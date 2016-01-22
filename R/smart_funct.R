@@ -1,0 +1,177 @@
+
+
+RecLFD <- function(MAT,RANGE,NH){
+  vecL <- matrix(0,2,length(RANGE))
+  colnames(vecL) <- as.character(RANGE)
+  rownames(vecL) <- c("Female","Male")
+  for(ii in 1:nrow(MAT)){
+    vecL[1,which(colnames(vecL)== as.character(MAT[ii,1]))]=vecL[1,which(colnames(vecL)== as.character(MAT[ii,1]))]+MAT[ii,2]
+    vecL[2,which(colnames(vecL)== as.character(MAT[ii,1]))]=vecL[2,which(colnames(vecL)== as.character(MAT[ii,1]))]+MAT[ii,3]
+  }
+  vecL <- vecL/NH
+  return(vecL)
+}
+
+
+plotRecLFD <- function(reclfd, perc = TRUE, besid = FALSE){
+  par(mar = c(1.5,2,3,0))
+  if(besid){
+    barplot(t(reclfd)/max(reclfd), col = c("skyblue3","pink3"), beside = TRUE, cex.axis = 0.8, cex.names = 0.5, font.main = 4, space = c(0,0.3))
+  }else{
+    if(perc == TRUE){
+      reclfd[1,] <- reclfd[1,]/max(reclfd[1,])
+      reclfd[2,] <- reclfd[2,]/max(reclfd[2,])
+    }
+    pre_mfrow <- par("mfrow")
+    par(mfrow = c(2, 1))
+    barplot(reclfd[1,], ylim = c(0,1), col = "pink3", main = "Female", cex.axis = 0.5, cex.names = 0.6, font.main = 4, las = 2)
+    barplot(reclfd[2,], ylim = c(0,1), col = "skyblue3", main = "Male", cex.axis = 0.5, cex.names = 0.6, font.main = 4)
+    par(mfrow = pre_mfrow)
+  }
+}
+
+
+IntInvDis <- function(xdata, RefCell, IntCell,
+                      Refmax, Refmin, ncells,
+                      Grid, graph=F, logplot=T){
+  xdataRef <- xdata[RefCell,]
+  colnames(xdataRef) <- c("LON","LAT","Coh")
+  xdata.gstat <- gstat(id="Coh",
+                       formula = Coh~1,
+                       locations = ~ LON + LAT,
+                       data = xdataRef,
+                       nmax = Refmax,
+                       nmin = Refmin)
+  xdataOut <- numeric(ncells)
+  xdataOut[RefCell] <- xdataRef[,3]
+  xdataInt <- xdata[IntCell,]
+  colnames(xdataInt) <- c("LON","LAT","Coh")
+  xdataOut[IntCell] <- predict(xdata.gstat, xdataInt)[,3]
+  if(graph){
+    if(logplot){
+      gv <- log10(xdataOut+1)
+    }else{
+      gv <- xdataOut
+    }
+    #cols <- rev(heat.colors(10))
+    #colvec <- seq(round(min(gv),1),round(max(gv),1),length=10)
+    #plot(Grid6min, col= cols[findInterval(gv,colvec)])
+    levelplot(gv~LON+LAT, cbind(xdata[,1:2],gv), aspect = "fill")
+  }
+  return(as.data.frame(cbind(xdata[,1:2],xdataOut)))
+}
+
+
+FindCenters=function(vertexes,nvert){
+  ncenters=nrow(vertexes)/nvert
+  coords=matrix(0,ncenters,2)
+  colnames(coords)=c("LON","LAT")
+  for(i in 1:ncenters)	  coords[i,]=c(mean(vertexes[(i+4*(i-1)):(i+4*(i-1)+4),4]),
+                                      mean(vertexes[(i+4*(i-1)):(i+4*(i-1)+4),5]))
+  return(coords)
+}
+
+###############
+
+GenS <- function(Abbmat, num_cla, qqM, LCspe, yea, num_coh, MixtureP){
+  new_dim <- dim(Abbmat)
+  new_dim[2] <- num_cla
+  new_dim[3] <- 1
+  TempArray <- array(0,dim=new_dim)
+  for(sex in 1:2){
+    for(coh in 1:num_coh){
+      mmcoh <- MixtureP[[sex]]$Means[yea,coh]
+      sdcoh <- MixtureP[[sex]]$Sigmas[yea,coh]
+      for(ij in 1:dim(TempArray)[1]){
+        abbcoh <- Abbmat[ij,coh,yea,sex]
+        add <- floor((1/qqM)*abbcoh*dnorm(LCspe,mmcoh,sdcoh))
+        TempArray[ij,,1,sex] <- TempArray[ij,,1,sex]+add
+      }
+    }
+  }
+  return(TempArray)
+}
+
+
+GenPop <- function(Abbmat, num_cla, LCspe, RA, qMM, num_ye, num_coh, MixtureP){
+  new_dim <- dim(Abbmat)
+  new_dim[2] <- num_cla
+  TempArray <- array(0,dim=new_dim)
+  for(yy in 1:length(num_ye)){
+    for(sex in 1:2){
+      for(coh in 1:num_coh){
+        mmcoh <- MixtureP[[sex]]$Means[yy,coh]
+        sdcoh <- MixtureP[[sex]]$Sigmas[yy,coh]
+        for(ij in 1:dim(TempArray)[1]){
+          abbcoh <- Abbmat[ij,coh,yy,sex]
+          add <- floor(RA*(1/qMM)*abbcoh*dnorm(LCspe,mmcoh,sdcoh))
+          TempArray[ij,,yy,sex] <- TempArray[ij,,yy,sex]+add
+        }
+      }
+    }
+  }
+  return(TempArray)
+}
+
+
+LFDtoBcell <- function(LCspe, abbF, abbM, LWpar){
+  aF <- LWpar[1,1]
+  bF <- LWpar[1,2]
+  aM <- LWpar[2,1]
+  bM <- LWpar[2,2]
+  WLC_F <- aF * LCspe^bF
+  WLC_M <- aM * LCspe^bM
+  Bcell <- matrix(rep(WLC_F,nrow(abbF)),nrow(abbF),ncol(abbF),byrow=T) * abbF +
+    matrix(rep(WLC_M,nrow(abbM)),nrow(abbM),ncol(abbM),byrow=T) * abbM
+  return(Bcell)
+}
+
+
+GenOgiveSel <- function(lenCla, SelPar){
+  LCspe <- lenCla + (lenCla[2]-lenCla[1])/2
+  L50 <- SelPar[1]
+  L75 <- SelPar[2]
+  S1 <- L50 * log(3) /(L75 - L50)
+  S2 <- log(3) /(L75 - L50)
+  SL <- 1/(1 + exp(S1 - S2*LCspe))
+  return(SL)
+}
+
+
+FindFG <- function(grid_shp,
+                   grid_polyset,
+                   grid_centres,
+                   ncells,
+                   cells_data,
+                   numCuts = 50,
+                   minsize = 10,
+                   modeska="S",
+                   skater_method){
+  set.seed(123)
+  #Build the neighboorhod list
+  Grid.bh <- grid_shp[1]
+  bh.nb <- poly2nb(Grid.bh, queen=TRUE)
+  bh.mat <- cbind(rep(1:length(bh.nb),lapply(bh.nb,length)),unlist(bh.nb))
+  #Compute the basic objects for clustering
+  lcosts <- nbcosts(bh.nb,cells_data)
+  nb.w <- nb2listw(bh.nb, lcosts, style=modeska)
+  mst.bh <- mstree(nb.w, ini=1)
+  index <- 0
+  clu_matrix <- matrix(NA,ncells,length(numCuts))
+  #Perform the first CC (without removing spurious clusters)
+  for(nCuts in numCuts){
+    cat("Performing CC with ",nCuts," cuts.......")
+    index <- index +1
+    res1 <- skater(mst.bh[,1:2], cells_data, ncuts = nCuts, minsize,
+                   method=skater_method)
+    clu_matrix[,index] <- res1$groups
+    cat("Done","\n")
+  }
+  IndexS <- IndexCH <- numeric(ncol(clu_matrix))
+  for(i in 1:ncol(clu_matrix)){
+    IndexS <- silhouette(clu_matrix[,i],dist(cells_data,
+                                             method=skater_method))
+    IndexCH <-  get_CH(cells_data,clu_matrix[,i])
+  }
+}
+

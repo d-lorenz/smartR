@@ -1,0 +1,1008 @@
+
+#' SmartProject
+#'
+#' The \code{SmartProject} class implements the main class of SMART.
+#'
+#' @return This function returns the 'smartProject' object.
+#'
+#'
+#'
+
+SmartProject <- R6Class("smartProject",
+                        portable = FALSE,
+                        class = TRUE,
+                        public = list(
+                          rawData = NULL,
+                          years = NULL,
+                          species = NULL,
+                          bySpecie = NULL,
+                          sampMap = NULL,
+                          fleet = NULL,
+                          loadRawLFD = function(csv_path) {
+                            cat("Loading sampling data...\n", sep = "")
+                            rawData <<- read.table(file = csv_path, sep = ";", dec = ".", colClasses = c("character", "numeric", "numeric", "factor", "numeric", "numeric", "numeric", "numeric"), header = TRUE)
+                            cat("Setting Years... ", sep = "")
+                            setYears()
+                            cat(" from ", min(levels(years)[as.numeric(years)]), " to ", max(levels(years)[as.numeric(years)]),"\nSetting Species... ", sep = "")
+                            setSpecies()
+                            cat(" found: ", paste(species, collapse = " - "), "\nSplitting Species...", sep = "")
+                            splitSpecies()
+                            cat(" completed!", sep = "")
+                          },
+                          setYears = function(){years <<- sort(unique(rawData[,"Year"]), decreasing = FALSE)},
+                          loadMap = function(map_path){sampMap <<- SampleMap$new(map_path)},
+                          createFleet = function(){fleet <<- FishFleet$new()},
+                          setSpecies = function(){species <<- unique(rawData[,"SPECIE"])},
+                          splitSpecies = function(){
+                            if(length(species) == 1){
+                              addSpecie(rawData)
+                            }else{
+                              for(i in 1:length(species)){
+                                addSpecie(rawData[rawData[,"SPECIE"] == species[i],])}}
+                          },
+                          addSpecie = function(sing_spe){bySpecie <<- c(bySpecie, BySpeLFD$new(sing_spe))},
+                          setLFDPop = function(){
+                            if(length(species) == 1){
+                              calcLFDPop(1)
+                            }else{
+                              for(i in 1:length(species)){
+                                calcLFDPop(i)
+                              }}
+                            # speDisPlot("All")
+                          },
+                          loadFleeEffoDbs = function(effort_path, met_nam){
+                            cat("\nLoading Effort data...\n", sep = "")
+                            sort_files <- sort(effort_path)
+                            fleet$rawEffort <<- list()
+                            for(i in sort_files){
+                              cat("\nLoading db: ", i, sep = "")
+                              cat("\nSelecting tracks in box...", sep = "")
+                              tmp_eff <- fn$sqldf("select * from (select * from (select * from nn_clas where met_des = '`met_nam`') join (select *, rowid as i_id from intrp where LON > `sampMap$gridBboxSP@bbox[1,1]` and LON < `sampMap$gridBboxSP@bbox[1,2]` and LAT > `sampMap$gridBboxSP@bbox[2,1]` and LAT < `sampMap$gridBboxSP@bbox[2,2]`) using (I_NCEE, T_NUM)) join (select * from p_depth) using (i_id)",
+                                               dbname = i)
+
+                              ### Over in B-Box
+                              in_box <- over(SpatialPoints(tmp_eff[,c("LON","LAT")]), sampMap$gridBboxSP)
+                              in_box[is.na(in_box)] <- 0
+                              tmp_eff$in_box <- in_box
+
+                              in_box_ping <- sqldf("select I_NCEE, T_NUM, sum(in_box) from tmp_eff group by I_NCEE, T_NUM")
+                              all_ping <- sqldf("select I_NCEE, T_NUM, count(*) from tmp_eff group by I_NCEE, T_NUM")
+
+                              ### Loading 100% only
+                              cat("\nLoading 100% in box only...", sep = "")
+                              all_in_box <- in_box_ping[which(in_box_ping[,3]/all_ping[,3] == 1),1:2]
+                              all_sos <- sqldf("select * from tmp_eff join (select * from all_in_box) using (I_NCEE, T_NUM)")
+
+                              cat("\nSaving Data", sep = "")
+                              tmp_key <- names(which.max(table(years(all_sos$DATE))))
+                              fleet$rawEffort[[tmp_key]] <<- all_sos
+                            }
+                          },
+                          effPlot = function(whichYear){
+                            if(whichYear == "All"){
+                              all_sum <- apply(fleet$rawEffort, 1, sum)
+                              round_perc <- 1+round(100*all_sum/max(all_sum))
+                              # col_palette <- rev(heat.colors(100))
+                              # cell_colors <- col_palette[round_perc]
+                              distrPlotCols(cols = rev(heat.colors(101)), vals = round_perc,
+                                            maxVal = ceiling(max(all_sum)),
+                                            plotTitle = "Effort all years",
+                                            legendUnits = "Hours")
+
+                            }else{
+                              num_col <- which(colnames(fleet$rawEffort) == whichYear)
+
+                              yea_eff <- round(fleet$rawEffort[,num_col])
+                              round_yea <- 1+100*yea_eff/max(yea_eff)
+
+                              distrPlotCols(cols = rev(heat.colors(101)), vals = round_yea,
+                                            maxVal = ceiling(max(yea_eff)),
+                                            plotTitle = paste("Effort ", whichYear, sep = ""),
+                                            legendUnits = "Hours")
+                            }
+                          },
+                          speDisPlot = function(whoPlo){
+                            if(whoPlo == "All"){
+                              sampMap$plotSamMap("All species")
+                              for(i in 1:length(species)){
+                                points(bySpecie[[i]]$rawData[,c("LON","LAT")], pch = 20, col = 1+i, cex = 0.4)
+                              }
+                            }else{
+                              sampMap$plotSamMap(whoPlo)
+                              points(bySpecie[[which(species == whoPlo)]]$rawData[,c("LON","LAT")], pch = 20, col = 1+which(species == whoPlo), cex = 0.4)
+                            }
+                          },
+                          plotGooSpe = function(whoPlo){
+                            if(whoPlo == "All"){
+                              tmp_data <- unique(rawData[,c("SPECIE", "LAT", "LON")])
+                            }else{
+                              tmp_data <- unique(rawData[which(rawData$SPECIE == whoPlo),c("SPECIE", "LAT", "LON")])
+                              levels(tmp_data[,1]) <- unique(rawData[,"SPECIE"])
+                            }
+                            sampMap$plotGooGridPoi(tmp_data)
+                          },
+                          distrPlotCols = function(cols = NULL, vals = NULL, maxVal = 100,
+                                                   plotTitle = "NoTitle", legendUnits = "NoUnits"){
+                            def.par <- par(no.readonly = TRUE)
+                            par(mar = c(2.5,2.5,3,1))
+                            layout(matrix(c(1,2), 1, 2, byrow = TRUE), widths = c(6,1))
+                            sampMap$plotSamMap(title = plotTitle, celCol = cols[vals])
+                            par(mar = c(5,3,5,1))
+                            plot(NULL, xlim=c(0,1), ylim=c(0,1), bty="n", axes = FALSE, ann = FALSE, main = "Hours")
+                            rect(0.25,seq(0.2,0.79, length.out = 100),
+                                 0.55,seq(0.21,0.80, length.out = 100),
+                                 col = cols, border = rainbow(1, alpha = 0.01))
+                            mtext(ceiling(seq(from = 0, to = maxVal, length.out = 10)), side = 2,
+                                  at = seq(0.21,0.80, length.out = 10), las = 2, cex = 1)
+                            text(legendUnits, x = 0.25, y = 0.15)
+                            par(def.par)
+                          },
+                          cohoDisPlot = function(whoSpe, whoCoh, whiYea, interp){
+                            if(interp == FALSE){
+                              if(whoCoh == "All"){
+                                if(whiYea == "All"){
+                                  # 1+round(apply(bySpecie[[whoSpe]]$Coh_A[,,,],1,sum)/max(apply(bySpecie[[whoSpe]]$Coh_A[,,,],1,sum)), 2)*100
+                                  yea_abb <- round(apply(bySpecie[[whoSpe]]$Coh_A[,,,],1,sum))
+                                  round_yea <- 1+100*yea_abb/max(yea_abb)
+
+                                  distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
+                                                maxVal = ceiling(max(yea_abb)),
+                                                plotTitle = paste("Specie: ", species[whoSpe], " - All cohorts - All years", sep = ""), legendUnits = "N.")
+                                }else{
+                                  # 1+round(apply(bySpecie[[whoSpe]]$Coh_A[,,whiYea,],1,sum)/max(apply(bySpecie[[whoSpe]]$Coh_A[,,whiYea,],1,sum)), 2)*100
+                                  yea_abb <- round(apply(bySpecie[[whoSpe]]$Coh_A[,,whiYea,],1,sum))
+                                  round_yea <- 1+100*yea_abb/max(yea_abb)
+
+                                  distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
+                                                maxVal = ceiling(max(yea_abb)),
+                                                plotTitle = paste("Specie: ", species[whoSpe], " - All cohorts - Year: ", whiYea, sep = ""),
+                                                legendUnits = "N.")
+                                }
+                              }else{
+                                if(whiYea == "All"){
+                                  yea_abb <- round(apply(bySpecie[[whoSpe]]$Coh_A[,whoCoh,,],1,sum))
+                                  round_yea <- 1+100*yea_abb/max(yea_abb)
+
+                                  distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
+                                                maxVal = ceiling(max(yea_abb)),
+                                                plotTitle = paste("Specie: ", species[whoSpe], " - Cohort: ", whoCoh, "- All years", sep = ""),
+                                                legendUnits = "N.")
+                                }else{
+                                  yea_abb <- round(apply(bySpecie[[whoSpe]]$Coh_A[,whoCoh,whiYea,],1,sum))
+                                  round_yea <- 1+100*yea_abb/max(yea_abb)
+
+                                  distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
+                                                maxVal = ceiling(max(yea_abb)),
+                                                plotTitle = paste("Specie: ", species[whoSpe], " - Cohort: ", whoCoh, " - Year: ", whiYea, sep = ""),
+                                                legendUnits = "N.")
+                                }
+                              }
+                            }else{
+                              if(whoCoh == "All"){
+                                if(whiYea == "All"){
+                                  yea_abb <- round(apply(bySpecie[[whoSpe]]$Coh_A_Int[,,,],1,sum))
+                                  round_yea <- 1+100*yea_abb/max(yea_abb)
+
+                                  distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
+                                                maxVal = ceiling(max(yea_abb)),
+                                                plotTitle = paste("Specie: ", species[whoSpe], " - All cohorts - All years", sep = ""),
+                                                legendUnits = "N.")
+                                }else{
+                                  yea_abb <- round(apply(bySpecie[[whoSpe]]$Coh_A_Int[,,whiYea,],1,sum))
+                                  round_yea <- 1+100*yea_abb/max(yea_abb)
+
+                                  distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
+                                                maxVal = ceiling(max(yea_abb)),
+                                                plotTitle = paste("Specie: ", species[whoSpe], " - All cohorts - Year: ", whiYea, sep = ""),
+                                                legendUnits = "N.")
+                                }
+                              }else{
+                                if(whiYea == "All"){
+                                  yea_abb <- round(apply(bySpecie[[whoSpe]]$Coh_A_Int[,whoCoh,,],1,sum))
+                                  round_yea <- 1+100*yea_abb/max(yea_abb)
+
+                                  distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
+                                                maxVal = ceiling(max(yea_abb)),
+                                                plotTitle = paste("Specie: ", species[whoSpe], " - Cohort: ", whoCoh, "- All years", sep = ""),
+                                                legendUnits = "N.")
+                                }else{
+                                  yea_abb <- round(apply(bySpecie[[whoSpe]]$Coh_A_Int[,whoCoh,whiYea,],1,sum))
+                                  round_yea <- 1+100*yea_abb/max(yea_abb)
+
+                                  distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
+                                                maxVal = ceiling(max(yea_abb)),
+                                                plotTitle = paste("Specie: ", species[whoSpe], " - Cohort: ", whoCoh, " - Year: ", whiYea, sep = ""),
+                                                legendUnits = "N.")
+                                }
+                              }
+                            }
+                          },
+                          calcLFDPop = function(ind_num){
+                            bySpecie[[ind_num]]$LFDPop <<- array(dim=c(sampMap$nCells, length(bySpecie[[ind_num]]$lengClas),length(bySpecie[[ind_num]]$years),2))
+                            for(y in 1:length(bySpecie[[ind_num]]$years)){
+                              subLFD <- bySpecie[[ind_num]]$rawData[which(bySpecie[[ind_num]]$rawData$Year==bySpecie[[ind_num]]$years[y]),]
+                              poinOver <- as.numeric(sp::over(SpatialPoints(subLFD[,c("LON","LAT")]), SpatialPolygons(sampMap$gridShp@polygons)))
+                              subLFD <- cbind(subLFD[,c("LCLASS", "FEMALE", "MALE")], poinOver)
+                              colnames(subLFD) <- c("LCLASS", "FEMALE", "MALE", "Cell")
+                              for(IDcell in 1:sampMap$nCells){
+                                if(length(which(subLFD[,"Cell"] == IDcell))>0){
+                                  cell.data <- subLFD[which(subLFD[,"Cell"] == IDcell),]
+                                  cell.LFD <- RecLFD(cell.data,
+                                                     bySpecie[[ind_num]]$lengClas,
+                                                     length(unique(cell.data[,1])))
+                                  bySpecie[[ind_num]]$LFDPop[IDcell,,y,1] <<- cell.LFD[1,]
+                                  bySpecie[[ind_num]]$LFDPop[IDcell,,y,2] <<- cell.LFD[2,]
+                                }else{
+                                  bySpecie[[ind_num]]$LFDPop[IDcell,,y,1] <<- rep(0,length(bySpecie[[ind_num]]$lengClas))
+                                  bySpecie[[ind_num]]$LFDPop[IDcell,,y,2] <<- rep(0,length(bySpecie[[ind_num]]$lengClas))
+                                }}}},
+                          setCoh_A = function(){
+                            if(length(species) == 1){
+                              calcCoh_A(1)
+                            }else{
+                              for(i in 1:length(species)){
+                                calcCoh_A(i)
+                              }}
+                          },
+                          calcCoh_A = function(ind_num){
+
+                            Pop <- bySpecie[[ind_num]]$LFDPop
+                            LC <- bySpecie[[ind_num]]$lengClas[-length(bySpecie[[ind_num]]$lengClas)]
+                            sp <- bySpecie[[ind_num]]$specie
+                            nc <- bySpecie[[ind_num]]$nCoho
+                            bySpecie[[ind_num]]$Coh_A <<- array(dim=c(sampMap$nCells, nc, length(bySpecie[[ind_num]]$years),2))
+                            for(y in 1:length(bySpecie[[ind_num]]$years)){
+                              for(sex in c(1:2)){
+                                mms <- bySpecie[[ind_num]]$mixPar[[sex]][[1]][y,]
+                                sds <- bySpecie[[ind_num]]$mixPar[[sex]][[2]][y,]
+                                opt <- matrix(0,length(LC),nc)
+                                for(ij in 1:sampMap$nCells){
+                                  vv <- Pop[ij, , y, sex]
+                                  coh.abb <- numeric(nc)
+                                  if(sum(vv)>0){
+                                    for(coh in c(1:nc)) opt[,coh] <- dnorm(LC,mms[coh],sds[coh])
+                                    opt.ass <- apply(opt,1,which.max)
+                                    for(coh in c(1:nc)) coh.abb[coh] <- sum(vv[which(opt.ass==coh)])
+                                  }
+                                  bySpecie[[ind_num]]$Coh_A[ij,1:nc,y,sex] <- as.numeric(coh.abb)
+                                }
+                              }
+                            }
+                          },
+                          calcCoh_A_Int = function(ind_num){
+                            bySpecie[[ind_num]]$Coh_A_Int <<- array(dim=c(sampMap$nCells, bySpecie[[ind_num]]$nCoho,length(bySpecie[[ind_num]]$years),2))
+                            for(y in 1:length(bySpecie[[ind_num]]$years)){
+                              for(sex in 1:2){
+                                for(coh in 1:bySpecie[[ind_num]]$nCoho){
+                                  xdata <- cbind(sampMap$griCent, bySpecie[[ind_num]]$Coh_A[,coh,y,sex])
+                                  colnames(xdata) <- c("LON","LAT","Coh")
+                                  xdata <- as.data.frame(xdata)
+                                  yea_poi <- bySpecie[[ind_num]]$rawData[which(bySpecie[[ind_num]]$rawData$Year == bySpecie[[ind_num]]$years[y]),c("LON", "LAT")]
+                                  cMEDITS <- which(!is.na(over(sampMap$gridShp, SpatialPoints(unique(yea_poi)))))
+                                  noMEDITS <- setdiff(c(1:sampMap$nCells),cMEDITS)
+                                  Areacell <- 9.091279*11.112
+                                  RateArea <- Areacell/100
+                                  bySpecie[[ind_num]]$Coh_A_Int[,coh,y,sex] <- IntInvDis(RateArea*xdata, cMEDITS, noMEDITS,
+                                                                                         Refmax=5, Refmin=3,
+                                                                                         sampMap$nCells,
+                                                                                         sampMap$gridShp, graph=T, logplot=F)[,3]
+                                }
+                              }
+                            }
+                          }
+                        ))
+
+
+#' BySpeLFD
+#'
+#' The \code{BySpeLFD} class implements the class of SMART to handle species samplings.
+#'
+#' @return This function returns the 'sampleLFDbyspe' object.
+#'
+
+BySpeLFD <- R6Class("sampleLFDbyspe",
+                    portable = FALSE,
+                    class = TRUE,
+                    public = list(
+                      specie = NULL,
+                      years = NULL,
+                      rawData = NULL,
+                      lengClas = NULL, #LClass
+                      LFDPop = NULL,
+                      mixPar = NULL, # MixtureP e ncohorts
+                      nCoho = NULL,
+                      prior = NULL,
+                      Coh_A = NULL,
+                      Coh_A_Int = NULL,
+                      # Fis_Gro = NULL,
+                      LWpar = NULL,
+                      scorVec = NULL,
+                      qMedits = NULL,
+                      bRefs = NULL,
+                      popGen = NULL,
+                      selPar = NULL,
+                      setRawData = function(raw_data){rawData <<- raw_data},
+                      plotLFD = function(){
+                        plotSpeAllYea(rawData)
+                      },
+                      initialize = function(sing_spe){
+                        setRawData(sing_spe)
+                        setYears()
+                        setSpecie()
+                        setLClass()
+                      },
+                      setYears = function(){years <<- sort(unique(rawData[,"Year"]), decreasing = FALSE)},
+                      setSpecie = function(){specie <<- unique(rawData[,"SPECIE"])},
+                      setLClass = function(){lengClas <<- seq(from = min(rawData[,"LCLASS"]), to = max(rawData[,"LCLASS"]), by = 1) },
+                      setNCoho = function(num_coh){nCoho <<- num_coh},
+                      setPrior = function(f_linf, f_k, f_t0, m_linf, m_k, m_t0){
+                        prior <<- list('Female' = list('Linf' = list('Mean' = f_linf[1], 'StD' = f_linf[2]),
+                                                       'K' = list('Mean' = f_k[1], 'StD' = f_k[2]),
+                                                       't0' = list('Mean' = f_t0[1], 'StD' = f_t0[2])),
+                                       'Male' = list('Linf' = list('Mean' = m_linf[1], 'StD' = m_linf[2]),
+                                                     'K' = list('Mean' = m_k[1], 'StD' = m_k[2]),
+                                                     't0' = list('Mean' = m_t0[1], 'StD' = m_t0[2])))
+
+                      },
+                      setLWpar = function(aF, bF, aM, bM){
+                        LWpar <<- array(dim=c(2,2))
+                        LWpar[1,] <<- c(aF, bF)
+                        LWpar[2,] <<- c(aM, bM)
+                      },
+                      setBrefs = function(b_value){
+                        bRefs <<- b_value
+                      },
+                      setSelPar = function(L50, L75){
+                        tmp_sel <- c(L50, L75)
+                        names(tmp_sel) <- c("L50","L75")
+                        selPar <<- tmp_sel
+                      },
+                      genMedmo = function(){
+
+                        LCspe <- lengClas + (lengClas[2]-lengClas[1])/2
+
+                        # !!
+                        Areacell <- 9.091279*11.112
+                        RateArea <- Areacell/100
+
+                        TempArray <- GenPop(Abbmat = Coh_A_Int, num_cla = length(lengClas),
+                                            LCspe = LCspe, RA = RateArea, qMM = qMedits,
+                                            num_ye = years, num_coh = nCoho, MixtureP = mixPar)
+
+                        #Check
+                        cat(specie,"Biomassa", as.character(years[length(years)]), " =",
+                            sum(LFDtoBcell(LCspe = LCspe, abbF = TempArray[,,length(years),1], abbM = TempArray[,,length(years),2],
+                                           LWpar = LWpar))/1000000 ,"\n")
+
+                        popGen <<- TempArray
+
+                      },
+                      calcMix = function(nAdap = 100, nSamp = 2000){
+
+                        mixPar <<- list('Female' = list('Means' = matrix(NA, length(years), nCoho), 'Sigmas' = matrix(NA, length(years), nCoho)),
+                                        'Male' = list('Means' = matrix(NA, length(years), nCoho), 'Sigmas' = matrix(NA, length(years), nCoho)))
+
+                        for(sex in c('Female', 'Male')){
+                          ind_cou = apply(LFDPop[,,,ifelse(sex == 'Female', 1, 2)], 2, sum)      # Counts of males, per length
+                          num_ind = round(ind_cou/(9850/2))
+                          ind_dis = rep(lengClas, num_ind) + runif(sum(num_ind), 0, 1)
+                          Nclust = nCoho
+                          N = length(ind_dis)
+                          # Input formating for JAGS
+                          alpha = rep(5, Nclust)
+                          Z = rep(NA, N)  # initial allocations
+                          Z[which.min(ind_dis)] = 1  # smallest value assigned to cluster 1
+                          Z[which.max(ind_dis)] = Nclust  # highest value assigned to cluster Nclust
+                          dataList = list(y = ind_dis, N = N, Nclust = Nclust, Z = Z, alpha = alpha)
+                          model.str <- paste('model{
+                                             # Likelihood:
+                                             for(i in 1:N){
+                                             y[i] ~ dnorm(mean[i], tau[Z[i]])
+                                             mean[i] <- Linf * (1 - exp(-k * (Z[i] - t0)))
+                                             Z[i] ~ dcat(p[1:Nclust])
+                                             }
+                                             # Prior:
+                                             Linf ~ dnorm(', prior[[sex]][['Linf']][['Mean']],', ', 1/(prior[[sex]][['Linf']][['StD']])^2,')
+                                             k ~ dnorm(', prior[[sex]][['K']][['Mean']],', ', 1/(prior[[sex]][['K']][['StD']])^2,')
+                                             t0 ~ dnorm(', prior[[sex]][['t0']][['Mean']],', ', 1/(prior[[sex]][['t0']][['StD']])^2,')
+                                             p ~ ddirch(alpha)
+                                             for(clustIdx in 1:Nclust){
+                                             tau[clustIdx] ~ dgamma(1.0E-5, 1.0E-5)
+                                             }
+                        }', sep = "")
+                          jags = jags.model(textConnection(model.str), data = dataList, n.chains = 1, n.adapt = nAdap)
+                          TT = nSamp
+                          samples = jags.samples(jags, c('Linf', 'k', 't0', 'tau', 'p', 'Z'), TT)
+                          # Estimates
+                          # predicted length at age
+                          LHat = mean(samples$Linf)
+                          kHat = mean(samples$k)
+                          t0Hat = mean(samples$t0)
+                          means = LHat * (1 - exp(-kHat*((1:Nclust) - t0Hat)))
+                          taus = matrix(as.numeric(samples$tau), ncol=Nclust, byrow=T)
+                          sigma2s = 1/taus
+                          tauHat = apply(taus, 2, mean)
+                          sigma2Hat = apply(sigma2s, 2, mean)
+                          ps = matrix(as.numeric(samples$p), ncol=Nclust, byrow=T)
+                          pHat = apply(ps, 2, mean)
+                          ma_zHat = numeric(length(lengClas))
+                          for(iObs in 1:length(lengClas)){
+                            postProbs = pHat * dnorm(lengClas[iObs], means, sqrt(sigma2Hat))
+                            ma_zHat[iObs] = which.max(postProbs)
+                          }
+                          asc = seq(min(ind_dis), max(ind_dis), length=200)
+                          densities = matrix(0, length(asc), Nclust)
+                          dens = numeric(length(asc))
+                          for(iasc in 1:length(asc)){
+                            densities[iasc,] = pHat * dnorm(asc[iasc], means, sqrt(sigma2Hat))
+                            dens[iasc] = sum(densities[iasc,])
+                          }
+                          dens2 = matrix(0, length(asc), length(means))
+                          for(j in 1:length(means)){
+                            dens2[,j] = pHat[j] * dnorm(asc, means[j], sqrt(sigma2Hat[j]))
+                          }
+                          plot(range(asc), c(0, max(hist(ind_dis, plot = FALSE)$density)+0.02), type='n',
+                               main = paste(sex, specie,"- LFD", sep = " "),
+                               xlab = "Density",
+                               ylab = "Length", cex.lab = 0.5)
+                          hist(ind_dis, breaks=30, freq=F, col='lightgray', add = TRUE)
+                          for(j in 1:length(means)){
+                            polygon(c(min(asc),asc,max(asc)), c(0,dens2[,j],0), col=
+                                      ifelse(sex == "Female", rgb(0.8,0.1,0.1,0.2), rgb(0.1,0.1,0.8,0.2)), border=F)
+                          }
+                          lines(asc, dens)
+                          for(yea in 1:length(years)){
+                            a_yea_abb <- cbind(apply(LFDPop[,,yea,ifelse(sex == 'Female', 1, 2)], 2, sum), lengClas, ma_zHat)
+                            for(coho in 1:nCoho){
+                              coho_ind <- which(a_yea_abb[,3] == coho)
+                              sim_pop <- rep(lengClas[coho_ind], a_yea_abb[coho_ind,1])
+                              mixPar[[sex]][['Means']][yea,coho] <<- mean(sim_pop)
+                              mixPar[[sex]][['Sigmas']][yea,coho] <<- sd(sim_pop)
+                            }
+                          }
+                        }
+                      }))
+
+
+#' FishFleet
+#'
+#' The \code{FishFleet} class implements the class of SMART to manage fleet data.
+#'
+#' @return This function returns the 'fishFleet' object.
+#'
+
+FishFleet <- R6Class("fishFleet",
+                     portable = FALSE,
+                     class = TRUE,
+                     public = list(
+                       rawRegister = NULL,
+                       rawEffort = NULL,
+                       rawSelectivity = NULL,
+                       rawProduction = NULL,
+                       registerIds = NULL,
+                       productionIds = NULL,
+                       prodIdsLoa = NULL,
+                       effortIds = NULL,
+                       loadFleetRegis = function(register_path){
+                         cat("Loading raw Fleet Register data...\n", sep = "")
+                         rawRegister <<- readRegisterEU(register_path)
+                       },
+                       loadMatEffort = function(effort_path){
+                         cat("Loading Effort data...\n", sep = "")
+                         rawEffort <<- readRDS(effort_path)
+                       },
+                       loadProduction = function(production_path){
+                         cat("Loading Production data...\n", sep = "")
+                         sort_files <- sort(production_path)
+                         rawProduction <<- list()
+                         for(i in 1:length(sort_files)){
+                           tmp_mat <- read.csv2(sort_files[i])
+                           tmp_key <- names(which.max(table(years(tmp_mat$UTC_S))))
+                           rawProduction[[tmp_key]] <<- tmp_mat
+                         }
+                       },
+                       setProdIds = function(){
+                         cat("Setting Production IDs...\n", sep = "")
+                         productionIds <<- list()
+                         for(i in 1:length(rawProduction)){
+                           tmp_ids <- unique(rawProduction[[i]][,1])
+                           tmp_key <- names(rawProduction[i])
+                           productionIds[[tmp_key]] <<- tmp_ids
+                         }
+                         productionIds[["All"]] <<- unique(unlist(productionIds))
+                       },
+                       plotCountIDsProd = function(){
+                         tmp_df <- data.frame("Year" = names(productionIds),
+                                              "Ids" = unlist(lapply(unique(productionIds), length)))
+                         # names(tmp_df) <- c("Year", "Ids")
+                         tmp_plot <- ggplot(tmp_df, aes(x = Year, y = Ids)) + geom_bar(stat = "identity") +
+                           geom_text(aes(y=Ids, label = Ids), position= position_dodge(width=1),
+                                     vjust=2.5, color="white") +
+                           ggtitle("Count of Distinct Vessels") +
+                           ylab("N. of IDs")
+                         print(tmp_plot)
+                       },
+                       getLoa4Prod = function(){
+                         if(!is.null(productionIds) & !is.null(registerIds)){
+                           tmp_reg <- rawRegister[,c("CFR", "Loa")]
+                           tmp_reg[,1] <- substr(tmp_reg[,1], 4, nchar(tmp_reg[1,1]))
+
+                           tmp_pro <- data.frame("CFR" = productionIds[["All"]])
+                           tmp_pro[,1] <- paste(unlist(lapply(mapply(rep, times = 9-nchar(tmp_pro[,1]), x = 0), paste, collapse = "")),
+                                                tmp_pro[,1], sep = "")
+
+                           prodIdsLoa <<- merge(x = tmp_pro, y = tmp_reg, by = "CFR")
+                         }
+                       },
+                       plotLoaProd = function(){
+                         tmp_tab <- table(round(prodIdsLoa[,2]))
+                         tmp_df <- data.frame("Length" = names(tmp_tab),
+                                              "Count" = as.numeric(tmp_tab))
+                         ggplot(tmp_df, aes(x = Length, y = Count)) + geom_bar(stat = "identity") +
+                           geom_text(aes(y = Count, label = Count), position= position_dodge(width=1),
+                                     vjust=-.5, color="black") +
+                           ggtitle("Count of Distinct Vessels") +
+                           ylab("N. of IDs")
+                       },
+                       #                        plotRawProduction = function(){
+                       #                          for(i in 1:length(rawProduction)){
+                       #                            if(i == 1){
+                       #                            tmp_data <- cbind(tmp_lst[[i]], years(tmp_lst[[i]]$UTC_S))
+                       #                            }else{
+                       #                              tmp_data <- rbind(tmp_data,
+                       #                                                cbind(tmp_lst[[i]], years(tmp_lst[[i]]$UTC_S)))
+                       #                            }
+                       #                          }
+                       #
+                       #                        },
+                       readRegisterEU = function(reg_path){
+                         cat("Checking EU Fleet Register format...\n", sep = "")
+                         two_rows <- readLines(con = reg_path, n = 2)
+                         last_char <- substr(two_rows[2], nchar(two_rows[2]), nchar(two_rows[2]))
+                         raw_fleet <- readLines(con = reg_path, n = -1)
+                         if(last_char == ";"){
+                           cat("Trailing character found! Cleaning...\n", sep = "")
+                           tmp_flee <- paste(unlist(lapply(strsplit(raw_fleet, split = ";"), paste, collapse = ";")), collapse = "\n")
+                         }else{
+                           tmp_flee <- paste(raw_fleet, collapse = "\n")
+                         }
+                         if(substr(reg_path, nchar(reg_path)-12, nchar(reg_path)) != "_smart-ed.csv"){
+                           tmp_flee <- gsub("\\;",",", tmp_flee)
+                           new_path <- paste(substr(reg_path, 1, nchar(reg_path)-4), "_smart-ed",
+                                             substr(reg_path, nchar(reg_path)-3, nchar(reg_path)), sep = "")
+                           cat("\nWriting edited Fleet register in:\n", new_path, "\n\n", sep = "")
+                           write(tmp_flee, file = new_path)
+                           reg_path <- new_path
+                         }
+                         cat("Loading file... ", sep = "")
+                         re_fleet <- read.csv(reg_path, stringsAsFactors = FALSE)
+                         cat("OK\n", sep = "")
+                         return(re_fleet)
+                       },
+                       cleanRegister = function(){
+                         cat("Ordering Fleet Register by CFR... ", sep = "")
+                         rawRegister$CFR <<- as.character(rawRegister$CFR)
+                         rawRegister <<- rawRegister[order(rawRegister$CFR),]
+                         rawRegister$Country.Code <<- as.character(rawRegister$Country.Code)
+                         setRegIds()
+                         rawRegister$Loa <<- as.numeric(as.character(rawRegister$Loa))
+                         rawRegister$Power.Main <<- as.numeric(as.character(rawRegister$Power.Main))
+                         cat("OK\n", sep = "")
+                       },
+                       plotRegSum = function(){
+                         cat("Plotting Fleet register summary statistics... ", sep = "")
+                         def.par <- par(no.readonly = TRUE)
+                         layout(matrix(c(1,2,3,4,5,6),2,3,byrow = TRUE))
+                         plotBarReg(regVar = "Gear.Main.Code", title = "Main Gear")
+                         plotBarReg(regVar = "Gear.Sec.Code", title = "Secondary Gear")
+                         plotBarReg(regVar = "Hull.Material", title = "Hull Material")
+                         plotBoxReg(regVar = "Construction.Year", title = "Year of Construction")
+                         plotBoxReg(regVar = "Loa", title = "Length Overall")
+                         plotBoxReg(regVar = "Power.Main", title = "Power")
+                         par(def.par)
+                         cat("Completed\n", sep = "")
+                       },
+                       plotBarReg = function(regVar, p_las = 2, title = regVar){
+                         barplot(table(rawRegister[,regVar]), las = p_las, main = title)
+                       },
+                       plotBoxReg = function(regVar, title = regVar){
+                         boxplot(rawRegister[,regVar], main = title)
+                       },
+                       setRegIds = function(){
+                         registerIds <<- rawRegister$CFR
+                       },
+                       by_ship = NULL,
+                       splitFleet = function(){
+                         cat("Splitting Fleet into ships...\n", sep = "")
+                         by_ship <<- apply(rawRegister, 1, buildShip)
+                       },
+                       buildShip = function(cur_ship){
+                         tmp_ship <- FishShip$new()
+                         tmp_ship$setShip(ship_id = cur_ship["CFR"],
+                                          ship_loa = cur_ship["Loa"],
+                                          ship_pow = cur_ship["Power.Main"],
+                                          ship_act = NA,
+                                          ship_met = NA,
+                                          ship_m_gea = cur_ship["Gear.Main.Code"],
+                                          ship_s_gea = cur_ship["Gear.Sec.Code"],
+                                          ship_eff = NA,
+                                          ship_sel = NA,
+                                          ship_pro = NA)
+                         return(tmp_ship)
+                       }
+                     )
+)
+
+
+FishShip <- R6Class("fishShip",
+                    portable = FALSE,
+                    class = TRUE,
+                    public = list(
+                      shipId = NULL,    # from VMS, Fleet Register or Survey
+                      shipLoa = NULL,   # from Fleet Register
+                      shipPow = NULL,   # from Fleet Register or Model
+                      shipAct = NULL,   # from Fleet Register
+                      shipMet = NULL,   # from Fleet Register
+                      shipMaiGea = NULL,   # from Fleet Register
+                      shipSecGea = NULL,   # from Fleet Register
+                      shipEff = NULL,   # from VMS
+                      shipSel = NULL,   # from Survey
+                      shipPro = NULL,   # from Survey
+                      setShip = function(ship_id = NA,
+                                         ship_loa = NA,
+                                         ship_pow = NA,
+                                         ship_act = NA,
+                                         ship_met = NA,
+                                         ship_m_gea = NA,
+                                         ship_s_gea = NA,
+                                         ship_eff = NA,
+                                         ship_sel = NA,
+                                         ship_pro = NA){
+                        setShipId(ship_id)
+                        setShipLoa(ship_loa)
+                        setShipPow(ship_pow)
+                        setShipAct(ship_act)
+                        setShipMet(ship_met)
+                        setShipMaiGea(ship_m_gea)
+                        setShipSecGea(ship_s_gea)
+                        setShipEff(ship_eff)
+                        setShipSel(ship_sel)
+                        setShipPro(ship_pro)
+                      },
+                      setShipId = function(id){
+                        shipId <<- id
+                      },
+                      setShipLoa = function(loa){
+                        shipLoa <<- loa
+                      },
+                      setShipPow = function(pow){
+                        shipPow <<- pow
+                      },
+                      setShipAct = function(act){
+                        shipAct <<- act
+                      },
+                      setShipMet = function(met){
+                        shipMet <<- met
+                      },
+                      setShipMaiGea = function(m_gea){
+                        shipMaiGea <<- m_gea
+                      },
+                      setShipSecGea = function(s_gea){
+                        shipSecGea <<- s_gea
+                      },
+                      setShipEff = function(eff){
+                        shipEff <<- eff
+                      },
+                      setShipSel = function(sel){
+                        shipSel <<- sel
+                      },
+                      setShipPro = function(pro){
+                        shipPro <<- pro
+                      }
+                    )
+)
+
+#' SampleMap
+#'
+#' The \code{SampleMap} class implements the class of SMART to control geographical data.
+#'
+#' @return This function returns the 'sampleMap' object.
+#'
+
+SampleMap <- R6Class("sampleMap",
+                     portable = FALSE,
+                     class = TRUE,
+                     public = list(
+                       gridPath = NULL,
+                       gridName = NULL,
+                       gridShp = NULL,
+                       gridBbox = NULL,
+                       gridBboxExt = NULL,
+                       gridBboxSP = NULL,
+                       bioPath = NULL,
+                       bioName = NULL,
+                       bioShp = NULL,
+                       bioDF = NULL,
+                       gridPolySet = NULL,
+                       nCells = NULL,
+                       sCells = NULL, # cMedits
+                       griCent = NULL, # gCenter
+                       gridBathy = NULL,
+                       centDept = NULL,
+                       clusInpu = NULL, # calcfish input
+                       clusMat = NULL, # matrix output calcfish
+                       indSil = NULL, # vect clusters silhouette output calcfish
+                       indCH = NULL, # vect index CH output calcfish
+                       gooMap = NULL,
+                       gooMapPlot = NULL,
+                       sampColScale = NULL,
+                       plotRange = NULL,
+                       initialize = function(grid_path){
+                         setGridPath(grid_path)
+                         setGridName()
+                         loadGridShp()
+                         setNumCell()
+                         createPolySet()
+                         setGridCenter()
+                         createGridBbox()
+                       },
+                       createGridBbox = function(){
+                         gridBbox <<- bbox(gridShp)
+                         gridBboxExt <<- make_bbox(lon = gridBbox[1,],
+                                                   lat = gridBbox[2,],
+                                                   f = 0.1)
+
+                         polyext <- Polygon(cbind(c(gridBboxExt[["left"]],gridBboxExt[["left"]],gridBboxExt[["right"]],gridBboxExt[["right"]],gridBboxExt[["left"]]),
+                                                  c(gridBboxExt[["bottom"]],gridBboxExt[["top"]],gridBboxExt[["top"]],gridBboxExt[["bottom"]],gridBboxExt[["bottom"]])))
+
+                         polypolyext = Polygons(list(polyext), "s1")
+
+                         gridBboxSP <<- SpatialPolygons(list(polypolyext))
+                       },
+                       getGooMap = function(){
+                         gooMap <<- get_googlemap(center = c(lon = mean(gridPolySet$X), lat = mean(gridPolySet$Y)),
+                                                  zoom = MaxZoom(latrange = range(gridPolySet$Y), lonrange = range(gridPolySet$X)),
+                                                  size = c(640, 640), scale = 2, format = "png8", maptype = "hybrid",
+                                                  color = "color")
+                         setGooPlot()
+                         setPlotRange()
+                       },
+                       setGooPlot = function(){
+                         gooMapPlot <<- ggmap(gooMap)
+                       },
+                       setPlotRange = function(){
+                         plotRange <<- data.frame(xmin=gridBboxExt[1],
+                                            xmax=gridBboxExt[3],
+                                            ymin=gridBboxExt[2],
+                                            ymax=gridBboxExt[4])
+                       },
+                       plotGooGrid = function(){
+                         gooMapPlot + geom_polygon(aes(x = X, y = Y, group = PID),
+                                                   fill = 'grey', size = 0.2,
+                                                   color = 'gainsboro', data = gridPolySet, alpha = 0.5) +
+                           coord_fixed(xlim = extendrange(plotRange[1:2]),
+                                       ylim = extendrange(plotRange[3:4]), expand = TRUE)
+                       },
+                       plotGooGridData = function(grid_data){
+
+                         gooMapPlot + geom_polygon(aes(x = X, y = Y, group = PID),
+                                                   fill = 'grey', size = 0.2,
+                                                   color = 'gainsboro', data = grid_data, alpha = 0.5) +
+                           coord_fixed(xlim = extendrange(plotRange[1:2]),
+                                       ylim = extendrange(plotRange[3:4]), expand = TRUE)
+                       },
+                       setSampColScale = function(fac_col){
+                         myColors <- brewer.pal(length(fac_col), "Set1")
+                         names(myColors) <- fac_col
+                         sampColScale <<- scale_colour_manual(name = "SPECIE",values = myColors)
+                       },
+                       plotGooGridPoi = function(poi_data){
+                         plotGooGrid() + geom_jitter(data = poi_data,
+                                                     aes(x = LON, y = LAT, shape = SPECIE, color = SPECIE),
+                                                     width = 0.05, height = 0.05, alpha = 0.95) + sampColScale
+                       },
+                       plotGooBbox = function(){
+                         text_x <- mean(gridBboxExt[c(1,3)])
+                         text_y <- mean(gridBboxExt[c(2,4)])
+                         plotGooGrid() + geom_rect(data=plotRange, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
+                                                   color="firebrick",
+                                                   fill = alpha('red', 0.2),
+                                                   inherit.aes = FALSE) +
+                           annotate("label", x = text_x, y = text_y,
+                                    label="Bounding\nBox", family="serif", fontface="italic",
+                                    colour="firebrick", size=6, fill = "grey80")
+                       },
+                       setGridPath = function(path2grid){
+                         gridPath <<- path2grid
+                       },
+                       setGridName = function(){
+                         tmp_name <- unlist(strsplit(gridPath, "/"))
+                         tmp_name <- tmp_name[length(tmp_name)]
+                         gridName <<- substr(tmp_name, 1, nchar(tmp_name)-4)
+                       },
+                       loadGridShp = function(){
+                         gridShp <<- readShapePoly(gridPath)
+                       },
+                       setBioPath = function(path2bio){
+                         bioPath <<- path2bio
+                       },
+                       setBioName = function(){
+                         tmp_name <- unlist(strsplit(bioPath, "/"))
+                         tmp_name <- tmp_name[length(tmp_name)]
+                         bioName <<- substr(tmp_name, 1, nchar(tmp_name)-4)
+                       },
+                       loadBioShp = function(){
+                         bioShp <<- readShapePoly(bioPath)
+                       },
+                       addBioShp = function(bio_path){
+                         setBioPath(bio_path)
+                         setBioName()
+                         loadBioShp()
+                       },
+                       loadBioDF = function(bio_path){
+                         bioDF <<- readRDS(bio_path)
+                       },
+                       plotBioDF = function(){
+                         def.par <- par(no.readonly = TRUE)
+                         par(mar=c(2.5,2.5,3,1))
+                         layout(matrix(c(1,2), 1, 2, byrow = TRUE), widths = c(6,1))
+
+                         vec_bio <- apply(bioDF, 1, function(x) which(x == 1))
+                         color_clas <- rainbow(max(vec_bio))
+                         plotSamMap(title = "Biocenosis", celCol = color_clas[vec_bio])
+
+                         par(mar=c(5,1,1,1))
+                         par(mar=c(1,0,1,0))
+
+                         plot(NULL, xlim=c(0,1), ylim=c(0,1), bty="n", axes = FALSE, ann = FALSE)
+                         legend(x = 0, y = 0.5, legend = colnames(bioDF), fill = color_clas, bty = "n")
+                         par(def.par)
+                       },
+                       createPolySet = function(){
+                         gridPolySet <<- as.data.frame(SpatialPolygons2PolySet(gridShp))
+                       },
+                       setNumCell = function(){
+                         nCells <<- length(gridShp@polygons)
+                       },
+                       setGridCenter = function(){
+                         griCent <<- coordinates(gridShp) # or gCentroid from rgeos
+                       },
+                       getGridBath = function(){
+                         lon_ran <- extendrange(griCent[,1], f = 0.05)
+                         lat_ran <- extendrange(griCent[,2], f = 0.05)
+                         gridBathy <<- getNOAA.bathy(lon1 = lon_ran[1],
+                                                     lon2 = lon_ran[2],
+                                                     lat1 = lat_ran[1],
+                                                     lat2 = lat_ran[2], resolution = 1)
+                       },
+                       saveGridBath = function(bathy_path){
+                         saveRDS(object = gridBathy, file = bathy_path)
+                       },
+                       loadGridBath = function(bathy_path){
+                         gridBathy <<- readRDS(bathy_path)
+                         getCentDept()
+                       },
+                       getCentDept = function(){
+                         centDept <<- get.depth(gridBathy, x = griCent[,1], y = griCent[,2], locator = FALSE)
+                       },
+                       plotGridBathy = function(){
+                         def.par <- par(no.readonly = TRUE)
+                         par(mar=c(2.5,2.5,3,1))
+                         layout(matrix(c(1,2), 1, 2, byrow = TRUE), widths = c(6,1))
+                         blues <- c("midnightblue", "royalblue4", "royalblue3",
+                                    "royalblue1", "slategray1")
+                         plot(gridBathy, image = TRUE, lwd = 0.2,
+                              bpal = list(c(min(gridBathy), -0.5, blues)))
+                         title(main = paste("Bathymetry Map", sep = ""))
+                         plot(gridShp, ylab = "", xlab = "", add =TRUE, lwd = 0.65, axes = FALSE, ann = FALSE)
+                         plot(gridBathy, deep = 0, shallow = 0, step = 0, lwd = 0.5, add = TRUE, axes = FALSE, ann = FALSE)
+                         map("worldHires", fill = T, col = "whitesmoke", add = TRUE)
+                         map.scale(cex = 0.75, ratio = FALSE)
+                         map.axes(cex.axis=0.8)
+                         par(mar=c(5,1,1,1))
+                         plot(NULL, xlim=c(0,1), ylim=c(0,1), bty="n", axes = FALSE, ann = FALSE)
+                         colorlegend(posx = c(0.45, 0.65), posy = c(0.15, 0.55),
+                                     col = intpalette(blues, 50), zval = pretty(seq(from = min(gridBathy),
+                                                                                    to = 0, length.out = 3),
+                                                                                n = 4),
+                                     zlim = range(pretty(seq(from = min(gridBathy),
+                                                             to = 0, length.out = 3),
+                                                         n = 4)), cex = 0.5, left = TRUE)
+                         par(def.par)
+                       },
+                       plotSamMap = function(title = "", celCol = NULL){
+                         par(mar = c(3,3,1.5,0.5))
+                         plotPolys(gridPolySet, main = title, ylab = "", xlab = "", col = celCol, axes = TRUE,
+                                   xlim = extendrange(c(gridShp@bbox[1,1], gridShp@bbox[1,2]), f = 0.05),
+                                   ylim = extendrange(c(gridShp@bbox[2,1], gridShp@bbox[2,2]), f = 0.05))
+                         mtext("Longitude", side=1, line=2.1, cex = 1.5)
+                         mtext("Latitude", side=2, line=2, cex = 1.5)
+                         map("worldHires", fill = T, col = "gainsboro", add = TRUE)
+                         # map.axes(cex.axis=0.8)
+                         map.scale(cex = 0.75, ratio = FALSE)
+                       },
+                       plotCoho = function(abbs){
+                         x_rang <- extendrange(c(gridShp@bbox[1,1], gridShp@bbox[1,2]), f = 0.05)
+                         y_rang <- extendrange(c(gridShp@bbox[2,1], gridShp@bbox[2,2]), f = 0.07)
+                         plotPolys(gridPolySet, ylab = "", xlab = "",
+                                   xlim = x_rang,
+                                   ylim = y_rang)
+                         mtext("Longitude", side=1, line=2.1, cex = 1.1)
+                         mtext("Latitude", side=2, line=2, cex = 1.1)
+                         smoothScatter(griCent[rep.int(1:nrow(griCent), abbs+1),],
+                                       colramp = colorRampPalette(c("white", "white", "blue", "purple"),bias = 0.77, alpha = 0.5),
+                                       add = TRUE, nbin = 250, xlab = NULL, ylab = NULL, nrpoints = 0)
+                         plot(gridShp, ylab = "", xlab = "",
+                              add =TRUE, lwd = 0.25)
+                         map("worldHires", fill = T, col = "gainsboro",
+                             xlim = x_rang,
+                             ylim = y_rang, add = TRUE)
+                         map.scale(x = min(abs(x_rang))+(diff(x_rang)/10), y = min(abs(y_rang))+(diff(y_rang)/7), cex = 0.65, ratio = FALSE)
+
+                       },
+                       setClusInpu = function(clus_data){
+                         clusInpu <<- as.matrix(clus_data)
+                       },
+                       calcFishGrou = function(numCuts = 50,
+                                               minsize = 10,
+                                               modeska = "S",
+                                               skater_method){
+                         set.seed(123)
+                         #Build the neighboorhod list
+                         Grid.bh <- gridShp[1]
+                         ##  Construct neighbours list from polygon list
+                         bh.nb <- poly2nb(Grid.bh, queen = TRUE)
+                         bh.mat <- cbind(rep(1:length(bh.nb), lapply(bh.nb,length)), unlist(bh.nb))
+                         #Compute the basic objects for clustering
+                         ##  Cost of each edge as the distance between nodes
+                         lcosts <- nbcosts(bh.nb, clusInpu)
+                         ##  Spatial weights for neighbours lists
+                         nb.w <- nb2listw(bh.nb, lcosts, style = modeska)
+                         ##  Find the minimal spanning tree
+                         mst.bh <- mstree(nb.w, ini = 1)
+                         clusMat <<- matrix(NA, nCells, numCuts)
+                         cat("Performing CC with 1 cut... ", sep = "")
+                         res1 <- skater(mst.bh[,1:2], clusInpu, ncuts = 1, minsize,
+                                        method = skater_method)
+                         clusMat[,1] <<- res1$groups
+                         cat(" Done","\n", sep = "")
+                         # plotFishGrou(ind_clu = 1)
+
+                         #Perform the first CC (without removing spurious clusters)
+                         for(nCuts in 2:numCuts){
+                           cat("Performing CC with ",nCuts," cuts... ", sep = "")
+                           ##  Spatial 'K'luster Analysis by Tree Edge Removal
+                           #                            res1 <- skater(mst.bh[,1:2], cells_data, ncuts = nCuts, minsize,
+                           #                                           method = skater_method)
+                           res1 <- skater(res1, clusInpu, ncuts = 1, minsize,
+                                          method = skater_method)
+                           clusMat[,nCuts] <<- res1$groups
+                           cat(" Done","\n", sep = "")
+                           # plotFishGrou(ind_clu = nCuts)
+                         }
+
+                         indSil <<- numeric(ncol(clusMat))
+                         indCH <<- numeric(ncol(clusMat))
+                         for(i in 1:ncol(clusMat)){
+                           ##  Compute silhouette information according to a given clustering in k clusters
+                           indSil[i] <<- summary(silhouette(clusMat[,i],dist(clusInpu,
+                                                                             method = skater_method)))$avg.width
+                           ##  Compute CH index for a given partition of a data set
+                           indCH[i] <<-  get_CH(clusInpu,clusMat[,i])
+                         }
+                       },
+                       plotFishGrou = function(ind_clu){
+                         def.par <- par(no.readonly = TRUE)
+                         layout(matrix(c(1,3,2,3),2,2,byrow = TRUE), c(1,3), TRUE)
+                         plot(indCH, type = "l", ann = FALSE)
+                         title("CH")
+                         abline(v = ind_clu, col = "red", lty = 2)
+                         plot(indSil, type = "l", ann = FALSE)
+                         title("Silhouette")
+                         abline(v = ind_clu, col = "red", lty = 2)
+                         plotSamMap(title = paste("Max Width with ", ind_clu, " cuts", sep = ""),
+                                    celCol = (rainbow(length(unique(clusMat[,ind_clu]))))[clusMat[,ind_clu]])
+                         par(def.par)
+                       }
+                     ))
+
