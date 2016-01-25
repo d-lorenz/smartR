@@ -732,6 +732,9 @@ smart_gui <- function(){
   ####   Effort   ##############################################
   ##############################################################
 
+  ### TO DO:
+  # - Add button + window to show speed/depth profiles
+
   eff_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Effort")
   eff_g_top <- gframe(horizontal = TRUE, container = eff_g)
   addSpace(eff_g_top, 2)
@@ -744,6 +747,19 @@ smart_gui <- function(){
     svalue(effvie_drop) <- "All"
     dev.set(dev.list()[pre_dev+5])
     my_project$effPlot("All")
+
+    ### Update Effort Status
+    effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
+    delete(effo_g, effo_g$children[[length(effo_g$children)]])
+    add(effo_g, effo_sta_n)
+  })
+  addSpring(eff_g_top1)
+  gbutton("Extract from VMSBASE", container = eff_g_top1, handler = function(h,...){
+
+    tmp_files <- gfile(text = "Select Effort DBs", type = "open",
+                       initial.filename = NULL, initial.dir = getwd(), filter = list(),
+                       multi = TRUE)
+    my_project$loadFleeEffoDbs(tmp_files)
 
     ### Update Effort Status
     effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
