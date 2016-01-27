@@ -502,17 +502,16 @@ FishFleet <- R6Class("fishFleet",
                          }
                        },
                        plotSpeedDepth = function(which_year, speed_range, depth_range){
-                         ## which_year <- "2009"
                          tmp_dat <- rawEffort[[which_year]][,c("SPE","DEPTH")]
                          op <- par(no.readonly = TRUE)
-                         par(mfrow = c(2,1))
-                         speed_hist <- hist(tmp_dat$SPE[which(tmp_dat$SPE <= 25 & tmp_dat$SPE != 0)], 100, plot = FALSE)
+                         par(mfrow = c(2,1), mar = c(3,0,2,0))
+                         speed_hist <- hist(tmp_dat$SPE[which(tmp_dat$SPE <= quantile(tmp_dat$SPE, 0.99) & tmp_dat$SPE > 0)], 100, plot = FALSE)
                          plot(speed_hist, xlab = "Speed", main = "")
                          abline(v = speed_range[1], col = "red", lty = 2)
                          abline(v = speed_range[2], col = "red", lty = 2)
                          text(x = speed_range[1]+((speed_range[2]-speed_range[1])/2), y = max(speed_hist$counts)/2, labels = "FISHING", col = 2)
                          title(main = paste("Speed/Depth profile of ", which_year, sep = ""))
-                         depth_hist <- hist(tmp_dat$DEPTH[which(tmp_dat$DEPTH >= -1000 & tmp_dat$DEPTH <= 0)], 100, plot = FALSE)
+                         depth_hist <- hist(tmp_dat$DEPTH[which(tmp_dat$DEPTH >= quantile(tmp_dat$DEPTH, 0.01) & tmp_dat$DEPTH <= 0)], 100, plot = FALSE)
                          plot(depth_hist, xlab = "Depth", main = "")
                          abline(v = depth_range[1], col = "red", lty = 2)
                          abline(v = depth_range[2], col = "red", lty = 2)

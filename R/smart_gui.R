@@ -756,10 +756,17 @@ smart_gui <- function(){
   addSpring(eff_g_top1)
   gbutton("Extract from VMSBASE", container = eff_g_top1, handler = function(h,...){
 
-    tmp_files <- gfile(text = "Select Effort DBs", type = "open",
-                       initial.filename = NULL, initial.dir = getwd(), filter = list(),
-                       multi = TRUE)
-    my_project$loadFleeEffoDbs(tmp_files)
+    #### SKIPPED LOADING rData
+#     tmp_files <- gfile(text = "Select Effort DBs", type = "open",
+#                        initial.filename = NULL, initial.dir = getwd(), filter = list(),
+#                        multi = TRUE)
+#
+#     my_project$loadFleeEffoDbs(tmp_files)
+
+    cat("\nLoading effort from rData...", sep = "")
+    my_project$fleet$rawEffort <- readRDS("/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/rawEffo.rData")
+    cat("   Done!", sep = "")
+
 
     ### Update Effort Status
     effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
@@ -767,6 +774,75 @@ smart_gui <- function(){
     add(effo_g, effo_sta_n)
   })
   addSpring(eff_g_top1)
+  addSpring(eff_g_top)
+
+  eff_g_top1b <- ggroup(horizontal = FALSE, container = eff_g_top)
+  addSpring(eff_g_top1b)
+  gbutton("Set Fishing Points", container = eff_g_top1b, handler = function(h,...){
+
+    temp_dia <- gwindow(title="Set Fishing Points", visible = FALSE,
+                        width = 650, height = 450, parent = main_win)
+
+    up_g <- ggroup(horizontal = FALSE, container = temp_dia)
+    up_fra <- gframe(container = up_g, horizontal = TRUE)
+    addSpring(up_fra)
+    spe_fra <- gframe(text = "Speed Range", container = up_fra, horizontal = TRUE)
+    spe_lay <- glayout(homogeneous = FALSE, spacing = 10, container = spe_fra)
+    spe_lay[1,1, anchor = 0] <- "Min"
+    spe_lay[2,1, anchor = 0] <- "Max"
+    spe_lay[1,2, anchor = 0] <- gspinbutton(from = 0, to = 30, by = 1, value = 0, container = spe_lay,
+                                            handler = function(...){
+                                              my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
+                                                                               speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
+                                                                               depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
+                                            })
+    spe_lay[2,2, anchor = 0] <- gspinbutton(from = 0, to = 30, by = 1, value = 10, container = spe_lay,
+                                            handler = function(...){
+                                              my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
+                                                                               speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
+                                                                               depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
+                                            })
+    addSpring(up_fra)
+    dep_fra <- gframe(text = "Depth Range", container = up_fra, horizontal = TRUE)
+    dep_lay <- glayout(homogeneous = FALSE, spacing = 10, container = dep_fra)
+    dep_lay[1,1, anchor = 0] <- "Min"
+    dep_lay[2,1, anchor = 0] <- "Max"
+    dep_lay[1,2, anchor = 0] <- gspinbutton(from = -5000, to = 0, by = 10, value = -500, container = dep_lay,
+                                            handler = function(...){
+                                              my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
+                                                                               speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
+                                                                               depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
+                                            })
+    dep_lay[2,2, anchor = 0] <- gspinbutton(from = -5000, to = 0, by = 10, value = 0, container = dep_lay,
+                                            handler = function(...){
+                                              my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
+                                                                               speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
+                                                                               depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
+                                            })
+    addSpring(up_fra)
+    yea_fra <- gframe(text = "Year View", container = up_fra, horizontal = TRUE)
+    yea_drop <- gcombobox(names(my_project$fleet$rawEffort), selected = 1,
+                          editable = FALSE, container = yea_fra, expand = TRUE,
+                          handler = function(...){
+                            my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
+                                                             speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
+                                                             depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
+                          })
+    addSpring(up_fra)
+    gbutton(text = "\n   Set!   \n", container = up_fra, handler = function(...){
+
+      dispose(temp_dia)
+    })
+    addSpring(up_fra)
+    fipo_gra <- ggraphics(width = 600, height = 400, container = up_g, expand = TRUE)
+    visible(temp_dia) <- TRUE
+
+    my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
+                                     speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
+                                     depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
+
+  })
+  addSpring(eff_g_top1b)
   addSpring(eff_g_top)
 
   eff_g_top2 <- gframe(text = "View", horizontal = TRUE, container = eff_g_top, expand = TRUE)
