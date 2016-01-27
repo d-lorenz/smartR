@@ -514,22 +514,15 @@ FishFleet <- R6Class("fishFleet",
                            tmp_dat <- rawEffort[[j]][,c("SPE","DEPTH")]
 
                            cat("\nSetting speed filter... ", sep = "")
-                           tmp_dat$FishSpeed <- 0
-                           tmp_dat$FishSpeed[which(tmp_dat$SPE >= fishPoinPara[1] & tmp_dat$SPE <= fishPoinPara[2])] <- 1
+                           tmp_dat$FishSpeed <- tmp_dat$SPE >= as.numeric(fishPoinPara[1]) & tmp_dat$SPE <= as.numeric(fishPoinPara[2])
                            cat("Done!", sep = "")
 
                            cat("\nSetting depth filter... ", sep = "")
-                           tmp_dat$FishDepth <- 0
-                           tmp_dat$FishDepth[which(tmp_dat$DEPTH >= fishPoinPara[3] & tmp_dat$DEPTH <= fishPoinPara[4])] <- 1
+                           tmp_dat$FishDepth <- tmp_dat$DEPTH <= as.numeric(fishPoinPara[3]) & tmp_dat$DEPTH >= as.numeric(fishPoinPara[4])
                            cat("Done!", sep = "")
 
                            cat("\nCombining speed and depth data... ", sep = "")
-                           tmp_dat$FishPoint <- 0
-                           tmp_dat$FishPoint[which(tmp_dat$FishSpeed == 1 & tmp_dat$FishDepth == 1)] <- 1
-                           cat("Done!", sep = "")
-
-                           cat("\nSaving Results... ", sep = "")
-                           rawEffort[[j]]$FishPoint <<- tmp_dat$FishPoint
+                           rawEffort[[j]]$FishPoint <<- tmp_dat$FishSpeed & tmp_dat$FishDepth
                            cat("Done!", sep = "")
                          }
                        },
