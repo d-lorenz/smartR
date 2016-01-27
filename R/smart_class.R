@@ -508,6 +508,31 @@ FishFleet <- R6Class("fishFleet",
                                                     min_dep = depth_range[1],
                                                     max_dep = depth_range[2])
                        },
+                       setFishPoin = function(){
+                         for(j in names(rawEffort)){
+                           cat("\n\nComputing fishing points for ", j, sep = "")
+                           tmp_dat <- rawEffort[[j]][,c("SPE","DEPTH")]
+
+                           cat("\nSetting speed filter... ", sep = "")
+                           tmp_dat$FishSpeed <- 0
+                           tmp_dat$FishSpeed[which(tmp_dat$SPE >= fishPoinPara[1] & tmp_dat$SPE <= fishPoinPara[2])] <- 1
+                           cat("Done!", sep = "")
+
+                           cat("\nSetting depth filter... ", sep = "")
+                           tmp_dat$FishDepth <- 0
+                           tmp_dat$FishDepth[which(tmp_dat$DEPTH >= fishPoinPara[3] & tmp_dat$DEPTH <= fishPoinPara[4])] <- 1
+                           cat("Done!", sep = "")
+
+                           cat("\nCombining speed and depth data... ", sep = "")
+                           tmp_dat$FishPoint <- 0
+                           tmp_dat$FishPoint[which(tmp_dat$FishSpeed == 1 & tmp_dat$FishDepth == 1)] <- 1
+                           cat("Done!", sep = "")
+
+                           cat("\nSaving Results... ", sep = "")
+                           rawEffort[[j]]$FishPoint <<- tmp_dat$FishPoint
+                           cat("Done!", sep = "")
+                         }
+                       },
                        plotSpeedDepth = function(which_year, speed_range, depth_range){
                          tmp_dat <- rawEffort[[which_year]][,c("SPE","DEPTH")]
                          op <- par(no.readonly = TRUE)
