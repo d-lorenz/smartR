@@ -526,6 +526,19 @@ FishFleet <- R6Class("fishFleet",
                            cat("Done!", sep = "")
                          }
                        },
+                       plotFishPoinStat = function(){
+                         tmp_stat <- data.frame()
+                         for(j in names(rawEffort)){
+                           tmp_stat <- rbind(tmp_stat, cbind(j, c("Not Fishing", "Fishing"), as.numeric(table(rawEffort[[j]]$FishPoint))))
+                         }
+                         colnames(tmp_stat) <- c("Year", "Status", "Value")
+                         tmp_stat$Value <- as.numeric(as.character(tmp_stat$Value))
+
+                         ggplot(data = tmp_stat, aes(x = Year, y = Value, fill = Status)) +
+                           geom_bar(stat="identity", position = position_dodge(), colour="black") +
+                           ggtitle("Number of Fishing Points each Year") +
+                           scale_fill_manual(values=c("gainsboro", "grey50")) + theme_linedraw()
+                       },
                        plotSpeedDepth = function(which_year, speed_range, depth_range){
                          tmp_dat <- rawEffort[[which_year]][,c("SPE","DEPTH")]
                          op <- par(no.readonly = TRUE)
