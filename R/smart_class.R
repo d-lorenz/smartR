@@ -483,6 +483,7 @@ FishFleet <- R6Class("fishFleet",
                        productionIds = NULL,
                        prodIdsLoa = NULL,
                        effortIds = NULL,
+                       fishPoinPara = NULL,
                        loadFleetRegis = function(register_path){
                          cat("Loading raw Fleet Register data...\n", sep = "")
                          rawRegister <<- readRegisterEU(register_path)
@@ -500,6 +501,12 @@ FishFleet <- R6Class("fishFleet",
                            tmp_key <- names(which.max(table(years(tmp_mat$UTC_S))))
                            rawProduction[[tmp_key]] <<- tmp_mat
                          }
+                       },
+                       setFishPoinPara = function(speed_range, depth_range){
+                         fishPoinPara <<- data.frame(min_spe = speed_range[1],
+                                                    max_spe = speed_range[2],
+                                                    min_dep = depth_range[1],
+                                                    max_dep = depth_range[2])
                        },
                        plotSpeedDepth = function(which_year, speed_range, depth_range){
                          tmp_dat <- rawEffort[[which_year]][,c("SPE","DEPTH")]

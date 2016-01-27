@@ -830,6 +830,12 @@ smart_gui <- function(){
                           })
     addSpring(up_fra)
     gbutton(text = "\n   Set!   \n", container = up_fra, handler = function(...){
+      ### TO DO
+      #   - add 'fishing points filter' parameters to fleet object
+      my_project$fleet$setFishPoinPara(speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
+                                       depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
+      #   - compute fishing points
+
 
       dispose(temp_dia)
     })
