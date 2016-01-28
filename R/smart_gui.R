@@ -853,6 +853,13 @@ smart_gui <- function(){
   addSpring(eff_g_top1b)
   addSpring(eff_g_top)
 
+  eff_g_top1c <- ggroup(horizontal = FALSE, container = eff_g_top)
+  addSpring(eff_g_top1c)
+  gbutton("Grid Fishing Points", container = eff_g_top1c, handler = function(h,...){
+    my_project$setCellPoin()
+  })
+  addSpring(eff_g_top)
+
   eff_g_top2 <- gframe(text = "View", horizontal = TRUE, container = eff_g_top, expand = TRUE)
   addSpring(eff_g_top2)
   effvie_drop <- gcombobox(items = "Year", selected = 1, container = eff_g_top2, expand = TRUE, editable = FALSE)

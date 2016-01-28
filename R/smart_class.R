@@ -58,7 +58,7 @@ SmartProject <- R6Class("smartProject",
                               cat("\nLoading db: ", i, sep = "")
                               cat("\nSelecting tracks in box...", sep = "")
                               tmp_eff <- fn$sqldf("select * from (select * from (select * from nn_clas where met_des = '`met_nam`') join (select *, rowid as i_id from intrp where LON > `sampMap$gridBboxSP@bbox[1,1]` and LON < `sampMap$gridBboxSP@bbox[1,2]` and LAT > `sampMap$gridBboxSP@bbox[2,1]` and LAT < `sampMap$gridBboxSP@bbox[2,2]`) using (I_NCEE, T_NUM)) join (select * from p_depth) using (i_id)",
-                                               dbname = i)
+                                                  dbname = i)
 
                               ### Over in B-Box
                               in_box <- over(SpatialPoints(tmp_eff[,c("LON","LAT")]), sampMap$gridBboxSP)
@@ -136,6 +136,18 @@ SmartProject <- R6Class("smartProject",
                                   at = seq(0.21,0.80, length.out = 10), las = 2, cex = 1)
                             text(legendUnits, x = 0.25, y = 0.15)
                             par(def.par)
+                          },
+                          setCellPoin = function(){
+                            num_cell <- getinfo.shape(sampMap$gridPath)$entities
+                            sampMap$gridShp@plotOrder <- 1:num_cell
+                            tmp_polygons <- SpatialPolygons(sampMap$gridShp@polygons)
+
+                            for(j in names(fleet$rawEffort)){
+                              cat("\n\nGridding year ", j, sep = "")
+                              cat("\nOverlaying points...", sep = "")
+                              fleet$rawEffort[[j]]$Cell <<- over(SpatialPoints(fleet$rawEffort[[j]][,c("LON","LAT")]), tmp_polygons)
+                              cat("Done!", sep = "")
+                            }
                           },
                           cohoDisPlot = function(whoSpe, whoCoh, whiYea, interp){
                             if(interp == FALSE){
@@ -504,9 +516,9 @@ FishFleet <- R6Class("fishFleet",
                        },
                        setFishPoinPara = function(speed_range, depth_range){
                          fishPoinPara <<- data.frame(min_spe = speed_range[1],
-                                                    max_spe = speed_range[2],
-                                                    min_dep = depth_range[1],
-                                                    max_dep = depth_range[2])
+                                                     max_spe = speed_range[2],
+                                                     min_dep = depth_range[1],
+                                                     max_dep = depth_range[2])
                        },
                        setFishPoin = function(){
                          for(j in names(rawEffort)){
@@ -831,9 +843,9 @@ SampleMap <- R6Class("sampleMap",
                        },
                        setPlotRange = function(){
                          plotRange <<- data.frame(xmin=gridBboxExt[1],
-                                            xmax=gridBboxExt[3],
-                                            ymin=gridBboxExt[2],
-                                            ymax=gridBboxExt[4])
+                                                  xmax=gridBboxExt[3],
+                                                  ymin=gridBboxExt[2],
+                                                  ymax=gridBboxExt[4])
                        },
                        plotGooGrid = function(){
                          gooMapPlot + geom_polygon(aes(x = X, y = Y, group = PID),
