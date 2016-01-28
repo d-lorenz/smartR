@@ -116,7 +116,7 @@ smart_gui <- function(){
       svalue(ma_date_s) <- paste("To: ", max(as.numeric(as.character(my_project$years))), sep = "")
       svalue(n_spec_s) <- paste(length(my_project$species),
                                 ifelse(length(my_project$species) == 1, " specie", " species"), sep = "")
-#       samp_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
+      #       samp_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
       delete(samp_g, samp_g$children[[length(samp_g$children)]])
       add(samp_g, samp_sta_n)
     }
@@ -139,7 +139,7 @@ smart_gui <- function(){
     if(!is.null(my_project$fleet$rawEffort)){
       effvie_drop[] <- c("All", colnames(my_project$fleet$rawEffort))
       svalue(effvie_drop) <- "All"
-#       effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
+      #       effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
       delete(effo_g, effo_g$children[[length(effo_g$children)]])
       add(effo_g, effo_sta_n)
     }
@@ -149,7 +149,7 @@ smart_gui <- function(){
     if(!is.null(my_project$sampMap$clusMat)){
       fg_plotCut[] <- 1:ncol(my_project$sampMap$clusMat)
       svalue(fg_plotCut) <- which.max(my_project$sampMap$indSil)
-#       figr_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
+      #       figr_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
       delete(figr_g, figr_g$children[[length(figr_g$children)]])
       add(figr_g, figr_sta_n)
     }
@@ -757,11 +757,11 @@ smart_gui <- function(){
   gbutton("Extract from VMSBASE", container = eff_g_top1, handler = function(h,...){
 
     #### SKIPPED LOADING rData
-#     tmp_files <- gfile(text = "Select Effort DBs", type = "open",
-#                        initial.filename = NULL, initial.dir = getwd(), filter = list(),
-#                        multi = TRUE)
-#
-#     my_project$loadFleeEffoDbs(tmp_files)
+    #     tmp_files <- gfile(text = "Select Effort DBs", type = "open",
+    #                        initial.filename = NULL, initial.dir = getwd(), filter = list(),
+    #                        multi = TRUE)
+    #
+    #     my_project$loadFleeEffoDbs(tmp_files)
 
     cat("\nLoading effort from rData...", sep = "")
     my_project$fleet$rawEffort <- readRDS("/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/rawEffo.rData")
@@ -793,14 +793,14 @@ smart_gui <- function(){
     spe_lay[1,2, anchor = 0] <- gspinbutton(from = 0, to = 30, by = 1, value = 0, container = spe_lay,
                                             handler = function(...){
                                               my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
-                                                                               speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
-                                                                               depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
+                                                                              speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
+                                                                              depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
                                             })
     spe_lay[2,2, anchor = 0] <- gspinbutton(from = 0, to = 30, by = 1, value = 10, container = spe_lay,
                                             handler = function(...){
                                               my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
-                                                                               speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
-                                                                               depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
+                                                                              speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
+                                                                              depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
                                             })
     addSpring(up_fra)
     dep_fra <- gframe(text = "Depth Range", container = up_fra, horizontal = TRUE)
@@ -810,14 +810,14 @@ smart_gui <- function(){
     dep_lay[1,2, anchor = 0] <- gspinbutton(from = -5000, to = 0, by = 10, value = -500, container = dep_lay,
                                             handler = function(...){
                                               my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
-                                                                               speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
-                                                                               depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
+                                                                              speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
+                                                                              depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
                                             })
     dep_lay[2,2, anchor = 0] <- gspinbutton(from = -5000, to = 0, by = 10, value = 0, container = dep_lay,
                                             handler = function(...){
                                               my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
-                                                                               speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
-                                                                               depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
+                                                                              speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
+                                                                              depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
                                             })
     addSpring(up_fra)
     yea_fra <- gframe(text = "Year View", container = up_fra, horizontal = TRUE)
@@ -825,13 +825,13 @@ smart_gui <- function(){
                           editable = FALSE, container = yea_fra, expand = TRUE,
                           handler = function(...){
                             my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
-                                                             speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
-                                                             depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
+                                                            speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
+                                                            depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
                           })
     addSpring(up_fra)
     gbutton(text = "\n   Set!   \n", container = up_fra, handler = function(...){
       my_project$fleet$setFishPoinPara(speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
-                                       depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
+                                       depth_range = sort(unlist(lapply(dep_lay[1:2,2], svalue)), decreasing = TRUE))
       my_project$fleet$setFishPoin()
       dispose(temp_dia)
     })
@@ -840,9 +840,15 @@ smart_gui <- function(){
     visible(temp_dia) <- TRUE
 
     my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
-                                     speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
-                                     depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
+                                    speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
+                                    depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
 
+  })
+
+  addSpring(eff_g_top1b)
+  gbutton("View Stats", container = eff_g_top1b, handler = function(h,...){
+    dev.set(dev.list()[pre_dev+5])
+    my_project$fleet$plotFishPoinStat()
   })
   addSpring(eff_g_top1b)
   addSpring(eff_g_top)
@@ -908,13 +914,13 @@ smart_gui <- function(){
               cat("\nInput for Fishing Grounds Clustering:\n")
               if(svalue(lyt[2,2])){ ### Resource
                 cat("\n   -   Resource Distribution")
-              clus_data <- cbind(clus_data,
-                                 apply(my_project$bySpecie[[1]]$Coh_A_Int[,1,,1], 1, sum),
-                                 apply(my_project$bySpecie[[1]]$Coh_A_Int[,2,,1], 1, sum),
-                                 apply(my_project$bySpecie[[1]]$Coh_A_Int[,3,,1], 1, sum),
-                                 apply(my_project$bySpecie[[1]]$Coh_A_Int[,1,,2], 1, sum),
-                                 apply(my_project$bySpecie[[1]]$Coh_A_Int[,2,,2], 1, sum),
-                                 apply(my_project$bySpecie[[1]]$Coh_A_Int[,3,,2], 1, sum))
+                clus_data <- cbind(clus_data,
+                                   apply(my_project$bySpecie[[1]]$Coh_A_Int[,1,,1], 1, sum),
+                                   apply(my_project$bySpecie[[1]]$Coh_A_Int[,2,,1], 1, sum),
+                                   apply(my_project$bySpecie[[1]]$Coh_A_Int[,3,,1], 1, sum),
+                                   apply(my_project$bySpecie[[1]]$Coh_A_Int[,1,,2], 1, sum),
+                                   apply(my_project$bySpecie[[1]]$Coh_A_Int[,2,,2], 1, sum),
+                                   apply(my_project$bySpecie[[1]]$Coh_A_Int[,3,,2], 1, sum))
               }
               if(svalue(lyt[3,2])){ ### SeaBed
                 cat("\n   -   Seabed Category")
@@ -929,7 +935,7 @@ smart_gui <- function(){
               if(svalue(lyt[5,2])){ ### Bathymetry
                 cat("\n   -   Bathymetry\n")
                 clus_data <- cbind(clus_data,
-                                 my_project$sampMap$centDept[,3])
+                                   my_project$sampMap$centDept[,3])
               }
               clus_data <- clus_data[,-1]
               my_project$sampMap$setClusInpu(clus_data)
@@ -978,10 +984,10 @@ smart_gui <- function(){
   fig_g_top_plot <- gframe(text = "Plot", horizontal = TRUE, container = fig_g_top, expand = TRUE)
   addSpring(fig_g_top_plot)
   fg_plotCut <- gcombobox(items = 2:50,
-                       container = fig_g_top_plot, handler = function(h,...){
-                         dev.set(dev.list()[pre_dev+6])
-                         my_project$sampMap$plotFishGrou(svalue(fg_plotCut))
-                       })
+                          container = fig_g_top_plot, handler = function(h,...){
+                            dev.set(dev.list()[pre_dev+6])
+                            my_project$sampMap$plotFishGrou(svalue(fg_plotCut))
+                          })
 
   addSpring(fig_g_top_plot)
   addSpring(fig_g_top)
@@ -1040,14 +1046,14 @@ smart_gui <- function(){
   addSpring(pro_g_top)
   pro_g_top1 <- ggroup(horizontal = FALSE, container = pro_g_top)
   addSpring(pro_g_top1)
-#   gbutton("Edit Raw Production", container = pro_g_top1, handler = function(h,...){
-#
-#   })
+  #   gbutton("Edit Raw Production", container = pro_g_top1, handler = function(h,...){
+  #
+  #   })
   gbutton("Load Landings", container = pro_g_top1, handler = function(h,...){
     tmp_files <- gfile(text = "Select Landings Data", type = "open",
                        filter = list("csv files" = list(patterns = c("*.csv")),
                                      "All files" = list(patterns = c("*"))),
-                            multi = TRUE)
+                       multi = TRUE)
 
     dev.set(dev.list()[pre_dev+8])
 
