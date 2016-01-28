@@ -733,7 +733,6 @@ smart_gui <- function(){
   ##############################################################
 
   ### TO DO:
-  # - Add button + window to show speed/depth profiles
 
   eff_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Effort")
   eff_g_top <- gframe(horizontal = TRUE, container = eff_g)
@@ -858,6 +857,7 @@ smart_gui <- function(){
   gbutton("Grid Fishing Points", container = eff_g_top1c, handler = function(h,...){
     my_project$setCellPoin()
   })
+  addSpring(eff_g_top1c)
   addSpring(eff_g_top)
 
   eff_g_top2 <- gframe(text = "View", horizontal = TRUE, container = eff_g_top, expand = TRUE)
