@@ -488,6 +488,7 @@ FishFleet <- R6Class("fishFleet",
                      public = list(
                        rawRegister = NULL,
                        rawEffort = NULL,
+                       weekEffoMatr = NULL,
                        rawSelectivity = NULL,
                        rawProduction = NULL,
                        registerIds = NULL,
@@ -518,6 +519,22 @@ FishFleet <- R6Class("fishFleet",
                                                      max_spe = speed_range[2],
                                                      min_dep = depth_range[1],
                                                      max_dep = depth_range[2])
+                       },
+                       setWeekEffoMatr = function(){
+                         weekEffoMatr <<- list()
+                         for(j in names(rawEffort)){
+                           cat("\n\nLoading year ", j, " ... ", sep = "")
+                           tmp_dat <- rawEffort[[j]][,c("I_NCEE","T_NUM", "WeekNum", "Cell", "FishPoint")]
+                           cat("Done!", sep = "")
+                           tmp_dat$Cell <- as.factor(tmp_dat$Cell)
+
+                           cat("\nCreating weekly fishing effort matrix... ", sep = "")
+                           tmp_matrix <- dcast(tmp_dat,
+                                               I_NCEE + T_NUM + WeekNum + FishPoint~ Cell, fun.aggregate = sum,
+                                               na.rm=TRUE, value.var = "FishPoint")
+                           weekEffoMatr[[j]] <<- subset(tmp_matrix, FishPoint == TRUE)
+                           cat("Done!", sep = "")
+                         }
                        },
                        setWeekNum = function(){
                          for(j in names(rawEffort)){
