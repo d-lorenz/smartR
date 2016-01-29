@@ -519,6 +519,13 @@ FishFleet <- R6Class("fishFleet",
                                                      min_dep = depth_range[1],
                                                      max_dep = depth_range[2])
                        },
+                       setWeekNum = function(){
+                         for(j in names(rawEffort)){
+                           cat("\n\nAdding week number to year ", j, sep = "")
+                           tmp_dat <- rawEffort[[j]][,c("DATE")]
+                           rawEffort[[j]]$WeekNum <<- as.numeric(format(as.Date(chron(tmp_dat)), "%V"))
+                         }
+                       },
                        setFishPoin = function(){
                          for(j in names(rawEffort)){
                            cat("\n\nComputing fishing points for ", j, sep = "")
