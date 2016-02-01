@@ -136,6 +136,31 @@ SmartProject <- R6Class("smartProject",
                             text(legendUnits, x = 0.25, y = 0.15)
                             par(def.par)
                           },
+                          ggplotRawEffort = function(year){
+                            tmp_dat <- fleet$rawEffort[[year]][sample(1:nrow(fleet$rawEffort[[year]]), 100000),c("LON","LAT","W_HARB")]
+                            tmp_dat$W_HARB <- as.factor(tmp_dat$W_HARB)
+                            sampMap$gooMapPlot +
+                              geom_point(data = tmp_dat,
+                                         aes(x = LON, y = LAT, shape = W_HARB, color = W_HARB), size = 1, alpha = 0.2)+
+                              scale_colour_manual(values = c("coral", "darkseagreen1")) +
+                              coord_fixed(xlim = extendrange(sampMap$plotRange[1:2]),
+                                          ylim = extendrange(sampMap$plotRange[3:4]), expand = TRUE) +
+                              guides(colour = guide_legend(override.aes = list(size=3, alpha = 1)))
+
+                          }
+                          ,
+                          ggplotFishingPoints = function(year){
+                            tmp_dat <- fleet$rawEffort[[year]][sample(1:nrow(fleet$rawEffort[[year]]), 100000),c("LON","LAT","FishPoint")]
+                            tmp_dat$FishPoint <- as.factor(tmp_dat$FishPoint)
+                            sampMap$gooMapPlot +
+                              geom_point(data = tmp_dat,
+                                         aes(x = LON, y = LAT, color = FishPoint), size = 0.25, alpha = 0.2)+
+                              scale_colour_manual(values = c("coral", "darkseagreen1")) +
+                              coord_fixed(xlim = extendrange(sampMap$plotRange[1:2]),
+                                          ylim = extendrange(sampMap$plotRange[3:4]), expand = TRUE) +
+                              guides(colour = guide_legend(override.aes = list(size=3, alpha = 1)))
+
+                          },
                           setCellPoin = function(){
                             num_cell <- getinfo.shape(sampMap$gridPath)$entities
                             sampMap$gridShp@plotOrder <- 1:num_cell
