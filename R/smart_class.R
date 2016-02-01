@@ -173,6 +173,18 @@ SmartProject <- R6Class("smartProject",
                               cat("Done!", sep = "")
                             }
                           },
+                          ggplotGridEffort = function(year){
+                            tmp_dat <- table(fleet$rawEffort[[year]][fleet$rawEffort[[year]]$FishPoint == TRUE & !is.na(fleet$rawEffort[[year]]$Cell), c("Cell")])
+                            all_cell <- merge(x = sampMap$gridPolySet$PID,
+                                              data.frame(x = as.numeric(names(tmp_dat)), y = tmp_dat), all = TRUE)[,c(1,3)]
+                            all_cell[is.na(all_cell)] <- 0
+                            grid_data <- cbind(sampMap$gridPolySet, LogCount = log(all_cell[,2] + 1))
+                            sampMap$gooMapPlot + geom_polygon(aes(x = X, y = Y, group = PID, fill = LogCount), size = 0.2,
+                                                                          data = grid_data, alpha = 0.8) +
+                              scale_fill_gradient(low = "Yellow", high = "coral") +
+                              coord_fixed(xlim = extendrange(sampMap$plotRange[1:2]),
+                                          ylim = extendrange(sampMap$plotRange[3:4]), expand = TRUE)
+                          },
                           cohoDisPlot = function(whoSpe, whoCoh, whiYea, interp){
                             if(interp == FALSE){
                               if(whoCoh == "All"){
