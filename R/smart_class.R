@@ -136,7 +136,7 @@ SmartProject <- R6Class("smartProject",
                             text(legendUnits, x = 0.25, y = 0.15)
                             par(def.par)
                           },
-                          ggplotRawEffort = function(year){
+                          ggplotRawPoints = function(year){
                             tmp_dat <- fleet$rawEffort[[year]][sample(1:nrow(fleet$rawEffort[[year]]), 100000),c("LON","LAT","W_HARB")]
                             tmp_dat$W_HARB <- as.factor(tmp_dat$W_HARB)
                             sampMap$gooMapPlot +
