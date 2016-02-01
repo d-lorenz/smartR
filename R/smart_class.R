@@ -557,20 +557,29 @@ FishFleet <- R6Class("fishFleet",
                                                      min_dep = depth_range[1],
                                                      max_dep = depth_range[2])
                        },
-                       setWeekEffoMatr = function(){
+                       setWeekEffoMatr = function(all_cells = NULL){
                          weekEffoMatr <<- list()
                          for(j in names(rawEffort)){
                            cat("\n\nLoading year ", j, " ... ", sep = "")
-                           tmp_dat <- rawEffort[[j]][,c("I_NCEE","T_NUM", "WeekNum", "Cell", "FishPoint")]
+                           tmp_dat <- rawEffort[[j]][rawEffort[[j]]$FishPoint == TRUE,c("I_NCEE","T_NUM", "WeekNum", "Cell", "FishPoint")]
                            cat("Done!", sep = "")
                            tmp_dat$Cell <- as.factor(tmp_dat$Cell)
-
                            cat("\nCreating weekly fishing effort matrix... ", sep = "")
                            tmp_matrix <- dcast(tmp_dat,
-                                               I_NCEE + T_NUM + WeekNum + FishPoint~ Cell, fun.aggregate = sum,
+                                               I_NCEE + T_NUM + WeekNum ~ Cell, fun.aggregate = sum,
                                                na.rm=TRUE, value.var = "FishPoint")
-                           weekEffoMatr[[j]] <<- subset(tmp_matrix, FishPoint == TRUE)
                            cat("Done!", sep = "")
+                           if(!is.null(all_cells)){
+                             cat("\nChecking... ", sep = "")
+                             miss_cols <- setdiff(all_cells, names(tmp_matrix)[4:ncol(tmp_matrix)])
+                             if(length(miss_cols) > 0){
+                               cat("adding cells with no points... ", miss_cols, sep = "")
+                               tmp_matrix[,miss_cols] <- 0
+                               tmp_matrix <- tmp_matrix[,c(1:3, 3+order(as.numeric(names(tmp_matrix)[4:ncol(tmp_matrix)])))]
+                             }
+                             cat(" Done!", sep = "")
+                           }
+                           weekEffoMatr[[j]] <<- tmp_matrix
                          }
                        },
                        setWeekNum = function(){
