@@ -173,6 +173,29 @@ SmartProject <- R6Class("smartProject",
                               cat("Done!", sep = "")
                             }
                           },
+                          setWeekEffoMatr = function(){
+                            fleet$weekEffoMatr <<- list()
+                            for(j in names(fleet$rawEffort)){
+                              cat("\n\nLoading year ", j, " ... ", sep = "")
+                              tmp_dat <- fleet$rawEffort[[j]][fleet$rawEffort[[j]]$FishPoint == TRUE & !is.na(fleet$rawEffort[[j]]$Cell),c("I_NCEE","T_NUM", "WeekNum", "Cell", "FishPoint")]
+                              cat("Done!", sep = "")
+                              tmp_dat$Cell <- as.factor(tmp_dat$Cell)
+                              cat("\nCreating weekly fishing effort matrix... ", sep = "")
+                              tmp_matrix <- dcast(tmp_dat,
+                                                  I_NCEE + T_NUM + WeekNum ~ Cell, fun.aggregate = sum,
+                                                  na.rm=TRUE, value.var = "FishPoint")
+                              cat("Done!", sep = "")
+                              cat("\nChecking... ", sep = "")
+                              miss_cols <- setdiff(as.character(sampMap$gridShp@plotOrder), names(tmp_matrix)[4:ncol(tmp_matrix)])
+                              if(length(miss_cols) > 0){
+                                cat(length(miss_cols), " cells with no points... ", sep = "")
+                                tmp_matrix[,miss_cols] <- 0
+                                tmp_matrix <- tmp_matrix[,c(1:3, 3+order(as.numeric(names(tmp_matrix)[4:ncol(tmp_matrix)])))]
+                              }
+                              cat(" Done!", sep = "")
+                              fleet$weekEffoMatr[[j]] <<- tmp_matrix
+                            }
+                          },
                           ggplotGridEffort = function(year){
                             tmp_dat <- table(fleet$rawEffort[[year]][fleet$rawEffort[[year]]$FishPoint == TRUE & !is.na(fleet$rawEffort[[year]]$Cell), c("Cell")])
                             all_cell <- merge(x = sampMap$gridPolySet$PID,
@@ -180,7 +203,7 @@ SmartProject <- R6Class("smartProject",
                             all_cell[is.na(all_cell)] <- 0
                             grid_data <- cbind(sampMap$gridPolySet, LogCount = log(all_cell[,2] + 1))
                             sampMap$gooMapPlot + geom_polygon(aes(x = X, y = Y, group = PID, fill = LogCount), size = 0.2,
-                                                                          data = grid_data, alpha = 0.8) +
+                                                              data = grid_data, alpha = 0.8) +
                               scale_fill_gradient(low = "Yellow", high = "coral") +
                               coord_fixed(xlim = extendrange(sampMap$plotRange[1:2]),
                                           ylim = extendrange(sampMap$plotRange[3:4]), expand = TRUE)
@@ -556,31 +579,6 @@ FishFleet <- R6Class("fishFleet",
                                                      max_spe = speed_range[2],
                                                      min_dep = depth_range[1],
                                                      max_dep = depth_range[2])
-                       },
-                       setWeekEffoMatr = function(all_cells = NULL){
-                         weekEffoMatr <<- list()
-                         for(j in names(rawEffort)){
-                           cat("\n\nLoading year ", j, " ... ", sep = "")
-                           tmp_dat <- rawEffort[[j]][rawEffort[[j]]$FishPoint == TRUE,c("I_NCEE","T_NUM", "WeekNum", "Cell", "FishPoint")]
-                           cat("Done!", sep = "")
-                           tmp_dat$Cell <- as.factor(tmp_dat$Cell)
-                           cat("\nCreating weekly fishing effort matrix... ", sep = "")
-                           tmp_matrix <- dcast(tmp_dat,
-                                               I_NCEE + T_NUM + WeekNum ~ Cell, fun.aggregate = sum,
-                                               na.rm=TRUE, value.var = "FishPoint")
-                           cat("Done!", sep = "")
-                           if(!is.null(all_cells)){
-                             cat("\nChecking... ", sep = "")
-                             miss_cols <- setdiff(all_cells, names(tmp_matrix)[4:ncol(tmp_matrix)])
-                             if(length(miss_cols) > 0){
-                               cat("adding cells with no points... ", miss_cols, sep = "")
-                               tmp_matrix[,miss_cols] <- 0
-                               tmp_matrix <- tmp_matrix[,c(1:3, 3+order(as.numeric(names(tmp_matrix)[4:ncol(tmp_matrix)])))]
-                             }
-                             cat(" Done!", sep = "")
-                           }
-                           weekEffoMatr[[j]] <<- tmp_matrix
-                         }
                        },
                        setWeekNum = function(){
                          for(j in names(rawEffort)){
