@@ -42,5 +42,6 @@ Imports:
     ggplot2,
     sqldf,
     gsubfn,
-    chron
+    chron,
+    reshape2
 RoxygenNote: 5.0.1

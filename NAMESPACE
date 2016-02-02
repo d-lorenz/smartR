@@ -23,6 +23,7 @@ importFrom("spdep", "poly2nb", "nbcosts", "nb2listw", "mstree", "skater")
 importFrom("marmap", "getNOAA.bathy", "get.depth")
 importFrom("shape", "intpalette", "colorlegend")
 importFrom("png", "readPNG")
+importFrom("reshape2", "dcast")
 
 
 export(smart_gui)
