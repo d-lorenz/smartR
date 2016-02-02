@@ -565,7 +565,7 @@ FishFleet <- R6Class("fishFleet",
                          rawEffort <<- readRDS(effort_path)
                        },
                        loadProduction = function(production_path){
-                         cat("Loading Production data...\n", sep = "")
+                         cat("Loading Production data... ", sep = "")
                          sort_files <- sort(production_path)
                          rawProduction <<- list()
                          for(i in 1:length(sort_files)){
@@ -573,6 +573,7 @@ FishFleet <- R6Class("fishFleet",
                            tmp_key <- names(which.max(table(years(tmp_mat$UTC_S))))
                            rawProduction[[tmp_key]] <<- tmp_mat
                          }
+                         cat("Done!", sep = "")
                        },
                        setFishPoinPara = function(speed_range, depth_range){
                          fishPoinPara <<- data.frame(min_spe = speed_range[1],
