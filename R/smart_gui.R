@@ -788,6 +788,7 @@ smart_gui <- function(){
 
     effvie_drop[] <- names(my_project$fleet$rawEffort)
     svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
+    dev.set(dev.list()[pre_dev+5])
 
     my_project$ggplotRawPoints(svalue(effvie_drop))
 
@@ -795,6 +796,11 @@ smart_gui <- function(){
     effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
     delete(effo_g, effo_g$children[[length(effo_g$children)]])
     add(effo_g, effo_sta_n)
+  })
+  addSpring(eff_g_top1)
+  gbutton("View Raw Effort", container = eff_g_top1, handler = function(h,...){
+    dev.set(dev.list()[pre_dev+5])
+    my_project$ggplotRawPoints(svalue(effvie_drop))
   })
   addSpring(eff_g_top1)
   addSpring(eff_g_top)
