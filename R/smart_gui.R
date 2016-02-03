@@ -783,7 +783,7 @@ smart_gui <- function(){
     #     my_project$loadFleeEffoDbs(tmp_files)
 
     cat("\nLoading effort from rData...", sep = "")
-    my_project$fleet$rawEffort <- readRDS("/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/rawEffo.rData")
+    my_project$fleet$rawEffort <- readRDS("/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/rawEffort.rData")
     cat("   Done!", sep = "")
 
     effvie_drop[] <- names(my_project$fleet$rawEffort)
