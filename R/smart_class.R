@@ -140,11 +140,11 @@ SmartProject <- R6Class("smartProject",
                             tmp_dat <- fleet$rawEffort[[year]][sample(1:nrow(fleet$rawEffort[[year]]), 100000),c("LON","LAT","W_HARB")]
                             tmp_dat$W_HARB <- as.factor(tmp_dat$W_HARB)
                             tmp_plot <- suppressMessages(sampMap$gooMapPlot +
-                              geom_point(data = tmp_dat,
-                                         aes(x = LON, y = LAT, shape = W_HARB, color = W_HARB), size = 1, alpha = 0.2)+
-                              scale_colour_manual(values = c("coral", "darkseagreen1")) +
-                              lims(x = extendrange(sampMap$plotRange[1:2]), y = extendrange(sampMap$plotRange[3:4])) +
-                              guides(colour = guide_legend(override.aes = list(size=3, alpha = 1))))
+                                                           geom_point(data = tmp_dat,
+                                                                      aes(x = LON, y = LAT, shape = W_HARB, color = W_HARB), size = 1, alpha = 0.2)+
+                                                           scale_colour_manual(values = c("coral", "darkseagreen1")) +
+                                                           lims(x = extendrange(tmp_dat$LON), y = extendrange(tmp_dat$LAT)) +
+                                                           guides(colour = guide_legend(override.aes = list(size=3, alpha = 1))))
                             suppressWarnings(print(tmp_plot))
                           }
                           ,
@@ -152,11 +152,11 @@ SmartProject <- R6Class("smartProject",
                             tmp_dat <- fleet$rawEffort[[year]][sample(1:nrow(fleet$rawEffort[[year]]), 100000),c("LON","LAT","FishPoint")]
                             tmp_dat$FishPoint <- as.factor(tmp_dat$FishPoint)
                             tmp_plot <- suppressMessages(sampMap$gooMapPlot +
-                              geom_point(data = tmp_dat,
-                                         aes(x = LON, y = LAT, color = FishPoint), size = 0.25, alpha = 0.2)+
-                              scale_colour_manual(values = c("coral", "darkseagreen1")) +
-                              lims(x = extendrange(sampMap$plotRange[1:2]), y = extendrange(sampMap$plotRange[3:4])) +
-                              guides(colour = guide_legend(override.aes = list(size=3, alpha = 1))))
+                                                           geom_point(data = tmp_dat,
+                                                                      aes(x = LON, y = LAT, color = FishPoint), size = 0.25, alpha = 0.2)+
+                                                           scale_colour_manual(values = c("coral", "darkseagreen1")) +
+                                                           lims(x = extendrange(tmp_dat$LON), y = extendrange(tmp_dat$LAT)) +
+                                                           guides(colour = guide_legend(override.aes = list(size=3, alpha = 1))))
                             suppressWarnings(print(tmp_plot))
                           },
                           setCellPoin = function(){
@@ -201,9 +201,9 @@ SmartProject <- R6Class("smartProject",
                             all_cell[is.na(all_cell)] <- 0
                             grid_data <- cbind(sampMap$gridPolySet, LogCount = log(all_cell[,2] + 1))
                             tmp_plot <- suppressMessages(sampMap$gooMapPlot + geom_polygon(aes(x = X, y = Y, group = PID, fill = LogCount), size = 0.2,
-                                                              data = grid_data, alpha = 0.8) +
-                              scale_fill_gradient(low = "Yellow", high = "coral") +
-                              lims(x = extendrange(sampMap$plotRange[1:2]), y = extendrange(sampMap$plotRange[3:4])))
+                                                                                           data = grid_data, alpha = 0.8) +
+                                                           scale_fill_gradient(low = "Yellow", high = "coral") +
+                                                           lims(x = extendrange(sampMap$plotRange[1:2]), y = extendrange(sampMap$plotRange[3:4])))
                             suppressWarnings(print(tmp_plot))
                           },
                           cohoDisPlot = function(whoSpe, whoCoh, whiYea, interp){
@@ -916,15 +916,15 @@ SampleMap <- R6Class("sampleMap",
                                                   ymax=gridBboxExt[4])
                        },
                        setGooGrid = function(){
-#                          gooGrid <<- gooMapPlot + geom_polygon(aes(x = X, y = Y, group = PID),
-#                                                                fill = 'grey', size = 0.2,
-#                                                                color = 'gainsboro', data = gridPolySet, alpha = 0.5) +
-#                            coord_fixed(xlim = extendrange(plotRange[1:2]),
-#                                        ylim = extendrange(plotRange[3:4]), expand = TRUE)
+                         #                          gooGrid <<- gooMapPlot + geom_polygon(aes(x = X, y = Y, group = PID),
+                         #                                                                fill = 'grey', size = 0.2,
+                         #                                                                color = 'gainsboro', data = gridPolySet, alpha = 0.5) +
+                         #                            coord_fixed(xlim = extendrange(plotRange[1:2]),
+                         #                                        ylim = extendrange(plotRange[3:4]), expand = TRUE)
                          gooGrid <<- suppressMessages(gooMapPlot + geom_polygon(aes(x = X, y = Y, group = PID),
-                                                               fill = 'grey', size = 0.2,
-                                                               color = 'gainsboro', data = gridPolySet, alpha = 0.5) +
-                           lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4])))
+                                                                                fill = 'grey', size = 0.2,
+                                                                                color = 'gainsboro', data = gridPolySet, alpha = 0.5) +
+                                                        lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4])))
                        },
                        plotGooGrid = function(){
                          suppressWarnings(print(gooGrid))
@@ -951,9 +951,9 @@ SampleMap <- R6Class("sampleMap",
                          text_x <- mean(gridBboxExt[c(1,3)])
                          text_y <- mean(gridBboxExt[c(2,4)])
                          gooBbox <<- gooGrid + geom_rect(data=plotRange, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
-                                                   color="firebrick",
-                                                   fill = alpha('red', 0.2),
-                                                   inherit.aes = FALSE) +
+                                                         color="firebrick",
+                                                         fill = alpha('red', 0.2),
+                                                         inherit.aes = FALSE) +
                            annotate("label", x = text_x, y = text_y,
                                     label="Bounding\nBox", family="serif", fontface="italic",
                                     colour="firebrick", size=6, fill = "grey80")
