@@ -474,6 +474,26 @@ smart_gui <- function(){
          })
   addSpring(gri_g_top1_bio)
 
+  gri_g_top1_goo <- ggroup(horizontal = TRUE, container = gri_g_top1)
+  addSpring(gri_g_top1_goo)
+  gbutton("Load Google map", container = gri_g_top1_goo, handler = function(h,...){
+    Sys.sleep(1)
+    dev.set(dev.list()[pre_dev+1])
+    svalue(stat_bar) <- "Loading Google map..."
+    my_project$sampMap$getGooMap()
+    my_project$sampMap$setGooGrid()
+    my_project$sampMap$setGooBbox()
+    svalue(stat_bar) <- ""
+    my_project$sampMap$plotGooGrid()
+  })
+  addSpring(gri_g_top1_goo)
+  gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_goo,
+         handler = function(h,...){
+           dev.set(dev.list()[pre_dev+1])
+           my_project$sampMap$plotGooGrid()
+         })
+  addSpring(gri_g_top1_goo)
+
   addSpring(gri_g_top1)
 
   addSpring(gri_g_top)
@@ -766,6 +786,10 @@ smart_gui <- function(){
     my_project$fleet$rawEffort <- readRDS("/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/rawEffo.rData")
     cat("   Done!", sep = "")
 
+    effvie_drop[] <- names(my_project$fleet$rawEffort)
+    svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
+
+    my_project$ggplotRawPoints(svalue(effvie_drop))
 
     ### Update Effort Status
     effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
@@ -845,6 +869,11 @@ smart_gui <- function(){
   })
 
   addSpring(eff_g_top1b)
+  gbutton("View Fishing Points", container = eff_g_top1b, handler = function(h,...){
+    dev.set(dev.list()[pre_dev+5])
+    my_project$ggplotFishingPoints(svalue(effvie_drop))
+  })
+  addSpring(eff_g_top1b)
   gbutton("View Stats", container = eff_g_top1b, handler = function(h,...){
     dev.set(dev.list()[pre_dev+5])
     my_project$fleet$plotFishPoinStat()
@@ -856,6 +885,13 @@ smart_gui <- function(){
   addSpring(eff_g_top1c)
   gbutton("Grid Fishing Points", container = eff_g_top1c, handler = function(h,...){
     my_project$setCellPoin()
+    my_project$fleet$setWeekNum()
+    my_project$setWeekEffoMatr()
+  })
+  addSpring(eff_g_top1c)
+  gbutton("View Gridded Effort", container = eff_g_top1c, handler = function(h,...){
+    dev.set(dev.list()[pre_dev+5])
+    my_project$ggplotGridEffort(svalue(effvie_drop))
   })
   addSpring(eff_g_top1c)
   addSpring(eff_g_top)
@@ -864,12 +900,12 @@ smart_gui <- function(){
   addSpring(eff_g_top2)
   effvie_drop <- gcombobox(items = "Year", selected = 1, container = eff_g_top2, expand = TRUE, editable = FALSE)
   addSpring(eff_g_top2)
-  gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = eff_g_top2,
-         handler = function(h,...){
-           dev.set(dev.list()[pre_dev+5])
-           my_project$effPlot(svalue(effvie_drop))
-         })
-  addSpring(eff_g_top2)
+#   gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = eff_g_top2,
+#          handler = function(h,...){
+#            dev.set(dev.list()[pre_dev+5])
+#            my_project$ggplotGridEffort(svalue(effvie_drop))
+#          })
+#   addSpring(eff_g_top2)
   addSpring(eff_g_top)
   eff_p <- ggraphics(container = eff_g, width = 600, height = 300, expand = TRUE)
 
