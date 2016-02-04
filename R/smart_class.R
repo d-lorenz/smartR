@@ -677,6 +677,26 @@ FishFleet <- R6Class("fishFleet",
                            idsEffoProd[[i]] <<- effortIds[[i]][effortIds[[i]] %in% productionIds[[i]]]
                          }
                        },
+                       plotCountIDsEffoProd = function(){
+                         tmp_effo <- data.frame("Year" = names(effortIds),
+                                                "Ids" = unlist(lapply(effortIds, length)),
+                                                "Dataset" = "Effort")
+                         tmp_prod <- data.frame("Year" = names(productionIds),
+                                                "Ids" = unlist(lapply(productionIds, length)),
+                                                "Dataset" = "Production")
+                         tmp_comb <- data.frame("Year" = names(idsEffoProd),
+                                                "Ids" = unlist(lapply(idsEffoProd, length)),
+                                                "Dataset" = "Match")
+                         tmp_df <- rbind(tmp_effo, tmp_comb, tmp_prod)
+                         rownames(tmp_df) <- NULL
+                         tmp_plot <- ggplot(tmp_df, aes(x = Year, y = Ids, fill = Dataset)) +
+                           geom_bar(position=position_dodge(), stat = "identity") +
+                           geom_text(aes(y=Ids, label = Ids), position= position_dodge(width=1),
+                                     vjust=2.5, color="grey20") +
+                           ggtitle("Count of Distinct Vessels") +
+                           ylab("N. of IDs")
+                         print(tmp_plot)
+                       },
                        plotCountIDsEffo = function(){
                          tmp_df <- data.frame("Year" = names(effortIds),
                                               "Ids" = unlist(lapply(unique(effortIds), length)))
