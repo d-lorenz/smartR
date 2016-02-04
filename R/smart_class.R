@@ -648,12 +648,22 @@ FishFleet <- R6Class("fishFleet",
                          text(x = depth_range[1]+((depth_range[2]-depth_range[1])/2), y = max(depth_hist$counts)/2, labels = "FISHING", col = 2)
                          par(op)
                        },
+                       setEffortIds = function(){
+                         cat("Setting Effort IDs...\n", sep = "")
+                         effortIds <<- list()
+                         for(i in names(rawEffort)){
+                           tmp_ids <- unique(rawEffort[[i]][,1])
+                           tmp_key <- i
+                           effortIds[[tmp_key]] <<- tmp_ids
+                         }
+                         effortIds[["All"]] <<- unique(unlist(effortIds))
+                       },
                        setProdIds = function(){
                          cat("Setting Production IDs...\n", sep = "")
                          productionIds <<- list()
-                         for(i in 1:length(rawProduction)){
+                         for(i in names(rawProduction)){
                            tmp_ids <- unique(rawProduction[[i]][,1])
-                           tmp_key <- names(rawProduction[i])
+                           tmp_key <- i
                            productionIds[[tmp_key]] <<- tmp_ids
                          }
                          productionIds[["All"]] <<- unique(unlist(productionIds))
