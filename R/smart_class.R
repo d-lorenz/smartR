@@ -686,8 +686,8 @@ FishFleet <- R6Class("fishFleet",
                                                 "Dataset" = "Production")
                          tmp_comb <- data.frame("Year" = names(idsEffoProd),
                                                 "Ids" = unlist(lapply(idsEffoProd, length)),
-                                                "Dataset" = "Match")
-                         tmp_df <- rbind(tmp_effo, tmp_comb, tmp_prod)
+                                                "Dataset" = "Overlap")
+                         tmp_df <- rbind(tmp_effo, tmp_prod, tmp_comb)
                          rownames(tmp_df) <- NULL
                          tmp_plot <- ggplot(tmp_df, aes(x = Year, y = Ids, fill = Dataset)) +
                            geom_bar(position=position_dodge(), stat = "identity") +
