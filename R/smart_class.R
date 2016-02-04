@@ -563,6 +563,7 @@ FishFleet <- R6Class("fishFleet",
                        productionIds = NULL,
                        prodIdsLoa = NULL,
                        effortIds = NULL,
+                       idsEffoProd = NULL,
                        fishPoinPara = NULL,
                        loadFleetRegis = function(register_path){
                          cat("Loading raw Fleet Register data...\n", sep = "")
@@ -667,6 +668,14 @@ FishFleet <- R6Class("fishFleet",
                            productionIds[[tmp_key]] <<- tmp_ids
                          }
                          productionIds[["All"]] <<- unique(unlist(productionIds))
+                       },
+                       setIdsEffoProd = function(){
+                         ###   Set IDs cross match effort/production
+                         to_match <- names(effortIds)[names(effortIds) %in% names(productionIds)]
+                         idsEffoProd <<- list()
+                         for(i in to_match){
+                           idsEffoProd[[i]] <<- effortIds[[i]][effortIds[[i]] %in% productionIds[[i]]]
+                         }
                        },
                        plotCountIDsEffo = function(){
                          tmp_df <- data.frame("Year" = names(effortIds),
