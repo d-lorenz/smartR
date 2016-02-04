@@ -675,7 +675,7 @@ FishFleet <- R6Class("fishFleet",
                          tmp_plot <- ggplot(tmp_df, aes(x = Year, y = Ids)) + geom_bar(stat = "identity") +
                            geom_text(aes(y=Ids, label = Ids), position= position_dodge(width=1),
                                      vjust=2.5, color="white") +
-                           ggtitle("Count of Distinct Vessels") +
+                           ggtitle("Count of Distinct Vessels - Production Dataset") +
                            ylab("N. of IDs")
                          print(tmp_plot)
                        },
