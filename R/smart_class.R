@@ -1,12 +1,13 @@
-
+#############################################################
 #' SmartProject
 #'
-#' The \code{SmartProject} class implements the main class of SMART.
+#' The \code{SmartProject} class implements the main class of
+#'  SMART.
 #'
 #' @return This function returns the 'smartProject' object.
 #'
 #'
-#'
+#############################################################
 
 SmartProject <- R6Class("smartProject",
                         portable = FALSE,
@@ -362,12 +363,16 @@ SmartProject <- R6Class("smartProject",
                         ))
 
 
+
+#############################################################
 #' BySpeLFD
 #'
-#' The \code{BySpeLFD} class implements the class of SMART to handle species samplings.
+#' The \code{BySpeLFD} class implements the class of SMART to
+#'  handle species samplings.
 #'
 #' @return This function returns the 'sampleLFDbyspe' object.
 #'
+#############################################################
 
 BySpeLFD <- R6Class("sampleLFDbyspe",
                     portable = FALSE,
@@ -533,12 +538,17 @@ BySpeLFD <- R6Class("sampleLFDbyspe",
                       }))
 
 
+
+#############################################################
 #' FishFleet
 #'
-#' The \code{FishFleet} class implements the class of SMART to manage fleet data.
+#' The \code{FishFleet} class implements the class of SMART
+#' to manage fleet data.
 #'
 #' @return This function returns the 'fishFleet' object.
 #'
+#############################################################
+
 
 FishFleet <- R6Class("fishFleet",
                      portable = FALSE,
@@ -839,12 +849,18 @@ FishShip <- R6Class("fishShip",
                     )
 )
 
+
+
+#############################################################
 #' SampleMap
 #'
-#' The \code{SampleMap} class implements the class of SMART to control geographical data.
+#' The \code{SampleMap} class implements the class of SMART
+#' to control geographical data.
 #'
 #' @return This function returns the 'sampleMap' object.
 #'
+#############################################################
+
 
 SampleMap <- R6Class("sampleMap",
                      portable = FALSE,
