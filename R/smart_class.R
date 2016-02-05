@@ -66,7 +66,7 @@ SmartProject <- R6Class("smartProject",
                                                   using (I_NCEE, T_NUM))
                                                   join
                                                   (select * from p_depth)
-                                                  using (i_id)", dbname = i)                              ### Over in B-Box
+                                                  using (i_id)", dbname = i)                             ### Over in B-Box
                               in_box <- over(SpatialPoints(tmp_eff[,c("LON","LAT")]), sampMap$gridBboxSP)
                               in_box[is.na(in_box)] <- 0
                               tmp_eff$in_box <- in_box
