@@ -60,18 +60,13 @@ SmartProject <- R6Class("smartProject",
                               cat("\nSelecting tracks in box...", sep = "")
                               tmp_eff <- fn$sqldf("select * from
                       (select * from
-                                                  (select * from nn_clas where met_des = '`met_nam`')
-                                                  join
-                                                  (select * from
                                                   (select *, rowid as i_id from intrp)
                                                   join
-                                                  (select distinct I_NCEE, T_NUM from intrp where LON > `sampMap$gridBboxSP@bbox[1,1]` and LON < `sampMap$gridBboxSP@bbox[1,2]` and LAT > `sampMap$gridBboxSP@bbox[2,1]` and LAT < `sampMap$gridBboxSP@bbox[2,2]`)
+                                                  (select distinct I_NCEE, T_NUM from intrp where I_NCEE in (select distinct I_NCEE from nn_clas where met_des = '`met_nam`') and LON > `sampMap$gridBboxSP@bbox[1,1]` and LON < `sampMap$gridBboxSP@bbox[1,2]` and LAT > `sampMap$gridBboxSP@bbox[2,1]` and LAT < `sampMap$gridBboxSP@bbox[2,2]`)
                                                   using (I_NCEE, T_NUM))
-                                                  using (I_NCEE))
                                                   join
                                                   (select * from p_depth)
-                                                  using (i_id)", dbname = i)
-                              ### Over in B-Box
+                                                  using (i_id)", dbname = i)                              ### Over in B-Box
                               in_box <- over(SpatialPoints(tmp_eff[,c("LON","LAT")]), sampMap$gridBboxSP)
                               in_box[is.na(in_box)] <- 0
                               tmp_eff$in_box <- in_box
