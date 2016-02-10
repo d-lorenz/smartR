@@ -920,6 +920,7 @@ SampleMap <- R6Class("sampleMap",
                        gridBbox = NULL,
                        gridBboxExt = NULL,
                        gridBboxSP = NULL,
+                       harbDbf = NULL,
                        bioPath = NULL,
                        bioName = NULL,
                        bioShp = NULL,
@@ -948,6 +949,11 @@ SampleMap <- R6Class("sampleMap",
                          createPolySet()
                          setGridCenter()
                          createGridBbox()
+                       },
+                       loadHarbDbf = function(dbf_path){
+                         tmp_dbf <- read.dbf(file = dbf_path)
+                         colnames(tmp_dbf) <- c("XCOORD", "YCOORD", "Name")
+                         harbDbf <<- tmp_dbf
                        },
                        createGridBbox = function(){
                          gridBbox <<- bbox(gridShp)
