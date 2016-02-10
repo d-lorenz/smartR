@@ -43,5 +43,6 @@ Imports:
     sqldf,
     gsubfn,
     chron,
-    reshape2
+    reshape2,
+    foreign
 RoxygenNote: 5.0.1
