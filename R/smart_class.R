@@ -170,6 +170,30 @@ SmartProject <- R6Class("smartProject",
                               cat("Done!", sep = "")
                             }
                           },
+                          setTrackHarb = function(){
+                            fleet$trackHarbs <<- list()
+                            for(i in names(fleet$rawEffort)){
+                              cat("\nLoading effort year: ", i, "... ", sep = "")
+                              tmp_eff <- fleet$rawEffort[[i]]
+                              tmp_harbs <- sqldf("select xCFR I_NCEE, xTnum T_NUM, LON_S, LAT_S, DATE_S, LON_E, LAT_E, DATE_E from
+                                                 (select x.I_NCEE xCFR, LAT LAT_S, LON LON_S, DATE DATE_S, T_NUM xTnum from tmp_eff x where W_HARB = 1)
+                                                 join
+                                                 (select y.I_NCEE yCFR, LAT LAT_E, LON LON_E, DATE DATE_E, T_NUM yTnum from tmp_eff y where W_HARB = 1)
+                                                 on xCFR = yCFR and xTnum = yTnum and DATE_S != DATE_E and DATE_S < DATE_E order by xCFR, xTnum, DATE_S")
+                              cat("Done!", sep = "")
+                              uni_harbs <- as.data.frame(unique(rbind(as.matrix(tmp_harbs[,c("LON_S","LAT_S")]),as.matrix(tmp_harbs[,c("LON_E","LAT_E")]))))
+                              uni_harbs$Name <- ""
+                              cat("\nSetting nearest harbor name... ", sep = "")
+                              tmp_dist <- apply(spDists(x = as.matrix(uni_harbs[,1:2]),
+                                                        y = as.matrix(sampMap$harbDbf[,1:2]), longlat = TRUE), 1, which.min)
+                              uni_harbs$Name <- as.character(sampMap$harbDbf[tmp_dist,3])
+                              cat("Done!", sep = "")
+                              cat("\nSaving... ", sep = "")
+                              fleet$trackHarbs[[i]] <<- sqldf("select I_NCEE, T_NUM, k.LON_S LON_S, k.LAT_S LAT_S, DATE_S, HARB_S, LON_E, LAT_E, DATE_E, Name HARB_E from (select I_NCEE, T_NUM, LON_S, LAT_S, DATE_S, Name HARB_S, LON_E, LAT_E, DATE_E from tmp_harbs join uni_harbs using (LON_S, LAT_S)) k join uni_harbs x on x.LON_S = LON_E and x.LAT_S = LAT_E")
+                              cat("Done!", sep = "")
+                            }
+
+                          },
                           setWeekEffoMatr = function(){
                             fleet$weekEffoMatr <<- list()
                             for(j in names(fleet$rawEffort)){
@@ -555,6 +579,7 @@ FishFleet <- R6Class("fishFleet",
                        rawRegister = NULL,
                        rawEffort = NULL,
                        weekEffoMatr = NULL,
+                       trackHarbs = NULL,
                        rawSelectivity = NULL,
                        rawProduction = NULL,
                        registerIds = NULL,
