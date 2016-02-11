@@ -959,6 +959,7 @@ SampleMap <- R6Class("sampleMap",
                        bioShp = NULL,
                        bioDF = NULL,
                        gridPolySet = NULL,
+                       gridFortify = NULL,
                        nCells = NULL,
                        sCells = NULL, # cMedits
                        griCent = NULL, # gCenter
@@ -980,6 +981,7 @@ SampleMap <- R6Class("sampleMap",
                          loadGridShp()
                          setNumCell()
                          createPolySet()
+                         fortifyGridShp()
                          setGridCenter()
                          createGridBbox()
                        },
@@ -1024,9 +1026,9 @@ SampleMap <- R6Class("sampleMap",
                          #                                                                color = 'gainsboro', data = gridPolySet, alpha = 0.5) +
                          #                            coord_fixed(xlim = extendrange(plotRange[1:2]),
                          #                                        ylim = extendrange(plotRange[3:4]), expand = TRUE)
-                         gooGrid <<- suppressMessages(gooMapPlot + geom_polygon(aes(x = X, y = Y, group = PID),
+                         gooGrid <<- suppressMessages(gooMapPlot + geom_polygon(aes(x = long, y = lat, group = group),
                                                                                 fill = 'grey', size = 0.2,
-                                                                                color = 'gainsboro', data = gridPolySet, alpha = 0.5) +
+                                                                                color = 'gainsboro', data = gridFortify, alpha = 0.5) +
                                                         lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4])))
                        },
                        plotGooGrid = function(){
@@ -1112,6 +1114,9 @@ SampleMap <- R6Class("sampleMap",
                        },
                        createPolySet = function(){
                          gridPolySet <<- as.data.frame(SpatialPolygons2PolySet(gridShp))
+                       },
+                       fortifyGridShp = function(){
+                         gridFortify <<- fortify(gridShp)
                        },
                        setNumCell = function(){
                          nCells <<- length(gridShp@polygons)
