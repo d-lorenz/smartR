@@ -51,7 +51,7 @@ SmartProject <- R6Class("smartProject",
                               }}
                             # speDisPlot("All")
                           },
-                          loadFleeEffoDbs = function(effort_path, met_nam){
+                          loadFleeEffoDbs = function(effort_path, met_nam, onBox = TRUE){
                             cat("\nLoading Effort data...\n", sep = "")
                             sort_files <- sort(effort_path)
                             fleet$rawEffort <<- list()
@@ -59,7 +59,15 @@ SmartProject <- R6Class("smartProject",
                               cat("\nLoading db: ", i, sep = "")
                               cat("\nSelecting tracks in box...", sep = "")
                               tmp_eff <- fn$sqldf("select * from (select * from (select *, rowid as i_id from intrp) join (select distinct I_NCEE, T_NUM from intrp where I_NCEE in (select distinct I_NCEE from nn_clas where met_des = '`met_nam`') and LON > `sampMap$gridBboxSP@bbox[1,1]` and LON < `sampMap$gridBboxSP@bbox[1,2]` and LAT > `sampMap$gridBboxSP@bbox[2,1]` and LAT < `sampMap$gridBboxSP@bbox[2,2]`) using (I_NCEE, T_NUM)) join (select * from p_depth) using (i_id)", dbname = i)                             ### Over in B-Box
-                              in_box <- over(SpatialPoints(tmp_eff[,c("LON","LAT")]), sampMap$gridBboxSP)
+                              if(onBox){
+                                in_box <- over(SpatialPoints(tmp_eff[,c("LON","LAT")]), sampMap$gridBboxSP)
+                              }else{
+                                in_box <- over(SpatialPoints(tmp_eff[,c("LON","LAT")]),
+                                               unionSpatialPolygons(my_sampling$sampMap$gridShp,
+                                                                    IDs = rep(1,
+                                                                              length(my_sampling$sampMap$gridShp@polygons)))
+                                )
+                              }
                               in_box[is.na(in_box)] <- 0
                               tmp_eff$in_box <- in_box
 
