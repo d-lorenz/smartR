@@ -202,7 +202,7 @@ SmartProject <- R6Class("smartProject",
                             }
 
                           },
-                          setWeekEffoMatr = function(){
+                          setWeekEffoMatrCell = function(){
                             fleet$weekEffoMatr <<- list()
                             for(j in names(fleet$rawEffort)){
                               cat("\n\nLoading year ", j, " ... ", sep = "")
@@ -220,6 +220,30 @@ SmartProject <- R6Class("smartProject",
                                 cat(length(miss_cols), " cells with no points... ", sep = "")
                                 tmp_matrix[,miss_cols] <- 0
                                 tmp_matrix <- tmp_matrix[,c(1:3, 3+order(as.numeric(names(tmp_matrix)[4:ncol(tmp_matrix)])))]
+                              }
+                              cat(" Done!", sep = "")
+                              fleet$weekEffoMatr[[j]] <<- tmp_matrix
+                            }
+                          },
+                          setWeekEffoMatrGround = function(){
+                            fleet$weekEffoMatr <<- list()
+                            for(j in names(fleet$rawEffort)){
+                              cat("\n\nLoading year ", j, " ... ", sep = "")
+                              tmp_dat <- fleet$rawEffort[[j]][fleet$rawEffort[[j]]$FishPoint == TRUE & !is.na(fleet$rawEffort[[j]]$Cell),c("I_NCEE","T_NUM", "WeekNum", "MonthNum", "FishGround", "FishPoint")]
+                              cat("Done!", sep = "")
+                              tmp_dat$FishGround <- as.factor(tmp_dat$FishGround)
+                              cat("\nCreating weekly fishing effort matrix... ", sep = "")
+                              tmp_matrix <- dcast(tmp_dat,
+                                                  I_NCEE + T_NUM + WeekNum + MonthNum ~ FishGround, fun.aggregate = sum,
+                                                  na.rm=TRUE, value.var = "FishPoint")
+                              cat("Done!", sep = "")
+                              cat("\nChecking... ", sep = "")
+                              miss_cols <- setdiff(as.character(unique(fleet$rawEffort[[j]]$FishGround[!is.na(fleet$rawEffort[[j]]$FishGround)])),
+                                                   names(tmp_matrix)[5:ncol(tmp_matrix)])
+                              if(length(miss_cols) > 0){
+                                cat(length(miss_cols), " cells with no points... ", sep = "")
+                                tmp_matrix[,miss_cols] <- 0
+                                tmp_matrix <- tmp_matrix[,c(1:4, 4+order(as.numeric(names(tmp_matrix)[5:ncol(tmp_matrix)])))]
                               }
                               cat(" Done!", sep = "")
                               fleet$weekEffoMatr[[j]] <<- tmp_matrix
