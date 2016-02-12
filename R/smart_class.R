@@ -208,7 +208,7 @@ SmartProject <- R6Class("smartProject",
                                                FishGround = my_sampling$sampMap$clusMat[,numCut])
                             for(j in names(fleet$rawEffort)){
                               cat("\n\nSetting Fishing Ground of year ", j, "... ", sep = "")
-                              fleet$rawEffort[[j]]$FishGround <- tmp_clust[fleet$rawEffort[[j]]$Cell,2]
+                              fleet$rawEffort[[j]]$FishGround <<- tmp_clust[fleet$rawEffort[[j]]$Cell,2]
                               cat("Done!", sep = "")
                             }
                           },
