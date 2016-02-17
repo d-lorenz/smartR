@@ -364,12 +364,22 @@ smart_gui <- function(){
     Sys.sleep(1)
     dev.set(dev.list()[pre_dev+1])
     my_project$loadMap("/Users/Lomo/Documents/Uni/Lab/Proj/SMART_All/SMART1.0/Geo/Grid/GFCM_Grid_6min_GSA16.shp")
+
+    ### automatic download of google map
+    my_project$sampMap$getGooMap()       ### FIX add a check if sampMap is loaded
+    svalue(stat_bar) <- "Downloading Google map..."
+    my_project$sampMap$setGooGrid()
+    my_project$sampMap$setGooBbox()
+
     svalue(gri_l1) <- paste("Polyset: Loaded")
     svalue(gri_l2) <- paste("N. Cells: ", my_project$sampMap$nCells)
     svalue(gri_l3) <- paste("GCenter: Loaded")
     svalue(stat_bar) <- "Plotting grid..."
-    my_project$sampMap$plotSamMap(title = my_project$sampMap$gridName)
-
+    if(!is.null(my_project$sampMap$gooMap)){
+      my_project$sampMap$plotGooGrid()
+    }else{
+      my_project$sampMap$plotSamMap(title = my_project$sampMap$gridName)
+    }
     if(!is.null(my_project$rawData)){
       svalue(stat_bar) <- "Splitting Population..."
       my_project$setLFDPop()
@@ -906,12 +916,12 @@ smart_gui <- function(){
   addSpring(eff_g_top2)
   effvie_drop <- gcombobox(items = "Year", selected = 1, container = eff_g_top2, expand = TRUE, editable = FALSE)
   addSpring(eff_g_top2)
-#   gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = eff_g_top2,
-#          handler = function(h,...){
-#            dev.set(dev.list()[pre_dev+5])
-#            my_project$ggplotGridEffort(svalue(effvie_drop))
-#          })
-#   addSpring(eff_g_top2)
+  #   gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = eff_g_top2,
+  #          handler = function(h,...){
+  #            dev.set(dev.list()[pre_dev+5])
+  #            my_project$ggplotGridEffort(svalue(effvie_drop))
+  #          })
+  #   addSpring(eff_g_top2)
   addSpring(eff_g_top)
   eff_p <- ggraphics(container = eff_g, width = 600, height = 300, expand = TRUE)
 
