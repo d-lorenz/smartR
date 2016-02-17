@@ -420,6 +420,7 @@ smart_gui <- function(){
     #Get the plot information so the image will fill the plot box, and draw it
     lim <- par()
     rasterImage(ima, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
+    svalue(stat_bar) <- ""
   })
   addSpring(gri_g_top1_dep)
   gimage(system.file("ico/document-save-2.ico", package="smartR"), container = gri_g_top1_dep,
@@ -452,6 +453,7 @@ smart_gui <- function(){
     plot(1:2, type='n', xlab="", ylab="", axes = FALSE, ann=FALSE)
     lim <- par()
     rasterImage(ima, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
+    svalue(stat_bar) <- ""
   })
   # addSpring(gri_g_top1_dep)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_dep,
@@ -475,6 +477,7 @@ smart_gui <- function(){
     svalue(stat_bar) <- "Loading biocenosis data.frame..."
     my_project$sampMap$loadBioDF("/Users/Lomo/Documents/Uni/R/smart/data/BioM.rData")
     my_project$sampMap$plotBioDF()
+    svalue(stat_bar) <- ""
   })
   # addSpring(gri_g_top1_bio)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_bio,
