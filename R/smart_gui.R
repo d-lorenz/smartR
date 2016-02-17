@@ -787,6 +787,7 @@ smart_gui <- function(){
 
     cat("\nLoading effort from rData...", sep = "")
     svalue(stat_bar) <- "Loading effort from rData..."
+    Sys.sleep(1)
 
     my_project$fleet$rawEffort <- readRDS(tmp_file)
     my_project$fleet$setEffortIds()
@@ -822,6 +823,7 @@ smart_gui <- function(){
 
     cat("\nLoading effort from rData...", sep = "")
     svalue(stat_bar) <- "Loading effort from vmsbase db..."
+    Sys.sleep(1)
     my_project$fleet$rawEffort <- readRDS(tmp_file)
     my_project$fleet$setEffortIds()
     cat("   Done!", sep = "")
@@ -832,6 +834,7 @@ smart_gui <- function(){
     dev.set(dev.list()[pre_dev+5])
 
     svalue(stat_bar) <- "Plotting raw effort..."
+    Sys.sleep(1)
     my_project$ggplotRawPoints(svalue(effvie_drop))
     svalue(stat_bar) <- ""
 
@@ -844,6 +847,7 @@ smart_gui <- function(){
   gbutton("View Raw Effort", container = eff_g_top1, handler = function(h,...){
     dev.set(dev.list()[pre_dev+5])
     svalue(stat_bar) <- "Plotting raw effort..."
+    Sys.sleep(1)
     my_project$ggplotRawPoints(svalue(effvie_drop))
     svalue(stat_bar) <- ""
 
@@ -915,7 +919,7 @@ smart_gui <- function(){
     visible(temp_dia) <- TRUE
 
     svalue(stat_bar) <- "Plotting speed/depth profiles..."
-
+    Sys.sleep(1)
     my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
                                     speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
                                     depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
@@ -924,16 +928,18 @@ smart_gui <- function(){
   })
 
   addSpring(eff_g_top1b)
-  gbutton("View Fishing Points", container = eff_g_top1b, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+5])
-    svalue(stat_bar) <- "Plotting fishing points..."
-    my_project$ggplotFishingPoints(svalue(effvie_drop))
-    svalue(stat_bar) <- ""
-  })
-  addSpring(eff_g_top1b)
+  # gbutton("View Fishing Points", container = eff_g_top1b, handler = function(h,...){
+  #   dev.set(dev.list()[pre_dev+5])
+  #   svalue(stat_bar) <- "Plotting fishing points..."
+  #   Sys.sleep(1)
+  #   my_project$ggplotFishingPoints(svalue(effvie_drop))
+  #   svalue(stat_bar) <- ""
+  # })
+  # addSpring(eff_g_top1b)
   gbutton("View Stats", container = eff_g_top1b, handler = function(h,...){
     dev.set(dev.list()[pre_dev+5])
     svalue(stat_bar) <- "Plotting fishing points data summary..."
+    Sys.sleep(1)
     my_project$fleet$plotFishPoinStat()
     svalue(stat_bar) <- ""
   })
@@ -944,20 +950,23 @@ smart_gui <- function(){
   addSpring(eff_g_top1c)
   gbutton("Grid Fishing Points", container = eff_g_top1c, handler = function(h,...){
     svalue(stat_bar) <- "Setting fishing point cells..."
+    Sys.sleep(1)
     my_project$setCellPoin()
     svalue(stat_bar) <- "Adding week and month number to dataset..."
+    Sys.sleep(1)
     my_project$fleet$setWeekMonthNum()
     # my_project$setWeekEffoMatr()
     svalue(stat_bar) <- ""
   })
   addSpring(eff_g_top1c)
-  gbutton("View Gridded Effort", container = eff_g_top1c, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+5])
-    svalue(stat_bar) <- "Plotting gridded effort..."
-    my_project$ggplotGridEffort(svalue(effvie_drop))
-    svalue(stat_bar) <- ""
-  })
-  addSpring(eff_g_top1c)
+  # gbutton("View Gridded Effort", container = eff_g_top1c, handler = function(h,...){
+  #   dev.set(dev.list()[pre_dev+5])
+  #   svalue(stat_bar) <- "Plotting gridded effort..."
+  #   Sys.sleep(1)
+  #   my_project$ggplotGridEffort(svalue(effvie_drop))
+  #   svalue(stat_bar) <- ""
+  # })
+  # addSpring(eff_g_top1c)
   addSpring(eff_g_top)
 
   eff_g_top2 <- gframe(text = "View", horizontal = TRUE, container = eff_g_top, expand = TRUE)
@@ -970,6 +979,33 @@ smart_gui <- function(){
   #            my_project$ggplotGridEffort(svalue(effvie_drop))
   #          })
   #   addSpring(eff_g_top2)
+  eff_g_top2_ver <- ggroup(horizontal = FALSE, container = eff_g_top2)
+  addSpring(eff_g_top2_ver)
+  gbutton("Raw Effort", container = eff_g_top2_ver, handler = function(h,...){
+    dev.set(dev.list()[pre_dev+5])
+    svalue(stat_bar) <- "Plotting raw effort..."
+    my_project$ggplotRawPoints(svalue(effvie_drop))
+    svalue(stat_bar) <- ""
+  })
+  addSpring(eff_g_top2_ver)
+  gbutton("Fishing Points", container = eff_g_top2_ver, handler = function(h,...){
+    dev.set(dev.list()[pre_dev+5])
+    svalue(stat_bar) <- "Plotting fishing points..."
+    Sys.sleep(1)
+    my_project$ggplotFishingPoints(svalue(effvie_drop))
+    svalue(stat_bar) <- ""
+  })
+  addSpring(eff_g_top2_ver)
+  gbutton("Gridded Effort", container = eff_g_top2_ver, handler = function(h,...){
+    dev.set(dev.list()[pre_dev+5])
+    svalue(stat_bar) <- "Plotting gridded effort..."
+    Sys.sleep(1)
+    my_project$ggplotGridEffort(svalue(effvie_drop))
+    svalue(stat_bar) <- ""
+  })
+  addSpring(eff_g_top2_ver)
+  addSpring(eff_g_top2)
+  addSpring(eff_g_top1c)
   addSpring(eff_g_top)
   eff_p <- ggraphics(container = eff_g, width = 600, height = 300, expand = TRUE)
 
