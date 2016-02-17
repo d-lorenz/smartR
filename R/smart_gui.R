@@ -833,9 +833,9 @@ smart_gui <- function(){
     svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
     dev.set(dev.list()[pre_dev+5])
 
-    svalue(stat_bar) <- "Plotting raw effort..."
+    svalue(stat_bar) <- "Plotting Count of disinct vessels..."
     Sys.sleep(1)
-    my_project$ggplotRawPoints(svalue(effvie_drop))
+    my_project$fleet$plotCountIDsEffo()
     svalue(stat_bar) <- ""
 
     ### Update Effort Status
@@ -844,15 +844,14 @@ smart_gui <- function(){
     add(effo_g, effo_sta_n)
   })
   addSpring(eff_g_top1)
-  gbutton("View Raw Effort", container = eff_g_top1, handler = function(h,...){
+  gbutton("View Stats", container = eff_g_top1, handler = function(h,...){
     dev.set(dev.list()[pre_dev+5])
-    svalue(stat_bar) <- "Plotting raw effort..."
+    svalue(stat_bar) <- "Plotting Count of disinct vessels..."
     Sys.sleep(1)
-    my_project$ggplotRawPoints(svalue(effvie_drop))
+    my_project$fleet$plotCountIDsEffo()
     svalue(stat_bar) <- ""
-
   })
-  addSpring(eff_g_top1)
+
   addSpring(eff_g_top)
 
   eff_g_top1b <- ggroup(horizontal = FALSE, container = eff_g_top)
@@ -928,14 +927,7 @@ smart_gui <- function(){
   })
 
   addSpring(eff_g_top1b)
-  # gbutton("View Fishing Points", container = eff_g_top1b, handler = function(h,...){
-  #   dev.set(dev.list()[pre_dev+5])
-  #   svalue(stat_bar) <- "Plotting fishing points..."
-  #   Sys.sleep(1)
-  #   my_project$ggplotFishingPoints(svalue(effvie_drop))
-  #   svalue(stat_bar) <- ""
-  # })
-  # addSpring(eff_g_top1b)
+
   gbutton("View Stats", container = eff_g_top1b, handler = function(h,...){
     dev.set(dev.list()[pre_dev+5])
     svalue(stat_bar) <- "Plotting fishing points data summary..."
@@ -959,26 +951,14 @@ smart_gui <- function(){
     svalue(stat_bar) <- ""
   })
   addSpring(eff_g_top1c)
-  # gbutton("View Gridded Effort", container = eff_g_top1c, handler = function(h,...){
-  #   dev.set(dev.list()[pre_dev+5])
-  #   svalue(stat_bar) <- "Plotting gridded effort..."
-  #   Sys.sleep(1)
-  #   my_project$ggplotGridEffort(svalue(effvie_drop))
-  #   svalue(stat_bar) <- ""
-  # })
-  # addSpring(eff_g_top1c)
+
   addSpring(eff_g_top)
 
   eff_g_top2 <- gframe(text = "View", horizontal = TRUE, container = eff_g_top, expand = TRUE)
   addSpring(eff_g_top2)
   effvie_drop <- gcombobox(items = "Year", selected = 1, container = eff_g_top2, expand = TRUE, editable = FALSE)
   addSpring(eff_g_top2)
-  #   gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = eff_g_top2,
-  #          handler = function(h,...){
-  #            dev.set(dev.list()[pre_dev+5])
-  #            my_project$ggplotGridEffort(svalue(effvie_drop))
-  #          })
-  #   addSpring(eff_g_top2)
+
   eff_g_top2_ver <- ggroup(horizontal = FALSE, container = eff_g_top2)
   addSpring(eff_g_top2_ver)
   gbutton("Raw Effort", container = eff_g_top2_ver, handler = function(h,...){
