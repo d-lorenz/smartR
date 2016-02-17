@@ -789,11 +789,12 @@ smart_gui <- function(){
     svalue(stat_bar) <- "Loading effort from rData..."
 
     my_project$fleet$rawEffort <- readRDS(tmp_file)
+    my_project$fleet$setEffortIds()
     cat("   Done!", sep = "")
     svalue(stat_bar) <- ""
 
-    effvie_drop[] <- c("All", colnames(my_project$fleet$rawEffort))
-    svalue(effvie_drop) <- "All"
+    effvie_drop[] <- names(my_project$fleet$rawEffort)
+    svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
     dev.set(dev.list()[pre_dev+5])
 
     svalue(stat_bar) <- "Plotting raw effort..."
