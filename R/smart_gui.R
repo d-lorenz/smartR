@@ -1133,7 +1133,7 @@ smart_gui <- function(){
 
   addSpring(fig_g_top)
 
-  gbutton("Select\nthis\nPartitioning", container = fig_g_top, handler = function(h,...){
+  gbutton("   Select\n     this\nPartitioning", container = fig_g_top, handler = function(h,...){
     my_project$setFishGround(numCut = svalue(fg_plotCut))
     })
   addSpring(fig_g_top)
