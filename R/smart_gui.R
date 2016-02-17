@@ -1062,7 +1062,7 @@ smart_gui <- function(){
                   tmp_effo$Cell <- as.numeric(as.character(tmp_effo$Cell))
                   miss_rows <- as.numeric(setdiff(as.character(my_project$sampMap$gridShp@plotOrder), as.character(tmp_effo$Cell)))
                   if(length(miss_rows) > 0){
-                    cat(length(miss_rows), " cells with no points... ", sep = "")
+                    # cat(length(miss_rows), " cells with no points... ", sep = "")
                     tmp_effo <- rbind(tmp_effo, data.frame(Cell = miss_rows, Freq = 0))
                     tmp_effo <- tmp_effo[order(tmp_effo[,1]),]
                   }
@@ -1130,7 +1130,14 @@ smart_gui <- function(){
                           })
 
   addSpring(fig_g_top_plot)
+
   addSpring(fig_g_top)
+
+  gbutton("Select\nthis\nPartitioning", container = fig_g_top, handler = function(h,...){
+    my_project$setFishGround(numCut = svalue(fg_plotCut))
+    })
+  addSpring(fig_g_top)
+
   addSpace(fig_g_top, 2)
   fisGro_p <- ggraphics(container = fig_g, width = 600, height = 300, expand = TRUE)
 
