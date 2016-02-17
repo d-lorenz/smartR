@@ -857,6 +857,7 @@ smart_gui <- function(){
   eff_g_top1b <- ggroup(horizontal = FALSE, container = eff_g_top)
   addSpring(eff_g_top1b)
   gbutton("Set Fishing Points", container = eff_g_top1b, handler = function(h,...){
+    svalue(stat_bar) <- "Setting paramters..."
 
     temp_dia <- gwindow(title="Set Fishing Points", visible = FALSE,
                         width = 650, height = 450, parent = main_win)
@@ -917,13 +918,9 @@ smart_gui <- function(){
     fipo_gra <- ggraphics(width = 600, height = 400, container = up_g, expand = TRUE)
     visible(temp_dia) <- TRUE
 
-    svalue(stat_bar) <- "Plotting speed/depth profiles..."
-    Sys.sleep(1)
     my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
                                     speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
                                     depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
-    svalue(stat_bar) <- ""
-
   })
 
   addSpring(eff_g_top1b)
