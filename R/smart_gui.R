@@ -786,14 +786,19 @@ smart_gui <- function(){
     tmp_file <- "/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/smart_rawEffort_new.rData"
 
     cat("\nLoading effort from rData...", sep = "")
+    svalue(stat_bar) <- "Loading effort from rData..."
+
     my_project$fleet$rawEffort <- readRDS(tmp_file)
     cat("   Done!", sep = "")
+    svalue(stat_bar) <- ""
 
     effvie_drop[] <- c("All", colnames(my_project$fleet$rawEffort))
     svalue(effvie_drop) <- "All"
     dev.set(dev.list()[pre_dev+5])
 
+    svalue(stat_bar) <- "Plotting raw effort..."
     my_project$ggplotRawPoints(svalue(effvie_drop))
+    svalue(stat_bar) <- ""
 
     # my_project$effPlot("All")
 
@@ -815,14 +820,19 @@ smart_gui <- function(){
     tmp_file <- "/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/smart_rawEffort_new.rData"
 
     cat("\nLoading effort from rData...", sep = "")
+    svalue(stat_bar) <- "Loading effort from vmsbase db..."
     my_project$fleet$rawEffort <- readRDS(tmp_file)
+    my_project$fleet$setEffortIds()
     cat("   Done!", sep = "")
+    svalue(stat_bar) <- ""
 
     effvie_drop[] <- names(my_project$fleet$rawEffort)
     svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
     dev.set(dev.list()[pre_dev+5])
 
+    svalue(stat_bar) <- "Plotting raw effort..."
     my_project$ggplotRawPoints(svalue(effvie_drop))
+    svalue(stat_bar) <- ""
 
     ### Update Effort Status
     effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
@@ -832,7 +842,10 @@ smart_gui <- function(){
   addSpring(eff_g_top1)
   gbutton("View Raw Effort", container = eff_g_top1, handler = function(h,...){
     dev.set(dev.list()[pre_dev+5])
+    svalue(stat_bar) <- "Plotting raw effort..."
     my_project$ggplotRawPoints(svalue(effvie_drop))
+    svalue(stat_bar) <- ""
+
   })
   addSpring(eff_g_top1)
   addSpring(eff_g_top)
@@ -900,21 +913,28 @@ smart_gui <- function(){
     fipo_gra <- ggraphics(width = 600, height = 400, container = up_g, expand = TRUE)
     visible(temp_dia) <- TRUE
 
+    svalue(stat_bar) <- "Plotting speed/depth profiles..."
+
     my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
                                     speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
                                     depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
+    svalue(stat_bar) <- ""
 
   })
 
   addSpring(eff_g_top1b)
   gbutton("View Fishing Points", container = eff_g_top1b, handler = function(h,...){
     dev.set(dev.list()[pre_dev+5])
+    svalue(stat_bar) <- "Plotting fishing points..."
     my_project$ggplotFishingPoints(svalue(effvie_drop))
+    svalue(stat_bar) <- ""
   })
   addSpring(eff_g_top1b)
   gbutton("View Stats", container = eff_g_top1b, handler = function(h,...){
     dev.set(dev.list()[pre_dev+5])
+    svalue(stat_bar) <- "Plotting fishing points data summary..."
     my_project$fleet$plotFishPoinStat()
+    svalue(stat_bar) <- ""
   })
   addSpring(eff_g_top1b)
   addSpring(eff_g_top)
@@ -922,14 +942,19 @@ smart_gui <- function(){
   eff_g_top1c <- ggroup(horizontal = FALSE, container = eff_g_top)
   addSpring(eff_g_top1c)
   gbutton("Grid Fishing Points", container = eff_g_top1c, handler = function(h,...){
+    svalue(stat_bar) <- "Setting fishing point cells..."
     my_project$setCellPoin()
-    my_project$fleet$setWeekNum()
-    my_project$setWeekEffoMatr()
+    svalue(stat_bar) <- "Adding week and month number to dataset..."
+    my_project$fleet$setWeekMonthNum()
+    # my_project$setWeekEffoMatr()
+    svalue(stat_bar) <- ""
   })
   addSpring(eff_g_top1c)
   gbutton("View Gridded Effort", container = eff_g_top1c, handler = function(h,...){
     dev.set(dev.list()[pre_dev+5])
+    svalue(stat_bar) <- "Plotting gridded effort..."
     my_project$ggplotGridEffort(svalue(effvie_drop))
+    svalue(stat_bar) <- ""
   })
   addSpring(eff_g_top1c)
   addSpring(eff_g_top)
