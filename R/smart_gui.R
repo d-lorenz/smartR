@@ -935,7 +935,7 @@ smart_gui <- function(){
     my_project$fleet$plotFishPoinStat()
     svalue(stat_bar) <- ""
   })
-  addSpring(eff_g_top1b)
+  # addSpring(eff_g_top1b)
   addSpring(eff_g_top)
 
   eff_g_top1c <- ggroup(horizontal = FALSE, container = eff_g_top)
@@ -985,7 +985,7 @@ smart_gui <- function(){
   })
   addSpring(eff_g_top2_ver)
   addSpring(eff_g_top2)
-  addSpring(eff_g_top1c)
+  # addSpring(eff_g_top1c)
   addSpring(eff_g_top)
   eff_p <- ggraphics(container = eff_g, width = 600, height = 300, expand = TRUE)
 
