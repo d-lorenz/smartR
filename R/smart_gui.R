@@ -358,7 +358,7 @@ smart_gui <- function(){
   gri_g_top1 <- ggroup(horizontal = FALSE, container = gri_g_top)
   addSpring(gri_g_top1)
   gri_g_top1_gri <- ggroup(horizontal = TRUE, container = gri_g_top1)
-  addSpring(gri_g_top1_gri)
+  # addSpring(gri_g_top1_gri)
   gbutton("Load Grid", container = gri_g_top1_gri, handler = function(h,...){
     svalue(stat_bar) <- "Loading Grid..."
     Sys.sleep(1)
@@ -468,7 +468,7 @@ smart_gui <- function(){
   addSpring(gri_g_top1)
 
   gri_g_top1_bio <- ggroup(horizontal = TRUE, container = gri_g_top1)
-  addSpring(gri_g_top1_bio)
+  # addSpring(gri_g_top1_bio)
   gbutton("Load Biocenosis", container = gri_g_top1_bio, handler = function(h,...){
     Sys.sleep(1)
     dev.set(dev.list()[pre_dev+1])
@@ -485,7 +485,7 @@ smart_gui <- function(){
   addSpring(gri_g_top1_bio)
 
   gri_g_top1_goo <- ggroup(horizontal = TRUE, container = gri_g_top1)
-  addSpring(gri_g_top1_goo)
+  # addSpring(gri_g_top1_goo)
   gbutton("Load Google map", container = gri_g_top1_goo, handler = function(h,...){
     Sys.sleep(1)
     dev.set(dev.list()[pre_dev+1])
