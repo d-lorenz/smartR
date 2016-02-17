@@ -1037,28 +1037,45 @@ smart_gui <- function(){
               cat("\nInput for Fishing Grounds Clustering:\n")
               if(svalue(lyt[2,2])){ ### Resource
                 cat("\n   -   Resource Distribution")
+                tmp_res <- cbind(apply(my_project$bySpecie[[1]]$Coh_A_Int[,1,,1], 1, sum),
+                                 apply(my_project$bySpecie[[1]]$Coh_A_Int[,2,,1], 1, sum),
+                                 apply(my_project$bySpecie[[1]]$Coh_A_Int[,3,,1], 1, sum),
+                                 apply(my_project$bySpecie[[1]]$Coh_A_Int[,1,,2], 1, sum),
+                                 apply(my_project$bySpecie[[1]]$Coh_A_Int[,2,,2], 1, sum),
+                                 apply(my_project$bySpecie[[1]]$Coh_A_Int[,3,,2], 1, sum))
+                multi_fac_res <- switch(lyt[2,3], "0.5X" = 0.5, "1" = 1, "2X" = 2)
                 clus_data <- cbind(clus_data,
-                                   apply(my_project$bySpecie[[1]]$Coh_A_Int[,1,,1], 1, sum),
-                                   apply(my_project$bySpecie[[1]]$Coh_A_Int[,2,,1], 1, sum),
-                                   apply(my_project$bySpecie[[1]]$Coh_A_Int[,3,,1], 1, sum),
-                                   apply(my_project$bySpecie[[1]]$Coh_A_Int[,1,,2], 1, sum),
-                                   apply(my_project$bySpecie[[1]]$Coh_A_Int[,2,,2], 1, sum),
-                                   apply(my_project$bySpecie[[1]]$Coh_A_Int[,3,,2], 1, sum))
+                                   tmp_res*multi_fac_res)
               }
               if(svalue(lyt[3,2])){ ### SeaBed
                 cat("\n   -   Seabed Category")
+                multi_fac_bed <- switch(lyt[3,3], "0.5X" = 0.5, "1" = 1, "2X" = 2)
                 clus_data <- cbind(clus_data,
-                                   my_project$sampMap$bioDF)
+                                   my_project$sampMap$bioDF*multi_fac_bed)
               }
               if(svalue(lyt[4,2])){ ### Effort
                 cat("\n   -   Effort Distribution")
-                clus_data <- cbind(clus_data,
-                                   my_project$fleet$rawEffort)
+                multi_fac_eff <- switch(lyt[4,3], "0.5X" = 0.5, "1" = 1, "2X" = 2)
+                for(i in names(my_sampling$fleet$rawEffort)){
+                  tmp_effo <- as.data.frame(table(my_project$fleet$rawEffort[[i]]$Cell[which(my_project$fleet$rawEffort[[i]]$FishPoint)]))
+                  names(tmp_effo) <- c("Cell", "Freq")
+                  tmp_effo$Cell <- as.numeric(as.character(tmp_effo$Cell))
+                  miss_rows <- as.numeric(setdiff(as.character(my_project$sampMap$gridShp@plotOrder), as.character(tmp_effo$Cell)))
+                  if(length(miss_rows) > 0){
+                    cat(length(miss_rows), " cells with no points... ", sep = "")
+                    tmp_effo <- rbind(tmp_effo, data.frame(Cell = miss_rows, Freq = 0))
+                    tmp_effo <- tmp_effo[order(tmp_effo[,1]),]
+                  }
+                  clus_data <- cbind(clus_data, tmp_effo[,2]*multi_fac_eff)
+                  colnames(clus_data)[ncol(clus_data)] <- paste("Year_", i, sep = "")
+                }
               }
               if(svalue(lyt[5,2])){ ### Bathymetry
                 cat("\n   -   Bathymetry\n")
-                clus_data <- cbind(clus_data,
-                                   my_project$sampMap$centDept[,3])
+                multi_fac_dep <- switch(lyt[5,3], "0.5X" = 0.5, "1" = 1, "2X" = 2)
+                tmp_depth <- as.data.frame(my_project$sampMap$centDept[,3])
+                names(tmp_depth) <- "Depth"
+                clus_data <- cbind(clus_data, tmp_depth*multi_fac_dep)
               }
               clus_data <- clus_data[,-1]
               my_project$sampMap$setClusInpu(clus_data)
