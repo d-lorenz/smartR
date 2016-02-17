@@ -965,6 +965,7 @@ smart_gui <- function(){
   gbutton("Raw Effort", container = eff_g_top2_ver, handler = function(h,...){
     dev.set(dev.list()[pre_dev+5])
     svalue(stat_bar) <- "Plotting raw effort..."
+    Sys.sleep(1)
     my_project$ggplotRawPoints(svalue(effvie_drop))
     svalue(stat_bar) <- ""
   })
@@ -1134,7 +1135,7 @@ smart_gui <- function(){
 
   addSpring(fig_g_top)
 
-  gbutton("   Select\n     this\nPartitioning", container = fig_g_top, handler = function(h,...){
+  gbutton("    Select\n      this\nPartitioning", container = fig_g_top, handler = function(h,...){
     my_project$setFishGround(numCut = svalue(fg_plotCut))
     })
   addSpring(fig_g_top)
