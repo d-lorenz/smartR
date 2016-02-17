@@ -1042,7 +1042,8 @@ SampleMap <- R6Class("sampleMap",
                        },
                        getGooMap = function(){
                          gooMap <<- get_googlemap(center = c(lon = mean(gridPolySet$X), lat = mean(gridPolySet$Y)),
-                                                  zoom = MaxZoom(latrange = range(gridPolySet$Y), lonrange = range(gridPolySet$X)),
+                                                  zoom = MaxZoom(latrange = c(gridBboxExt[2], gridBboxExt[4]),
+                                                                 lonrange = c(gridBboxExt[1], gridBboxExt[3])),
                                                   size = c(640, 640), scale = 2, format = "png8", maptype = "hybrid",
                                                   color = "color")
                          setGooPlot()
