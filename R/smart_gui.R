@@ -354,7 +354,7 @@ smart_gui <- function(){
   gri_g_top <- gframe(horizontal = TRUE, container = gri_g)
   addSpace(gri_g_top, 2)
   # addSpace(gri_g, 2, horizontal = TRUE)
-  addSpring(gri_g_top)
+  # addSpring(gri_g_top)
   gri_g_top1 <- ggroup(horizontal = FALSE, container = gri_g_top)
   addSpring(gri_g_top1)
   gri_g_top1_gri <- ggroup(horizontal = TRUE, container = gri_g_top1)
@@ -391,7 +391,7 @@ smart_gui <- function(){
     delete(grid_g, grid_g$children[[length(grid_g$children)]])
     add(grid_g, grid_sta_n)
   })
-  addSpring(gri_g_top1_gri)
+  # addSpring(gri_g_top1_gri)
 
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_gri,
          handler = function(h,...){
@@ -453,7 +453,7 @@ smart_gui <- function(){
     lim <- par()
     rasterImage(ima, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
   })
-  addSpring(gri_g_top1_dep)
+  # addSpring(gri_g_top1_dep)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_dep,
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+1])
@@ -476,7 +476,7 @@ smart_gui <- function(){
     my_project$sampMap$loadBioDF("/Users/Lomo/Documents/Uni/R/smart/data/BioM.rData")
     my_project$sampMap$plotBioDF()
   })
-  addSpring(gri_g_top1_bio)
+  # addSpring(gri_g_top1_bio)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_bio,
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+1])
@@ -496,7 +496,7 @@ smart_gui <- function(){
     svalue(stat_bar) <- ""
     my_project$sampMap$plotGooGrid()
   })
-  addSpring(gri_g_top1_goo)
+  # addSpring(gri_g_top1_goo)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_goo,
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+1])
