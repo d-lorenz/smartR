@@ -857,7 +857,7 @@ smart_gui <- function(){
   eff_g_top1b <- ggroup(horizontal = FALSE, container = eff_g_top)
   addSpring(eff_g_top1b)
   gbutton("Set Fishing Points", container = eff_g_top1b, handler = function(h,...){
-    svalue(stat_bar) <- "Setting paramters..."
+    svalue(stat_bar) <- "Setting parameters..."
 
     temp_dia <- gwindow(title="Set Fishing Points", visible = FALSE,
                         width = 650, height = 450, parent = main_win)
@@ -912,8 +912,10 @@ smart_gui <- function(){
       my_project$fleet$setFishPoinPara(speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
                                        depth_range = sort(unlist(lapply(dep_lay[1:2,2], svalue)), decreasing = TRUE))
       svalue(stat_bar) <- "Setting fishing points..."
+      Sys.sleep(1)
       my_project$fleet$setFishPoin()
       svalue(stat_bar) <- ""
+      Sys.sleep(1)
       dispose(temp_dia)
     })
     addSpring(up_fra)
