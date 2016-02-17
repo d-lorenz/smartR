@@ -911,7 +911,9 @@ smart_gui <- function(){
     gbutton(text = "\n   Set!   \n", container = up_fra, handler = function(...){
       my_project$fleet$setFishPoinPara(speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
                                        depth_range = sort(unlist(lapply(dep_lay[1:2,2], svalue)), decreasing = TRUE))
+      svalue(stat_bar) <- "Setting fishing points..."
       my_project$fleet$setFishPoin()
+      svalue(stat_bar) <- ""
       dispose(temp_dia)
     })
     addSpring(up_fra)
