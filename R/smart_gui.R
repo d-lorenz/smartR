@@ -773,12 +773,29 @@ smart_gui <- function(){
   addSpring(eff_g_top)
   eff_g_top1 <- ggroup(horizontal = FALSE, container = eff_g_top)
   addSpring(eff_g_top1)
-  gbutton("Load Data", container = eff_g_top1, handler = function(h,...){
-    my_project$fleet$loadMatEffort("/Users/Lomo/Documents/Uni/R/smart/data/EFF_OTB_Hours_9years.rData")
+  gbutton("Load from rData", container = eff_g_top1, handler = function(h,...){
+    # my_project$fleet$loadMatEffort("/Users/Lomo/Documents/Uni/R/smart/data/EFF_OTB_Hours_9years.rData")
+    #### SKIPPED LOADING rData
+    #     tmp_files <- gfile(text = "Select Effort rData", type = "open",
+    #                        initial.filename = NULL, initial.dir = getwd(), filter = list(),
+    #                        multi = TRUE)
+    #
+    #     my_project$loadFleeEffoDbs(tmp_files)
+    #     my_project$fleet$rawEffort <- readRDS(tmp_files)
+
+    tmp_file <- "/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/smart_rawEffort_new.rData"
+
+    cat("\nLoading effort from rData...", sep = "")
+    my_project$fleet$rawEffort <- readRDS(tmp_file)
+    cat("   Done!", sep = "")
+
     effvie_drop[] <- c("All", colnames(my_project$fleet$rawEffort))
     svalue(effvie_drop) <- "All"
     dev.set(dev.list()[pre_dev+5])
-    my_project$effPlot("All")
+
+    my_project$ggplotRawPoints(svalue(effvie_drop))
+
+    # my_project$effPlot("All")
 
     ### Update Effort Status
     effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
@@ -795,8 +812,10 @@ smart_gui <- function(){
     #
     #     my_project$loadFleeEffoDbs(tmp_files)
 
+    tmp_file <- "/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/smart_rawEffort_new.rData"
+
     cat("\nLoading effort from rData...", sep = "")
-    my_project$fleet$rawEffort <- readRDS("/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/rawEffort.rData")
+    my_project$fleet$rawEffort <- readRDS(tmp_file)
     cat("   Done!", sep = "")
 
     effvie_drop[] <- names(my_project$fleet$rawEffort)
