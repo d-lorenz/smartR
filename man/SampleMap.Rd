@@ -12,7 +12,8 @@ SampleMap
 This function returns the 'sampleMap' object.
 }
 \description{
-The \code{SampleMap} class implements the class of SMART to control geographical data.
+The \code{SampleMap} class implements the class of SMART
+to control geographical data.
 }
 \keyword{datasets}
 

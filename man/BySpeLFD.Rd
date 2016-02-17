@@ -12,7 +12,8 @@ BySpeLFD
 This function returns the 'sampleLFDbyspe' object.
 }
 \description{
-The \code{BySpeLFD} class implements the class of SMART to handle species samplings.
+The \code{BySpeLFD} class implements the class of SMART to
+ handle species samplings.
 }
 \keyword{datasets}
 

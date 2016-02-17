@@ -12,7 +12,8 @@ SmartProject
 This function returns the 'smartProject' object.
 }
 \description{
-The \code{SmartProject} class implements the main class of SMART.
+The \code{SmartProject} class implements the main class of
+ SMART.
 }
 \keyword{datasets}
 

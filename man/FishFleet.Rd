@@ -12,7 +12,8 @@ FishFleet
 This function returns the 'fishFleet' object.
 }
 \description{
-The \code{FishFleet} class implements the class of SMART to manage fleet data.
+The \code{FishFleet} class implements the class of SMART
+to manage fleet data.
 }
 \keyword{datasets}
 
