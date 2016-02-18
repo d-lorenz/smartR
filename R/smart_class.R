@@ -254,6 +254,7 @@ SmartProject <- R6Class("smartProject",
                                 tmp_matrix[,miss_cols] <- 0
                                 tmp_matrix <- tmp_matrix[,c(1:4, 4+order(as.numeric(names(tmp_matrix)[5:ncol(tmp_matrix)])))]
                               }
+                              tmp_matrix <- sqldf("select * from tmp_matrix join (select I_NCEE, T_NUM, min(DATE) DATE_S, max(DATE) DATE_E from tmp_dat group by I_NCEE, T_NUM) using (I_NCEE, T_NUM)")
                               cat(" Done!", sep = "")
                               fleet$weekEffoMatr[[j]] <<- tmp_matrix
                             }
