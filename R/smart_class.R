@@ -792,7 +792,7 @@ FishFleet <- R6Class("fishFleet",
                          print(tmp_plot)
                        },
                        setEffoProdMatr = function(){
-                         effoProd <- list()
+                         effoProd <<- list()
                          for(i in names(my_sampling$fleet$rawEffort)){
                            tmp_effo <- my_sampling$fleet$dayEffoMatr[[i]]
                            tmp_prod <- my_sampling$fleet$prodMatr[[i]]
@@ -800,7 +800,7 @@ FishFleet <- R6Class("fishFleet",
                          }
                        },
                        setProdMatr = function(){
-                         prodMatr <- list()
+                         prodMatr <<- list()
                          for(i in names(my_sampling$fleet$rawEffort)){
                            tmp_prod <- my_sampling$fleet$rawProduction[[i]]
                            tmp_prod <- tmp_prod[tmp_prod$NUMUE %in% my_sampling$fleet$idsEffoProd[[i]],]
