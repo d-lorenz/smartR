@@ -623,6 +623,7 @@ FishFleet <- R6Class("fishFleet",
                        weekEffoMatr = NULL,
                        dayEffoMatr = NULL,
                        prodMatr = NULL,
+                       effoProd = NULL,
                        trackHarbs = NULL,
                        rawSelectivity = NULL,
                        rawProduction = NULL,
@@ -789,6 +790,14 @@ FishFleet <- R6Class("fishFleet",
                            ggtitle("Count of Distinct Vessels - Production Dataset") +
                            ylab("N. of IDs")
                          print(tmp_plot)
+                       },
+                       setEffoProdMatr = function(){
+                         effoProd <- list()
+                         for(i in names(my_sampling$fleet$rawEffort)){
+                           tmp_effo <- my_sampling$fleet$dayEffoMatr[[i]]
+                           tmp_prod <- my_sampling$fleet$prodMatr[[i]]
+                           effoProd[[i]] <<- sqldf("select * from tmp_effo, tmp_prod where I_NCEE = NUMUE and DATE >= UTC_S and DATE <= UTC_E")
+                         }
                        },
                        setProdMatr = function(){
                          prodMatr <- list()
