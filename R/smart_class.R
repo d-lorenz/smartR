@@ -812,7 +812,7 @@ FishFleet <- R6Class("fishFleet",
                              tmp_itm <- effoProd[[i]][which(effoProd[[i]]$I_NCEE == dis_vesmon[j,1] & effoProd[[i]]$MonthNum == dis_vesmon[j,2]),]
                              effoProdMont[[i]][j,3:(ncol(dayEffoMatr[[i]])-1)] <<- apply(unique(tmp_itm[,4:ncol(dayEffoMatr[[i]])]),2,sum)
                              tmp_prod_itm <- unique(tmp_itm[,c(ncol(dayEffoMatr[[i]])+1,(ncol(dayEffoMatr[[i]])+5):ncol(tmp_itm))])
-                             effoProdMont[[i]][j,(ncol(dayEffoMatr[[i]])):ncol(out_mat[[i]])] <<- apply(tmp_prod_itm[,2:ncol(tmp_prod_itm)], 2, sum)
+                             effoProdMont[[i]][j,(ncol(dayEffoMatr[[i]])):ncol(effoProdMont[[i]])] <<- apply(tmp_prod_itm[,2:ncol(tmp_prod_itm)], 2, sum)
                            }
                            cat("Done!")
                          }
