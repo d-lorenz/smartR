@@ -624,6 +624,7 @@ FishFleet <- R6Class("fishFleet",
                        dayEffoMatr = NULL,
                        prodMatr = NULL,
                        effoProd = NULL,
+                       effoProdMont = NULL,
                        trackHarbs = NULL,
                        rawSelectivity = NULL,
                        rawProduction = NULL,
@@ -797,6 +798,23 @@ FishFleet <- R6Class("fishFleet",
                            tmp_effo <- my_sampling$fleet$dayEffoMatr[[i]]
                            tmp_prod <- my_sampling$fleet$prodMatr[[i]]
                            effoProd[[i]] <<- sqldf("select * from tmp_effo, tmp_prod where I_NCEE = NUMUE and DATE >= UTC_S and DATE <= UTC_E")
+                         }
+                       },
+                       setEffoProdMont = function(){
+                         effoProdMont <<- list()
+                         for(i in names(my_sampling$fleet$effoProd)){
+                           cat("\nGenerating year ", i,"... ", sep = "")
+                           dis_vesmon <- unique(my_sampling$fleet$effoProd[[i]][,c("I_NCEE", "MonthNum")])
+                           effoProdMont[[i]] <<- data.frame(matrix(data = 0, nrow = nrow(dis_vesmon), ncol = ncol(my_sampling$fleet$effoProd[[i]])-5))
+                           colnames(effoProdMont[[i]]) <<- c(colnames(my_sampling$fleet$dayEffoMatr[[i]])[-2], colnames(my_sampling$fleet$prodMatr[[i]])[-c(1:4)])
+                           effoProdMont[[i]][,1:2] <<- dis_vesmon
+                           for(j in 1:nrow(dis_vesmon)){
+                             tmp_itm <- my_sampling$fleet$effoProd[[i]][which(my_sampling$fleet$effoProd[[i]]$I_NCEE == dis_vesmon[j,1] & my_sampling$fleet$effoProd[[i]]$MonthNum == dis_vesmon[j,2]),]
+                             effoProdMont[[i]][j,3:(ncol(my_sampling$fleet$dayEffoMatr[[i]])-1)] <<- apply(unique(tmp_itm[,4:ncol(my_sampling$fleet$dayEffoMatr[[i]])]),2,sum)
+                             tmp_prod_itm <- unique(tmp_itm[,c(ncol(my_sampling$fleet$dayEffoMatr[[i]])+1,(ncol(my_sampling$fleet$dayEffoMatr[[i]])+5):ncol(tmp_itm))])
+                             effoProdMont[[i]][j,(ncol(my_sampling$fleet$dayEffoMatr[[i]])):ncol(out_mat[[i]])] <<- apply(tmp_prod_itm[,2:ncol(tmp_prod_itm)], 2, sum)
+                           }
+                           cat("Done!")
                          }
                        },
                        setProdMatr = function(){
