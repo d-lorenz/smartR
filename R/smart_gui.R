@@ -1130,7 +1130,7 @@ smart_gui <- function(){
 
   gbutton("    Select\n      this\nPartitioning", container = fig_g_top, handler = function(h,...){
     my_project$setFishGround(numCut = svalue(fg_plotCut))
-    })
+  })
   addSpring(fig_g_top)
 
   addSpace(fig_g_top, 2)
@@ -1325,9 +1325,9 @@ smart_gui <- function(){
     gbutton(text = "\n   Set!   \n", container = up_fra, handler = function(...){
 
       my_project$fleet$setSpecSettItm(specie = svalue(spe_drop),
-                                       thresh = svalue(thr_spin),
-                                       brea = svalue(num_bre_spin),
-                                       max_xlim = svalue(max_x_spin))
+                                      thresh = svalue(thr_spin),
+                                      brea = svalue(num_bre_spin),
+                                      max_xlim = svalue(max_x_spin))
 
       svalue(set_lab) <- "Set"
       delete(set_gru, set_gru$children[[length(set_gru$children)]])
@@ -1368,6 +1368,13 @@ smart_gui <- function(){
 
   })
   addSpring(pro_g_top1)
+  addSpring(pro_g_top)
+
+  pro_g_top2 <- ggroup(horizontal = FALSE, container = pro_g_top)
+  addSpring(pro_g_top2)
+  gbutton("Get Logit", container = pro_g_top1, handler = function(h,...){
+
+  })
 
   addSpring(pro_g_top)
   gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"),
