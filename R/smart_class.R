@@ -732,7 +732,9 @@ FishFleet <- R6Class("fishFleet",
                        },
                        setProdSpec = function(){
                          prodSpec <<- list()
+                         cat("\nSetting Species year ", sep = "")
                          for(i in names(effoProdMont)){
+                           cat(i, "... ", sep = "")
                            prodSpec[[i]] <<- colnames(effoProdMont[[i]])[ncol(dayEffoMatr[[i]]):ncol(effoProdMont[[i]])]
                            if(i == names(prodSpec)[1]){
                              prodSpec[["Cross"]] <<- prodSpec[[i]]
@@ -740,6 +742,7 @@ FishFleet <- R6Class("fishFleet",
                              prodSpec[["Cross"]] <<- intersect(prodSpec[["Cross"]], prodSpec[[i]])
                            }
                          }
+                         cat("Done!", sep = "")
                        },
                        setSpecSett = function(){
                          specSett <<- vector(mode = "list", length = length(prodSpec[["Cross"]]))
@@ -751,8 +754,10 @@ FishFleet <- R6Class("fishFleet",
                                                            max_x = max_xlim)
                        },
                        setEffoProdAll = function(){
+                         cat("\nSetting effort/production year ", sep = "")
                          tmp_spe <- sort(prodSpec[["Cross"]])
                          for(i in names(effoProdMont)){
+                           cat(i, "... ", sep = "")
                            tmp_nam <- colnames(effoProdMont[[i]])
                            tmp_cols <- which(tmp_nam %in% tmp_spe)
                            if(i == names(effoProdMont)[1]){
@@ -761,6 +766,7 @@ FishFleet <- R6Class("fishFleet",
                              effoProdAll <<- rbind(effoProdAll, cbind(Year = i, effoProdMont[[i]][,c(1:(ncol(dayEffoMatr[[i]])-1), tmp_cols[order(tmp_nam[tmp_cols])])]))
                            }
                          }
+                         cat("Done!", sep = "")
                        },
                        setProdIds = function(){
                          cat("\nSetting Production IDs year ", sep = "")
