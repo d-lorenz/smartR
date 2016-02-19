@@ -663,7 +663,7 @@ FishFleet <- R6Class("fishFleet",
                                                      max_dep = depth_range[2])
                        },
                        setWeekMonthNum = function(){
-                         cat("\n\nAdding week and month number to year ", sep = "")
+                         cat("\nAdding week and month number to year ", sep = "")
                          for(j in names(rawEffort)){
                            cat(j, "... ", sep = "")
                            tmp_dat <- rawEffort[[j]][,c("DATE")]
