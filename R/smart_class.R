@@ -856,25 +856,22 @@ FishFleet <- R6Class("fishFleet",
                        },
                        setDayEffoMatrGround = function(){
                          dayEffoMatr <<- list()
+                         cat("\nCreating weekly matrix for year ", sep = "")
                          for(j in names(rawEffort)){
-                           cat("\n\nLoading year ", j, " ... ", sep = "")
+                           cat(j, "... ", sep = "")
                            tmp_dat <- rawEffort[[j]][rawEffort[[j]]$FishPoint == TRUE & !is.na(rawEffort[[j]]$Cell),c("I_NCEE","DATE", "MonthNum", "FishGround", "FishPoint")]
-                           cat("\nCreating weekly fishing effort matrix... ", sep = "")
                            tmp_matrix <- dcast(tmp_dat, formula = list(.(I_NCEE, DATE = round(DATE), MonthNum), .(FishGround)),
                                                fun.aggregate = sum,
                                                na.rm=TRUE, value.var = "FishPoint")
-                           cat("Done!", sep = "")
-                           cat("\nChecking... ", sep = "")
                            miss_cols <- setdiff(as.character(unique(rawEffort[[j]]$FishGround[!is.na(rawEffort[[j]]$FishGround)])),
                                                 names(tmp_matrix)[5:ncol(tmp_matrix)])
                            if(length(miss_cols) > 0){
-                             cat(length(miss_cols), " cells with no points... ", sep = "")
                              tmp_matrix[,miss_cols] <- 0
                              tmp_matrix <- tmp_matrix[,c(1:4, 4+order(as.numeric(names(tmp_matrix)[5:ncol(tmp_matrix)])))]
                            }
-                           cat(" Done!", sep = "")
                            dayEffoMatr[[j]] <<- tmp_matrix
                          }
+                         cat("Done!", sep = "")
                        },
                        getLoa4Prod = function(){
                          if(!is.null(productionIds) & !is.null(registerIds)){
