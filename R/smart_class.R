@@ -743,7 +743,7 @@ FishFleet <- R6Class("fishFleet",
                        },
                        setSpecSett = function(){
                          specSett <<- vector(mode = "list", length = length(prodSpec[["Cross"]]))
-                         names(set_lst) <<- sort(prodSpec[["Cross"]])
+                         names(specSett) <<- sort(prodSpec[["Cross"]])
                        },
                        setSpecSettItm = function(specie, thresh, brea, max_xlim){
                          specSett[[specie]] <<- data.frame(threshold = thresh,
