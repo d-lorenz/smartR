@@ -1353,19 +1353,19 @@ smart_gui <- function(){
     land_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
     add(set_gru, land_sta)
 
-    tmp_spe <- my_sampling$fleet$effoProdAll[,which(colnames(my_sampling$fleet$effoProdAll) == svalue(spe_drop))]
+    tmp_spe <- my_project$fleet$effoProdAll[,which(colnames(my_project$fleet$effoProdAll) == svalue(spe_drop))]
     tmp_spe <- tmp_spe[tmp_spe != 0]
 
-    if(is.null(my_sampling$fleet$specSett[[svalue(spe_drop)]])){
+    if(is.null(my_project$fleet$specSett[[svalue(spe_drop)]])){
       max_x_spin[] <- seq(0, max(tmp_spe), by = 10)
       svalue(max_x_spin) <- quantile(tmp_spe, 0.95)
       thr_spin[] <- seq(0, svalue(max_x_spin), by = 0.5)
       svalue(thr_spin) <- quantile(tmp_spe, 0.05)
     }else{
-      thr_spin[] <- seq(0, my_sampling$fleet$specSett[[svalue(spe_drop)]]$max_x, by = 0.5)
-      svalue(thr_spin) <- my_sampling$fleet$specSett[[svalue(spe_drop)]]$threshold
-      svalue(num_bre_spin) <- my_sampling$fleet$specSett[[svalue(spe_drop)]]$breaks
-      svalue(max_x_spin) <- my_sampling$fleet$specSett[[svalue(spe_drop)]]$max_x
+      thr_spin[] <- seq(0, my_project$fleet$specSett[[svalue(spe_drop)]]$max_x, by = 0.5)
+      svalue(thr_spin) <- my_project$fleet$specSett[[svalue(spe_drop)]]$threshold
+      svalue(num_bre_spin) <- my_project$fleet$specSett[[svalue(spe_drop)]]$breaks
+      svalue(max_x_spin) <- my_project$fleet$specSett[[svalue(spe_drop)]]$max_x
     }
 
     hist(tmp_spe[tmp_spe <= svalue(max_x_spin)],
