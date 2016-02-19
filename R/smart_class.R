@@ -170,13 +170,12 @@ SmartProject <- R6Class("smartProject",
                             num_cell <- getinfo.shape(sampMap$gridPath)$entities
                             sampMap$gridShp@plotOrder <- 1:num_cell
                             tmp_polygons <- SpatialPolygons(sampMap$gridShp@polygons)
-
+                            cat("\n\nGridding year ", sep = "")
                             for(j in names(fleet$rawEffort)){
-                              cat("\n\nGridding year ", j, sep = "")
-                              cat("\nOverlaying points...", sep = "")
+                              cat(j, "... ", sep = "")
                               fleet$rawEffort[[j]]$Cell <<- over(SpatialPoints(fleet$rawEffort[[j]][,c("LON","LAT")]), tmp_polygons)
-                              cat("Done!", sep = "")
                             }
+                            cat("Done!", sep = "")
                           },
                           setTrackHarb = function(){
                             fleet$trackHarbs <<- list()
@@ -827,8 +826,9 @@ FishFleet <- R6Class("fishFleet",
                        },
                        setEffoProdMont = function(){
                          effoProdMont <<- list()
+                         cat("\nGenerating year ", sep = "")
                          for(i in names(effoProd)){
-                           cat("\nGenerating year ", i,"... ", sep = "")
+                           cat(i,"... ", sep = "")
                            dis_vesmon <- unique(effoProd[[i]][,c("I_NCEE", "MonthNum")])
                            effoProdMont[[i]] <<- data.frame(matrix(data = 0, nrow = nrow(dis_vesmon), ncol = ncol(effoProd[[i]])-5))
                            colnames(effoProdMont[[i]]) <<- c(colnames(dayEffoMatr[[i]])[-2], colnames(prodMatr[[i]])[-c(1:4)])
@@ -839,8 +839,8 @@ FishFleet <- R6Class("fishFleet",
                              tmp_prod_itm <- unique(tmp_itm[,c(ncol(dayEffoMatr[[i]])+1,(ncol(dayEffoMatr[[i]])+5):ncol(tmp_itm))])
                              effoProdMont[[i]][j,(ncol(dayEffoMatr[[i]])):ncol(effoProdMont[[i]])] <<- apply(tmp_prod_itm[,2:ncol(tmp_prod_itm)], 2, sum)
                            }
-                           cat("Done!")
                          }
+                         cat("Done!")
                        },
                        setProdMatr = function(){
                          prodMatr <<- list()
