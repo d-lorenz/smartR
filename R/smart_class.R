@@ -746,7 +746,6 @@ FishFleet <- R6Class("fishFleet",
                          }
                        },
                        setEffoProdAll = function(){
-                         effoProdAll <<- NULL
                          tmp_spe <- sort(prodSpec[["Cross"]])
                          for(i in names(effoProdMont)){
                            tmp_nam <- colnames(effoProdMont[[i]])
