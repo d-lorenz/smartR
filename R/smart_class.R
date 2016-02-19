@@ -1345,25 +1345,22 @@ SampleMap <- R6Class("sampleMap",
                          ##  Find the minimal spanning tree
                          mst.bh <- mstree(nb.w, ini = 1)
                          clusMat <<- matrix(NA, nCells, numCuts)
-                         cat("Performing CC with 1 cut... ", sep = "")
+                         cat("Clustering", sep = "")
                          res1 <- skater(mst.bh[,1:2], clusInpu, ncuts = 1, minsize,
                                         method = skater_method)
                          clusMat[,1] <<- res1$groups
-                         cat(" Done","\n", sep = "")
-                         # plotFishGrou(ind_clu = 1)
 
                          #Perform the first CC (without removing spurious clusters)
                          for(nCuts in 2:numCuts){
-                           cat("Performing CC with ",nCuts," cuts... ", sep = "")
+                           cat(".", sep = "")
                            ##  Spatial 'K'luster Analysis by Tree Edge Removal
                            #                            res1 <- skater(mst.bh[,1:2], cells_data, ncuts = nCuts, minsize,
                            #                                           method = skater_method)
                            res1 <- skater(res1, clusInpu, ncuts = 1, minsize,
                                           method = skater_method)
                            clusMat[,nCuts] <<- res1$groups
-                           cat(" Done","\n", sep = "")
-                           # plotFishGrou(ind_clu = nCuts)
                          }
+                         cat(" Done!", sep = "")
 
                          indSil <<- numeric(ncol(clusMat))
                          indCH <<- numeric(ncol(clusMat))
