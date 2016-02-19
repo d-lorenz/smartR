@@ -753,7 +753,7 @@ FishFleet <- R6Class("fishFleet",
                            if(i == names(effoProdMont)[1]){
                              effoProdAll <<- cbind(Year = i, effoProdMont[[i]][,c(1:(ncol(dayEffoMatr[[i]])-1), tmp_cols[order(tmp_nam[tmp_cols])])])
                            }else{
-                             effoProdAll <<- rbind(allYea, cbind(Year = i, effoProdMont[[i]][,c(1:(ncol(dayEffoMatr[[i]])-1), tmp_cols[order(tmp_nam[tmp_cols])])]))
+                             effoProdAll <<- rbind(effoProdAll, cbind(Year = i, effoProdMont[[i]][,c(1:(ncol(dayEffoMatr[[i]])-1), tmp_cols[order(tmp_nam[tmp_cols])])]))
                            }
                          }
                        },
