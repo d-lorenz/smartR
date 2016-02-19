@@ -718,14 +718,16 @@ FishFleet <- R6Class("fishFleet",
                          par(op)
                        },
                        setEffortIds = function(){
-                         cat("Setting Effort IDs...\n", sep = "")
+                         cat("\nSetting Effort IDs year ", sep = "")
                          effortIds <<- list()
                          for(i in names(rawEffort)){
+                           cat(i, "... ", sep = "")
                            tmp_ids <- unique(rawEffort[[i]][,1])
                            tmp_key <- i
                            effortIds[[tmp_key]] <<- tmp_ids
                          }
                          effortIds[["All"]] <<- unique(unlist(effortIds))
+                         cat("Done!", sep = "")
                        },
                        setProdSpec = function(){
                          prodSpec <<- list()
