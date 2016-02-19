@@ -916,6 +916,13 @@ smart_gui <- function(){
       my_project$fleet$setFishPoin()
       svalue(stat_bar) <- ""
       Sys.sleep(1)
+      svalue(stat_bar) <- "Setting fishing point cells..."
+      Sys.sleep(1)
+      my_project$setCellPoin()
+      svalue(stat_bar) <- "Adding week and month number to dataset..."
+      Sys.sleep(1)
+      my_project$fleet$setWeekMonthNum()
+      svalue(stat_bar) <- ""
       dispose(temp_dia)
     })
     addSpring(up_fra)
@@ -938,20 +945,6 @@ smart_gui <- function(){
   })
   # addSpring(eff_g_top1b)
   addSpring(eff_g_top)
-
-  eff_g_top1c <- ggroup(horizontal = FALSE, container = eff_g_top)
-  addSpring(eff_g_top1c)
-  gbutton("Grid Fishing Points", container = eff_g_top1c, handler = function(h,...){
-    svalue(stat_bar) <- "Setting fishing point cells..."
-    Sys.sleep(1)
-    my_project$setCellPoin()
-    svalue(stat_bar) <- "Adding week and month number to dataset..."
-    Sys.sleep(1)
-    my_project$fleet$setWeekMonthNum()
-    # my_project$setWeekEffoMatr()
-    svalue(stat_bar) <- ""
-  })
-  addSpring(eff_g_top1c)
 
   addSpring(eff_g_top)
 
