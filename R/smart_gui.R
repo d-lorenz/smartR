@@ -791,7 +791,7 @@ smart_gui <- function(){
 
     my_project$fleet$rawEffort <- readRDS(tmp_file)
     my_project$fleet$setEffortIds()
-    cat("   Done!", sep = "")
+    # cat("   Done!", sep = "")
     svalue(stat_bar) <- ""
 
     effvie_drop[] <- names(my_project$fleet$rawEffort)
@@ -1036,7 +1036,7 @@ smart_gui <- function(){
     gbutton("\nAccept\n", container = bot_g,
             handler = function(h,...){
               clus_data <- numeric(length = my_project$sampMap$nCells)
-              cat("\nInput for Fishing Grounds Clustering:\n")
+              cat("\nInput for Fishing Grounds Clustering:")
               if(svalue(lyt[2,2])){ ### Resource
                 cat("\n   -   Resource Distribution")
                 tmp_res <- cbind(apply(my_project$bySpecie[[1]]$Coh_A_Int[,1,,1], 1, sum),
@@ -1238,12 +1238,12 @@ smart_gui <- function(){
     addSpace(up_fra, 20)
     spe_fra <- gframe(text = "Specie", container = up_fra, horizontal = TRUE, expand = TRUE)
     addSpace(spe_fra, 20)
-    spe_drop <- gcombobox(sort(prodSpec[["Cross"]]), selected = 1,
+    spe_drop <- gcombobox(sort(my_project$fleet$prodSpec[["Cross"]]), selected = 1,
                           editable = FALSE, container = spe_fra, expand = TRUE,
                           handler = function(...){
-                            tmp_spe <- my_sampling$fleet$effoProdAll[,which(colnames(my_sampling$fleet$effoProdAll) == svalue(spe_drop))]
+                            tmp_spe <- my_project$fleet$effoProdAll[,which(colnames(my_project$fleet$effoProdAll) == svalue(spe_drop))]
                             tmp_spe <- tmp_spe[tmp_spe != 0]
-                            if(is.null(my_sampling$fleet$specSett[[svalue(spe_drop)]])){
+                            if(is.null(my_project$fleet$specSett[[svalue(spe_drop)]])){
                               max_x_spin[] <- seq(0, max(tmp_spe), by = 10)
                               svalue(max_x_spin) <- quantile(tmp_spe, 0.95)
                               thr_spin[] <- seq(0, svalue(max_x_spin), by = 0.5)
@@ -1254,10 +1254,10 @@ smart_gui <- function(){
                               svalue(set_lab) <- "Not set"
 
                             }else{
-                              thr_spin[] <- seq(0, my_sampling$fleet$specSett[[svalue(spe_drop)]]$max_x, by = 0.5)
-                              svalue(thr_spin) <- my_sampling$fleet$specSett[[svalue(spe_drop)]]$threshold
-                              svalue(num_bre_spin) <- my_sampling$fleet$specSett[[svalue(spe_drop)]]$breaks
-                              svalue(max_x_spin) <- my_sampling$fleet$specSett[[svalue(spe_drop)]]$max_x
+                              thr_spin[] <- seq(0, my_project$fleet$specSett[[svalue(spe_drop)]]$max_x, by = 0.5)
+                              svalue(thr_spin) <- my_project$fleet$specSett[[svalue(spe_drop)]]$threshold
+                              svalue(num_bre_spin) <- my_project$fleet$specSett[[svalue(spe_drop)]]$breaks
+                              svalue(max_x_spin) <- my_project$fleet$specSett[[svalue(spe_drop)]]$max_x
                               delete(set_gru, set_gru$children[[length(set_gru$children)]])
                               add(set_gru, land_sta_n)
                               svalue(set_lab) <- "Set"
@@ -1276,7 +1276,7 @@ smart_gui <- function(){
     thr_spin <- gspinbutton(from = 0, to = 100,
                             by = 0.5, value = 0, container = thr_fra,
                             handler = function(...){
-                              tmp_spe <- my_sampling$fleet$effoProdAll[,which(colnames(my_sampling$fleet$effoProdAll) == svalue(spe_drop))]
+                              tmp_spe <- my_project$fleet$effoProdAll[,which(colnames(my_project$fleet$effoProdAll) == svalue(spe_drop))]
                               tmp_spe <- tmp_spe[tmp_spe != 0]
 
                               hist(tmp_spe[tmp_spe <= svalue(max_x_spin)],
@@ -1295,7 +1295,7 @@ smart_gui <- function(){
     max_x_spin <- gspinbutton(from = 100, to = 1000,
                               by = 10, value = 100, container = bou_gru,
                               handler = function(...){
-                                tmp_spe <- my_sampling$fleet$effoProdAll[,which(colnames(my_sampling$fleet$effoProdAll) == svalue(spe_drop))]
+                                tmp_spe <- my_project$fleet$effoProdAll[,which(colnames(my_project$fleet$effoProdAll) == svalue(spe_drop))]
                                 tmp_spe <- tmp_spe[tmp_spe != 0]
 
                                 hist(tmp_spe[tmp_spe <= svalue(max_x_spin)],
@@ -1309,7 +1309,7 @@ smart_gui <- function(){
     num_bre_spin <- gspinbutton(from = 10, to = 1000,
                                 by = 10, value = 100, container = bou_gru2,
                                 handler = function(...){
-                                  tmp_spe <- my_sampling$fleet$effoProdAll[,which(colnames(my_sampling$fleet$effoProdAll) == svalue(spe_drop))]
+                                  tmp_spe <- my_project$fleet$effoProdAll[,which(colnames(my_project$fleet$effoProdAll) == svalue(spe_drop))]
                                   tmp_spe <- tmp_spe[tmp_spe != 0]
 
                                   hist(tmp_spe[tmp_spe <= svalue(max_x_spin)],
@@ -1331,7 +1331,7 @@ smart_gui <- function(){
 
     gbutton(text = "\n   Set!   \n", container = up_fra, handler = function(...){
 
-      my_sampling$fleet$setSpecSettItm(specie = svalue(spe_drop),
+      my_project$fleet$setSpecSettItm(specie = svalue(spe_drop),
                                        thresh = svalue(thr_spin),
                                        brea = svalue(num_bre_spin),
                                        max_xlim = svalue(max_x_spin))
