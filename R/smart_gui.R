@@ -1058,7 +1058,7 @@ smart_gui <- function(){
               if(svalue(lyt[4,2])){ ### Effort
                 cat("\n   -   Effort Distribution")
                 multi_fac_eff <- switch(svalue(lyt[4,3]), "0.5X" = 0.5, "1" = 1, "2X" = 2)
-                for(i in names(my_sampling$fleet$rawEffort)){
+                for(i in names(my_project$fleet$rawEffort)){
                   tmp_effo <- as.data.frame(table(my_project$fleet$rawEffort[[i]]$Cell[which(my_project$fleet$rawEffort[[i]]$FishPoint)]))
                   names(tmp_effo) <- c("Cell", "Freq")
                   tmp_effo$Cell <- as.numeric(as.character(tmp_effo$Cell))
