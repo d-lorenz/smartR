@@ -675,7 +675,7 @@ FishFleet <- R6Class("fishFleet",
                        setFishPoin = function(){
                          cat("\nComputing fishing points year ", sep = "")
                          for(j in names(rawEffort)){
-                           cat(i, "... ", sep = "")
+                           cat(j, "... ", sep = "")
                            tmp_dat <- rawEffort[[j]][,c("SPE","DEPTH")]
                            tmp_dat$FishSpeed <- tmp_dat$SPE >= as.numeric(fishPoinPara[1]) & tmp_dat$SPE <= as.numeric(fishPoinPara[2])
                            tmp_dat$FishDepth <- tmp_dat$DEPTH <= as.numeric(fishPoinPara[3]) & tmp_dat$DEPTH >= as.numeric(fishPoinPara[4])
