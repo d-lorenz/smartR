@@ -204,11 +204,12 @@ SmartProject <- R6Class("smartProject",
                           setFishGround = function(numCut){
                             tmp_clust <- cbind(Cell = 1:sampMap$nCells,
                                                FishGround = sampMap$clusMat[,numCut])
+                            cat("\nSetting Fishing Ground year ", sep = "")
                             for(j in names(fleet$rawEffort)){
-                              cat("\n\nSetting Fishing Ground of year ", j, "... ", sep = "")
+                              cat(j, "... ", sep = "")
                               fleet$rawEffort[[j]]$FishGround <<- tmp_clust[fleet$rawEffort[[j]]$Cell,2]
-                              cat("Done!", sep = "")
                             }
+                            cat("Done!", sep = "")
                           },
                           setWeekEffoMatrCell = function(){
                             fleet$weekEffoMatr <<- list()
