@@ -739,18 +739,9 @@ FishFleet <- R6Class("fishFleet",
                          for(i in names(effoProdMont)){
                            prodSpec[[i]] <<- colnames(effoProdMont[[i]])[ncol(dayEffoMatr[[i]]):ncol(effoProdMont[[i]])]
                            if(i == names(prodSpec)[1]){
-                             prodSpec[["Cross"]] <- prodSpec[[i]]
+                             prodSpec[["Cross"]] <<- prodSpec[[i]]
                            }else{
-                             prodSpec[["Cross"]] <- intersect(prodSpec[["Cross"]], prodSpec[[i]])
-                           }
-                         }
-                       },
-                       setProdSpecCross = function(){
-                         for(i in names(prodSpec)){
-                           if(i == names(prodSpec)[1]){
-                             prodSpec[["Cross"]] <- prodSpec[[i]]
-                           }else{
-                             prodSpec[["Cross"]] <- intersect(prodSpec[["Cross"]], prodSpec[[i]])
+                             prodSpec[["Cross"]] <<- intersect(prodSpec[["Cross"]], prodSpec[[i]])
                            }
                          }
                        },
