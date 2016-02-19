@@ -625,6 +625,7 @@ FishFleet <- R6Class("fishFleet",
                        prodMatr = NULL,
                        effoProd = NULL,
                        effoProdMont = NULL,
+                       effoProdAll = NULL,
                        trackHarbs = NULL,
                        rawSelectivity = NULL,
                        rawProduction = NULL,
@@ -737,6 +738,24 @@ FishFleet <- R6Class("fishFleet",
                          prodSpec <<- list()
                          for(i in names(effoProdMont)){
                            prodSpec[[i]] <<- colnames(effoProdMont[[i]])[ncol(dayEffoMatr[[i]]):ncol(effoProdMont[[i]])]
+                           if(i == names(prodSpec)[1]){
+                             prodSpec[["Cross"]] <- prodSpec[[i]]
+                           }else{
+                             prodSpec[["Cross"]] <- intersect(prodSpec[["Cross"]], prodSpec[[i]])
+                           }
+                         }
+                       },
+                       setEffoProdAll = function(){
+                         effoProdAll <<- NULL
+                         tmp_spe <- sort(prodSpec[["Cross"]])
+                         for(i in names(effoProdMont)){
+                           tmp_nam <- colnames(effoProdMont[[i]])
+                           tmp_cols <- which(tmp_nam %in% tmp_spe)
+                           if(i == names(effoProdMont)[1]){
+                             effoProdAll <<- cbind(Year = i, effoProdMont[[i]][,c(1:(ncol(dayEffoMatr[[i]])-1), tmp_cols[order(tmp_nam[tmp_cols])])])
+                           }else{
+                             effoProdAll <<- rbind(allYea, cbind(Year = i, effoProdMont[[i]][,c(1:(ncol(dayEffoMatr[[i]])-1), tmp_cols[order(tmp_nam[tmp_cols])])]))
+                           }
                          }
                        },
                        setProdIds = function(){
