@@ -1258,7 +1258,7 @@ smart_gui <- function(){
 
                             hist(tmp_spe[tmp_spe <= svalue(max_x_spin)],
                                  breaks = svalue(num_bre_spin),
-                                 main = svalue(spe_drop), xlab = "")
+                                 main = expression(italic(svalue(spe_drop)), xlab = "")
                             abline(v = svalue(thr_spin), col = 2, lwd = 3, lty = 2)
                           })
     addSpace(spe_fra, 20)
@@ -1274,7 +1274,7 @@ smart_gui <- function(){
 
                               hist(tmp_spe[tmp_spe <= svalue(max_x_spin)],
                                    breaks = svalue(num_bre_spin),
-                                   main = svalue(spe_drop), xlab = "")
+                                   main = expression(italic(svalue(spe_drop)), xlab = "")
                               abline(v = svalue(thr_spin), col = 2, lwd = 3, lty = 2)
                             })
     addSpace(up_fra, 20)
@@ -1293,7 +1293,7 @@ smart_gui <- function(){
 
                                 hist(tmp_spe[tmp_spe <= svalue(max_x_spin)],
                                      breaks = svalue(num_bre_spin),
-                                     main = svalue(spe_drop), xlab = "")
+                                     main = expression(italic(svalue(spe_drop)), xlab = "")
                                 abline(v = svalue(thr_spin), col = 2, lwd = 3, lty = 2)
                               })
     bou_gru2 <- ggroup(horizontal = TRUE, container = bou_fra)
@@ -1307,7 +1307,7 @@ smart_gui <- function(){
 
                                   hist(tmp_spe[tmp_spe <= svalue(max_x_spin)],
                                        breaks = svalue(num_bre_spin),
-                                       main = svalue(spe_drop), xlab = "")
+                                       main = expression(italic(svalue(spe_drop)), xlab = "")
                                   abline(v = svalue(thr_spin), col = 2, lwd = 3, lty = 2)
                                 })
 
@@ -1363,7 +1363,7 @@ smart_gui <- function(){
 
     hist(tmp_spe[tmp_spe <= svalue(max_x_spin)],
          breaks = svalue(num_bre_spin),
-         main = svalue(spe_drop), xlab = "")
+         main = expression(italic(svalue(spe_drop)), xlab = "")
     abline(v = svalue(thr_spin), col = 2, lwd = 3, lty = 2)
 
   })
