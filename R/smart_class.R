@@ -763,7 +763,7 @@ FishFleet <- R6Class("fishFleet",
                          }
                        },
                        setProdIds = function(){
-                         cat("Setting Production IDs year ", sep = "")
+                         cat("\nSetting Production IDs year ", sep = "")
                          productionIds <<- list()
                          for(i in names(rawProduction)){
                            cat(i, "... ", sep = "")
