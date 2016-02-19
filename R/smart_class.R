@@ -631,6 +631,7 @@ FishFleet <- R6Class("fishFleet",
                        registerIds = NULL,
                        productionIds = NULL,
                        prodIdsLoa = NULL,
+                       prodSpec = NULL,
                        effortIds = NULL,
                        idsEffoProd = NULL,
                        fishPoinPara = NULL,
@@ -731,6 +732,12 @@ FishFleet <- R6Class("fishFleet",
                            effortIds[[tmp_key]] <<- tmp_ids
                          }
                          effortIds[["All"]] <<- unique(unlist(effortIds))
+                       },
+                       setProdSpec = function(){
+                         prodSpec <<- list()
+                         for(i in names(effoProdMont)){
+                           prodSpec[[i]] <<- colnames(effoProdMont[[i]])[ncol(dayEffoMatr[[i]]):ncol(effoProdMont[[i]])]
+                         }
                        },
                        setProdIds = function(){
                          cat("Setting Production IDs...\n", sep = "")
