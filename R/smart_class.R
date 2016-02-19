@@ -633,6 +633,7 @@ FishFleet <- R6Class("fishFleet",
                        productionIds = NULL,
                        prodIdsLoa = NULL,
                        prodSpec = NULL,
+                       specSett = NULL,
                        effortIds = NULL,
                        idsEffoProd = NULL,
                        fishPoinPara = NULL,
@@ -739,6 +740,10 @@ FishFleet <- R6Class("fishFleet",
                              prodSpec[["Cross"]] <<- intersect(prodSpec[["Cross"]], prodSpec[[i]])
                            }
                          }
+                       },
+                       setSpecSett = function(){
+                         specSett <<- vector(mode = "list", length = length(prodSpec[["Cross"]]))
+                         names(set_lst) <- sort(prodSpec[["Cross"]])
                        },
                        setEffoProdAll = function(){
                          tmp_spe <- sort(prodSpec[["Cross"]])
