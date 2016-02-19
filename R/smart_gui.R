@@ -1225,6 +1225,157 @@ smart_gui <- function(){
     my_project$fleet$setSpecSett()
   })
   addSpring(pro_g_top1)
+
+  gbutton("Set Landings\nThresholds", container = pro_g_top1, handler = function(h,...){
+
+    temp_dia <- gwindow(title="Set Landings Threshold", visible = FALSE,
+                        parent = main_win,
+                        width = 900, height = 500)
+
+    up_g <- ggroup(horizontal = FALSE, container = temp_dia)
+    up_fra <- gframe(container = up_g, horizontal = TRUE, expand = TRUE)
+    # addSpring(up_fra)
+    addSpace(up_fra, 20)
+    spe_fra <- gframe(text = "Specie", container = up_fra, horizontal = TRUE, expand = TRUE)
+    addSpace(spe_fra, 20)
+    spe_drop <- gcombobox(sort(prodSpec[["Cross"]]), selected = 1,
+                          editable = FALSE, container = spe_fra, expand = TRUE,
+                          handler = function(...){
+                            tmp_spe <- my_sampling$fleet$effoProdAll[,which(colnames(my_sampling$fleet$effoProdAll) == svalue(spe_drop))]
+                            tmp_spe <- tmp_spe[tmp_spe != 0]
+                            if(is.null(my_sampling$fleet$specSett[[svalue(spe_drop)]])){
+                              max_x_spin[] <- seq(0, max(tmp_spe), by = 10)
+                              svalue(max_x_spin) <- quantile(tmp_spe, 0.95)
+                              thr_spin[] <- seq(0, svalue(max_x_spin), by = 0.5)
+                              svalue(thr_spin) <- quantile(tmp_spe, 0.05)
+                              svalue(num_bre_spin) <- 100
+                              delete(set_gru, set_gru$children[[length(set_gru$children)]])
+                              add(set_gru, land_sta)
+                              svalue(set_lab) <- "Not set"
+
+                            }else{
+                              thr_spin[] <- seq(0, my_sampling$fleet$specSett[[svalue(spe_drop)]]$max_x, by = 0.5)
+                              svalue(thr_spin) <- my_sampling$fleet$specSett[[svalue(spe_drop)]]$threshold
+                              svalue(num_bre_spin) <- my_sampling$fleet$specSett[[svalue(spe_drop)]]$breaks
+                              svalue(max_x_spin) <- my_sampling$fleet$specSett[[svalue(spe_drop)]]$max_x
+                              delete(set_gru, set_gru$children[[length(set_gru$children)]])
+                              add(set_gru, land_sta_n)
+                              svalue(set_lab) <- "Set"
+                            }
+
+                            hist(tmp_spe[tmp_spe <= svalue(max_x_spin)],
+                                 breaks = svalue(num_bre_spin),
+                                 main = svalue(spe_drop), xlab = "")
+                            abline(v = svalue(thr_spin), col = 2, lwd = 3, lty = 2)
+                          })
+    addSpace(spe_fra, 20)
+    addSpace(up_fra, 20)
+    # addSpring(up_fra)
+    thr_fra <- gframe(text = "Threshold", container = up_fra, horizontal = TRUE)
+    addSpace(thr_fra, 20)
+    thr_spin <- gspinbutton(from = 0, to = 100,
+                            by = 0.5, value = 0, container = thr_fra,
+                            handler = function(...){
+                              tmp_spe <- my_sampling$fleet$effoProdAll[,which(colnames(my_sampling$fleet$effoProdAll) == svalue(spe_drop))]
+                              tmp_spe <- tmp_spe[tmp_spe != 0]
+
+                              hist(tmp_spe[tmp_spe <= svalue(max_x_spin)],
+                                   breaks = svalue(num_bre_spin),
+                                   main = svalue(spe_drop), xlab = "")
+                              abline(v = svalue(thr_spin), col = 2, lwd = 3, lty = 2)
+                            })
+    addSpace(up_fra, 20)
+    addSpace(thr_fra, 20)
+
+    bou_fra <- gframe(text = "Limits and Breaks", container = up_fra, horizontal = FALSE)
+    addSpace(bou_fra, 20)
+    bou_gru <- ggroup(horizontal = TRUE, container = bou_fra)
+    glabel("Max Value:", container = bou_gru)
+    addSpring(bou_gru)
+    max_x_spin <- gspinbutton(from = 100, to = 1000,
+                              by = 10, value = 100, container = bou_gru,
+                              handler = function(...){
+                                tmp_spe <- my_sampling$fleet$effoProdAll[,which(colnames(my_sampling$fleet$effoProdAll) == svalue(spe_drop))]
+                                tmp_spe <- tmp_spe[tmp_spe != 0]
+
+                                hist(tmp_spe[tmp_spe <= svalue(max_x_spin)],
+                                     breaks = svalue(num_bre_spin),
+                                     main = svalue(spe_drop), xlab = "")
+                                abline(v = svalue(thr_spin), col = 2, lwd = 3, lty = 2)
+                              })
+    bou_gru2 <- ggroup(horizontal = TRUE, container = bou_fra)
+    glabel("N. Breaks:", container = bou_gru2)
+    addSpring(bou_gru2)
+    num_bre_spin <- gspinbutton(from = 10, to = 1000,
+                                by = 10, value = 100, container = bou_gru2,
+                                handler = function(...){
+                                  tmp_spe <- my_sampling$fleet$effoProdAll[,which(colnames(my_sampling$fleet$effoProdAll) == svalue(spe_drop))]
+                                  tmp_spe <- tmp_spe[tmp_spe != 0]
+
+                                  hist(tmp_spe[tmp_spe <= svalue(max_x_spin)],
+                                       breaks = svalue(num_bre_spin),
+                                       main = svalue(spe_drop), xlab = "")
+                                  abline(v = svalue(thr_spin), col = 2, lwd = 3, lty = 2)
+                                })
+
+    addSpace(bou_fra, 20)
+    addSpring(up_fra)
+
+    set_gru_up <- ggroup(container = up_fra, horizontal = FALSE)
+    addSpring(set_gru_up)
+    set_gru <- ggroup(container = set_gru_up, horizontal = TRUE)
+    set_lab <- glabel(text = "Not set", container = set_gru)
+    addSpring(set_gru_up)
+
+    addSpace(up_fra, 20)
+
+    gbutton(text = "\n   Set!   \n", container = up_fra, handler = function(...){
+
+      my_sampling$fleet$setSpecSettItm(specie = svalue(spe_drop),
+                                       thresh = svalue(thr_spin),
+                                       brea = svalue(num_bre_spin),
+                                       max_xlim = svalue(max_x_spin))
+
+      svalue(set_lab) <- "Set"
+      delete(set_gru, set_gru$children[[length(set_gru$children)]])
+      add(set_gru, land_sta_n)
+
+    })
+    addSpring(up_fra)
+
+    gbutton(text = " Close\nWindow", container = up_fra, handler = function(...){
+      dispose(temp_dia)
+    })
+    land_gra <- ggraphics(width = 600, height = 400, container = up_g, expand = TRUE)
+    visible(temp_dia) <- TRUE
+
+    land_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
+    land_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
+    add(set_gru, land_sta)
+
+    tmp_spe <- my_sampling$fleet$effoProdAll[,which(colnames(my_sampling$fleet$effoProdAll) == svalue(spe_drop))]
+    tmp_spe <- tmp_spe[tmp_spe != 0]
+
+    if(is.null(my_sampling$fleet$specSett[[svalue(spe_drop)]])){
+      max_x_spin[] <- seq(0, max(tmp_spe), by = 10)
+      svalue(max_x_spin) <- quantile(tmp_spe, 0.95)
+      thr_spin[] <- seq(0, svalue(max_x_spin), by = 0.5)
+      svalue(thr_spin) <- quantile(tmp_spe, 0.05)
+    }else{
+      thr_spin[] <- seq(0, my_sampling$fleet$specSett[[svalue(spe_drop)]]$max_x, by = 0.5)
+      svalue(thr_spin) <- my_sampling$fleet$specSett[[svalue(spe_drop)]]$threshold
+      svalue(num_bre_spin) <- my_sampling$fleet$specSett[[svalue(spe_drop)]]$breaks
+      svalue(max_x_spin) <- my_sampling$fleet$specSett[[svalue(spe_drop)]]$max_x
+    }
+
+    hist(tmp_spe[tmp_spe <= svalue(max_x_spin)],
+         breaks = svalue(num_bre_spin),
+         main = svalue(spe_drop), xlab = "")
+    abline(v = svalue(thr_spin), col = 2, lwd = 3, lty = 2)
+
+  })
+  addSpring(pro_g_top1)
+
   addSpring(pro_g_top)
   gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"),
          container = pro_g_top, handler = function(h,...){
