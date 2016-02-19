@@ -170,7 +170,7 @@ SmartProject <- R6Class("smartProject",
                             num_cell <- getinfo.shape(sampMap$gridPath)$entities
                             sampMap$gridShp@plotOrder <- 1:num_cell
                             tmp_polygons <- SpatialPolygons(sampMap$gridShp@polygons)
-                            cat("\n\nGridding year ", sep = "")
+                            cat("\nGridding year ", sep = "")
                             for(j in names(fleet$rawEffort)){
                               cat(j, "... ", sep = "")
                               fleet$rawEffort[[j]]$Cell <<- over(SpatialPoints(fleet$rawEffort[[j]][,c("LON","LAT")]), tmp_polygons)
