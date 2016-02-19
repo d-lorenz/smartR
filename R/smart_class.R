@@ -757,14 +757,16 @@ FishFleet <- R6Class("fishFleet",
                          }
                        },
                        setProdIds = function(){
-                         cat("Setting Production IDs...\n", sep = "")
+                         cat("Setting Production IDs year ", sep = "")
                          productionIds <<- list()
                          for(i in names(rawProduction)){
+                           cat(i, "... ", sep = "")
                            tmp_ids <- unique(rawProduction[[i]][,1])
                            tmp_key <- i
                            productionIds[[tmp_key]] <<- tmp_ids
                          }
                          productionIds[["All"]] <<- unique(unlist(productionIds))
+                         cat("Done!", sep = "")
                        },
                        setIdsEffoProd = function(){
                          ###   Set IDs cross match effort/production
