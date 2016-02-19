@@ -1199,16 +1199,27 @@ smart_gui <- function(){
   #
   #   })
   gbutton("Load Landings", container = pro_g_top1, handler = function(h,...){
-    tmp_files <- gfile(text = "Select Landings Data", type = "open",
-                       filter = list("csv files" = list(patterns = c("*.csv")),
-                                     "All files" = list(patterns = c("*"))),
-                       multi = TRUE)
+    # tmp_files <- gfile(text = "Select Landings Data", type = "open",
+    #                    filter = list("csv files" = list(patterns = c("*.csv")),
+    #                                  "All files" = list(patterns = c("*"))),
+    #                    multi = TRUE)
+    # my_project$fleet$loadProduction(tmp_files)
 
     dev.set(dev.list()[pre_dev+8])
+    my_project$fleet$rawProduction <- readRDS("/Users/Lomo/Documents/Uni/PhD/TESI/landings/LandAll.rData")
 
-    my_project$fleet$loadProduction(tmp_files)
     my_project$fleet$setProdIds()
+
     my_project$fleet$plotCountIDsProd()
+
+    my_sampling$fleet$setIdsEffoProd()
+    my_sampling$fleet$setProdMatr()
+    my_sampling$fleet$setDayEffoMatrGround()
+    my_sampling$fleet$setEffoProdMatr()
+    my_sampling$fleet$setEffoProdMont()
+    my_sampling$fleet$setProdSpec()
+    my_sampling$fleet$setEffoProdAll()
+    my_sampling$fleet$setSpecSett()
   })
   addSpring(pro_g_top1)
   addSpring(pro_g_top)
