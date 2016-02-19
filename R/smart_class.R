@@ -745,6 +745,15 @@ FishFleet <- R6Class("fishFleet",
                            }
                          }
                        },
+                       setProdSpecCross = function(){
+                         for(i in names(prodSpec)){
+                           if(i == names(prodSpec)[1]){
+                             prodSpec[["Cross"]] <- prodSpec[[i]]
+                           }else{
+                             prodSpec[["Cross"]] <- intersect(prodSpec[["Cross"]], prodSpec[[i]])
+                           }
+                         }
+                       },
                        setEffoProdAll = function(){
                          tmp_spe <- sort(prodSpec[["Cross"]])
                          for(i in names(effoProdMont)){
