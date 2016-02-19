@@ -1210,16 +1210,19 @@ smart_gui <- function(){
 
     my_project$fleet$setProdIds()
 
-    my_project$fleet$plotCountIDsProd()
+    # my_project$fleet$plotCountIDsProd()
 
-    my_sampling$fleet$setIdsEffoProd()
-    my_sampling$fleet$setProdMatr()
-    my_sampling$fleet$setDayEffoMatrGround()
-    my_sampling$fleet$setEffoProdMatr()
-    my_sampling$fleet$setEffoProdMont()
-    my_sampling$fleet$setProdSpec()
-    my_sampling$fleet$setEffoProdAll()
-    my_sampling$fleet$setSpecSett()
+    my_project$fleet$setIdsEffoProd()
+
+    my_project$fleet$plotCountIDsEffoProd()
+
+    my_project$fleet$setProdMatr()
+    my_project$fleet$setDayEffoMatrGround()
+    my_project$fleet$setEffoProdMatr()
+    my_project$fleet$setEffoProdMont()
+    my_project$fleet$setProdSpec()
+    my_project$fleet$setEffoProdAll()
+    my_project$fleet$setSpecSett()
   })
   addSpring(pro_g_top1)
   addSpring(pro_g_top)
