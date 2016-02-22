@@ -1380,6 +1380,118 @@ smart_gui <- function(){
   addSpring(pro_g_top2)
   gbutton("Get Logit", container = pro_g_top2, handler = function(h,...){
 
+
+    temp_dia <- gwindow(title="Get Logit", visible = FALSE,
+                        parent = main_win,
+                        width = 900, height = 500)
+
+    up_g <- ggroup(horizontal = FALSE, container = temp_dia)
+    up_fra <- gframe(container = up_g, horizontal = TRUE, expand = TRUE)
+    # addSpring(up_fra)
+    addSpace(up_fra, 20)
+    spe_fra <- gframe(text = "Specie", container = up_fra, horizontal = TRUE, expand = TRUE)
+    addSpace(spe_fra, 20)
+    spe_drop <- gcombobox(sort(my_sampling$fleet$prodSpec[["Cross"]]), selected = 1,
+                          editable = FALSE, container = spe_fra, expand = TRUE,
+                          handler = function(...){
+
+                          })
+    addSpace(spe_fra, 20)
+    addSpace(up_fra, 20)
+    # addSpring(up_fra)
+
+    gbutton(text = "Get\nLogit", container = up_fra, handler = function(...){
+
+      tmp_mat <- my_sampling$fleet$effoProdAll[,c(1,3:(ncol(my_sampling$fleet$dayEffoMatr[[1]])),which(colnames(my_sampling$fleet$effoProdAll) == svalue(spe_drop)))]
+      tmp_spe <- tmp_mat[,ncol(tmp_mat)]
+      tmp_x <- tmp_mat[,1:(ncol(tmp_mat)-1)]
+      tmp_x$MonthNum <- as.factor(tmp_x$MonthNum)
+
+      tmp_logit <- getLogit(Lit = tmp_spe, X = tmp_x,
+                            thrB = my_sampling$fleet$specSett[[svalue(spe_drop)]]$threshold,
+                            ptrain = 80, ptest = 20)
+
+      predictTrain <- predict(tmp_logit[["logit_f"]], type = "response")
+      ROCRpred <- prediction(predictTrain, 1*(tmp_spe>my_sampling$fleet$specSett[[svalue(spe_drop)]]$threshold))
+      ROCRperf <- performance(ROCRpred, "tpr", "fpr")
+      analysis <- roc(response = tmp_x[,ncol(tmp_x)], predictor = predictTrain)
+      e <- cbind(analysis$thresholds,analysis$sensitivities+analysis$specificities)
+      opt_t <- e[which.max(e[,2]),1]
+      svalue(thr_spin) <- round(opt_t, 2)
+      base_seq <- seq(opt_t-0.1,opt_t+0.1,0.05)
+      base_seq <- base_seq[-which(base_seq == opt_t)]
+      plot(ROCRperf, main = "ROC curve - Tpr/Fpr",
+           print.cutoffs.at = c(base_seq ,opt_t),
+           text.cex = c(rep(0.85, length(base_seq)), 1.5),
+           text.col = c(rep("grey70", length(base_seq)), "black"),
+           text.adj = c(-0.2, 1.7))
+
+      predict <- factor(as.numeric(predictTrain > opt_t))
+      truth <- factor(1*(tmp_spe>my_sampling$fleet$specSett[[svalue(spe_drop)]]$threshold))
+      tmp_Tbl <- table(predict, truth)
+      tmp_conf <- confusionMatrix(tmp_Tbl)
+      svalue(tmp_txt) <- capture.output({cat("\n")
+        print(tmp_conf)})
+    })
+    addSpace(up_fra, 20)
+
+    thr_fra <- gframe(text = "Tune Cutoff", container = up_fra, expand = TRUE, horizontal = TRUE)
+    addSpace(thr_fra, 20)
+    thr_spin <- gslider(from = 0.01, to = 0.99,
+                        by = 0.01, value = 0.5, container = thr_fra, expand = TRUE,
+                        handler = function(...){
+                          predict <- factor(as.numeric(predictTrain > svalue(thr_spin)))
+                          truth <- factor(1*(tmp_spe>my_sampling$fleet$specSett[[svalue(spe_drop)]]$threshold))
+                          tmp_Tbl <- table(predict, truth)
+                          tmp_conf <- confusionMatrix(tmp_Tbl)
+                          svalue(tmp_txt) <- capture.output({cat("\n")
+                            print(tmp_conf)})
+                        })
+    addSpace(up_fra, 20)
+    addSpace(thr_fra, 20)
+
+    gbutton(text = "\n   Set!   \n", container = up_fra, handler = function(...){
+
+      # my_sampling$fleet$setSpecSettItm(specie = svalue(spe_drop),
+      #                                  thresh = svalue(thr_spin),
+      #                                  brea = svalue(num_bre_spin),
+      #                                  max_xlim = svalue(max_x_spin))
+      #
+      svalue(set_lab) <- "Saved"
+      delete(set_gru, set_gru$children[[length(set_gru$children)]])
+      add(set_gru, land_sta_n)
+    })
+
+    addSpace(up_fra, 20)
+    set_gru_up <- ggroup(container = up_fra, horizontal = FALSE)
+    addSpring(set_gru_up)
+    set_lab <- glabel(text = "Not Saved", container = set_gru_up)
+    set_gru <- ggroup(container = set_gru_up, horizontal = TRUE)
+    addSpring(set_gru_up)
+    addSpace(up_fra, 20)
+
+    addSpring(up_fra)
+    gbutton(text = " Close\nWindow", container = up_fra, handler = function(...){
+      dispose(temp_dia)
+    })
+    addSpace(up_fra, 20)
+
+    bot_g <- ggroup(horizontal = TRUE, container = up_g)
+    addSpace(bot_g, 10)
+    bot_lef_g <- ggroup(horizontal = FALSE, container = bot_g)
+    addSpring(bot_lef_g)
+    tmp_txt <- gtext(text = NULL, width = 300, height = 350, container = bot_lef_g)
+    addSpring(bot_lef_g)
+    addSpace(bot_g, 10)
+    land_gra <- ggraphics(width = 300, height = 400, container = bot_g, expand = TRUE)
+    visible(temp_dia) <- TRUE
+    addSpace(bot_g, 10)
+
+    land_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
+    land_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
+    add(set_gru, land_sta)
+
+
   })
   addSpring(pro_g_top2)
 
