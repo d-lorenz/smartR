@@ -1245,7 +1245,6 @@ smart_gui <- function(){
                               delete(set_gru, set_gru$children[[length(set_gru$children)]])
                               add(set_gru, land_sta)
                               svalue(set_lab) <- "Not set"
-
                             }else{
                               thr_spin[] <- seq(0, my_project$fleet$specSett[[svalue(spe_drop)]]$max_x, by = 0.5)
                               svalue(thr_spin) <- my_project$fleet$specSett[[svalue(spe_drop)]]$threshold
@@ -1354,11 +1353,18 @@ smart_gui <- function(){
       svalue(max_x_spin) <- quantile(tmp_spe, 0.95)
       thr_spin[] <- seq(0, svalue(max_x_spin), by = 0.5)
       svalue(thr_spin) <- quantile(tmp_spe, 0.05)
+      svalue(num_bre_spin) <- 100
+      delete(set_gru, set_gru$children[[length(set_gru$children)]])
+      add(set_gru, land_sta)
+      svalue(set_lab) <- "Not set"
     }else{
       thr_spin[] <- seq(0, my_project$fleet$specSett[[svalue(spe_drop)]]$max_x, by = 0.5)
       svalue(thr_spin) <- my_project$fleet$specSett[[svalue(spe_drop)]]$threshold
       svalue(num_bre_spin) <- my_project$fleet$specSett[[svalue(spe_drop)]]$breaks
       svalue(max_x_spin) <- my_project$fleet$specSett[[svalue(spe_drop)]]$max_x
+      delete(set_gru, set_gru$children[[length(set_gru$children)]])
+      add(set_gru, land_sta_n)
+      svalue(set_lab) <- "Set"
     }
 
     hist(tmp_spe[tmp_spe <= svalue(max_x_spin)],
