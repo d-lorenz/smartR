@@ -1381,6 +1381,7 @@ smart_gui <- function(){
   gbutton("Get Logit", container = pro_g_top2, handler = function(h,...){
 
   })
+  addSpring(pro_g_top2)
 
   addSpring(pro_g_top)
   gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"),
