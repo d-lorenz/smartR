@@ -1380,6 +1380,8 @@ smart_gui <- function(){
   addSpring(pro_g_top2)
   gbutton("Get Logit", container = pro_g_top2, handler = function(h,...){
 
+    predictTrain <- NULL
+    tmp_spe <- NULL
 
     temp_dia <- gwindow(title="Get Logit", visible = FALSE,
                         parent = main_win,
