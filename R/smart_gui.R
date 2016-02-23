@@ -352,7 +352,7 @@ smart_gui <- function(){
   gri_g <- gvbox(container = uti_gn, label = "Grid", expand = TRUE)
   # addSpace(gri_g, 2, horizontal = TRUE)
   gri_g_top <- gframe(horizontal = TRUE, container = gri_g)
-  addSpace(gri_g_top, 2)
+  addSpace(gri_g_top, 20)
   # addSpace(gri_g, 2, horizontal = TRUE)
   # addSpring(gri_g_top)
   gri_g_top1 <- ggroup(horizontal = FALSE, container = gri_g_top)
