@@ -44,5 +44,8 @@ Imports:
     gsubfn,
     chron,
     reshape2,
-    foreign
+    foreign,
+    ROCR,
+    pROC,
+    caret
 RoxygenNote: 5.0.1

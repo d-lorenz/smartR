@@ -25,6 +25,10 @@ importFrom("shape", "intpalette", "colorlegend")
 importFrom("png", "readPNG")
 importFrom("reshape2", "dcast")
 importFrom("foreign", "read.dbf")
+importFrom("ROCR", "prediction", "performance")
+importFrom("pROC", "roc")
+importFrom("caret", "confusionMatrix")
+
 
 
 export(smart_gui)
