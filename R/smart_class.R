@@ -753,6 +753,11 @@ FishFleet <- R6Class("fishFleet",
                                                            breaks = brea,
                                                            max_x = max_xlim)
                        },
+                       getMatSpeLand = function(specie){
+                         tmp_mat <- effoProdAll[,c(1,3:(ncol(dayEffoMatr[[1]])),which(colnames(effoProdAll) == specie))]
+                         tmp_mat$MonthNum <- as.factor(tmp_mat$MonthNum)
+                         return(tmp_mat)
+                       },
                        setEffoProdAll = function(){
                          cat("\nSetting effort/production year ", sep = "")
                          tmp_spe <- sort(prodSpec[["Cross"]])

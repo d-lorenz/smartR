@@ -1404,10 +1404,11 @@ smart_gui <- function(){
 
     gbutton(text = "Get\nLogit", container = up_fra, handler = function(...){
 
-      tmp_mat <- my_project$fleet$effoProdAll[,c(1,3:(ncol(my_project$fleet$dayEffoMatr[[1]])),which(colnames(my_project$fleet$effoProdAll) == svalue(spe_drop)))]
+      ## Get year-moth-fishGround-lands x specie
+      tmp_mat <- getMatSpeLand(svalue(spe_drop))
+
       tmp_spe <- tmp_mat[,ncol(tmp_mat)]
       tmp_x <- tmp_mat[,1:(ncol(tmp_mat)-1)]
-      tmp_x$MonthNum <- as.factor(tmp_x$MonthNum)
 
       tmp_logit <- getLogit(Lit = tmp_spe, X = tmp_x,
                             thrB = my_project$fleet$specSett[[svalue(spe_drop)]]$threshold,
