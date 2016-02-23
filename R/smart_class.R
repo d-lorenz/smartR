@@ -783,7 +783,7 @@ FishFleet <- R6Class("fishFleet",
                        },
                        setSpecLogit = function(specie){
                          if(is.null(specLogit)) specLogit <<- list()
-                         if(is.null(specLogit[[specie]])) specLogit[[specie]] <- list()
+                         if(is.null(specLogit[[specie]])) specLogit[[specie]] <<- list()
                          tmp_mat <- getMatSpeLand(specie)
                          specLogit[[specie]]$landings <<- tmp_mat[,ncol(tmp_mat)]
                          specLogit[[specie]]$logit <<- getLogit(Lit = specLogit[[specie]]$landings, X = tmp_mat[,1:(ncol(tmp_mat)-1)],
