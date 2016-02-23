@@ -1380,9 +1380,6 @@ smart_gui <- function(){
   addSpring(pro_g_top2)
   gbutton("Get Logit", container = pro_g_top2, handler = function(h,...){
 
-    predictTrain <- NULL
-    tmp_spe <- NULL
-
     temp_dia <- gwindow(title="Get Logit", visible = FALSE,
                         parent = main_win,
                         width = 900, height = 500)
@@ -1396,45 +1393,21 @@ smart_gui <- function(){
     spe_drop <- gcombobox(sort(names(my_project$fleet$specSett)), selected = 1,
                           editable = FALSE, container = spe_fra, expand = TRUE,
                           handler = function(...){
-
+                            if(!is.null(my_project$fleet$specLogit[[svalue(spe_drop)]]$ROCRperf)){
+                              my_project$fleet$plotLogitROC(svalue(spe_drop))
+                              svalue(tmp_txt) <- capture.output({cat("\n")
+                                print(my_project$fleet$specLogit[[svalue(spe_drop)]]$confMatrix)})
+                            }
                           })
     addSpace(spe_fra, 20)
     addSpace(up_fra, 20)
     # addSpring(up_fra)
 
     gbutton(text = "Get\nLogit", container = up_fra, handler = function(...){
-
-      ## Get year-moth-fishGround-lands x specie
-      tmp_mat <- getMatSpeLand(svalue(spe_drop))
-
-      tmp_spe <- tmp_mat[,ncol(tmp_mat)]
-      tmp_x <- tmp_mat[,1:(ncol(tmp_mat)-1)]
-
-      tmp_logit <- getLogit(Lit = tmp_spe, X = tmp_x,
-                            thrB = my_project$fleet$specSett[[svalue(spe_drop)]]$threshold,
-                            ptrain = 80, ptest = 20)
-
-      predictTrain <- predict(tmp_logit[["logit_f"]], type = "response")
-      ROCRpred <- prediction(predictTrain, 1*(tmp_spe>my_project$fleet$specSett[[svalue(spe_drop)]]$threshold))
-      ROCRperf <- performance(ROCRpred, "tpr", "fpr")
-      analysis <- roc(response = tmp_x[,ncol(tmp_x)], predictor = predictTrain)
-      e <- cbind(analysis$thresholds,analysis$sensitivities+analysis$specificities)
-      opt_t <- e[which.max(e[,2]),1]
-      svalue(thr_spin) <- round(opt_t, 2)
-      base_seq <- seq(opt_t-0.1,opt_t+0.1,0.05)
-      base_seq <- base_seq[-which(base_seq == opt_t)]
-      plot(ROCRperf, main = "ROC curve - Tpr/Fpr",
-           print.cutoffs.at = c(base_seq ,opt_t),
-           text.cex = c(rep(0.85, length(base_seq)), 1.5),
-           text.col = c(rep("grey70", length(base_seq)), "black"),
-           text.adj = c(-0.2, 1.7))
-
-      predict <- factor(as.numeric(predictTrain > opt_t))
-      truth <- factor(1*(tmp_spe>my_project$fleet$specSett[[svalue(spe_drop)]]$threshold))
-      tmp_Tbl <- table(predict, truth)
-      tmp_conf <- confusionMatrix(tmp_Tbl)
+      my_project$fleet$setSpecLogit(svalue(spe_drop))
+      svalue(thr_spin) <- round(my_project$fleet$specLogit[[svalue(spe_drop)]]$optCut, 2)
       svalue(tmp_txt) <- capture.output({cat("\n")
-        print(tmp_conf)})
+        print(my_project$fleet$specLogit[[svalue(spe_drop)]]$confMatrix)})
     })
     addSpace(up_fra, 20)
 
@@ -1443,23 +1416,16 @@ smart_gui <- function(){
     thr_spin <- gslider(from = 0.01, to = 0.99,
                         by = 0.01, value = 0.5, container = thr_fra, expand = TRUE,
                         handler = function(...){
-                          predict <- factor(as.numeric(predictTrain > svalue(thr_spin)))
-                          truth <- factor(1*(tmp_spe>my_project$fleet$specSett[[svalue(spe_drop)]]$threshold))
-                          tmp_Tbl <- table(predict, truth)
-                          tmp_conf <- confusionMatrix(tmp_Tbl)
+                          if(!is.null(my_project$fleet$specLogit[[svalue(spe_drop)]])){
+                          my_project$fleet$setSpecLogitConf(specie = svalue(spe_drop), cutoff = svalue(thr_spin))
                           svalue(tmp_txt) <- capture.output({cat("\n")
-                            print(tmp_conf)})
+                            print(my_project$fleet$specLogit[[svalue(spe_drop)]]$confMatrix)})
+                          }
                         })
     addSpace(up_fra, 20)
     addSpace(thr_fra, 20)
 
-    gbutton(text = "\n   Set!   \n", container = up_fra, handler = function(...){
-
-      # my_project$fleet$setSpecSettItm(specie = svalue(spe_drop),
-      #                                  thresh = svalue(thr_spin),
-      #                                  brea = svalue(num_bre_spin),
-      #                                  max_xlim = svalue(max_x_spin))
-      #
+    gbutton(text = "\n   Save   \n", container = up_fra, handler = function(...){
       svalue(set_lab) <- "Saved"
       delete(set_gru, set_gru$children[[length(set_gru$children)]])
       add(set_gru, logi_sta_n)
