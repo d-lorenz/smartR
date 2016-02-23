@@ -634,6 +634,7 @@ FishFleet <- R6Class("fishFleet",
                        prodIdsLoa = NULL,
                        prodSpec = NULL,
                        specSett = NULL,
+                       specLogit = NULL,
                        effortIds = NULL,
                        idsEffoProd = NULL,
                        fishPoinPara = NULL,
@@ -752,6 +753,48 @@ FishFleet <- R6Class("fishFleet",
                          specSett[[specie]] <<- data.frame(threshold = thresh,
                                                            breaks = brea,
                                                            max_x = max_xlim)
+                       },
+                       setSpecLogitPredict = function(specie){
+                         specLogit[[specie]]$predict <<- predict(specLogit[[specie]]$logit$logit_f, type = "response")
+                       },
+                       setSpecLogitROCR = function(specie){
+                         ROCRpred <- prediction(specLogit[[specie]]$predict, 1*(specLogit[[specie]]$landings > specSett[[specie]]$threshold))
+                         specLogit[[specie]]$ROCRperf <<- performance(ROCRpred, "tpr", "fpr")
+                       },
+                       setSpecLogitOptCut = function(specie){
+                         analysis <- roc(response = specLogit[[specie]]$landings, predictor = specLogit[[specie]]$predict)
+                         tuning <- cbind(analysis$thresholds,analysis$sensitivities+analysis$specificities)
+                         specLogit[[specie]]$optCut <<- tuning[which.max(tuning[,2]),1]
+                       },
+                       plotLogitROC = function(specie){
+                         base_seq <- seq(specLogit[[specie]]$optCut-0.1,specLogit[[specie]]$optCut+0.1,0.05)
+                         base_seq <- base_seq[-which(base_seq == specLogit[[specie]]$optCut)]
+                         plot(specLogit[[specie]]$ROCRperf, main = "ROC curve - Tpr/Fpr",
+                              print.cutoffs.at = c(base_seq ,specLogit[[specie]]$optCut),
+                              text.cex = c(rep(0.85, length(base_seq)), 1.5),
+                              text.col = c(rep("grey70", length(base_seq)), "black"),
+                              text.adj = c(-0.2, 1.7))
+                       },
+                       setSpecLogitConf = function(specie, cutoff = specLogit[[specie]]$optCut){
+                         predict <- factor(as.numeric(specLogit[[specie]]$predict > cutoff))
+                         truth <- factor(1*(specLogit[[specie]]$landings > specSett[[specie]]$threshold))
+                         tmp_Tbl <- table(predict, truth)
+                         specLogit[[specie]]$confMatrix <<- confusionMatrix(tmp_Tbl)
+                       },
+                       setSpecLogit = function(specie){
+                         if(is.null(specLogit)) specLogit <<- list()
+                         if(is.null(specLogit[[specie]])) specLogit[[specie]] <- list()
+                         tmp_mat <- getMatSpeLand(specie)
+                         specLogit[[specie]]$landings <<- tmp_mat[,ncol(tmp_mat)]
+                         tmp_x <- tmp_mat[,1:(ncol(tmp_mat)-1)]
+                         specLogit[[specie]]$logit <<- getLogit(Lit = specLogit[[specie]]$landings, X = tmp_x,
+                                               thrB = specSett[[specie]]$threshold,
+                                               ptrain = 80, ptest = 20)
+                         setSpecLogitPredict(specie)
+                         setSpecLogitROCR(specie)
+                         setSpecLogitOptCut(specie)
+                         plotLogitROC(specie)
+                         setSpecLogitConf(specie)
                        },
                        getMatSpeLand = function(specie){
                          tmp_mat <- effoProdAll[,c(1,3:(ncol(dayEffoMatr[[1]])),which(colnames(effoProdAll) == specie))]
