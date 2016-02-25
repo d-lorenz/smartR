@@ -1329,8 +1329,20 @@ SampleMap <- R6Class("sampleMap",
                        },
                        plotGridBathy = function(){
                          def.par <- par(no.readonly = TRUE)
-                         print(autoplot(gridBathy, geom=c("r", "c"), coast = TRUE) +
-                           scale_fill_etopo(name = "Depth") + xlab("Longitude") + ylab("Latitude") + ggtitle("Bathymetry"))
+                         f_bathy <- fortify.bathy(gridBathy)
+                         f_bathy$z[f_bathy$z > 0] <- 0
+                         f_bathy$Depth <- f_bathy$z
+                         the_plot <- ggplot(f_bathy, mapping = aes_string(x = "x", y = "y")) +
+                           geom_raster(aes_string(fill = "Depth")) +
+                           geom_contour(aes_string(z = "Depth"), size = 0.2,
+                                                 colour = "black", alpha = 0.5, linetype = "longdash") +
+                           geom_contour(aes_string(z = "Depth"),
+                                                 colour = "black", linetype = "solid", size = 0.4,
+                                                 breaks = 0, alpha = 1)+
+                           xlab("Longitude") + ylab("Latitude") +
+                           ggtitle("Bathymetry") +
+                           discrete_scale("colour", "brewer", brewer_pal("seq", "Blues"))
+                         print(the_plot)
                          par(def.par)
                        },
                        plotSamMap = function(title = "", celCol = NULL){
