@@ -787,8 +787,8 @@ FishFleet <- R6Class("fishFleet",
                          tmp_mat <- getMatSpeLand(specie)
                          specLogit[[specie]]$landings <<- tmp_mat[,ncol(tmp_mat)]
                          specLogit[[specie]]$logit <<- getLogit(Lit = specLogit[[specie]]$landings, X = tmp_mat[,1:(ncol(tmp_mat)-1)],
-                                               thrB = specSett[[specie]]$threshold,
-                                               ptrain = 80, ptest = 20)
+                                                                thrB = specSett[[specie]]$threshold,
+                                                                ptrain = 80, ptest = 20)
                          setSpecLogitPredict(specie)
                          setSpecLogitROCR(specie)
                          setSpecLogitOptCut(specie)
@@ -1353,16 +1353,16 @@ SampleMap <- R6Class("sampleMap",
                          the_plot <- ggplot(f_bathy, mapping = aes_string(x = "x", y = "y")) +
                            geom_raster(aes_string(fill = "Depth")) +
                            geom_contour(aes_string(z = "Depth"), size = 0.2,
-                                                 colour = "black", alpha = 0.5, linetype = "longdash") +
+                                        colour = "black", alpha = 0.5, linetype = "longdash") +
                            geom_contour(aes_string(z = "Depth"),
-                                                 colour = "black", linetype = "solid", size = 0.4,
-                                                 breaks = 0, alpha = 1)+
+                                        colour = "black", linetype = "solid", size = 0.4,
+                                        breaks = 0, alpha = 1)+
                            xlab("Longitude") + ylab("Latitude") +
                            ggtitle("Bathymetry")
-                           # discrete_scale("colour", "brewer", brewer_pal("seq", "Blues"))+
-                           # lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4]))
-                           # coord_fixed(xlim = extendrange(plotRange[1:2]),
-                           #             ylim = extendrange(plotRange[3:4]), expand = TRUE)
+                         # discrete_scale("colour", "brewer", brewer_pal("seq", "Blues"))+
+                         # lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4]))
+                         # coord_fixed(xlim = extendrange(plotRange[1:2]),
+                         #             ylim = extendrange(plotRange[3:4]), expand = TRUE)
                          print(the_plot)
                          par(def.par)
                        },
