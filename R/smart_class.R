@@ -1361,8 +1361,9 @@ SampleMap <- R6Class("sampleMap",
                            xlab("Longitude") + ylab("Latitude") +
                            ggtitle("Bathymetry") +
                            # discrete_scale("colour", "brewer", brewer_pal("seq", "Blues"))+
-                           coord_fixed(xlim = extendrange(plotRange[1:2]),
-                                       ylim = extendrange(plotRange[3:4]), expand = TRUE)
+                           lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4]))+
+                           # coord_fixed(xlim = extendrange(plotRange[1:2]),
+                           #             ylim = extendrange(plotRange[3:4]), expand = TRUE)
                          print(the_plot)
                          par(def.par)
                        },
