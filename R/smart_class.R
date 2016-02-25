@@ -925,7 +925,7 @@ FishFleet <- R6Class("fishFleet",
                                                fun.aggregate = sum,
                                                na.rm=TRUE, value.var = "FishPoint")
                            miss_cols <- setdiff(as.character(unique(rawEffort[[j]]$FishGround[!is.na(rawEffort[[j]]$FishGround)])),
-                                                names(tmp_matrix)[5:ncol(tmp_matrix)])
+                                                names(tmp_matrix)[4:ncol(tmp_matrix)])
                            if(length(miss_cols) > 0){
                              tmp_matrix[,miss_cols] <- 0
                              tmp_matrix <- tmp_matrix[,c(1:4, 4+order(as.numeric(names(tmp_matrix)[5:ncol(tmp_matrix)])))]
