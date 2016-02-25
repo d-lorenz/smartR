@@ -1297,6 +1297,25 @@ SampleMap <- R6Class("sampleMap",
                          legend(x = 0, y = 0.5, legend = colnames(bioDF), fill = color_clas, bty = "n")
                          par(def.par)
                        },
+                       ggplotBioDF = function(){
+                         def.par <- par(no.readonly = TRUE)
+
+                         tmp_dat <- apply(bioDF, 1, function(x) which(x == 1))
+                         color_clas <- rainbow(max(tmp_dat))
+
+                         names(tmp_dat) <- 1:length(tmp_dat)
+                         all_cell <- merge(x = gridPolySet$PID,
+                                           data.frame(x = as.numeric(names(tmp_dat)), y = tmp_dat), all = TRUE)[,c(1,3)]
+                         all_cell[is.na(all_cell)] <- 0
+                         grid_data <- cbind(sampMap$gridPolySet, FishingGroung = all_cell[,2])
+                         tmp_plot <- suppressMessages(sampMap$gooMapPlot +
+                                                        geom_polygon(aes(x = X, y = Y, group = PID, fill = FishingGroung), size = 0.2,
+                                                                                        data = grid_data, alpha = 0.8) +
+                                                        discrete_scale("colour", "rainbow", "rainbow")+
+                                                        lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4])))
+                         suppressWarnings(print(tmp_plot))
+                         par(def.par)
+                       },
                        createPolySet = function(){
                          gridPolySet <<- as.data.frame(SpatialPolygons2PolySet(gridShp))
                        },
