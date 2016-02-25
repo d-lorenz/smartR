@@ -1329,8 +1329,8 @@ SampleMap <- R6Class("sampleMap",
                        },
                        plotGridBathy = function(){
                          def.par <- par(no.readonly = TRUE)
-                         autoplot(gridBathy, geom=c("r", "c"), coast = TRUE) +
-                           scale_fill_etopo(name = "Depth") + xlab("Longitude") + ylab("Latitude") + ggtitle("Bathymetry")
+                         print(autoplot(gridBathy, geom=c("r", "c"), coast = TRUE) +
+                           scale_fill_etopo(name = "Depth") + xlab("Longitude") + ylab("Latitude") + ggtitle("Bathymetry"))
 
                          # par(mar=c(2.5,2.5,3,1))
                          # layout(matrix(c(1,2), 1, 2, byrow = TRUE), widths = c(6,1))
