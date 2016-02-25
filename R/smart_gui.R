@@ -1409,9 +1409,9 @@ smart_gui <- function(){
                         by = 0.01, value = 0.5, container = thr_fra, expand = TRUE,
                         handler = function(...){
                           if(!is.null(my_project$fleet$specLogit[[svalue(spe_drop)]])){
-                          my_project$fleet$setSpecLogitConf(specie = svalue(spe_drop), cutoff = svalue(thr_spin))
-                          svalue(tmp_txt) <- capture.output({cat("\n")
-                            print(my_project$fleet$specLogit[[svalue(spe_drop)]]$confMatrix)})
+                            my_project$fleet$setSpecLogitConf(specie = svalue(spe_drop), cutoff = svalue(thr_spin))
+                            svalue(tmp_txt) <- capture.output({cat("\n")
+                              print(my_project$fleet$specLogit[[svalue(spe_drop)]]$confMatrix)})
                           }
                         })
     addSpace(up_fra, 20)
