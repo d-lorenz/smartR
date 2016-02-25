@@ -461,15 +461,22 @@ smart_gui <- function(){
     dev.set(dev.list()[pre_dev+1])
     svalue(stat_bar) <- "Loading biocenosis data.frame..."
     my_project$sampMap$loadBioDF("/Users/Lomo/Documents/Uni/R/smart/data/BioM.rData")
-    my_project$sampMap$plotBioDF()
+    if(!is.null(my_project$sampMap$gooMap)){
+      my_project$sampMap$ggplotBioDF()
+    }else{
+      my_project$sampMap$plotBioDF()
+    }
     svalue(stat_bar) <- ""
   })
   # addSpring(gri_g_top1_bio)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_bio,
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+1])
-           my_project$sampMap$plotBioDF()
-         })
+           if(!is.null(my_project$sampMap$gooMap)){
+             my_project$sampMap$ggplotBioDF()
+           }else{
+             my_project$sampMap$plotBioDF()
+           }         })
   addSpring(gri_g_top1_bio)
 
   gri_g_top1_goo <- ggroup(horizontal = TRUE, container = gri_g_top1)
