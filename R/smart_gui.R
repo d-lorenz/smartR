@@ -396,7 +396,12 @@ smart_gui <- function(){
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_gri,
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+1])
-           my_project$sampMap$plotSamMap(title = my_project$sampMap$gridName)
+           svalue(stat_bar) <- "Plotting grid..."
+           if(!is.null(my_project$sampMap$gooMap)){
+             my_project$sampMap$plotGooGrid()
+           }else{
+             my_project$sampMap$plotSamMap(title = my_project$sampMap$gridName)
+           }
          })
   addSpring(gri_g_top1_gri)
 
