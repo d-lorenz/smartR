@@ -1331,28 +1331,6 @@ SampleMap <- R6Class("sampleMap",
                          def.par <- par(no.readonly = TRUE)
                          print(autoplot(gridBathy, geom=c("r", "c"), coast = TRUE) +
                            scale_fill_etopo(name = "Depth") + xlab("Longitude") + ylab("Latitude") + ggtitle("Bathymetry"))
-
-                         # par(mar=c(2.5,2.5,3,1))
-                         # layout(matrix(c(1,2), 1, 2, byrow = TRUE), widths = c(6,1))
-                         # blues <- c("midnightblue", "royalblue4", "royalblue3",
-                         #            "royalblue1", "slategray1")
-                         # plot(gridBathy, image = TRUE, lwd = 0.2,
-                         #      bpal = list(c(min(gridBathy), -0.5, blues)))
-                         # title(main = paste("Bathymetry Map", sep = ""))
-                         # plot(gridShp, ylab = "", xlab = "", add =TRUE, lwd = 0.65, axes = FALSE, ann = FALSE)
-                         # plot(gridBathy, deep = 0, shallow = 0, step = 0, lwd = 0.5, add = TRUE, axes = FALSE, ann = FALSE)
-                         # map("worldHires", fill = T, col = "whitesmoke", add = TRUE)
-                         # map.scale(cex = 0.75, ratio = FALSE)
-                         # map.axes(cex.axis=0.8)
-                         # par(mar=c(5,1,1,1))
-                         # plot(NULL, xlim=c(0,1), ylim=c(0,1), bty="n", axes = FALSE, ann = FALSE)
-                         # colorlegend(posx = c(0.45, 0.65), posy = c(0.15, 0.55),
-                         #             col = intpalette(blues, 50), zval = pretty(seq(from = min(gridBathy),
-                         #                                                            to = 0, length.out = 3),
-                         #                                                        n = 4),
-                         #             zlim = range(pretty(seq(from = min(gridBathy),
-                         #                                     to = 0, length.out = 3),
-                         #                                 n = 4)), cex = 0.5, left = TRUE)
                          par(def.par)
                        },
                        plotSamMap = function(title = "", celCol = NULL){

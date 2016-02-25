@@ -432,27 +432,18 @@ smart_gui <- function(){
          })
   addSpring(gri_g_top1_dep)
   gbutton("Load Depth", container = gri_g_top1_dep, handler = function(h,...){
-    Sys.sleep(1)
     dev.set(dev.list()[pre_dev+1])
-
     ## Get path to bathymetry rData
-
     svalue(stat_bar) <- "Loading depth..."
+    Sys.sleep(1)
 
     load_path <- "/Users/Lomo/Documents/Uni/Lab/Proj/smart\ gui/SMART_GUI/bathy_test.rData"
 
     my_project$sampMap$loadGridBath(load_path)
     # my_project$sampMap$getCentDept()
-
     svalue(stat_bar) <- "Plotting Bathymetry..."
-    # png(filename = paste(substr(my_project$sampMap$gridPath, 1, nchar(my_project$sampMap$gridPath)-4), "_bathy.jpeg", sep = ""),
-    #     width = 800, height = 518, units = "px", pointsize = 15)
+    Sys.sleep(1)
     my_project$sampMap$plotGridBathy()
-    # dev.off()
-    # ima<-readPNG(paste(substr(my_project$sampMap$gridPath, 1, nchar(my_project$sampMap$gridPath)-4), "_bathy.png", sep = ""))
-    # plot(1:2, type='n', xlab="", ylab="", axes = FALSE, ann=FALSE)
-    # lim <- par()
-    # rasterImage(ima, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
     svalue(stat_bar) <- ""
   })
   # addSpring(gri_g_top1_dep)
@@ -460,11 +451,6 @@ smart_gui <- function(){
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+1])
            my_project$sampMap$plotGridBathy()
-           # ima<-readPNG(paste(substr(my_project$sampMap$gridPath, 1, nchar(my_project$sampMap$gridPath)-4), "_bathy.png", sep = ""))
-           # plot(1:2, type='n', xlab="", ylab="", axes = FALSE, ann=FALSE)
-           # #Get the plot information so the image will fill the plot box, and draw it
-           # lim <- par()
-           # rasterImage(ima, lim$usr[1], lim$usr[3], lim$usr[2], lim$usr[4])
          })
   addSpring(gri_g_top1_dep)
 
