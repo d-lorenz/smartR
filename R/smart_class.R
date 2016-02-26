@@ -63,9 +63,9 @@ SmartProject <- R6Class("smartProject",
                                 in_box <- over(SpatialPoints(tmp_eff[,c("LON","LAT")]), sampMap$gridBboxSP)
                               }else{
                                 in_box <- over(SpatialPoints(tmp_eff[,c("LON","LAT")]),
-                                               unionSpatialPolygons(my_sampling$sampMap$gridShp,
+                                               unionSpatialPolygons(sampMap$gridShp,
                                                                     IDs = rep(1,
-                                                                              length(my_sampling$sampMap$gridShp@polygons)))
+                                                                              length(sampMap$gridShp@polygons)))
                                 )
                               }
                               in_box[is.na(in_box)] <- 0
@@ -1351,7 +1351,7 @@ SampleMap <- R6Class("sampleMap",
                          f_bathy <- fortify.bathy(gridBathy)
                          f_bathy$z[f_bathy$z > 0] <- 0
                          colnames(f_bathy) <- c("lon", "lat", "Depth")
-                         the_plot <- suppressMessages(my_sampling$sampMap$gooMapPlot +
+                         the_plot <- suppressMessages(gooMapPlot +
                                                         stat_contour(data = f_bathy, aes(x = lon, y = lat, z = Depth, colour = ..level..), size = 0.2, binwidth = 250) +
                                                         lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4])) +
                                                         xlab("Longitude") + ylab("Latitude") +
