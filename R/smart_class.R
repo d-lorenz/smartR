@@ -150,7 +150,7 @@ SmartProject <- R6Class("smartProject",
                                                            geom_point(data = tmp_dat,
                                                                       aes(x = LON, y = LAT, shape = W_HARB, color = W_HARB), size = 1, alpha = 0.2)+
                                                            scale_colour_manual(values = c("coral", "darkseagreen1")) +
-                                                           lims(x = extendrange(tmp_dat$LON), y = extendrange(tmp_dat$LAT)) +
+                                                           lims(x = extendrange(sampMap$plotRange[1:2]), y = extendrange(sampMap$plotRange[3:4])) +
                                                            guides(colour = guide_legend(override.aes = list(size=3, alpha = 1))))
                             suppressWarnings(print(tmp_plot))
                           }
@@ -162,7 +162,7 @@ SmartProject <- R6Class("smartProject",
                                                            geom_point(data = tmp_dat,
                                                                       aes(x = LON, y = LAT, color = FishPoint), size = 0.25, alpha = 0.2)+
                                                            scale_colour_manual(values = c("coral", "darkseagreen1")) +
-                                                           lims(x = extendrange(tmp_dat$LON), y = extendrange(tmp_dat$LAT)) +
+                                                           lims(x = extendrange(sampMap$plotRange[1:2]), y = extendrange(sampMap$plotRange[3:4])) +
                                                            guides(colour = guide_legend(override.aes = list(size=3, alpha = 1))))
                             suppressWarnings(print(tmp_plot))
                           },
