@@ -1349,21 +1349,13 @@ SampleMap <- R6Class("sampleMap",
                          def.par <- par(no.readonly = TRUE)
                          f_bathy <- fortify.bathy(gridBathy)
                          f_bathy$z[f_bathy$z > 0] <- 0
-                         f_bathy$Depth <- f_bathy$z
-                         the_plot <- ggplot(f_bathy, mapping = aes_string(x = "x", y = "y")) +
-                           geom_raster(aes_string(fill = "Depth")) +
-                           geom_contour(aes_string(z = "Depth"), size = 0.2,
-                                        colour = "black", alpha = 0.5, linetype = "longdash") +
-                           geom_contour(aes_string(z = "Depth"),
-                                        colour = "black", linetype = "solid", size = 0.4,
-                                        breaks = 0, alpha = 1)+
-                           xlab("Longitude") + ylab("Latitude") +
-                           ggtitle("Bathymetry")
-                         # discrete_scale("colour", "brewer", brewer_pal("seq", "Blues"))+
-                         # lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4]))
-                         # coord_fixed(xlim = extendrange(plotRange[1:2]),
-                         #             ylim = extendrange(plotRange[3:4]), expand = TRUE)
-                         print(the_plot)
+                         colnames(f_bathy) <- c("lon", "lat", "Depth")
+                         the_plot <- suppressMessages(my_sampling$sampMap$gooMapPlot +
+                                                        stat_contour(data = f_bathy, aes(x = lon, y = lat, z = Depth, colour = ..level..), size = 0.2, binwidth = 250) +
+                                                        lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4])) +
+                                                        xlab("Longitude") + ylab("Latitude") +
+                                                        ggtitle("Bathymetry"))
+                         suppressWarnings(print(the_plot))
                          par(def.par)
                        },
                        plotSamMap = function(title = "", celCol = NULL){
