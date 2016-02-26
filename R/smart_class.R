@@ -1310,6 +1310,7 @@ SampleMap <- R6Class("sampleMap",
                          tmp_plot <- suppressMessages(gooMapPlot +
                                                         geom_polygon(aes(x = X, y = Y, group = PID, fill = Seabed), size = 0.2,
                                                                      data = grid_data, alpha = 0.8) +
+                                                        lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4])) +
                                                         xlab("Longitude") + ylab("Latitude") +
                                                         ggtitle("Seabed"))
                          suppressWarnings(print(tmp_plot))
