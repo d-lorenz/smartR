@@ -920,10 +920,12 @@ FishFleet <- R6Class("fishFleet",
                          cat("\nCreating weekly matrix for year ", sep = "")
                          for(j in names(rawEffort)){
                            cat(j, "... ", sep = "")
-                           tmp_dat <- rawEffort[[j]][rawEffort[[j]]$FishPoint == TRUE & !is.na(rawEffort[[j]]$Cell),c("I_NCEE","DATE", "MonthNum", "FishGround", "FishPoint")]
-                           tmp_matrix <- dcast(tmp_dat, formula = list(.(I_NCEE, DATE = round(DATE), MonthNum), .(FishGround)),
-                                               fun.aggregate = sum,
-                                               na.rm=TRUE, value.var = "FishPoint")
+                           tmp_dat <- rawEffort[[j]][rawEffort[[j]]$FishPoint == TRUE & rawEffort[[j]]$P_INT == 1 & !is.na(rawEffort[[j]]$Cell),c("I_NCEE","DATE", "MonthNum", "FishGround", "FishPoint")]
+                           tmp_dat$DATE <- ceiling(tmp_dat$DATE)
+                           tmp_matrix <- dcast(tmp_dat, formula = I_NCEE + DATE + MonthNum ~ FishGround,
+                                               fun.aggregate = sum, na.rm=TRUE, value.var = "FishPoint")
+                           ## points to hours: interpolation interval 10 min
+                           tmp_matrix[,4:ncol(tmp_matrix)] <- tmp_matrix[,4:ncol(tmp_matrix)]/6
                            miss_cols <- setdiff(as.character(unique(rawEffort[[j]]$FishGround[!is.na(rawEffort[[j]]$FishGround)])),
                                                 names(tmp_matrix)[4:ncol(tmp_matrix)])
                            if(length(miss_cols) > 0){
