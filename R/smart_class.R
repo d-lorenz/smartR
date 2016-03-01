@@ -280,9 +280,9 @@ SmartProject <- R6Class("smartProject",
 
                             if(length(which(is.na(data)==TRUE,arr.ind=TRUE)[,1])>0)
                               data <- data[-which(is.na(data)==TRUE,arr.ind=TRUE)[,1],]
-                            norow <- which(data[,which(colnames(data)==species)]<=thrB)
+                            norow <- which(data[,which(colnames(data)==specie)]<=thrB)
                             X0 <- data[-norow,which(colnames(data) %in% c("Year","MonthNum","Loa",as.character(seq(1:nFG))))]
-                            Y0 <- data[-norow,which(colnames(data)==species)]
+                            Y0 <- data[-norow,which(colnames(data)==specie)]
 
                             #Gen Matrix of scenaria and fill by membership
                             nY <- length(unique(X0$Year))
