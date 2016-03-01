@@ -638,6 +638,7 @@ FishFleet <- R6Class("fishFleet",
                        specLogit = NULL,
                        effortIds = NULL,
                        idsEffoProd = NULL,
+                       effoProdAllLoa = NULL,
                        fishPoinPara = NULL,
                        loadFleetRegis = function(register_path){
                          cat("Loading raw Fleet Register data...\n", sep = "")
@@ -815,6 +816,14 @@ FishFleet <- R6Class("fishFleet",
                            }
                          }
                          cat("Done!", sep = "")
+                       },
+                       setEffoProdAllLoa = function(){
+                         tmp_effoProd <- effoProdAll
+                         tmp_loa <- rawRegister[,c("CFR","Loa")]
+                         tmp_loa$CFR <- as.numeric(substr(tmp_loa$CFR, 4, nchar(tmp_loa$CFR[1])))
+                         tmp_loa <- tmp_loa[!is.na(tmp_loa),]
+                         names(tmp_loa) <- c("I_NCEE", "Loa")
+                         effoProdAllLoa <<- sqldf("select * from tmp_effoProd left join (select * from tmp_loa) using (I_NCEE)")
                        },
                        setProdIds = function(){
                          cat("\nSetting Production IDs year ", sep = "")
