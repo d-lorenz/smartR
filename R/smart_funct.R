@@ -224,7 +224,7 @@ getNNLS <- function(subX, subY, zeroFG){
   return(nnls_m)
 }
 
-nnls_model <- function(data, species, nFG, thrB, thr0, minobs){
+nnls_model <- function(data, species, nFG, thrB, thr0, minobs, thr_r2){
   if(length(which(is.na(data)==TRUE,arr.ind=TRUE)[,1])>0)
     data <- data[-which(is.na(data)==TRUE,arr.ind=TRUE)[,1],]
   norow <- which(data[,which(colnames(data)==species)]<=thrB)
