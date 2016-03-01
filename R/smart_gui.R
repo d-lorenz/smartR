@@ -1397,6 +1397,8 @@ smart_gui <- function(){
 
     gbutton(text = "Get\nLogit", container = up_fra, handler = function(...){
       my_project$fleet$setSpecLogit(svalue(spe_drop))
+      my_project$fleet$plotLogitROC(svalue(spe_drop))
+
       svalue(thr_spin) <- round(my_project$fleet$specLogit[[svalue(spe_drop)]]$optCut, 2)
       svalue(tmp_txt) <- capture.output({cat("\n")
         print(my_project$fleet$specLogit[[svalue(spe_drop)]]$confMatrix)})
