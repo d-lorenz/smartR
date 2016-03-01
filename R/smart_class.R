@@ -794,7 +794,7 @@ FishFleet <- R6Class("fishFleet",
                          setSpecLogitPredict(specie)
                          setSpecLogitROCR(specie)
                          setSpecLogitOptCut(specie)
-                         plotLogitROC(specie)
+                         # plotLogitROC(specie)
                          setSpecLogitConf(specie)
                        },
                        getMatSpeLand = function(specie){
