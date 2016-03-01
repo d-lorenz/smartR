@@ -47,5 +47,6 @@ Imports:
     foreign,
     ROCR,
     pROC,
-    caret
+    caret,
+    nnls
 RoxygenNote: 5.0.1

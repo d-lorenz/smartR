@@ -28,6 +28,7 @@ importFrom("foreign", "read.dbf")
 importFrom("ROCR", "prediction", "performance")
 importFrom("pROC", "roc")
 importFrom("caret", "confusionMatrix")
+importFrom("nnls", "nnls")
 
 
 
