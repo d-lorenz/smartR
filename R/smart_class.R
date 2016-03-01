@@ -272,7 +272,7 @@ SmartProject <- R6Class("smartProject",
                                                            lims(x = extendrange(sampMap$plotRange[1:2]), y = extendrange(sampMap$plotRange[3:4])))
                             suppressWarnings(print(tmp_plot))
                           },
-                          nnls_model = function(specie, minobs, thr_r2){
+                          getNnlsModel = function(specie, minobs, thr_r2){
                             data <- fleet$effoProdAllLoa
                             nFG <- sampMap$cutFG
                             thrB <- fleet$specSett[[specie]]$threshold
