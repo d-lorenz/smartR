@@ -341,7 +341,7 @@ SmartProject <- R6Class("smartProject",
                             blist[[5]] <- SceMat
                             blist[[6]] <- nfitted
                             names(blist) <- c("bmat","obsY","fittedY","nnls_r2", "SceMat", "nfitted")
-                            fleet$resNNLS[[specie]] <- blist
+                            fleet$resNNLS[[specie]] <<- blist
                           },
                           cohoDisPlot = function(whoSpe, whoCoh, whiYea, interp){
                             if(interp == FALSE){
