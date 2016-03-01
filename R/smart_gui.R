@@ -1458,6 +1458,12 @@ smart_gui <- function(){
   })
   addSpring(pro_g_top2)
 
+  gbutton("Get NNLS", container = pro_g_top2, handler = function(h,...){
+
+
+  })
+  addSpring(pro_g_top2)
+
   addSpring(pro_g_top)
   gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"),
          container = pro_g_top, handler = function(h,...){
