@@ -202,6 +202,7 @@ SmartProject <- R6Class("smartProject",
 
                           },
                           setFishGround = function(numCut){
+                            sampMap$cutFG <<- numCut
                             tmp_clust <- cbind(Cell = 1:sampMap$nCells,
                                                FishGround = sampMap$clusMat[,numCut])
                             cat("\nSetting Fishing Ground year ", sep = "")
@@ -1155,6 +1156,7 @@ SampleMap <- R6Class("sampleMap",
                        clusMat = NULL, # matrix output calcfish
                        indSil = NULL, # vect clusters silhouette output calcfish
                        indCH = NULL, # vect index CH output calcfish
+                       cutFG = NULL,
                        gooMap = NULL,
                        gooMapPlot = NULL,
                        gooGrid = NULL,
