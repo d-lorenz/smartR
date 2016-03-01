@@ -272,6 +272,77 @@ SmartProject <- R6Class("smartProject",
                                                            lims(x = extendrange(sampMap$plotRange[1:2]), y = extendrange(sampMap$plotRange[3:4])))
                             suppressWarnings(print(tmp_plot))
                           },
+                          nnls_model <- function(specie, minobs, thr_r2){
+                            data <- fleet$effoProdAllLoa
+                            nFG <- sampMap$cutFG
+                            thrB <- fleet$specSett[[specie]]$threshold
+                            thr0 <- mean(data[,specie][data[,specie] < thrB & data[,specie] > 0])
+
+                            if(length(which(is.na(data)==TRUE,arr.ind=TRUE)[,1])>0)
+                              data <- data[-which(is.na(data)==TRUE,arr.ind=TRUE)[,1],]
+                            norow <- which(data[,which(colnames(data)==species)]<=thrB)
+                            X0 <- data[-norow,which(colnames(data) %in% c("Year","MonthNum","Loa",as.character(seq(1:nFG))))]
+                            Y0 <- data[-norow,which(colnames(data)==species)]
+
+                            #Gen Matrix of scenaria and fill by membership
+                            nY <- length(unique(X0$Year))
+                            nM <- 12
+                            membY <- as.numeric(as.factor(X0$Year)) #Membership delle osservazioni x anno
+                            membM <- as.numeric(X0$MonthNum) #Membership delle osservazioni x mese
+                            SceMat <- expand.grid(unique(membY),unique(membM))
+                            colnames(SceMat) <-c("YEAR","MONTH")
+                            SceList <- vector(mode="list", length=nrow(SceMat))
+                            il <- 0
+                            for(i in 1:nrow(SceMat)){
+                              il <- il+1
+                              SceList[[il]] <- which((membY==SceMat[il,1])&(membM==SceMat[il,2]))
+                            }
+                            lsce <- as.numeric(lapply(SceList,length))
+                            wsce <- which(lsce>=minobs)
+                            nSce <- length(wsce)
+
+                            #Gen and fill the matrix of betas
+                            bmat <- matrix(NA,length(unique(membY))*length(unique(membM)),nFG)
+                            obsY <- fittedY <- vector(mode="list",length=nSce)
+                            nnls_r2 <- rep(NA,nSce)
+                            nfitted <- 0
+                            nno <- 0
+                            wcol <- which(colnames(X0) %in% as.character(seq(1,nFG)))
+
+                            for(iS in wsce){
+                              subX <- X0[SceList[[iS]],wcol]*(X0$Loa[SceList[[iS]]])
+                              subY <- Y0[SceList[[iS]]]
+                              zeroFG <- which(apply(subX,2,sum)==0)
+                              eFG <- setdiff(1:nFG,zeroFG)
+                              if(length(zeroFG)>0) subX <- subX[,-zeroFG]
+                              if(min(dim(subX))>0){
+                                nnls_m <- getNNLS(subX,subY, zeroFG)
+                                if(abs(nnls_m$r2) > thr_r2){
+                                  nnls_r2[iS] <- nnls_m$r2
+                                  obsY[[iS]] <- nnls_m$obs
+                                  fittedY[[iS]] <- nnls_m$fitted
+                                  tcoo <- 12*(SceMat[iS,"YEAR"]-1)+SceMat[iS,"MONTH"]
+                                  bmat[tcoo,eFG] <- nnls_m$betas
+                                  if(length(zeroFG)>0) bmat[tcoo,zeroFG] <- 0
+                                  nfitted <- nfitted + 1
+                                }else{
+                                  nno <- nno + 1
+                                }
+                              }else{
+                                nno <- nno + 1
+                              }
+                            }
+                            cat("\n", nSce, " actual scenarios ", nfitted, "(", floor(100*(nSce-nno)/nSce), "%) fitted", sep = "")
+                            blist <- vector(mode="list",length=4)
+                            blist[[1]] <- bmat
+                            blist[[2]] <- unlist(obsY)
+                            blist[[3]] <- unlist(fittedY)
+                            blist[[4]] <- unlist(nnls_r2)
+                            blist[[5]] <- SceMat
+                            blist[[6]] <- nfitted
+                            names(blist) <- c("bmat","obsY","fittedY","nnls_r2", "SceMat", "nfitted")
+                            fleet$resNNLS[[specie]] <- blist
+                          },
                           cohoDisPlot = function(whoSpe, whoCoh, whiYea, interp){
                             if(interp == FALSE){
                               if(whoCoh == "All"){
@@ -639,6 +710,7 @@ FishFleet <- R6Class("fishFleet",
                        effortIds = NULL,
                        idsEffoProd = NULL,
                        effoProdAllLoa = NULL,
+                       resNNLS = NULL,
                        fishPoinPara = NULL,
                        loadFleetRegis = function(register_path){
                          cat("Loading raw Fleet Register data...\n", sep = "")
@@ -750,6 +822,10 @@ FishFleet <- R6Class("fishFleet",
                        setSpecSett = function(){
                          specSett <<- vector(mode = "list", length = length(prodSpec[["Cross"]]))
                          names(specSett) <<- sort(prodSpec[["Cross"]])
+                       },
+                       setNNLS = function(){
+                         resNNLS <<- vector(mode = "list", length = length(prodSpec[["Cross"]]))
+                         names(resNNLS) <<- sort(prodSpec[["Cross"]])
                        },
                        setSpecSettItm = function(specie, thresh, brea, max_xlim){
                          specSett[[specie]] <<- data.frame(threshold = thresh,
