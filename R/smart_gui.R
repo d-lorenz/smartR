@@ -1498,7 +1498,7 @@ smart_gui <- function(){
                                sep = "")
 
       tmp_df <- data.frame(R2 = "R2",
-                           Values = as.numeric(my_project$fleet$resNNLS[[specie]][["nnls_r2"]]))
+                           Values = as.numeric(my_project$fleet$resNNLS[[svalue(spe_drop)]][["nnls_r2"]]))
       bp <- ggplot(tmp_df, aes(x = R2, y = Values)) +
         geom_violin(fill = "grey30", colour = "grey90", alpha = 0.05) +
         geom_boxplot(fill = "grey90", width = 0.5) +
@@ -1508,8 +1508,8 @@ smart_gui <- function(){
         labs(title = "R2 values") +
         geom_hline(aes(yintercept = svalue(thr_spin)), linetype="dashed", size = 0.5, colour = "red")
 
-      tmp_reg <- data.frame(Observed = my_project$fleet$resNNLS[[specie]]$obsY,
-                            Fitted = my_project$fleet$resNNLS[[specie]]$fittedY)
+      tmp_reg <- data.frame(Observed = my_project$fleet$resNNLS[[svalue(spe_drop)]]$obsY,
+                            Fitted = my_project$fleet$resNNLS[[svalue(spe_drop)]]$fittedY)
 
       reg_p <- ggplot(tmp_reg, aes(y = Fitted, x = Observed)) +
         geom_point(alpha = 0.25, size = 0.2) + stat_smooth(method = "lm") +
