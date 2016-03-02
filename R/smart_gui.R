@@ -1482,6 +1482,8 @@ smart_gui <- function(){
 
     gbutton(text = " Get\nNNLS", container = up_fra, handler = function(...){
 
+      if(is.null(my_project$fleet$effoProdAllLoa)) my_project$fleet$setEffoProdAllLoa()
+
       my_project$getNnlsModel(specie = svalue(spe_drop), minobs = svalue(obs_spin), thr_r2 = svalue(thr_spin))
 
       svalue(tmp_txt) <- paste("\n\nRaw Scenarios:\n\n\t",
