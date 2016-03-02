@@ -346,7 +346,8 @@ SmartProject <- R6Class("smartProject",
                             blist[[4]] <- unlist(nnls_r2)
                             blist[[5]] <- SceMat
                             blist[[6]] <- nfitted
-                            names(blist) <- c("bmat", "obsY", "fittedY", "nnls_r2", "SceMat", "nfitted")
+                            blist[[7]] <- nSce
+                            names(blist) <- c("bmat", "obsY", "fittedY", "nnls_r2", "SceMat", "nfitted", "nSce")
                             fleet$resNNLS[[specie]] <<- blist
                           },
                           cohoDisPlot = function(whoSpe, whoCoh, whiYea, interp){
