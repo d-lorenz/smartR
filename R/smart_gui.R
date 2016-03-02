@@ -1461,6 +1461,121 @@ smart_gui <- function(){
   gbutton("Get NNLS", container = pro_g_top2, handler = function(h,...){
 
 
+
+    temp_dia <- gwindow(title="Get NNLS", visible = FALSE,
+                        # parent = main_win,
+                        width = 950, height = 500)
+
+    up_g <- ggroup(horizontal = FALSE, container = temp_dia, expand = TRUE)
+    up_fra <- gframe(container = up_g, horizontal = TRUE, expand = TRUE)
+    # addSpring(up_fra)
+    addSpace(up_fra, 20)
+    spe_fra <- gframe(text = "Specie", container = up_fra, horizontal = TRUE, expand = TRUE)
+    addSpace(spe_fra, 20)
+    spe_drop <- gcombobox(sort(names(my_project$fleet$specSett)[which(!unlist(lapply(my_project$fleet$specSett, is.null)))]), selected = 1,
+                          editable = FALSE, container = spe_fra, expand = TRUE,
+                          handler = function(...){
+
+                          })
+    addSpace(spe_fra, 20)
+    addSpace(up_fra, 20)
+
+    gbutton(text = " Get\nNNLS", container = up_fra, handler = function(...){
+
+      my_project$getNnlsModel(specie = svalue(spe_drop), minobs = svalue(obs_spin), thr_r2 = svalue(thr_spin))
+
+      svalue(tmp_txt) <- paste("\n\nRaw Scenarios:\n\n\t",
+                               nrow(my_project$fleet$resNNLS[[svalue(spe_drop)]]$bmat),
+                               "\n\nWith at least ", svalue(obs_spin), " observations:\n\n\t",
+                               my_project$fleet$resNNLS[[svalue(spe_drop)]]$nSce,
+                               "\n\nFitted:\n\n\t",
+                               my_project$fleet$resNNLS[[svalue(spe_drop)]]$nfitted,
+                               "   (",
+                               round(100*my_project$fleet$resNNLS[[svalue(spe_drop)]]$fittedY/my_project$fleet$resNNLS[[svalue(spe_drop)]]$nSce),
+                               "%)\n\n",
+                               sep = "")
+
+      tmp_df <- data.frame(R2 = "R2",
+                           Values = as.numeric(my_project$fleet$resNNLS[[specie]][["nnls_r2"]]))
+      bp <- ggplot(tmp_df, aes(x = R2, y = Values)) +
+        geom_violin(fill = "grey30", colour = "grey90", alpha = 0.05) +
+        geom_boxplot(fill = "grey90", width = 0.5) +
+        stat_boxplot(geom ='errorbar', width = 0.25) +
+        theme(axis.text.x = element_blank()) +
+        ylim(0, 1) +
+        labs(title = "R2 values") +
+        geom_hline(aes(yintercept = svalue(thr_spin)), linetype="dashed", size = 0.5, colour = "red")
+
+      tmp_reg <- data.frame(Observed = my_project$fleet$resNNLS[[specie]]$obsY,
+                            Fitted = my_project$fleet$resNNLS[[specie]]$fittedY)
+
+      reg_p <- ggplot(tmp_reg, aes(y = Fitted, x = Observed)) +
+        geom_point(alpha = 0.25, size = 0.2) + stat_smooth(method = "lm") +
+        labs(title = "Observed VS Fitted") +
+        scale_x_log10() +
+        scale_y_log10() +
+        annotation_logticks()
+
+      grid.arrange(reg_p, bp, layout_matrix = rbind(c(1,1,2),c(1,1,2)))
+    })
+    addSpace(up_fra, 20)
+    obs_fra <- gframe(text = "Min Observations", container = up_fra, expand = TRUE, horizontal = TRUE)
+    addSpace(obs_fra, 20)
+    obs_spin <- gspinbutton(from = 1, to = 100,
+                            by = 1, value = 10, container = obs_fra, expand = TRUE,
+                            handler = function(...){
+
+                            })
+    addSpace(up_fra, 20)
+    addSpace(obs_fra, 20)
+
+    thr_fra <- gframe(text = "R2 Threshold", container = up_fra, expand = TRUE, horizontal = TRUE)
+    addSpace(thr_fra, 20)
+    thr_spin <- gslider(from = 0, to = 1,
+                        by = 0.01, value = 0, container = thr_fra, expand = TRUE,
+                        handler = function(...){
+
+                        })
+    addSpace(up_fra, 20)
+    addSpace(thr_fra, 20)
+
+    gbutton(text = "\n   Save   \n", container = up_fra, handler = function(...){
+      svalue(set_lab) <- "Saved"
+      delete(set_gru, set_gru$children[[length(set_gru$children)]])
+      add(set_gru, logi_sta_n)
+    })
+
+    addSpace(up_fra, 20)
+    set_gru_up <- ggroup(container = up_fra, horizontal = FALSE)
+    addSpring(set_gru_up)
+    set_lab <- glabel(text = "Not Saved", container = set_gru_up)
+    set_gru <- ggroup(container = set_gru_up, horizontal = TRUE)
+    addSpring(set_gru_up)
+    addSpace(up_fra, 20)
+
+    # addSpring(up_fra)
+    gbutton(text = " Close\nWindow", container = up_fra, handler = function(...){
+      dispose(temp_dia)
+    })
+    addSpace(up_fra, 20)
+    # addSpace(up_g, 20)
+    bot_g <- ggroup(horizontal = TRUE, container = up_g)
+    addSpace(bot_g, 10)
+    bot_lef_g <- ggroup(horizontal = FALSE, container = bot_g)
+    addSpring(bot_lef_g)
+    tmp_txt <- gtext(text = NULL, width = 200, height = 350, container = bot_lef_g)
+    addSpring(bot_lef_g)
+    addSpace(bot_g, 10)
+    nnls_gra <- ggraphics(width = 300, height = 400, container = bot_g, expand = TRUE)
+    visible(temp_dia) <- TRUE
+    addSpace(bot_g, 10)
+
+    logi_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
+    logi_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
+    add(set_gru, logi_sta)
+
+
+
   })
   addSpring(pro_g_top2)
 
