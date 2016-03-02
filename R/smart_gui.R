@@ -1493,7 +1493,7 @@ smart_gui <- function(){
                                "\n\nFitted:\n\n\t",
                                my_project$fleet$resNNLS[[svalue(spe_drop)]]$nfitted,
                                "   (",
-                               round(100*my_project$fleet$resNNLS[[svalue(spe_drop)]]$fittedY/my_project$fleet$resNNLS[[svalue(spe_drop)]]$nSce),
+                               round(100*my_project$fleet$resNNLS[[svalue(spe_drop)]]$nfitted/my_project$fleet$resNNLS[[svalue(spe_drop)]]$nSce),
                                "%)\n\n",
                                sep = "")
 
