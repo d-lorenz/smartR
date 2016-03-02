@@ -1463,7 +1463,7 @@ smart_gui <- function(){
 
 
     temp_dia <- gwindow(title="Get NNLS", visible = FALSE,
-                        # parent = main_win,
+                        parent = main_win,
                         width = 950, height = 500)
 
     up_g <- ggroup(horizontal = FALSE, container = temp_dia, expand = TRUE)
