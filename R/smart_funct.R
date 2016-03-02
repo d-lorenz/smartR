@@ -156,7 +156,7 @@ getLogit <- function(Lit, X, thrB, ptrain = 80, ptest = 20){
 
   #Result #1: % of correct fish/non fish prediction
   confm <- 100*sum(diag(table(predf,Litb[itest])))/sum(table(predf,Litb[itest]))
-  cat("Preliminary performance = ",confm,"%","\n")
+  cat("\nLogit preliminary performance = ", confm, "%", sep = "")
   logit_f <- glm(Litb ~. , family="binomial", data = as.data.frame(XY))
   LogitList <- vector(mode="list", length=3)
   LogitList[[1]] <- confm
