@@ -334,7 +334,13 @@ SmartProject <- R6Class("smartProject",
                             }
                             cat("\n", nSce, " actual scenarios ", nfitted, "(", floor(100*(nSce-nno)/nSce), "%) fitted", sep = "")
                             blist <- vector(mode="list",length=4)
-                            blist[[1]] <- bmat
+
+                            if(anyNA(bmat)){
+                              blist[[1]] <- fillbetas(bmat)
+                            }else{
+                              blist[[1]] <- bmat
+                            }
+
                             blist[[2]] <- unlist(obsY)
                             blist[[3]] <- unlist(fittedY)
                             blist[[4]] <- unlist(nnls_r2)

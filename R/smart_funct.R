@@ -223,3 +223,11 @@ getNNLS <- function(subX, subY, zeroFG){
   names(nnls_m) <- c("model","betas","s2","FGno","r2","obs","fitted")
   return(nnls_m)
 }
+
+fillbetas <- function(bmat){
+  bdf <- as.data.frame(bmat)
+  ff <- paste(colnames(bdf),"+",sep="",collapse="")
+  ff <- as.formula(paste("~",substr(ff,1,nchar(ff)-1)))
+  fbmat <- as.matrix(mnimput(ff,bdf)$filled.dataset)
+  return(fbmat)
+}
