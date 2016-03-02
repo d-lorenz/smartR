@@ -30,6 +30,7 @@ importFrom("pROC", "roc")
 importFrom("caret", "confusionMatrix")
 importFrom("nnls", "nnls")
 importFrom("mtsdi", "mnimput")
+importFrom("gridExtra", "grid.arrange")
 
 
 export(smart_gui)
