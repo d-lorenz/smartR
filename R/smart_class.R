@@ -834,6 +834,30 @@ FishFleet <- R6Class("fishFleet",
                          resNNLS <<- vector(mode = "list", length = length(prodSpec[["Cross"]]))
                          names(resNNLS) <<- sort(prodSpec[["Cross"]])
                        },
+                       plotNNLS = function(specie, thresR2){
+                         tmp_df <- data.frame(R2 = "R2",
+                                              Values = as.numeric(resNNLS[[specie]][["nnls_r2"]]))
+                         bp <- ggplot(tmp_df, aes(x = R2, y = Values)) +
+                           geom_violin(fill = "grey30", colour = "grey90", alpha = 0.05) +
+                           geom_boxplot(fill = "grey90", width = 0.5) +
+                           stat_boxplot(geom ='errorbar', width = 0.25) +
+                           theme(axis.text.x = element_blank()) +
+                           ylim(0, 1) +
+                           labs(title = "R2 values") +
+                           geom_hline(aes(yintercept = thresR2), linetype="dashed", size = 0.5, colour = "red")
+
+                         tmp_reg <- data.frame(Observed = my_project$fleet$resNNLS[[specie]]$obsY,
+                                               Fitted = my_project$fleet$resNNLS[[specie]]$fittedY)
+
+                         reg_p <- ggplot(tmp_reg, aes(y = Fitted, x = Observed)) +
+                           geom_point(alpha = 0.25, size = 0.2) + stat_smooth(method = "lm") +
+                           labs(title = "Observed VS Fitted") +
+                           scale_x_log10() +
+                           scale_y_log10() +
+                           annotation_logticks()
+
+                         grid.arrange(reg_p, bp, layout_matrix = rbind(c(1,1,2),c(1,1,2)))
+                       },
                        setSpecSettItm = function(specie, thresh, brea, max_xlim){
                          specSett[[specie]] <<- data.frame(threshold = thresh,
                                                            breaks = brea,

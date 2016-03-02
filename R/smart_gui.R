@@ -1497,28 +1497,7 @@ smart_gui <- function(){
                                "%)\n\n",
                                sep = "")
 
-      tmp_df <- data.frame(R2 = "R2",
-                           Values = as.numeric(my_project$fleet$resNNLS[[svalue(spe_drop)]][["nnls_r2"]]))
-      bp <- ggplot(tmp_df, aes(x = R2, y = Values)) +
-        geom_violin(fill = "grey30", colour = "grey90", alpha = 0.05) +
-        geom_boxplot(fill = "grey90", width = 0.5) +
-        stat_boxplot(geom ='errorbar', width = 0.25) +
-        theme(axis.text.x = element_blank()) +
-        ylim(0, 1) +
-        labs(title = "R2 values") +
-        geom_hline(aes(yintercept = svalue(thr_spin)), linetype="dashed", size = 0.5, colour = "red")
-
-      tmp_reg <- data.frame(Observed = my_project$fleet$resNNLS[[svalue(spe_drop)]]$obsY,
-                            Fitted = my_project$fleet$resNNLS[[svalue(spe_drop)]]$fittedY)
-
-      reg_p <- ggplot(tmp_reg, aes(y = Fitted, x = Observed)) +
-        geom_point(alpha = 0.25, size = 0.2) + stat_smooth(method = "lm") +
-        labs(title = "Observed VS Fitted") +
-        scale_x_log10() +
-        scale_y_log10() +
-        annotation_logticks()
-
-      grid.arrange(reg_p, bp, layout_matrix = rbind(c(1,1,2),c(1,1,2)))
+      my_project$fleet$plotNNLS(specie = svalue(spe_drop), thresR2 = svalue(thr_spin))
     })
     addSpace(up_fra, 20)
     obs_fra <- gframe(text = "Min Observations", container = up_fra, expand = TRUE, horizontal = TRUE)
