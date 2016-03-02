@@ -29,7 +29,7 @@ importFrom("ROCR", "prediction", "performance")
 importFrom("pROC", "roc")
 importFrom("caret", "confusionMatrix")
 importFrom("nnls", "nnls")
-
+importFrom("mtsdi", "mnimput")
 
 
 export(smart_gui)

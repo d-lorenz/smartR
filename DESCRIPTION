@@ -48,5 +48,6 @@ Imports:
     ROCR,
     pROC,
     caret,
-    nnls
+    nnls,
+    mtsdi
 RoxygenNote: 5.0.1
