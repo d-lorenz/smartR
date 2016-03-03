@@ -1277,7 +1277,8 @@ SampleMap <- R6Class("sampleMap",
                        cutResEffo = NULL,
                        cutResShp = NULL,
                        cutResShpFort = NULL,
-                       ggdepthFGbox = NULL,
+                       ggDepthFGbox = NULL,
+                       ggEffoFGbox = NULL,
                        gooMap = NULL,
                        gooMapPlot = NULL,
                        gooGrid = NULL,
@@ -1584,13 +1585,13 @@ SampleMap <- R6Class("sampleMap",
                          cutResShpFort$FG <<- as.factor(cutResShpFort$id)
                        },
                        setDepthFGbox = function(){
-                         ggdepthFGbox <<- suppressMessages(ggplot(cutResult, aes(x = FG, y = Depth, group = FG)) +
+                         ggDepthFGbox <<- suppressMessages(ggplot(cutResult, aes(x = FG, y = Depth, group = FG)) +
                                                              geom_boxplot() +
                                                              coord_flip() +
                                                              theme(legend.position='none'))
                        },
                        setEffoFGbox = function(){
-                         effo_box <- ggplot(cutResEffo, aes(x = FG, y = Effort, group = Cluster)) +
+                         ggEffoFGbox <<- ggplot(cutResEffo, aes(x = FG, y = Effort, group = Cluster)) +
                            geom_boxplot() +
                            coord_flip() +
                            theme(legend.position='none')
