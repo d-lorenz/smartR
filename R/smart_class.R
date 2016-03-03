@@ -1273,6 +1273,7 @@ SampleMap <- R6Class("sampleMap",
                        indSil = NULL, # vect clusters silhouette output calcfish
                        indCH = NULL, # vect index CH output calcfish
                        cutFG = NULL,
+                       tmpCut = NULL,
                        cutResult = NULL,
                        cutResEffo = NULL,
                        cutResShp = NULL,
@@ -1581,6 +1582,7 @@ SampleMap <- R6Class("sampleMap",
                          par(def.par)
                        },
                        setCutResult = function(ind_clu){
+                         tmpCut <<- ind_clu
                          cutResult <<- data.frame(clusInpu, FG = as.factor(clusMat[,ind_clu]))
                          cutResEffo <<- data.frame(Effort = apply(cutResult[, grep("Year", colnames(cutResult))],1, sum),
                                                    Cluster = cutResult[,ncol(cutResult)])
@@ -1641,6 +1643,13 @@ SampleMap <- R6Class("sampleMap",
                                                            lims(x = extendrange(plotRange[1:2]),
                                                                 y = extendrange(plotRange[3:4])) +
                                                            theme(legend.position='none'))
+                       },
+                       setIchFGlin = function(){
+                       ch_df <- data.frame(cut = 1:length(indCH),
+                                           CH_index = indCH)
+                       ggIchFGlin <<- suppressMessages(ggplot(ch_df, aes(x = cut, y = CH_index)) +
+                                                         geom_line() +
+                                                         geom_vline(aes(xintercept = 23), linetype="dashed", size = 0.5, colour = "red"))
                        }
                      ))
 
