@@ -1272,6 +1272,9 @@ SampleMap <- R6Class("sampleMap",
                        indSil = NULL, # vect clusters silhouette output calcfish
                        indCH = NULL, # vect index CH output calcfish
                        cutFG = NULL,
+                       cutResult = NULL,
+                       cutResShp = NULL,
+                       cutResShpFort = NULL,
                        gooMap = NULL,
                        gooMapPlot = NULL,
                        gooGrid = NULL,
@@ -1568,6 +1571,12 @@ SampleMap <- R6Class("sampleMap",
                          plotSamMap(title = paste("Max Width with ", ind_clu, " cuts", sep = ""),
                                     celCol = (rainbow(length(unique(clusMat[,ind_clu]))))[clusMat[,ind_clu]])
                          par(def.par)
+                       },
+                       setCutResult = function(ind_clu){
+                         cutResult <<- data.frame(clusInpu, FG = as.factor(clusMat[,ind_clu]))
+                         cutResShp <<- unionSpatialPolygons(gridShp, IDs = clusMat[,ind_clu])
+                         cutResShpFort <<- fortify(cutResShp)
+                         cutResShpFort$FG <<- as.factor(cutResShpFort$id)
                        }
                      ))
 
