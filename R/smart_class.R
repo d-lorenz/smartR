@@ -333,7 +333,7 @@ SmartProject <- R6Class("smartProject",
                                 nno <- nno + 1
                               }
                             }
-                            cat("\n", nSce, " actual scenarios ", nfitted, "(", floor(100*(nSce-nno)/nSce), "%) fitted", sep = "")
+                            cat("\n", nSce, " actual scenarios - ", nfitted, " fitted", "(", floor(100*(nSce-nno)/nSce), "%)", sep = "")
                             blist <- vector(mode="list",length=4)
 
                             if(anyNA(bmat)){
