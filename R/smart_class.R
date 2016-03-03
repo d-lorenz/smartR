@@ -1649,7 +1649,7 @@ SampleMap <- R6Class("sampleMap",
                                            CH_index = indCH)
                        ggIchFGlin <<- suppressMessages(ggplot(ch_df, aes(x = cut, y = CH_index)) +
                                                          geom_line() +
-                                                         geom_vline(aes(xintercept = 23), linetype="dashed", size = 0.5, colour = "red"))
+                                                         geom_vline(aes(xintercept = tmpCut), linetype="dashed", size = 0.5, colour = "red"))
                        }
                      ))
 
