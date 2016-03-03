@@ -1623,7 +1623,7 @@ SampleMap <- R6Class("sampleMap",
                                                             theme(legend.position='none'))
                        },
                        setBioFGmat = function(){
-                         tmp_bio <- data.frame(FG = cutResEffo$FG, cutResEffo[,which(make.names(colnames(bioDF)) %in% colnames(cutResEffo))])
+                         tmp_bio <- data.frame(FG = cutResult$FG, cutResult[,which(make.names(colnames(bioDF)) %in% colnames(cutResult))])
                          bio2plot <- melt(tmp_bio, id.vars="FG", variable.name = "Substrate")
                          bio2plot <- bio2plot[bio2plot$value == 1,1:2]
                          ggBioFGmat <<- suppressMessages(ggplot(bio2plot, aes(x = FG, y = Substrate, fill = Substrate)) +
