@@ -1594,6 +1594,14 @@ SampleMap <- R6Class("sampleMap",
                          names(cutResShpCent) <<- c("Lon", "Lat", "FG")
                          cutResShpFort <<- fortify(cutResShp)
                          cutResShpFort$FG <<- as.factor(cutResShpFort$id)
+
+                         setDepthFGbox()
+                         setEffoFGbox()
+                         setEffoFGmap()
+                         setBioFGmat()
+                         setCutFGmap()
+                         setIchFGlin()
+                         setSilFGlin()
                        },
                        setDepthFGbox = function(){
                          ggDepthFGbox <<- suppressMessages(ggplot(cutResult, aes(x = FG, y = Depth, group = FG)) +
