@@ -1281,6 +1281,7 @@ SampleMap <- R6Class("sampleMap",
                        ggDepthFGbox = NULL,
                        ggEffoFGbox = NULL,
                        ggEffoFGmap = NULL,
+                       ggBioFGmat = NULL,
                        gooMap = NULL,
                        gooMapPlot = NULL,
                        gooGrid = NULL,
@@ -1608,13 +1609,26 @@ SampleMap <- R6Class("sampleMap",
                          all_cell[is.na(all_cell)] <- 0
                          grid_data <- cbind(cutResShpFort, Hours = all_cell[,2])
                          ggEffoFGmap <<- suppressMessages(gooMapPlot + geom_polygon(aes(x = long, y = lat, group = group, fill = Hours),
-                                                                                colour = "black", size = 0.1,
-                                                                                data = grid_data, alpha = 0.8) +
-                                                        scale_fill_gradient(low = "Yellow", high = "coral") +
-                                                        geom_text(aes(label = FG, x = Lon, y = Lat),
-                                                                  data = cutResShpCent, size = 2) +
-                                                        lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4])) +
-                                                        theme(legend.position='none'))
+                                                                                    colour = "black", size = 0.1,
+                                                                                    data = grid_data, alpha = 0.8) +
+                                                            scale_fill_gradient(low = "Yellow", high = "coral") +
+                                                            geom_text(aes(label = FG, x = Lon, y = Lat),
+                                                                      data = cutResShpCent, size = 2) +
+                                                            lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4])) +
+                                                            theme(legend.position='none'))
+                       },
+                       setBioFGmat = function(){
+                         tmp_bio <- data.frame(FG = cutResEffo$FG, cutResEffo[,which(make.names(colnames(bioDF)) %in% colnames(cutResEffo))])
+                         bio2plot <- melt(tmp_bio, id.vars="FG", variable.name = "Substrate")
+                         bio2plot <- bio2plot[bio2plot$value == 1,1:2]
+                         ggBioFGmat <<- suppressMessages(ggplot(bio2plot, aes(x = FG, y = Substrate, fill = Substrate)) +
+                                                           geom_tile() +
+                                                           coord_flip() +
+                                                           annotate("text", colour = "grey30", y = 1:length(levels(bio2plot$Substrate)),
+                                                                    x = rep(4, length(levels(bio2plot$Substrate))),
+                                                                    label = levels(bio2plot$Substrate),
+                                                                    angle = rep(90, length(levels(bio2plot$Substrate)))) +
+                                                           theme(legend.position = 'none', axis.text.x = element_text(colour = "white")))
                        }
                      ))
 
