@@ -1276,6 +1276,7 @@ SampleMap <- R6Class("sampleMap",
                        cutResult = NULL,
                        cutResEffo = NULL,
                        cutResShp = NULL,
+                       cutResShpCent = NULL,
                        cutResShpFort = NULL,
                        ggDepthFGbox = NULL,
                        ggEffoFGbox = NULL,
@@ -1581,6 +1582,9 @@ SampleMap <- R6Class("sampleMap",
                          cutResEffo <<- data.frame(Effort = apply(cutResult[, grep("Year", colnames(cutResult))],1, sum),
                                                  Cluster = cutResult[,ncol(cutResult)])
                          cutResShp <<- unionSpatialPolygons(gridShp, IDs = clusMat[,ind_clu])
+                         cutResShpCent <<- as.data.frame(coordinates(cutResShp))
+                         cutResShpCent$id <<- rownames(cutResShpCent)
+                         names(cutResShpCent) <<- c("Lon", "Lat", "FG")
                          cutResShpFort <<- fortify(cutResShp)
                          cutResShpFort$FG <<- as.factor(cutResShpFort$id)
                        },
