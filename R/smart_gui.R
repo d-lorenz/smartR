@@ -1037,8 +1037,7 @@ smart_gui <- function(){
               if(svalue(lyt[3,2])){ ### SeaBed
                 cat("\n   -   Seabed Category")
                 multi_fac_bed <- switch(svalue(lyt[3,3]), "0.5X" = 0.5, "1" = 1, "2X" = 2)
-                clus_data <- cbind(clus_data,
-                                   my_project$sampMap$bioDF*multi_fac_bed)
+                clus_data <- cbind(clus_data, my_project$sampMap$bioDF*multi_fac_bed)
               }
               if(svalue(lyt[4,2])){ ### Effort
                 cat("\n   -   Effort Distribution")
