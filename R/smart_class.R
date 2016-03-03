@@ -847,8 +847,8 @@ FishFleet <- R6Class("fishFleet",
                            labs(title = "R2 values") +
                            geom_hline(aes(yintercept = thresR2), linetype="dashed", size = 0.5, colour = "red")
 
-                         tmp_reg <- data.frame(Observed = my_project$fleet$resNNLS[[specie]]$obsY,
-                                               Fitted = my_project$fleet$resNNLS[[specie]]$fittedY)
+                         tmp_reg <- data.frame(Observed = resNNLS[[specie]]$obsY,
+                                               Fitted = resNNLS[[specie]]$fittedY)
 
                          reg_p <- ggplot(tmp_reg, aes(y = Fitted, x = Observed)) +
                            geom_point(alpha = 0.25, size = 0.2) + stat_smooth(method = "lm") +
