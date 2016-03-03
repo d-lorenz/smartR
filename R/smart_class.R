@@ -1276,6 +1276,7 @@ SampleMap <- R6Class("sampleMap",
                        cutResult = NULL,
                        cutResShp = NULL,
                        cutResShpFort = NULL,
+                       ggdepthFGbox = NULL,
                        gooMap = NULL,
                        gooMapPlot = NULL,
                        gooGrid = NULL,
@@ -1578,6 +1579,12 @@ SampleMap <- R6Class("sampleMap",
                          cutResShp <<- unionSpatialPolygons(gridShp, IDs = clusMat[,ind_clu])
                          cutResShpFort <<- fortify(cutResShp)
                          cutResShpFort$FG <<- as.factor(cutResShpFort$id)
+                       },
+                       setDepthFGbox = function(){
+                         ggdepthFGbox <<- suppressMessages(ggplot(cutResult, aes(x = FG, y = Depth, group = FG)) +
+                                                             geom_boxplot() +
+                                                             coord_flip() +
+                                                             theme(legend.position='none'))
                        }
                      ))
 
