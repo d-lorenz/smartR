@@ -1282,6 +1282,7 @@ SampleMap <- R6Class("sampleMap",
                        ggEffoFGbox = NULL,
                        ggEffoFGmap = NULL,
                        ggBioFGmat = NULL,
+                       ggCutFGmap = NULL,
                        gooMap = NULL,
                        gooMapPlot = NULL,
                        gooGrid = NULL,
@@ -1629,6 +1630,17 @@ SampleMap <- R6Class("sampleMap",
                                                                     label = levels(bio2plot$Substrate),
                                                                     angle = rep(90, length(levels(bio2plot$Substrate)))) +
                                                            theme(legend.position = 'none', axis.text.x = element_text(colour = "white")))
+                       },
+                       setCutFGmap = function(){
+                         ggCutFGmap <<- suppressMessages(gooMapPlot +
+                                                           geom_polygon(aes(x = long, y = lat, group = group, fill = FG),
+                                                                        colour = "black", size = 0.1,
+                                                                        data = cutResShpFort, alpha = 0.8) +
+                                                           geom_text(aes(label = FG, x = Lon, y = Lat),
+                                                                     data = cutResShpCent, size = 2) +
+                                                           lims(x = extendrange(plotRange[1:2]),
+                                                                y = extendrange(plotRange[3:4])) +
+                                                           theme(legend.position='none'))
                        }
                      ))
 
