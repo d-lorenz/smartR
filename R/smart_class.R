@@ -1280,6 +1280,7 @@ SampleMap <- R6Class("sampleMap",
                        cutResShpFort = NULL,
                        ggDepthFGbox = NULL,
                        ggEffoFGbox = NULL,
+                       ggEffoFGmap = NULL,
                        gooMap = NULL,
                        gooMapPlot = NULL,
                        gooGrid = NULL,
@@ -1580,7 +1581,7 @@ SampleMap <- R6Class("sampleMap",
                        setCutResult = function(ind_clu){
                          cutResult <<- data.frame(clusInpu, FG = as.factor(clusMat[,ind_clu]))
                          cutResEffo <<- data.frame(Effort = apply(cutResult[, grep("Year", colnames(cutResult))],1, sum),
-                                                 Cluster = cutResult[,ncol(cutResult)])
+                                                   Cluster = cutResult[,ncol(cutResult)])
                          cutResShp <<- unionSpatialPolygons(gridShp, IDs = clusMat[,ind_clu])
                          cutResShpCent <<- as.data.frame(coordinates(cutResShp))
                          cutResShpCent$id <<- rownames(cutResShpCent)
@@ -1596,9 +1597,24 @@ SampleMap <- R6Class("sampleMap",
                        },
                        setEffoFGbox = function(){
                          ggEffoFGbox <<- suppressMessages(ggplot(cutResEffo, aes(x = FG, y = Effort, group = Cluster)) +
-                           geom_boxplot() +
-                           coord_flip() +
-                           theme(legend.position='none'))
+                                                            geom_boxplot() +
+                                                            coord_flip() +
+                                                            theme(legend.position='none'))
+                       },
+                       setEffoFGmap = function(){
+                         agg_eff <- aggregate(formula = Effort ~ Cluster, data = cutResEffo, FUN = sum)
+                         all_cell <- merge(x = cutResShpFort$id,
+                                           data.frame(x = agg_eff$Cluster, y = agg_eff$Effort), all = TRUE)
+                         all_cell[is.na(all_cell)] <- 0
+                         grid_data <- cbind(cutResShpFort, Hours = all_cell[,2])
+                         ggEffoFGmap <<- suppressMessages(gooMapPlot + geom_polygon(aes(x = long, y = lat, group = group, fill = Hours),
+                                                                                colour = "black", size = 0.1,
+                                                                                data = grid_data, alpha = 0.8) +
+                                                        scale_fill_gradient(low = "Yellow", high = "coral") +
+                                                        geom_text(aes(label = FG, x = Lon, y = Lat),
+                                                                  data = cutResShpCent, size = 2) +
+                                                        lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4])) +
+                                                        theme(legend.position='none'))
                        }
                      ))
 
