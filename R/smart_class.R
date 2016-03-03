@@ -1602,7 +1602,7 @@ SampleMap <- R6Class("sampleMap",
                                                              theme(legend.position='none'))
                        },
                        setEffoFGbox = function(){
-                         ggEffoFGbox <<- suppressMessages(ggplot(cutResEffo, aes(x = FG, y = Effort, group = Cluster)) +
+                         ggEffoFGbox <<- suppressMessages(ggplot(cutResEffo, aes(x = Cluster, y = Effort, group = Cluster)) +
                                                             geom_boxplot() +
                                                             coord_flip() +
                                                             theme(legend.position='none'))
