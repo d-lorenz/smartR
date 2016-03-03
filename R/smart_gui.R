@@ -1097,7 +1097,7 @@ smart_gui <- function(){
                                     modeska = "S",
                                     skater_method = svalue(fg_metr))
     dev.set(dev.list()[pre_dev+6])
-    my_project$sampMap$plotFishGrou(which.max(my_project$sampMap$indSil))
+
     fg_plotCut[] <- 1:svalue(fg_maxCut)
     svalue(fg_plotCut) <- which.max(my_project$sampMap$indSil)
 
@@ -1113,7 +1113,18 @@ smart_gui <- function(){
   fg_plotCut <- gcombobox(items = 2:50,
                           container = fig_g_top_plot, handler = function(h,...){
                             dev.set(dev.list()[pre_dev+6])
-                            my_project$sampMap$plotFishGrou(svalue(fg_plotCut))
+                            # my_project$sampMap$plotFishGrou(svalue(fg_plotCut))
+                            my_project$sampMap$setCutResult(ind_clu = svalue(fg_plotCut))
+
+                            suppressWarnings(grid.arrange(my_project$sampMap$ggIchFGlin,
+                                                          my_project$sampMap$ggSilFGlin,
+                                                          my_project$sampMap$ggCutFGmap,
+                                                          my_project$sampMap$ggDepthFGbox,
+                                                          my_project$sampMap$ggEffoFGbox,
+                                                          my_project$sampMap$ggEffoFGmap,
+                                                          my_project$sampMap$ggBioFGmat,
+                                                          layout_matrix = rbind(c(1,3,3,4,5,7),c(2,6,6,4,5,7))))
+
                           })
 
   addSpring(fig_g_top_plot)
@@ -1122,6 +1133,8 @@ smart_gui <- function(){
 
   gbutton("    Select\n      this\nPartitioning", container = fig_g_top, handler = function(h,...){
     my_project$setFishGround(numCut = svalue(fg_plotCut))
+    my_project$sampMap$setCutResult(ind_clu = svalue(fg_plotCut))
+
   })
   addSpring(fig_g_top)
 
