@@ -1274,6 +1274,7 @@ SampleMap <- R6Class("sampleMap",
                        indCH = NULL, # vect index CH output calcfish
                        cutFG = NULL,
                        cutResult = NULL,
+                       cutResEffo = NULL,
                        cutResShp = NULL,
                        cutResShpFort = NULL,
                        ggdepthFGbox = NULL,
@@ -1576,6 +1577,8 @@ SampleMap <- R6Class("sampleMap",
                        },
                        setCutResult = function(ind_clu){
                          cutResult <<- data.frame(clusInpu, FG = as.factor(clusMat[,ind_clu]))
+                         cutResEffo <<- data.frame(Effort = apply(cutResult[, grep("Year", colnames(cutResult))],1, sum),
+                                                 Cluster = cutResult[,ncol(cutResult)])
                          cutResShp <<- unionSpatialPolygons(gridShp, IDs = clusMat[,ind_clu])
                          cutResShpFort <<- fortify(cutResShp)
                          cutResShpFort$FG <<- as.factor(cutResShpFort$id)
@@ -1585,6 +1588,12 @@ SampleMap <- R6Class("sampleMap",
                                                              geom_boxplot() +
                                                              coord_flip() +
                                                              theme(legend.position='none'))
+                       },
+                       setEffoFGbox = function(){
+                         effo_box <- ggplot(cutResEffo, aes(x = FG, y = Effort, group = Cluster)) +
+                           geom_boxplot() +
+                           coord_flip() +
+                           theme(legend.position='none')
                        }
                      ))
 
