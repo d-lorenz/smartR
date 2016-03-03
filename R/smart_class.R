@@ -1284,6 +1284,8 @@ SampleMap <- R6Class("sampleMap",
                        ggEffoFGmap = NULL,
                        ggBioFGmat = NULL,
                        ggCutFGmap = NULL,
+                       ggIchFGlin = NULL,
+                       ggSilFGlin = NULL,
                        gooMap = NULL,
                        gooMapPlot = NULL,
                        gooGrid = NULL,
@@ -1645,11 +1647,18 @@ SampleMap <- R6Class("sampleMap",
                                                            theme(legend.position='none'))
                        },
                        setIchFGlin = function(){
-                       ch_df <- data.frame(cut = 1:length(indCH),
-                                           CH_index = indCH)
-                       ggIchFGlin <<- suppressMessages(ggplot(ch_df, aes(x = cut, y = CH_index)) +
-                                                         geom_line() +
-                                                         geom_vline(aes(xintercept = tmpCut), linetype="dashed", size = 0.5, colour = "red"))
+                         ch_df <- data.frame(cut = 1:length(indCH),
+                                             CH_index = indCH)
+                         ggIchFGlin <<- suppressMessages(ggplot(ch_df, aes(x = cut, y = CH_index)) +
+                                                           geom_line() +
+                                                           geom_vline(aes(xintercept = tmpCut), linetype="dashed", size = 0.5, colour = "red"))
+                       },
+                       setSilFGlin = function(){
+                         sil_df <- data.frame(cut = 1:length(indSil),
+                                              Sil_index = indSil)
+                         ggSilFGlin <<- suppressMessages(ggplot(sil_df, aes(x = cut, y = Sil_index)) +
+                                                           geom_line() +
+                                                           geom_vline(aes(xintercept = tmpCut), linetype="dashed", size = 0.5, colour = "red"))
                        }
                      ))
 
