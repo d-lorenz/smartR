@@ -1,4 +1,4 @@
-#############################################################
+####SmartProject#############################################
 #' SmartProject
 #'
 #' The \code{SmartProject} class implements the main class of
@@ -508,7 +508,7 @@ SmartProject <- R6Class("smartProject",
 
 
 
-#############################################################
+####BySpeLFD#################################################
 #' BySpeLFD
 #'
 #' The \code{BySpeLFD} class implements the class of SMART to
@@ -683,7 +683,7 @@ BySpeLFD <- R6Class("sampleLFDbyspe",
 
 
 
-#############################################################
+####FishFleet################################################
 #' FishFleet
 #'
 #' The \code{FishFleet} class implements the class of SMART
@@ -1235,7 +1235,7 @@ FishShip <- R6Class("fishShip",
 
 
 
-#############################################################
+####SampleMap################################################
 #' SampleMap
 #'
 #' The \code{SampleMap} class implements the class of SMART
