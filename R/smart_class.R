@@ -705,6 +705,7 @@ FishFleet <- R6Class("fishFleet",
                        prodMatr = NULL,
                        effoProd = NULL,
                        effoProdMont = NULL,
+                       effoMont = NULL,
                        effoProdAll = NULL,
                        trackHarbs = NULL,
                        rawSelectivity = NULL,
@@ -1016,6 +1017,22 @@ FishFleet <- R6Class("fishFleet",
                              effoProdMont[[i]][j,3:(ncol(dayEffoMatr[[i]])-1)] <<- apply(unique(tmp_itm[,4:ncol(dayEffoMatr[[i]])]),2,sum)
                              tmp_prod_itm <- unique(tmp_itm[,c(ncol(dayEffoMatr[[i]])+1,(ncol(dayEffoMatr[[i]])+5):ncol(tmp_itm))])
                              effoProdMont[[i]][j,(ncol(dayEffoMatr[[i]])):ncol(effoProdMont[[i]])] <<- apply(tmp_prod_itm[,2:ncol(tmp_prod_itm)], 2, sum)
+                           }
+                         }
+                         cat("Done!")
+                       },
+                       setEffoMont = function(){
+                         effoMont <<- list()
+                         cat("\nGenerating year ", sep = "")
+                         for(i in names(dayEffoMatr)){
+                           cat(i,"... ", sep = "")
+                           dis_vesmon <- unique(dayEffoMatr[[i]][,c("I_NCEE", "MonthNum")])
+                           effoMont[[i]] <<- data.frame(matrix(data = 0, nrow = nrow(dis_vesmon), ncol = ncol(dayEffoMatr[[i]])-1))
+                           colnames(effoMont[[i]]) <<- c(colnames(dayEffoMatr[[i]])[-2])
+                           effoMont[[i]][,1:2] <<- dis_vesmon
+                           for(j in 1:nrow(dis_vesmon)){
+                             tmp_itm <- dayEffoMatr[[i]][which(dayEffoMatr[[i]]$I_NCEE == dis_vesmon[j,1] & dayEffoMatr[[i]]$MonthNum == dis_vesmon[j,2]),]
+                             effoMont[[i]][j,3:(ncol(dayEffoMatr[[i]])-1)] <<- apply(unique(tmp_itm[,4:ncol(dayEffoMatr[[i]])]),2,sum)
                            }
                          }
                          cat("Done!")
