@@ -945,6 +945,13 @@ FishFleet <- R6Class("fishFleet",
                          names(tmp_loa) <- c("I_NCEE", "Loa")
                          effoProdAllLoa <<- sqldf("select * from tmp_effoProd left join (select * from tmp_loa) using (I_NCEE)")
                        },
+                       setEffoAllLoa = function(){
+                         tmp_effo <- effoAll
+                         tmp_loa <- my_sampling$fleet$rawRegister[,c("CFR","Loa")]
+                         tmp_loa$CFR <- substr(tmp_loa$CFR, 4, nchar(tmp_loa$CFR[1]))
+                         names(tmp_loa) <- c("I_NCEE", "Loa")
+                         effoAllLoa <<- sqldf("select * from tmp_effo left join (select * from tmp_loa) using (I_NCEE)")
+                       },
                        setProdIds = function(){
                          cat("\nSetting Production IDs year ", sep = "")
                          productionIds <<- list()
