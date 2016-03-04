@@ -723,6 +723,7 @@ FishFleet <- R6Class("fishFleet",
                        effoProdMont = NULL,
                        effoMont = NULL,
                        effoProdAll = NULL,
+                       effoAll = NULL,
                        trackHarbs = NULL,
                        rawSelectivity = NULL,
                        rawProduction = NULL,
@@ -736,6 +737,7 @@ FishFleet <- R6Class("fishFleet",
                        effortIds = NULL,
                        idsEffoProd = NULL,
                        effoProdAllLoa = NULL,
+                       effoAllLoa = NULL,
                        resNNLS = NULL,
                        fishPoinPara = NULL,
                        loadFleetRegis = function(register_path){
@@ -944,7 +946,7 @@ FishFleet <- R6Class("fishFleet",
                          cat("Done!", sep = "")
                        },
                        setEffoAll = function(){
-                         cat("\nSetting effort/production year ", sep = "")
+                         cat("\nSetting effort year ", sep = "")
                          for(i in names(effoMont)){
                            cat(i, "... ", sep = "")
                            if(i == names(effoMont)[1]){
