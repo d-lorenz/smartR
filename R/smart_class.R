@@ -275,7 +275,7 @@ SmartProject <- R6Class("smartProject",
                           },
                           getNnlsModel = function(specie, minobs, thr_r2){
                             data <- fleet$effoProdAllLoa
-                            nFG <- sampMap$cutFG
+                            nFG <- sampMap$cutFG + 1
                             thrB <- fleet$specSett[[specie]]$threshold
                             thr0 <- mean(data[,specie][data[,specie] < thrB & data[,specie] > 0])
 
