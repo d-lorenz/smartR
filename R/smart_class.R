@@ -153,8 +153,24 @@ SmartProject <- R6Class("smartProject",
                                                            lims(x = extendrange(sampMap$plotRange[1:2]), y = extendrange(sampMap$plotRange[3:4])) +
                                                            guides(colour = guide_legend(override.aes = list(size=3, alpha = 1))))
                             suppressWarnings(print(tmp_plot))
-                          }
-                          ,
+                          },
+                          predictProduction = function(specie){
+                            Prod <- numeric(nrow(fleet$effoAllLoa))
+                            lyears <- sort(as.numeric(as.character(unique(fleet$effoAllLoa$Year))))
+                            datalog <- fleet$effoAllLoa
+                            datalog$MonthNum <- as.factor(datalog$MonthNum)
+                            datalog$Year <- as.factor(datalog$Year)
+                            infish <- which(predict(fleet$specLogit[[specie]]$logit$logit_f, datalog, type="response") > fleet$specLogit[[specie]]$optCut)
+                            for(i in 1:length(infish)){
+                              idata <- as.numeric(fleet$effoAllLoa[infish[i], which(colnames(fleet$effoAllLoa) %in% as.character(seq(1, sampMap$cutFG + 1)))])
+                              iloa <- as.numeric(fleet$effoAllLoa[infish[i], "Loa"])
+                              iy <- which(lyears == fleet$effoAllLoa[infish[i], "Year"])
+                              im <- as.numeric(as.character(fleet$effoAllLoa[infish[i], "MonthNum"]))
+                              ib <- fleet$resNNLS[[specie]]$bmat[which((fleet$resNNLS[[specie]]$SceMat$YEAR == iy) & (fleet$resNNLS[[specie]]$SceMat$MONTH == im)),]
+                              Prod[infish[i]] <- sum(ib * idata * iloa) + mean(fleet$effoProdAllLoa[,specie][fleet$effoProdAllLoa[,specie] < fleet$specSett[[specie]]$threshold & fleet$effoProdAllLoa[,specie] > 0])
+                            }
+                            fleet$predProd[[specie]] <<- Prod
+                          },
                           ggplotFishingPoints = function(year){
                             tmp_dat <- fleet$rawEffort[[year]][sample(1:nrow(fleet$rawEffort[[year]]), 100000),c("LON","LAT","FishPoint")]
                             tmp_dat$FishPoint <- as.factor(tmp_dat$FishPoint)
@@ -711,6 +727,7 @@ FishFleet <- R6Class("fishFleet",
                        rawSelectivity = NULL,
                        rawProduction = NULL,
                        registerIds = NULL,
+                       predProd = NULL,
                        productionIds = NULL,
                        prodIdsLoa = NULL,
                        prodSpec = NULL,
