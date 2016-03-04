@@ -926,6 +926,18 @@ FishFleet <- R6Class("fishFleet",
                          }
                          cat("Done!", sep = "")
                        },
+                       setEffoAll = function(){
+                         cat("\nSetting effort/production year ", sep = "")
+                         for(i in names(effoMont)){
+                           cat(i, "... ", sep = "")
+                           if(i == names(effoMont)[1]){
+                             effoAll <<- cbind(Year = i, effoMont[[i]])
+                           }else{
+                             effoAll <<- rbind(effoAll, cbind(Year = i, effoMont[[i]]))
+                           }
+                         }
+                         cat("Done!", sep = "")
+                       },
                        setEffoProdAllLoa = function(){
                          tmp_effoProd <- effoProdAll
                          tmp_loa <- rawRegister[,c("CFR","Loa")]
