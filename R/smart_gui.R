@@ -417,7 +417,7 @@ smart_gui <- function(){
     my_project$sampMap$getCentDept()
     svalue(stat_bar) <- "Plotting Bathymetry..."
     Sys.sleep(1)
-    my_project$sampMap$plotGridBathy()
+    my_project$sampMap$ggplotGridBathy()
     svalue(stat_bar) <- ""
   })
   addSpring(gri_g_top1_dep)
@@ -441,14 +441,14 @@ smart_gui <- function(){
     # my_project$sampMap$getCentDept()
     svalue(stat_bar) <- "Plotting Bathymetry..."
     Sys.sleep(1)
-    my_project$sampMap$plotGridBathy()
+    my_project$sampMap$ggplotGridBathy()
     svalue(stat_bar) <- ""
   })
   # addSpring(gri_g_top1_dep)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_dep,
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+1])
-           my_project$sampMap$plotGridBathy()
+           my_project$sampMap$ggplotGridBathy()
          })
   addSpring(gri_g_top1_dep)
 

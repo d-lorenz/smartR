@@ -1534,7 +1534,7 @@ SampleMap <- R6Class("sampleMap",
                        getCentDept = function(){
                          centDept <<- get.depth(gridBathy, x = griCent[,1], y = griCent[,2], locator = FALSE)
                        },
-                       plotGridBathy = function(){
+                       ggplotGridBathy = function(){
                          # def.par <- par(no.readonly = TRUE)
                          f_bathy <- fortify.bathy(gridBathy)
                          f_bathy$z[f_bathy$z > 0] <- 0
