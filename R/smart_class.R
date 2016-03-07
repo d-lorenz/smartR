@@ -1535,7 +1535,7 @@ SampleMap <- R6Class("sampleMap",
                          centDept <<- get.depth(gridBathy, x = griCent[,1], y = griCent[,2], locator = FALSE)
                        },
                        plotGridBathy = function(){
-                         def.par <- par(no.readonly = TRUE)
+                         # def.par <- par(no.readonly = TRUE)
                          f_bathy <- fortify.bathy(gridBathy)
                          f_bathy$z[f_bathy$z > 0] <- 0
                          colnames(f_bathy) <- c("lon", "lat", "Depth")
@@ -1545,7 +1545,7 @@ SampleMap <- R6Class("sampleMap",
                                                         xlab("Longitude") + ylab("Latitude") +
                                                         ggtitle("Bathymetry"))
                          suppressWarnings(print(the_plot))
-                         par(def.par)
+                         # par(def.par)
                        },
                        plotSamMap = function(title = "", celCol = NULL){
                          par(mar = c(3,3,1.5,0.5))
