@@ -1486,7 +1486,7 @@ SampleMap <- R6Class("sampleMap",
                          par(def.par)
                        },
                        ggplotBioDF = function(){
-                         def.par <- par(no.readonly = TRUE)
+                         # def.par <- par(no.readonly = TRUE)
                          cell_bed <- apply(bioDF, 1, function(x) which(x == 1))
                          tmp_dat <- colnames(bioDF)[cell_bed]
                          color_clas <- rainbow(max(cell_bed))
@@ -1502,7 +1502,7 @@ SampleMap <- R6Class("sampleMap",
                                                         xlab("Longitude") + ylab("Latitude") +
                                                         ggtitle("Seabed"))
                          suppressWarnings(print(tmp_plot))
-                         par(def.par)
+                         # par(def.par)
                        },
                        createPolySet = function(){
                          gridPolySet <<- as.data.frame(SpatialPolygons2PolySet(gridShp))
