@@ -50,5 +50,6 @@ Imports:
     caret,
     nnls,
     mtsdi,
-    gridExtra
+    gridExtra,
+    rgeos
 RoxygenNote: 5.0.1
