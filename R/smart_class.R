@@ -155,7 +155,7 @@ SmartProject <- R6Class("smartProject",
                             suppressWarnings(print(tmp_plot))
                           },
                           predictProduction = function(specie){
-                            Prod <- numeric(nrow(fleet$effoAllLoa))
+                            Prod <- matrix(data = NA, nrow(fleet$effoAllLoa), ncol = sampMap$cutFG + 1)
                             lyears <- sort(as.numeric(as.character(unique(fleet$effoAllLoa$Year))))
                             datalog <- fleet$effoAllLoa
                             datalog$MonthNum <- as.factor(datalog$MonthNum)
@@ -168,7 +168,7 @@ SmartProject <- R6Class("smartProject",
                               im <- as.numeric(as.character(fleet$effoAllLoa[infish[i], "MonthNum"]))
                               ib <- fleet$resNNLS[[specie]]$bmat[which((fleet$resNNLS[[specie]]$SceMat$YEAR == iy) & (fleet$resNNLS[[specie]]$SceMat$MONTH == im)),]
                               # Prod[infish[i]] <- sum(ib * idata * iloa) + mean(fleet$effoProdAllLoa[,specie][fleet$effoProdAllLoa[,specie] < fleet$specSett[[specie]]$threshold & fleet$effoProdAllLoa[,specie] > 0])
-                              Prod[infish[i]] <- (ib * idata * iloa) + mean(fleet$effoProdAllLoa[,specie][fleet$effoProdAllLoa[,specie] < fleet$specSett[[specie]]$threshold & fleet$effoProdAllLoa[,specie] > 0])
+                              Prod[infish[i],] <- (ib * idata * iloa) + mean(fleet$effoProdAllLoa[,specie][fleet$effoProdAllLoa[,specie] < fleet$specSett[[specie]]$threshold & fleet$effoProdAllLoa[,specie] > 0])
                             }
                             colnames(Prod) <- paste("PR_", as.character(seq(1, ncol(Prod))), sep = "")
                             fleet$predProd[[specie]] <<- Prod
