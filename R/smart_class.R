@@ -157,18 +157,20 @@ SmartProject <- R6Class("smartProject",
                           predictProduction = function(specie){
                             Prod <- matrix(data = NA, nrow(fleet$effoAllLoa), ncol = sampMap$cutFG + 1)
                             lyears <- sort(as.numeric(as.character(unique(fleet$effoAllLoa$Year))))
+                            thrZero <- mean(fleet$effoProdAllLoa[,specie][fleet$effoProdAllLoa[,specie] < fleet$specSett[[specie]]$threshold & fleet$effoProdAllLoa[,specie] > 0])
+                            fgClms <- which(colnames(fleet$effoAllLoa) %in% as.character(seq(1, sampMap$cutFG + 1)))
                             datalog <- fleet$effoAllLoa
                             datalog$MonthNum <- as.factor(datalog$MonthNum)
                             datalog$Year <- as.factor(datalog$Year)
                             infish <- which(predict(fleet$specLogit[[specie]]$logit$logit_f, datalog, type="response") > fleet$specLogit[[specie]]$optCut)
                             for(i in 1:length(infish)){
-                              idata <- as.numeric(fleet$effoAllLoa[infish[i], which(colnames(fleet$effoAllLoa) %in% as.character(seq(1, sampMap$cutFG + 1)))])
+                              idata <- as.numeric(fleet$effoAllLoa[infish[i], fgClms])
                               iloa <- as.numeric(fleet$effoAllLoa[infish[i], "Loa"])
                               iy <- which(lyears == fleet$effoAllLoa[infish[i], "Year"])
                               im <- as.numeric(as.character(fleet$effoAllLoa[infish[i], "MonthNum"]))
                               ib <- fleet$resNNLS[[specie]]$bmat[which((fleet$resNNLS[[specie]]$SceMat$YEAR == iy) & (fleet$resNNLS[[specie]]$SceMat$MONTH == im)),]
                               # Prod[infish[i]] <- sum(ib * idata * iloa) + mean(fleet$effoProdAllLoa[,specie][fleet$effoProdAllLoa[,specie] < fleet$specSett[[specie]]$threshold & fleet$effoProdAllLoa[,specie] > 0])
-                              Prod[infish[i],] <- (ib * idata * iloa) + mean(fleet$effoProdAllLoa[,specie][fleet$effoProdAllLoa[,specie] < fleet$specSett[[specie]]$threshold & fleet$effoProdAllLoa[,specie] > 0])
+                              Prod[infish[i],] <- (ib * idata * iloa) + (ib*idata)/sum(ib*idata)*thrZero
                             }
                             colnames(Prod) <- paste("PR_", as.character(seq(1, ncol(Prod))), sep = "")
                             fleet$predProd[[specie]] <<- Prod
