@@ -782,6 +782,7 @@ FishFleet <- R6Class("fishFleet",
                        effoProdAllLoa = NULL,
                        effoAllLoa = NULL,
                        resNNLS = NULL,
+                       betaMeltYear = NULL,
                        fishPoinPara = NULL,
                        loadFleetRegis = function(register_path){
                          cat("Loading raw Fleet Register data...\n", sep = "")
@@ -897,6 +898,14 @@ FishFleet <- R6Class("fishFleet",
                        setNNLS = function(){
                          resNNLS <<- vector(mode = "list", length = length(prodSpec[["Cross"]]))
                          names(resNNLS) <<- sort(prodSpec[["Cross"]])
+                       },
+                       setBetaMeltYear = function(){
+                         tmp_df <- data.frame(Year = names(effoProd)[resNNLS[[specie]]$SceMat$YEAR],
+                                              resNNLS[[specie]]$bmat)
+                         tmp_df_agg <- aggregate(. ~ Year, tmp_df, sum)
+                         betaMeltYear <<- melt(data = tmp_df_agg, id.vars = "Year",
+                                               measure.vars = c(2:ncol(tmp_df_agg)),
+                                               variable.name = "FishGround", value.name = "Productivity")
                        },
                        plotNNLS = function(specie, thresR2){
                          tmp_df <- data.frame(R2 = "R2",
