@@ -198,32 +198,66 @@ SmartProject <- R6Class("smartProject",
                             all_cell[is.na(all_cell)] <- 0
                             grid_data <- cbind(sampMap$cutResShpFort, Beta = all_cell[,2])
                             sampMap$ggBetaFGmap <<- suppressMessages(sampMap$gooMapPlot + geom_polygon(aes(x = long, y = lat, group = group, fill = Beta),
-                                                                                              colour = "black", size = 0.1,
-                                                                                              data = grid_data, alpha = 0.8) +
-                                                              scale_fill_gradient("Beta\nValues", low = "lightyellow", high = "mediumseagreen") +
-                                                              geom_text(aes(label = FG, x = Lon, y = Lat),
-                                                                        data = sampMap$cutResShpCent, size = 2) +
-                                                              # theme(legend.position='none') +
-                                                              ggtitle(paste("Betas x Fishing Ground - ", year, sep = "")) +
-                                                              xlab("Longitude") + ylab("Latitude") +
-                                                              lims(x = extendrange(sampMap$plotRange[1:2]),
-                                                                   y = extendrange(sampMap$plotRange[3:4]))
+                                                                                                       colour = "black", size = 0.1,
+                                                                                                       data = grid_data, alpha = 0.8) +
+                                                                       scale_fill_gradient("Beta\nValues", low = "lightyellow", high = "mediumseagreen") +
+                                                                       geom_text(aes(label = FG, x = Lon, y = Lat),
+                                                                                 data = sampMap$cutResShpCent, size = 2) +
+                                                                       # theme(legend.position='none') +
+                                                                       ggtitle(paste("Betas x Fishing Ground - ", year, sep = "")) +
+                                                                       xlab("Longitude") + ylab("Latitude") +
+                                                                       lims(x = extendrange(sampMap$plotRange[1:2]),
+                                                                            y = extendrange(sampMap$plotRange[3:4]))
                             )
                             sampMap$ggBetaFGbox <<- suppressMessages(ggplot(fleet$betaMeltYear,
-                                                                   aes(x = FishGround, y = Productivity,
-                                                                       group = FishGround)) +
-                                                              geom_boxplot() +
-                                                              coord_flip() +
-                                                              geom_point(data = tmp_melt_sub,
-                                                                         aes(x = FishGround, y = Productivity,
-                                                                             fill = Productivity, group = FishGround),
-                                                                         size = 2, shape = 21, color = "grey40") +
-                                                              geom_line(data = tmp_melt_sub,
-                                                                        aes(x = FishGround, y = Productivity, group = Year),
-                                                                        color = "grey40") +
-                                                              scale_fill_gradient(low = "lightyellow", high = "mediumseagreen") +
-                                                              xlab("Fishing Ground") +
-                                                              theme(legend.position='none')
+                                                                            aes(x = FishGround, y = Productivity,
+                                                                                group = FishGround)) +
+                                                                       geom_boxplot() +
+                                                                       coord_flip() +
+                                                                       geom_point(data = tmp_melt_sub,
+                                                                                  aes(x = FishGround, y = Productivity,
+                                                                                      fill = Productivity, group = FishGround),
+                                                                                  size = 2, shape = 21, color = "grey40") +
+                                                                       geom_line(data = tmp_melt_sub,
+                                                                                 aes(x = FishGround, y = Productivity, group = Year),
+                                                                                 color = "grey40") +
+                                                                       scale_fill_gradient(low = "lightyellow", high = "mediumseagreen") +
+                                                                       xlab("Fishing Ground") +
+                                                                       theme(legend.position='none')
+                            )
+                          },
+                          setPlotProdMeltYear = function(year){
+                            tmp_melt_sub <- subset(fleet$prodMeltYear, Year == year)
+                            all_cell <- merge(x = sampMap$cutResShpFort$id,
+                                              data.frame(x = substr(as.character(tmp_melt_sub$FishGround),4, nchar(as.character(tmp_melt_sub$FishGround))),
+                                                         y = tmp_melt_sub$Production), all = TRUE)
+                            all_cell[is.na(all_cell)] <- 0
+                            grid_data <- cbind(sampMap$cutResShpFort, Hours = all_cell[,2])
+                            sampMap$ggProdFGmap <- suppressMessages(sampMap$gooMapPlot +
+                                                                      geom_polygon(aes(x = long, y = lat, group = group, fill = Hours),
+                                                                                   colour = "black", size = 0.1,
+                                                                                   data = grid_data, alpha = 0.8) +
+                                                                      scale_fill_gradient("Production\nValues",
+                                                                                          low = "lightyellow", high = "slateblue1") +
+                                                                      geom_text(aes(label = FG, x = Lon, y = Lat),
+                                                                                data = sampMap$cutResShpCent, size = 2) +
+                                                                      # theme(legend.position='none') +
+                                                                      ggtitle(paste("Production x Fishing Ground - ", year, sep = "")) +
+                                                                      xlab("Longitude") + ylab("Latitude") +
+                                                                      lims(x = extendrange(sampMap$plotRange[1:2]),
+                                                                           y = extendrange(sampMap$plotRange[3:4]))
+                            )
+                            sampMap$ggProdFGbox <<- suppressMessages(ggplot(fleet$prodMeltYear, aes(x = FishGround, y = Production, group = FishGround)) +
+                                                                       geom_boxplot() +
+                                                                       coord_flip() +
+                                                                       geom_point(data = tmp_melt_sub, aes(x = FishGround, y = Production,
+                                                                                                           fill = Production, group = FishGround),
+                                                                                  size = 2, shape = 21, color = "grey40") +
+                                                                       geom_line(data = tmp_melt_sub, aes(x = FishGround, y = Production, group = Year),
+                                                                                 color = "grey40") +
+                                                                       scale_fill_gradient(low = "lightyellow", high = "slateblue1") +
+                                                                       xlab("Fishing Ground") +
+                                                                       theme(legend.position='none')
                             )
                           },
                           setCellPoin = function(){
@@ -913,7 +947,7 @@ FishFleet <- R6Class("fishFleet",
                                               predProd[[specie]])
                          tmp_df_agg <- aggregate(. ~ Year, tmp_df, sum)
                          prodMeltYear <<- melt(data = tmp_df_agg, id.vars = "Year", measure.vars = c(2:ncol(tmp_df_agg)),
-                                              variable.name = "FishGround", value.name = "Production")
+                                               variable.name = "FishGround", value.name = "Production")
 
                        },
                        plotNNLS = function(specie, thresR2){
@@ -1404,6 +1438,8 @@ SampleMap <- R6Class("sampleMap",
                        ggSilFGlin = NULL,
                        ggBetaFGmap = NULL,
                        ggBetaFGbox = NULL,
+                       ggProdFGmap = NULL,
+                       ggProdFGbox = NULL,
                        gooMap = NULL,
                        gooMapPlot = NULL,
                        gooGrid = NULL,
