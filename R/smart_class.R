@@ -189,6 +189,43 @@ SmartProject <- R6Class("smartProject",
                                                            guides(colour = guide_legend(override.aes = list(size=3, alpha = 1))))
                             suppressWarnings(print(tmp_plot))
                           },
+                          setPlotBetaMeltYear = function(year){
+                            tmp_melt_sub <- subset(fleet$betaMeltYear, Year == year)
+                            all_cell <- merge(x = sampMap$cutResShpFort$id,
+                                              data.frame(x = substr(as.character(tmp_melt_sub$FishGround),4,
+                                                                    nchar(as.character(tmp_melt_sub$FishGround))),
+                                                         y = tmp_melt_sub$Productivity), all = TRUE)
+                            all_cell[is.na(all_cell)] <- 0
+                            grid_data <- cbind(sampMap$cutResShpFort, Beta = all_cell[,2])
+                            sampMap$ggBetaFGmap <<- suppressMessages(sampMap$gooMapPlot + geom_polygon(aes(x = long, y = lat, group = group, fill = Beta),
+                                                                                              colour = "black", size = 0.1,
+                                                                                              data = grid_data, alpha = 0.8) +
+                                                              scale_fill_gradient("Beta\nValues", low = "lightyellow", high = "mediumseagreen") +
+                                                              geom_text(aes(label = FG, x = Lon, y = Lat),
+                                                                        data = sampMap$cutResShpCent, size = 2) +
+                                                              # theme(legend.position='none') +
+                                                              ggtitle(paste("Betas x Fishing Ground - ", year, sep = "")) +
+                                                              xlab("Longitude") + ylab("Latitude") +
+                                                              lims(x = extendrange(sampMap$plotRange[1:2]),
+                                                                   y = extendrange(sampMap$plotRange[3:4]))
+                            )
+                            sampMap$ggBetaFGbox <<- suppressMessages(ggplot(fleet$betaMeltYear,
+                                                                   aes(x = FishGround, y = Productivity,
+                                                                       group = FishGround)) +
+                                                              geom_boxplot() +
+                                                              coord_flip() +
+                                                              geom_point(data = tmp_melt_sub,
+                                                                         aes(x = FishGround, y = Productivity,
+                                                                             fill = Productivity, group = FishGround),
+                                                                         size = 2, shape = 21, color = "grey40") +
+                                                              geom_line(data = tmp_melt_sub,
+                                                                        aes(x = FishGround, y = Productivity, group = Year),
+                                                                        color = "grey40") +
+                                                              scale_fill_gradient(low = "lightyellow", high = "mediumseagreen") +
+                                                              xlab("Fishing Ground") +
+                                                              theme(legend.position='none')
+                            )
+                          },
                           setCellPoin = function(){
                             num_cell <- getinfo.shape(sampMap$gridPath)$entities
                             sampMap$gridShp@plotOrder <- 1:num_cell
