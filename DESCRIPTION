@@ -22,6 +22,7 @@ Depends:
     gWidgets2,
     gWidgets2RGtk2,
     rjags,
+    maptools,
     mapdata
 Imports:
     PBSmapping,
@@ -29,7 +30,6 @@ Imports:
     lattice,
     plyr,
     sp,
-    maptools,
     maps,
     clues,
     cluster,
