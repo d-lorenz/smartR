@@ -924,6 +924,8 @@ FishFleet <- R6Class("fishFleet",
                              prodSpec[["Cross"]] <<- intersect(prodSpec[["Cross"]], prodSpec[[i]])
                            }
                          }
+                         setSpecSett()
+                         setNNLS()
                          cat("Done!", sep = "")
                        },
                        setSpecSett = function(){

@@ -1219,7 +1219,7 @@ smart_gui <- function(){
     my_project$fleet$setEffoProdMont()
     my_project$fleet$setProdSpec()
     my_project$fleet$setEffoProdAll()
-    my_project$fleet$setSpecSett()
+    # my_project$fleet$setSpecSett()
   })
   addSpring(pro_g_top1)
 
