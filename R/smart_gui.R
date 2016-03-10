@@ -1509,7 +1509,7 @@ smart_gui <- function(){
                                "%)\n\n",
                                sep = "")
       provie_drop[] <- names(my_project$fleet$effoProdMont)
-      prospe_drop[] <- names(my_project$fleet$prodSpec)
+      prospe_drop[] <- sort(names(my_project$fleet$specSett)[which(!unlist(lapply(my_project$fleet$specSett, is.null)))])
       my_project$fleet$plotNNLS(specie = svalue(spe_drop), thresR2 = svalue(thr_spin))
     })
     addSpace(up_fra, 20)
