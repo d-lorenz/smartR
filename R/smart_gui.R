@@ -1587,7 +1587,7 @@ smart_gui <- function(){
     dev.set(dev.list()[pre_dev+8])
     svalue(stat_bar) <- "Plotting productivity..."
     Sys.sleep(1)
-    my_project$setPlotBetaMeltYear(specie = svalue(prospe_drop), year = value(provie_drop))
+    my_project$setPlotBetaMeltYear(specie = svalue(prospe_drop), year = svalue(provie_drop))
     suppressWarnings(grid.arrange(my_project$sampMap$ggBetaFGmap,
                                   my_project$sampMap$ggBetaFGbox,
                                   layout_matrix = rbind(c(1,1,1,2),c(1,1,1,2))))
@@ -1598,7 +1598,7 @@ smart_gui <- function(){
     dev.set(dev.list()[pre_dev+8])
     svalue(stat_bar) <- "Plotting production..."
     Sys.sleep(1)
-    my_project$setPlotBetaMeltYear(specie = svalue(prospe_drop), year = value(provie_drop))
+    my_project$setPlotBetaMeltYear(specie = svalue(prospe_drop), year = svalue(provie_drop))
     suppressWarnings(grid.arrange(my_project$sampMap$ggBetaFGmap,
                                   my_project$sampMap$ggBetaFGbox,
                                   layout_matrix = rbind(c(1,1,1,2),c(1,1,1,2))))
