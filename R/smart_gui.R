@@ -1601,7 +1601,8 @@ smart_gui <- function(){
     my_project$setPlotBetaMeltYear(specie = svalue(prospe_drop), year = value(provie_drop))
     suppressWarnings(grid.arrange(my_project$sampMap$ggBetaFGmap,
                                   my_project$sampMap$ggBetaFGbox,
-                                  layout_matrix = rbind(c(1,1,1,2),c(1,1,1,2))))    svalue(stat_bar) <- ""
+                                  layout_matrix = rbind(c(1,1,1,2),c(1,1,1,2))))
+    svalue(stat_bar) <- ""
   })
   addSpring(pro_g_top2_ver)
   addSpring(pro_g_top2_view)
