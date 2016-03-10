@@ -19,13 +19,13 @@ Description: SMART (Spatial MAnagement of demersal Resources for Trawl
 License: GPL (>= 2)
 Depends:
     R6,
-    gWidgets2,
-    gWidgets2RGtk2,
     rjags,
     maptools,
     mapdata
 Imports:
     PBSmapping,
+    gWidgets2,
+    gWidgets2RGtk2,
     gstat,
     lattice,
     plyr,
