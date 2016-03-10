@@ -1508,8 +1508,8 @@ smart_gui <- function(){
                                round(100*my_project$fleet$resNNLS[[svalue(spe_drop)]]$nfitted/my_project$fleet$resNNLS[[svalue(spe_drop)]]$nSce),
                                "%)\n\n",
                                sep = "")
-      provie_drop[] <- names(my_sampling$fleet$effoProdMont)
-      prospe_drop[] <- names(my_sampling$fleet$prodSpec)
+      provie_drop[] <- names(my_project$fleet$effoProdMont)
+      prospe_drop[] <- names(my_project$fleet$prodSpec)
       my_project$fleet$plotNNLS(specie = svalue(spe_drop), thresR2 = svalue(thr_spin))
     })
     addSpace(up_fra, 20)
