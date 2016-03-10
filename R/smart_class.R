@@ -443,6 +443,7 @@ SmartProject <- R6Class("smartProject",
                             blist[[7]] <- nSce
                             names(blist) <- c("bmat", "obsY", "fittedY", "nnls_r2", "SceMat", "nfitted", "nSce")
                             fleet$resNNLS[[specie]] <<- blist
+                            fleet$setBetaMeltYear(specie)
                           },
                           cohoDisPlot = function(whoSpe, whoCoh, whiYea, interp){
                             if(interp == FALSE){
