@@ -189,8 +189,8 @@ SmartProject <- R6Class("smartProject",
                                                            guides(colour = guide_legend(override.aes = list(size=3, alpha = 1))))
                             suppressWarnings(print(tmp_plot))
                           },
-                          setPlotBetaMeltYear = function(year){
-                            tmp_melt_sub <- subset(fleet$betaMeltYear, Year == year)
+                          setPlotBetaMeltYear = function(specie, year){
+                            tmp_melt_sub <- subset(fleet$betaMeltYear[[specie]], Year == year)
                             all_cell <- merge(x = sampMap$cutResShpFort$id,
                                               data.frame(x = substr(as.character(tmp_melt_sub$FishGround),4,
                                                                     nchar(as.character(tmp_melt_sub$FishGround))),
@@ -209,7 +209,7 @@ SmartProject <- R6Class("smartProject",
                                                                        lims(x = extendrange(sampMap$plotRange[1:2]),
                                                                             y = extendrange(sampMap$plotRange[3:4]))
                             )
-                            sampMap$ggBetaFGbox <<- suppressMessages(ggplot(fleet$betaMeltYear,
+                            sampMap$ggBetaFGbox <<- suppressMessages(ggplot(fleet$betaMeltYear[[specie]],
                                                                             aes(x = FishGround, y = Productivity,
                                                                                 group = FishGround)) +
                                                                        geom_boxplot() +
@@ -940,7 +940,7 @@ FishFleet <- R6Class("fishFleet",
                          tmp_df <- data.frame(Year = names(effoProd)[resNNLS[[specie]]$SceMat$YEAR],
                                               resNNLS[[specie]]$bmat)
                          tmp_df_agg <- aggregate(. ~ Year, tmp_df, sum)
-                         betaMeltYear <<- melt(data = tmp_df_agg, id.vars = "Year",
+                         betaMeltYear[[specie]] <<- melt(data = tmp_df_agg, id.vars = "Year",
                                                measure.vars = c(2:ncol(tmp_df_agg)),
                                                variable.name = "FishGround", value.name = "Productivity")
                        },
