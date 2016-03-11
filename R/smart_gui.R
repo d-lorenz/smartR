@@ -17,7 +17,7 @@ smart_gui <- function(){
 
   pre_dev <- length(dev.list())
 
-  main_win <- gwindow(paste("SMART - Version ", "1.1", sep = ""),width = 1200, height= 625 , visible = FALSE)
+  main_win <- gwindow(paste("SMART - Version ", "1.1", sep = ""),width = 1200, height= 625, visible = FALSE)
   big_g <- ggroup(horizontal = TRUE, container = main_win)
 
 
@@ -519,7 +519,7 @@ smart_gui <- function(){
          })
   addSpring(gri_g_top3)
   addSpring(gri_g_top)
-  gri_p <- ggraphics(container = gri_g, width = 600, height = 300, expand = TRUE)
+  gri_p <- ggraphics(container = gri_g, width = 600, height = 280, expand = TRUE)
   pop_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Population")
   pop_g_top <- gframe(horizontal = TRUE, container = pop_g, spacing = 10)
   addSpring(pop_g_top)
@@ -546,7 +546,7 @@ smart_gui <- function(){
   addSpring(lfdfra_g)
   addSpring(pop_g_top)
   addSpace(pop_g_top, 2)
-  pop_p <- ggraphics(container = pop_g, width = 600, height = 300, expand = TRUE)
+  pop_p <- ggraphics(container = pop_g, width = 600, height = 280, expand = TRUE)
 
 
   ##############################################################
@@ -697,7 +697,7 @@ smart_gui <- function(){
   addSpring(go_g)
   # save_b <- gbutton ("  SAVE  ", container = go_g)
   addSpring(cont_g)
-  mix_p <- ggraphics(container = mix_g, width = 600, height = 300, expand = TRUE)
+  mix_p <- ggraphics(container = mix_g, width = 600, height = 280, expand = TRUE)
 
 
   ##############################################################
@@ -750,7 +750,7 @@ smart_gui <- function(){
   addSpring(cohofra_g)
   addSpring(cohoP_g_top)
   addSpace(cohoP_g_top, 2)
-  cohPop_p <- ggraphics(container = cohoP_g, width = 600, height = 300, expand = TRUE)
+  cohPop_p <- ggraphics(container = cohoP_g, width = 600, height = 280, expand = TRUE)
 
 
   ##############################################################
@@ -974,7 +974,7 @@ smart_gui <- function(){
   addSpring(eff_g_top2)
   # addSpring(eff_g_top1c)
   addSpring(eff_g_top)
-  eff_p <- ggraphics(container = eff_g, width = 600, height = 300, expand = TRUE)
+  eff_p <- ggraphics(container = eff_g, width = 600, height = 280, expand = TRUE)
 
 
   ##############################################################
@@ -1138,7 +1138,7 @@ smart_gui <- function(){
   addSpring(fig_g_top)
 
   addSpace(fig_g_top, 2)
-  fisGro_p <- ggraphics(container = fig_g, width = 600, height = 300, expand = TRUE)
+  fisGro_p <- ggraphics(container = fig_g, width = 600, height = 280, expand = TRUE)
 
 
   ##############################################################
@@ -1179,7 +1179,7 @@ smart_gui <- function(){
          })
   addSpring(reg_g_top)
   addSpace(reg_g_top, 2)
-  regGro_p <- ggraphics(container = reg_g, width = 600, height = 300, expand = TRUE)
+  regGro_p <- ggraphics(container = reg_g, width = 600, height = 280, expand = TRUE)
 
 
   ##############################################################
@@ -1626,7 +1626,7 @@ smart_gui <- function(){
 
   addSpring(pro_g_top)
   addSpace(pro_g_top, 2)
-  proGro_p <- ggraphics(container = pro_g, width = 600, height = 300, expand = TRUE)
+  proGro_p <- ggraphics(container = pro_g, width = 600, height = 280, expand = TRUE)
 
 
   ##############################################################
