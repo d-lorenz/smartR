@@ -1580,8 +1580,8 @@ smart_gui <- function(){
     my_project$fleet$setEffoMont()
     my_project$fleet$setEffoAll()
     my_project$fleet$setEffoAllLoa()
-    my_project$predictProduction(specie)
-    my_project$fleet$setProdMeltYear(specie)
+    my_project$predictProduction(svalue(prospe_drop))
+    my_project$fleet$setProdMeltYear(svalue(prospe_drop))
 
   })
 
