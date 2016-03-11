@@ -1574,6 +1574,21 @@ smart_gui <- function(){
   addSpring(pro_g_top2)
   addSpring(pro_g_top)
 
+  pro_g_top3 <- ggroup(horizontal = FALSE, container = pro_g_top)
+  gbutton("Predict\nProduction", container = pro_g_top3, handler = function(h,...){
+
+    my_project$fleet$setEffoMont()
+    my_project$fleet$setEffoAll()
+    my_project$fleet$setEffoAllLoa()
+    my_project$predictProduction(specie)
+    my_project$fleet$setProdMeltYear(specie)
+
+  })
+
+
+  addSpring(pro_g_top3)
+  addSpring(pro_g_top)
+
   pro_g_top2_view <- gframe(text = "View", horizontal = TRUE, container = pro_g_top, expand = TRUE)
   addSpring(pro_g_top2_view)
   provie_drop <- gcombobox(items = "Year", selected = 1, container = pro_g_top2_view,
@@ -1598,10 +1613,12 @@ smart_gui <- function(){
     dev.set(dev.list()[pre_dev+8])
     svalue(stat_bar) <- "Plotting production..."
     Sys.sleep(1)
-    my_project$setPlotBetaMeltYear(specie = svalue(prospe_drop), year = svalue(provie_drop))
-    suppressWarnings(grid.arrange(my_project$sampMap$ggBetaFGmap,
-                                  my_project$sampMap$ggBetaFGbox,
+
+    my_project$setPlotProdMeltYear(specie = svalue(prospe_drop), year = svalue(provie_drop))
+    suppressWarnings(grid.arrange(my_project$sampMap$ggProdFGmap,
+                                  my_project$sampMap$ggProdFGbox,
                                   layout_matrix = rbind(c(1,1,1,2),c(1,1,1,2))))
+
     svalue(stat_bar) <- ""
   })
   addSpring(pro_g_top2_ver)
