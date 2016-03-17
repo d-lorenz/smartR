@@ -98,7 +98,7 @@ smart_gui <- function(){
       raw_t[] <- my_project$rawDataSurvey[sample(1:nrow(my_project$rawDataSurvey), 100, replace = FALSE),]
       svalue(raw_l1) <- paste("Specie: ", paste(my_project$species, collapse = " - "))
       #   svalue(raw_l2) <- paste("Length Classes: from ",  min(my_project$LClass), " to ", max(my_project$LClass))
-      svalue(raw_l3) <- paste("Years: from", min(as.numeric(as.character(my_project$years))), " to ", max(as.numeric(as.character(my_project$years))))
+      svalue(raw_l3) <- paste("Years: from", min(as.numeric(as.character(my_project$yearSurvey))), " to ", max(as.numeric(as.character(my_project$yearSurvey))))
       spec_drop[] <- my_project$species
       spec_drop_mix[] <- my_project$species
       spevie_drop[] <- c("All", my_project$species)
@@ -107,14 +107,14 @@ smart_gui <- function(){
       svalue(cohSpe_drop) <- my_project$species[1]
       svalue(spevie_drop) <- "All"
       svalue(spec_drop_mix) <- my_project$species[1]
-      year_drop[] <- c("All", as.character(my_project$years))
-      cohYea_drop[] <- c("All", as.character(my_project$years))
-      svalue(year_drop) <- my_project$years[1]
+      year_drop[] <- c("All", as.character(my_project$yearSurvey))
+      cohYea_drop[] <- c("All", as.character(my_project$yearSurvey))
+      svalue(year_drop) <- my_project$yearSurvey[1]
       svalue(cohYea_drop) <- "All"
 
-      svalue(n_year_s) <- paste(length(my_project$years), " years", sep = "")
-      svalue(mi_date_s) <- paste("From: ", min(as.numeric(as.character(my_project$years))), sep = "")
-      svalue(ma_date_s) <- paste("To: ", max(as.numeric(as.character(my_project$years))), sep = "")
+      svalue(n_year_s) <- paste(length(my_project$yearSurvey), " years", sep = "")
+      svalue(mi_date_s) <- paste("From: ", min(as.numeric(as.character(my_project$yearSurvey))), sep = "")
+      svalue(ma_date_s) <- paste("To: ", max(as.numeric(as.character(my_project$yearSurvey))), sep = "")
       svalue(n_spec_s) <- paste(length(my_project$species),
                                 ifelse(length(my_project$species) == 1, " specie", " species"), sep = "")
       #       samp_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
@@ -479,7 +479,7 @@ smart_gui <- function(){
       raw_t[] <- my_project$rawDataSurvey[sample(1:nrow(my_project$rawDataSurvey), 100, replace = FALSE),]
       svalue(raw_l1) <- paste("Specie: ", paste(my_project$species, collapse = " - "))
       #   svalue(raw_l2) <- paste("Length Classes: from ",  min(my_project$LClass), " to ", max(my_project$LClass))
-      svalue(raw_l3) <- paste("Years: from", min(as.numeric(as.character(my_project$years))), " to ", max(as.numeric(as.character(my_project$years))))
+      svalue(raw_l3) <- paste("Years: from", min(as.numeric(as.character(my_project$yearSurvey))), " to ", max(as.numeric(as.character(my_project$yearSurvey))))
       spec_drop[] <- my_project$species
       spec_drop_mix[] <- my_project$species
       spevie_drop[] <- c("All", my_project$species)
@@ -488,9 +488,9 @@ smart_gui <- function(){
       svalue(cohSpe_drop) <- my_project$species[1]
       svalue(spevie_drop) <- "All"
       svalue(spec_drop_mix) <- my_project$species[1]
-      year_drop[] <- c("All", as.character(my_project$years))
-      cohYea_drop[] <- c("All", as.character(my_project$years))
-      svalue(year_drop) <- my_project$years[1]
+      year_drop[] <- c("All", as.character(my_project$yearSurvey))
+      cohYea_drop[] <- c("All", as.character(my_project$yearSurvey))
+      svalue(year_drop) <- my_project$yearSurvey[1]
       svalue(cohYea_drop) <- "All"
 
       if(!is.null(my_project$sampMap)){
@@ -500,9 +500,9 @@ smart_gui <- function(){
       svalue(stat_bar) <- ""
 
       ### Update Sampling Status
-      svalue(n_year_s) <- paste(length(my_project$years), " years", sep = "")
-      svalue(mi_date_s) <- paste("From: ", min(as.numeric(as.character(my_project$years))), sep = "")
-      svalue(ma_date_s) <- paste("To: ", max(as.numeric(as.character(my_project$years))), sep = "")
+      svalue(n_year_s) <- paste(length(my_project$yearSurvey), " years", sep = "")
+      svalue(mi_date_s) <- paste("From: ", min(as.numeric(as.character(my_project$yearSurvey))), sep = "")
+      svalue(ma_date_s) <- paste("To: ", max(as.numeric(as.character(my_project$yearSurvey))), sep = "")
       svalue(n_spec_s) <- paste(length(my_project$species),
                                 ifelse(length(my_project$species) == 1, " specie", " species"), sep = "")
 
@@ -753,7 +753,7 @@ smart_gui <- function(){
            dev.set(dev.list()[pre_dev+4])
            my_project$cohoDisPlot(which(my_project$species == svalue(cohSpe_drop)),
                                   ifelse(svalue(cohCoh_drop) == "All", "All", as.numeric(svalue(cohCoh_drop))),
-                                  ifelse(svalue(cohYea_drop) == "All", "All", which(my_project$years == svalue(cohYea_drop))),
+                                  ifelse(svalue(cohYea_drop) == "All", "All", which(my_project$yearSurvey == svalue(cohYea_drop))),
                                   ifelse(svalue(cohInt_r) == "Yes", TRUE, FALSE))
          })
   addSpring(cohofra_g)
