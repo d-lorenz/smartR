@@ -176,6 +176,8 @@ smart_gui <- function(){
   addSpring(pro_g_top)
   addSpace(pro_g_top, 2)
 
+  pro_g_mid <- gframe(text = "Data", horizontal = TRUE, container = pro_g)
+  addSpace(pro_g_mid, 2)
 
   addSpring(pro_g_mid)
   # gbutton("Grid", container = pro_g_mid)
@@ -189,10 +191,6 @@ smart_gui <- function(){
   grid_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
   add(grid_g, grid_sta)
   #   enabled(grid_b) <- FALSE
-
-
-  pro_g_mid <- gframe(text = "Data", horizontal = TRUE, container = pro_g)
-  addSpace(pro_g_mid, 2)
 
   addSpring(pro_g_mid)
   # gbutton("Sampling", container = pro_g_mid)
