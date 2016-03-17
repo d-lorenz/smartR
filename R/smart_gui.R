@@ -456,33 +456,6 @@ smart_gui <- function(){
   addSpring(gri_g_top3)
   addSpring(gri_g_top)
   gri_p <- ggraphics(container = gri_g, width = 600, height = 280, expand = TRUE)
-  pop_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Population")
-  pop_g_top <- gframe(horizontal = TRUE, container = pop_g, spacing = 10)
-  addSpring(pop_g_top)
-  lfdfra_g <- gframe("LFD data", horizontal = TRUE, container = pop_g_top, expand = TRUE)
-  addSpring(lfdfra_g)
-  spec_b <- gframe("Specie", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
-  addSpring(lfdfra_g)
-  addSpring(spec_b)
-  spec_drop <- gcombobox(items = "Specie", selected = 1, container = spec_b, editable = FALSE)
-  addSpring(spec_b)
-  year_b <- gframe("Year", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
-  addSpring(lfdfra_g)
-  addSpring(year_b)
-  year_drop <- gcombobox(items = "Year", selected = 1, container = year_b, editable = FALSE)
-  addSpring(year_b)
-  gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = lfdfra_g,
-         handler = function(h,...){
-           dev.set(dev.list()[pre_dev+2])
-           spe_ind <- which(my_project$species == svalue(spec_drop))
-           ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$bySpecie[[spe_ind]]$rawData[,c("LCLASS","FEMALE","MALE")], my_cel_dat <- my_project$bySpecie[[spe_ind]]$rawData[which(my_project$bySpecie[[spe_ind]]$rawData[,"Year"] ==  svalue(year_drop)),c("LCLASS","FEMALE","MALE")])
-           the_reclfd <- RecLFD(my_cel_dat, my_project$bySpecie[[spe_ind]]$lengClas, 1)
-           plotRecLFD(the_reclfd)
-         })
-  addSpring(lfdfra_g)
-  addSpring(pop_g_top)
-  addSpace(pop_g_top, 2)
-  pop_p <- ggraphics(container = pop_g, width = 600, height = 280, expand = TRUE)
 
 
 
@@ -548,6 +521,40 @@ smart_gui <- function(){
 
   blankDF = data.frame(SPECIE = character(0), LAT = numeric(0), LON = numeric(0), Year = character(0), LCLASS = numeric(0), FEMALE = character(0), MALE = character(0), UNSEX = character(0), stringsAsFactors=FALSE)
   raw_t <- gtable(blankDF, container = raw_g, expand = TRUE)
+
+
+
+  ##############################################################
+  ####   Population   ##########################################
+  ##############################################################
+
+  pop_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Population")
+  pop_g_top <- gframe(horizontal = TRUE, container = pop_g, spacing = 10)
+  addSpring(pop_g_top)
+  lfdfra_g <- gframe("LFD data", horizontal = TRUE, container = pop_g_top, expand = TRUE)
+  addSpring(lfdfra_g)
+  spec_b <- gframe("Specie", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
+  addSpring(lfdfra_g)
+  addSpring(spec_b)
+  spec_drop <- gcombobox(items = "Specie", selected = 1, container = spec_b, editable = FALSE)
+  addSpring(spec_b)
+  year_b <- gframe("Year", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
+  addSpring(lfdfra_g)
+  addSpring(year_b)
+  year_drop <- gcombobox(items = "Year", selected = 1, container = year_b, editable = FALSE)
+  addSpring(year_b)
+  gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = lfdfra_g,
+         handler = function(h,...){
+           dev.set(dev.list()[pre_dev+2])
+           spe_ind <- which(my_project$species == svalue(spec_drop))
+           ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$bySpecie[[spe_ind]]$rawData[,c("LCLASS","FEMALE","MALE")], my_cel_dat <- my_project$bySpecie[[spe_ind]]$rawData[which(my_project$bySpecie[[spe_ind]]$rawData[,"Year"] ==  svalue(year_drop)),c("LCLASS","FEMALE","MALE")])
+           the_reclfd <- RecLFD(my_cel_dat, my_project$bySpecie[[spe_ind]]$lengClas, 1)
+           plotRecLFD(the_reclfd)
+         })
+  addSpring(lfdfra_g)
+  addSpring(pop_g_top)
+  addSpace(pop_g_top, 2)
+  pop_p <- ggraphics(container = pop_g, width = 600, height = 280, expand = TRUE)
 
 
 
