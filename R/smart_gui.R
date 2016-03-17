@@ -318,7 +318,7 @@ smart_gui <- function(){
     }
     if(!is.null(my_project$rawDataSurvey)){
       svalue(stat_bar) <- "Splitting Population..."
-      my_project$setLFDPop()
+      my_project$setLFDPopSur()
     }
     svalue(stat_bar) <- ""
 
@@ -495,7 +495,7 @@ smart_gui <- function(){
 
       if(!is.null(my_project$sampMap)){
         svalue(stat_bar) <- "Splitting Population..."
-        my_project$setLFDPop()
+        my_project$setLFDPopSur()
       }
       svalue(stat_bar) <- ""
 

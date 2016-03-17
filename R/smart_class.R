@@ -42,12 +42,12 @@ SmartProject <- R6Class("smartProject",
                                 addSpecie(rawDataSurvey[rawDataSurvey[,"SPECIE"] == specieInSurvey[i],])}}
                           },
                           addSpecie = function(sing_spe){surveySpecie <<- c(surveySpecie, SurveySpecie$new(sing_spe))},
-                          setLFDPop = function(){
+                          setLFDPopSur = function(){
                             if(length(specieInSurvey) == 1){
-                              calcLFDPop(1)
+                              calcLFDPopSur(1)
                             }else{
                               for(i in 1:length(specieInSurvey)){
-                                calcLFDPop(i)
+                                calcLFDPopSur(i)
                               }}
                             # speDisPlot("All")
                           },
@@ -525,8 +525,8 @@ SmartProject <- R6Class("smartProject",
                               }
                             }
                           },
-                          calcLFDPop = function(ind_num){
-                            surveySpecie[[ind_num]]$LFDPop <<- array(dim=c(sampMap$nCells, length(surveySpecie[[ind_num]]$lengthSur),length(surveySpecie[[ind_num]]$yearSur),2))
+                          calcLFDPopSur = function(ind_num){
+                            surveySpecie[[ind_num]]$LFDPopSur <<- array(dim=c(sampMap$nCells, length(surveySpecie[[ind_num]]$lengthSur),length(surveySpecie[[ind_num]]$yearSur),2))
                             for(y in 1:length(surveySpecie[[ind_num]]$yearSur)){
                               subLFD <- surveySpecie[[ind_num]]$rawLFD[which(surveySpecie[[ind_num]]$rawLFD$Year==surveySpecie[[ind_num]]$yearSur[y]),]
                               poinOver <- as.numeric(sp::over(SpatialPoints(subLFD[,c("LON","LAT")]), SpatialPolygons(sampMap$gridShp@polygons)))
@@ -538,11 +538,11 @@ SmartProject <- R6Class("smartProject",
                                   cell.LFD <- RecLFD(cell.data,
                                                      surveySpecie[[ind_num]]$lengthSur,
                                                      length(unique(cell.data[,1])))
-                                  surveySpecie[[ind_num]]$LFDPop[IDcell,,y,1] <<- cell.LFD[1,]
-                                  surveySpecie[[ind_num]]$LFDPop[IDcell,,y,2] <<- cell.LFD[2,]
+                                  surveySpecie[[ind_num]]$LFDPopSur[IDcell,,y,1] <<- cell.LFD[1,]
+                                  surveySpecie[[ind_num]]$LFDPopSur[IDcell,,y,2] <<- cell.LFD[2,]
                                 }else{
-                                  surveySpecie[[ind_num]]$LFDPop[IDcell,,y,1] <<- rep(0,length(surveySpecie[[ind_num]]$lengthSur))
-                                  surveySpecie[[ind_num]]$LFDPop[IDcell,,y,2] <<- rep(0,length(surveySpecie[[ind_num]]$lengthSur))
+                                  surveySpecie[[ind_num]]$LFDPopSur[IDcell,,y,1] <<- rep(0,length(surveySpecie[[ind_num]]$lengthSur))
+                                  surveySpecie[[ind_num]]$LFDPopSur[IDcell,,y,2] <<- rep(0,length(surveySpecie[[ind_num]]$lengthSur))
                                 }}}},
                           setCoh_A = function(){
                             if(length(specieInSurvey) == 1){
@@ -554,7 +554,7 @@ SmartProject <- R6Class("smartProject",
                           },
                           calcCoh_A = function(ind_num){
 
-                            Pop <- surveySpecie[[ind_num]]$LFDPop
+                            Pop <- surveySpecie[[ind_num]]$LFDPopSur
                             LC <- surveySpecie[[ind_num]]$lengthSur[-length(surveySpecie[[ind_num]]$lengthSur)]
                             sp <- surveySpecie[[ind_num]]$specie
                             nc <- surveySpecie[[ind_num]]$nCoho
@@ -620,7 +620,7 @@ SurveySpecie <- R6Class("SurveyBySpecie",
                       yearSur = NULL,
                       rawLFD = NULL,
                       lengthSur = NULL, #LClass
-                      LFDPop = NULL,
+                      LFDPopSur = NULL,
                       mixPar = NULL, # MixtureP e ncohorts
                       nCoho = NULL,
                       prior = NULL,
@@ -695,7 +695,7 @@ SurveySpecie <- R6Class("SurveyBySpecie",
                                         'Male' = list('Means' = matrix(NA, length(yearSur), nCoho), 'Sigmas' = matrix(NA, length(yearSur), nCoho)))
 
                         for(sex in c('Female', 'Male')){
-                          ind_cou = apply(LFDPop[,,,ifelse(sex == 'Female', 1, 2)], 2, sum)      # Counts of males, per length
+                          ind_cou = apply(LFDPopSur[,,,ifelse(sex == 'Female', 1, 2)], 2, sum)      # Counts of males, per length
                           num_ind = round(ind_cou/(9850/2))
                           ind_dis = rep(lengthSur, num_ind) + runif(sum(num_ind), 0, 1)
                           Nclust = nCoho
@@ -764,7 +764,7 @@ SurveySpecie <- R6Class("SurveyBySpecie",
                           }
                           lines(asc, dens)
                           for(yea in 1:length(yearSur)){
-                            a_yea_abb <- cbind(apply(LFDPop[,,yea,ifelse(sex == 'Female', 1, 2)], 2, sum), lengthSur, ma_zHat)
+                            a_yea_abb <- cbind(apply(LFDPopSur[,,yea,ifelse(sex == 'Female', 1, 2)], 2, sum), lengthSur, ma_zHat)
                             for(coho in 1:nCoho){
                               coho_ind <- which(a_yea_abb[,3] == coho)
                               sim_pop <- rep(lengthSur[coho_ind], a_yea_abb[coho_ind,1])
