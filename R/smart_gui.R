@@ -547,7 +547,7 @@ smart_gui <- function(){
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+2])
            spe_ind <- which(my_project$species == svalue(spec_drop))
-           ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$bySpecie[[spe_ind]]$rawLFDSurvey[,c("LCLASS","FEMALE","MALE")], my_cel_dat <- my_project$bySpecie[[spe_ind]]$rawLFDSurvey[which(my_project$bySpecie[[spe_ind]]$rawLFDSurvey[,"Year"] ==  svalue(year_drop)),c("LCLASS","FEMALE","MALE")])
+           ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$bySpecie[[spe_ind]]$rawLFD[,c("LCLASS","FEMALE","MALE")], my_cel_dat <- my_project$bySpecie[[spe_ind]]$rawLFD[which(my_project$bySpecie[[spe_ind]]$rawLFD[,"Year"] ==  svalue(year_drop)),c("LCLASS","FEMALE","MALE")])
            the_reclfd <- RecLFD(my_cel_dat, my_project$bySpecie[[spe_ind]]$lengClas, 1)
            plotRecLFD(the_reclfd)
          })
