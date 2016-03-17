@@ -175,6 +175,21 @@ smart_gui <- function(){
   addSpring(pro_g_top)
   addSpace(pro_g_top, 2)
 
+
+  addSpring(pro_g_mid)
+  # gbutton("Grid", container = pro_g_mid)
+  grid_g <- gframe(text = "Environment", horizontal = FALSE, container = pro_g_mid)
+  n_cell_g <- glabel("   ---", container = grid_g)
+  addSpring(grid_g)
+  grid_b <- gbutton(text = "Show data", container = grid_g, handler = function(h,..){
+    svalue(uti_gn) <- 2
+  })
+  grid_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
+  grid_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
+  add(grid_g, grid_sta)
+  #   enabled(grid_b) <- FALSE
+
+
   pro_g_mid <- gframe(text = "Data", horizontal = TRUE, container = pro_g)
   addSpace(pro_g_mid, 2)
 
@@ -187,26 +202,12 @@ smart_gui <- function(){
   n_spec_s <- glabel("   ---", container = samp_g)
   addSpring(samp_g)
   samp_b <- gbutton(text = "Show data", container = samp_g, handler = function(h,..){
-    svalue(uti_gn) <- 2
+    svalue(uti_gn) <- 3
   })
   samp_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   samp_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
   add(samp_g, samp_sta)
   #   enabled(samp_b) <- FALSE
-
-
-  addSpring(pro_g_mid)
-  # gbutton("Grid", container = pro_g_mid)
-  grid_g <- gframe(text = "Grid", horizontal = FALSE, container = pro_g_mid)
-  n_cell_g <- glabel("   ---", container = grid_g)
-  addSpring(grid_g)
-  grid_b <- gbutton(text = "Show data", container = grid_g, handler = function(h,..){
-    svalue(uti_gn) <- 3
-  })
-  grid_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
-  grid_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
-  add(grid_g, grid_sta)
-  #   enabled(grid_b) <- FALSE
 
 
   addSpring(pro_g_mid)
@@ -276,77 +277,13 @@ smart_gui <- function(){
   add(sele_g, sele_sta)
   #   enabled(sele_b) <- FALSE
 
-
   addSpring(pro_g_mid)
   addSpace(pro_g_mid, 2)
 
 
-  ##############################################################
-  ####   Raw Sample   ##########################################
-  ##############################################################
-
-  raw_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Raw Sample")
-  raw_g_top <- gframe(horizontal = TRUE, container = raw_g)
-  addSpace(raw_g_top, 2)
-  addSpring(raw_g_top)
-  raw_g_top1 <- ggroup(horizontal = FALSE, container = raw_g_top)
-  addSpring(raw_g_top1)
-  gbutton("Load Sample", container = raw_g_top1, handler = function(h,...){
-    svalue(stat_bar) <- "Loading Data..."
-    Sys.sleep(1)
-    my_project$loadRawLFD(csv_path = "/Users/Lomo/Documents/Uni/Lab/Proj/smart\ gui/SMART_GUI/SampleData_ed.csv")
-
-    if(!is.null(my_project$rawData)){ #update_pop_gui()
-
-      raw_t[] <- my_project$rawData[sample(1:nrow(my_project$rawData), 100, replace = FALSE),]
-      svalue(raw_l1) <- paste("Specie: ", paste(my_project$species, collapse = " - "))
-      #   svalue(raw_l2) <- paste("Length Classes: from ",  min(my_project$LClass), " to ", max(my_project$LClass))
-      svalue(raw_l3) <- paste("Years: from", min(as.numeric(as.character(my_project$years))), " to ", max(as.numeric(as.character(my_project$years))))
-      spec_drop[] <- my_project$species
-      spec_drop_mix[] <- my_project$species
-      spevie_drop[] <- c("All", my_project$species)
-      cohSpe_drop[] <- my_project$species
-      svalue(spec_drop) <- my_project$species[1]
-      svalue(cohSpe_drop) <- my_project$species[1]
-      svalue(spevie_drop) <- "All"
-      svalue(spec_drop_mix) <- my_project$species[1]
-      year_drop[] <- c("All", as.character(my_project$years))
-      cohYea_drop[] <- c("All", as.character(my_project$years))
-      svalue(year_drop) <- my_project$years[1]
-      svalue(cohYea_drop) <- "All"
-
-      if(!is.null(my_project$sampMap)){
-        svalue(stat_bar) <- "Splitting Population..."
-        my_project$setLFDPop()
-      }
-      svalue(stat_bar) <- ""
-
-      ### Update Sampling Status
-      svalue(n_year_s) <- paste(length(my_project$years), " years", sep = "")
-      svalue(mi_date_s) <- paste("From: ", min(as.numeric(as.character(my_project$years))), sep = "")
-      svalue(ma_date_s) <- paste("To: ", max(as.numeric(as.character(my_project$years))), sep = "")
-      svalue(n_spec_s) <- paste(length(my_project$species),
-                                ifelse(length(my_project$species) == 1, " specie", " species"), sep = "")
-
-      delete(samp_g, samp_g$children[[length(samp_g$children)]])
-      add(samp_g, samp_sta_n)
-    }
-  })
-  addSpring(raw_g_top1)
-  addSpring(raw_g_top)
-  raw_g_top2 <- ggroup(horizontal = FALSE, container = raw_g_top)
-  raw_l1 <- glabel("Specie: ", container = raw_g_top2)
-  raw_l3 <- glabel("Years: ", container = raw_g_top2)
-  addSpring(raw_g_top)
-  addSpace(raw_g_top, 2)
-  addSpace(raw_g_top2, 2)
-
-  blankDF = data.frame(SPECIE = character(0), LAT = numeric(0), LON = numeric(0), Year = character(0), LCLASS = numeric(0), FEMALE = character(0), MALE = character(0), UNSEX = character(0), stringsAsFactors=FALSE)
-  raw_t <- gtable(blankDF, container = raw_g, expand = TRUE)
-
 
   ##############################################################
-  ####   Grid   ################################################
+  ####   Environment   #########################################
   ##############################################################
 
   gri_g <- gvbox(container = uti_gn, label = "Grid", expand = TRUE)
@@ -547,6 +484,72 @@ smart_gui <- function(){
   addSpring(pop_g_top)
   addSpace(pop_g_top, 2)
   pop_p <- ggraphics(container = pop_g, width = 600, height = 280, expand = TRUE)
+
+
+
+  ##############################################################
+  ####     Survey     ##########################################
+  ##############################################################
+
+  raw_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Raw Sample")
+  raw_g_top <- gframe(horizontal = TRUE, container = raw_g)
+  addSpace(raw_g_top, 2)
+  addSpring(raw_g_top)
+  raw_g_top1 <- ggroup(horizontal = FALSE, container = raw_g_top)
+  addSpring(raw_g_top1)
+  gbutton("Load Sample", container = raw_g_top1, handler = function(h,...){
+    svalue(stat_bar) <- "Loading Data..."
+    Sys.sleep(1)
+    my_project$loadRawLFD(csv_path = "/Users/Lomo/Documents/Uni/Lab/Proj/smart\ gui/SMART_GUI/SampleData_ed.csv")
+
+    if(!is.null(my_project$rawData)){ #update_pop_gui()
+
+      raw_t[] <- my_project$rawData[sample(1:nrow(my_project$rawData), 100, replace = FALSE),]
+      svalue(raw_l1) <- paste("Specie: ", paste(my_project$species, collapse = " - "))
+      #   svalue(raw_l2) <- paste("Length Classes: from ",  min(my_project$LClass), " to ", max(my_project$LClass))
+      svalue(raw_l3) <- paste("Years: from", min(as.numeric(as.character(my_project$years))), " to ", max(as.numeric(as.character(my_project$years))))
+      spec_drop[] <- my_project$species
+      spec_drop_mix[] <- my_project$species
+      spevie_drop[] <- c("All", my_project$species)
+      cohSpe_drop[] <- my_project$species
+      svalue(spec_drop) <- my_project$species[1]
+      svalue(cohSpe_drop) <- my_project$species[1]
+      svalue(spevie_drop) <- "All"
+      svalue(spec_drop_mix) <- my_project$species[1]
+      year_drop[] <- c("All", as.character(my_project$years))
+      cohYea_drop[] <- c("All", as.character(my_project$years))
+      svalue(year_drop) <- my_project$years[1]
+      svalue(cohYea_drop) <- "All"
+
+      if(!is.null(my_project$sampMap)){
+        svalue(stat_bar) <- "Splitting Population..."
+        my_project$setLFDPop()
+      }
+      svalue(stat_bar) <- ""
+
+      ### Update Sampling Status
+      svalue(n_year_s) <- paste(length(my_project$years), " years", sep = "")
+      svalue(mi_date_s) <- paste("From: ", min(as.numeric(as.character(my_project$years))), sep = "")
+      svalue(ma_date_s) <- paste("To: ", max(as.numeric(as.character(my_project$years))), sep = "")
+      svalue(n_spec_s) <- paste(length(my_project$species),
+                                ifelse(length(my_project$species) == 1, " specie", " species"), sep = "")
+
+      delete(samp_g, samp_g$children[[length(samp_g$children)]])
+      add(samp_g, samp_sta_n)
+    }
+  })
+  addSpring(raw_g_top1)
+  addSpring(raw_g_top)
+  raw_g_top2 <- ggroup(horizontal = FALSE, container = raw_g_top)
+  raw_l1 <- glabel("Specie: ", container = raw_g_top2)
+  raw_l3 <- glabel("Years: ", container = raw_g_top2)
+  addSpring(raw_g_top)
+  addSpace(raw_g_top, 2)
+  addSpace(raw_g_top2, 2)
+
+  blankDF = data.frame(SPECIE = character(0), LAT = numeric(0), LON = numeric(0), Year = character(0), LCLASS = numeric(0), FEMALE = character(0), MALE = character(0), UNSEX = character(0), stringsAsFactors=FALSE)
+  raw_t <- gtable(blankDF, container = raw_g, expand = TRUE)
+
 
 
   ##############################################################
