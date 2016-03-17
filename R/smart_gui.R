@@ -472,7 +472,7 @@ smart_gui <- function(){
   gbutton("Load Sample", container = raw_g_top1, handler = function(h,...){
     svalue(stat_bar) <- "Loading Data..."
     Sys.sleep(1)
-    my_project$loadRawLFD(csv_path = "/Users/Lomo/Documents/Uni/Lab/Proj/smart\ gui/SMART_GUI/SampleData_ed.csv")
+    my_project$loadSurveyLFD(csv_path = "/Users/Lomo/Documents/Uni/Lab/Proj/smart\ gui/SMART_GUI/SampleData_ed.csv")
 
     if(!is.null(my_project$rawDataSurvey)){ #update_pop_gui()
 
