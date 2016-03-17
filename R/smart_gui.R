@@ -93,9 +93,9 @@ smart_gui <- function(){
 
     ### Update Sampling Status
 
-    if(!is.null(my_project$rawData)){ #update_pop_gui()
+    if(!is.null(my_project$rawDataSurvey)){ #update_pop_gui()
 
-      raw_t[] <- my_project$rawData[sample(1:nrow(my_project$rawData), 100, replace = FALSE),]
+      raw_t[] <- my_project$rawDataSurvey[sample(1:nrow(my_project$rawDataSurvey), 100, replace = FALSE),]
       svalue(raw_l1) <- paste("Specie: ", paste(my_project$species, collapse = " - "))
       #   svalue(raw_l2) <- paste("Length Classes: from ",  min(my_project$LClass), " to ", max(my_project$LClass))
       svalue(raw_l3) <- paste("Years: from", min(as.numeric(as.character(my_project$years))), " to ", max(as.numeric(as.character(my_project$years))))
@@ -316,7 +316,7 @@ smart_gui <- function(){
     }else{
       my_project$sampMap$plotSamMap(title = my_project$sampMap$gridName)
     }
-    if(!is.null(my_project$rawData)){
+    if(!is.null(my_project$rawDataSurvey)){
       svalue(stat_bar) <- "Splitting Population..."
       my_project$setLFDPop()
     }
@@ -474,9 +474,9 @@ smart_gui <- function(){
     Sys.sleep(1)
     my_project$loadRawLFD(csv_path = "/Users/Lomo/Documents/Uni/Lab/Proj/smart\ gui/SMART_GUI/SampleData_ed.csv")
 
-    if(!is.null(my_project$rawData)){ #update_pop_gui()
+    if(!is.null(my_project$rawDataSurvey)){ #update_pop_gui()
 
-      raw_t[] <- my_project$rawData[sample(1:nrow(my_project$rawData), 100, replace = FALSE),]
+      raw_t[] <- my_project$rawDataSurvey[sample(1:nrow(my_project$rawDataSurvey), 100, replace = FALSE),]
       svalue(raw_l1) <- paste("Specie: ", paste(my_project$species, collapse = " - "))
       #   svalue(raw_l2) <- paste("Length Classes: from ",  min(my_project$LClass), " to ", max(my_project$LClass))
       svalue(raw_l3) <- paste("Years: from", min(as.numeric(as.character(my_project$years))), " to ", max(as.numeric(as.character(my_project$years))))
@@ -547,7 +547,7 @@ smart_gui <- function(){
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+2])
            spe_ind <- which(my_project$species == svalue(spec_drop))
-           ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$bySpecie[[spe_ind]]$rawData[,c("LCLASS","FEMALE","MALE")], my_cel_dat <- my_project$bySpecie[[spe_ind]]$rawData[which(my_project$bySpecie[[spe_ind]]$rawData[,"Year"] ==  svalue(year_drop)),c("LCLASS","FEMALE","MALE")])
+           ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$bySpecie[[spe_ind]]$rawDataSurvey[,c("LCLASS","FEMALE","MALE")], my_cel_dat <- my_project$bySpecie[[spe_ind]]$rawDataSurvey[which(my_project$bySpecie[[spe_ind]]$rawDataSurvey[,"Year"] ==  svalue(year_drop)),c("LCLASS","FEMALE","MALE")])
            the_reclfd <- RecLFD(my_cel_dat, my_project$bySpecie[[spe_ind]]$lengClas, 1)
            plotRecLFD(the_reclfd)
          })
