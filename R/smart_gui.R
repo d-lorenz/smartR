@@ -96,17 +96,17 @@ smart_gui <- function(){
     if(!is.null(my_project$rawDataSurvey)){ #update_pop_gui()
 
       raw_t[] <- my_project$rawDataSurvey[sample(1:nrow(my_project$rawDataSurvey), 100, replace = FALSE),]
-      svalue(raw_l1) <- paste("Specie: ", paste(my_project$species, collapse = " - "))
+      svalue(raw_l1) <- paste("Specie: ", paste(my_project$specieInSurvey, collapse = " - "))
       #   svalue(raw_l2) <- paste("Length Classes: from ",  min(my_project$LClass), " to ", max(my_project$LClass))
       svalue(raw_l3) <- paste("Years: from", min(as.numeric(as.character(my_project$yearInSurvey))), " to ", max(as.numeric(as.character(my_project$yearInSurvey))))
-      spec_drop[] <- my_project$species
-      spec_drop_mix[] <- my_project$species
-      spevie_drop[] <- c("All", my_project$species)
-      cohSpe_drop[] <- my_project$species
-      svalue(spec_drop) <- my_project$species[1]
-      svalue(cohSpe_drop) <- my_project$species[1]
+      spec_drop[] <- my_project$specieInSurvey
+      spec_drop_mix[] <- my_project$specieInSurvey
+      spevie_drop[] <- c("All", my_project$specieInSurvey)
+      cohSpe_drop[] <- my_project$specieInSurvey
+      svalue(spec_drop) <- my_project$specieInSurvey[1]
+      svalue(cohSpe_drop) <- my_project$specieInSurvey[1]
       svalue(spevie_drop) <- "All"
-      svalue(spec_drop_mix) <- my_project$species[1]
+      svalue(spec_drop_mix) <- my_project$specieInSurvey[1]
       year_drop[] <- c("All", as.character(my_project$yearInSurvey))
       cohYea_drop[] <- c("All", as.character(my_project$yearInSurvey))
       svalue(year_drop) <- my_project$yearInSurvey[1]
@@ -115,8 +115,8 @@ smart_gui <- function(){
       svalue(n_year_s) <- paste(length(my_project$yearInSurvey), " years", sep = "")
       svalue(mi_date_s) <- paste("From: ", min(as.numeric(as.character(my_project$yearInSurvey))), sep = "")
       svalue(ma_date_s) <- paste("To: ", max(as.numeric(as.character(my_project$yearInSurvey))), sep = "")
-      svalue(n_spec_s) <- paste(length(my_project$species),
-                                ifelse(length(my_project$species) == 1, " specie", " species"), sep = "")
+      svalue(n_spec_s) <- paste(length(my_project$specieInSurvey),
+                                ifelse(length(my_project$specieInSurvey) == 1, " specie", " species"), sep = "")
       #       samp_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
       delete(samp_g, samp_g$children[[length(samp_g$children)]])
       add(samp_g, samp_sta_n)
@@ -477,17 +477,17 @@ smart_gui <- function(){
     if(!is.null(my_project$rawDataSurvey)){ #update_pop_gui()
 
       raw_t[] <- my_project$rawDataSurvey[sample(1:nrow(my_project$rawDataSurvey), 100, replace = FALSE),]
-      svalue(raw_l1) <- paste("Specie: ", paste(my_project$species, collapse = " - "))
+      svalue(raw_l1) <- paste("Specie: ", paste(my_project$specieInSurvey, collapse = " - "))
       #   svalue(raw_l2) <- paste("Length Classes: from ",  min(my_project$LClass), " to ", max(my_project$LClass))
       svalue(raw_l3) <- paste("Years: from", min(as.numeric(as.character(my_project$yearInSurvey))), " to ", max(as.numeric(as.character(my_project$yearInSurvey))))
-      spec_drop[] <- my_project$species
-      spec_drop_mix[] <- my_project$species
-      spevie_drop[] <- c("All", my_project$species)
-      cohSpe_drop[] <- my_project$species
-      svalue(spec_drop) <- my_project$species[1]
-      svalue(cohSpe_drop) <- my_project$species[1]
+      spec_drop[] <- my_project$specieInSurvey
+      spec_drop_mix[] <- my_project$specieInSurvey
+      spevie_drop[] <- c("All", my_project$specieInSurvey)
+      cohSpe_drop[] <- my_project$specieInSurvey
+      svalue(spec_drop) <- my_project$specieInSurvey[1]
+      svalue(cohSpe_drop) <- my_project$specieInSurvey[1]
       svalue(spevie_drop) <- "All"
-      svalue(spec_drop_mix) <- my_project$species[1]
+      svalue(spec_drop_mix) <- my_project$specieInSurvey[1]
       year_drop[] <- c("All", as.character(my_project$yearInSurvey))
       cohYea_drop[] <- c("All", as.character(my_project$yearInSurvey))
       svalue(year_drop) <- my_project$yearInSurvey[1]
@@ -503,8 +503,8 @@ smart_gui <- function(){
       svalue(n_year_s) <- paste(length(my_project$yearInSurvey), " years", sep = "")
       svalue(mi_date_s) <- paste("From: ", min(as.numeric(as.character(my_project$yearInSurvey))), sep = "")
       svalue(ma_date_s) <- paste("To: ", max(as.numeric(as.character(my_project$yearInSurvey))), sep = "")
-      svalue(n_spec_s) <- paste(length(my_project$species),
-                                ifelse(length(my_project$species) == 1, " specie", " species"), sep = "")
+      svalue(n_spec_s) <- paste(length(my_project$specieInSurvey),
+                                ifelse(length(my_project$specieInSurvey) == 1, " specie", " species"), sep = "")
 
       delete(samp_g, samp_g$children[[length(samp_g$children)]])
       add(samp_g, samp_sta_n)
@@ -546,7 +546,7 @@ smart_gui <- function(){
   gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = lfdfra_g,
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+2])
-           spe_ind <- which(my_project$species == svalue(spec_drop))
+           spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
            ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$surveySpecie[[spe_ind]]$rawLFD[,c("LCLASS","FEMALE","MALE")], my_cel_dat <- my_project$surveySpecie[[spe_ind]]$rawLFD[which(my_project$surveySpecie[[spe_ind]]$rawLFD[,"Year"] ==  svalue(year_drop)),c("LCLASS","FEMALE","MALE")])
            the_reclfd <- RecLFD(my_cel_dat, my_project$surveySpecie[[spe_ind]]$lengClas, 1)
            plotRecLFD(the_reclfd)
@@ -582,7 +582,7 @@ smart_gui <- function(){
   prio_b <- gbutton ("Set Priors", container = prio_g,
                      handler = function(h,...){
 
-                       spe_ind <- which(my_project$species == svalue(spec_drop_mix))
+                       spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop_mix))
                        #                        temp_dia <- gbasicdialog(title="Set Growth Parameters", do.buttons = FALSE)
                        temp_dia <- gwindow(title="Set Growth Parameters", visible = FALSE,
                                            parent = main_win, width = 550, height = 400)
@@ -693,13 +693,13 @@ smart_gui <- function(){
                      pre_mfrow <- par(c("mfrow", "mar"))
                      par(mfrow = c(2, 1))
                      par(mar = c(2,2,1.5,0.5))
-                     my_project$surveySpecie[[which(my_project$species == svalue(spec_drop_mix))]]$setNCoho(as.numeric(svalue(ncih_sb)))
-                     my_project$surveySpecie[[which(my_project$species == svalue(spec_drop_mix))]]$calcMix(nAdap = as.numeric(svalue(mc_niter)), nSamp = as.numeric(svalue(mc_nsamp)))
+                     my_project$surveySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_mix))]]$setNCoho(as.numeric(svalue(ncih_sb)))
+                     my_project$surveySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_mix))]]$calcMix(nAdap = as.numeric(svalue(mc_niter)), nSamp = as.numeric(svalue(mc_nsamp)))
 
-                     my_project$calcCoh_A(which(my_project$species == svalue(spec_drop_mix)))
-                     my_project$calcCoh_A_Int(which(my_project$species == svalue(spec_drop_mix)))
+                     my_project$calcCoh_A(which(my_project$specieInSurvey == svalue(spec_drop_mix)))
+                     my_project$calcCoh_A_Int(which(my_project$specieInSurvey == svalue(spec_drop_mix)))
 
-                     cohCoh_drop[] <- c("All", seq(1, my_project$surveySpecie[[which(my_project$species == svalue(spec_drop_mix))]]$nCoho, by = 1))
+                     cohCoh_drop[] <- c("All", seq(1, my_project$surveySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_mix))]]$nCoho, by = 1))
                      svalue(cohCoh_drop) <- "All"
                      par(pre_mfrow)
                    })
@@ -723,8 +723,8 @@ smart_gui <- function(){
   addSpring(cohofra_g)
   addSpring(cohSpe_b)
   cohSpe_drop <- gcombobox(items = "Specie", selected = 1, container = cohSpe_b, editable = FALSE, handler = function(h,...){
-    if(length(my_project$surveySpecie[[which(my_project$species == svalue(cohSpe_drop))]]$nCoho) > 0){
-      cohCoh_drop[] <- c("All", seq(1, my_project$surveySpecie[[which(my_project$species == svalue(cohSpe_drop))]]$nCoho, by = 1))
+    if(length(my_project$surveySpecie[[which(my_project$specieInSurvey == svalue(cohSpe_drop))]]$nCoho) > 0){
+      cohCoh_drop[] <- c("All", seq(1, my_project$surveySpecie[[which(my_project$specieInSurvey == svalue(cohSpe_drop))]]$nCoho, by = 1))
       svalue(cohCoh_drop) <- "All"
     }
   })
@@ -751,7 +751,7 @@ smart_gui <- function(){
   gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = cohofra_g,
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+4])
-           my_project$cohoDisPlot(which(my_project$species == svalue(cohSpe_drop)),
+           my_project$cohoDisPlot(which(my_project$specieInSurvey == svalue(cohSpe_drop)),
                                   ifelse(svalue(cohCoh_drop) == "All", "All", as.numeric(svalue(cohCoh_drop))),
                                   ifelse(svalue(cohYea_drop) == "All", "All", which(my_project$yearInSurvey == svalue(cohYea_drop))),
                                   ifelse(svalue(cohInt_r) == "Yes", TRUE, FALSE))

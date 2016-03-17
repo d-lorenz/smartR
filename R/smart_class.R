@@ -15,7 +15,7 @@ SmartProject <- R6Class("smartProject",
                         public = list(
                           rawDataSurvey = NULL,
                           yearInSurvey = NULL,
-                          species = NULL,
+                          specieInSurvey = NULL,
                           surveySpecie = NULL,
                           sampMap = NULL,
                           fleet = NULL,
@@ -26,27 +26,27 @@ SmartProject <- R6Class("smartProject",
                             setYears()
                             cat(" from ", min(levels(yearInSurvey)[as.numeric(yearInSurvey)]), " to ", max(levels(yearInSurvey)[as.numeric(yearInSurvey)]),"\nSetting Species... ", sep = "")
                             setSpecies()
-                            cat(" found: ", paste(species, collapse = " - "), "\nSplitting Species...", sep = "")
+                            cat(" found: ", paste(specieInSurvey, collapse = " - "), "\nSplitting Species...", sep = "")
                             splitSpecies()
                             cat(" completed!", sep = "")
                           },
                           setYears = function(){yearInSurvey <<- sort(unique(rawDataSurvey[,"Year"]), decreasing = FALSE)},
                           loadMap = function(map_path){sampMap <<- SampleMap$new(map_path)},
                           createFleet = function(){fleet <<- FishFleet$new()},
-                          setSpecies = function(){species <<- unique(rawDataSurvey[,"SPECIE"])},
+                          setSpecies = function(){specieInSurvey <<- unique(rawDataSurvey[,"SPECIE"])},
                           splitSpecies = function(){
-                            if(length(species) == 1){
+                            if(length(specieInSurvey) == 1){
                               addSpecie(rawDataSurvey)
                             }else{
-                              for(i in 1:length(species)){
-                                addSpecie(rawDataSurvey[rawDataSurvey[,"SPECIE"] == species[i],])}}
+                              for(i in 1:length(specieInSurvey)){
+                                addSpecie(rawDataSurvey[rawDataSurvey[,"SPECIE"] == specieInSurvey[i],])}}
                           },
                           addSpecie = function(sing_spe){surveySpecie <<- c(surveySpecie, SurveySpecie$new(sing_spe))},
                           setLFDPop = function(){
-                            if(length(species) == 1){
+                            if(length(specieInSurvey) == 1){
                               calcLFDPop(1)
                             }else{
-                              for(i in 1:length(species)){
+                              for(i in 1:length(specieInSurvey)){
                                 calcLFDPop(i)
                               }}
                             # speDisPlot("All")
@@ -110,12 +110,12 @@ SmartProject <- R6Class("smartProject",
                           speDisPlot = function(whoPlo){
                             if(whoPlo == "All"){
                               sampMap$plotSamMap("All species")
-                              for(i in 1:length(species)){
+                              for(i in 1:length(specieInSurvey)){
                                 points(surveySpecie[[i]]$rawLFD[,c("LON","LAT")], pch = 20, col = 1+i, cex = 0.4)
                               }
                             }else{
                               sampMap$plotSamMap(whoPlo)
-                              points(surveySpecie[[which(species == whoPlo)]]$rawLFD[,c("LON","LAT")], pch = 20, col = 1+which(species == whoPlo), cex = 0.4)
+                              points(surveySpecie[[which(specieInSurvey == whoPlo)]]$rawLFD[,c("LON","LAT")], pch = 20, col = 1+which(specieInSurvey == whoPlo), cex = 0.4)
                             }
                           },
                           plotGooSpe = function(whoPlo){
@@ -455,7 +455,7 @@ SmartProject <- R6Class("smartProject",
 
                                   distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
                                                 maxVal = ceiling(max(yea_abb)),
-                                                plotTitle = paste("Specie: ", species[whoSpe], " - All cohorts - All years", sep = ""), legendUnits = "N.")
+                                                plotTitle = paste("Specie: ", specieInSurvey[whoSpe], " - All cohorts - All years", sep = ""), legendUnits = "N.")
                                 }else{
                                   # 1+round(apply(surveySpecie[[whoSpe]]$Coh_A[,,whiYea,],1,sum)/max(apply(surveySpecie[[whoSpe]]$Coh_A[,,whiYea,],1,sum)), 2)*100
                                   yea_abb <- round(apply(surveySpecie[[whoSpe]]$Coh_A[,,whiYea,],1,sum))
@@ -463,7 +463,7 @@ SmartProject <- R6Class("smartProject",
 
                                   distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
                                                 maxVal = ceiling(max(yea_abb)),
-                                                plotTitle = paste("Specie: ", species[whoSpe], " - All cohorts - Year: ", whiYea, sep = ""),
+                                                plotTitle = paste("Specie: ", specieInSurvey[whoSpe], " - All cohorts - Year: ", whiYea, sep = ""),
                                                 legendUnits = "N.")
                                 }
                               }else{
@@ -473,7 +473,7 @@ SmartProject <- R6Class("smartProject",
 
                                   distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
                                                 maxVal = ceiling(max(yea_abb)),
-                                                plotTitle = paste("Specie: ", species[whoSpe], " - Cohort: ", whoCoh, "- All years", sep = ""),
+                                                plotTitle = paste("Specie: ", specieInSurvey[whoSpe], " - Cohort: ", whoCoh, "- All years", sep = ""),
                                                 legendUnits = "N.")
                                 }else{
                                   yea_abb <- round(apply(surveySpecie[[whoSpe]]$Coh_A[,whoCoh,whiYea,],1,sum))
@@ -481,7 +481,7 @@ SmartProject <- R6Class("smartProject",
 
                                   distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
                                                 maxVal = ceiling(max(yea_abb)),
-                                                plotTitle = paste("Specie: ", species[whoSpe], " - Cohort: ", whoCoh, " - Year: ", whiYea, sep = ""),
+                                                plotTitle = paste("Specie: ", specieInSurvey[whoSpe], " - Cohort: ", whoCoh, " - Year: ", whiYea, sep = ""),
                                                 legendUnits = "N.")
                                 }
                               }
@@ -493,7 +493,7 @@ SmartProject <- R6Class("smartProject",
 
                                   distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
                                                 maxVal = ceiling(max(yea_abb)),
-                                                plotTitle = paste("Specie: ", species[whoSpe], " - All cohorts - All years", sep = ""),
+                                                plotTitle = paste("Specie: ", specieInSurvey[whoSpe], " - All cohorts - All years", sep = ""),
                                                 legendUnits = "N.")
                                 }else{
                                   yea_abb <- round(apply(surveySpecie[[whoSpe]]$Coh_A_Int[,,whiYea,],1,sum))
@@ -501,7 +501,7 @@ SmartProject <- R6Class("smartProject",
 
                                   distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
                                                 maxVal = ceiling(max(yea_abb)),
-                                                plotTitle = paste("Specie: ", species[whoSpe], " - All cohorts - Year: ", whiYea, sep = ""),
+                                                plotTitle = paste("Specie: ", specieInSurvey[whoSpe], " - All cohorts - Year: ", whiYea, sep = ""),
                                                 legendUnits = "N.")
                                 }
                               }else{
@@ -511,7 +511,7 @@ SmartProject <- R6Class("smartProject",
 
                                   distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
                                                 maxVal = ceiling(max(yea_abb)),
-                                                plotTitle = paste("Specie: ", species[whoSpe], " - Cohort: ", whoCoh, "- All years", sep = ""),
+                                                plotTitle = paste("Specie: ", specieInSurvey[whoSpe], " - Cohort: ", whoCoh, "- All years", sep = ""),
                                                 legendUnits = "N.")
                                 }else{
                                   yea_abb <- round(apply(surveySpecie[[whoSpe]]$Coh_A_Int[,whoCoh,whiYea,],1,sum))
@@ -519,7 +519,7 @@ SmartProject <- R6Class("smartProject",
 
                                   distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
                                                 maxVal = ceiling(max(yea_abb)),
-                                                plotTitle = paste("Specie: ", species[whoSpe], " - Cohort: ", whoCoh, " - Year: ", whiYea, sep = ""),
+                                                plotTitle = paste("Specie: ", specieInSurvey[whoSpe], " - Cohort: ", whoCoh, " - Year: ", whiYea, sep = ""),
                                                 legendUnits = "N.")
                                 }
                               }
@@ -545,10 +545,10 @@ SmartProject <- R6Class("smartProject",
                                   surveySpecie[[ind_num]]$LFDPop[IDcell,,y,2] <<- rep(0,length(surveySpecie[[ind_num]]$lengClas))
                                 }}}},
                           setCoh_A = function(){
-                            if(length(species) == 1){
+                            if(length(specieInSurvey) == 1){
                               calcCoh_A(1)
                             }else{
-                              for(i in 1:length(species)){
+                              for(i in 1:length(specieInSurvey)){
                                 calcCoh_A(i)
                               }}
                           },
