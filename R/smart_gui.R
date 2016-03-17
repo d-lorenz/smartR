@@ -547,8 +547,8 @@ smart_gui <- function(){
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+2])
            spe_ind <- which(my_project$species == svalue(spec_drop))
-           ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$bySpecie[[spe_ind]]$rawLFD[,c("LCLASS","FEMALE","MALE")], my_cel_dat <- my_project$bySpecie[[spe_ind]]$rawLFD[which(my_project$bySpecie[[spe_ind]]$rawLFD[,"Year"] ==  svalue(year_drop)),c("LCLASS","FEMALE","MALE")])
-           the_reclfd <- RecLFD(my_cel_dat, my_project$bySpecie[[spe_ind]]$lengClas, 1)
+           ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$surveySpecie[[spe_ind]]$rawLFD[,c("LCLASS","FEMALE","MALE")], my_cel_dat <- my_project$surveySpecie[[spe_ind]]$rawLFD[which(my_project$surveySpecie[[spe_ind]]$rawLFD[,"Year"] ==  svalue(year_drop)),c("LCLASS","FEMALE","MALE")])
+           the_reclfd <- RecLFD(my_cel_dat, my_project$surveySpecie[[spe_ind]]$lengClas, 1)
            plotRecLFD(the_reclfd)
          })
   addSpring(lfdfra_g)
@@ -600,13 +600,13 @@ smart_gui <- function(){
                        fe_lay[2,1, anchor = 0] <- "Linf"
                        fe_lay[3,1, anchor = 0] <- "K"
                        fe_lay[4,1, anchor = 0] <- "t0"
-                       pre_pri <- length(my_project$bySpecie[[1]]$prior)
-                       fe_lay[2,2] <- gedit(ifelse(pre_pri, my_project$bySpecie[[spe_ind]]$prior[["Female"]]$Linf$Mean, "edit here"), container=fe_lay)
-                       fe_lay[2,3] <- gedit(ifelse(pre_pri, my_project$bySpecie[[spe_ind]]$prior[["Female"]]$Linf$StD, "edit here"), container=fe_lay)
-                       fe_lay[3,2] <- gedit(ifelse(pre_pri, my_project$bySpecie[[spe_ind]]$prior[["Female"]]$K$Mean, "edit here"), container=fe_lay)
-                       fe_lay[3,3] <- gedit(ifelse(pre_pri, my_project$bySpecie[[spe_ind]]$prior[["Female"]]$K$StD, "edit here"), container=fe_lay)
-                       fe_lay[4,2] <- gedit(ifelse(pre_pri, my_project$bySpecie[[spe_ind]]$prior[["Female"]]$t0$Mean, "edit here"), container=fe_lay)
-                       fe_lay[4,3] <- gedit(ifelse(pre_pri, my_project$bySpecie[[spe_ind]]$prior[["Female"]]$t0$StD, "edit here"), container=fe_lay)
+                       pre_pri <- length(my_project$surveySpecie[[1]]$prior)
+                       fe_lay[2,2] <- gedit(ifelse(pre_pri, my_project$surveySpecie[[spe_ind]]$prior[["Female"]]$Linf$Mean, "edit here"), container=fe_lay)
+                       fe_lay[2,3] <- gedit(ifelse(pre_pri, my_project$surveySpecie[[spe_ind]]$prior[["Female"]]$Linf$StD, "edit here"), container=fe_lay)
+                       fe_lay[3,2] <- gedit(ifelse(pre_pri, my_project$surveySpecie[[spe_ind]]$prior[["Female"]]$K$Mean, "edit here"), container=fe_lay)
+                       fe_lay[3,3] <- gedit(ifelse(pre_pri, my_project$surveySpecie[[spe_ind]]$prior[["Female"]]$K$StD, "edit here"), container=fe_lay)
+                       fe_lay[4,2] <- gedit(ifelse(pre_pri, my_project$surveySpecie[[spe_ind]]$prior[["Female"]]$t0$Mean, "edit here"), container=fe_lay)
+                       fe_lay[4,3] <- gedit(ifelse(pre_pri, my_project$surveySpecie[[spe_ind]]$prior[["Female"]]$t0$StD, "edit here"), container=fe_lay)
                        addSpace(fe_fra, 10)
                        addSpace(up_g, 10)
 
@@ -618,12 +618,12 @@ smart_gui <- function(){
                        ma_lay[2,1, anchor = 0] <- "Linf"
                        ma_lay[3,1, anchor = 0] <- "K"
                        ma_lay[4,1, anchor = 0] <- "t0"
-                       ma_lay[2,2] <- gedit(ifelse(pre_pri, my_project$bySpecie[[spe_ind]]$prior[["Male"]]$Linf$Mean, "edit here"), container=ma_lay)
-                       ma_lay[2,3] <- gedit(ifelse(pre_pri, my_project$bySpecie[[spe_ind]]$prior[["Male"]]$Linf$StD, "edit here"), container=ma_lay)
-                       ma_lay[3,2] <- gedit(ifelse(pre_pri, my_project$bySpecie[[spe_ind]]$prior[["Male"]]$K$Mean, "edit here"), container=ma_lay)
-                       ma_lay[3,3] <- gedit(ifelse(pre_pri, my_project$bySpecie[[spe_ind]]$prior[["Male"]]$K$StD, "edit here"), container=ma_lay)
-                       ma_lay[4,2] <- gedit(ifelse(pre_pri, my_project$bySpecie[[spe_ind]]$prior[["Male"]]$t0$Mean, "edit here"), container=ma_lay)
-                       ma_lay[4,3] <- gedit(ifelse(pre_pri, my_project$bySpecie[[spe_ind]]$prior[["Male"]]$t0$StD, "edit here"), container=ma_lay)
+                       ma_lay[2,2] <- gedit(ifelse(pre_pri, my_project$surveySpecie[[spe_ind]]$prior[["Male"]]$Linf$Mean, "edit here"), container=ma_lay)
+                       ma_lay[2,3] <- gedit(ifelse(pre_pri, my_project$surveySpecie[[spe_ind]]$prior[["Male"]]$Linf$StD, "edit here"), container=ma_lay)
+                       ma_lay[3,2] <- gedit(ifelse(pre_pri, my_project$surveySpecie[[spe_ind]]$prior[["Male"]]$K$Mean, "edit here"), container=ma_lay)
+                       ma_lay[3,3] <- gedit(ifelse(pre_pri, my_project$surveySpecie[[spe_ind]]$prior[["Male"]]$K$StD, "edit here"), container=ma_lay)
+                       ma_lay[4,2] <- gedit(ifelse(pre_pri, my_project$surveySpecie[[spe_ind]]$prior[["Male"]]$t0$Mean, "edit here"), container=ma_lay)
+                       ma_lay[4,3] <- gedit(ifelse(pre_pri, my_project$surveySpecie[[spe_ind]]$prior[["Male"]]$t0$StD, "edit here"), container=ma_lay)
                        addSpace(ma_fra, 10)
 
                        addSpring(up_g)
@@ -657,7 +657,7 @@ smart_gui <- function(){
 
                        gbutton("\nAccept\n", container = bot_g,
                                handler = function(h,...){
-                                 my_project$bySpecie[[spe_ind]]$setPrior(as.numeric(unlist(lapply(fe_lay[2,2:3], svalue))),
+                                 my_project$surveySpecie[[spe_ind]]$setPrior(as.numeric(unlist(lapply(fe_lay[2,2:3], svalue))),
                                                                          as.numeric(unlist(lapply(fe_lay[3,2:3], svalue))),
                                                                          as.numeric(unlist(lapply(fe_lay[4,2:3], svalue))),
                                                                          as.numeric(unlist(lapply(ma_lay[2,2:3], svalue))),
@@ -693,13 +693,13 @@ smart_gui <- function(){
                      pre_mfrow <- par(c("mfrow", "mar"))
                      par(mfrow = c(2, 1))
                      par(mar = c(2,2,1.5,0.5))
-                     my_project$bySpecie[[which(my_project$species == svalue(spec_drop_mix))]]$setNCoho(as.numeric(svalue(ncih_sb)))
-                     my_project$bySpecie[[which(my_project$species == svalue(spec_drop_mix))]]$calcMix(nAdap = as.numeric(svalue(mc_niter)), nSamp = as.numeric(svalue(mc_nsamp)))
+                     my_project$surveySpecie[[which(my_project$species == svalue(spec_drop_mix))]]$setNCoho(as.numeric(svalue(ncih_sb)))
+                     my_project$surveySpecie[[which(my_project$species == svalue(spec_drop_mix))]]$calcMix(nAdap = as.numeric(svalue(mc_niter)), nSamp = as.numeric(svalue(mc_nsamp)))
 
                      my_project$calcCoh_A(which(my_project$species == svalue(spec_drop_mix)))
                      my_project$calcCoh_A_Int(which(my_project$species == svalue(spec_drop_mix)))
 
-                     cohCoh_drop[] <- c("All", seq(1, my_project$bySpecie[[which(my_project$species == svalue(spec_drop_mix))]]$nCoho, by = 1))
+                     cohCoh_drop[] <- c("All", seq(1, my_project$surveySpecie[[which(my_project$species == svalue(spec_drop_mix))]]$nCoho, by = 1))
                      svalue(cohCoh_drop) <- "All"
                      par(pre_mfrow)
                    })
@@ -723,8 +723,8 @@ smart_gui <- function(){
   addSpring(cohofra_g)
   addSpring(cohSpe_b)
   cohSpe_drop <- gcombobox(items = "Specie", selected = 1, container = cohSpe_b, editable = FALSE, handler = function(h,...){
-    if(length(my_project$bySpecie[[which(my_project$species == svalue(cohSpe_drop))]]$nCoho) > 0){
-      cohCoh_drop[] <- c("All", seq(1, my_project$bySpecie[[which(my_project$species == svalue(cohSpe_drop))]]$nCoho, by = 1))
+    if(length(my_project$surveySpecie[[which(my_project$species == svalue(cohSpe_drop))]]$nCoho) > 0){
+      cohCoh_drop[] <- c("All", seq(1, my_project$surveySpecie[[which(my_project$species == svalue(cohSpe_drop))]]$nCoho, by = 1))
       svalue(cohCoh_drop) <- "All"
     }
   })
@@ -1033,12 +1033,12 @@ smart_gui <- function(){
               cat("\nInput for Fishing Grounds Clustering:")
               if(svalue(lyt[2,2])){ ### Resource
                 cat("\n   -   Resource Distribution")
-                tmp_res <- cbind(apply(my_project$bySpecie[[1]]$Coh_A_Int[,1,,1], 1, sum),
-                                 apply(my_project$bySpecie[[1]]$Coh_A_Int[,2,,1], 1, sum),
-                                 apply(my_project$bySpecie[[1]]$Coh_A_Int[,3,,1], 1, sum),
-                                 apply(my_project$bySpecie[[1]]$Coh_A_Int[,1,,2], 1, sum),
-                                 apply(my_project$bySpecie[[1]]$Coh_A_Int[,2,,2], 1, sum),
-                                 apply(my_project$bySpecie[[1]]$Coh_A_Int[,3,,2], 1, sum))
+                tmp_res <- cbind(apply(my_project$surveySpecie[[1]]$Coh_A_Int[,1,,1], 1, sum),
+                                 apply(my_project$surveySpecie[[1]]$Coh_A_Int[,2,,1], 1, sum),
+                                 apply(my_project$surveySpecie[[1]]$Coh_A_Int[,3,,1], 1, sum),
+                                 apply(my_project$surveySpecie[[1]]$Coh_A_Int[,1,,2], 1, sum),
+                                 apply(my_project$surveySpecie[[1]]$Coh_A_Int[,2,,2], 1, sum),
+                                 apply(my_project$surveySpecie[[1]]$Coh_A_Int[,3,,2], 1, sum))
                 multi_fac_res <- switch(svalue(lyt[2,3]), "0.5X" = 0.5, "1" = 1, "2X" = 2)
                 clus_data <- cbind(clus_data,
                                    tmp_res*multi_fac_res)
