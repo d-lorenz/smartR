@@ -616,7 +616,7 @@ SurveySpecie <- R6Class("SurveyBySpecie",
                     portable = FALSE,
                     class = TRUE,
                     public = list(
-                      specie = NULL,
+                      specieSur = NULL,
                       yearSur = NULL,
                       rawLFD = NULL,
                       lengClas = NULL, #LClass
@@ -644,7 +644,7 @@ SurveySpecie <- R6Class("SurveyBySpecie",
                         setLClass()
                       },
                       setYears = function(){yearSur <<- sort(unique(rawLFD[,"Year"]), decreasing = FALSE)},
-                      setSpecie = function(){specie <<- unique(rawLFD[,"SPECIE"])},
+                      setSpecie = function(){specieSur <<- unique(rawLFD[,"SPECIE"])},
                       setLClass = function(){lengClas <<- seq(from = min(rawLFD[,"LCLASS"]), to = max(rawLFD[,"LCLASS"]), by = 1) },
                       setNCoho = function(num_coh){nCoho <<- num_coh},
                       setPrior = function(f_linf, f_k, f_t0, m_linf, m_k, m_t0){
@@ -682,7 +682,7 @@ SurveySpecie <- R6Class("SurveyBySpecie",
                                             num_ye = yearSur, num_coh = nCoho, MixtureP = mixPar)
 
                         #Check
-                        cat(specie,"Biomassa", as.character(yearSur[length(yearSur)]), " =",
+                        cat(specieSur,"Biomassa", as.character(yearSur[length(yearSur)]), " =",
                             sum(LFDtoBcell(LCspe = LCspe, abbF = TempArray[,,length(yearSur),1], abbM = TempArray[,,length(yearSur),2],
                                            LWpar = LWpar))/1000000 ,"\n")
 
@@ -754,7 +754,7 @@ SurveySpecie <- R6Class("SurveyBySpecie",
                             dens2[,j] = pHat[j] * dnorm(asc, means[j], sqrt(sigma2Hat[j]))
                           }
                           plot(range(asc), c(0, max(hist(ind_dis, plot = FALSE)$density)+0.02), type='n',
-                               main = paste(sex, specie,"- LFD", sep = " "),
+                               main = paste(sex, specieSur,"- LFD", sep = " "),
                                xlab = "Density",
                                ylab = "Length", cex.lab = 0.5)
                           hist(ind_dis, breaks=30, freq=F, col='lightgray', add = TRUE)
