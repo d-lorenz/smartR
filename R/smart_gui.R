@@ -38,7 +38,7 @@ smart_gui <- function(){
   gbutton(text = "Grid", container = env_eg, handler = function(h,...){
     svalue(uti_gn) <- 2})
   raw_eg <- gexpandgroup("Resources", horizontal = FALSE, container = lef_g)
-  gbutton(text = "Raw Sample", container = raw_eg, handler = function(h,...){
+  gbutton(text = "Survey", container = raw_eg, handler = function(h,...){
     svalue(uti_gn) <- 3})
   gbutton(text = "Population", container = raw_eg, handler = function(h,...){
     svalue(uti_gn) <- 4})
@@ -463,7 +463,7 @@ smart_gui <- function(){
   ####     Survey     ##########################################
   ##############################################################
 
-  raw_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Raw Sample")
+  raw_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Survey")
   raw_g_top <- gframe(horizontal = TRUE, container = raw_g)
   addSpace(raw_g_top, 2)
   addSpring(raw_g_top)
