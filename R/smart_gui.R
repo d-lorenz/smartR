@@ -34,10 +34,11 @@ smart_gui <- function(){
     svalue(uti_gn) <- 1})
   gbutton(text = "Load", container = pro_eg, handler = function(h,...){
     svalue(uti_gn) <- 1})
+  env_eg <- gexpandgroup("Environment", horizontal = FALSE, container = lef_g)
+  gbutton(text = "Grid", container = env_eg, handler = function(h,...){
+    svalue(uti_gn) <- 2})
   raw_eg <- gexpandgroup("Resources", horizontal = FALSE, container = lef_g)
   gbutton(text = "Raw Sample", container = raw_eg, handler = function(h,...){
-    svalue(uti_gn) <- 2})
-  gbutton(text = "Grid", container = raw_eg, handler = function(h,...){
     svalue(uti_gn) <- 3})
   gbutton(text = "Population", container = raw_eg, handler = function(h,...){
     svalue(uti_gn) <- 4})
