@@ -608,11 +608,11 @@ SmartProject <- R6Class("smartProject",
 #' The \code{SurveySpecie} class implements the class of SMART to
 #'  handle species samplings.
 #'
-#' @return This function returns the 'sampleLFDbyspe' object.
+#' @return This function returns the 'SurveyBySpecie' object.
 #'
 #############################################################
 
-SurveySpecie <- R6Class("sampleLFDbyspe",
+SurveySpecie <- R6Class("SurveyBySpecie",
                     portable = FALSE,
                     class = TRUE,
                     public = list(
