@@ -20,7 +20,7 @@ SmartProject <- R6Class("smartProject",
                           sampMap = NULL,
                           fleet = NULL,
                           loadSurveyLFD = function(csv_path) {
-                            cat("Loading sampling data...\n", sep = "")
+                            cat("Loading survey data...\n", sep = "")
                             rawDataSurvey <<- read.table(file = csv_path, sep = ";", dec = ".", colClasses = c("character", "numeric", "numeric", "factor", "numeric", "numeric", "numeric", "numeric"), header = TRUE)
                             cat("Setting Years... ", sep = "")
                             setYears()
