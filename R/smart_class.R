@@ -41,7 +41,7 @@ SmartProject <- R6Class("smartProject",
                               for(i in 1:length(species)){
                                 addSpecie(rawDataSurvey[rawDataSurvey[,"SPECIE"] == species[i],])}}
                           },
-                          addSpecie = function(sing_spe){bySpecie <<- c(bySpecie, BySpeLFD$new(sing_spe))},
+                          addSpecie = function(sing_spe){bySpecie <<- c(bySpecie, SurveySpecie$new(sing_spe))},
                           setLFDPop = function(){
                             if(length(species) == 1){
                               calcLFDPop(1)
@@ -602,17 +602,17 @@ SmartProject <- R6Class("smartProject",
 
 
 
-####BySpeLFD#################################################
-#' BySpeLFD
+####SurveySpecie#################################################
+#' SurveySpecie
 #'
-#' The \code{BySpeLFD} class implements the class of SMART to
+#' The \code{SurveySpecie} class implements the class of SMART to
 #'  handle species samplings.
 #'
 #' @return This function returns the 'sampleLFDbyspe' object.
 #'
 #############################################################
 
-BySpeLFD <- R6Class("sampleLFDbyspe",
+SurveySpecie <- R6Class("sampleLFDbyspe",
                     portable = FALSE,
                     class = TRUE,
                     public = list(
