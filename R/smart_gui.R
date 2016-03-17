@@ -1682,7 +1682,7 @@ smart_gui <- function(){
   visible(sim_eg) <- TRUE
   visible(main_win) <- TRUE
 
-  svalue(uti_gn) <- 3
+  svalue(uti_gn) <- 2
   svalue(uti_gn) <- 4
   svalue(uti_gn) <- 5
   svalue(uti_gn) <- 6
