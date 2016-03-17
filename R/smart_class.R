@@ -14,7 +14,7 @@ SmartProject <- R6Class("smartProject",
                         class = TRUE,
                         public = list(
                           rawDataSurvey = NULL,
-                          yearSurvey = NULL,
+                          yearInSurvey = NULL,
                           species = NULL,
                           surveySpecie = NULL,
                           sampMap = NULL,
@@ -24,13 +24,13 @@ SmartProject <- R6Class("smartProject",
                             rawDataSurvey <<- read.table(file = csv_path, sep = ";", dec = ".", colClasses = c("character", "numeric", "numeric", "factor", "numeric", "numeric", "numeric", "numeric"), header = TRUE)
                             cat("Setting Years... ", sep = "")
                             setYears()
-                            cat(" from ", min(levels(yearSurvey)[as.numeric(yearSurvey)]), " to ", max(levels(yearSurvey)[as.numeric(yearSurvey)]),"\nSetting Species... ", sep = "")
+                            cat(" from ", min(levels(yearInSurvey)[as.numeric(yearInSurvey)]), " to ", max(levels(yearInSurvey)[as.numeric(yearInSurvey)]),"\nSetting Species... ", sep = "")
                             setSpecies()
                             cat(" found: ", paste(species, collapse = " - "), "\nSplitting Species...", sep = "")
                             splitSpecies()
                             cat(" completed!", sep = "")
                           },
-                          setYears = function(){yearSurvey <<- sort(unique(rawDataSurvey[,"Year"]), decreasing = FALSE)},
+                          setYears = function(){yearInSurvey <<- sort(unique(rawDataSurvey[,"Year"]), decreasing = FALSE)},
                           loadMap = function(map_path){sampMap <<- SampleMap$new(map_path)},
                           createFleet = function(){fleet <<- FishFleet$new()},
                           setSpecies = function(){species <<- unique(rawDataSurvey[,"SPECIE"])},
