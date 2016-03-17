@@ -526,7 +526,7 @@ SmartProject <- R6Class("smartProject",
                             }
                           },
                           calcLFDPop = function(ind_num){
-                            surveySpecie[[ind_num]]$LFDPop <<- array(dim=c(sampMap$nCells, length(surveySpecie[[ind_num]]$lengClas),length(surveySpecie[[ind_num]]$yearSur),2))
+                            surveySpecie[[ind_num]]$LFDPop <<- array(dim=c(sampMap$nCells, length(surveySpecie[[ind_num]]$lengthSur),length(surveySpecie[[ind_num]]$yearSur),2))
                             for(y in 1:length(surveySpecie[[ind_num]]$yearSur)){
                               subLFD <- surveySpecie[[ind_num]]$rawLFD[which(surveySpecie[[ind_num]]$rawLFD$Year==surveySpecie[[ind_num]]$yearSur[y]),]
                               poinOver <- as.numeric(sp::over(SpatialPoints(subLFD[,c("LON","LAT")]), SpatialPolygons(sampMap$gridShp@polygons)))
@@ -536,13 +536,13 @@ SmartProject <- R6Class("smartProject",
                                 if(length(which(subLFD[,"Cell"] == IDcell))>0){
                                   cell.data <- subLFD[which(subLFD[,"Cell"] == IDcell),]
                                   cell.LFD <- RecLFD(cell.data,
-                                                     surveySpecie[[ind_num]]$lengClas,
+                                                     surveySpecie[[ind_num]]$lengthSur,
                                                      length(unique(cell.data[,1])))
                                   surveySpecie[[ind_num]]$LFDPop[IDcell,,y,1] <<- cell.LFD[1,]
                                   surveySpecie[[ind_num]]$LFDPop[IDcell,,y,2] <<- cell.LFD[2,]
                                 }else{
-                                  surveySpecie[[ind_num]]$LFDPop[IDcell,,y,1] <<- rep(0,length(surveySpecie[[ind_num]]$lengClas))
-                                  surveySpecie[[ind_num]]$LFDPop[IDcell,,y,2] <<- rep(0,length(surveySpecie[[ind_num]]$lengClas))
+                                  surveySpecie[[ind_num]]$LFDPop[IDcell,,y,1] <<- rep(0,length(surveySpecie[[ind_num]]$lengthSur))
+                                  surveySpecie[[ind_num]]$LFDPop[IDcell,,y,2] <<- rep(0,length(surveySpecie[[ind_num]]$lengthSur))
                                 }}}},
                           setCoh_A = function(){
                             if(length(specieInSurvey) == 1){
@@ -555,7 +555,7 @@ SmartProject <- R6Class("smartProject",
                           calcCoh_A = function(ind_num){
 
                             Pop <- surveySpecie[[ind_num]]$LFDPop
-                            LC <- surveySpecie[[ind_num]]$lengClas[-length(surveySpecie[[ind_num]]$lengClas)]
+                            LC <- surveySpecie[[ind_num]]$lengthSur[-length(surveySpecie[[ind_num]]$lengthSur)]
                             sp <- surveySpecie[[ind_num]]$specie
                             nc <- surveySpecie[[ind_num]]$nCoho
                             surveySpecie[[ind_num]]$Coh_A <<- array(dim=c(sampMap$nCells, nc, length(surveySpecie[[ind_num]]$yearSur),2))
@@ -619,7 +619,7 @@ SurveySpecie <- R6Class("SurveyBySpecie",
                       specieSur = NULL,
                       yearSur = NULL,
                       rawLFD = NULL,
-                      lengClas = NULL, #LClass
+                      lengthSur = NULL, #LClass
                       LFDPop = NULL,
                       mixPar = NULL, # MixtureP e ncohorts
                       nCoho = NULL,
@@ -645,7 +645,7 @@ SurveySpecie <- R6Class("SurveyBySpecie",
                       },
                       setYears = function(){yearSur <<- sort(unique(rawLFD[,"Year"]), decreasing = FALSE)},
                       setSpecie = function(){specieSur <<- unique(rawLFD[,"SPECIE"])},
-                      setLClass = function(){lengClas <<- seq(from = min(rawLFD[,"LCLASS"]), to = max(rawLFD[,"LCLASS"]), by = 1) },
+                      setLClass = function(){lengthSur <<- seq(from = min(rawLFD[,"LCLASS"]), to = max(rawLFD[,"LCLASS"]), by = 1) },
                       setNCoho = function(num_coh){nCoho <<- num_coh},
                       setPrior = function(f_linf, f_k, f_t0, m_linf, m_k, m_t0){
                         prior <<- list('Female' = list('Linf' = list('Mean' = f_linf[1], 'StD' = f_linf[2]),
@@ -671,13 +671,13 @@ SurveySpecie <- R6Class("SurveyBySpecie",
                       },
                       genMedmo = function(){
 
-                        LCspe <- lengClas + (lengClas[2]-lengClas[1])/2
+                        LCspe <- lengthSur + (lengthSur[2]-lengthSur[1])/2
 
                         # !!
                         Areacell <- 9.091279*11.112
                         RateArea <- Areacell/100
 
-                        TempArray <- GenPop(Abbmat = Coh_A_Int, num_cla = length(lengClas),
+                        TempArray <- GenPop(Abbmat = Coh_A_Int, num_cla = length(lengthSur),
                                             LCspe = LCspe, RA = RateArea, qMM = qMedits,
                                             num_ye = yearSur, num_coh = nCoho, MixtureP = mixPar)
 
@@ -697,7 +697,7 @@ SurveySpecie <- R6Class("SurveyBySpecie",
                         for(sex in c('Female', 'Male')){
                           ind_cou = apply(LFDPop[,,,ifelse(sex == 'Female', 1, 2)], 2, sum)      # Counts of males, per length
                           num_ind = round(ind_cou/(9850/2))
-                          ind_dis = rep(lengClas, num_ind) + runif(sum(num_ind), 0, 1)
+                          ind_dis = rep(lengthSur, num_ind) + runif(sum(num_ind), 0, 1)
                           Nclust = nCoho
                           N = length(ind_dis)
                           # Input formating for JAGS
@@ -737,9 +737,9 @@ SurveySpecie <- R6Class("SurveyBySpecie",
                           sigma2Hat = apply(sigma2s, 2, mean)
                           ps = matrix(as.numeric(samples$p), ncol=Nclust, byrow=T)
                           pHat = apply(ps, 2, mean)
-                          ma_zHat = numeric(length(lengClas))
-                          for(iObs in 1:length(lengClas)){
-                            postProbs = pHat * dnorm(lengClas[iObs], means, sqrt(sigma2Hat))
+                          ma_zHat = numeric(length(lengthSur))
+                          for(iObs in 1:length(lengthSur)){
+                            postProbs = pHat * dnorm(lengthSur[iObs], means, sqrt(sigma2Hat))
                             ma_zHat[iObs] = which.max(postProbs)
                           }
                           asc = seq(min(ind_dis), max(ind_dis), length=200)
@@ -764,10 +764,10 @@ SurveySpecie <- R6Class("SurveyBySpecie",
                           }
                           lines(asc, dens)
                           for(yea in 1:length(yearSur)){
-                            a_yea_abb <- cbind(apply(LFDPop[,,yea,ifelse(sex == 'Female', 1, 2)], 2, sum), lengClas, ma_zHat)
+                            a_yea_abb <- cbind(apply(LFDPop[,,yea,ifelse(sex == 'Female', 1, 2)], 2, sum), lengthSur, ma_zHat)
                             for(coho in 1:nCoho){
                               coho_ind <- which(a_yea_abb[,3] == coho)
-                              sim_pop <- rep(lengClas[coho_ind], a_yea_abb[coho_ind,1])
+                              sim_pop <- rep(lengthSur[coho_ind], a_yea_abb[coho_ind,1])
                               mixPar[[sex]][['Means']][yea,coho] <<- mean(sim_pop)
                               mixPar[[sex]][['Sigmas']][yea,coho] <<- sd(sim_pop)
                             }
