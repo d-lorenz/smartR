@@ -13,7 +13,7 @@ SmartProject <- R6Class("smartProject",
                         portable = FALSE,
                         class = TRUE,
                         public = list(
-                          rawData = NULL,
+                          rawDataSurvey = NULL,
                           years = NULL,
                           species = NULL,
                           bySpecie = NULL,
@@ -21,7 +21,7 @@ SmartProject <- R6Class("smartProject",
                           fleet = NULL,
                           loadRawLFD = function(csv_path) {
                             cat("Loading sampling data...\n", sep = "")
-                            rawData <<- read.table(file = csv_path, sep = ";", dec = ".", colClasses = c("character", "numeric", "numeric", "factor", "numeric", "numeric", "numeric", "numeric"), header = TRUE)
+                            rawDataSurvey <<- read.table(file = csv_path, sep = ";", dec = ".", colClasses = c("character", "numeric", "numeric", "factor", "numeric", "numeric", "numeric", "numeric"), header = TRUE)
                             cat("Setting Years... ", sep = "")
                             setYears()
                             cat(" from ", min(levels(years)[as.numeric(years)]), " to ", max(levels(years)[as.numeric(years)]),"\nSetting Species... ", sep = "")
@@ -30,16 +30,16 @@ SmartProject <- R6Class("smartProject",
                             splitSpecies()
                             cat(" completed!", sep = "")
                           },
-                          setYears = function(){years <<- sort(unique(rawData[,"Year"]), decreasing = FALSE)},
+                          setYears = function(){years <<- sort(unique(rawDataSurvey[,"Year"]), decreasing = FALSE)},
                           loadMap = function(map_path){sampMap <<- SampleMap$new(map_path)},
                           createFleet = function(){fleet <<- FishFleet$new()},
-                          setSpecies = function(){species <<- unique(rawData[,"SPECIE"])},
+                          setSpecies = function(){species <<- unique(rawDataSurvey[,"SPECIE"])},
                           splitSpecies = function(){
                             if(length(species) == 1){
-                              addSpecie(rawData)
+                              addSpecie(rawDataSurvey)
                             }else{
                               for(i in 1:length(species)){
-                                addSpecie(rawData[rawData[,"SPECIE"] == species[i],])}}
+                                addSpecie(rawDataSurvey[rawDataSurvey[,"SPECIE"] == species[i],])}}
                           },
                           addSpecie = function(sing_spe){bySpecie <<- c(bySpecie, BySpeLFD$new(sing_spe))},
                           setLFDPop = function(){
@@ -111,19 +111,19 @@ SmartProject <- R6Class("smartProject",
                             if(whoPlo == "All"){
                               sampMap$plotSamMap("All species")
                               for(i in 1:length(species)){
-                                points(bySpecie[[i]]$rawData[,c("LON","LAT")], pch = 20, col = 1+i, cex = 0.4)
+                                points(bySpecie[[i]]$rawDataSurvey[,c("LON","LAT")], pch = 20, col = 1+i, cex = 0.4)
                               }
                             }else{
                               sampMap$plotSamMap(whoPlo)
-                              points(bySpecie[[which(species == whoPlo)]]$rawData[,c("LON","LAT")], pch = 20, col = 1+which(species == whoPlo), cex = 0.4)
+                              points(bySpecie[[which(species == whoPlo)]]$rawDataSurvey[,c("LON","LAT")], pch = 20, col = 1+which(species == whoPlo), cex = 0.4)
                             }
                           },
                           plotGooSpe = function(whoPlo){
                             if(whoPlo == "All"){
-                              tmp_data <- unique(rawData[,c("SPECIE", "LAT", "LON")])
+                              tmp_data <- unique(rawDataSurvey[,c("SPECIE", "LAT", "LON")])
                             }else{
-                              tmp_data <- unique(rawData[which(rawData$SPECIE == whoPlo),c("SPECIE", "LAT", "LON")])
-                              levels(tmp_data[,1]) <- unique(rawData[,"SPECIE"])
+                              tmp_data <- unique(rawDataSurvey[which(rawDataSurvey$SPECIE == whoPlo),c("SPECIE", "LAT", "LON")])
+                              levels(tmp_data[,1]) <- unique(rawDataSurvey[,"SPECIE"])
                             }
                             sampMap$plotGooGridPoi(tmp_data)
                           },
@@ -528,7 +528,7 @@ SmartProject <- R6Class("smartProject",
                           calcLFDPop = function(ind_num){
                             bySpecie[[ind_num]]$LFDPop <<- array(dim=c(sampMap$nCells, length(bySpecie[[ind_num]]$lengClas),length(bySpecie[[ind_num]]$years),2))
                             for(y in 1:length(bySpecie[[ind_num]]$years)){
-                              subLFD <- bySpecie[[ind_num]]$rawData[which(bySpecie[[ind_num]]$rawData$Year==bySpecie[[ind_num]]$years[y]),]
+                              subLFD <- bySpecie[[ind_num]]$rawDataSurvey[which(bySpecie[[ind_num]]$rawDataSurvey$Year==bySpecie[[ind_num]]$years[y]),]
                               poinOver <- as.numeric(sp::over(SpatialPoints(subLFD[,c("LON","LAT")]), SpatialPolygons(sampMap$gridShp@polygons)))
                               subLFD <- cbind(subLFD[,c("LCLASS", "FEMALE", "MALE")], poinOver)
                               colnames(subLFD) <- c("LCLASS", "FEMALE", "MALE", "Cell")
@@ -585,7 +585,7 @@ SmartProject <- R6Class("smartProject",
                                   xdata <- cbind(sampMap$griCent, bySpecie[[ind_num]]$Coh_A[,coh,y,sex])
                                   colnames(xdata) <- c("LON","LAT","Coh")
                                   xdata <- as.data.frame(xdata)
-                                  yea_poi <- bySpecie[[ind_num]]$rawData[which(bySpecie[[ind_num]]$rawData$Year == bySpecie[[ind_num]]$years[y]),c("LON", "LAT")]
+                                  yea_poi <- bySpecie[[ind_num]]$rawDataSurvey[which(bySpecie[[ind_num]]$rawDataSurvey$Year == bySpecie[[ind_num]]$years[y]),c("LON", "LAT")]
                                   cMEDITS <- which(!is.na(over(sampMap$gridShp, SpatialPoints(unique(yea_poi)))))
                                   noMEDITS <- setdiff(c(1:sampMap$nCells),cMEDITS)
                                   Areacell <- 9.091279*11.112
