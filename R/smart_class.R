@@ -111,11 +111,11 @@ SmartProject <- R6Class("smartProject",
                             if(whoPlo == "All"){
                               sampMap$plotSamMap("All species")
                               for(i in 1:length(specieInSurvey)){
-                                points(surveySpecie[[i]]$rawLFD[,c("LON","LAT")], pch = 20, col = 1+i, cex = 0.4)
+                                points(surveySpecie[[i]]$rawLFDSur[,c("LON","LAT")], pch = 20, col = 1+i, cex = 0.4)
                               }
                             }else{
                               sampMap$plotSamMap(whoPlo)
-                              points(surveySpecie[[which(specieInSurvey == whoPlo)]]$rawLFD[,c("LON","LAT")], pch = 20, col = 1+which(specieInSurvey == whoPlo), cex = 0.4)
+                              points(surveySpecie[[which(specieInSurvey == whoPlo)]]$rawLFDSur[,c("LON","LAT")], pch = 20, col = 1+which(specieInSurvey == whoPlo), cex = 0.4)
                             }
                           },
                           plotGooSpe = function(whoPlo){
@@ -528,7 +528,7 @@ SmartProject <- R6Class("smartProject",
                           calcLFDPopSur = function(ind_num){
                             surveySpecie[[ind_num]]$LFDPopSur <<- array(dim=c(sampMap$nCells, length(surveySpecie[[ind_num]]$lengthSur),length(surveySpecie[[ind_num]]$yearSur),2))
                             for(y in 1:length(surveySpecie[[ind_num]]$yearSur)){
-                              subLFD <- surveySpecie[[ind_num]]$rawLFD[which(surveySpecie[[ind_num]]$rawLFD$Year==surveySpecie[[ind_num]]$yearSur[y]),]
+                              subLFD <- surveySpecie[[ind_num]]$rawLFDSur[which(surveySpecie[[ind_num]]$rawLFDSur$Year==surveySpecie[[ind_num]]$yearSur[y]),]
                               poinOver <- as.numeric(sp::over(SpatialPoints(subLFD[,c("LON","LAT")]), SpatialPolygons(sampMap$gridShp@polygons)))
                               subLFD <- cbind(subLFD[,c("LCLASS", "FEMALE", "MALE")], poinOver)
                               colnames(subLFD) <- c("LCLASS", "FEMALE", "MALE", "Cell")
@@ -585,7 +585,7 @@ SmartProject <- R6Class("smartProject",
                                   xdata <- cbind(sampMap$griCent, surveySpecie[[ind_num]]$Coh_A[,coh,y,sex])
                                   colnames(xdata) <- c("LON","LAT","Coh")
                                   xdata <- as.data.frame(xdata)
-                                  yea_poi <- surveySpecie[[ind_num]]$rawLFD[which(surveySpecie[[ind_num]]$rawLFD$Year == surveySpecie[[ind_num]]$yearSur[y]),c("LON", "LAT")]
+                                  yea_poi <- surveySpecie[[ind_num]]$rawLFDSur[which(surveySpecie[[ind_num]]$rawLFDSur$Year == surveySpecie[[ind_num]]$yearSur[y]),c("LON", "LAT")]
                                   cMEDITS <- which(!is.na(over(sampMap$gridShp, SpatialPoints(unique(yea_poi)))))
                                   noMEDITS <- setdiff(c(1:sampMap$nCells),cMEDITS)
                                   Areacell <- 9.091279*11.112
@@ -618,7 +618,7 @@ SurveySpecie <- R6Class("SurveyBySpecie",
                     public = list(
                       specieSur = NULL,
                       yearSur = NULL,
-                      rawLFD = NULL,
+                      rawLFDSur = NULL,
                       lengthSur = NULL, #LClass
                       LFDPopSur = NULL,
                       mixParSur = NULL, # MixtureP e ncohorts
@@ -633,9 +633,9 @@ SurveySpecie <- R6Class("SurveyBySpecie",
                       bRefs = NULL,
                       popGen = NULL,
                       selPar = NULL,
-                      setRawData = function(raw_data){rawLFD <<- raw_data},
+                      setRawData = function(raw_data){rawLFDSur <<- raw_data},
                       plotLFD = function(){
-                        plotSpeAllYea(rawLFD)
+                        plotSpeAllYea(rawLFDSur)
                       },
                       initialize = function(sing_spe){
                         setRawData(sing_spe)
@@ -643,9 +643,9 @@ SurveySpecie <- R6Class("SurveyBySpecie",
                         setSpecie()
                         setLClass()
                       },
-                      setYears = function(){yearSur <<- sort(unique(rawLFD[,"Year"]), decreasing = FALSE)},
-                      setSpecie = function(){specieSur <<- unique(rawLFD[,"SPECIE"])},
-                      setLClass = function(){lengthSur <<- seq(from = min(rawLFD[,"LCLASS"]), to = max(rawLFD[,"LCLASS"]), by = 1) },
+                      setYears = function(){yearSur <<- sort(unique(rawLFDSur[,"Year"]), decreasing = FALSE)},
+                      setSpecie = function(){specieSur <<- unique(rawLFDSur[,"SPECIE"])},
+                      setLClass = function(){lengthSur <<- seq(from = min(rawLFDSur[,"LCLASS"]), to = max(rawLFDSur[,"LCLASS"]), by = 1) },
                       setNCoho = function(num_coh){nCoho <<- num_coh},
                       setPrior = function(f_linf, f_k, f_t0, m_linf, m_k, m_t0){
                         prior <<- list('Female' = list('Linf' = list('Mean' = f_linf[1], 'StD' = f_linf[2]),
