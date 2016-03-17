@@ -561,8 +561,8 @@ SmartProject <- R6Class("smartProject",
                             surveySpecie[[ind_num]]$Coh_A <<- array(dim=c(sampMap$nCells, nc, length(surveySpecie[[ind_num]]$yearSur),2))
                             for(y in 1:length(surveySpecie[[ind_num]]$yearSur)){
                               for(sex in c(1:2)){
-                                mms <- surveySpecie[[ind_num]]$mixPar[[sex]][[1]][y,]
-                                sds <- surveySpecie[[ind_num]]$mixPar[[sex]][[2]][y,]
+                                mms <- surveySpecie[[ind_num]]$mixParSur[[sex]][[1]][y,]
+                                sds <- surveySpecie[[ind_num]]$mixParSur[[sex]][[2]][y,]
                                 opt <- matrix(0,length(LC),nc)
                                 for(ij in 1:sampMap$nCells){
                                   vv <- Pop[ij, , y, sex]
@@ -621,7 +621,7 @@ SurveySpecie <- R6Class("SurveyBySpecie",
                       rawLFD = NULL,
                       lengthSur = NULL, #LClass
                       LFDPopSur = NULL,
-                      mixPar = NULL, # MixtureP e ncohorts
+                      mixParSur = NULL, # MixtureP e ncohorts
                       nCoho = NULL,
                       prior = NULL,
                       Coh_A = NULL,
@@ -679,7 +679,7 @@ SurveySpecie <- R6Class("SurveyBySpecie",
 
                         TempArray <- GenPop(Abbmat = Coh_A_Int, num_cla = length(lengthSur),
                                             LCspe = LCspe, RA = RateArea, qMM = qMedits,
-                                            num_ye = yearSur, num_coh = nCoho, MixtureP = mixPar)
+                                            num_ye = yearSur, num_coh = nCoho, MixtureP = mixParSur)
 
                         #Check
                         cat(specieSur,"Biomassa", as.character(yearSur[length(yearSur)]), " =",
@@ -691,7 +691,7 @@ SurveySpecie <- R6Class("SurveyBySpecie",
                       },
                       calcMix = function(nAdap = 100, nSamp = 2000){
 
-                        mixPar <<- list('Female' = list('Means' = matrix(NA, length(yearSur), nCoho), 'Sigmas' = matrix(NA, length(yearSur), nCoho)),
+                        mixParSur <<- list('Female' = list('Means' = matrix(NA, length(yearSur), nCoho), 'Sigmas' = matrix(NA, length(yearSur), nCoho)),
                                         'Male' = list('Means' = matrix(NA, length(yearSur), nCoho), 'Sigmas' = matrix(NA, length(yearSur), nCoho)))
 
                         for(sex in c('Female', 'Male')){
@@ -768,8 +768,8 @@ SurveySpecie <- R6Class("SurveyBySpecie",
                             for(coho in 1:nCoho){
                               coho_ind <- which(a_yea_abb[,3] == coho)
                               sim_pop <- rep(lengthSur[coho_ind], a_yea_abb[coho_ind,1])
-                              mixPar[[sex]][['Means']][yea,coho] <<- mean(sim_pop)
-                              mixPar[[sex]][['Sigmas']][yea,coho] <<- sd(sim_pop)
+                              mixParSur[[sex]][['Means']][yea,coho] <<- mean(sim_pop)
+                              mixParSur[[sex]][['Sigmas']][yea,coho] <<- sd(sim_pop)
                             }
                           }
                         }
