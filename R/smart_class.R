@@ -777,8 +777,8 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
 
 
 
-####FisherySpecie#################################################
-#' FisherySpecie
+####FisheryBySpecie#################################################
+#' FisheryBySpecie
 #'
 #' The \code{FisheryBySpecie} class implements the class of SMART to
 #'  handle species samplings.
