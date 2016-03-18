@@ -601,6 +601,36 @@ smart_gui <- function(){
   addSpring(pop_g_top)
   lfdfra_g <- gframe("LFD data", horizontal = TRUE, container = pop_g_top, expand = TRUE)
   addSpring(lfdfra_g)
+  source_r <- gradio(items = c("Survey", "Fishery"), horizontal = FALSE, container = lfdfra_g, expand = TRUE, handler = function(...){
+    if(svalue(source_r) == "Survey"){
+      spec_drop[] <- my_project$specieInSurvey
+      spec_drop_mix[] <- my_project$specieInSurvey
+      spevie_drop[] <- c("All", my_project$specieInSurvey)
+      cohSpe_drop[] <- my_project$specieInSurvey
+      svalue(spec_drop) <- my_project$specieInSurvey[1]
+      svalue(cohSpe_drop) <- my_project$specieInSurvey[1]
+      svalue(spevie_drop) <- "All"
+      svalue(spec_drop_mix) <- my_project$specieInSurvey[1]
+      year_drop[] <- c("All", as.character(my_project$yearInSurvey))
+      cohYea_drop[] <- c("All", as.character(my_project$yearInSurvey))
+      svalue(year_drop) <- my_project$yearInSurvey[1]
+      svalue(cohYea_drop) <- "All"
+    }else{
+      spec_drop[] <- my_project$specieInFishery
+      spec_drop_mix[] <- my_project$specieInFishery
+      spevie_drop[] <- c("All", my_project$specieInFishery)
+      cohSpe_drop[] <- my_project$specieInFishery
+      svalue(spec_drop) <- my_project$specieInFishery[1]
+      svalue(cohSpe_drop) <- my_project$specieInFishery[1]
+      svalue(spevie_drop) <- "All"
+      svalue(spec_drop_mix) <- my_project$specieInFishery[1]
+      year_drop[] <- c("All", as.character(my_project$yearInFishery))
+      cohYea_drop[] <- c("All", as.character(my_project$yearInFishery))
+      svalue(year_drop) <- my_project$yearInFishery[1]
+      svalue(cohYea_drop) <- "All"
+    }
+  })
+  addSpring(lfdfra_g)
   spec_b <- gframe("Specie", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
   addSpring(lfdfra_g)
   addSpring(spec_b)
@@ -614,9 +644,15 @@ smart_gui <- function(){
   gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = lfdfra_g,
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+2])
-           spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
-           ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[,c("LCLASS","FEMALE","MALE")], my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[which(my_project$surveyBySpecie[[spe_ind]]$rawLFD[,"Year"] ==  svalue(year_drop)),c("LCLASS","FEMALE","MALE")])
-           the_reclfd <- RecLFD(my_cel_dat, my_project$surveyBySpecie[[spe_ind]]$lengClas, 1)
+           if(svalue(source_r) == "Survey"){
+             spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
+             ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[,c("LCLASS","FEMALE","MALE")], my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[which(my_project$surveyBySpecie[[spe_ind]]$rawLFD[,"Year"] ==  svalue(year_drop)),c("LCLASS","FEMALE","MALE")])
+             the_reclfd <- RecLFD(my_cel_dat, my_project$surveyBySpecie[[spe_ind]]$lengClas, 1)
+           }else{
+             spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
+             ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$fisheryBySpecie[[spe_ind]]$rawLFD[,c("LCLASS","FEMALE","MALE")], my_cel_dat <- my_project$fisheryBySpecie[[spe_ind]]$rawLFD[which(my_project$fisheryBySpecie[[spe_ind]]$rawLFD[,"Year"] ==  svalue(year_drop)),c("LCLASS","FEMALE","MALE")])
+             the_reclfd <- RecLFD(my_cel_dat, my_project$fisheryBySpecie[[spe_ind]]$lengClas, 1)
+           }
            plotRecLFD(the_reclfd)
          })
   addSpring(lfdfra_g)
@@ -726,11 +762,11 @@ smart_gui <- function(){
                        gbutton("\nAccept\n", container = bot_g,
                                handler = function(h,...){
                                  my_project$surveyBySpecie[[spe_ind]]$setPrior(as.numeric(unlist(lapply(fe_lay[2,2:3], svalue))),
-                                                                         as.numeric(unlist(lapply(fe_lay[3,2:3], svalue))),
-                                                                         as.numeric(unlist(lapply(fe_lay[4,2:3], svalue))),
-                                                                         as.numeric(unlist(lapply(ma_lay[2,2:3], svalue))),
-                                                                         as.numeric(unlist(lapply(ma_lay[3,2:3], svalue))),
-                                                                         as.numeric(unlist(lapply(ma_lay[4,2:3], svalue))))
+                                                                               as.numeric(unlist(lapply(fe_lay[3,2:3], svalue))),
+                                                                               as.numeric(unlist(lapply(fe_lay[4,2:3], svalue))),
+                                                                               as.numeric(unlist(lapply(ma_lay[2,2:3], svalue))),
+                                                                               as.numeric(unlist(lapply(ma_lay[3,2:3], svalue))),
+                                                                               as.numeric(unlist(lapply(ma_lay[4,2:3], svalue))))
 
                                  ## to check
                                  dispose(temp_dia)
