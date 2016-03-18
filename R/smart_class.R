@@ -48,10 +48,10 @@ SmartProject <- R6Class("smartProject",
                           addSpecieSurvey = function(sing_spe){surveyBySpecie <<- c(surveyBySpecie, surveyBySpecie$new(sing_spe))},
                           setLFDPopSurvey = function(){
                             if(length(specieInSurvey) == 1){
-                              calcLFDPop(1)
+                              calcLFDPopSurvey(1)
                             }else{
                               for(i in 1:length(specieInSurvey)){
-                                calcLFDPop(i)
+                                calcLFDPopSurvey(i)
                               }}
                             # speDisPlot("All")
                           },
@@ -529,7 +529,7 @@ SmartProject <- R6Class("smartProject",
                               }
                             }
                           },
-                          calcLFDPop = function(ind_num){
+                          calcLFDPopSurvey = function(ind_num){
                             surveyBySpecie[[ind_num]]$LFDPop <<- array(dim=c(sampMap$nCells, length(surveyBySpecie[[ind_num]]$lengClas),length(surveyBySpecie[[ind_num]]$year),2))
                             for(y in 1:length(surveyBySpecie[[ind_num]]$year)){
                               subLFD <- surveyBySpecie[[ind_num]]$rawLFD[which(surveyBySpecie[[ind_num]]$rawLFD$Year==surveyBySpecie[[ind_num]]$year[y]),]
