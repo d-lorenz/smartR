@@ -601,8 +601,8 @@ smart_gui <- function(){
   addSpring(pop_g_top)
   lfdfra_g <- gframe("LFD data", horizontal = TRUE, container = pop_g_top, expand = TRUE)
   addSpring(lfdfra_g)
-  source_r <- gradio(items = c("Survey", "Fishery"), horizontal = FALSE, container = lfdfra_g, expand = TRUE, handler = function(...){
-    if(svalue(source_r) == "Survey"){
+  sourcePop_r <- gradio(items = c("Survey", "Fishery"), horizontal = FALSE, container = lfdfra_g, expand = TRUE, handler = function(...){
+    if(svalue(sourcePop_r) == "Survey"){
       spec_drop[] <- my_project$specieInSurvey
       svalue(spec_drop) <- my_project$specieInSurvey[1]
       year_drop[] <- c("All", as.character(my_project$yearInSurvey))
@@ -628,7 +628,7 @@ smart_gui <- function(){
   gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = lfdfra_g,
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+2])
-           if(svalue(source_r) == "Survey"){
+           if(svalue(sourcePop_r) == "Survey"){
              spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
              ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[,c("LCLASS","FEMALE","MALE")], my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[which(my_project$surveyBySpecie[[spe_ind]]$rawLFD[,"Year"] ==  svalue(year_drop)),c("LCLASS","FEMALE","MALE")])
              the_reclfd <- RecLFD(my_cel_dat, my_project$surveyBySpecie[[spe_ind]]$lengClas, 1)
