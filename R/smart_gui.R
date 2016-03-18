@@ -525,6 +525,72 @@ smart_gui <- function(){
 
 
   ##############################################################
+  ####     Fishery     #########################################
+  ##############################################################
+
+  fis_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Fishery")
+  fis_g_top <- gframe(horizontal = TRUE, container = fis_g)
+  addSpace(fis_g_top, 2)
+  addSpring(fis_g_top)
+  fis_g_top1 <- ggroup(horizontal = FALSE, container = fis_g_top)
+  addSpring(fis_g_top1)
+  gbutton("Load Sample", container = fis_g_top1, handler = function(h,...){
+    svalue(stat_bar) <- "Loading Data..."
+    Sys.sleep(1)
+    my_project$loadFisheryLFD(csv_path = "/Users/Lomo/Documents/Uni/R/smart/data/Resource - Fishery/fishery_data_CampBiol.csv")
+
+    if(!is.null(my_project$rawDataFishery)){ #update_pop_gui()
+
+      fis_t[] <- my_project$rawDataFishery[sample(1:nrow(my_project$rawDataFishery), 100, replace = FALSE),]
+      svalue(fis_l1) <- paste("Specie: ", paste(my_project$specieInFishery, collapse = " - "))
+      #   svalue(fis_l2) <- paste("Length Classes: from ",  min(my_project$LClass), " to ", max(my_project$LClass))
+      svalue(fis_l3) <- paste("Years: from", min(as.numeric(as.character(my_project$yearInFishery))), " to ", max(as.numeric(as.character(my_project$yearInFishery))))
+      # spec_drop[] <- my_project$specieInFishery
+      # spec_drop_mix[] <- my_project$specieInFishery
+      # spevie_drop[] <- c("All", my_project$specieInFishery)
+      # cohSpe_drop[] <- my_project$specieInFishery
+      # svalue(spec_drop) <- my_project$specieInFishery[1]
+      # svalue(cohSpe_drop) <- my_project$specieInFishery[1]
+      # svalue(spevie_drop) <- "All"
+      # svalue(spec_drop_mix) <- my_project$specieInFishery[1]
+      # year_drop[] <- c("All", as.character(my_project$yearInFishery))
+      # cohYea_drop[] <- c("All", as.character(my_project$yearInFishery))
+      # svalue(year_drop) <- my_project$yearInFishery[1]
+      # svalue(cohYea_drop) <- "All"
+
+      # if(!is.null(my_project$sampMap)){
+      #   svalue(stat_bar) <- "Splitting Population..."
+      #   my_project$setLFDPopSurvey()
+      # }
+
+      svalue(stat_bar) <- ""
+
+      # ### Update Sampling Status
+      # svalue(n_year_s) <- paste(length(my_project$yearInFishery), " years", sep = "")
+      # svalue(mi_date_s) <- paste("From: ", min(as.numeric(as.character(my_project$yearInFishery))), sep = "")
+      # svalue(ma_date_s) <- paste("To: ", max(as.numeric(as.character(my_project$yearInFishery))), sep = "")
+      # svalue(n_spec_s) <- paste(length(my_project$specieInFishery),
+      #                           ifelse(length(my_project$specieInFishery) == 1, " specie", " species"), sep = "")
+      #
+      # delete(samp_g, samp_g$children[[length(samp_g$children)]])
+      # add(samp_g, samp_sta_n)
+    }
+  })
+  addSpring(fis_g_top1)
+  addSpring(fis_g_top)
+  fis_g_top2 <- ggroup(horizontal = FALSE, container = fis_g_top)
+  fis_l1 <- glabel("Specie: ", container = fis_g_top2)
+  fis_l3 <- glabel("Years: ", container = fis_g_top2)
+  addSpring(fis_g_top)
+  addSpace(fis_g_top, 2)
+  addSpace(fis_g_top2, 2)
+
+  blankDF = data.frame(SPECIE = character(0), LAT = numeric(0), LON = numeric(0), Year = character(0), LCLASS = numeric(0), FEMALE = character(0), MALE = character(0), UNSEX = character(0), stringsAsFactors=FALSE)
+  fis_t <- gtable(blankDF, container = fis_g, expand = TRUE)
+
+
+
+  ##############################################################
   ####   Population   ##########################################
   ##############################################################
 
