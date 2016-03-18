@@ -29,7 +29,7 @@ SmartProject <- R6Class("smartProject",
                             cat("Setting Years... ", sep = "")
                             setYearSurvey()
                             cat(" from ", min(levels(yearInSurvey)[as.numeric(yearInSurvey)]), " to ", max(levels(yearInSurvey)[as.numeric(yearInSurvey)]),"\nSetting Species... ", sep = "")
-                            setSpeciesSurvey()
+                            setSpecieSurvey()
                             cat(" found: ", paste(specieInSurvey, collapse = " - "), "\nSplitting Species...", sep = "")
                             splitSpecieSurvey()
                             cat(" completed!", sep = "")
@@ -37,7 +37,7 @@ SmartProject <- R6Class("smartProject",
                           setYearSurvey = function(){yearInSurvey <<- sort(unique(rawDataSurvey[,"Year"]), decreasing = FALSE)},
                           loadMap = function(map_path){sampMap <<- SampleMap$new(map_path)},
                           createFleet = function(){fleet <<- FishFleet$new()},
-                          setSpeciesSurvey = function(){specieInSurvey <<- unique(rawDataSurvey[,"SPECIE"])},
+                          setSpecieSurvey = function(){specieInSurvey <<- unique(rawDataSurvey[,"SPECIE"])},
                           splitSpecieSurvey = function(){
                             if(length(specieInSurvey) == 1){
                               addSpecie(rawDataSurvey)
