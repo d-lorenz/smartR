@@ -46,7 +46,7 @@ SmartProject <- R6Class("smartProject",
                                 addSpecieSurvey(rawDataSurvey[rawDataSurvey[,"SPECIE"] == specieInSurvey[i],])}}
                           },
                           addSpecieSurvey = function(sing_spe){surveyBySpecie <<- c(surveyBySpecie, surveyBySpecie$new(sing_spe))},
-                          setLFDPop = function(){
+                          setLFDPopSurvey = function(){
                             if(length(specieInSurvey) == 1){
                               calcLFDPop(1)
                             }else{
