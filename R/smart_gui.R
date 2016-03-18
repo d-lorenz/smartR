@@ -696,7 +696,7 @@ smart_gui <- function(){
                      my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_mix))]]$setNCoho(as.numeric(svalue(ncih_sb)))
                      my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_mix))]]$calcMix(nAdap = as.numeric(svalue(mc_niter)), nSamp = as.numeric(svalue(mc_nsamp)))
 
-                     my_project$calcCoh_A(which(my_project$specieInSurvey == svalue(spec_drop_mix)))
+                     my_project$calcCoh_A_Survey(which(my_project$specieInSurvey == svalue(spec_drop_mix)))
                      my_project$calcCoh_A_Int(which(my_project$specieInSurvey == svalue(spec_drop_mix)))
 
                      cohCoh_drop[] <- c("All", seq(1, my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_mix))]]$nCoho, by = 1))
