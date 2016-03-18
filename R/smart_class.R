@@ -526,9 +526,9 @@ SmartProject <- R6Class("smartProject",
                             }
                           },
                           calcLFDPop = function(ind_num){
-                            surveySpecie[[ind_num]]$LFDPop <<- array(dim=c(sampMap$nCells, length(surveySpecie[[ind_num]]$lengClas),length(surveySpecie[[ind_num]]$yearSur),2))
-                            for(y in 1:length(surveySpecie[[ind_num]]$yearSur)){
-                              subLFD <- surveySpecie[[ind_num]]$rawLFD[which(surveySpecie[[ind_num]]$rawLFD$Year==surveySpecie[[ind_num]]$yearSur[y]),]
+                            surveySpecie[[ind_num]]$LFDPop <<- array(dim=c(sampMap$nCells, length(surveySpecie[[ind_num]]$lengClas),length(surveySpecie[[ind_num]]$year),2))
+                            for(y in 1:length(surveySpecie[[ind_num]]$year)){
+                              subLFD <- surveySpecie[[ind_num]]$rawLFD[which(surveySpecie[[ind_num]]$rawLFD$Year==surveySpecie[[ind_num]]$year[y]),]
                               poinOver <- as.numeric(sp::over(SpatialPoints(subLFD[,c("LON","LAT")]), SpatialPolygons(sampMap$gridShp@polygons)))
                               subLFD <- cbind(subLFD[,c("LCLASS", "FEMALE", "MALE")], poinOver)
                               colnames(subLFD) <- c("LCLASS", "FEMALE", "MALE", "Cell")
@@ -558,8 +558,8 @@ SmartProject <- R6Class("smartProject",
                             LC <- surveySpecie[[ind_num]]$lengClas[-length(surveySpecie[[ind_num]]$lengClas)]
                             sp <- surveySpecie[[ind_num]]$specie
                             nc <- surveySpecie[[ind_num]]$nCoho
-                            surveySpecie[[ind_num]]$Coh_A <<- array(dim=c(sampMap$nCells, nc, length(surveySpecie[[ind_num]]$yearSur),2))
-                            for(y in 1:length(surveySpecie[[ind_num]]$yearSur)){
+                            surveySpecie[[ind_num]]$Coh_A <<- array(dim=c(sampMap$nCells, nc, length(surveySpecie[[ind_num]]$year),2))
+                            for(y in 1:length(surveySpecie[[ind_num]]$year)){
                               for(sex in c(1:2)){
                                 mms <- surveySpecie[[ind_num]]$mixPar[[sex]][[1]][y,]
                                 sds <- surveySpecie[[ind_num]]$mixPar[[sex]][[2]][y,]
@@ -578,14 +578,14 @@ SmartProject <- R6Class("smartProject",
                             }
                           },
                           calcCoh_A_Int = function(ind_num){
-                            surveySpecie[[ind_num]]$Coh_A_Int <<- array(dim=c(sampMap$nCells, surveySpecie[[ind_num]]$nCoho,length(surveySpecie[[ind_num]]$yearSur),2))
-                            for(y in 1:length(surveySpecie[[ind_num]]$yearSur)){
+                            surveySpecie[[ind_num]]$Coh_A_Int <<- array(dim=c(sampMap$nCells, surveySpecie[[ind_num]]$nCoho,length(surveySpecie[[ind_num]]$year),2))
+                            for(y in 1:length(surveySpecie[[ind_num]]$year)){
                               for(sex in 1:2){
                                 for(coh in 1:surveySpecie[[ind_num]]$nCoho){
                                   xdata <- cbind(sampMap$griCent, surveySpecie[[ind_num]]$Coh_A[,coh,y,sex])
                                   colnames(xdata) <- c("LON","LAT","Coh")
                                   xdata <- as.data.frame(xdata)
-                                  yea_poi <- surveySpecie[[ind_num]]$rawLFD[which(surveySpecie[[ind_num]]$rawLFD$Year == surveySpecie[[ind_num]]$yearSur[y]),c("LON", "LAT")]
+                                  yea_poi <- surveySpecie[[ind_num]]$rawLFD[which(surveySpecie[[ind_num]]$rawLFD$Year == surveySpecie[[ind_num]]$year[y]),c("LON", "LAT")]
                                   cMEDITS <- which(!is.na(over(sampMap$gridShp, SpatialPoints(unique(yea_poi)))))
                                   noMEDITS <- setdiff(c(1:sampMap$nCells),cMEDITS)
                                   Areacell <- 9.091279*11.112
@@ -617,7 +617,7 @@ SurveySpecie <- R6Class("SurveyBySpecie",
                     class = TRUE,
                     public = list(
                       specie = NULL,
-                      yearSur = NULL,
+                      year = NULL,
                       rawLFD = NULL,
                       lengClas = NULL, #LClass
                       LFDPop = NULL,
@@ -643,7 +643,7 @@ SurveySpecie <- R6Class("SurveyBySpecie",
                         setSpecie()
                         setLClass()
                       },
-                      setYears = function(){yearSur <<- sort(unique(rawLFD[,"Year"]), decreasing = FALSE)},
+                      setYears = function(){year <<- sort(unique(rawLFD[,"Year"]), decreasing = FALSE)},
                       setSpecie = function(){specie <<- unique(rawLFD[,"SPECIE"])},
                       setLClass = function(){lengClas <<- seq(from = min(rawLFD[,"LCLASS"]), to = max(rawLFD[,"LCLASS"]), by = 1) },
                       setNCoho = function(num_coh){nCoho <<- num_coh},
@@ -679,11 +679,11 @@ SurveySpecie <- R6Class("SurveyBySpecie",
 
                         TempArray <- GenPop(Abbmat = Coh_A_Int, num_cla = length(lengClas),
                                             LCspe = LCspe, RA = RateArea, qMM = qMedits,
-                                            num_ye = yearSur, num_coh = nCoho, MixtureP = mixPar)
+                                            num_ye = year, num_coh = nCoho, MixtureP = mixPar)
 
                         #Check
-                        cat(specie,"Biomassa", as.character(yearSur[length(yearSur)]), " =",
-                            sum(LFDtoBcell(LCspe = LCspe, abbF = TempArray[,,length(yearSur),1], abbM = TempArray[,,length(yearSur),2],
+                        cat(specie,"Biomassa", as.character(year[length(year)]), " =",
+                            sum(LFDtoBcell(LCspe = LCspe, abbF = TempArray[,,length(year),1], abbM = TempArray[,,length(year),2],
                                            LWpar = LWpar))/1000000 ,"\n")
 
                         popGen <<- TempArray
@@ -691,8 +691,8 @@ SurveySpecie <- R6Class("SurveyBySpecie",
                       },
                       calcMix = function(nAdap = 100, nSamp = 2000){
 
-                        mixPar <<- list('Female' = list('Means' = matrix(NA, length(yearSur), nCoho), 'Sigmas' = matrix(NA, length(yearSur), nCoho)),
-                                        'Male' = list('Means' = matrix(NA, length(yearSur), nCoho), 'Sigmas' = matrix(NA, length(yearSur), nCoho)))
+                        mixPar <<- list('Female' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)),
+                                        'Male' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)))
 
                         for(sex in c('Female', 'Male')){
                           ind_cou = apply(LFDPop[,,,ifelse(sex == 'Female', 1, 2)], 2, sum)      # Counts of males, per length
@@ -763,7 +763,7 @@ SurveySpecie <- R6Class("SurveyBySpecie",
                                       ifelse(sex == "Female", rgb(0.8,0.1,0.1,0.2), rgb(0.1,0.1,0.8,0.2)), border=F)
                           }
                           lines(asc, dens)
-                          for(yea in 1:length(yearSur)){
+                          for(yea in 1:length(year)){
                             a_yea_abb <- cbind(apply(LFDPop[,,yea,ifelse(sex == 'Female', 1, 2)], 2, sum), lengClas, ma_zHat)
                             for(coho in 1:nCoho){
                               coho_ind <- which(a_yea_abb[,3] == coho)
