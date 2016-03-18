@@ -843,7 +843,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                             setSpecie()
                             setLClass()
                           },
-                          setYears = function(){year <<- sort(unique(rawLFD[,"Year"]), decreasing = FALSE)},
+                          setYears = function(){year <<- sort(unique(years(rawLFD[,"DATE"])), decreasing = FALSE)},
                           setSpecie = function(){specie <<- unique(rawLFD[,"SPECIE"])},
                           setLClass = function(){lengClas <<- seq(from = min(rawLFD[,"LCLASS"]), to = max(rawLFD[,"LCLASS"]), by = 1) },
                           setNCoho = function(num_coh){nCoho <<- num_coh},
