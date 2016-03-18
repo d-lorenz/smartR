@@ -16,7 +16,7 @@ SmartProject <- R6Class("smartProject",
                           rawDataSurvey = NULL,
                           yearInSurvey = NULL,
                           specieInSurvey = NULL,
-                          surveySpecie = NULL,
+                          surveyBySpecie = NULL,
                           sampMap = NULL,
                           fleet = NULL,
                           loadSurveyLFD = function(csv_path) {
@@ -41,7 +41,7 @@ SmartProject <- R6Class("smartProject",
                               for(i in 1:length(specieInSurvey)){
                                 addSpecie(rawDataSurvey[rawDataSurvey[,"SPECIE"] == specieInSurvey[i],])}}
                           },
-                          addSpecie = function(sing_spe){surveySpecie <<- c(surveySpecie, SurveySpecie$new(sing_spe))},
+                          addSpecie = function(sing_spe){surveyBySpecie <<- c(surveyBySpecie, surveyBySpecie$new(sing_spe))},
                           setLFDPop = function(){
                             if(length(specieInSurvey) == 1){
                               calcLFDPop(1)
@@ -111,11 +111,11 @@ SmartProject <- R6Class("smartProject",
                             if(whoPlo == "All"){
                               sampMap$plotSamMap("All species")
                               for(i in 1:length(specieInSurvey)){
-                                points(surveySpecie[[i]]$rawLFD[,c("LON","LAT")], pch = 20, col = 1+i, cex = 0.4)
+                                points(surveyBySpecie[[i]]$rawLFD[,c("LON","LAT")], pch = 20, col = 1+i, cex = 0.4)
                               }
                             }else{
                               sampMap$plotSamMap(whoPlo)
-                              points(surveySpecie[[which(specieInSurvey == whoPlo)]]$rawLFD[,c("LON","LAT")], pch = 20, col = 1+which(specieInSurvey == whoPlo), cex = 0.4)
+                              points(surveyBySpecie[[which(specieInSurvey == whoPlo)]]$rawLFD[,c("LON","LAT")], pch = 20, col = 1+which(specieInSurvey == whoPlo), cex = 0.4)
                             }
                           },
                           plotGooSpe = function(whoPlo){
@@ -449,16 +449,16 @@ SmartProject <- R6Class("smartProject",
                             if(interp == FALSE){
                               if(whoCoh == "All"){
                                 if(whiYea == "All"){
-                                  # 1+round(apply(surveySpecie[[whoSpe]]$Coh_A[,,,],1,sum)/max(apply(surveySpecie[[whoSpe]]$Coh_A[,,,],1,sum)), 2)*100
-                                  yea_abb <- round(apply(surveySpecie[[whoSpe]]$Coh_A[,,,],1,sum))
+                                  # 1+round(apply(surveyBySpecie[[whoSpe]]$Coh_A[,,,],1,sum)/max(apply(surveyBySpecie[[whoSpe]]$Coh_A[,,,],1,sum)), 2)*100
+                                  yea_abb <- round(apply(surveyBySpecie[[whoSpe]]$Coh_A[,,,],1,sum))
                                   round_yea <- 1+100*yea_abb/max(yea_abb)
 
                                   distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
                                                 maxVal = ceiling(max(yea_abb)),
                                                 plotTitle = paste("Specie: ", specieInSurvey[whoSpe], " - All cohorts - All years", sep = ""), legendUnits = "N.")
                                 }else{
-                                  # 1+round(apply(surveySpecie[[whoSpe]]$Coh_A[,,whiYea,],1,sum)/max(apply(surveySpecie[[whoSpe]]$Coh_A[,,whiYea,],1,sum)), 2)*100
-                                  yea_abb <- round(apply(surveySpecie[[whoSpe]]$Coh_A[,,whiYea,],1,sum))
+                                  # 1+round(apply(surveyBySpecie[[whoSpe]]$Coh_A[,,whiYea,],1,sum)/max(apply(surveyBySpecie[[whoSpe]]$Coh_A[,,whiYea,],1,sum)), 2)*100
+                                  yea_abb <- round(apply(surveyBySpecie[[whoSpe]]$Coh_A[,,whiYea,],1,sum))
                                   round_yea <- 1+100*yea_abb/max(yea_abb)
 
                                   distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
@@ -468,7 +468,7 @@ SmartProject <- R6Class("smartProject",
                                 }
                               }else{
                                 if(whiYea == "All"){
-                                  yea_abb <- round(apply(surveySpecie[[whoSpe]]$Coh_A[,whoCoh,,],1,sum))
+                                  yea_abb <- round(apply(surveyBySpecie[[whoSpe]]$Coh_A[,whoCoh,,],1,sum))
                                   round_yea <- 1+100*yea_abb/max(yea_abb)
 
                                   distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
@@ -476,7 +476,7 @@ SmartProject <- R6Class("smartProject",
                                                 plotTitle = paste("Specie: ", specieInSurvey[whoSpe], " - Cohort: ", whoCoh, "- All years", sep = ""),
                                                 legendUnits = "N.")
                                 }else{
-                                  yea_abb <- round(apply(surveySpecie[[whoSpe]]$Coh_A[,whoCoh,whiYea,],1,sum))
+                                  yea_abb <- round(apply(surveyBySpecie[[whoSpe]]$Coh_A[,whoCoh,whiYea,],1,sum))
                                   round_yea <- 1+100*yea_abb/max(yea_abb)
 
                                   distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
@@ -488,7 +488,7 @@ SmartProject <- R6Class("smartProject",
                             }else{
                               if(whoCoh == "All"){
                                 if(whiYea == "All"){
-                                  yea_abb <- round(apply(surveySpecie[[whoSpe]]$Coh_A_Int[,,,],1,sum))
+                                  yea_abb <- round(apply(surveyBySpecie[[whoSpe]]$Coh_A_Int[,,,],1,sum))
                                   round_yea <- 1+100*yea_abb/max(yea_abb)
 
                                   distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
@@ -496,7 +496,7 @@ SmartProject <- R6Class("smartProject",
                                                 plotTitle = paste("Specie: ", specieInSurvey[whoSpe], " - All cohorts - All years", sep = ""),
                                                 legendUnits = "N.")
                                 }else{
-                                  yea_abb <- round(apply(surveySpecie[[whoSpe]]$Coh_A_Int[,,whiYea,],1,sum))
+                                  yea_abb <- round(apply(surveyBySpecie[[whoSpe]]$Coh_A_Int[,,whiYea,],1,sum))
                                   round_yea <- 1+100*yea_abb/max(yea_abb)
 
                                   distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
@@ -506,7 +506,7 @@ SmartProject <- R6Class("smartProject",
                                 }
                               }else{
                                 if(whiYea == "All"){
-                                  yea_abb <- round(apply(surveySpecie[[whoSpe]]$Coh_A_Int[,whoCoh,,],1,sum))
+                                  yea_abb <- round(apply(surveyBySpecie[[whoSpe]]$Coh_A_Int[,whoCoh,,],1,sum))
                                   round_yea <- 1+100*yea_abb/max(yea_abb)
 
                                   distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
@@ -514,7 +514,7 @@ SmartProject <- R6Class("smartProject",
                                                 plotTitle = paste("Specie: ", specieInSurvey[whoSpe], " - Cohort: ", whoCoh, "- All years", sep = ""),
                                                 legendUnits = "N.")
                                 }else{
-                                  yea_abb <- round(apply(surveySpecie[[whoSpe]]$Coh_A_Int[,whoCoh,whiYea,],1,sum))
+                                  yea_abb <- round(apply(surveyBySpecie[[whoSpe]]$Coh_A_Int[,whoCoh,whiYea,],1,sum))
                                   round_yea <- 1+100*yea_abb/max(yea_abb)
 
                                   distrPlotCols(cols = rev(topo.colors(101)), vals = round_yea,
@@ -526,9 +526,9 @@ SmartProject <- R6Class("smartProject",
                             }
                           },
                           calcLFDPop = function(ind_num){
-                            surveySpecie[[ind_num]]$LFDPop <<- array(dim=c(sampMap$nCells, length(surveySpecie[[ind_num]]$lengClas),length(surveySpecie[[ind_num]]$year),2))
-                            for(y in 1:length(surveySpecie[[ind_num]]$year)){
-                              subLFD <- surveySpecie[[ind_num]]$rawLFD[which(surveySpecie[[ind_num]]$rawLFD$Year==surveySpecie[[ind_num]]$year[y]),]
+                            surveyBySpecie[[ind_num]]$LFDPop <<- array(dim=c(sampMap$nCells, length(surveyBySpecie[[ind_num]]$lengClas),length(surveyBySpecie[[ind_num]]$year),2))
+                            for(y in 1:length(surveyBySpecie[[ind_num]]$year)){
+                              subLFD <- surveyBySpecie[[ind_num]]$rawLFD[which(surveyBySpecie[[ind_num]]$rawLFD$Year==surveyBySpecie[[ind_num]]$year[y]),]
                               poinOver <- as.numeric(sp::over(SpatialPoints(subLFD[,c("LON","LAT")]), SpatialPolygons(sampMap$gridShp@polygons)))
                               subLFD <- cbind(subLFD[,c("LCLASS", "FEMALE", "MALE")], poinOver)
                               colnames(subLFD) <- c("LCLASS", "FEMALE", "MALE", "Cell")
@@ -536,13 +536,13 @@ SmartProject <- R6Class("smartProject",
                                 if(length(which(subLFD[,"Cell"] == IDcell))>0){
                                   cell.data <- subLFD[which(subLFD[,"Cell"] == IDcell),]
                                   cell.LFD <- RecLFD(cell.data,
-                                                     surveySpecie[[ind_num]]$lengClas,
+                                                     surveyBySpecie[[ind_num]]$lengClas,
                                                      length(unique(cell.data[,1])))
-                                  surveySpecie[[ind_num]]$LFDPop[IDcell,,y,1] <<- cell.LFD[1,]
-                                  surveySpecie[[ind_num]]$LFDPop[IDcell,,y,2] <<- cell.LFD[2,]
+                                  surveyBySpecie[[ind_num]]$LFDPop[IDcell,,y,1] <<- cell.LFD[1,]
+                                  surveyBySpecie[[ind_num]]$LFDPop[IDcell,,y,2] <<- cell.LFD[2,]
                                 }else{
-                                  surveySpecie[[ind_num]]$LFDPop[IDcell,,y,1] <<- rep(0,length(surveySpecie[[ind_num]]$lengClas))
-                                  surveySpecie[[ind_num]]$LFDPop[IDcell,,y,2] <<- rep(0,length(surveySpecie[[ind_num]]$lengClas))
+                                  surveyBySpecie[[ind_num]]$LFDPop[IDcell,,y,1] <<- rep(0,length(surveyBySpecie[[ind_num]]$lengClas))
+                                  surveyBySpecie[[ind_num]]$LFDPop[IDcell,,y,2] <<- rep(0,length(surveyBySpecie[[ind_num]]$lengClas))
                                 }}}},
                           setCoh_A = function(){
                             if(length(specieInSurvey) == 1){
@@ -554,15 +554,15 @@ SmartProject <- R6Class("smartProject",
                           },
                           calcCoh_A = function(ind_num){
 
-                            Pop <- surveySpecie[[ind_num]]$LFDPop
-                            LC <- surveySpecie[[ind_num]]$lengClas[-length(surveySpecie[[ind_num]]$lengClas)]
-                            sp <- surveySpecie[[ind_num]]$specie
-                            nc <- surveySpecie[[ind_num]]$nCoho
-                            surveySpecie[[ind_num]]$Coh_A <<- array(dim=c(sampMap$nCells, nc, length(surveySpecie[[ind_num]]$year),2))
-                            for(y in 1:length(surveySpecie[[ind_num]]$year)){
+                            Pop <- surveyBySpecie[[ind_num]]$LFDPop
+                            LC <- surveyBySpecie[[ind_num]]$lengClas[-length(surveyBySpecie[[ind_num]]$lengClas)]
+                            sp <- surveyBySpecie[[ind_num]]$specie
+                            nc <- surveyBySpecie[[ind_num]]$nCoho
+                            surveyBySpecie[[ind_num]]$Coh_A <<- array(dim=c(sampMap$nCells, nc, length(surveyBySpecie[[ind_num]]$year),2))
+                            for(y in 1:length(surveyBySpecie[[ind_num]]$year)){
                               for(sex in c(1:2)){
-                                mms <- surveySpecie[[ind_num]]$mixPar[[sex]][[1]][y,]
-                                sds <- surveySpecie[[ind_num]]$mixPar[[sex]][[2]][y,]
+                                mms <- surveyBySpecie[[ind_num]]$mixPar[[sex]][[1]][y,]
+                                sds <- surveyBySpecie[[ind_num]]$mixPar[[sex]][[2]][y,]
                                 opt <- matrix(0,length(LC),nc)
                                 for(ij in 1:sampMap$nCells){
                                   vv <- Pop[ij, , y, sex]
@@ -572,25 +572,25 @@ SmartProject <- R6Class("smartProject",
                                     opt.ass <- apply(opt,1,which.max)
                                     for(coh in c(1:nc)) coh.abb[coh] <- sum(vv[which(opt.ass==coh)])
                                   }
-                                  surveySpecie[[ind_num]]$Coh_A[ij,1:nc,y,sex] <- as.numeric(coh.abb)
+                                  surveyBySpecie[[ind_num]]$Coh_A[ij,1:nc,y,sex] <- as.numeric(coh.abb)
                                 }
                               }
                             }
                           },
                           calcCoh_A_Int = function(ind_num){
-                            surveySpecie[[ind_num]]$Coh_A_Int <<- array(dim=c(sampMap$nCells, surveySpecie[[ind_num]]$nCoho,length(surveySpecie[[ind_num]]$year),2))
-                            for(y in 1:length(surveySpecie[[ind_num]]$year)){
+                            surveyBySpecie[[ind_num]]$Coh_A_Int <<- array(dim=c(sampMap$nCells, surveyBySpecie[[ind_num]]$nCoho,length(surveyBySpecie[[ind_num]]$year),2))
+                            for(y in 1:length(surveyBySpecie[[ind_num]]$year)){
                               for(sex in 1:2){
-                                for(coh in 1:surveySpecie[[ind_num]]$nCoho){
-                                  xdata <- cbind(sampMap$griCent, surveySpecie[[ind_num]]$Coh_A[,coh,y,sex])
+                                for(coh in 1:surveyBySpecie[[ind_num]]$nCoho){
+                                  xdata <- cbind(sampMap$griCent, surveyBySpecie[[ind_num]]$Coh_A[,coh,y,sex])
                                   colnames(xdata) <- c("LON","LAT","Coh")
                                   xdata <- as.data.frame(xdata)
-                                  yea_poi <- surveySpecie[[ind_num]]$rawLFD[which(surveySpecie[[ind_num]]$rawLFD$Year == surveySpecie[[ind_num]]$year[y]),c("LON", "LAT")]
+                                  yea_poi <- surveyBySpecie[[ind_num]]$rawLFD[which(surveyBySpecie[[ind_num]]$rawLFD$Year == surveyBySpecie[[ind_num]]$year[y]),c("LON", "LAT")]
                                   cMEDITS <- which(!is.na(over(sampMap$gridShp, SpatialPoints(unique(yea_poi)))))
                                   noMEDITS <- setdiff(c(1:sampMap$nCells),cMEDITS)
                                   Areacell <- 9.091279*11.112
                                   RateArea <- Areacell/100
-                                  surveySpecie[[ind_num]]$Coh_A_Int[,coh,y,sex] <- IntInvDis(RateArea*xdata, cMEDITS, noMEDITS,
+                                  surveyBySpecie[[ind_num]]$Coh_A_Int[,coh,y,sex] <- IntInvDis(RateArea*xdata, cMEDITS, noMEDITS,
                                                                                          Refmax=5, Refmin=3,
                                                                                          sampMap$nCells,
                                                                                          sampMap$gridShp, graph=T, logplot=F)[,3]
@@ -602,17 +602,17 @@ SmartProject <- R6Class("smartProject",
 
 
 
-####SurveySpecie#################################################
-#' SurveySpecie
+####SurveyBySpecie#################################################
+#' SurveyBySpecie
 #'
-#' The \code{SurveySpecie} class implements the class of SMART to
+#' The \code{SurveyBySpecie} class implements the class of SMART to
 #'  handle species samplings.
 #'
 #' @return This function returns the 'SurveyBySpecie' object.
 #'
 #############################################################
 
-SurveySpecie <- R6Class("SurveyBySpecie",
+SurveyBySpecie <- R6Class("SurveyBySpecie",
                     portable = FALSE,
                     class = TRUE,
                     public = list(
