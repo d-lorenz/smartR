@@ -46,7 +46,7 @@ SmartProject <- R6Class("smartProject",
                             cat(" completed!", sep = "")
                           },
                           setYearSurvey = function(){yearInSurvey <<- sort(unique(rawDataSurvey[,"Year"]), decreasing = FALSE)},
-                          setYearFishery = function(){yearInFishery <<- sort(unique(rawDataFishery[,"Year"]), decreasing = FALSE)},
+                          setYearFishery = function(){yearInFishery <<- sort(unique(years(rawDataFishery[,"DATE"])), decreasing = FALSE)},
                           loadMap = function(map_path){sampMap <<- SampleMap$new(map_path)},
                           createFleet = function(){fleet <<- FishFleet$new()},
                           setSpecieSurvey = function(){specieInSurvey <<- unique(rawDataSurvey[,"SPECIE"])},
