@@ -604,30 +604,14 @@ smart_gui <- function(){
   source_r <- gradio(items = c("Survey", "Fishery"), horizontal = FALSE, container = lfdfra_g, expand = TRUE, handler = function(...){
     if(svalue(source_r) == "Survey"){
       spec_drop[] <- my_project$specieInSurvey
-      spec_drop_mix[] <- my_project$specieInSurvey
-      spevie_drop[] <- c("All", my_project$specieInSurvey)
-      cohSpe_drop[] <- my_project$specieInSurvey
       svalue(spec_drop) <- my_project$specieInSurvey[1]
-      svalue(cohSpe_drop) <- my_project$specieInSurvey[1]
-      svalue(spevie_drop) <- "All"
-      svalue(spec_drop_mix) <- my_project$specieInSurvey[1]
       year_drop[] <- c("All", as.character(my_project$yearInSurvey))
-      cohYea_drop[] <- c("All", as.character(my_project$yearInSurvey))
       svalue(year_drop) <- my_project$yearInSurvey[1]
-      svalue(cohYea_drop) <- "All"
     }else{
       spec_drop[] <- my_project$specieInFishery
-      spec_drop_mix[] <- my_project$specieInFishery
-      spevie_drop[] <- c("All", my_project$specieInFishery)
-      cohSpe_drop[] <- my_project$specieInFishery
       svalue(spec_drop) <- my_project$specieInFishery[1]
-      svalue(cohSpe_drop) <- my_project$specieInFishery[1]
-      svalue(spevie_drop) <- "All"
-      svalue(spec_drop_mix) <- my_project$specieInFishery[1]
       year_drop[] <- c("All", as.character(my_project$yearInFishery))
-      cohYea_drop[] <- c("All", as.character(my_project$yearInFishery))
       svalue(year_drop) <- my_project$yearInFishery[1]
-      svalue(cohYea_drop) <- "All"
     }
   })
   addSpring(lfdfra_g)
