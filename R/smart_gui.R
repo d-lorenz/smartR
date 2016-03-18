@@ -40,35 +40,37 @@ smart_gui <- function(){
   raw_eg <- gexpandgroup("Resources", horizontal = FALSE, container = lef_g)
   gbutton(text = "Survey", container = raw_eg, handler = function(h,...){
     svalue(uti_gn) <- 3})
-  gbutton(text = "Population", container = raw_eg, handler = function(h,...){
+  gbutton(text = "Fishery", container = raw_eg, handler = function(h,...){
     svalue(uti_gn) <- 4})
-  gbutton(text = "Mixture", container = raw_eg, handler = function(h,...){
+  gbutton(text = "Population", container = raw_eg, handler = function(h,...){
     svalue(uti_gn) <- 5})
-  gbutton(text = "Cohorts", container = raw_eg, handler = function(h,...){
+  gbutton(text = "Mixture", container = raw_eg, handler = function(h,...){
     svalue(uti_gn) <- 6})
+  gbutton(text = "Cohorts", container = raw_eg, handler = function(h,...){
+    svalue(uti_gn) <- 7})
 
   eff_eg <- gexpandgroup("Effort", horizontal = FALSE, container = lef_g)
   gbutton(text = "Load VMS Data", container = eff_eg, handler = function(h,...){
-    svalue(uti_gn) <- 7})
-
-  gbutton(text = "Fishing Grounds", container = eff_eg, handler = function(h,...){
     svalue(uti_gn) <- 8})
 
-  gbutton(text = "Fleet Register", container = eff_eg, handler = function(h,...){
+  gbutton(text = "Fishing Grounds", container = eff_eg, handler = function(h,...){
     svalue(uti_gn) <- 9})
 
-  gbutton(text = "Production", container = eff_eg, handler = function(h,...){
+  gbutton(text = "Fleet Register", container = eff_eg, handler = function(h,...){
     svalue(uti_gn) <- 10})
 
-  gbutton(text = "Selectivity", container = eff_eg, handler = function(h,...){
+  gbutton(text = "Production", container = eff_eg, handler = function(h,...){
     svalue(uti_gn) <- 11})
+
+  gbutton(text = "Selectivity", container = eff_eg, handler = function(h,...){
+    svalue(uti_gn) <- 12})
 
   pre_eg <- gexpandgroup("Predictive", horizontal = FALSE, container = lef_g)
   gbutton(text = "Predict", container = pre_eg, handler = function(h,...){
-    svalue(uti_gn) <- 12})
+    svalue(uti_gn) <- 13})
   sim_eg <- gexpandgroup("Simulation", horizontal = FALSE, container = lef_g)
   gbutton(text = "Simulate", container = sim_eg, handler = function(h,...){
-    svalue(uti_gn) <- 13})
+    svalue(uti_gn) <- 14})
   addSpring(lef_g)
   stat_bar <- gstatusbar("", container = lef_g, visible = TRUE)
 
@@ -194,7 +196,7 @@ smart_gui <- function(){
 
   addSpring(pro_g_mid)
   # gbutton("Sampling", container = pro_g_mid)
-  samp_g <- gframe(text = "Sampling", horizontal = FALSE, container = pro_g_mid)
+  samp_g <- gframe(text = "Survey", horizontal = FALSE, container = pro_g_mid)
   n_year_s <- glabel("   ---", container = samp_g)
   mi_date_s <- glabel("", container = samp_g)
   ma_date_s <- glabel("", container = samp_g)
@@ -215,7 +217,7 @@ smart_gui <- function(){
   # n_cell_g <- glabel("   ---", container = effo_g)
   addSpring(effo_g)
   effo_b <- gbutton(text = "Show data", container = effo_g, handler = function(h,..){
-    svalue(uti_gn) <- 7
+    svalue(uti_gn) <- 8
   })
   effo_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
@@ -229,7 +231,7 @@ smart_gui <- function(){
   # n_cell_g <- glabel("   ---", container = effo_g)
   addSpring(figr_g)
   figr_b <- gbutton(text = "Show data", container = figr_g, handler = function(h,..){
-    svalue(uti_gn) <- 8
+    svalue(uti_gn) <- 9
   })
   figr_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   figr_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
@@ -243,7 +245,7 @@ smart_gui <- function(){
   # n_cell_g <- glabel("   ---", container = regi_g)
   addSpring(regi_g)
   regi_b <- gbutton(text = "Show data", container = regi_g, handler = function(h,..){
-    svalue(uti_gn) <- 9
+    svalue(uti_gn) <- 10
   })
   regi_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   regi_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
@@ -257,7 +259,7 @@ smart_gui <- function(){
   # n_cell_g <- glabel("   ---", container = prod_g)
   addSpring(prod_g)
   prod_b <- gbutton(text = "Show data", container = prod_g, handler = function(h,..){
-    svalue(uti_gn) <- 10
+    svalue(uti_gn) <- 11
   })
   prod_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   add(prod_g, prod_sta)
@@ -270,7 +272,7 @@ smart_gui <- function(){
   # n_cell_g <- glabel("   ---", container = effo_g)
   addSpring(sele_g)
   sele_b <- gbutton(text = "Show data", container = sele_g, handler = function(h,..){
-    svalue(uti_gn) <- 11
+    svalue(uti_gn) <- 12
   })
   sele_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   add(sele_g, sele_sta)
@@ -1749,7 +1751,6 @@ smart_gui <- function(){
   visible(main_win) <- TRUE
 
   svalue(uti_gn) <- 2
-  svalue(uti_gn) <- 4
   svalue(uti_gn) <- 5
   svalue(uti_gn) <- 6
   svalue(uti_gn) <- 7
@@ -1759,6 +1760,7 @@ smart_gui <- function(){
   svalue(uti_gn) <- 11
   svalue(uti_gn) <- 12
   svalue(uti_gn) <- 13
+  svalue(uti_gn) <- 14
   svalue(uti_gn) <- 1
   # visible(main_win) <- TRUE
 
