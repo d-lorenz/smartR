@@ -655,6 +655,15 @@ smart_gui <- function(){
   addSpace(mix_g_top, 20)
   cont_g <- gframe("Mixture Analysis", horizontal = TRUE, container = mix_g_top, expand = TRUE)
   addSpring(cont_g)
+  sourceMix_r <- gradio(items = c("Survey", "Fishery"), horizontal = FALSE, container = lfdfra_g, expand = TRUE, handler = function(...){
+    if(svalue(sourceMix_r) == "Survey"){
+      spec_drop_mix[] <- my_project$specieInSurvey
+      svalue(spec_drop_mix) <- my_project$specieInSurvey[1]
+    }else{
+      spec_drop_mix[] <- my_project$specieInFishery
+      svalue(spec_drop_mix) <- my_project$specieInFishery[1]
+    }
+  })
   spec_mix_f <- gframe(" Specie ", horizontal = FALSE, container = cont_g, expand = TRUE)
   addSpring(spec_mix_f)
   spec_drop_mix <- gcombobox(items = "Specie", selected = 1, container = spec_mix_f, editable = FALSE, expand = TRUE)
