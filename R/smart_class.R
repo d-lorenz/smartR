@@ -27,14 +27,14 @@ SmartProject <- R6Class("smartProject",
                             cat("Loading survey data...\n", sep = "")
                             rawDataSurvey <<- read.table(file = csv_path, sep = ";", dec = ".", colClasses = c("character", "numeric", "numeric", "factor", "numeric", "numeric", "numeric", "numeric"), header = TRUE)
                             cat("Setting Years... ", sep = "")
-                            setYears()
+                            setYearSurvey()
                             cat(" from ", min(levels(yearInSurvey)[as.numeric(yearInSurvey)]), " to ", max(levels(yearInSurvey)[as.numeric(yearInSurvey)]),"\nSetting Species... ", sep = "")
                             setSpecies()
                             cat(" found: ", paste(specieInSurvey, collapse = " - "), "\nSplitting Species...", sep = "")
                             splitSpecies()
                             cat(" completed!", sep = "")
                           },
-                          setYears = function(){yearInSurvey <<- sort(unique(rawDataSurvey[,"Year"]), decreasing = FALSE)},
+                          setYearSurvey = function(){yearInSurvey <<- sort(unique(rawDataSurvey[,"Year"]), decreasing = FALSE)},
                           loadMap = function(map_path){sampMap <<- SampleMap$new(map_path)},
                           createFleet = function(){fleet <<- FishFleet$new()},
                           setSpecies = function(){specieInSurvey <<- unique(rawDataSurvey[,"SPECIE"])},
