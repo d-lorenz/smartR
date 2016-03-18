@@ -548,7 +548,7 @@ SmartProject <- R6Class("smartProject",
                                   surveyBySpecie[[ind_num]]$LFDPop[IDcell,,y,1] <<- rep(0,length(surveyBySpecie[[ind_num]]$lengClas))
                                   surveyBySpecie[[ind_num]]$LFDPop[IDcell,,y,2] <<- rep(0,length(surveyBySpecie[[ind_num]]$lengClas))
                                 }}}},
-                          setCoh_A = function(){
+                          setCoh_A_Survey = function(){
                             if(length(specieInSurvey) == 1){
                               calcCoh_A(1)
                             }else{
