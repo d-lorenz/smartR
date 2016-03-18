@@ -24,9 +24,9 @@ SmartProject <- R6Class("smartProject",
                           sampMap = NULL,
                           fleet = NULL,
                           loadSurveyLFD = function(csv_path) {
-                            cat("Loading survey data...\n", sep = "")
+                            cat("\nLoading survey data...", sep = "")
                             rawDataSurvey <<- read.table(file = csv_path, sep = ";", dec = ".", colClasses = c("character", "numeric", "numeric", "factor", "numeric", "numeric", "numeric", "numeric"), header = TRUE)
-                            cat("Setting Years... ", sep = "")
+                            cat("\nSetting Years... ", sep = "")
                             setYearSurvey()
                             cat(" from ", min(levels(yearInSurvey)[as.numeric(yearInSurvey)]), " to ", max(levels(yearInSurvey)[as.numeric(yearInSurvey)]),"\nSetting Species... ", sep = "")
                             setSpecieSurvey()
@@ -35,9 +35,9 @@ SmartProject <- R6Class("smartProject",
                             cat(" completed!", sep = "")
                           },
                           loadFisheryLFD = function(csv_path) {
-                            cat("Loading fishery data...\n", sep = "")
+                            cat("\nLoading fishery data...", sep = "")
                             rawDataFishery <<- read.table(file = csv_path, sep = ";", dec = ".", header = TRUE)
-                            cat("Setting Years... ", sep = "")
+                            cat("\nSetting Years... ", sep = "")
                             setYearFishery()
                             cat(" from ", min(levels(yearInFishery)[as.numeric(yearInFishery)]), " to ", max(levels(yearInFishery)[as.numeric(yearInFishery)]),"\nSetting Species... ", sep = "")
                             setSpecieFishery()

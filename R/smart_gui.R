@@ -587,7 +587,7 @@ smart_gui <- function(){
   addSpace(fis_g_top, 2)
   addSpace(fis_g_top2, 2)
 
-  blankDF = data.frame(SPECIE = character(0), LAT = numeric(0), LON = numeric(0), Year = character(0), LCLASS = numeric(0), FEMALE = character(0), MALE = character(0), UNSEX = character(0), stringsAsFactors=FALSE)
+  blankDF = data.frame(SPECIE = character(0), LAT = numeric(0), LON = numeric(0), Date = character(0), LCLASS = numeric(0), FEMALE = character(0), MALE = character(0), UNSEX = character(0), stringsAsFactors=FALSE)
   fis_t <- gtable(blankDF, container = fis_g, expand = TRUE)
 
 
