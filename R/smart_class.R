@@ -37,6 +37,10 @@ SmartProject <- R6Class("smartProject",
                           loadFisheryLFD = function(csv_path) {
                             cat("\nLoading fishery data...", sep = "")
                             rawDataFishery <<- read.table(file = csv_path, sep = ";", dec = ".", header = TRUE)
+
+                            rawDataFishery$FEMALE <<- rawDataFishery$UNSEX/2
+                            rawDataFishery$MALE <<- rawDataFishery$UNSEX/2
+
                             cat("\nSetting Years... ", sep = "")
                             setYearFishery()
                             cat(" from ", min(levels(yearInFishery)[as.numeric(yearInFishery)]), " to ", max(levels(yearInFishery)[as.numeric(yearInFishery)]),"\nSetting Species... ", sep = "")
