@@ -65,8 +65,8 @@ SmartProject <- R6Class("smartProject",
                               for(i in 1:length(specieInFishery)){
                                 addSpecieFishery(rawDataFishery[rawDataFishery[,"SPECIE"] == specieInFishery[i],])}}
                           },
-                          addSpecieSurvey = function(sing_spe){surveyBySpecie <<- c(surveyBySpecie, surveyBySpecie$new(sing_spe))},
-                          addSpecieFishery = function(sing_spe){fisheryBySpecie <<- c(fisheryBySpecie, fisheryBySpecie$new(sing_spe))},
+                          addSpecieSurvey = function(sing_spe){surveyBySpecie <<- c(surveyBySpecie, SurveyBySpecie$new(sing_spe))},
+                          addSpecieFishery = function(sing_spe){fisheryBySpecie <<- c(fisheryBySpecie, FisheryBySpecie$new(sing_spe))},
                           setLFDPopSurvey = function(){
                             if(length(specieInSurvey) == 1){
                               calcLFDPopSurvey(1)
