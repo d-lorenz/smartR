@@ -581,7 +581,7 @@ SmartProject <- R6Class("smartProject",
                               }
                             }
                           },
-                          calcCoh_A_Int = function(ind_num){
+                          intrpCoh_A_Survey = function(ind_num){
                             surveyBySpecie[[ind_num]]$Coh_A_Int <<- array(dim=c(sampMap$nCells, surveyBySpecie[[ind_num]]$nCoho,length(surveyBySpecie[[ind_num]]$year),2))
                             for(y in 1:length(surveyBySpecie[[ind_num]]$year)){
                               for(sex in 1:2){
