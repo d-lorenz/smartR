@@ -40,12 +40,12 @@ SmartProject <- R6Class("smartProject",
                           setSpecieSurvey = function(){specieInSurvey <<- unique(rawDataSurvey[,"SPECIE"])},
                           splitSpecieSurvey = function(){
                             if(length(specieInSurvey) == 1){
-                              addSpecie(rawDataSurvey)
+                              addSpecieSurvey(rawDataSurvey)
                             }else{
                               for(i in 1:length(specieInSurvey)){
-                                addSpecie(rawDataSurvey[rawDataSurvey[,"SPECIE"] == specieInSurvey[i],])}}
+                                addSpecieSurvey(rawDataSurvey[rawDataSurvey[,"SPECIE"] == specieInSurvey[i],])}}
                           },
-                          addSpecie = function(sing_spe){surveyBySpecie <<- c(surveyBySpecie, surveyBySpecie$new(sing_spe))},
+                          addSpecieSurvey = function(sing_spe){surveyBySpecie <<- c(surveyBySpecie, surveyBySpecie$new(sing_spe))},
                           setLFDPop = function(){
                             if(length(specieInSurvey) == 1){
                               calcLFDPop(1)
