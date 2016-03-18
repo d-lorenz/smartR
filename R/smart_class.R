@@ -34,10 +34,23 @@ SmartProject <- R6Class("smartProject",
                             splitSpecieSurvey()
                             cat(" completed!", sep = "")
                           },
+                          loadFisheryLFD = function(csv_path) {
+                            cat("Loading fishery data...\n", sep = "")
+                            rawDataFishery <<- read.table(file = csv_path, sep = ";", dec = ".", header = TRUE)
+                            cat("Setting Years... ", sep = "")
+                            setYearFishery()
+                            cat(" from ", min(levels(yearInFishery)[as.numeric(yearInFishery)]), " to ", max(levels(yearInFishery)[as.numeric(yearInFishery)]),"\nSetting Species... ", sep = "")
+                            setSpecieFishery()
+                            cat(" found: ", paste(specieInFishery, collapse = " - "), "\nSplitting Species...", sep = "")
+                            splitSpecieFishery()
+                            cat(" completed!", sep = "")
+                          },
                           setYearSurvey = function(){yearInSurvey <<- sort(unique(rawDataSurvey[,"Year"]), decreasing = FALSE)},
+                          setYearFishery = function(){yearInFishery <<- sort(unique(rawDataFishery[,"Year"]), decreasing = FALSE)},
                           loadMap = function(map_path){sampMap <<- SampleMap$new(map_path)},
                           createFleet = function(){fleet <<- FishFleet$new()},
                           setSpecieSurvey = function(){specieInSurvey <<- unique(rawDataSurvey[,"SPECIE"])},
+                          setSpecieFishery = function(){specieInFishery <<- unique(rawDataFishery[,"SPECIE"])},
                           splitSpecieSurvey = function(){
                             if(length(specieInSurvey) == 1){
                               addSpecieSurvey(rawDataSurvey)
@@ -45,7 +58,15 @@ SmartProject <- R6Class("smartProject",
                               for(i in 1:length(specieInSurvey)){
                                 addSpecieSurvey(rawDataSurvey[rawDataSurvey[,"SPECIE"] == specieInSurvey[i],])}}
                           },
+                          splitSpecieFishery = function(){
+                            if(length(specieInFishery) == 1){
+                              addSpecieFishery(rawDataFishery)
+                            }else{
+                              for(i in 1:length(specieInFishery)){
+                                addSpecieFishery(rawDataFishery[rawDataFishery[,"SPECIE"] == specieInFishery[i],])}}
+                          },
                           addSpecieSurvey = function(sing_spe){surveyBySpecie <<- c(surveyBySpecie, surveyBySpecie$new(sing_spe))},
+                          addSpecieFishery = function(sing_spe){fisheryBySpecie <<- c(fisheryBySpecie, fisheryBySpecie$new(sing_spe))},
                           setLFDPopSurvey = function(){
                             if(length(specieInSurvey) == 1){
                               calcLFDPopSurvey(1)
