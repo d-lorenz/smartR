@@ -844,11 +844,11 @@ smart_gui <- function(){
                          gbutton("\nAccept\n", container = bot_g,
                                  handler = function(h,...){
                                    my_project$fisheryBySpecie[[spe_ind]]$setPrior(as.numeric(unlist(lapply(fe_lay[2,2:3], svalue))),
-                                                                                 as.numeric(unlist(lapply(fe_lay[3,2:3], svalue))),
-                                                                                 as.numeric(unlist(lapply(fe_lay[4,2:3], svalue))),
-                                                                                 as.numeric(unlist(lapply(ma_lay[2,2:3], svalue))),
-                                                                                 as.numeric(unlist(lapply(ma_lay[3,2:3], svalue))),
-                                                                                 as.numeric(unlist(lapply(ma_lay[4,2:3], svalue))))
+                                                                                  as.numeric(unlist(lapply(fe_lay[3,2:3], svalue))),
+                                                                                  as.numeric(unlist(lapply(fe_lay[4,2:3], svalue))),
+                                                                                  as.numeric(unlist(lapply(ma_lay[2,2:3], svalue))),
+                                                                                  as.numeric(unlist(lapply(ma_lay[3,2:3], svalue))),
+                                                                                  as.numeric(unlist(lapply(ma_lay[4,2:3], svalue))))
                                    dispose(temp_dia)
                                  })
                          addSpring(bot_g)
@@ -880,15 +880,15 @@ smart_gui <- function(){
 
                      if(svalue(sourceMix_r) == "Survey"){
 
-                     # Set number of cohorts
-                     my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_mix))]]$setNCoho(as.numeric(svalue(ncih_sb)))
-                     # Compute mixture
-                     my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_mix))]]$calcMix(nAdap = as.numeric(svalue(mc_niter)), nSamp = as.numeric(svalue(mc_nsamp)))
-                     # Transform length to cohorts
-                     my_project$calcCoh_A_Survey(which(my_project$specieInSurvey == svalue(spec_drop_mix)))
-                     # Interpolate cohorts
-                     my_project$intrpCoh_A_Survey(which(my_project$specieInSurvey == svalue(spec_drop_mix)))
-                     cohCoh_drop[] <- c("All", seq(1, my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_mix))]]$nCoho, by = 1))
+                       # Set number of cohorts
+                       my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_mix))]]$setNCoho(as.numeric(svalue(ncih_sb)))
+                       # Compute mixture
+                       my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_mix))]]$calcMix(nAdap = as.numeric(svalue(mc_niter)), nSamp = as.numeric(svalue(mc_nsamp)))
+                       # Transform length to cohorts
+                       my_project$calcCoh_A_Survey(which(my_project$specieInSurvey == svalue(spec_drop_mix)))
+                       # Interpolate cohorts
+                       my_project$intrpCoh_A_Survey(which(my_project$specieInSurvey == svalue(spec_drop_mix)))
+                       cohCoh_drop[] <- c("All", seq(1, my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_mix))]]$nCoho, by = 1))
 
                      }else{
 
