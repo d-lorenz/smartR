@@ -685,95 +685,171 @@ smart_gui <- function(){
   prio_b <- gbutton ("Set Priors", container = prio_g,
                      handler = function(h,...){
 
-                       spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop_mix))
-                       #                        temp_dia <- gbasicdialog(title="Set Growth Parameters", do.buttons = FALSE)
-                       temp_dia <- gwindow(title="Set Growth Parameters", visible = FALSE,
-                                           parent = main_win, width = 550, height = 400)
-                       # size(temp_dia) <- c(550, 400)
-                       up_g_top <- ggroup(horizontal = TRUE, container = temp_dia)
-                       addSpring(up_g_top)
-                       up_g <- ggroup(horizontal = FALSE, container = up_g_top)
-                       addSpring(up_g)
+                       if(svalue(sourceMix_r) == "Survey"){
 
-                       fe_fra <- gframe("Female", container = up_g, fill = TRUE)
-                       addSpace(fe_fra, 10)
-                       fe_lay <- glayout(homogeneous = FALSE, spacing = 10, container = fe_fra)
-                       fe_lay[1,2, anchor = 0] <- "Mean"
-                       fe_lay[1,3, anchor = 0] <- "SD"
-                       fe_lay[2,1, anchor = 0] <- "Linf"
-                       fe_lay[3,1, anchor = 0] <- "K"
-                       fe_lay[4,1, anchor = 0] <- "t0"
-                       pre_pri <- length(my_project$surveyBySpecie[[1]]$prior)
-                       fe_lay[2,2] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Female"]]$Linf$Mean, "edit here"), container=fe_lay)
-                       fe_lay[2,3] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Female"]]$Linf$StD, "edit here"), container=fe_lay)
-                       fe_lay[3,2] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Female"]]$K$Mean, "edit here"), container=fe_lay)
-                       fe_lay[3,3] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Female"]]$K$StD, "edit here"), container=fe_lay)
-                       fe_lay[4,2] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Female"]]$t0$Mean, "edit here"), container=fe_lay)
-                       fe_lay[4,3] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Female"]]$t0$StD, "edit here"), container=fe_lay)
-                       addSpace(fe_fra, 10)
-                       addSpace(up_g, 10)
+                         spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop_mix))
+                         temp_dia <- gwindow(title="Set Growth Parameters", visible = FALSE,
+                                             parent = main_win, width = 550, height = 400)
+                         up_g_top <- ggroup(horizontal = TRUE, container = temp_dia)
+                         addSpring(up_g_top)
+                         up_g <- ggroup(horizontal = FALSE, container = up_g_top)
+                         addSpring(up_g)
+                         fe_fra <- gframe("Female", container = up_g, fill = TRUE)
+                         addSpace(fe_fra, 10)
+                         fe_lay <- glayout(homogeneous = FALSE, spacing = 10, container = fe_fra)
+                         fe_lay[1,2, anchor = 0] <- "Mean"
+                         fe_lay[1,3, anchor = 0] <- "SD"
+                         fe_lay[2,1, anchor = 0] <- "Linf"
+                         fe_lay[3,1, anchor = 0] <- "K"
+                         fe_lay[4,1, anchor = 0] <- "t0"
+                         pre_pri <- length(my_project$surveyBySpecie[[1]]$prior)
+                         fe_lay[2,2] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Female"]]$Linf$Mean, "edit here"), container=fe_lay)
+                         fe_lay[2,3] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Female"]]$Linf$StD, "edit here"), container=fe_lay)
+                         fe_lay[3,2] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Female"]]$K$Mean, "edit here"), container=fe_lay)
+                         fe_lay[3,3] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Female"]]$K$StD, "edit here"), container=fe_lay)
+                         fe_lay[4,2] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Female"]]$t0$Mean, "edit here"), container=fe_lay)
+                         fe_lay[4,3] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Female"]]$t0$StD, "edit here"), container=fe_lay)
+                         addSpace(fe_fra, 10)
+                         addSpace(up_g, 10)
+                         ma_fra <- gframe("Male", container = up_g, fill = TRUE)
+                         addSpace(ma_fra, 10)
+                         ma_lay <- glayout(homogeneous = FALSE, spacing = 10, container = ma_fra)
+                         ma_lay[1,2, anchor = 0] <- "Mean"
+                         ma_lay[1,3, anchor = 0] <- "SD"
+                         ma_lay[2,1, anchor = 0] <- "Linf"
+                         ma_lay[3,1, anchor = 0] <- "K"
+                         ma_lay[4,1, anchor = 0] <- "t0"
+                         ma_lay[2,2] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Male"]]$Linf$Mean, "edit here"), container=ma_lay)
+                         ma_lay[2,3] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Male"]]$Linf$StD, "edit here"), container=ma_lay)
+                         ma_lay[3,2] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Male"]]$K$Mean, "edit here"), container=ma_lay)
+                         ma_lay[3,3] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Male"]]$K$StD, "edit here"), container=ma_lay)
+                         ma_lay[4,2] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Male"]]$t0$Mean, "edit here"), container=ma_lay)
+                         ma_lay[4,3] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Male"]]$t0$StD, "edit here"), container=ma_lay)
+                         addSpace(ma_fra, 10)
+                         addSpring(up_g)
+                         addSpring(up_g_top)
+                         bot_g <- ggroup(horizontal = TRUE, container = up_g)
+                         addSpring(bot_g)
+                         gbutton("  Load  \n  CSV  ", container = bot_g,
+                                 handler = function(h,...){
+                                   g_par_file <- gfile(text = "Select a file...", type = "open",
+                                                       initial.filename = NULL, initial.dir = getwd(),
+                                                       filter = list("csv files" = list(patterns = c("*.csv", "*.txt")),
+                                                                     "All files" = list(patterns = c("*"))), quote = TRUE)
+                                   if(length(g_par_file) > 0){
+                                     tmp_g <- read.table(g_par_file, sep = ";", dec = ".", header = TRUE,
+                                                         colClasses = c("factor", rep("numeric",6)))
+                                     fe_lay[2,2] <- gedit(tmp_g[1,2], container=fe_lay)
+                                     fe_lay[2,3] <- gedit(tmp_g[1,3], container=fe_lay)
+                                     fe_lay[3,2] <- gedit(tmp_g[1,4], container=fe_lay)
+                                     fe_lay[3,3] <- gedit(tmp_g[1,5], container=fe_lay)
+                                     fe_lay[4,2] <- gedit(tmp_g[1,6], container=fe_lay)
+                                     fe_lay[4,3] <- gedit(tmp_g[1,7], container=fe_lay)
+                                     ma_lay[2,2] <- gedit(tmp_g[2,2], container=ma_lay)
+                                     ma_lay[2,3] <- gedit(tmp_g[2,3], container=ma_lay)
+                                     ma_lay[3,2] <- gedit(tmp_g[2,4], container=ma_lay)
+                                     ma_lay[3,3] <- gedit(tmp_g[2,5], container=ma_lay)
+                                     ma_lay[4,2] <- gedit(tmp_g[2,6], container=ma_lay)
+                                     ma_lay[4,3] <- gedit(tmp_g[2,7], container=ma_lay)
+                                   }
+                                 })
+                         addSpring(bot_g)
+                         gbutton("\nAccept\n", container = bot_g,
+                                 handler = function(h,...){
+                                   my_project$surveyBySpecie[[spe_ind]]$setPrior(as.numeric(unlist(lapply(fe_lay[2,2:3], svalue))),
+                                                                                 as.numeric(unlist(lapply(fe_lay[3,2:3], svalue))),
+                                                                                 as.numeric(unlist(lapply(fe_lay[4,2:3], svalue))),
+                                                                                 as.numeric(unlist(lapply(ma_lay[2,2:3], svalue))),
+                                                                                 as.numeric(unlist(lapply(ma_lay[3,2:3], svalue))),
+                                                                                 as.numeric(unlist(lapply(ma_lay[4,2:3], svalue))))
+                                   dispose(temp_dia)
+                                 })
+                         addSpring(bot_g)
+                         visible(temp_dia) <- TRUE
 
-                       ma_fra <- gframe("Male", container = up_g, fill = TRUE)
-                       addSpace(ma_fra, 10)
-                       ma_lay <- glayout(homogeneous = FALSE, spacing = 10, container = ma_fra)
-                       ma_lay[1,2, anchor = 0] <- "Mean"
-                       ma_lay[1,3, anchor = 0] <- "SD"
-                       ma_lay[2,1, anchor = 0] <- "Linf"
-                       ma_lay[3,1, anchor = 0] <- "K"
-                       ma_lay[4,1, anchor = 0] <- "t0"
-                       ma_lay[2,2] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Male"]]$Linf$Mean, "edit here"), container=ma_lay)
-                       ma_lay[2,3] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Male"]]$Linf$StD, "edit here"), container=ma_lay)
-                       ma_lay[3,2] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Male"]]$K$Mean, "edit here"), container=ma_lay)
-                       ma_lay[3,3] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Male"]]$K$StD, "edit here"), container=ma_lay)
-                       ma_lay[4,2] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Male"]]$t0$Mean, "edit here"), container=ma_lay)
-                       ma_lay[4,3] <- gedit(ifelse(pre_pri, my_project$surveyBySpecie[[spe_ind]]$prior[["Male"]]$t0$StD, "edit here"), container=ma_lay)
-                       addSpace(ma_fra, 10)
+                       }else{
 
-                       addSpring(up_g)
-                       addSpring(up_g_top)
-                       bot_g <- ggroup(horizontal = TRUE, container = up_g)
-                       addSpring(bot_g)
-                       gbutton("  Load  \n  CSV  ", container = bot_g,
-                               handler = function(h,...){
-                                 g_par_file <- gfile(text = "Select a file...", type = "open",
-                                                     initial.filename = NULL, initial.dir = getwd(),
-                                                     filter = list("csv files" = list(patterns = c("*.csv", "*.txt")),
-                                                                   "All files" = list(patterns = c("*"))), quote = TRUE)
-                                 if(length(g_par_file) > 0){
-                                   tmp_g <- read.table(g_par_file, sep = ";", dec = ".", header = TRUE,
-                                                       colClasses = c("factor", rep("numeric",6)))
-                                   fe_lay[2,2] <- gedit(tmp_g[1,2], container=fe_lay)
-                                   fe_lay[2,3] <- gedit(tmp_g[1,3], container=fe_lay)
-                                   fe_lay[3,2] <- gedit(tmp_g[1,4], container=fe_lay)
-                                   fe_lay[3,3] <- gedit(tmp_g[1,5], container=fe_lay)
-                                   fe_lay[4,2] <- gedit(tmp_g[1,6], container=fe_lay)
-                                   fe_lay[4,3] <- gedit(tmp_g[1,7], container=fe_lay)
-                                   ma_lay[2,2] <- gedit(tmp_g[2,2], container=ma_lay)
-                                   ma_lay[2,3] <- gedit(tmp_g[2,3], container=ma_lay)
-                                   ma_lay[3,2] <- gedit(tmp_g[2,4], container=ma_lay)
-                                   ma_lay[3,3] <- gedit(tmp_g[2,5], container=ma_lay)
-                                   ma_lay[4,2] <- gedit(tmp_g[2,6], container=ma_lay)
-                                   ma_lay[4,3] <- gedit(tmp_g[2,7], container=ma_lay)
-                                 }
-                               })
-                       addSpring(bot_g)
+                         spe_ind <- which(my_project$specieInFishery == svalue(spec_drop_mix))
+                         temp_dia <- gwindow(title="Set Growth Parameters", visible = FALSE,
+                                             parent = main_win, width = 550, height = 400)
+                         up_g_top <- ggroup(horizontal = TRUE, container = temp_dia)
+                         addSpring(up_g_top)
+                         up_g <- ggroup(horizontal = FALSE, container = up_g_top)
+                         addSpring(up_g)
+                         fe_fra <- gframe("Female", container = up_g, fill = TRUE)
+                         addSpace(fe_fra, 10)
+                         fe_lay <- glayout(homogeneous = FALSE, spacing = 10, container = fe_fra)
+                         fe_lay[1,2, anchor = 0] <- "Mean"
+                         fe_lay[1,3, anchor = 0] <- "SD"
+                         fe_lay[2,1, anchor = 0] <- "Linf"
+                         fe_lay[3,1, anchor = 0] <- "K"
+                         fe_lay[4,1, anchor = 0] <- "t0"
+                         pre_pri <- length(my_project$fisheryBySpecie[[1]]$prior)
+                         fe_lay[2,2] <- gedit(ifelse(pre_pri, my_project$fisheryBySpecie[[spe_ind]]$prior[["Female"]]$Linf$Mean, "edit here"), container=fe_lay)
+                         fe_lay[2,3] <- gedit(ifelse(pre_pri, my_project$fisheryBySpecie[[spe_ind]]$prior[["Female"]]$Linf$StD, "edit here"), container=fe_lay)
+                         fe_lay[3,2] <- gedit(ifelse(pre_pri, my_project$fisheryBySpecie[[spe_ind]]$prior[["Female"]]$K$Mean, "edit here"), container=fe_lay)
+                         fe_lay[3,3] <- gedit(ifelse(pre_pri, my_project$fisheryBySpecie[[spe_ind]]$prior[["Female"]]$K$StD, "edit here"), container=fe_lay)
+                         fe_lay[4,2] <- gedit(ifelse(pre_pri, my_project$fisheryBySpecie[[spe_ind]]$prior[["Female"]]$t0$Mean, "edit here"), container=fe_lay)
+                         fe_lay[4,3] <- gedit(ifelse(pre_pri, my_project$fisheryBySpecie[[spe_ind]]$prior[["Female"]]$t0$StD, "edit here"), container=fe_lay)
+                         addSpace(fe_fra, 10)
+                         addSpace(up_g, 10)
+                         ma_fra <- gframe("Male", container = up_g, fill = TRUE)
+                         addSpace(ma_fra, 10)
+                         ma_lay <- glayout(homogeneous = FALSE, spacing = 10, container = ma_fra)
+                         ma_lay[1,2, anchor = 0] <- "Mean"
+                         ma_lay[1,3, anchor = 0] <- "SD"
+                         ma_lay[2,1, anchor = 0] <- "Linf"
+                         ma_lay[3,1, anchor = 0] <- "K"
+                         ma_lay[4,1, anchor = 0] <- "t0"
+                         ma_lay[2,2] <- gedit(ifelse(pre_pri, my_project$fisheryBySpecie[[spe_ind]]$prior[["Male"]]$Linf$Mean, "edit here"), container=ma_lay)
+                         ma_lay[2,3] <- gedit(ifelse(pre_pri, my_project$fisheryBySpecie[[spe_ind]]$prior[["Male"]]$Linf$StD, "edit here"), container=ma_lay)
+                         ma_lay[3,2] <- gedit(ifelse(pre_pri, my_project$fisheryBySpecie[[spe_ind]]$prior[["Male"]]$K$Mean, "edit here"), container=ma_lay)
+                         ma_lay[3,3] <- gedit(ifelse(pre_pri, my_project$fisheryBySpecie[[spe_ind]]$prior[["Male"]]$K$StD, "edit here"), container=ma_lay)
+                         ma_lay[4,2] <- gedit(ifelse(pre_pri, my_project$fisheryBySpecie[[spe_ind]]$prior[["Male"]]$t0$Mean, "edit here"), container=ma_lay)
+                         ma_lay[4,3] <- gedit(ifelse(pre_pri, my_project$fisheryBySpecie[[spe_ind]]$prior[["Male"]]$t0$StD, "edit here"), container=ma_lay)
+                         addSpace(ma_fra, 10)
+                         addSpring(up_g)
+                         addSpring(up_g_top)
+                         bot_g <- ggroup(horizontal = TRUE, container = up_g)
+                         addSpring(bot_g)
+                         gbutton("  Load  \n  CSV  ", container = bot_g,
+                                 handler = function(h,...){
+                                   g_par_file <- gfile(text = "Select a file...", type = "open",
+                                                       initial.filename = NULL, initial.dir = getwd(),
+                                                       filter = list("csv files" = list(patterns = c("*.csv", "*.txt")),
+                                                                     "All files" = list(patterns = c("*"))), quote = TRUE)
+                                   if(length(g_par_file) > 0){
+                                     tmp_g <- read.table(g_par_file, sep = ";", dec = ".", header = TRUE,
+                                                         colClasses = c("factor", rep("numeric",6)))
+                                     fe_lay[2,2] <- gedit(tmp_g[1,2], container=fe_lay)
+                                     fe_lay[2,3] <- gedit(tmp_g[1,3], container=fe_lay)
+                                     fe_lay[3,2] <- gedit(tmp_g[1,4], container=fe_lay)
+                                     fe_lay[3,3] <- gedit(tmp_g[1,5], container=fe_lay)
+                                     fe_lay[4,2] <- gedit(tmp_g[1,6], container=fe_lay)
+                                     fe_lay[4,3] <- gedit(tmp_g[1,7], container=fe_lay)
+                                     ma_lay[2,2] <- gedit(tmp_g[2,2], container=ma_lay)
+                                     ma_lay[2,3] <- gedit(tmp_g[2,3], container=ma_lay)
+                                     ma_lay[3,2] <- gedit(tmp_g[2,4], container=ma_lay)
+                                     ma_lay[3,3] <- gedit(tmp_g[2,5], container=ma_lay)
+                                     ma_lay[4,2] <- gedit(tmp_g[2,6], container=ma_lay)
+                                     ma_lay[4,3] <- gedit(tmp_g[2,7], container=ma_lay)
+                                   }
+                                 })
+                         addSpring(bot_g)
+                         gbutton("\nAccept\n", container = bot_g,
+                                 handler = function(h,...){
+                                   my_project$fisheryBySpecie[[spe_ind]]$setPrior(as.numeric(unlist(lapply(fe_lay[2,2:3], svalue))),
+                                                                                 as.numeric(unlist(lapply(fe_lay[3,2:3], svalue))),
+                                                                                 as.numeric(unlist(lapply(fe_lay[4,2:3], svalue))),
+                                                                                 as.numeric(unlist(lapply(ma_lay[2,2:3], svalue))),
+                                                                                 as.numeric(unlist(lapply(ma_lay[3,2:3], svalue))),
+                                                                                 as.numeric(unlist(lapply(ma_lay[4,2:3], svalue))))
+                                   dispose(temp_dia)
+                                 })
+                         addSpring(bot_g)
+                         visible(temp_dia) <- TRUE
 
-                       gbutton("\nAccept\n", container = bot_g,
-                               handler = function(h,...){
-                                 my_project$surveyBySpecie[[spe_ind]]$setPrior(as.numeric(unlist(lapply(fe_lay[2,2:3], svalue))),
-                                                                               as.numeric(unlist(lapply(fe_lay[3,2:3], svalue))),
-                                                                               as.numeric(unlist(lapply(fe_lay[4,2:3], svalue))),
-                                                                               as.numeric(unlist(lapply(ma_lay[2,2:3], svalue))),
-                                                                               as.numeric(unlist(lapply(ma_lay[3,2:3], svalue))),
-                                                                               as.numeric(unlist(lapply(ma_lay[4,2:3], svalue))))
-
-                                 ## to check
-                                 dispose(temp_dia)
-                                 # suppressMessages(dispose(temp_dia))
-                               })
-                       addSpring(bot_g)
-                       visible(temp_dia) <- TRUE
-                       #                        visible(temp_dia, set=TRUE)
+                       }
                      })
   addSpring(prio_g)
   addSpring(cont_g)
