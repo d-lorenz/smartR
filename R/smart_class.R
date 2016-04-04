@@ -81,7 +81,7 @@ SmartProject <- R6Class("smartProject",
                             # speDisPlot("All")
                           },
                           setLFDPopFishery = function(){
-                            if(length(specieInFisheryy) == 1){
+                            if(length(specieInFishery) == 1){
                               calcLFDPopFishery(1)
                             }else{
                               for(i in 1:length(specieInFishery)){
