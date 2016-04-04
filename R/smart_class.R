@@ -80,6 +80,15 @@ SmartProject <- R6Class("smartProject",
                               }}
                             # speDisPlot("All")
                           },
+                          setLFDPopFishery = function(){
+                            if(length(specieInFisheryy) == 1){
+                              calcLFDPopFishery(1)
+                            }else{
+                              for(i in 1:length(specieInFishery)){
+                                calcLFDPopFishery(i)
+                              }}
+                            # speDisPlot("All")
+                          },
                           loadFleeEffoDbs = function(effort_path, met_nam, onBox = TRUE){
                             cat("\nLoading Effort data...\n", sep = "")
                             sort_files <- sort(effort_path)
@@ -572,6 +581,25 @@ SmartProject <- R6Class("smartProject",
                                 }else{
                                   surveyBySpecie[[ind_num]]$LFDPop[IDcell,,y,1] <<- rep(0,length(surveyBySpecie[[ind_num]]$lengClas))
                                   surveyBySpecie[[ind_num]]$LFDPop[IDcell,,y,2] <<- rep(0,length(surveyBySpecie[[ind_num]]$lengClas))
+                                }}}},
+                          calcLFDPopFishery = function(ind_num){
+                            fisheryBySpecie[[ind_num]]$LFDPop <<- array(dim=c(sampMap$nCells, length(fisheryBySpecie[[ind_num]]$lengClas),length(fisheryBySpecie[[ind_num]]$year),2))
+                            for(y in 1:length(fisheryBySpecie[[ind_num]]$year)){
+                              subLFD <- fisheryBySpecie[[ind_num]]$rawLFD[which(fisheryBySpecie[[ind_num]]$rawLFD$Year==fisheryBySpecie[[ind_num]]$year[y]),]
+                              poinOver <- as.numeric(sp::over(SpatialPoints(subLFD[,c("LON","LAT")]), SpatialPolygons(sampMap$gridShp@polygons)))
+                              subLFD <- cbind(subLFD[,c("LCLASS", "FEMALE", "MALE")], poinOver)
+                              colnames(subLFD) <- c("LCLASS", "FEMALE", "MALE", "Cell")
+                              for(IDcell in 1:sampMap$nCells){
+                                if(length(which(subLFD[,"Cell"] == IDcell))>0){
+                                  cell.data <- subLFD[which(subLFD[,"Cell"] == IDcell),]
+                                  cell.LFD <- RecLFD(cell.data,
+                                                     fisheryBySpecie[[ind_num]]$lengClas,
+                                                     length(unique(cell.data[,1])))
+                                  fisheryBySpecie[[ind_num]]$LFDPop[IDcell,,y,1] <<- cell.LFD[1,]
+                                  fisheryBySpecie[[ind_num]]$LFDPop[IDcell,,y,2] <<- cell.LFD[2,]
+                                }else{
+                                  fisheryBySpecie[[ind_num]]$LFDPop[IDcell,,y,1] <<- rep(0,length(fisheryBySpecie[[ind_num]]$lengClas))
+                                  fisheryBySpecie[[ind_num]]$LFDPop[IDcell,,y,2] <<- rep(0,length(fisheryBySpecie[[ind_num]]$lengClas))
                                 }}}},
                           setCoh_A_Survey = function(){
                             if(length(specieInSurvey) == 1){
