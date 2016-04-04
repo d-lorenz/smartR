@@ -980,7 +980,8 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 
                             for(sex in c('Female', 'Male')){
                               ind_cou = apply(LFDPop[,,,ifelse(sex == 'Female', 1, 2)], 2, sum)      # Counts of males, per length
-                              num_ind = round(ind_cou/(9850/2))
+                              # num_ind = round(ind_cou/(9850/2))
+                              num_ind = ind_cou
                               ind_dis = rep(lengClas, num_ind) + runif(sum(num_ind), 0, 1)
                               Nclust = nCoho
                               N = length(ind_dis)
