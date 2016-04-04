@@ -618,7 +618,6 @@ SmartProject <- R6Class("smartProject",
                               }}
                           },
                           calcCoh_A_Survey = function(ind_num){
-
                             Pop <- surveyBySpecie[[ind_num]]$LFDPop
                             LC <- surveyBySpecie[[ind_num]]$lengClas[-length(surveyBySpecie[[ind_num]]$lengClas)]
                             sp <- surveyBySpecie[[ind_num]]$specie
@@ -642,6 +641,30 @@ SmartProject <- R6Class("smartProject",
                               }
                             }
                           },
+                          calcCoh_A_Fishery = function(ind_num){
+                            Pop <- fisheryBySpecie[[ind_num]]$LFDPop
+                            LC <- fisheryBySpecie[[ind_num]]$lengClas[-length(fisheryBySpecie[[ind_num]]$lengClas)]
+                            sp <- fisheryBySpecie[[ind_num]]$specie
+                            nc <- fisheryBySpecie[[ind_num]]$nCoho
+                            fisheryBySpecie[[ind_num]]$Coh_A <<- array(dim=c(sampMap$nCells, nc, length(fisheryBySpecie[[ind_num]]$year),2))
+                            for(y in 1:length(fisheryBySpecie[[ind_num]]$year)){
+                              for(sex in c(1:2)){
+                                mms <- fisheryBySpecie[[ind_num]]$mixPar[[sex]][[1]][y,]
+                                sds <- fisheryBySpecie[[ind_num]]$mixPar[[sex]][[2]][y,]
+                                opt <- matrix(0,length(LC),nc)
+                                for(ij in 1:sampMap$nCells){
+                                  vv <- Pop[ij, , y, sex]
+                                  coh.abb <- numeric(nc)
+                                  if(sum(vv)>0){
+                                    for(coh in c(1:nc)) opt[,coh] <- dnorm(LC,mms[coh],sds[coh])
+                                    opt.ass <- apply(opt,1,which.max)
+                                    for(coh in c(1:nc)) coh.abb[coh] <- sum(vv[which(opt.ass==coh)])
+                                  }
+                                  fisheryBySpecie[[ind_num]]$Coh_A[ij,1:nc,y,sex] <- as.numeric(coh.abb)
+                                }
+                              }
+                            }
+                          },
                           intrpCoh_A_Survey = function(ind_num){
                             surveyBySpecie[[ind_num]]$Coh_A_Int <<- array(dim=c(sampMap$nCells, surveyBySpecie[[ind_num]]$nCoho,length(surveyBySpecie[[ind_num]]$year),2))
                             for(y in 1:length(surveyBySpecie[[ind_num]]$year)){
@@ -659,6 +682,27 @@ SmartProject <- R6Class("smartProject",
                                                                                          Refmax=5, Refmin=3,
                                                                                          sampMap$nCells,
                                                                                          sampMap$gridShp, graph=T, logplot=F)[,3]
+                                }
+                              }
+                            }
+                          },
+                          intrpCoh_A_Fishery = function(ind_num){
+                            fisheryBySpecie[[ind_num]]$Coh_A_Int <<- array(dim=c(sampMap$nCells, fisheryBySpecie[[ind_num]]$nCoho,length(fisheryBySpecie[[ind_num]]$year),2))
+                            for(y in 1:length(fisheryBySpecie[[ind_num]]$year)){
+                              for(sex in 1:2){
+                                for(coh in 1:fisheryBySpecie[[ind_num]]$nCoho){
+                                  xdata <- cbind(sampMap$griCent, fisheryBySpecie[[ind_num]]$Coh_A[,coh,y,sex])
+                                  colnames(xdata) <- c("LON","LAT","Coh")
+                                  xdata <- as.data.frame(xdata)
+                                  yea_poi <- fisheryBySpecie[[ind_num]]$rawLFD[which(fisheryBySpecie[[ind_num]]$rawLFD$Year == fisheryBySpecie[[ind_num]]$year[y]),c("LON", "LAT")]
+                                  cMEDITS <- which(!is.na(over(sampMap$gridShp, SpatialPoints(unique(yea_poi)))))
+                                  noMEDITS <- setdiff(c(1:sampMap$nCells),cMEDITS)
+                                  Areacell <- 9.091279*11.112
+                                  RateArea <- Areacell/100
+                                  fisheryBySpecie[[ind_num]]$Coh_A_Int[,coh,y,sex] <- IntInvDis(RateArea*xdata, cMEDITS, noMEDITS,
+                                                                                               Refmax=5, Refmin=3,
+                                                                                               sampMap$nCells,
+                                                                                               sampMap$gridShp, graph=T, logplot=F)[,3]
                                 }
                               }
                             }
