@@ -585,7 +585,7 @@ SmartProject <- R6Class("smartProject",
                           calcLFDPopFishery = function(ind_num){
                             fisheryBySpecie[[ind_num]]$LFDPop <<- array(dim=c(sampMap$nCells, length(fisheryBySpecie[[ind_num]]$lengClas),length(fisheryBySpecie[[ind_num]]$year),2))
                             for(y in 1:length(fisheryBySpecie[[ind_num]]$year)){
-                              subLFD <- fisheryBySpecie[[ind_num]]$rawLFD[which(fisheryBySpecie[[ind_num]]$rawLFD$Year==fisheryBySpecie[[ind_num]]$year[y]),]
+                              subLFD <- fisheryBySpecie[[ind_num]]$rawLFD[which(years(fisheryBySpecie[[ind_num]]$rawLFD$DATE)==fisheryBySpecie[[ind_num]]$year[y]),]
                               poinOver <- as.numeric(sp::over(SpatialPoints(subLFD[,c("LON","LAT")]), SpatialPolygons(sampMap$gridShp@polygons)))
                               subLFD <- cbind(subLFD[,c("LCLASS", "FEMALE", "MALE")], poinOver)
                               colnames(subLFD) <- c("LCLASS", "FEMALE", "MALE", "Cell")
