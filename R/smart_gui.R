@@ -579,6 +579,12 @@ smart_gui <- function(){
     }
   })
   addSpring(fis_g_top1)
+  gbutton("Set length weight\nrelationship", container = fis_g_top1, handler = function(h,...){
+
+
+
+  })
+  addSpring(fis_g_top1)
   addSpring(fis_g_top)
   fis_g_top2 <- ggroup(horizontal = FALSE, container = fis_g_top)
   fis_l1 <- glabel("Specie: ", container = fis_g_top2)
