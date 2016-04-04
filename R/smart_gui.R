@@ -872,10 +872,17 @@ smart_gui <- function(){
                      pre_mfrow <- par(c("mfrow", "mar"))
                      par(mfrow = c(2, 1))
                      par(mar = c(2,2,1.5,0.5))
+
+                     # Set number of cohorts
                      my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_mix))]]$setNCoho(as.numeric(svalue(ncih_sb)))
+
+                     # Compute mixture
                      my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_mix))]]$calcMix(nAdap = as.numeric(svalue(mc_niter)), nSamp = as.numeric(svalue(mc_nsamp)))
 
+                     # Transform length to cohorts
                      my_project$calcCoh_A_Survey(which(my_project$specieInSurvey == svalue(spec_drop_mix)))
+
+                     # Interpolate cohorts
                      my_project$intrpCoh_A_Survey(which(my_project$specieInSurvey == svalue(spec_drop_mix)))
 
                      cohCoh_drop[] <- c("All", seq(1, my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_mix))]]$nCoho, by = 1))
