@@ -319,8 +319,12 @@ smart_gui <- function(){
       my_project$sampMap$plotSamMap(title = my_project$sampMap$gridName)
     }
     if(!is.null(my_project$rawDataSurvey)){
-      svalue(stat_bar) <- "Splitting Population..."
+      svalue(stat_bar) <- "Splitting Survey Population..."
       my_project$setLFDPopSurvey()
+    }
+    if(!is.null(my_project$rawDataFishery)){
+      svalue(stat_bar) <- "Splitting Fishery Population..."
+      my_project$setLFDPopFishery()
     }
     svalue(stat_bar) <- ""
 
@@ -496,7 +500,7 @@ smart_gui <- function(){
       svalue(cohYea_drop) <- "All"
 
       if(!is.null(my_project$sampMap)){
-        svalue(stat_bar) <- "Splitting Population..."
+        svalue(stat_bar) <- "Splitting Survey Population..."
         my_project$setLFDPopSurvey()
       }
       svalue(stat_bar) <- ""
@@ -560,10 +564,11 @@ smart_gui <- function(){
       # svalue(year_drop) <- my_project$yearInFishery[1]
       # svalue(cohYea_drop) <- "All"
 
-      # if(!is.null(my_project$sampMap)){
-      #   svalue(stat_bar) <- "Splitting Population..."
-      #   my_project$setLFDPopSurvey()
-      # }
+
+      if(!is.null(my_project$sampMap)){
+        svalue(stat_bar) <- "Splitting Fishery Population..."
+        my_project$setLFDPopFishery()
+      }
 
       svalue(stat_bar) <- ""
 
