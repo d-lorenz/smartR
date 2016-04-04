@@ -231,3 +231,33 @@ fillbetas <- function(bmat){
   fbmat <- as.matrix(mnimput(ff,bdf)$filled.dataset)
   return(fbmat)
 }
+
+
+weight2number <- function(x){
+  # setwd("~/Desktop")
+  # x <- read.table("fishery_data_CampBiol.csv", h=TRUE, sep=";",dec=".")[,c("DATE","LCLASS","UNSEX")]
+  colnames(x) <- c("UTC","LClass","KG")
+
+  a <- mean(c(0.00002648, 0.00001532))
+  b <- mean(c(2.823, 2.942))
+  Lmean <- sort(unique(x$LClass))
+  Wmean <- a*(Lmean+0.5)^b
+  WK <- data.frame(Length=Lmean,Weight=Wmean)
+  N <- numeric(nrow(x))
+
+  for(i in 1:nrow(x))
+    N[i] <- x[i,"KG"]/WK[which(WK$Length==x[i,"LClass"]),"Weight"]
+  N <- round(N,0)
+
+  Ldata <- matrix(0,0,2)
+
+  for(i in 1:nrow(x)){
+    Ni <- N[i]
+    ll <- rep(x[i,"LClass"],Ni)+runif(Ni,0,1)
+    tt <- rep(x[i,"UTC"],Ni)
+    Ldata <- rbind(Ldata,data.frame(tt,ll))
+  }
+  colnames(Ldata) <- c("UTC","Length(cm)")
+
+  return(Ldata)
+}
