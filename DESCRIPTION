@@ -2,7 +2,7 @@ Package: smartR
 Type: Package
 Title: Spatially Explicit Bio-Economic Model for Assessing and Managing Demersal
     Fisheries
-Version: 0.14
+Version: 0.15
 Date: 2016-04-06
 Author: Lorenzo D'Andrea, Tommaso Russo, Antonio Parisi, Stefano Cataudella
 Maintainer: Lorenzo D'Andrea <support@vmsbase.org>
