@@ -1595,7 +1595,9 @@ FishFleet <- R6Class("fishFleet",
                                                fun.aggregate = sum, na.rm=TRUE, value.var = "FishPoint")
                            ## points to hours: interpolation interval 10 min
                            tmp_matrix[,4:ncol(tmp_matrix)] <- tmp_matrix[,4:ncol(tmp_matrix)]/6
-                           miss_cols <- setdiff(as.character(unique(rawEffort[[j]]$FishGround[!is.na(rawEffort[[j]]$FishGround)])),
+                           # miss_cols <- setdiff(as.character(unique(rawEffort[[j]]$FishGround[!is.na(rawEffort[[j]]$FishGround)])),
+                           #                      names(tmp_matrix)[4:ncol(tmp_matrix)])
+                           miss_cols <- setdiff(1:max(rawEffort[[j]]$FishGround[!is.na(rawEffort[[j]]$FishGround)]),
                                                 names(tmp_matrix)[4:ncol(tmp_matrix)])
                            if(length(miss_cols) > 0){
                              tmp_matrix[,miss_cols] <- 0
