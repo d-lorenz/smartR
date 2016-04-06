@@ -1600,8 +1600,10 @@ FishFleet <- R6Class("fishFleet",
                            miss_cols <- setdiff(1:max(rawEffort[[j]]$FishGround[!is.na(rawEffort[[j]]$FishGround)]),
                                                 names(tmp_matrix)[4:ncol(tmp_matrix)])
                            if(length(miss_cols) > 0){
-                             tmp_matrix[,miss_cols] <- 0
-                             tmp_matrix <- tmp_matrix[,c(1:4, 4+order(as.numeric(names(tmp_matrix)[5:ncol(tmp_matrix)])))]
+                             # tmp_matrix[,miss_cols] <- 0
+                             tmp_matrix[,paste(miss_cols)] <- 0
+                             # tmp_matrix <- tmp_matrix[,c(1:4, 4+order(as.numeric(names(tmp_matrix)[5:ncol(tmp_matrix)])))]
+                             tmp_matrix <- tmp_matrix[, c(1:3, 3 + order(as.numeric(names(tmp_matrix)[4:ncol(tmp_matrix)])))]
                            }
                            dayEffoMatr[[j]] <<- tmp_matrix
                          }
