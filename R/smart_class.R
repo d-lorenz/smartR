@@ -2191,17 +2191,21 @@ SampleMap <- R6Class("sampleMap",
                                                             theme(legend.position='none'))
                        },
                        setBioFGmat = function(){
-                         tmp_bio <- data.frame(FG = cutResult$FG, cutResult[,which(make.names(colnames(bioDF)) %in% colnames(cutResult))])
-                         bio2plot <- melt(tmp_bio, id.vars="FG", variable.name = "Substrate")
-                         bio2plot <- bio2plot[bio2plot$value == 1,1:2]
-                         ggBioFGmat <<- suppressMessages(ggplot(bio2plot, aes(x = FG, y = Substrate, fill = Substrate)) +
-                                                           geom_tile() +
-                                                           coord_flip() +
-                                                           annotate("text", colour = "grey30", y = 1:length(levels(bio2plot$Substrate)),
-                                                                    x = rep(4, length(levels(bio2plot$Substrate))),
-                                                                    label = levels(bio2plot$Substrate),
-                                                                    angle = rep(90, length(levels(bio2plot$Substrate)))) +
-                                                           theme(legend.position = 'none', axis.text.x = element_text(colour = "white")))
+                         # ind_col <- which(make.names(colnames(bioDF)) %in% colnames(cutResult))
+                         # if(length(ind_col) > 0){
+                           # tmp_bio <- data.frame(FG = cutResult$FG, cutResult[,ind_col])
+                           tmp_bio <- data.frame(FG = cutResult$FG, bioDF)
+                           bio2plot <- melt(tmp_bio, id.vars="FG", variable.name = "Substrate")
+                           bio2plot <- bio2plot[bio2plot$value == 1,1:2]
+                           ggBioFGmat <<- suppressMessages(ggplot(bio2plot, aes(x = FG, y = Substrate, fill = Substrate)) +
+                                                             geom_tile() +
+                                                             coord_flip() +
+                                                             annotate("text", colour = "grey30", y = 1:length(levels(bio2plot$Substrate)),
+                                                                      x = rep(4, length(levels(bio2plot$Substrate))),
+                                                                      label = levels(bio2plot$Substrate),
+                                                                      angle = rep(90, length(levels(bio2plot$Substrate)))) +
+                                                             theme(legend.position = 'none', axis.text.x = element_text(colour = "white")))
+                         # }
                        },
                        setCutFGmap = function(){
                          ggCutFGmap <<- suppressMessages(gooMapPlot +
