@@ -2176,7 +2176,7 @@ SampleMap <- R6Class("sampleMap",
                                                             theme(legend.position='none'))
                        },
                        setEffoFGmap = function(){
-                         agg_eff <- aggregate(formula = Effort ~ Cluster, data = cutResEffo, FUN = sum)
+                         agg_eff <- aggregate(formula = Effort ~ Cluster, data = cutResEffo, FUN = mean)
                          all_cell <- merge(x = cutResShpFort$id,
                                            data.frame(x = agg_eff$Cluster, y = agg_eff$Effort), all = TRUE)
                          all_cell[is.na(all_cell)] <- 0
