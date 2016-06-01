@@ -2088,12 +2088,13 @@ SampleMap <- R6Class("sampleMap",
                        calcFishGrou = function(numCuts = 50,
                                                minsize = 10,
                                                modeska = "S",
-                                               skater_method){
+                                               skater_method,
+                                               nei_queen = TRUE){
                          set.seed(123)
                          #Build the neighboorhod list
                          Grid.bh <- gridShp[1]
                          ##  Construct neighbours list from polygon list
-                         bh.nb <- poly2nb(Grid.bh, queen = TRUE)
+                         bh.nb <- poly2nb(Grid.bh, queen = nei_queen)
                          bh.mat <- cbind(rep(1:length(bh.nb), lapply(bh.nb,length)), unlist(bh.nb))
                          #Compute the basic objects for clustering
                          ##  Cost of each edge as the distance between nodes
