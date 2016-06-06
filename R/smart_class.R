@@ -162,16 +162,18 @@ SmartProject <- R6Class("smartProject",
                                 tmp_data <- unique(rawDataSurvey[,c("SPECIE", "LAT", "LON")])
                               }else{
                                 tmp_data <- unique(rawDataSurvey[which(rawDataSurvey$SPECIE == whiSpe),c("SPECIE", "LAT", "LON")])
-                                levels(tmp_data[,1]) <- unique(rawDataSurvey[,"SPECIE"])
                               }
+                              # levels(tmp_data[,1]) <- unique(rawDataSurvey[,"SPECIE"])
+
                               sampMap$plotGooSpeSur(tmp_data)
                             }else{
                               if(whiSpe == "All"){
                                 tmp_data <- unique(rawDataFishery[,c("Specie", "Lat", "Lon")])
                               }else{
                                 tmp_data <- unique(rawDataFishery[which(rawDataFishery$Specie == whiSpe),c("Specie", "Lat", "Lon")])
-                                levels(tmp_data[,1]) <- unique(rawDataFishery[,"Specie"])
                               }
+                              # levels(tmp_data[,1]) <- unique(rawDataFishery[,"Specie"])
+
                               sampMap$plotGooSpeFis(tmp_data)
                             }
                           },
@@ -1936,14 +1938,19 @@ SampleMap <- R6Class("sampleMap",
                          sampColScale <<- scale_colour_manual(name = "SPECIE",values = myColors)
                        },
                        plotGooSpeSur = function(poi_data){
-                         plotGooGrid() + geom_jitter(data = poi_data,
+                         gooGrid + geom_jitter(data = poi_data,
                                                      aes(x = LON, y = LAT, shape = SPECIE, color = SPECIE),
                                                      width = 0.05, height = 0.05, alpha = 0.95) + sampColScale
                        },
                        plotGooSpeFis = function(poi_data){
-                         plotGooGrid() + geom_jitter(data = tmp_data,
-                                                     aes(x = Lon, y = Lat, shape = Specie, color = Specie),
-                                                     width = 0.05, height = 0.05, alpha = 0.95) + sampColScale
+                         gooGrid + geom_jitter(data = poi_data,
+                                               aes(x = Lon, y = Lat, shape = Specie, color = Specie),
+                                               width = 0.05, height = 0.05, alpha = 0.95)
+                         # temp_pos <- gooGrid + geom_jitter(data = poi_data,
+                         #                             aes(x = Lon, y = Lat, shape = Specie, color = Specie),
+                         #                             width = 0.05, height = 0.05, alpha = 0.95)
+                         # print(temp_pos)
+
                        },
                        setGooBbox = function(){
                          text_x <- mean(gridBboxExt[c(1,3)])
