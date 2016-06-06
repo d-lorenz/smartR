@@ -156,14 +156,24 @@ SmartProject <- R6Class("smartProject",
                               points(surveyBySpecie[[which(specieInSurvey == whoPlo)]]$rawLFD[,c("LON","LAT")], pch = 20, col = 1+which(specieInSurvey == whoPlo), cex = 0.4)
                             }
                           },
-                          plotGooSpe = function(whoPlo){
-                            if(whoPlo == "All"){
-                              tmp_data <- unique(rawDataSurvey[,c("SPECIE", "LAT", "LON")])
+                          plotGooSpe = function(whiSpe, whiSou){
+                            if(whiSou == "Survey"){
+                              if(whiSpe == "All"){
+                                tmp_data <- unique(rawDataSurvey[,c("SPECIE", "LAT", "LON")])
+                              }else{
+                                tmp_data <- unique(rawDataSurvey[which(rawDataSurvey$SPECIE == whiSpe),c("SPECIE", "LAT", "LON")])
+                                levels(tmp_data[,1]) <- unique(rawDataSurvey[,"SPECIE"])
+                              }
+                              sampMap$plotGooSpeSur(tmp_data)
                             }else{
-                              tmp_data <- unique(rawDataSurvey[which(rawDataSurvey$SPECIE == whoPlo),c("SPECIE", "LAT", "LON")])
-                              levels(tmp_data[,1]) <- unique(rawDataSurvey[,"SPECIE"])
+                              if(whiSpe == "All"){
+                                tmp_data <- unique(rawDataFishery[,c("Specie", "Lat", "Lon")])
+                              }else{
+                                tmp_data <- unique(rawDataFishery[which(rawDataFishery$Specie == whiSpe),c("Specie", "Lat", "Lon")])
+                                levels(tmp_data[,1]) <- unique(rawDataFishery[,"Specie"])
+                              }
+                              sampMap$plotGooSpeFis(tmp_data)
                             }
-                            sampMap$plotGooGridPoi(tmp_data)
                           },
                           distrPlotCols = function(cols = NULL, vals = NULL, maxVal = 100,
                                                    plotTitle = "NoTitle", legendUnits = "NoUnits"){
@@ -1925,9 +1935,14 @@ SampleMap <- R6Class("sampleMap",
                          names(myColors) <- fac_col
                          sampColScale <<- scale_colour_manual(name = "SPECIE",values = myColors)
                        },
-                       plotGooGridPoi = function(poi_data){
+                       plotGooSpeSur = function(poi_data){
                          plotGooGrid() + geom_jitter(data = poi_data,
                                                      aes(x = LON, y = LAT, shape = SPECIE, color = SPECIE),
+                                                     width = 0.05, height = 0.05, alpha = 0.95) + sampColScale
+                       },
+                       plotGooSpeFis = function(poi_data){
+                         plotGooGrid() + geom_jitter(data = tmp_data,
+                                                     aes(x = Lon, y = Lat, shape = Specie, color = Specie),
                                                      width = 0.05, height = 0.05, alpha = 0.95) + sampColScale
                        },
                        setGooBbox = function(){
@@ -2194,18 +2209,18 @@ SampleMap <- R6Class("sampleMap",
                        setBioFGmat = function(){
                          # ind_col <- which(make.names(colnames(bioDF)) %in% colnames(cutResult))
                          # if(length(ind_col) > 0){
-                           # tmp_bio <- data.frame(FG = cutResult$FG, cutResult[,ind_col])
-                           tmp_bio <- data.frame(FG = cutResult$FG, bioDF)
-                           bio2plot <- melt(tmp_bio, id.vars="FG", variable.name = "Substrate")
-                           bio2plot <- bio2plot[bio2plot$value == 1,1:2]
-                           ggBioFGmat <<- suppressMessages(ggplot(bio2plot, aes(x = FG, y = Substrate, fill = Substrate)) +
-                                                             geom_tile() +
-                                                             coord_flip() +
-                                                             annotate("text", colour = "grey30", y = 1:length(levels(bio2plot$Substrate)),
-                                                                      x = rep(4, length(levels(bio2plot$Substrate))),
-                                                                      label = levels(bio2plot$Substrate),
-                                                                      angle = rep(90, length(levels(bio2plot$Substrate)))) +
-                                                             theme(legend.position = 'none', axis.text.x = element_text(colour = "white")))
+                         # tmp_bio <- data.frame(FG = cutResult$FG, cutResult[,ind_col])
+                         tmp_bio <- data.frame(FG = cutResult$FG, bioDF)
+                         bio2plot <- melt(tmp_bio, id.vars="FG", variable.name = "Substrate")
+                         bio2plot <- bio2plot[bio2plot$value == 1,1:2]
+                         ggBioFGmat <<- suppressMessages(ggplot(bio2plot, aes(x = FG, y = Substrate, fill = Substrate)) +
+                                                           geom_tile() +
+                                                           coord_flip() +
+                                                           annotate("text", colour = "grey30", y = 1:length(levels(bio2plot$Substrate)),
+                                                                    x = rep(4, length(levels(bio2plot$Substrate))),
+                                                                    label = levels(bio2plot$Substrate),
+                                                                    angle = rep(90, length(levels(bio2plot$Substrate)))) +
+                                                           theme(legend.position = 'none', axis.text.x = element_text(colour = "white")))
                          # }
                        },
                        setCutFGmap = function(){
