@@ -33,6 +33,10 @@ importFrom("nnls", "nnls")
 importFrom("mtsdi", "mnimput")
 importFrom("gridExtra", "grid.arrange")
 
+importFrom("grDevices", "dev.list", "dev.set")
+importFrom("graphics", "abline", "barplot", "hist", "par")
+importFrom("stats", "as.formula", "dist", "dnorm", "glm", "predict", "quantile", "runif")
+importFrom("utils", "capture.output", "read.table")
 
 export(smart_gui)
 export(SmartProject)
