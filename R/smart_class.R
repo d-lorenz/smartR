@@ -38,8 +38,8 @@ SmartProject <- R6Class("smartProject",
                             cat("\nLoading fishery data...", sep = "")
                             rawDataFishery <<- read.table(file = csv_path, sep = ";", dec = ".", header = TRUE)
 
-                            rawDataFishery$FEMALE <<- rawDataFishery$UNSEX/2
-                            rawDataFishery$MALE <<- rawDataFishery$UNSEX/2
+                            # rawDataFishery$FEMALE <<- rawDataFishery$UNSEX/2
+                            # rawDataFishery$MALE <<- rawDataFishery$UNSEX/2
 
                             cat("\nSetting Years... ", sep = "")
                             setYearFishery()
@@ -50,11 +50,11 @@ SmartProject <- R6Class("smartProject",
                             cat(" completed!", sep = "")
                           },
                           setYearSurvey = function(){yearInSurvey <<- sort(unique(rawDataSurvey[,"Year"]), decreasing = FALSE)},
-                          setYearFishery = function(){yearInFishery <<- sort(unique(years(rawDataFishery[,"DATE"])), decreasing = FALSE)},
+                          setYearFishery = function(){yearInFishery <<- sort(unique(years(rawDataFishery[,"Date"])), decreasing = FALSE)},
                           loadMap = function(map_path){sampMap <<- SampleMap$new(map_path)},
                           createFleet = function(){fleet <<- FishFleet$new()},
                           setSpecieSurvey = function(){specieInSurvey <<- unique(rawDataSurvey[,"SPECIE"])},
-                          setSpecieFishery = function(){specieInFishery <<- unique(rawDataFishery[,"SPECIE"])},
+                          setSpecieFishery = function(){specieInFishery <<- unique(rawDataFishery[,"Specie"])},
                           splitSpecieSurvey = function(){
                             if(length(specieInSurvey) == 1){
                               addSpecieSurvey(rawDataSurvey)
@@ -67,7 +67,7 @@ SmartProject <- R6Class("smartProject",
                               addSpecieFishery(rawDataFishery)
                             }else{
                               for(i in 1:length(specieInFishery)){
-                                addSpecieFishery(rawDataFishery[rawDataFishery[,"SPECIE"] == specieInFishery[i],])}}
+                                addSpecieFishery(rawDataFishery[rawDataFishery[,"Specie"] == specieInFishery[i],])}}
                           },
                           addSpecieSurvey = function(sing_spe){surveyBySpecie <<- c(surveyBySpecie, SurveyBySpecie$new(sing_spe))},
                           addSpecieFishery = function(sing_spe){fisheryBySpecie <<- c(fisheryBySpecie, FisheryBySpecie$new(sing_spe))},
@@ -585,10 +585,10 @@ SmartProject <- R6Class("smartProject",
                           calcLFDPopFishery = function(ind_num){
                             fisheryBySpecie[[ind_num]]$LFDPop <<- array(dim=c(sampMap$nCells, length(fisheryBySpecie[[ind_num]]$lengClas),length(fisheryBySpecie[[ind_num]]$year),2))
                             for(y in 1:length(fisheryBySpecie[[ind_num]]$year)){
-                              subLFD <- fisheryBySpecie[[ind_num]]$rawLFD[which(years(fisheryBySpecie[[ind_num]]$rawLFD$DATE)==fisheryBySpecie[[ind_num]]$year[y]),]
-                              poinOver <- as.numeric(sp::over(SpatialPoints(subLFD[,c("LON","LAT")]), SpatialPolygons(sampMap$gridShp@polygons)))
-                              subLFD <- cbind(subLFD[,c("LCLASS", "FEMALE", "MALE")], poinOver)
-                              colnames(subLFD) <- c("LCLASS", "FEMALE", "MALE", "Cell")
+                              subLFD <- fisheryBySpecie[[ind_num]]$rawLFD[which(years(fisheryBySpecie[[ind_num]]$rawLFD$Date)==fisheryBySpecie[[ind_num]]$year[y]),]
+                              poinOver <- as.numeric(sp::over(SpatialPoints(subLFD[,c("Lon","Lat")]), SpatialPolygons(sampMap$gridShp@polygons)))
+                              subLFD <- cbind(subLFD[,c("Class", "Female", "Male")], poinOver)
+                              colnames(subLFD) <- c("Class", "Female", "Male", "Cell")
                               for(IDcell in 1:sampMap$nCells){
                                 if(length(which(subLFD[,"Cell"] == IDcell))>0){
                                   cell.data <- subLFD[which(subLFD[,"Cell"] == IDcell),]
@@ -694,7 +694,7 @@ SmartProject <- R6Class("smartProject",
                                   xdata <- cbind(sampMap$griCent, fisheryBySpecie[[ind_num]]$Coh_A[,coh,y,sex])
                                   colnames(xdata) <- c("LON","LAT","Coh")
                                   xdata <- as.data.frame(xdata)
-                                  yea_poi <- fisheryBySpecie[[ind_num]]$rawLFD[which(fisheryBySpecie[[ind_num]]$rawLFD$Year == fisheryBySpecie[[ind_num]]$year[y]),c("LON", "LAT")]
+                                  yea_poi <- fisheryBySpecie[[ind_num]]$rawLFD[which(fisheryBySpecie[[ind_num]]$rawLFD$Year == fisheryBySpecie[[ind_num]]$year[y]),c("Lon", "Lat")]
                                   cMEDITS <- which(!is.na(over(sampMap$gridShp, SpatialPoints(unique(yea_poi)))))
                                   noMEDITS <- setdiff(c(1:sampMap$nCells),cMEDITS)
                                   Areacell <- 9.091279*11.112
@@ -928,9 +928,9 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                setSpecie()
                                setLClass()
                              },
-                             setYears = function(){year <<- sort(unique(years(rawLFD[,"DATE"])), decreasing = FALSE)},
-                             setSpecie = function(){specie <<- unique(rawLFD[,"SPECIE"])},
-                             setLClass = function(){lengClas <<- seq(from = min(rawLFD[,"LCLASS"]), to = max(rawLFD[,"LCLASS"]), by = 1) },
+                             setYears = function(){year <<- sort(unique(years(rawLFD[,"Date"])), decreasing = FALSE)},
+                             setSpecie = function(){specie <<- unique(rawLFD[,"Specie"])},
+                             setLClass = function(){lengClas <<- seq(from = min(rawLFD[,"Class"]), to = max(rawLFD[,"Class"]), by = 1) },
                              setNCoho = function(num_coh){nCoho <<- num_coh},
                              setPrior = function(f_linf, f_k, f_t0, m_linf, m_k, m_t0){
                                prior <<- list('Female' = list('Linf' = list('Mean' = f_linf[1], 'StD' = f_linf[2]),
