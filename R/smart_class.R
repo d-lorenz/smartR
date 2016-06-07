@@ -1083,9 +1083,9 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                  Nclust = nCoho
 
                                  # X = readRDS('Ldata.rData')
-                                 X = preMix
+                                 X = rawLFD[,c("Date","Class", sex)]
 
-                                 indici = sample(1:nrow(X), size=3000)
+                                 indici = sample(1:nrow(X), size = min(c(3000, nrow(X))))
                                  y = X[indici,2]
                                  tUTC = X[indici,1]
                                  N = length(y)
