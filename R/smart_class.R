@@ -1908,7 +1908,7 @@ SampleMap <- R6Class("sampleMap",
                          setPlotRange()
                        },
                        setGooPlot = function(){
-                         gooMapPlot <<- ggmap(gooMap)
+                         gooMapPlot <<- ggmap(gooMap) + xlab("Longitude") + ylab("Latitude")
                        },
                        setPlotRange = function(){
                          plotRange <<- data.frame(xmin=gridBboxExt[1],
