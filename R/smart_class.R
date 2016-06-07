@@ -90,12 +90,12 @@ SmartProject <- R6Class("smartProject",
                             # speDisPlot("All")
                           },
                           loadFleeEffoDbs = function(effort_path, met_nam, onBox = TRUE, perOnBox = 1){
-                            cat("\nLoading Effort data...\n", sep = "")
+                            cat("\n   ---   Extracting Effort data   ---", sep = "")
                             sort_files <- sort(effort_path)
                             fleet$rawEffort <<- list()
                             for(i in sort_files){
-                              cat("\nLoading db: ", i, sep = "")
-                              cat("\nSelecting tracks in box...", sep = "")
+                              cat("\n\nLoading db: ", i, sep = "")
+                              # cat("\nSelecting tracks in box...", sep = "")
                               tmp_eff <- fn$sqldf("select * from (select * from (select *, rowid as i_id from intrp) join (select distinct I_NCEE, T_NUM from intrp where I_NCEE in (select distinct I_NCEE from nn_clas where met_des = '`met_nam`') and LON > `sampMap$gridBboxSP@bbox[1,1]` and LON < `sampMap$gridBboxSP@bbox[1,2]` and LAT > `sampMap$gridBboxSP@bbox[2,1]` and LAT < `sampMap$gridBboxSP@bbox[2,2]`) using (I_NCEE, T_NUM)) join (select * from p_depth) using (i_id)", dbname = i)                             ### Over in B-Box
                               if(onBox){
                                 in_box <- over(SpatialPoints(tmp_eff[,c("LON","LAT")]), sampMap$gridBboxSP)
@@ -103,12 +103,12 @@ SmartProject <- R6Class("smartProject",
                                 in_box <- over(SpatialPoints(tmp_eff[,c("LON","LAT")]),
                                                unionSpatialPolygons(sampMap$gridShp,
                                                                     IDs = rep(1,
-                                                                              length(sampMap$gridShp@polygons)))
-                                )
+                                                                              length(sampMap$gridShp@polygons))))
                               }
+                              cat("   -   Completed!", sep = "")
+
                               in_box[is.na(in_box)] <- 0
                               tmp_eff$in_box <- in_box
-
                               in_box_ping <- sqldf("select I_NCEE, T_NUM, sum(in_box) from tmp_eff group by I_NCEE, T_NUM")
                               all_ping <- sqldf("select I_NCEE, T_NUM, count(*) from tmp_eff group by I_NCEE, T_NUM")
 
@@ -122,7 +122,6 @@ SmartProject <- R6Class("smartProject",
                               }else{
                                 all_in_box <- in_box_ping[perOnInd,1:2]
                                 all_sos <- sqldf("select * from tmp_eff join (select * from all_in_box) using (I_NCEE, T_NUM)")
-
                                 cat("\nSaving Data", sep = "")
                                 tmp_key <- names(which.max(table(years(all_sos$DATE))))
                                 fleet$rawEffort[[tmp_key]] <<- all_sos
