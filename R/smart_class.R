@@ -419,11 +419,16 @@ SmartProject <- R6Class("smartProject",
                             all_cell <- merge(x = sampMap$gridPolySet$PID,
                                               data.frame(x = as.numeric(names(tmp_dat)), y = tmp_dat), all = TRUE)[,c(1,3)]
                             all_cell[is.na(all_cell)] <- 0
-                            grid_data <- cbind(sampMap$gridPolySet, LogCount = log(all_cell[,2] + 1))
-                            tmp_plot <- suppressMessages(sampMap$gooMapPlot + geom_polygon(aes(x = X, y = Y, group = PID, fill = LogCount), size = 0.2,
+                            # grid_data <- cbind(sampMap$gridPolySet, LogCount = log10(all_cell[,2] + 1))
+                            grid_data <- cbind(sampMap$gridPolySet, Count = all_cell[,2])
+                            tmp_plot <- suppressMessages(sampMap$gooMapPlot + geom_polygon(aes(x = X, y = Y, group = PID, fill = Count), size = 0.2,
                                                                                            data = grid_data, alpha = 0.8) +
-                                                           scale_fill_gradient(low = "Yellow", high = "coral") +
-                                                           lims(x = extendrange(sampMap$plotRange[1:2]), y = extendrange(sampMap$plotRange[3:4])))
+                                                           scale_fill_gradient(low = "Yellow", high = "coral",
+                                                                               trans = 'log10',
+                                                                               breaks = trans_breaks('log10', function(x) 10^x),
+                                                                               labels = trans_format('log10', math_format(10^.x))) +
+                                                           lims(x = extendrange(sampMap$plotRange[1:2]), y = extendrange(sampMap$plotRange[3:4])) +
+                                                           ggtitle(paste("Fishing Effort - ", year, sep = "")))
                             suppressWarnings(print(tmp_plot))
                           },
                           getNnlsModel = function(specie, minobs, thr_r2){
