@@ -89,7 +89,7 @@ SmartProject <- R6Class("smartProject",
                               }}
                             # speDisPlot("All")
                           },
-                          loadFleeEffoDbs = function(effort_path, met_nam, onBox = TRUE){
+                          loadFleeEffoDbs = function(effort_path, met_nam, onBox = TRUE, perOnBox = 1){
                             cat("\nLoading Effort data...\n", sep = "")
                             sort_files <- sort(effort_path)
                             fleet$rawEffort <<- list()
@@ -112,14 +112,21 @@ SmartProject <- R6Class("smartProject",
                               in_box_ping <- sqldf("select I_NCEE, T_NUM, sum(in_box) from tmp_eff group by I_NCEE, T_NUM")
                               all_ping <- sqldf("select I_NCEE, T_NUM, count(*) from tmp_eff group by I_NCEE, T_NUM")
 
-                              ### Loading 100% only
-                              cat("\nLoading 100% in box only...", sep = "")
-                              all_in_box <- in_box_ping[which(in_box_ping[,3]/all_ping[,3] == 1),1:2]
-                              all_sos <- sqldf("select * from tmp_eff join (select * from all_in_box) using (I_NCEE, T_NUM)")
+                              ### Selecting tracks with at least X points in the bounding box
+                              if(perOnBox > 100) perOnBox <- 1
+                              if(perOnBox > 1) perOnBox <- perOnBox/100
+                              cat("\nLoading tracks with at least ", perOnBox*100, "% of points in the bounding box...", sep = "")
+                              perOnInd <- in_box_ping[,3]/all_ping[,3] >= perOnBox
+                              if(sum(perOnInd) == 0){
+                                cat("\nNo tracks with ", perOnBox*100, "% of points in the bounding box.\nNo tracking data loaded!", sep = "")
+                              }else{
+                                all_in_box <- in_box_ping[perOnInd,1:2]
+                                all_sos <- sqldf("select * from tmp_eff join (select * from all_in_box) using (I_NCEE, T_NUM)")
 
-                              cat("\nSaving Data", sep = "")
-                              tmp_key <- names(which.max(table(years(all_sos$DATE))))
-                              fleet$rawEffort[[tmp_key]] <<- all_sos
+                                cat("\nSaving Data", sep = "")
+                                tmp_key <- names(which.max(table(years(all_sos$DATE))))
+                                fleet$rawEffort[[tmp_key]] <<- all_sos
+                              }
                             }
                           },
                           effPlot = function(whichYear){
@@ -1940,8 +1947,8 @@ SampleMap <- R6Class("sampleMap",
                        },
                        plotGooSpeSur = function(poi_data){
                          gooGrid + geom_jitter(data = poi_data,
-                                                     aes(x = LON, y = LAT, shape = SPECIE, color = SPECIE),
-                                                     width = 0.05, height = 0.05, alpha = 0.95) + sampColScale
+                                               aes(x = LON, y = LAT, shape = SPECIE, color = SPECIE),
+                                               width = 0.05, height = 0.05, alpha = 0.95) + sampColScale
                        },
                        plotGooSpeFis = function(poi_data){
                          gooGrid + geom_jitter(data = poi_data,
