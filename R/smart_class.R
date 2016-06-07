@@ -237,14 +237,15 @@ SmartProject <- R6Class("smartProject",
                             fleet$predProd[[specie]] <<- Prod
                           },
                           ggplotFishingPoints = function(year){
-                            tmp_dat <- fleet$rawEffort[[year]][sample(1:nrow(fleet$rawEffort[[year]]), 100000),c("LON","LAT","FishPoint")]
-                            tmp_dat$FishPoint <- as.factor(tmp_dat$FishPoint)
+                            tmp_dat <- fleet$rawEffort[[year]][sample(1:nrow(fleet$rawEffort[[year]]), min(c(50000, nrow(fleet$rawEffort[[year]])))),c("LON","LAT","FishPoint")]
+                            tmp_dat$Status <- factor(tmp_dat$FishPoint, levels = c("FALSE", "TRUE"), labels = c("Not fishing", "Fishing"))
                             tmp_plot <- suppressMessages(sampMap$gooMapPlot +
                                                            geom_point(data = tmp_dat,
-                                                                      aes(x = LON, y = LAT, color = FishPoint), size = 0.25, alpha = 0.2)+
+                                                                      aes(x = LON, y = LAT, color = Status), size = 0.25, alpha = 0.2)+
                                                            scale_colour_manual(values = c("coral", "darkseagreen1")) +
                                                            lims(x = extendrange(sampMap$plotRange[1:2]), y = extendrange(sampMap$plotRange[3:4])) +
-                                                           guides(colour = guide_legend(override.aes = list(size=3, alpha = 1))))
+                                                           guides(colour = guide_legend(override.aes = list(size=3, alpha = 1))) +
+                                                           ggtitle(paste("Sample fishing points - ", year, sep = "")))
                             suppressWarnings(print(tmp_plot))
                           },
                           setPlotBetaMeltYear = function(specie, year){
