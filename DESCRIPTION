@@ -51,5 +51,6 @@ Imports:
     nnls,
     mtsdi,
     gridExtra,
-    rgeos
+    rgeos,
+    scales
 RoxygenNote: 5.0.1
