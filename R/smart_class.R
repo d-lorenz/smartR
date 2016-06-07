@@ -1919,7 +1919,8 @@ SampleMap <- R6Class("sampleMap",
                          gooGrid <<- suppressMessages(gooMapPlot + geom_polygon(aes(x = long, y = lat, group = group),
                                                                                 fill = 'grey', size = 0.2,
                                                                                 color = 'gainsboro', data = gridFortify, alpha = 0.5) +
-                                                        lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4])))
+                                                        lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4])) +
+                                                        xlab("Longitude") + ylab("Latitude"))
                        },
                        plotGooGrid = function(){
                          suppressWarnings(print(gooGrid))
