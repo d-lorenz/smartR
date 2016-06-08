@@ -1097,47 +1097,51 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                  Nclust = nCoho
 
                                  # X = readRDS('Ldata.rData')
-                                 X = rawLFD[,c("Date","Class", sex)]
+                                 X = rawLFD[,c("Date","Class", "FG", sex)]
 
-                                 indici = sample(1:nrow(X), size = min(c(3000, nrow(X))))
-                                 y = X[indici,2]
-                                 tUTC = X[indici,1]
-                                 N = length(y)
+                                 names(X) <- c("UTC", "Length", "NumFG")
 
-                                 yearStart = c(14245, 14610, 14975, 15340, 15706, 16071, 16436)
-
-                                 # Da migliorare (lento)
-                                 tt = numeric(N)
-                                 for(it in 1:length(tUTC)){
-                                   temp1 = which((tUTC[it] - yearStart) > 0)
-                                   temp2 = (tUTC[it] - yearStart[length(temp1)] + 1) / 366
-                                   tt[it] = temp2
-                                   if(temp2 > 1) stop('Error: the UTC of the last year is missing?')
+                                 indici = sample(1:nrow(X), size = min(c(15000, nrow(X))))
+                                 indici = indici[-which(is.na(X[indici,"NumFG"]))]
+                                 y = X[indici,"Length"]
+                                 tUTC = X[indici,"UTC"]
+                                 FGlabels = as.numeric(X[indici,"NumFG"])
+                                 FGnames = unique(FGlabels)
+                                 FG = numeric(length(FGlabels))
+                                 for(FGname in 1:length(FGnames)){
+                                   indici = which(FGlabels == FGnames[FGname])
+                                   FG[indici] = rep(FGname, length(indici))
                                  }
+                                 nFG = length(unique(FG))
+                                 N = length(y)
+                                 tt = as.POSIXlt(chron(tUTC))$yday / 366
 
                                  # Input formating for JAGS
-                                 alpha = rep(5, Nclust)
+                                 alpha = rep(1, Nclust)
+                                 # alpha = c(0.1, 1, 10, 1)
                                  Z = rep(NA, N)  # initial allocations
                                  Z[which.min(y)] = 1  # smallest value assigned to cluster 1
                                  Z[which.max(y)] = Nclust  # highest value assigned to cluster Nclust
-                                 dataList = list(y=y, tt=tt, N=N, Nclust=Nclust, Z=Z, alpha=alpha)
-                                 #, sigma=sigma[1], p=p
+                                 dataList = list(y=y, tt=tt, FG=FG, nFG=nFG, N=N, Nclust=Nclust, Z=Z, alpha=alpha)
 
                                  model.str <- paste('model{
-                                                    # Likelihood:
+                   # Likelihood:
                                                     for(i in 1:N){
                                                     y[i] ~ dnorm(mean[i], tau[Z[i]])
-                                                    mean[i] <- Linf * (1 - exp(-k * ((Z[i] - 1 + tt[i]) - t0)))
-                                                    Z[i] ~ dcat(p[1:Nclust])
+                                                    mean[i] <- Linf * (1 - exp(-k * (Z[i] - 1 + tt[i] - t0)))
+                                                    Z[i] ~ dcat(p[FG[i],1:Nclust])
                                                     }
                                                     # Prior:
                                                     Linf ~ dnorm(', prior[[sex]][['Linf']][['Mean']],', ', 1/(prior[[sex]][['Linf']][['StD']])^2,')
                                                     k ~ dnorm(', prior[[sex]][['K']][['Mean']],', ', 1/(prior[[sex]][['K']][['StD']])^2,')
                                                     t0 ~ dnorm(', prior[[sex]][['t0']][['Mean']],', ', 1/(prior[[sex]][['t0']][['StD']])^2,')
-                                                    # t0 ~ dunif(0, 1)
-                                                    p ~ ddirch(alpha)
+                                                    #t0 ~ dbeta(35, 35)
+
+                                                    for(iFG in 1:nFG){
+                                                    p[iFG,1:Nclust] ~ ddirch(alpha)
+                                                    }
                                                     for(clustIdx in 1:Nclust){
-                                                    tau[clustIdx] ~ dgamma(1.0E-5, 1.0E-5)
+                                                    tau[clustIdx] ~ dgamma(1.0E-2, 1.0E-2)
                                                     }
                                }', sep = "")
 
