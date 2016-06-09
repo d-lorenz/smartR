@@ -12,7 +12,7 @@
 
 smart_gui <- function(){
 
-  my_project <- SmartProject$new()
+  my_project <<- SmartProject$new()
   my_project$createFleet()
 
   pre_dev <- length(dev.list())
