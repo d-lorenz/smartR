@@ -709,60 +709,6 @@ smart_gui <- function(){
 
 
 
-  # ##############################################################
-  # ####   Population   ##########################################
-  # ##############################################################
-  #
-  # pop_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Population")
-  # pop_g_top <- gframe(horizontal = TRUE, container = pop_g, spacing = 10)
-  # addSpring(pop_g_top)
-  # lfdfra_g <- gframe("LFD data", horizontal = TRUE, container = pop_g_top, expand = TRUE)
-  # addSpring(lfdfra_g)
-  # sourcePop_r <- gradio(items = c("Survey", "Fishery"), horizontal = FALSE, container = lfdfra_g, expand = TRUE, handler = function(...){
-  #   if(svalue(sourcePop_r) == "Survey"){
-  #     spec_drop[] <- my_project$specieInSurvey
-  #     svalue(spec_drop) <- my_project$specieInSurvey[1]
-  #     year_drop[] <- c("All", as.character(my_project$yearInSurvey))
-  #     svalue(year_drop) <- my_project$yearInSurvey[1]
-  #   }else{
-  #     spec_drop[] <- my_project$specieInFishery
-  #     svalue(spec_drop) <- my_project$specieInFishery[1]
-  #     year_drop[] <- c("All", as.character(my_project$yearInFishery))
-  #     svalue(year_drop) <- my_project$yearInFishery[1]
-  #   }
-  # })
-  # addSpring(lfdfra_g)
-  # spec_b <- gframe("Specie", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
-  # addSpring(lfdfra_g)
-  # addSpring(spec_b)
-  # spec_drop <- gcombobox(items = "Specie", selected = 1, container = spec_b, editable = FALSE)
-  # addSpring(spec_b)
-  # year_b <- gframe("Year", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
-  # addSpring(lfdfra_g)
-  # addSpring(year_b)
-  # year_drop <- gcombobox(items = "Year", selected = 1, container = year_b, editable = FALSE)
-  # addSpring(year_b)
-  # gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = lfdfra_g,
-  #        handler = function(h,...){
-  #          dev.set(dev.list()[pre_dev+2])
-  #          if(svalue(sourcePop_r) == "Survey"){
-  #            spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
-  #            ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[,c("LCLASS","FEMALE","MALE")], my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[which(my_project$surveyBySpecie[[spe_ind]]$rawLFD[,"Year"] ==  svalue(year_drop)),c("LCLASS","FEMALE","MALE")])
-  #            the_reclfd <- RecLFD(my_cel_dat, my_project$surveyBySpecie[[spe_ind]]$lengClas, 1)
-  #          }else{
-  #            spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
-  #            ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$fisheryBySpecie[[spe_ind]]$rawLFD[,c("Class","Female","Male")], my_cel_dat <- my_project$fisheryBySpecie[[spe_ind]]$rawLFD[which(years(my_project$fisheryBySpecie[[spe_ind]]$rawLFD[,"Date"]) ==  svalue(year_drop)),c("Class","Female","Male")])
-  #            the_reclfd <- RecLFD(my_cel_dat, my_project$fisheryBySpecie[[spe_ind]]$lengClas, 1)
-  #          }
-  #          plotRecLFD(the_reclfd)
-  #        })
-  # addSpring(lfdfra_g)
-  # addSpring(pop_g_top)
-  # addSpace(pop_g_top, 2)
-  # pop_p <- ggraphics(container = pop_g, width = 600, height = 280, expand = TRUE)
-
-
-
   ##############################################################
   ####   Mixture   #############################################
   ##############################################################
