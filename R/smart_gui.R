@@ -591,12 +591,11 @@ smart_gui <- function(){
   })
   addSpring(fis_g_top1)
   addSpring(fis_g_top)
-  gbutton("   Open\nLFD viewer", container = fis_g_top, handler = function(h,...){
 
+  gbutton("   Open\nLFD viewer", container = fis_g_top, handler = function(h,...){
 
     temp_dia <- gwindow(title="Length Frequency Distribution Viewer", visible = FALSE,
                         parent = main_win, width = 550, height = 400)
-
 
     pop_g <- ggroup(horizontal = FALSE, container = temp_dia, label = "Population")
     pop_g_top <- gframe(horizontal = TRUE, container = pop_g, spacing = 10)
@@ -627,15 +626,7 @@ smart_gui <- function(){
       plotRecLFD(the_reclfd)
     })
     addSpring(year_b)
-    # gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = lfdfra_g,
-    #        handler = function(h,...){
-    #
-    #            spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
-    #            ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$fisheryBySpecie[[spe_ind]]$rawLFD[,c("Class","Female","Male")], my_cel_dat <- my_project$fisheryBySpecie[[spe_ind]]$rawLFD[which(years(my_project$fisheryBySpecie[[spe_ind]]$rawLFD[,"Date"]) ==  svalue(year_drop)),c("Class","Female","Male")])
-    #            the_reclfd <- RecLFD(my_cel_dat, my_project$fisheryBySpecie[[spe_ind]]$lengClas, 1)
-    #
-    #          plotRecLFD(the_reclfd)
-    #        })
+
     addSpring(lfdfra_g)
     addSpring(pop_g_top)
     addSpace(pop_g_top, 2)
