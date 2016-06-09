@@ -591,6 +591,68 @@ smart_gui <- function(){
   })
   addSpring(fis_g_top1)
   addSpring(fis_g_top)
+  gbutton("   Open\nLFD viewer", container = fis_g_top, handler = function(h,...){
+
+
+    temp_dia <- gwindow(title="Length Frequency Distribution Viewer", visible = FALSE,
+                        parent = main_win, width = 550, height = 400)
+
+
+    pop_g <- ggroup(horizontal = FALSE, container = temp_dia, label = "Population")
+    pop_g_top <- gframe(horizontal = TRUE, container = pop_g, spacing = 10)
+    addSpring(pop_g_top)
+    lfdfra_g <- gframe("LFD data", horizontal = TRUE, container = pop_g_top, expand = TRUE)
+    addSpring(lfdfra_g)
+
+    spec_b <- gframe("Specie", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
+    addSpring(lfdfra_g)
+    addSpring(spec_b)
+    spec_drop <- gcombobox(items = my_project$specieInFishery, selected = 1, container = spec_b, editable = FALSE, handler = function(h,...){
+
+      spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
+      svalue(year_drop) <- "All"
+      my_cel_dat <- my_project$fisheryBySpecie[[spe_ind]]$rawLFD[,c("Class","Female","Male")]
+      the_reclfd <- RecLFD(my_cel_dat, my_project$fisheryBySpecie[[spe_ind]]$lengClas, 1)
+      plotRecLFD(the_reclfd)
+
+    })
+    addSpring(spec_b)
+    year_b <- gframe("Year", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
+    addSpring(lfdfra_g)
+    addSpring(year_b)
+    year_drop <- gcombobox(items = c("All", as.character(my_project$yearInFishery)), selected = 1, container = year_b, editable = FALSE, handler = function(h,...){
+      spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
+      ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$fisheryBySpecie[[spe_ind]]$rawLFD[,c("Class","Female","Male")], my_cel_dat <- my_project$fisheryBySpecie[[spe_ind]]$rawLFD[which(years(my_project$fisheryBySpecie[[spe_ind]]$rawLFD[,"Date"]) ==  svalue(year_drop)),c("Class","Female","Male")])
+      the_reclfd <- RecLFD(my_cel_dat, my_project$fisheryBySpecie[[spe_ind]]$lengClas, 1)
+      plotRecLFD(the_reclfd)
+    })
+    addSpring(year_b)
+    # gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = lfdfra_g,
+    #        handler = function(h,...){
+    #
+    #            spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
+    #            ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$fisheryBySpecie[[spe_ind]]$rawLFD[,c("Class","Female","Male")], my_cel_dat <- my_project$fisheryBySpecie[[spe_ind]]$rawLFD[which(years(my_project$fisheryBySpecie[[spe_ind]]$rawLFD[,"Date"]) ==  svalue(year_drop)),c("Class","Female","Male")])
+    #            the_reclfd <- RecLFD(my_cel_dat, my_project$fisheryBySpecie[[spe_ind]]$lengClas, 1)
+    #
+    #          plotRecLFD(the_reclfd)
+    #        })
+    addSpring(lfdfra_g)
+    addSpring(pop_g_top)
+    addSpace(pop_g_top, 2)
+    pop_p <- ggraphics(container = pop_g, width = 600, height = 280, expand = TRUE)
+
+    gbutton("Close", container = pop_g_top, handler = function(h,...){
+      dispose(temp_dia)
+    })
+
+    visible(temp_dia) <- TRUE
+
+    my_cel_dat <- my_project$fisheryBySpecie[[1]]$rawLFD[,c("Class","Female","Male")]
+    the_reclfd <- RecLFD(my_cel_dat, my_project$fisheryBySpecie[[1]]$lengClas, 1)
+    plotRecLFD(the_reclfd)
+  })
+
+  addSpring(fis_g_top)
   fis_g_top2 <- ggroup(horizontal = FALSE, container = fis_g_top)
   fis_l1 <- glabel("Specie: ", container = fis_g_top2)
   fis_l3 <- glabel("Years: ", container = fis_g_top2)
