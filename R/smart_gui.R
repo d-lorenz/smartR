@@ -486,17 +486,17 @@ smart_gui <- function(){
       svalue(raw_l1) <- paste("Specie: ", paste(my_project$specieInSurvey, collapse = " - "))
       #   svalue(raw_l2) <- paste("Length Classes: from ",  min(my_project$LClass), " to ", max(my_project$LClass))
       svalue(raw_l3) <- paste("Years: from", min(as.numeric(as.character(my_project$yearInSurvey))), " to ", max(as.numeric(as.character(my_project$yearInSurvey))))
-      spec_drop[] <- my_project$specieInSurvey
+      # spec_drop[] <- my_project$specieInSurvey
       spec_drop_mix[] <- my_project$specieInSurvey
       # spevie_drop[] <- c("All", my_project$specieInSurvey)
       cohSpe_drop[] <- my_project$specieInSurvey
-      svalue(spec_drop) <- my_project$specieInSurvey[1]
+      # svalue(spec_drop) <- my_project$specieInSurvey[1]
       svalue(cohSpe_drop) <- my_project$specieInSurvey[1]
       # svalue(spevie_drop) <- "All"
       svalue(spec_drop_mix) <- my_project$specieInSurvey[1]
-      year_drop[] <- c("All", as.character(my_project$yearInSurvey))
+      # year_drop[] <- c("All", as.character(my_project$yearInSurvey))
       cohYea_drop[] <- c("All", as.character(my_project$yearInSurvey))
-      svalue(year_drop) <- my_project$yearInSurvey[1]
+      # svalue(year_drop) <- my_project$yearInSurvey[1]
       svalue(cohYea_drop) <- "All"
 
       if(!is.null(my_project$sampMap)){
@@ -518,6 +518,59 @@ smart_gui <- function(){
   })
   addSpring(raw_g_top1)
   addSpring(raw_g_top)
+
+  gbutton("   Open\nLFD viewer", container = raw_g_top, handler = function(h,...){
+
+    temp_dia <- gwindow(title="Survey Length Frequency Distribution Viewer", visible = FALSE,
+                        parent = main_win, width = 550, height = 400)
+
+    pop_g <- ggroup(horizontal = FALSE, container = temp_dia, label = "Population")
+    pop_g_top <- gframe(horizontal = TRUE, container = pop_g, spacing = 10)
+    addSpring(pop_g_top)
+    lfdfra_g <- gframe("LFD data", horizontal = TRUE, container = pop_g_top, expand = TRUE)
+    addSpring(lfdfra_g)
+
+    spec_b <- gframe("Specie", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
+    addSpring(lfdfra_g)
+    addSpring(spec_b)
+    spec_drop <- gcombobox(items = my_project$specieInSurvey, selected = 1, container = spec_b, editable = FALSE, handler = function(h,...){
+
+      spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
+      svalue(year_drop) <- "All"
+      my_cel_dat <- my_project$specieInSurvey[[spe_ind]]$rawLFD[,c("LCLASS","FEMALE","MALE")]
+      the_reclfd <- RecLFD(my_cel_dat, my_project$specieInSurvey[[spe_ind]]$lengClas, 1)
+      plotRecLFD(the_reclfd)
+
+    })
+    addSpring(spec_b)
+    year_b <- gframe("Year", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
+    addSpring(lfdfra_g)
+    addSpring(year_b)
+    year_drop <- gcombobox(items = c("All", as.character(my_project$specieInSurvey)), selected = 1, container = year_b, editable = FALSE, handler = function(h,...){
+      spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
+      ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[,c("LCLASS","FEMALE","MALE")], my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[which(my_project$surveyBySpecie[[spe_ind]]$rawLFD[,"Year"] ==  svalue(year_drop)),c("LCLASS","FEMALE","MALE")])
+      the_reclfd <- RecLFD(my_cel_dat, my_project$specieInSurvey[[spe_ind]]$lengClas, 1)
+      plotRecLFD(the_reclfd)
+    })
+    addSpring(year_b)
+
+    addSpring(lfdfra_g)
+    addSpring(pop_g_top)
+    addSpace(pop_g_top, 2)
+    pop_p <- ggraphics(container = pop_g, width = 600, height = 280, expand = TRUE)
+
+    gbutton("Close", container = pop_g_top, handler = function(h,...){
+      dispose(temp_dia)
+    })
+
+    visible(temp_dia) <- TRUE
+
+    my_cel_dat <- my_project$specieInSurvey[[1]]$rawLFD[,c("Class","Female","Male")]
+    the_reclfd <- RecLFD(my_cel_dat, my_project$specieInSurvey[[1]]$lengClas, 1)
+    plotRecLFD(the_reclfd)
+  })
+
+
   raw_g_top2 <- ggroup(horizontal = FALSE, container = raw_g_top)
   raw_l1 <- glabel("Specie: ", container = raw_g_top2)
   raw_l3 <- glabel("Years: ", container = raw_g_top2)
