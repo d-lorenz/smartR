@@ -537,8 +537,8 @@ smart_gui <- function(){
 
       spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
       svalue(year_drop) <- "All"
-      my_cel_dat <- my_project$specieInSurvey[[spe_ind]]$rawLFD[,c("LCLASS","FEMALE","MALE")]
-      the_reclfd <- RecLFD(my_cel_dat, my_project$specieInSurvey[[spe_ind]]$lengClas, 1)
+      my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[,c("LCLASS","FEMALE","MALE")]
+      the_reclfd <- RecLFD(my_cel_dat, my_project$surveyBySpecie[[spe_ind]]$lengClas, 1)
       plotRecLFD(the_reclfd)
 
     })
@@ -546,10 +546,10 @@ smart_gui <- function(){
     year_b <- gframe("Year", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
     addSpring(lfdfra_g)
     addSpring(year_b)
-    year_drop <- gcombobox(items = c("All", as.character(my_project$specieInSurvey)), selected = 1, container = year_b, editable = FALSE, handler = function(h,...){
+    year_drop <- gcombobox(items = c("All", as.character(my_project$yearInSurvey)), selected = 1, container = year_b, editable = FALSE, handler = function(h,...){
       spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
       ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[,c("LCLASS","FEMALE","MALE")], my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[which(my_project$surveyBySpecie[[spe_ind]]$rawLFD[,"Year"] ==  svalue(year_drop)),c("LCLASS","FEMALE","MALE")])
-      the_reclfd <- RecLFD(my_cel_dat, my_project$specieInSurvey[[spe_ind]]$lengClas, 1)
+      the_reclfd <- RecLFD(my_cel_dat, my_project$surveyBySpecie[[spe_ind]]$lengClas, 1)
       plotRecLFD(the_reclfd)
     })
     addSpring(year_b)
@@ -565,11 +565,12 @@ smart_gui <- function(){
 
     visible(temp_dia) <- TRUE
 
-    my_cel_dat <- my_project$specieInSurvey[[1]]$rawLFD[,c("LCLASS","FEMALE","MALE")]
-    the_reclfd <- RecLFD(my_cel_dat, my_project$specieInSurvey[[1]]$lengClas, 1)
+    my_cel_dat <- my_project$surveyBySpecie[[1]]$rawLFD[,c("LCLASS","FEMALE","MALE")]
+    the_reclfd <- RecLFD(my_cel_dat, my_project$surveyBySpecie[[1]]$lengClas, 1)
     plotRecLFD(the_reclfd)
   })
 
+  addSpring(raw_g_top)
 
   raw_g_top2 <- ggroup(horizontal = FALSE, container = raw_g_top)
   raw_l1 <- glabel("Specie: ", container = raw_g_top2)
