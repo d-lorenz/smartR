@@ -647,7 +647,7 @@ smart_gui <- function(){
 
   gbutton("   Open\nLFD viewer", container = fis_g_top, handler = function(h,...){
 
-    temp_dia <- gwindow(title="Length Frequency Distribution Viewer", visible = FALSE,
+    temp_dia <- gwindow(title="Fishery Length Frequency Distribution Viewer", visible = FALSE,
                         parent = main_win, width = 550, height = 400)
 
     pop_g <- ggroup(horizontal = FALSE, container = temp_dia, label = "Population")
