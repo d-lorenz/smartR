@@ -565,7 +565,7 @@ smart_gui <- function(){
 
     visible(temp_dia) <- TRUE
 
-    my_cel_dat <- my_project$specieInSurvey[[1]]$rawLFD[,c("Class","Female","Male")]
+    my_cel_dat <- my_project$specieInSurvey[[1]]$rawLFD[,c("LCLASS","FEMALE","MALE")]
     the_reclfd <- RecLFD(my_cel_dat, my_project$specieInSurvey[[1]]$lengClas, 1)
     plotRecLFD(the_reclfd)
   })
