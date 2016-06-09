@@ -42,35 +42,35 @@ smart_gui <- function(){
     svalue(uti_gn) <- 3})
   gbutton(text = "Fishery", container = raw_eg, handler = function(h,...){
     svalue(uti_gn) <- 4})
-  gbutton(text = "Population", container = raw_eg, handler = function(h,...){
-    svalue(uti_gn) <- 5})
+  # gbutton(text = "Population", container = raw_eg, handler = function(h,...){
+  #   svalue(uti_gn) <- 5})
   gbutton(text = "Mixture", container = raw_eg, handler = function(h,...){
-    svalue(uti_gn) <- 6})
+    svalue(uti_gn) <- 5})
   gbutton(text = "Cohorts", container = raw_eg, handler = function(h,...){
-    svalue(uti_gn) <- 7})
+    svalue(uti_gn) <- 6})
 
   eff_eg <- gexpandgroup("Effort", horizontal = FALSE, container = lef_g)
   gbutton(text = "Load VMS Data", container = eff_eg, handler = function(h,...){
-    svalue(uti_gn) <- 8})
+    svalue(uti_gn) <- 7})
 
   gbutton(text = "Fishing Grounds", container = eff_eg, handler = function(h,...){
-    svalue(uti_gn) <- 9})
+    svalue(uti_gn) <- 8})
 
   gbutton(text = "Fleet Register", container = eff_eg, handler = function(h,...){
-    svalue(uti_gn) <- 10})
+    svalue(uti_gn) <- 9})
 
   gbutton(text = "Production", container = eff_eg, handler = function(h,...){
-    svalue(uti_gn) <- 11})
+    svalue(uti_gn) <- 10})
 
   gbutton(text = "Selectivity", container = eff_eg, handler = function(h,...){
-    svalue(uti_gn) <- 12})
+    svalue(uti_gn) <- 11})
 
   pre_eg <- gexpandgroup("Predictive", horizontal = FALSE, container = lef_g)
   gbutton(text = "Predict", container = pre_eg, handler = function(h,...){
-    svalue(uti_gn) <- 13})
+    svalue(uti_gn) <- 12})
   sim_eg <- gexpandgroup("Simulation", horizontal = FALSE, container = lef_g)
   gbutton(text = "Simulate", container = sim_eg, handler = function(h,...){
-    svalue(uti_gn) <- 14})
+    svalue(uti_gn) <- 13})
   addSpring(lef_g)
   stat_bar <- gstatusbar("", container = lef_g, visible = TRUE)
 
@@ -101,11 +101,11 @@ smart_gui <- function(){
       svalue(raw_l1) <- paste("Specie: ", paste(my_project$specieInSurvey, collapse = " - "))
       #   svalue(raw_l2) <- paste("Length Classes: from ",  min(my_project$LClass), " to ", max(my_project$LClass))
       svalue(raw_l3) <- paste("Years: from", min(as.numeric(as.character(my_project$yearInSurvey))), " to ", max(as.numeric(as.character(my_project$yearInSurvey))))
-      spec_drop[] <- my_project$specieInSurvey
+      # spec_drop[] <- my_project$specieInSurvey            ##  droplist from population tab
       spec_drop_mix[] <- my_project$specieInSurvey
       # spevie_drop[] <- c("All", my_project$specieInSurvey)
       cohSpe_drop[] <- my_project$specieInSurvey
-      svalue(spec_drop) <- my_project$specieInSurvey[1]
+      # svalue(spec_drop) <- my_project$specieInSurvey[1]   ##  droplist from population tab
       svalue(cohSpe_drop) <- my_project$specieInSurvey[1]
       # svalue(spevie_drop) <- "All"
       svalue(spec_drop_mix) <- my_project$specieInSurvey[1]
@@ -603,57 +603,57 @@ smart_gui <- function(){
 
 
 
-  ##############################################################
-  ####   Population   ##########################################
-  ##############################################################
-
-  pop_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Population")
-  pop_g_top <- gframe(horizontal = TRUE, container = pop_g, spacing = 10)
-  addSpring(pop_g_top)
-  lfdfra_g <- gframe("LFD data", horizontal = TRUE, container = pop_g_top, expand = TRUE)
-  addSpring(lfdfra_g)
-  sourcePop_r <- gradio(items = c("Survey", "Fishery"), horizontal = FALSE, container = lfdfra_g, expand = TRUE, handler = function(...){
-    if(svalue(sourcePop_r) == "Survey"){
-      spec_drop[] <- my_project$specieInSurvey
-      svalue(spec_drop) <- my_project$specieInSurvey[1]
-      year_drop[] <- c("All", as.character(my_project$yearInSurvey))
-      svalue(year_drop) <- my_project$yearInSurvey[1]
-    }else{
-      spec_drop[] <- my_project$specieInFishery
-      svalue(spec_drop) <- my_project$specieInFishery[1]
-      year_drop[] <- c("All", as.character(my_project$yearInFishery))
-      svalue(year_drop) <- my_project$yearInFishery[1]
-    }
-  })
-  addSpring(lfdfra_g)
-  spec_b <- gframe("Specie", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
-  addSpring(lfdfra_g)
-  addSpring(spec_b)
-  spec_drop <- gcombobox(items = "Specie", selected = 1, container = spec_b, editable = FALSE)
-  addSpring(spec_b)
-  year_b <- gframe("Year", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
-  addSpring(lfdfra_g)
-  addSpring(year_b)
-  year_drop <- gcombobox(items = "Year", selected = 1, container = year_b, editable = FALSE)
-  addSpring(year_b)
-  gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = lfdfra_g,
-         handler = function(h,...){
-           dev.set(dev.list()[pre_dev+2])
-           if(svalue(sourcePop_r) == "Survey"){
-             spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
-             ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[,c("LCLASS","FEMALE","MALE")], my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[which(my_project$surveyBySpecie[[spe_ind]]$rawLFD[,"Year"] ==  svalue(year_drop)),c("LCLASS","FEMALE","MALE")])
-             the_reclfd <- RecLFD(my_cel_dat, my_project$surveyBySpecie[[spe_ind]]$lengClas, 1)
-           }else{
-             spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
-             ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$fisheryBySpecie[[spe_ind]]$rawLFD[,c("Class","Female","Male")], my_cel_dat <- my_project$fisheryBySpecie[[spe_ind]]$rawLFD[which(years(my_project$fisheryBySpecie[[spe_ind]]$rawLFD[,"Date"]) ==  svalue(year_drop)),c("Class","Female","Male")])
-             the_reclfd <- RecLFD(my_cel_dat, my_project$fisheryBySpecie[[spe_ind]]$lengClas, 1)
-           }
-           plotRecLFD(the_reclfd)
-         })
-  addSpring(lfdfra_g)
-  addSpring(pop_g_top)
-  addSpace(pop_g_top, 2)
-  pop_p <- ggraphics(container = pop_g, width = 600, height = 280, expand = TRUE)
+  # ##############################################################
+  # ####   Population   ##########################################
+  # ##############################################################
+  #
+  # pop_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Population")
+  # pop_g_top <- gframe(horizontal = TRUE, container = pop_g, spacing = 10)
+  # addSpring(pop_g_top)
+  # lfdfra_g <- gframe("LFD data", horizontal = TRUE, container = pop_g_top, expand = TRUE)
+  # addSpring(lfdfra_g)
+  # sourcePop_r <- gradio(items = c("Survey", "Fishery"), horizontal = FALSE, container = lfdfra_g, expand = TRUE, handler = function(...){
+  #   if(svalue(sourcePop_r) == "Survey"){
+  #     spec_drop[] <- my_project$specieInSurvey
+  #     svalue(spec_drop) <- my_project$specieInSurvey[1]
+  #     year_drop[] <- c("All", as.character(my_project$yearInSurvey))
+  #     svalue(year_drop) <- my_project$yearInSurvey[1]
+  #   }else{
+  #     spec_drop[] <- my_project$specieInFishery
+  #     svalue(spec_drop) <- my_project$specieInFishery[1]
+  #     year_drop[] <- c("All", as.character(my_project$yearInFishery))
+  #     svalue(year_drop) <- my_project$yearInFishery[1]
+  #   }
+  # })
+  # addSpring(lfdfra_g)
+  # spec_b <- gframe("Specie", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
+  # addSpring(lfdfra_g)
+  # addSpring(spec_b)
+  # spec_drop <- gcombobox(items = "Specie", selected = 1, container = spec_b, editable = FALSE)
+  # addSpring(spec_b)
+  # year_b <- gframe("Year", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
+  # addSpring(lfdfra_g)
+  # addSpring(year_b)
+  # year_drop <- gcombobox(items = "Year", selected = 1, container = year_b, editable = FALSE)
+  # addSpring(year_b)
+  # gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = lfdfra_g,
+  #        handler = function(h,...){
+  #          dev.set(dev.list()[pre_dev+2])
+  #          if(svalue(sourcePop_r) == "Survey"){
+  #            spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
+  #            ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[,c("LCLASS","FEMALE","MALE")], my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[which(my_project$surveyBySpecie[[spe_ind]]$rawLFD[,"Year"] ==  svalue(year_drop)),c("LCLASS","FEMALE","MALE")])
+  #            the_reclfd <- RecLFD(my_cel_dat, my_project$surveyBySpecie[[spe_ind]]$lengClas, 1)
+  #          }else{
+  #            spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
+  #            ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$fisheryBySpecie[[spe_ind]]$rawLFD[,c("Class","Female","Male")], my_cel_dat <- my_project$fisheryBySpecie[[spe_ind]]$rawLFD[which(years(my_project$fisheryBySpecie[[spe_ind]]$rawLFD[,"Date"]) ==  svalue(year_drop)),c("Class","Female","Male")])
+  #            the_reclfd <- RecLFD(my_cel_dat, my_project$fisheryBySpecie[[spe_ind]]$lengClas, 1)
+  #          }
+  #          plotRecLFD(the_reclfd)
+  #        })
+  # addSpring(lfdfra_g)
+  # addSpring(pop_g_top)
+  # addSpace(pop_g_top, 2)
+  # pop_p <- ggraphics(container = pop_g, width = 600, height = 280, expand = TRUE)
 
 
 
@@ -873,7 +873,7 @@ smart_gui <- function(){
   addSpring(go_g)
   go_b <- gbutton ("   GO   ", container = go_g,
                    handler = function(h,...){
-                     dev.set(dev.list()[pre_dev+3])
+                     dev.set(dev.list()[pre_dev+2])
                      pre_mfrow <- par(c("mfrow", "mar"))
                      par(mfrow = c(2, 1))
                      par(mar = c(2,2,1.5,0.5))
@@ -953,7 +953,7 @@ smart_gui <- function(){
 
   gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = cohofra_g,
          handler = function(h,...){
-           dev.set(dev.list()[pre_dev+4])
+           dev.set(dev.list()[pre_dev+3])
            my_project$cohoDisPlot(which(my_project$specieInSurvey == svalue(cohSpe_drop)),
                                   ifelse(svalue(cohCoh_drop) == "All", "All", as.numeric(svalue(cohCoh_drop))),
                                   ifelse(svalue(cohYea_drop) == "All", "All", which(my_project$yearInSurvey == svalue(cohYea_drop))),
@@ -1000,7 +1000,7 @@ smart_gui <- function(){
 
     effvie_drop[] <- names(my_project$fleet$rawEffort)
     svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
-    dev.set(dev.list()[pre_dev+5])
+    dev.set(dev.list()[pre_dev+4])
 
     svalue(stat_bar) <- "Plotting raw effort..."
     my_project$ggplotRawPoints(svalue(effvie_drop))
@@ -1035,7 +1035,7 @@ smart_gui <- function(){
 
     effvie_drop[] <- names(my_project$fleet$rawEffort)
     svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
-    dev.set(dev.list()[pre_dev+5])
+    dev.set(dev.list()[pre_dev+4])
 
     svalue(stat_bar) <- "Plotting Count of disinct vessels..."
     Sys.sleep(1)
@@ -1049,7 +1049,7 @@ smart_gui <- function(){
   })
   addSpring(eff_g_top1)
   gbutton("View Stats", container = eff_g_top1, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+5])
+    dev.set(dev.list()[pre_dev+4])
     svalue(stat_bar) <- "Plotting Count of disinct vessels..."
     Sys.sleep(1)
     my_project$fleet$plotCountIDsEffo()
@@ -1141,7 +1141,7 @@ smart_gui <- function(){
   addSpring(eff_g_top1b)
 
   gbutton("View Stats", container = eff_g_top1b, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+5])
+    dev.set(dev.list()[pre_dev+4])
     svalue(stat_bar) <- "Plotting fishing points data summary..."
     Sys.sleep(1)
     my_project$fleet$plotFishPoinStat()
@@ -1160,7 +1160,7 @@ smart_gui <- function(){
   eff_g_top2_ver <- ggroup(horizontal = FALSE, container = eff_g_top2)
   addSpring(eff_g_top2_ver)
   gbutton("Raw Effort", container = eff_g_top2_ver, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+5])
+    dev.set(dev.list()[pre_dev+4])
     svalue(stat_bar) <- "Plotting raw effort..."
     Sys.sleep(1)
     my_project$ggplotRawPoints(svalue(effvie_drop))
@@ -1168,7 +1168,7 @@ smart_gui <- function(){
   })
   addSpring(eff_g_top2_ver)
   gbutton("Fishing Points", container = eff_g_top2_ver, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+5])
+    dev.set(dev.list()[pre_dev+4])
     svalue(stat_bar) <- "Plotting fishing points..."
     Sys.sleep(1)
     my_project$ggplotFishingPoints(svalue(effvie_drop))
@@ -1176,7 +1176,7 @@ smart_gui <- function(){
   })
   addSpring(eff_g_top2_ver)
   gbutton("Gridded Effort", container = eff_g_top2_ver, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+5])
+    dev.set(dev.list()[pre_dev+4])
     svalue(stat_bar) <- "Plotting gridded effort..."
     Sys.sleep(1)
     my_project$ggplotGridEffort(svalue(effvie_drop))
@@ -1307,7 +1307,7 @@ smart_gui <- function(){
                                     minsize = 10,
                                     modeska = "S",
                                     skater_method = svalue(fg_metr))
-    dev.set(dev.list()[pre_dev+6])
+    dev.set(dev.list()[pre_dev+5])
 
     fg_plotCut[] <- 1:svalue(fg_maxCut)
     svalue(fg_plotCut) <- which.max(my_project$sampMap$indSil)
@@ -1323,7 +1323,7 @@ smart_gui <- function(){
   addSpring(fig_g_top_plot)
   fg_plotCut <- gcombobox(items = 2:50,
                           container = fig_g_top_plot, handler = function(h,...){
-                            dev.set(dev.list()[pre_dev+6])
+                            dev.set(dev.list()[pre_dev+5])
                             # my_project$sampMap$plotFishGrou(svalue(fg_plotCut))
                             my_project$sampMap$setCutResult(ind_clu = svalue(fg_plotCut))
 
@@ -1365,7 +1365,7 @@ smart_gui <- function(){
     my_project$fleet$loadFleetRegis("/Users/Lomo/Documents/Uni/Lab/Data/FLEET/ITA_export.csv")
     my_project$fleet$cleanRegister()
     # my_project$fleet$splitFleet()
-    dev.set(dev.list()[pre_dev+7])
+    dev.set(dev.list()[pre_dev+6])
     my_project$fleet$plotRegSum()
 
     ### Update Register Status
@@ -1386,7 +1386,7 @@ smart_gui <- function(){
   addSpring(reg_g_top)
   gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"),
          container = reg_g_top, handler = function(h,...){
-           dev.set(dev.list()[pre_dev+7])
+           dev.set(dev.list()[pre_dev+6])
            my_project$fleet$plotRegSum()
          })
   addSpring(reg_g_top)
@@ -1414,7 +1414,7 @@ smart_gui <- function(){
     #                    multi = TRUE)
     # my_project$fleet$loadProduction(tmp_files)
 
-    dev.set(dev.list()[pre_dev+8])
+    dev.set(dev.list()[pre_dev+7])
     my_project$fleet$rawProduction <- readRDS("/Users/Lomo/Documents/Uni/PhD/TESI/landings/LandAll.rData")
 
     my_project$fleet$setProdIds()
@@ -1811,7 +1811,7 @@ smart_gui <- function(){
   pro_g_top2_ver <- ggroup(horizontal = FALSE, container = pro_g_top2_view)
   addSpring(pro_g_top2_ver)
   gbutton("Betas", container = pro_g_top2_ver, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+8])
+    dev.set(dev.list()[pre_dev+7])
     svalue(stat_bar) <- "Plotting productivity..."
     Sys.sleep(1)
     my_project$setPlotBetaMeltYear(specie = svalue(prospe_drop), year = svalue(provie_drop))
@@ -1822,7 +1822,7 @@ smart_gui <- function(){
   })
   addSpring(pro_g_top2_ver)
   gbutton("Production", container = pro_g_top2_ver, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+8])
+    dev.set(dev.list()[pre_dev+7])
     svalue(stat_bar) <- "Plotting production..."
     Sys.sleep(1)
 
@@ -1895,7 +1895,7 @@ smart_gui <- function(){
   svalue(uti_gn) <- 11
   svalue(uti_gn) <- 12
   svalue(uti_gn) <- 13
-  svalue(uti_gn) <- 14
+  # svalue(uti_gn) <- 14
   svalue(uti_gn) <- 1
   # visible(main_win) <- TRUE
 
