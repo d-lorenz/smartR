@@ -369,8 +369,8 @@ SmartProject <- R6Class("smartProject",
                           addFg2Fishery = function(){
                             for(i in 1:length(fisheryBySpecie)){
                               fisheryBySpecie[[i]]$rawLFD$numFG <<- over(SpatialPoints(data.frame(Lon = fisheryBySpecie[[i]]$rawLFD$Lon,
-                                                                                                 Lat = fisheryBySpecie[[i]]$rawLFD$Lat)),
-                                                                        sampMap$cutResShp)
+                                                                                                  Lat = fisheryBySpecie[[i]]$rawLFD$Lat)),
+                                                                         sampMap$cutResShp)
                             }
                           },
                           setWeekEffoMatrCell = function(){
@@ -1099,25 +1099,31 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                              calcMixDate = function(nAdap = 100, nSamp = 2000){
                                mixPar <<- list('Female' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)),
                                                'Male' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)))
-                               for(sex in c('Female', 'Male')){
+                               for(sex in c("Female", "Male")){
                                  # Nclust = 3
                                  Nclust = nCoho
 
                                  # X = readRDS('Ldata.rData')
-                                 X = rawLFD[,c("Date","Class", "FG", sex)]
+                                 tmp_X = rawLFD[rawLFD$Specie == specie, c("Date","Class", "numFG", sex)]
+                                 num_sex <- sum(tmp_X[,4])
+                                 cat("\n\nCalculating mixture model...\nFound", num_sex, sex, as.character(specie), "samples\n\n", sep = " ")
 
-                                 names(X) <- c("UTC", "Length", "NumFG")
+                                 X <- data.frame(UTC = rep(tmp_X$Date, tmp_X[,4]),
+                                                 Length = rep(tmp_X$Class, tmp_X[,4]) + runif(num_sex, -0.5, 0.5),
+                                                 NumFG = rep(tmp_X$numFG, tmp_X[,4]))
 
-                                 indici = sample(1:nrow(X), size = min(c(15000, nrow(X))))
-                                 indici = indici[-which(is.na(X[indici,"NumFG"]))]
-                                 y = X[indici,"Length"]
-                                 tUTC = X[indici,"UTC"]
-                                 FGlabels = as.numeric(X[indici,"NumFG"])
+                                 ind_SMP = sample(1:nrow(X), size = min(c(15000, nrow(X))))
+
+                                 ind_SMP = ind_SMP[!is.na(X[ind_SMP,"NumFG"])]
+
+                                 y = X[ind_SMP,"Length"]
+                                 tUTC = X[ind_SMP,"UTC"]
+                                 FGlabels = as.numeric(X[ind_SMP,"NumFG"])
                                  FGnames = unique(FGlabels)
                                  FG = numeric(length(FGlabels))
                                  for(FGname in 1:length(FGnames)){
-                                   indici = which(FGlabels == FGnames[FGname])
-                                   FG[indici] = rep(FGname, length(indici))
+                                   ind_FG = which(FGlabels == FGnames[FGname])
+                                   FG[ind_FG] = rep(FGname, length(ind_FG))
                                  }
                                  nFG = length(unique(FG))
                                  N = length(y)
@@ -1152,21 +1158,33 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                                     }
                                }', sep = "")
 
-                                 jags = jags.model(textConnection(model.str), data = dataList, n.chains = 1, n.adapt = nAdap)
+                                 # JAGS
+                                 numIter = nAdap
+                                 jags = jags.model(textConnection(model.str), data=dataList, n.chains=1, n.adapt=numIter)
+                                 numUpd = 2*nAdap
+                                 update(jags, numUpd)
                                  TT = nSamp
                                  samples = jags.samples(jags, c('Linf', 'k', 't0', 'tau', 'p', 'Z'), TT)
 
-                                 # Estimates
+                                 ## estimates
+
                                  LHat = mean(samples$Linf)
                                  kHat = mean(samples$k)
                                  t0Hat = mean(samples$t0)
                                  # means = LHat * (1 - exp(-kHat*((1:Nclust) - t0Hat)))
+
+                                 # means = LHat * (1 - exp(-kHat*((0:(Nclust-1)) + tt - t0Hat)))
                                  taus = matrix(as.numeric(samples$tau), ncol=Nclust, byrow=T)
                                  sigma2s = 1/taus
                                  tauHat = apply(taus, 2, mean)
                                  sigma2Hat = apply(sigma2s, 2, mean)
-                                 ps = matrix(as.numeric(samples$p), ncol=Nclust, byrow=T)
-                                 pHat = apply(ps, 2, mean)
+
+                                 # ps = matrix(as.numeric(samples$p), ncol=Nclust*nFG, byrow=T)
+                                 # pHat = apply(ps, 2, mean)
+
+                                 pArray = array(as.numeric(samples$p), c(nFG, Nclust, TT))
+                                 # pArray = array(as.numeric(samples$p), c(TT, Nclust, nFG))
+                                 pHat = apply(pArray,1:2,mean)
 
                                  # Latent vars
                                  means.f = matrix(0,N,Nclust)	# Means (per fish)
@@ -1174,39 +1192,60 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                  for(iObs in 1:N){
                                    temp = LHat * (1 - exp(-kHat*(((1:Nclust)-1+tt[iObs]) - t0Hat)))
                                    means.f[iObs,] = temp
-                                   postProbs = pHat * dnorm(y[iObs], temp, sqrt(sigma2Hat))
-                                   zHat[iObs] = which.max(postProbs)
+                                   postProbs = pHat[FG[iObs],] * dnorm(y[iObs], temp, sqrt(sigma2Hat))
+                                   zHat[iObs] = sample(1:Nclust, size=1, prob=postProbs) # which.max(postProbs)
+                                   # zHat[iObs] = which.max(postProbs)
+                                 }
+                                 ages.f = zHat-1+tt-t0Hat
+
+                                 LL = y
+                                 AA = floor(ages.f)#round(ages.f,0)
+                                 pop = as.numeric(table(AA))
+                                 popm = cbind(tt,tUTC,AA)
+                                 t0nat = 0.2
+
+                                 mm = vv = numeric(length(unique(AA)))
+                                 for(i in 1:length(unique(AA))){
+                                   mm[i] = mean(LL[which(AA==unique(AA)[i])])
+                                   vv[i] = var(LL[which(AA==unique(AA)[i])])
                                  }
 
-                                 # Residuals
-                                 e = y - means.f[cbind(1:N,zHat)]
-                                 hist(e, 100, freq=F)
-                                 asc = seq(min(e), max(e), length=200)
-                                 lines(asc, dnorm(asc,0,sd(e)))
+                                 ord = order(mm)
 
-                                 # Density plot/1
-                                 asc = seq(min(y), max(y), length=200)
-                                 densities = matrix(0, length(asc), Nclust)
-                                 dens = numeric(length(asc))
-                                 for(iasc in 1:length(asc)){
-                                   densities[iasc,] = pHat * dnorm(asc[iasc], means, sqrt(sigma2Hat))
-                                   dens[iasc] = sum(densities[iasc,])
+                                 mm = mm[ord]
+                                 vv = vv[ord]
+
+                                 all = numeric(0)
+                                 for(i in 1:length(unique(AA))){
+                                   if(is.na(vv[i])) next
+                                   all=c(all,rnorm(pop[i], mean = mm[i], sd = sqrt(vv[i])))
                                  }
 
-                                 hist(y, breaks=30, freq=F, col='lightgray')
-                                 lines(asc, dens, col=4, lwd=3)
+                                 # VBGT
+                                 ages.f = zHat-1+tt-t0Hat
+                                 asc = seq(0, max(ages.f), length=200)
+                                 VBt =  LHat * (1 - exp(-kHat * asc))
+                                 plot(asc, VBt, ylim=c(0, max(y)), type='l',
+                                      xlab='Age (t-t0)', ylab=expression(Length[age]))
+                                 title('Age-length relationship')
+                                 points(ages.f, y, pch='.', cex=2,col=AA+1)
 
-                                 # Density plot/2
-                                 dens2 = matrix(0, length(asc), length(means))
-                                 for(j in 1:length(means)){
-                                   dens2[,j] = pHat[j] * dnorm(asc, means[j], sqrt(sigma2Hat[j]))
-                                 }
+                                 # COHORT FREQ
+                                 barplot(table(AA), main = "Samples x Cohort")
 
-                                 plot(range(asc), c(0, max(dens)), type='n')
-                                 for(j in 1:length(means)){
-                                   polygon(c(min(asc),asc,max(asc)), c(0,dens2[,j],0), col=rgb(1,0,0,0.2,maxColorValue=1), border=F)
-                                 }
-                                 lines(asc, dens)
+                                 # TZERO
+                                 hist(samples$t0, 20, freq = FALSE,
+                                      # xlim=c(0,1),
+                                      # , axes = FALSE
+                                      main = "T zero distribution", xlab = "")
+                                 # axis(1,seq(0+1/24,1-1/24,length=12),
+                                 #      as.character(months(seq(1,360,length=12))),las=2)
+                                 abline(v = mean(samples$t0), lwd = 4, lty = 2, col = 2)
+
+                                 # KAPPA
+                                 hist(samples$k, 20, freq = FALSE,
+                                      main = "Kappa distribution", xlab="")
+                                 abline(v = mean(samples$k), lwd = 4, lty = 2, col = 2)
                                }
                              }))
 
