@@ -13,6 +13,7 @@
 smart_gui <- function(){
 
   my_project <<- SmartProject$new()
+  # assign("my_project", SmartProject$new(),.GlobalEnv)
   my_project$createFleet()
 
   pre_dev <- length(dev.list())
