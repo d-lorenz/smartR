@@ -1846,11 +1846,12 @@ smart_gui <- function(){
   go_b <- gbutton ("   GO   ", container = go_g,
                    handler = function(h,...){
                      dev.set(dev.list()[pre_dev+6])
-                     pre_mfrow <- par(c("mfrow", "mar"))
-                     par(mfrow = c(2, 1))
-                     par(mar = c(2,2,1.5,0.5))
 
                      if(svalue(sourceMix_r) == "Survey"){
+                       pre_mfrow <- par(c("mfrow", "mar"))
+                       par(mfrow = c(2, 1))
+                       par(mar = c(2,2,1.5,0.5))
+
                        ind_spe <- which(my_project$specieInSurvey == svalue(spec_drop_mix))
                        # Set number of cohorts
                        my_project$surveyBySpecie[[ind_spe]]$setNCoho(as.numeric(svalue(ncih_sb)))
@@ -1863,11 +1864,15 @@ smart_gui <- function(){
                        cohCoh_drop[] <- c("All", seq(1, my_project$surveyBySpecie[[ind_spe]]$nCoho, by = 1))
 
                      }else{
+                       pre_mfrow <- par(c("mfrow", "mar"))
+                       par(mfrow = c(2, 4))
+                       par(mar = c(2,2,1.5,0.5))
+
                        ind_spe <- which(my_project$specieInFishery == svalue(spec_drop_mix))
                        # Set number of cohorts
                        my_project$fisheryBySpecie[[ind_spe]]$setNCoho(as.numeric(svalue(ncih_sb)))
                        # Compute mixture
-                       my_project$fisheryBySpecie[[ind_spe]]$calcMix(nAdap = as.numeric(svalue(mc_niter)), nSamp = as.numeric(svalue(mc_nsamp)))
+                       my_project$fisheryBySpecie[[ind_spe]]$calcMixDate(nAdap = as.numeric(svalue(mc_niter)), nSamp = as.numeric(svalue(mc_nsamp)))
                        # Transform length to cohorts
                        my_project$calcCoh_A_Fishery(ind_spe)
                        # Interpolate cohorts
