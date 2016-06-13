@@ -94,7 +94,7 @@ smart_gui <- function(){
   addSpring(pro_g_top)
   gbutton("Load", container = pro_g_top, handler = function(h,...){
     load_path <- gfile(text = "Select Smart_Project file", type = "open", filter = list("R files" = list(patterns = c("*.rData"))))
-    my_project <<- readRDS(load_path)
+    my_project <- readRDS(load_path)
 
     ### Update Sampling Status
 
