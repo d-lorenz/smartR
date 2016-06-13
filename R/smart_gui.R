@@ -1851,28 +1851,28 @@ smart_gui <- function(){
                      par(mar = c(2,2,1.5,0.5))
 
                      if(svalue(sourceMix_r) == "Survey"){
-
+                       ind_spe <- which(my_project$specieInSurvey == svalue(spec_drop_mix))
                        # Set number of cohorts
-                       my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_mix))]]$setNCoho(as.numeric(svalue(ncih_sb)))
+                       my_project$surveyBySpecie[[ind_spe]]$setNCoho(as.numeric(svalue(ncih_sb)))
                        # Compute mixture
-                       my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_mix))]]$calcMix(nAdap = as.numeric(svalue(mc_niter)), nSamp = as.numeric(svalue(mc_nsamp)))
+                       my_project$surveyBySpecie[[ind_spe]]$calcMix(nAdap = as.numeric(svalue(mc_niter)), nSamp = as.numeric(svalue(mc_nsamp)))
                        # Transform length to cohorts
-                       my_project$calcCoh_A_Survey(which(my_project$specieInSurvey == svalue(spec_drop_mix)))
+                       my_project$calcCoh_A_Survey(ind_spe)
                        # Interpolate cohorts
-                       my_project$intrpCoh_A_Survey(which(my_project$specieInSurvey == svalue(spec_drop_mix)))
-                       cohCoh_drop[] <- c("All", seq(1, my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_mix))]]$nCoho, by = 1))
+                       my_project$intrpCoh_A_Survey(ind_spe)
+                       cohCoh_drop[] <- c("All", seq(1, my_project$surveyBySpecie[[ind_spe]]$nCoho, by = 1))
 
                      }else{
-
+                       ind_spe <- which(my_project$specieInFishery == svalue(spec_drop_mix))
                        # Set number of cohorts
-                       my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_mix))]]$setNCoho(as.numeric(svalue(ncih_sb)))
+                       my_project$fisheryBySpecie[[ind_spe]]$setNCoho(as.numeric(svalue(ncih_sb)))
                        # Compute mixture
-                       my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_mix))]]$calcMix(nAdap = as.numeric(svalue(mc_niter)), nSamp = as.numeric(svalue(mc_nsamp)))
+                       my_project$fisheryBySpecie[[ind_spe]]$calcMix(nAdap = as.numeric(svalue(mc_niter)), nSamp = as.numeric(svalue(mc_nsamp)))
                        # Transform length to cohorts
-                       my_project$calcCoh_A_Fishery(which(my_project$specieInFishery == svalue(spec_drop_mix)))
+                       my_project$calcCoh_A_Fishery(ind_spe)
                        # Interpolate cohorts
-                       my_project$intrpCoh_A_Fishery(which(my_project$specieInFishery == svalue(spec_drop_mix)))
-                       cohCoh_drop[] <- c("All", seq(1, my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_mix))]]$nCoho, by = 1))
+                       my_project$intrpCoh_A_Fishery(ind_spe)
+                       cohCoh_drop[] <- c("All", seq(1, my_project$fisheryBySpecie[[ind_spe]]$nCoho, by = 1))
 
                      }
                      svalue(cohCoh_drop) <- "All"
