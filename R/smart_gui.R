@@ -1873,11 +1873,12 @@ smart_gui <- function(){
                        my_project$fisheryBySpecie[[ind_spe]]$setNCoho(as.numeric(svalue(ncih_sb)))
                        # Compute mixture
                        my_project$fisheryBySpecie[[ind_spe]]$calcMixDate(nAdap = as.numeric(svalue(mc_niter)), nSamp = as.numeric(svalue(mc_nsamp)))
+
                        # Transform length to cohorts
-                       my_project$calcCoh_A_Fishery(ind_spe)
+                       # my_project$calcCoh_A_Fishery(ind_spe)
                        # Interpolate cohorts
-                       my_project$intrpCoh_A_Fishery(ind_spe)
-                       cohCoh_drop[] <- c("All", seq(1, my_project$fisheryBySpecie[[ind_spe]]$nCoho, by = 1))
+                       # my_project$intrpCoh_A_Fishery(ind_spe)
+                       # cohCoh_drop[] <- c("All", seq(1, my_project$fisheryBySpecie[[ind_spe]]$nCoho, by = 1))
 
                      }
                      svalue(cohCoh_drop) <- "All"
