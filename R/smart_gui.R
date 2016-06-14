@@ -1881,7 +1881,7 @@ smart_gui <- function(){
                        # cohCoh_drop[] <- c("All", seq(1, my_project$fisheryBySpecie[[ind_spe]]$nCoho, by = 1))
 
                      }
-                     svalue(cohCoh_drop) <- "All"
+                     # svalue(cohCoh_drop) <- "All"
                      par(pre_mfrow)
                    })
   addSpring(go_g)
