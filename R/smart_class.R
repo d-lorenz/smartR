@@ -1104,7 +1104,8 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                  Nclust = nCoho
 
                                  # X = readRDS('Ldata.rData')
-                                 tmp_X = rawLFD[rawLFD$Specie == specie, c("Date","Class", "numFG", sex)]
+                                 tmp_X = rawLFD[rawLFD$Specie == specie & !is.na(rawLFD$numFG), c("Date","Class", "numFG", sex)]
+
                                  num_sex <- sum(tmp_X[,4])
                                  cat("\n\nCalculating mixture model...\nFound", num_sex, sex, as.character(specie), "samples\n\n", sep = " ")
 
@@ -1114,7 +1115,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 
                                  ind_SMP = sample(1:nrow(X), size = min(c(15000, nrow(X))))
 
-                                 ind_SMP = ind_SMP[!is.na(X[ind_SMP,"NumFG"])]
+                                 # ind_SMP = ind_SMP[!is.na(X[ind_SMP,"NumFG"])]
 
                                  y = X[ind_SMP,"Length"]
                                  tUTC = X[ind_SMP,"UTC"]
