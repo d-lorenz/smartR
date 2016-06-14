@@ -1199,40 +1199,48 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                  }
                                  ages.f = zHat-1+tt-t0Hat
 
-                                 LL = y
-                                 AA = floor(ages.f)#round(ages.f,0)
-                                 pop = as.numeric(table(AA))
-                                 popm = cbind(tt,tUTC,AA)
-                                 t0nat = 0.2
+                                 ageLength_DF <- data.frame(Age = floor(ages.f),
+                                                      Length = y)
+                                 coho_AL <- ddply(ageLength_DF, .(Age), summarise,
+                                       coh.mean = mean(Length), coh.var = var(Length))
 
-                                 mm = vv = numeric(length(unique(AA)))
-                                 for(i in 1:length(unique(AA))){
-                                   mm[i] = mean(LL[which(AA==unique(AA)[i])])
-                                   vv[i] = var(LL[which(AA==unique(AA)[i])])
-                                 }
+                                 # if(sum(is.na(coho_AL)) > 0) coho_AL[is.na(coho_AL)] <- 0
 
-                                 ord = order(mm)
+                                 print(coho_AL)
 
-                                 mm = mm[ord]
-                                 vv = vv[ord]
-
-                                 all = numeric(0)
-                                 for(i in 1:length(unique(AA))){
-                                   if(is.na(vv[i])) next
-                                   all=c(all,rnorm(pop[i], mean = mm[i], sd = sqrt(vv[i])))
-                                 }
+                                 # LL = y
+                                 # AA = floor(ages.f)#round(ages.f,0)
+                                 # pop = as.numeric(table(AA))
+                                 # popm = cbind(tt,tUTC,AA)
+                                 # t0nat = 0.2
+                                 #
+                                 # mm = vv = numeric(length(unique(AA)))
+                                 # for(i in 1:length(unique(AA))){
+                                 #   mm[i] = mean(LL[which(AA==unique(AA)[i])])
+                                 #   vv[i] = var(LL[which(AA==unique(AA)[i])])
+                                 # }
+                                 #
+                                 # ord = order(mm)
+                                 #
+                                 # mm = mm[ord]
+                                 # vv = vv[ord]
+                                 #
+                                 # all = numeric(0)
+                                 # for(i in 1:length(unique(AA))){
+                                 #   if(is.na(vv[i])) next
+                                 #   all=c(all,rnorm(pop[i], mean = mm[i], sd = sqrt(vv[i])))
+                                 # }
 
                                  # VBGT
-                                 ages.f = zHat-1+tt-t0Hat
                                  asc = seq(0, max(ages.f), length=200)
                                  VBt =  LHat * (1 - exp(-kHat * asc))
                                  plot(asc, VBt, ylim=c(0, max(y)), type='l',
                                       xlab='Age (t-t0)', ylab=expression(Length[age]))
                                  title('Age-length relationship')
-                                 points(ages.f, y, pch='.', cex=2,col=AA+1)
+                                 points(ages.f, y, pch = 19, cex = 0.25, col = ageLength_DF$Age + 1)
 
                                  # COHORT FREQ
-                                 barplot(table(AA), main = "Samples x Cohort")
+                                 barplot(table(ageLength_DF$Age), main = "Samples x Cohort")
 
                                  # TZERO
                                  hist(samples$t0, 20, freq = FALSE,
@@ -1241,12 +1249,12 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                       main = "T zero distribution", xlab = "")
                                  # axis(1,seq(0+1/24,1-1/24,length=12),
                                  #      as.character(months(seq(1,360,length=12))),las=2)
-                                 abline(v = mean(samples$t0), lwd = 4, lty = 2, col = 2)
+                                 abline(v = mean(samples$t0), lwd = 2, lty = 2, col = 2)
 
                                  # KAPPA
                                  hist(samples$k, 20, freq = FALSE,
                                       main = "Kappa distribution", xlab="")
-                                 abline(v = mean(samples$k), lwd = 4, lty = 2, col = 2)
+                                 abline(v = mean(samples$k), lwd = 2, lty = 2, col = 2)
                                }
                              }))
 
