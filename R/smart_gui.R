@@ -1654,7 +1654,7 @@ smart_gui <- function(){
   addSpring(cont_g)
   ncoh_f <- gframe("N. cohorts", horizontal = FALSE, container = cont_g)
   addSpring(ncoh_f)
-  ncih_sb <- gspinbutton (from = 1, to = 10, by = 1, value = 3, digits = 0, container = ncoh_f)
+  ncih_sb <- gspinbutton (from = 1, to = 100, by = 1, value = 3, digits = 0, container = ncoh_f)
   addSpring(ncoh_f)
   addSpring(cont_g)
   prio_g <- ggroup(horizontal = TRUE, container = cont_g)
