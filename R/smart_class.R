@@ -1202,7 +1202,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                  ageLength_DF <- data.frame(Age = floor(ages.f),
                                                       Length = y)
                                  coho_AL <- ddply(ageLength_DF, .(Age), summarise,
-                                       coh.mean = mean(Length), coh.var = var(Length))
+                                       coh.mean = mean(Length), coh.var = var(Length), coh.num = length(Length))
 
                                  # if(sum(is.na(coho_AL)) > 0) coho_AL[is.na(coho_AL)] <- 0
 
