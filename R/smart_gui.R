@@ -678,6 +678,8 @@ smart_gui <- function(){
     effvie_drop[] <- names(my_project$fleet$rawEffort)
     svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
 
+    my_project$ggplotGridEffort(svalue(effvie_drop))
+
     svalue(stat_bar) <- ""
   })
   addSpring(eff_g_top_IO)
