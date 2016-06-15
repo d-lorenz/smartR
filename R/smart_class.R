@@ -2024,19 +2024,20 @@ SampleMap <- R6Class("sampleMap",
                          sampColScale <<- scale_colour_manual(name = "SPECIE",values = myColors)
                        },
                        plotGooSpeSur = function(poi_data){
-                         gooGrid + geom_jitter(data = poi_data,
-                                               aes(x = LON, y = LAT, shape = SPECIE, color = SPECIE),
-                                               width = 0.05, height = 0.05, alpha = 0.95) + sampColScale
+                         temp_pos <- suppressMessages(gooGrid + geom_jitter(data = poi_data,
+                                                                            aes(x = LON, y = LAT, shape = SPECIE, color = SPECIE),
+                                                                            width = 0.05, height = 0.05, alpha = 0.95) + sampColScale)
+                         suppressWarnings(print(temp_pos))
                        },
                        plotGooSpeFis = function(poi_data){
-                         gooGrid + geom_jitter(data = poi_data,
-                                               aes(x = Lon, y = Lat, shape = Specie, color = Specie),
-                                               width = 0.05, height = 0.05, alpha = 0.95)
+                         temp_pos <- suppressMessages(gooGrid + geom_jitter(data = poi_data,
+                                                                            aes(x = Lon, y = Lat, shape = Specie, color = Specie),
+                                                                            width = 0.05, height = 0.05, alpha = 0.95))
                          # temp_pos <- gooGrid + geom_jitter(data = poi_data,
                          #                             aes(x = Lon, y = Lat, shape = Specie, color = Specie),
                          #                             width = 0.05, height = 0.05, alpha = 0.95)
                          # print(temp_pos)
-
+                         suppressWarnings(print(temp_pos))
                        },
                        setGooBbox = function(){
                          text_x <- mean(gridBboxExt[c(1,3)])
