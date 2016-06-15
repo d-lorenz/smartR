@@ -1612,9 +1612,8 @@ smart_gui <- function(){
 
   addSpring(fis_g_top)
   gbutton("Assign FG", container = fis_g_top, handler = function(h,...){
-    cat("\nConnecting coordinates to fishing ground...", sep = "")
     my_project$addFg2Fishery()
-    cat(" Done!", sep = "")
+    fis_t[] <- my_project$rawDataFishery[sample(1:nrow(my_project$rawDataFishery), 100, replace = FALSE),]
   })
   addSpring(fis_g_top)
 
