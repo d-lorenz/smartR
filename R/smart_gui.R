@@ -1674,8 +1674,8 @@ smart_gui <- function(){
     spec_b <- gframe("Specie", horizontal = FALSE, container = pop_g_top, expand = TRUE)
 
     addSpring(spec_b)
-    spec_drop <- gcombobox(items = my_project$specieInFishery, selected = 1, container = spec_b, editable = FALSE, handler = function(h,...){
-      my_sampling$plotGooSpe(whiSpe = svalue(spec_drop), whiSou = "Fishery")
+    spec_drop <- gcombobox(items = c("All", my_project$specieInFishery), selected = 2, container = spec_b, editable = FALSE, handler = function(h,...){
+      my_project$plotGooSpe(whiSpe = svalue(spec_drop), whiSou = "Fishery")
     })
     addSpring(spec_b)
 
