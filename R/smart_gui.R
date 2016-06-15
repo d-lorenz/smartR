@@ -1687,6 +1687,8 @@ smart_gui <- function(){
     })
     addSpring(pop_g_top)
 
+    addSpace(pop_g_top, 10)
+
     pop_p <- ggraphics(container = pop_g, width = 400, height = 280, expand = TRUE)
 
     visible(temp_dia) <- TRUE
