@@ -654,6 +654,52 @@ smart_gui <- function(){
   # addSpring(eff_g_top1b)
   addSpring(eff_g_top)
 
+  eff_g_top_IO <- ggroup(horizontal = FALSE, container = eff_g_top)
+  addSpring(eff_g_top_IO)
+  gbutton("Load AA data", container = eff_g_top1b, handler = function(h,...){
+    svalue(stat_bar) <- "Loading AA data..."
+    Sys.sleep(1)
+
+    #### SKIPPED LOADING rData
+    #     tmp_files <- gfile(text = "Select AA effort data", type = "open",
+    #                        initial.filename = NULL, initial.dir = getwd(), filter = list(),
+    #                        multi = TRUE)
+    #
+
+    tmp_file <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
+
+    cat("\nLoading effort from rData...", sep = "")
+    svalue(stat_bar) <- "Loading effort from vmsbase db..."
+    Sys.sleep(1)
+
+    my_project$fleet$rawEffort <- readRDS(tmp_file)
+    my_project$fleet$setEffortIds()
+
+    svalue(stat_bar) <- ""
+  })
+  addSpring(eff_g_top_IO)
+  gbutton("Save AA data", container = eff_g_top1b, handler = function(h,...){
+    svalue(stat_bar) <- "Saving AA data..."
+    Sys.sleep(1)
+
+    #### SKIPPED SAVING rData
+    #     tmp_files <- gfile(text = "Select AA effort data", type = "save",
+    #                        initial.filename = NULL, initial.dir = getwd(), filter = list(),
+    #                        multi = TRUE)
+    #
+
+    tmp_file <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
+
+    cat("\nLoading effort from rData...", sep = "")
+    svalue(stat_bar) <- "Saving effort from vmsbase db..."
+    Sys.sleep(1)
+
+    saveRDS(my_project$fleet$rawEffort, tmp_file)
+
+    svalue(stat_bar) <- ""
+  })
+  addSpring(eff_g_top_IO)
+
   addSpring(eff_g_top)
 
   eff_g_top2 <- gframe(text = "View", horizontal = TRUE, container = eff_g_top, expand = TRUE)
