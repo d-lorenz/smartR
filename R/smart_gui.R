@@ -1609,7 +1609,7 @@ smart_gui <- function(){
   addSpace(fis_g_top, 2)
   addSpace(fis_g_top2, 2)
 
-  gbutton("   Open\nLFD viewer", container = fis_g_top, handler = function(h,...){
+  gbutton("Open\nLFD\nViewer", container = fis_g_top, handler = function(h,...){
 
     temp_dia <- gwindow(title="Fishery Length Frequency Distribution Viewer", visible = FALSE,
                         parent = main_win, width = 550, height = 400)
@@ -1662,7 +1662,7 @@ smart_gui <- function(){
 
   addSpring(fis_g_top)
 
-  gbutton("   View\n  Spatial\nDistribution", container = fis_g_top, handler = function(h,...){
+  gbutton("View\nSpatial\nDistribution", container = fis_g_top, handler = function(h,...){
 
     temp_dia <- gwindow(title="Spatial Distribution of Fishery sampling", visible = FALSE,
                         parent = main_win, width = 550, height = 400)
