@@ -1600,7 +1600,14 @@ smart_gui <- function(){
 
   })
   addSpring(fis_g_top1)
+
   addSpring(fis_g_top)
+  fis_g_top2 <- ggroup(horizontal = FALSE, container = fis_g_top)
+  fis_l1 <- glabel("Specie: ", container = fis_g_top2)
+  fis_l3 <- glabel("Years: ", container = fis_g_top2)
+  addSpring(fis_g_top)
+  addSpace(fis_g_top, 2)
+  addSpace(fis_g_top2, 2)
 
   gbutton("   Open\nLFD viewer", container = fis_g_top, handler = function(h,...){
 
@@ -1654,14 +1661,8 @@ smart_gui <- function(){
   })
 
   addSpring(fis_g_top)
-  fis_g_top2 <- ggroup(horizontal = FALSE, container = fis_g_top)
-  fis_l1 <- glabel("Specie: ", container = fis_g_top2)
-  fis_l3 <- glabel("Years: ", container = fis_g_top2)
-  addSpring(fis_g_top)
-  addSpace(fis_g_top, 2)
-  addSpace(fis_g_top2, 2)
 
-  gbutton("     View\nSpatial\ndistribution", container = fis_g_top, handler = function(h,...){
+  gbutton("   View\n  Spatial\nDistribution", container = fis_g_top, handler = function(h,...){
 
     temp_dia <- gwindow(title="Spatial Distribution of Fishery sampling", visible = FALSE,
                         parent = main_win, width = 550, height = 400)
@@ -1674,7 +1675,7 @@ smart_gui <- function(){
     spec_b <- gframe("Specie", horizontal = FALSE, container = pop_g_top, expand = TRUE)
 
     addSpring(spec_b)
-    spec_drop <- gcombobox(items = c("All", my_project$specieInFishery), selected = 2, container = spec_b, editable = FALSE, handler = function(h,...){
+    spec_drop <- gcombobox(items = c("All", as.character(my_project$specieInFishery)), selected = 2, container = spec_b, editable = FALSE, handler = function(h,...){
       my_project$plotGooSpe(whiSpe = svalue(spec_drop), whiSou = "Fishery")
     })
     addSpring(spec_b)
@@ -1695,6 +1696,7 @@ smart_gui <- function(){
   })
 
   addSpring(fis_g_top)
+
   gbutton("Assign FG", container = fis_g_top, handler = function(h,...){
     my_project$addFg2Fishery()
     fis_t[] <- my_project$rawDataFishery[sample(1:nrow(my_project$rawDataFishery), 100, replace = FALSE),]
