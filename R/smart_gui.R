@@ -1690,7 +1690,7 @@ smart_gui <- function(){
 
     visible(temp_dia) <- TRUE
 
-    my_sampling$plotGooSpe(whiSpe = "All", whiSou = "Fishery")
+    my_project$plotGooSpe(whiSpe = "All", whiSou = "Fishery")
 
   })
 
