@@ -1661,6 +1661,39 @@ smart_gui <- function(){
   addSpace(fis_g_top, 2)
   addSpace(fis_g_top2, 2)
 
+  gbutton("     View\nSpatial\ndistribution", container = fis_g_top, handler = function(h,...){
+
+    temp_dia <- gwindow(title="Spatial Distribution of Fishery sampling", visible = FALSE,
+                        parent = main_win, width = 550, height = 400)
+
+    pop_g <- ggroup(horizontal = FALSE, container = temp_dia)
+
+    pop_g_top <- gframe(horizontal = TRUE, container = pop_g, spacing = 10)
+
+    addSpring(pop_g_top)
+    spec_b <- gframe("Specie", horizontal = FALSE, container = pop_g_top, expand = TRUE)
+
+    addSpring(spec_b)
+    spec_drop <- gcombobox(items = my_project$specieInFishery, selected = 1, container = spec_b, editable = FALSE, handler = function(h,...){
+      my_sampling$plotGooSpe(whiSpe = svalue(spec_drop), whiSou = "Fishery")
+    })
+    addSpring(spec_b)
+
+    addSpring(pop_g_top)
+
+    gbutton("Close", container = pop_g_top, handler = function(h,...){
+      dispose(temp_dia)
+    })
+    addSpring(pop_g_top)
+
+    pop_p <- ggraphics(container = pop_g, width = 400, height = 280, expand = TRUE)
+
+    visible(temp_dia) <- TRUE
+
+    my_sampling$plotGooSpe(whiSpe = "All", whiSou = "Fishery")
+
+  })
+
   addSpring(fis_g_top)
   gbutton("Assign FG", container = fis_g_top, handler = function(h,...){
     my_project$addFg2Fishery()
