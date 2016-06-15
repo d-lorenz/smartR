@@ -2137,16 +2137,20 @@ SampleMap <- R6Class("sampleMap",
                        getCentDept = function(){
                          centDept <<- get.depth(gridBathy, x = griCent[,1], y = griCent[,2], locator = FALSE)
                        },
-                       ggplotGridBathy = function(){
+                       ggplotGridBathy = function(isoLine = c(-200, -1000)){
                          # def.par <- par(no.readonly = TRUE)
                          f_bathy <- fortify.bathy(gridBathy)
                          f_bathy$z[f_bathy$z > 0] <- 0
                          colnames(f_bathy) <- c("lon", "lat", "Depth")
                          the_plot <- suppressMessages(gooMapPlot +
-                                                        stat_contour(data = f_bathy, aes(x = lon, y = lat, z = Depth, colour = ..level..), size = 0.2, binwidth = 250) +
-                                                        lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4])) +
-                                                        xlab("Longitude") + ylab("Latitude") +
-                                                        ggtitle("Bathymetry"))
+                                                        geom_contour(aes(z = Depth, colour = factor(..level..)), data = f_bathy,
+                                                                     linetype = "solid", size = 0.35,
+                                                                     breaks = isoLine, alpha = 1) +
+                                                        scale_colour_brewer(palette = "Accent", name="Isobath") +
+                                                        guides(colour = guide_legend(override.aes = list(size = 2, alpha = 1))) +
+                                                        lims(x = extendrange(plotRange[1:2]),
+                                                             y = extendrange(plotRange[3:4])) +
+                                                        xlab("Longitude") + ylab("Latitude") + ggtitle("Bathymetry"))
                          suppressWarnings(print(the_plot))
                          # par(def.par)
                        },
