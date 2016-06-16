@@ -570,6 +570,9 @@ smart_gui <- function(){
     temp_dia <- gwindow(title="Set Fishing Points", visible = FALSE,
                         width = 650, height = 450, parent = main_win)
 
+    temp_dia <- gwindow(title="Set Fishing Points", visible = FALSE,
+                        width = 650, height = 450)
+
     up_g <- ggroup(horizontal = FALSE, container = temp_dia)
     up_fra <- gframe(container = up_g, horizontal = TRUE)
     addSpring(up_fra)
@@ -617,24 +620,63 @@ smart_gui <- function(){
                           })
     addSpring(up_fra)
     gbutton(text = "\n   Set!   \n", container = up_fra, handler = function(...){
+      enabled(up_fra) <- FALSE
+
+      plot(NULL, xlim = c(0,5), ylim = c(0,1), axes = FALSE, xlab = "", ylab = "")
+
       my_project$fleet$setFishPoinPara(speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
                                        depth_range = sort(unlist(lapply(dep_lay[1:2,2], svalue)), decreasing = TRUE))
+
       svalue(stat_bar) <- "Setting fishing points..."
+      points(1,0, pch = 19, col = "grey20")
+      text(1,0, labels = "Parameters", pos = 3, col = "grey20", srt = 45, offset = 1.5)
+      svalue(int_progBar) <- 10
       Sys.sleep(1)
+
       my_project$fleet$setFishPoin()
+
+      points(2,0, pch = 19, col = "grey20")
+      text(2,0, labels = "Fishing Points", pos = 3, col = "grey20", srt = 45, offset = 1.5)
       svalue(stat_bar) <- ""
+      svalue(int_statBar) <- ""
+      svalue(int_progBar) <- 30
       Sys.sleep(1)
       svalue(stat_bar) <- "Setting fishing point cells..."
       Sys.sleep(1)
+
       my_project$setCellPoin()
+
+      points(3,0, pch = 19, col = "grey20")
+      text(3,0, labels = "Cell Assign", pos = 3, col = "grey20", srt = 45, offset = 1.5)
       svalue(stat_bar) <- "Adding week and month number to dataset..."
+      svalue(int_progBar) <- 60
       Sys.sleep(1)
+
       my_project$fleet$setWeekMonthNum()
+
+      points(4,0, pch = 19, col = "grey20")
+      text(4,0, labels = "Week/Month\nAppend", pos = 3, col = "grey20", srt = 45, offset = 1.5)
       svalue(stat_bar) <- ""
-      dispose(temp_dia)
+      svalue(int_progBar) <- 90
+      Sys.sleep(1)
+      svalue(stat_bar) <- "Completed!"
+      svalue(int_progBar) <- 100
+      Sys.sleep(1)
+      if(gconfirm("Fishing point selection completed!\nClose window?", title = "Confirm", icon = "question", parent = temp_dia)){
+        dispose(temp_dia)
+      }else{
+        enabled(up_fra) <- TRUE
+      }
     })
     addSpring(up_fra)
     fipo_gra <- ggraphics(width = 600, height = 400, container = up_g, expand = TRUE)
+
+    bot_progStat <- ggroup(container = up_g, horizontal = TRUE)
+
+    addSpring(bot_progStat)
+    int_progBar <- gprogressbar(value = 0, container = bot_progStat)
+    addSpring(bot_progStat)
+
     visible(temp_dia) <- TRUE
 
     my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
