@@ -398,7 +398,7 @@ SmartProject <- R6Class("smartProject",
                             sampMap$setCutResult(ind_clu = numCut)
                             tmp_clust <- cbind(Cell = 1:sampMap$nCells,
                                                FishGround = sampMap$clusMat[,numCut])
-                            cat("\nSetting Fishing Ground year ", sep = "")
+                            cat("\n\nSetting Fishing Ground year ", sep = "")
                             for(j in names(fleet$rawEffort)){
                               cat(j, "... ", sep = "")
                               fleet$rawEffort[[j]]$FishGround <<- tmp_clust[fleet$rawEffort[[j]]$Cell,2]
@@ -2279,7 +2279,7 @@ SampleMap <- R6Class("sampleMap",
                          ##  Find the minimal spanning tree
                          mst.bh <- mstree(nb.w, ini = 1)
                          clusMat <<- matrix(NA, nCells, numCuts)
-                         cat("\n   -   Clustering", sep = "")
+                         cat("\nClustering", sep = "")
                          res1 <- skater(mst.bh[,1:2], clusInpu, ncuts = 1, minsize,
                                         method = skater_method)
                          clusMat[,1] <<- res1$groups
