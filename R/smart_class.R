@@ -241,16 +241,15 @@ SmartProject <- R6Class("smartProject",
                                 colnames(raw_effort)[ncol(raw_effort)] <- paste("Year_", i, sep = "")
                               }
                               sampMap$rawInpu <<- c(sampMap$rawInpu, Effort = list(raw_effort[,-1]))
-                              cat("   -   Loaded!")
+                              cat("\t-   Loaded!")
                             }
 
                             if(!is.null(sampMap$griCent)){
                               sampMap$availData <<- c(sampMap$availData, "Depth")
                               cat("\n   -   Cell Depth")
                               sampMap$rawInpu <<- c(sampMap$rawInpu, Depth = list(sampMap$centDept[,3]))
-                              cat("   -   Loaded!\n")
+                              cat("\t\t-   Loaded!\n")
                             }
-
                           },
                           predictProduction = function(specie){
                             Prod <- matrix(data = NA, nrow(fleet$effoAllLoa), ncol = sampMap$cutFG + 1)
