@@ -800,11 +800,12 @@ smart_gui <- function(){
   gbutton("\nSelect\n", container = fig_g_top_vars, handler = function(h,...){
 
     temp_dia <- gwindow(title="Select variables and weights", visible = FALSE,
-                        parent = main_win, width = 550, height = 400)
+                        parent = main_win,
+                        width = 550, height = 400)
 
     up_g_top <- ggroup(horizontal = FALSE, container = temp_dia)
     addSpring(up_g_top)
-    up_g <- gframe(text = "Variables", horizontal = TRUE, container = up_g_top)
+    up_g <- ggroup(horizontal = TRUE, container = up_g_top)
 
     addSpring(up_g)
 
@@ -813,14 +814,14 @@ smart_gui <- function(){
 
     lyt[1,2] <- "Variables"
     lyt[1,3] <- "      Weights      "
-    lyt[2,2] <- gcheckbox(c("Sampling Distribution"), checked = TRUE, container = lyt)
+    # lyt[2,2] <- gcheckbox(c("Sampling Distribution"), checked = TRUE, container = lyt)
+    # lyt[2,3] <- gcombobox(items = c("0.5X","1","2X"), selected = 2, container = lyt)
+    lyt[2,2] <- gcheckbox(c("Seabed"), checked = FALSE, container = lyt)
     lyt[2,3] <- gcombobox(items = c("0.5X","1","2X"), selected = 2, container = lyt)
-    lyt[3,2] <- gcheckbox(c("Seabed"), checked = TRUE, container = lyt)
+    lyt[3,2] <- gcheckbox(c("Fishing Effort"), checked = FALSE, container = lyt)
     lyt[3,3] <- gcombobox(items = c("0.5X","1","2X"), selected = 2, container = lyt)
-    lyt[4,2] <- gcheckbox(c("Fishing Effort"), checked = TRUE, container = lyt)
+    lyt[4,2] <- gcheckbox(c("Bathymetry"), checked = FALSE, container = lyt)
     lyt[4,3] <- gcombobox(items = c("0.5X","1","2X"), selected = 2, container = lyt)
-    lyt[5,2] <- gcheckbox(c("Bathymetry"), checked = TRUE, container = lyt)
-    lyt[5,3] <- gcombobox(items = c("0.5X","1","2X"), selected = 2, container = lyt)
 
     addSpring(up_g)
     addSpring(up_g_top)
@@ -829,54 +830,27 @@ smart_gui <- function(){
 
     gbutton("\nAccept\n", container = bot_g,
             handler = function(h,...){
-              clus_data <- numeric(length = my_project$sampMap$nCells)
-              cat("\nInput for Fishing Grounds Clustering:")
-              if(svalue(lyt[2,2])){ ### Resource
-                cat("\n   -   Resource Distribution")
-                tmp_res <- cbind(apply(my_project$surveyBySpecie[[1]]$Coh_A_Int[,1,,1], 1, sum),
-                                 apply(my_project$surveyBySpecie[[1]]$Coh_A_Int[,2,,1], 1, sum),
-                                 apply(my_project$surveyBySpecie[[1]]$Coh_A_Int[,3,,1], 1, sum),
-                                 apply(my_project$surveyBySpecie[[1]]$Coh_A_Int[,1,,2], 1, sum),
-                                 apply(my_project$surveyBySpecie[[1]]$Coh_A_Int[,2,,2], 1, sum),
-                                 apply(my_project$surveyBySpecie[[1]]$Coh_A_Int[,3,,2], 1, sum))
-                multi_fac_res <- switch(svalue(lyt[2,3]), "0.5X" = 0.5, "1" = 1, "2X" = 2)
-                clus_data <- cbind(clus_data,
-                                   tmp_res*multi_fac_res)
-              }
-              if(svalue(lyt[3,2])){ ### SeaBed
-                cat("\n   -   Seabed Category")
-                multi_fac_bed <- switch(svalue(lyt[3,3]), "0.5X" = 0.5, "1" = 1, "2X" = 2)
-                clus_data <- cbind(clus_data, my_project$sampMap$bioDF*multi_fac_bed)
-              }
-              if(svalue(lyt[4,2])){ ### Effort
-                cat("\n   -   Effort Distribution")
-                multi_fac_eff <- switch(svalue(lyt[4,3]), "0.5X" = 0.5, "1" = 1, "2X" = 2)
-                for(i in names(my_project$fleet$rawEffort)){
-                  tmp_effo <- as.data.frame(table(my_project$fleet$rawEffort[[i]]$Cell[which(my_project$fleet$rawEffort[[i]]$FishPoint)]))
-                  names(tmp_effo) <- c("Cell", "Freq")
-                  tmp_effo$Cell <- as.numeric(as.character(tmp_effo$Cell))
-                  miss_rows <- as.numeric(setdiff(as.character(my_project$sampMap$gridShp@plotOrder), as.character(tmp_effo$Cell)))
-                  if(length(miss_rows) > 0){
-                    # cat(length(miss_rows), " cells with no points... ", sep = "")
-                    tmp_effo <- rbind(tmp_effo, data.frame(Cell = miss_rows, Freq = 0))
-                    tmp_effo <- tmp_effo[order(tmp_effo[,1]),]
-                  }
-                  clus_data <- cbind(clus_data, tmp_effo[,2]*multi_fac_eff)
-                  colnames(clus_data)[ncol(clus_data)] <- paste("Year_", i, sep = "")
-                }
-              }
-              if(svalue(lyt[5,2])){ ### Bathymetry
-                cat("\n   -   Bathymetry\n")
-                multi_fac_dep <- switch(svalue(lyt[5,3]), "0.5X" = 0.5, "1" = 1, "2X" = 2)
-                tmp_depth <- as.data.frame(my_project$sampMap$centDept[,3])
-                names(tmp_depth) <- "Depth"
-                clus_data <- cbind(clus_data, tmp_depth*multi_fac_dep)
-              }
-              clus_data <- clus_data[,-1]
-              my_project$sampMap$setClusInpu(clus_data)
+
+              cat("\nInput for Fishing Grounds Clustering:\n")
+              my_project$sampMap$setClusInpu(whiData = unlist(lapply(lyt[2:4,2], svalue)),
+                                             howData = unlist(lapply(lyt[2:4,3], svalue)))
+
               dispose(temp_dia)
             })
     addSpring(bot_g)
+
+    my_project$setAvailData()
+
+    ifelse("Seabed" %in% my_project$sampMap$availData,
+           lapply(lyt[2,], function(x) enabled(x) <- TRUE),
+           lapply(lyt[2,], function(x) enabled(x) <- FALSE))
+    ifelse("Effort" %in% my_project$sampMap$availData,
+           lapply(lyt[3,], function(x) enabled(x) <- TRUE),
+           lapply(lyt[3,], function(x) enabled(x) <- FALSE))
+    ifelse("Depth" %in% my_project$sampMap$availData,
+           lapply(lyt[4,], function(x) enabled(x) <- TRUE),
+           lapply(lyt[4,], function(x) enabled(x) <- FALSE))
+
     visible(temp_dia) <- TRUE
   })
 
