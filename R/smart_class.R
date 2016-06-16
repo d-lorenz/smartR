@@ -2303,7 +2303,7 @@ SampleMap <- R6Class("sampleMap",
                            indSil[i] <<- summary(silhouette(clusMat[,i],dist(clusInpu,
                                                                              method = skater_method)))$avg.width
                            ##  Compute CH index for a given partition of a data set
-                           indCH[i] <<-  get_CH(clusInpu,clusMat[,i])
+                           indCH[i] <<-  get_CH(as.matrix(clusInpu),clusMat[,i])
                          }
                        },
                        plotFishGrou = function(ind_clu){
