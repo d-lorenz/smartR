@@ -2236,8 +2236,29 @@ SampleMap <- R6Class("sampleMap",
                          map.scale(x = min(abs(x_rang))+(diff(x_rang)/10), y = min(abs(y_rang))+(diff(y_rang)/7), cex = 0.65, ratio = FALSE)
 
                        },
-                       setClusInpu = function(clus_data){
-                         clusInpu <<- as.matrix(clus_data)
+                       setClusInpu = function(whiData = rep(TRUE,3), howData = rep(1, 3)){
+                         truIdx <- which(whiData == TRUE)
+                         if(length(truIdx)>0){
+                           tmp_lst <- list()
+                           for(i in truIdx){
+                             if(i == 1){
+                               cat("\n   -   Seabed")
+                               tmp_lst <- c(tmp_lst, list(rawInpu[[i]] * switch(howData[i], "0.5X" = 0.5, "1" = 1, "2X" = 2)))
+                               cat("\t\t-   Set!")
+                             } else if(i == 2){
+                               cat("\n   -   Effort")
+                               tmp_lst <- c(tmp_lst, list(vegan::decostand(log10(1 + rawInpu[[i]]), method = "range", MARGIN = 2) * switch(howData[i], "0.5X" = 0.5, "1" = 1, "2X" = 2)))
+                               cat("\t\t-   Set!")
+                             } else if(i == 3){
+                               cat("\n   -   Depth")
+                               tmp_inpu <- -rawInpu[[i]]
+                               tmp_inpu[tmp_inpu < 0] <- 0
+                               tmp_lst <- c(tmp_lst, Depth = list(vegan::decostand(log10(1 + tmp_inpu), method = "range", MARGIN = 2) * switch(howData[i], "0.5X" = 0.5, "1" = 1, "2X" = 2)))
+                               cat("\t\t-   Set!\n")
+                             }
+                           }
+                           clusInpu <<- do.call(cbind, tmp_lst)
+                         }
                        },
                        calcFishGrou = function(numCuts = 50,
                                                minsize = 10,
