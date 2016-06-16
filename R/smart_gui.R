@@ -709,7 +709,7 @@ smart_gui <- function(){
 
     tmp_file <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
 
-    cat("\nLoading effort from rData...", sep = "")
+    cat("\nLoading effort from AA data...", sep = "")
     svalue(stat_bar) <- "Loading effort from AA data..."
     Sys.sleep(1)
 
@@ -718,8 +718,9 @@ smart_gui <- function(){
 
     effvie_drop[] <- names(my_project$fleet$rawEffort)
     svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
+    dev.set(dev.list()[pre_dev+2])
 
-    my_project$ggplotGridEffort(svalue(effvie_drop))
+    my_project$ggplotGridEffort(names(my_project$fleet$rawEffort)[1])
 
     svalue(stat_bar) <- ""
   })
