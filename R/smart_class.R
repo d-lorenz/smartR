@@ -212,6 +212,46 @@ SmartProject <- R6Class("smartProject",
                                                            ggtitle(paste("Sample raw points - ", year, sep = "")))
                             suppressWarnings(print(tmp_plot))
                           },
+                          setAvailData = function(){
+                            sampMap$availData <<- character(0)
+                            sampMap$rawInpu <<- list()
+
+                            cat("\n\nLoading available data:")
+                            if(!is.null(sampMap$bioDF)){
+                              sampMap$availData <<- c(sampMap$availData, "Seabed")
+                              cat("\n   -   Seabed Category")
+                              sampMap$rawInpu <<- c(sampMap$rawInpu, Seabed = list(data.frame(sampMap$bioDF)))
+                              cat("   -   Loaded!")
+                            }
+
+                            if(!is.null(fleet$rawEffort)){
+                              sampMap$availData <<- c(sampMap$availData, "Effort")
+                              cat("\n   -   Effort Distribution")
+                              raw_effort <- numeric(length = sampMap$nCells)
+                              for(i in names(fleet$rawEffort)){
+                                tmp_effo <- as.data.frame(table(fleet$rawEffort[[i]]$Cell[which(fleet$rawEffort[[i]]$FishPoint)]))
+                                names(tmp_effo) <- c("Cell", "Freq")
+                                tmp_effo$Cell <- as.numeric(as.character(tmp_effo$Cell))
+                                miss_rows <- as.numeric(setdiff(as.character(sampMap$gridShp@plotOrder), as.character(tmp_effo$Cell)))
+                                if(length(miss_rows) > 0){
+                                  tmp_effo <- rbind(tmp_effo, data.frame(Cell = miss_rows, Freq = 0))
+                                  tmp_effo <- tmp_effo[order(tmp_effo[,1]),]
+                                }
+                                raw_effort <- cbind(raw_effort, tmp_effo[,2])
+                                colnames(raw_effort)[ncol(raw_effort)] <- paste("Year_", i, sep = "")
+                              }
+                              sampMap$rawInpu <<- c(sampMap$rawInpu, Effort = list(raw_effort[,-1]))
+                              cat("   -   Loaded!")
+                            }
+
+                            if(!is.null(sampMap$griCent)){
+                              sampMap$availData <<- c(sampMap$availData, "Depth")
+                              cat("\n   -   Cell Depth")
+                              sampMap$rawInpu <<- c(sampMap$rawInpu, Depth = list(sampMap$centDept[,3]))
+                              cat("   -   Loaded!\n")
+                            }
+
+                          },
                           predictProduction = function(specie){
                             Prod <- matrix(data = NA, nrow(fleet$effoAllLoa), ncol = sampMap$cutFG + 1)
                             lyears <- sort(as.numeric(as.character(unique(fleet$effoAllLoa$Year))))
