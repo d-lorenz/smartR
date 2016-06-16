@@ -737,7 +737,7 @@ smart_gui <- function(){
 
     tmp_file <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
 
-    cat("\nLoading effort from rData...", sep = "")
+    cat("\nSaving AA effort to rData...", sep = "")
     svalue(stat_bar) <- "Saving AA effort to rData..."
     Sys.sleep(1)
 
