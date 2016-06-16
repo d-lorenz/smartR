@@ -529,7 +529,7 @@ smart_gui <- function(){
 
     tmp_file <- "/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/smart_rawEffort_new.rData"
 
-    cat("\nLoading effort from rData...", sep = "")
+    cat("\nLoading effort from vmsbase db...", sep = "")
     svalue(stat_bar) <- "Loading effort from vmsbase db..."
     Sys.sleep(1)
     my_project$fleet$rawEffort <- readRDS(tmp_file)
