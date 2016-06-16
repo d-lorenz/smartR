@@ -2279,7 +2279,7 @@ SampleMap <- R6Class("sampleMap",
                          ##  Find the minimal spanning tree
                          mst.bh <- mstree(nb.w, ini = 1)
                          clusMat <<- matrix(NA, nCells, numCuts)
-                         cat("Clustering", sep = "")
+                         cat("\n   -   Clustering", sep = "")
                          res1 <- skater(mst.bh[,1:2], clusInpu, ncuts = 1, minsize,
                                         method = skater_method)
                          clusMat[,1] <<- res1$groups
