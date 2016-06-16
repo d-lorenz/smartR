@@ -216,12 +216,12 @@ SmartProject <- R6Class("smartProject",
                             sampMap$availData <<- character(0)
                             sampMap$rawInpu <<- list()
 
-                            cat("\n\nLoading available data:")
+                            cat("\n\nLoading available data:\n")
                             if(!is.null(sampMap$bioDF)){
                               sampMap$availData <<- c(sampMap$availData, "Seabed")
                               cat("\n   -   Seabed Category")
                               sampMap$rawInpu <<- c(sampMap$rawInpu, Seabed = list(data.frame(sampMap$bioDF)))
-                              cat("   -   Loaded!")
+                              cat("\t\t-   Loaded!")
                             }
 
                             if(!is.null(fleet$rawEffort)){
