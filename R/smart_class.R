@@ -1927,6 +1927,8 @@ SampleMap <- R6Class("sampleMap",
                        indCH = NULL, # vect index CH output calcfish
                        cutFG = NULL,
                        tmpCut = NULL,
+                       availData = NULL,
+                       rawInpu = NULL,
                        cutResult = NULL,
                        cutResEffo = NULL,
                        cutResShp = NULL,
