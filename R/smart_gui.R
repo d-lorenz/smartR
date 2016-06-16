@@ -901,11 +901,11 @@ smart_gui <- function(){
                             suppressWarnings(grid.arrange(my_project$sampMap$ggIchFGlin,
                                                           my_project$sampMap$ggSilFGlin,
                                                           my_project$sampMap$ggCutFGmap,
+                                                          my_project$sampMap$ggEffoFGmap,
                                                           my_project$sampMap$ggDepthFGbox,
                                                           my_project$sampMap$ggEffoFGbox,
-                                                          my_project$sampMap$ggEffoFGmap,
                                                           my_project$sampMap$ggBioFGmat,
-                                                          layout_matrix = rbind(c(1,3,3,4,5,7),c(2,6,6,4,5,7))))
+                                                          layout_matrix = rbind(c(1,3,3,5,6,7),c(2,4,4,5,6,7))))
 
                           })
 
