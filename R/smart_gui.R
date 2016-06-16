@@ -638,7 +638,6 @@ smart_gui <- function(){
       points(2,0, pch = 19, col = "grey20")
       text(2,0, labels = "Fishing Points", pos = 3, col = "grey20", srt = 45, offset = 1.5)
       svalue(stat_bar) <- ""
-      svalue(int_statBar) <- ""
       svalue(int_progBar) <- 30
       Sys.sleep(1)
       svalue(stat_bar) <- "Setting fishing point cells..."
