@@ -1172,10 +1172,7 @@ smart_gui <- function(){
     abline(v = svalue(thr_spin), col = 2, lwd = 3, lty = 2)
 
   })
-  addSpring(pro_g_top1)
   addSpring(pro_g_top)
-
-  pro_g_top2 <- ggroup(horizontal = FALSE, container = pro_g_top)
   addSpring(pro_g_top2)
   gbutton("Get Logit", container = pro_g_top2, handler = function(h,...){
 
