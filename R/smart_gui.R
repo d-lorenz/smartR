@@ -1062,24 +1062,6 @@ smart_gui <- function(){
     #                       handler = function(...){
     tmp_spe <- my_project$fleet$effoProdAll[,which(colnames(my_project$fleet$effoProdAll) == svalue(spe_drop))]
     tmp_spe <- tmp_spe[tmp_spe != 0]
-    if(is.null(my_project$fleet$specSett[[svalue(spe_drop)]])){
-      max_x_spin[] <- seq(0, max(tmp_spe), by = 10)
-      svalue(max_x_spin) <- quantile(tmp_spe, 0.95)
-      thr_spin[] <- seq(0, svalue(max_x_spin), by = 0.5)
-      svalue(thr_spin) <- quantile(tmp_spe, 0.05)
-      svalue(num_bre_spin) <- 100
-      delete(set_gru, set_gru$children[[length(set_gru$children)]])
-      add(set_gru, land_sta)
-      svalue(set_lab) <- "Not set"
-    }else{
-      thr_spin[] <- seq(0, my_project$fleet$specSett[[svalue(spe_drop)]]$max_x, by = 0.5)
-      svalue(thr_spin) <- my_project$fleet$specSett[[svalue(spe_drop)]]$threshold
-      svalue(num_bre_spin) <- my_project$fleet$specSett[[svalue(spe_drop)]]$breaks
-      svalue(max_x_spin) <- my_project$fleet$specSett[[svalue(spe_drop)]]$max_x
-      delete(set_gru, set_gru$children[[length(set_gru$children)]])
-      add(set_gru, land_sta_n)
-      svalue(set_lab) <- "Set"
-    }
 
     hist(tmp_spe[tmp_spe <= svalue(max_x_spin)],
          breaks = svalue(num_bre_spin),
@@ -1442,7 +1424,6 @@ smart_gui <- function(){
   })
   addSpring(pro_g_top2_ver)
   addSpring(pro_g_top2_view)
-
   addSpring(pro_g_top)
   addSpace(pro_g_top, 2)
   proGro_p <- ggraphics(container = pro_g, width = 600, height = 280, expand = TRUE)
