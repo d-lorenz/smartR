@@ -1066,6 +1066,7 @@ smart_gui <- function(){
     #                                  "All files" = list(patterns = c("*"))),
     #                    multi = TRUE)
     # my_project$fleet$loadProduction(tmp_files)
+    enabled(pro_g_top) <- FALSE
     svalue(stat_bar) <- "\n\nLoading landings..."
 
     dev.set(dev.list()[pre_dev+5])
@@ -1087,7 +1088,11 @@ smart_gui <- function(){
     my_project$fleet$setEffoProdAll()
     # my_project$fleet$setSpecSett()
     spe_drop[] <- sort(names(my_project$fleet$specSett))
+    svalue(spe_drop, index = TRUE) <- 1
     enabled(spe_drop) <- TRUE
+
+    enabled(pro_g_top) <- TRUE
+
   })
   addSpring(pro_g_top1)
 
@@ -1434,11 +1439,15 @@ smart_gui <- function(){
   pro_g_top3 <- ggroup(horizontal = FALSE, container = pro_g_top)
   gbutton("Predict\nProduction", container = pro_g_top3, handler = function(h,...){
 
+    enabled(pro_g_top) <- FALSE
+
     my_project$fleet$setEffoMont()
     my_project$fleet$setEffoAll()
     my_project$fleet$setEffoAllLoa()
     my_project$predictProduction(svalue(spe_drop))
     my_project$fleet$setProdMeltYear(svalue(spe_drop))
+
+    enabled(pro_g_top) <- TRUE
 
   })
 
