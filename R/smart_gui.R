@@ -1302,8 +1302,8 @@ smart_gui <- function(){
                                round(100*my_project$fleet$resNNLS[[svalue(spe_drop)]]$nfitted/my_project$fleet$resNNLS[[svalue(spe_drop)]]$nSce),
                                "%)\n\n",
                                sep = "")
-      provie_drop[] <- names(my_project$fleet$effoProdMont)
-      prospe_drop[] <- sort(names(my_project$fleet$specSett)[which(!unlist(lapply(my_project$fleet$specSett, is.null)))])
+      # provie_drop[] <- names(my_project$fleet$effoProdMont)
+      # prospe_drop[] <- sort(names(my_project$fleet$specSett)[which(!unlist(lapply(my_project$fleet$specSett, is.null)))])
       my_project$fleet$plotNNLS(specie = svalue(spe_drop), thresR2 = svalue(thr_spin))
     })
     addSpace(up_fra, 20)
@@ -1362,8 +1362,6 @@ smart_gui <- function(){
     logi_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
     add(set_gru, logi_sta)
 
-
-
   })
   addSpring(pro_g_top2)
   addSpring(pro_g_top)
@@ -1374,8 +1372,8 @@ smart_gui <- function(){
     my_project$fleet$setEffoMont()
     my_project$fleet$setEffoAll()
     my_project$fleet$setEffoAllLoa()
-    my_project$predictProduction(svalue(prospe_drop))
-    my_project$fleet$setProdMeltYear(svalue(prospe_drop))
+    my_project$predictProduction(svalue(spe_drop))
+    my_project$fleet$setProdMeltYear(svalue(spe_drop))
 
   })
 
@@ -1387,16 +1385,16 @@ smart_gui <- function(){
   addSpring(pro_g_top2_view)
   provie_drop <- gcombobox(items = "Year", selected = 1, container = pro_g_top2_view,
                            expand = TRUE, editable = FALSE)
-  prospe_drop <- gcombobox(items = "Specie", selected = 1, container = pro_g_top2_view,
-                           expand = TRUE, editable = FALSE)
+  # prospe_drop <- gcombobox(items = "Specie", selected = 1, container = pro_g_top2_view,
+  #                          expand = TRUE, editable = FALSE)
   addSpring(pro_g_top2_view)
   pro_g_top2_ver <- ggroup(horizontal = FALSE, container = pro_g_top2_view)
   addSpring(pro_g_top2_ver)
   gbutton("Betas", container = pro_g_top2_ver, handler = function(h,...){
     dev.set(dev.list()[pre_dev+5])
-    svalue(stat_bar) <- "Plotting productivity..."
+    svalue(stat_bar) <- "Plotting Betas..."
     Sys.sleep(1)
-    my_project$setPlotBetaMeltYear(specie = svalue(prospe_drop), year = svalue(provie_drop))
+    my_project$setPlotBetaMeltYear(specie = svalue(spe_drop), year = svalue(provie_drop))
     suppressWarnings(grid.arrange(my_project$sampMap$ggBetaFGmap,
                                   my_project$sampMap$ggBetaFGbox,
                                   layout_matrix = rbind(c(1,1,1,2),c(1,1,1,2))))
@@ -1408,7 +1406,7 @@ smart_gui <- function(){
     svalue(stat_bar) <- "Plotting production..."
     Sys.sleep(1)
 
-    my_project$setPlotProdMeltYear(specie = svalue(prospe_drop), year = svalue(provie_drop))
+    my_project$setPlotProdMeltYear(specie = svalue(spe_drop), year = svalue(provie_drop))
     suppressWarnings(grid.arrange(my_project$sampMap$ggProdFGmap,
                                   my_project$sampMap$ggProdFGbox,
                                   layout_matrix = rbind(c(1,1,1,2),c(1,1,1,2))))
