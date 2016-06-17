@@ -1006,7 +1006,18 @@ smart_gui <- function(){
   })
   addSpring(pro_g_top1)
 
-  gbutton("Set Landings\nThresholds", container = pro_g_top1, handler = function(h,...){
+  addSpace(pro_g_top1, 20)
+  spe_fra <- gframe(text = "Specie", container = pro_g_top1, horizontal = TRUE, expand = TRUE)
+  addSpace(spe_fra, 20)
+  spe_drop <- gcombobox("Specie list", selected = 1,
+                        editable = FALSE, container = spe_fra, expand = TRUE)
+  addSpace(spe_fra, 20)
+  addSpace(pro_g_top1, 20)
+
+  pro_g_top2 <- ggroup(horizontal = FALSE, container = pro_g_top)
+  addSpring(pro_g_top2)
+
+  gbutton("Set Threshold", container = pro_g_top2, handler = function(h,...){
 
     temp_dia <- gwindow(title="Set Landings Threshold", visible = FALSE,
                         parent = main_win,
