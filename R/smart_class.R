@@ -406,7 +406,7 @@ SmartProject <- R6Class("smartProject",
                             cat("Done!", sep = "")
                           },
                           addFg2Fishery = function(){
-                            cat("\nConnecting coordinates to fishing ground...", sep = "")
+                            cat("\n\nConnecting coordinates to fishing ground...", sep = "")
 
                             rawDataFishery$numFG <<- over(SpatialPoints(data.frame(Lon = rawDataFishery$Lon,
                                                                                    Lat = rawDataFishery$Lat)),
