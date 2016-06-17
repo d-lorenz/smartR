@@ -1053,8 +1053,9 @@ smart_gui <- function(){
   pro_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Production")
   pro_g_top <- gframe(horizontal = TRUE, container = pro_g)
   addSpace(pro_g_top, 2)
-  addSpring(pro_g_top)
-  pro_g_top1 <- ggroup(horizontal = FALSE, container = pro_g_top)
+  # addSpring(pro_g_top)
+  addSpace(pro_g_top, 40)
+  pro_g_top1 <- ggroup(horizontal = FALSE, container = pro_g_top, expand = TRUE)
   addSpring(pro_g_top1)
   #   gbutton("Edit Raw Production", container = pro_g_top1, handler = function(h,...){
   #
@@ -1090,13 +1091,14 @@ smart_gui <- function(){
   })
   addSpring(pro_g_top1)
 
-  addSpace(pro_g_top1, 20)
   spe_fra <- gframe(text = "Specie", container = pro_g_top1, horizontal = TRUE, expand = TRUE)
   # addSpace(spe_fra, 20)
   spe_drop <- gcombobox("Specie list", selected = 1,
                         editable = FALSE, container = spe_fra, expand = TRUE)
+  addSpring(pro_g_top1)
+
   # addSpace(spe_fra, 20)
-  addSpace(pro_g_top, 50)
+  addSpace(pro_g_top, 40)
   # addSpring(pro_g_top)
   enabled(spe_drop) <- FALSE
 
@@ -1121,11 +1123,6 @@ smart_gui <- function(){
     #                       handler = function(...){
     tmp_spe <- my_project$fleet$effoProdAll[,which(colnames(my_project$fleet$effoProdAll) == svalue(spe_drop))]
     tmp_spe <- tmp_spe[tmp_spe != 0]
-
-    hist(tmp_spe[tmp_spe <= svalue(max_x_spin)],
-         breaks = svalue(num_bre_spin),
-         main = bquote(italic(.(svalue(spe_drop)))), xlab = "")
-    abline(v = svalue(thr_spin), col = 2, lwd = 3, lty = 2)
     #                       })
     addSpace(spe_fra, 20)
     addSpace(up_fra, 20)
@@ -1448,8 +1445,8 @@ smart_gui <- function(){
 
   addSpring(pro_g_top3)
   addSpring(pro_g_top)
-
-  pro_g_top2_view <- gframe(text = "View", horizontal = TRUE, container = pro_g_top, expand = TRUE)
+  pro_g_top2_view_g <- ggroup(horizontal = FALSE, container = pro_g_top, expand = TRUE)
+  pro_g_top2_view <- gframe(text = "View", horizontal = TRUE, container = pro_g_top2_view_g, expand = TRUE)
   addSpring(pro_g_top2_view)
   provie_drop <- gcombobox(items = "Year", selected = 1, container = pro_g_top2_view,
                            expand = TRUE, editable = FALSE)
@@ -1483,6 +1480,7 @@ smart_gui <- function(){
   })
   addSpring(pro_g_top2_ver)
   addSpring(pro_g_top2_view)
+  addSpace(pro_g_top2_view_g, 7)
   addSpring(pro_g_top)
   addSpace(pro_g_top, 2)
   proGro_p <- ggraphics(container = pro_g, width = 600, height = 280, expand = TRUE)
