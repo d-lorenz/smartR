@@ -1121,7 +1121,8 @@ smart_gui <- function(){
     # addSpring(up_fra)
     addSpace(up_fra, 20)
     spe_fra <- gframe(text = "Specie", container = up_fra, horizontal = TRUE, expand = TRUE)
-    addSpace(spe_fra, 20)
+    # addSpace(spe_fra, 20)
+    addSpring(spe_fra)
     glabel(text = svalue(spe_drop), container = spe_fra)
     # spe_drop <- gcombobox(sort(my_project$fleet$prodSpec[["Cross"]]), selected = 1,
     #                       editable = FALSE, container = spe_fra, expand = TRUE,
@@ -1129,7 +1130,8 @@ smart_gui <- function(){
     tmp_spe <- my_project$fleet$effoProdAll[,which(colnames(my_project$fleet$effoProdAll) == svalue(spe_drop))]
     tmp_spe <- tmp_spe[tmp_spe != 0]
     #                       })
-    addSpace(spe_fra, 20)
+    # addSpace(spe_fra, 20)
+    addSpring(spe_fra)
     addSpace(up_fra, 20)
     # addSpring(up_fra)
     thr_fra <- gframe(text = "Threshold", container = up_fra, horizontal = TRUE)
@@ -1207,6 +1209,8 @@ smart_gui <- function(){
     gbutton(text = " Close\nWindow", container = up_fra, handler = function(...){
       dispose(temp_dia)
     })
+    addSpace(up_fra, 20)
+    addSpring(up_g)
     land_gra <- ggraphics(width = 600, height = 400, container = up_g, expand = TRUE)
     visible(temp_dia) <- TRUE
 
@@ -1255,18 +1259,14 @@ smart_gui <- function(){
     # addSpring(up_fra)
     addSpace(up_fra, 20)
     spe_fra <- gframe(text = "Specie", container = up_fra, horizontal = TRUE, expand = TRUE)
-    addSpace(spe_fra, 20)
+    addSpring(spe_fra)
     glabel(text = svalue(spe_drop), container = spe_fra)
     # spe_drop <- gcombobox(sort(names(my_project$fleet$specSett)[which(!unlist(lapply(my_project$fleet$specSett, is.null)))]), selected = 1,
     #                       editable = FALSE, container = spe_fra, expand = TRUE,
     #                       handler = function(...){
-    if(!is.null(my_project$fleet$specLogit[[svalue(spe_drop)]]$ROCRperf)){
-      my_project$fleet$plotLogitROC(svalue(spe_drop))
-      svalue(tmp_txt) <- capture.output({cat("\n")
-        print(my_project$fleet$specLogit[[svalue(spe_drop)]]$confMatrix)})
-    }
+
     # })
-    addSpace(spe_fra, 20)
+    addSpring(spe_fra)
     addSpace(up_fra, 20)
     # addSpring(up_fra)
 
@@ -1329,6 +1329,11 @@ smart_gui <- function(){
     logi_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
     add(set_gru, logi_sta)
 
+    if(!is.null(my_project$fleet$specLogit[[svalue(spe_drop)]]$ROCRperf)){
+      my_project$fleet$plotLogitROC(svalue(spe_drop))
+      svalue(tmp_txt) <- capture.output({cat("\n")
+        print(my_project$fleet$specLogit[[svalue(spe_drop)]]$confMatrix)})
+    }
 
   })
   addSpring(pro_g_top2)
@@ -1346,14 +1351,14 @@ smart_gui <- function(){
     # addSpring(up_fra)
     addSpace(up_fra, 20)
     spe_fra <- gframe(text = "Specie", container = up_fra, horizontal = TRUE, expand = TRUE)
-    addSpace(spe_fra, 20)
+    addSpring(spe_fra)
     glabel(text = svalue(spe_drop), container = spe_fra)
     # spe_drop <- gcombobox(sort(names(my_project$fleet$specSett)[which(!unlist(lapply(my_project$fleet$specSett, is.null)))]), selected = 1,
     #                       editable = FALSE, container = spe_fra, expand = TRUE,
     #                       handler = function(...){
     #
     #                       })
-    addSpace(spe_fra, 20)
+    addSpring(spe_fra)
     addSpace(up_fra, 20)
 
     gbutton(text = " Get\nNNLS", container = up_fra, handler = function(...){
