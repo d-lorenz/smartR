@@ -303,6 +303,7 @@ smart_gui <- function(){
   # addSpring(gri_g_top1_gri)
   gbutton("Load Grid", container = gri_g_top1_gri, handler = function(h,...){
     svalue(stat_bar) <- "Loading Grid..."
+    enabled(gri_g_top) <- FALSE
     Sys.sleep(1)
     dev.set(dev.list()[pre_dev+1])
     my_project$loadMap("/Users/Lomo/Documents/Uni/Lab/Proj/SMART_All/SMART1.0/Geo/Grid/GFCM_Grid_6min_GSA16.shp")
@@ -330,6 +331,8 @@ smart_gui <- function(){
       svalue(stat_bar) <- "Splitting Fishery Population..."
       my_project$setLFDPopFishery()
     }
+    enabled(gri_g_top) <- TRUE
+
     svalue(stat_bar) <- ""
 
     ### Update Grid Status
@@ -343,11 +346,15 @@ smart_gui <- function(){
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+1])
            svalue(stat_bar) <- "Plotting grid..."
+           enabled(gri_g_top) <- FALSE
+
            if(!is.null(my_project$sampMap$gooMap)){
              my_project$sampMap$plotGooGrid()
            }else{
              my_project$sampMap$plotSamMap(title = my_project$sampMap$gridName)
            }
+           enabled(gri_g_top) <- TRUE
+
          })
   addSpring(gri_g_top1_gri)
 
@@ -358,6 +365,8 @@ smart_gui <- function(){
   gbutton("Download Depth", container = gri_g_top1_dep, handler = function(h,...){
     dev.set(dev.list()[pre_dev+1])
     svalue(stat_bar) <- "Downloading depth..."
+    enabled(gri_g_top) <- FALSE
+
     Sys.sleep(1)
     my_project$sampMap$getGridBath()
     my_project$sampMap$getCentDept()
@@ -365,6 +374,7 @@ smart_gui <- function(){
     Sys.sleep(1)
     my_project$sampMap$ggplotGridBathy()
     svalue(stat_bar) <- ""
+    enabled(gri_g_top) <- TRUE
   })
   addSpring(gri_g_top1_dep)
   gimage(system.file("ico/document-save-2.ico", package="smartR"), container = gri_g_top1_dep,
@@ -379,6 +389,8 @@ smart_gui <- function(){
     dev.set(dev.list()[pre_dev+1])
     ## Get path to bathymetry rData
     svalue(stat_bar) <- "Loading depth..."
+    enabled(gri_g_top) <- FALSE
+
     Sys.sleep(1)
 
     load_path <- "/Users/Lomo/Documents/Uni/Lab/Proj/smart\ gui/SMART_GUI/bathy_test.rData"
@@ -389,6 +401,8 @@ smart_gui <- function(){
     Sys.sleep(1)
     my_project$sampMap$ggplotGridBathy()
     svalue(stat_bar) <- ""
+    enabled(gri_g_top) <- TRUE
+
   })
   # addSpring(gri_g_top1_dep)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_dep,
@@ -403,6 +417,8 @@ smart_gui <- function(){
   gri_g_top1_bio <- ggroup(horizontal = TRUE, container = gri_g_top1)
   # addSpring(gri_g_top1_bio)
   gbutton("Load Biocenosis", container = gri_g_top1_bio, handler = function(h,...){
+    enabled(gri_g_top) <- FALSE
+
     Sys.sleep(1)
     dev.set(dev.list()[pre_dev+1])
     svalue(stat_bar) <- "Loading biocenosis data.frame..."
@@ -413,6 +429,8 @@ smart_gui <- function(){
       my_project$sampMap$plotBioDF()
     }
     svalue(stat_bar) <- ""
+    enabled(gri_g_top) <- TRUE
+
   })
   # addSpring(gri_g_top1_bio)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_bio,
@@ -428,6 +446,8 @@ smart_gui <- function(){
   gri_g_top1_goo <- ggroup(horizontal = TRUE, container = gri_g_top1)
   # addSpring(gri_g_top1_goo)
   gbutton("Load Google map", container = gri_g_top1_goo, handler = function(h,...){
+    enabled(gri_g_top) <- FALSE
+
     Sys.sleep(1)
     dev.set(dev.list()[pre_dev+1])
     svalue(stat_bar) <- "Loading Google map..."
@@ -436,6 +456,8 @@ smart_gui <- function(){
     my_project$sampMap$setGooBbox()
     svalue(stat_bar) <- ""
     my_project$sampMap$plotGooGrid()
+    enabled(gri_g_top) <- TRUE
+
   })
   # addSpring(gri_g_top1_goo)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_goo,
