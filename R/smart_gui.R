@@ -1444,6 +1444,7 @@ smart_gui <- function(){
   addSpring(pro_g_top)
 
   pro_g_top3 <- ggroup(horizontal = FALSE, container = pro_g_top)
+  addSpring(pro_g_top3)
   gbutton("Predict\nProduction", container = pro_g_top3, handler = function(h,...){
 
     enabled(pro_g_top) <- FALSE
@@ -1457,10 +1458,10 @@ smart_gui <- function(){
     enabled(pro_g_top) <- TRUE
 
   })
-
-
   addSpring(pro_g_top3)
+
   addSpring(pro_g_top)
+
   pro_g_top2_view_g <- ggroup(horizontal = FALSE, container = pro_g_top, expand = TRUE)
   pro_g_top2_view <- gframe(text = "View", horizontal = TRUE, container = pro_g_top2_view_g, expand = TRUE)
   addSpring(pro_g_top2_view)
