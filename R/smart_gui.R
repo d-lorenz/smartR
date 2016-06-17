@@ -1117,7 +1117,7 @@ smart_gui <- function(){
     addSpace(up_fra, 20)
     spe_fra <- gframe(text = "Specie", container = up_fra, horizontal = TRUE, expand = TRUE)
     addSpace(spe_fra, 20)
-    gtext(text = svalue(spe_drop), container = spe_fra)
+    glabel(text = svalue(spe_drop), container = spe_fra)
     # spe_drop <- gcombobox(sort(my_project$fleet$prodSpec[["Cross"]]), selected = 1,
     #                       editable = FALSE, container = spe_fra, expand = TRUE,
     #                       handler = function(...){
@@ -1251,7 +1251,7 @@ smart_gui <- function(){
     addSpace(up_fra, 20)
     spe_fra <- gframe(text = "Specie", container = up_fra, horizontal = TRUE, expand = TRUE)
     addSpace(spe_fra, 20)
-    gtext(text = svalue(spe_drop), container = spe_fra)
+    glabel(text = svalue(spe_drop), container = spe_fra)
     # spe_drop <- gcombobox(sort(names(my_project$fleet$specSett)[which(!unlist(lapply(my_project$fleet$specSett, is.null)))]), selected = 1,
     #                       editable = FALSE, container = spe_fra, expand = TRUE,
     #                       handler = function(...){
@@ -1342,7 +1342,7 @@ smart_gui <- function(){
     addSpace(up_fra, 20)
     spe_fra <- gframe(text = "Specie", container = up_fra, horizontal = TRUE, expand = TRUE)
     addSpace(spe_fra, 20)
-    gtext(text = svalue(spe_drop), container = spe_fra)
+    glabel(text = svalue(spe_drop), container = spe_fra)
     # spe_drop <- gcombobox(sort(names(my_project$fleet$specSett)[which(!unlist(lapply(my_project$fleet$specSett, is.null)))]), selected = 1,
     #                       editable = FALSE, container = spe_fra, expand = TRUE,
     #                       handler = function(...){
