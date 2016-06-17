@@ -1029,35 +1029,36 @@ smart_gui <- function(){
     addSpace(up_fra, 20)
     spe_fra <- gframe(text = "Specie", container = up_fra, horizontal = TRUE, expand = TRUE)
     addSpace(spe_fra, 20)
-    spe_drop <- gcombobox(sort(my_project$fleet$prodSpec[["Cross"]]), selected = 1,
-                          editable = FALSE, container = spe_fra, expand = TRUE,
-                          handler = function(...){
-                            tmp_spe <- my_project$fleet$effoProdAll[,which(colnames(my_project$fleet$effoProdAll) == svalue(spe_drop))]
-                            tmp_spe <- tmp_spe[tmp_spe != 0]
-                            if(is.null(my_project$fleet$specSett[[svalue(spe_drop)]])){
-                              max_x_spin[] <- seq(0, max(tmp_spe), by = 10)
-                              svalue(max_x_spin) <- quantile(tmp_spe, 0.95)
-                              thr_spin[] <- seq(0, svalue(max_x_spin), by = 0.5)
-                              svalue(thr_spin) <- quantile(tmp_spe, 0.05)
-                              svalue(num_bre_spin) <- 100
-                              delete(set_gru, set_gru$children[[length(set_gru$children)]])
-                              add(set_gru, land_sta)
-                              svalue(set_lab) <- "Not set"
-                            }else{
-                              thr_spin[] <- seq(0, my_project$fleet$specSett[[svalue(spe_drop)]]$max_x, by = 0.5)
-                              svalue(thr_spin) <- my_project$fleet$specSett[[svalue(spe_drop)]]$threshold
-                              svalue(num_bre_spin) <- my_project$fleet$specSett[[svalue(spe_drop)]]$breaks
-                              svalue(max_x_spin) <- my_project$fleet$specSett[[svalue(spe_drop)]]$max_x
-                              delete(set_gru, set_gru$children[[length(set_gru$children)]])
-                              add(set_gru, land_sta_n)
-                              svalue(set_lab) <- "Set"
-                            }
+    gtext(text = svalue(spe_drop), container = spe_fra)
+    # spe_drop <- gcombobox(sort(my_project$fleet$prodSpec[["Cross"]]), selected = 1,
+    #                       editable = FALSE, container = spe_fra, expand = TRUE,
+    #                       handler = function(...){
+    tmp_spe <- my_project$fleet$effoProdAll[,which(colnames(my_project$fleet$effoProdAll) == svalue(spe_drop))]
+    tmp_spe <- tmp_spe[tmp_spe != 0]
+    if(is.null(my_project$fleet$specSett[[svalue(spe_drop)]])){
+      max_x_spin[] <- seq(0, max(tmp_spe), by = 10)
+      svalue(max_x_spin) <- quantile(tmp_spe, 0.95)
+      thr_spin[] <- seq(0, svalue(max_x_spin), by = 0.5)
+      svalue(thr_spin) <- quantile(tmp_spe, 0.05)
+      svalue(num_bre_spin) <- 100
+      delete(set_gru, set_gru$children[[length(set_gru$children)]])
+      add(set_gru, land_sta)
+      svalue(set_lab) <- "Not set"
+    }else{
+      thr_spin[] <- seq(0, my_project$fleet$specSett[[svalue(spe_drop)]]$max_x, by = 0.5)
+      svalue(thr_spin) <- my_project$fleet$specSett[[svalue(spe_drop)]]$threshold
+      svalue(num_bre_spin) <- my_project$fleet$specSett[[svalue(spe_drop)]]$breaks
+      svalue(max_x_spin) <- my_project$fleet$specSett[[svalue(spe_drop)]]$max_x
+      delete(set_gru, set_gru$children[[length(set_gru$children)]])
+      add(set_gru, land_sta_n)
+      svalue(set_lab) <- "Set"
+    }
 
-                            hist(tmp_spe[tmp_spe <= svalue(max_x_spin)],
-                                 breaks = svalue(num_bre_spin),
-                                 main = bquote(italic(.(svalue(spe_drop)))), xlab = "")
-                            abline(v = svalue(thr_spin), col = 2, lwd = 3, lty = 2)
-                          })
+    hist(tmp_spe[tmp_spe <= svalue(max_x_spin)],
+         breaks = svalue(num_bre_spin),
+         main = bquote(italic(.(svalue(spe_drop)))), xlab = "")
+    abline(v = svalue(thr_spin), col = 2, lwd = 3, lty = 2)
+    #                       })
     addSpace(spe_fra, 20)
     addSpace(up_fra, 20)
     # addSpring(up_fra)
@@ -1188,15 +1189,16 @@ smart_gui <- function(){
     addSpace(up_fra, 20)
     spe_fra <- gframe(text = "Specie", container = up_fra, horizontal = TRUE, expand = TRUE)
     addSpace(spe_fra, 20)
-    spe_drop <- gcombobox(sort(names(my_project$fleet$specSett)[which(!unlist(lapply(my_project$fleet$specSett, is.null)))]), selected = 1,
-                          editable = FALSE, container = spe_fra, expand = TRUE,
-                          handler = function(...){
-                            if(!is.null(my_project$fleet$specLogit[[svalue(spe_drop)]]$ROCRperf)){
-                              my_project$fleet$plotLogitROC(svalue(spe_drop))
-                              svalue(tmp_txt) <- capture.output({cat("\n")
-                                print(my_project$fleet$specLogit[[svalue(spe_drop)]]$confMatrix)})
-                            }
-                          })
+    gtext(text = svalue(spe_drop), container = spe_fra)
+    # spe_drop <- gcombobox(sort(names(my_project$fleet$specSett)[which(!unlist(lapply(my_project$fleet$specSett, is.null)))]), selected = 1,
+    #                       editable = FALSE, container = spe_fra, expand = TRUE,
+    #                       handler = function(...){
+    if(!is.null(my_project$fleet$specLogit[[svalue(spe_drop)]]$ROCRperf)){
+      my_project$fleet$plotLogitROC(svalue(spe_drop))
+      svalue(tmp_txt) <- capture.output({cat("\n")
+        print(my_project$fleet$specLogit[[svalue(spe_drop)]]$confMatrix)})
+    }
+    # })
     addSpace(spe_fra, 20)
     addSpace(up_fra, 20)
     # addSpring(up_fra)
@@ -1278,11 +1280,12 @@ smart_gui <- function(){
     addSpace(up_fra, 20)
     spe_fra <- gframe(text = "Specie", container = up_fra, horizontal = TRUE, expand = TRUE)
     addSpace(spe_fra, 20)
-    spe_drop <- gcombobox(sort(names(my_project$fleet$specSett)[which(!unlist(lapply(my_project$fleet$specSett, is.null)))]), selected = 1,
-                          editable = FALSE, container = spe_fra, expand = TRUE,
-                          handler = function(...){
-
-                          })
+    gtext(text = svalue(spe_drop), container = spe_fra)
+    # spe_drop <- gcombobox(sort(names(my_project$fleet$specSett)[which(!unlist(lapply(my_project$fleet$specSett, is.null)))]), selected = 1,
+    #                       editable = FALSE, container = spe_fra, expand = TRUE,
+    #                       handler = function(...){
+    #
+    #                       })
     addSpace(spe_fra, 20)
     addSpace(up_fra, 20)
 
