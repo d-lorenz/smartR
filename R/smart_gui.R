@@ -513,6 +513,8 @@ smart_gui <- function(){
     #     my_project$loadFleeEffoDbs(tmp_files)
     #     my_project$fleet$rawEffort <- readRDS(tmp_files)
 
+    enabled(eff_g_top) <- FALSE
+
     tmp_file <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/smart_rawEffort_new.rData"
 
     cat("\nLoading effort from rData...", sep = "")
@@ -534,6 +536,8 @@ smart_gui <- function(){
 
     # my_project$effPlot("All")
 
+    enabled(eff_g_top) <- TRUE
+
     ### Update Effort Status
     effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
     delete(effo_g, effo_g$children[[length(effo_g$children)]])
@@ -541,6 +545,8 @@ smart_gui <- function(){
   })
   addSpring(eff_g_top1)
   gbutton("Extract from VMSBASE", container = eff_g_top1, handler = function(h,...){
+
+    enabled(eff_g_top) <- FALSE
 
     #### SKIPPED LOADING rData
     #     tmp_files <- gfile(text = "Select Effort DBs", type = "open",
@@ -568,6 +574,8 @@ smart_gui <- function(){
     my_project$fleet$plotCountIDsEffo()
     svalue(stat_bar) <- ""
 
+    enabled(eff_g_top) <- TRUE
+
     ### Update Effort Status
     effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
     delete(effo_g, effo_g$children[[length(effo_g$children)]])
@@ -576,11 +584,18 @@ smart_gui <- function(){
   addSpring(eff_g_top1)
   gbutton("View Stats", container = eff_g_top1, handler = function(h,...){
     dev.set(dev.list()[pre_dev+2])
+
+    enabled(eff_g_top) <- FALSE
+
     svalue(stat_bar) <- "Plotting Count of disinct vessels..."
     Sys.sleep(1)
     my_project$fleet$plotCountIDsEffo()
     svalue(stat_bar) <- ""
+
+    enabled(eff_g_top) <- TRUE
+
   })
+  addSpring(eff_g_top1)
 
   addSpring(eff_g_top)
 
@@ -588,6 +603,8 @@ smart_gui <- function(){
   addSpring(eff_g_top1b)
   gbutton("Set Fishing Points", container = eff_g_top1b, handler = function(h,...){
     svalue(stat_bar) <- "Setting parameters..."
+
+    enabled(eff_g_top) <- FALSE
 
     temp_dia <- gwindow(title="Set Fishing Points", visible = FALSE,
                         width = 650, height = 450, parent = main_win)
@@ -684,9 +701,14 @@ smart_gui <- function(){
       svalue(int_progBar) <- 100
       Sys.sleep(1)
       if(gconfirm("Fishing point selection completed!\nClose window?", title = "Confirm", icon = "question", parent = temp_dia)){
+
+        enabled(eff_g_top) <- TRUE
+
         dispose(temp_dia)
       }else{
         enabled(up_fra) <- TRUE
+
+        enabled(eff_g_top) <- TRUE
       }
     })
     addSpring(up_fra)
@@ -710,17 +732,28 @@ smart_gui <- function(){
   gbutton("View Stats", container = eff_g_top1b, handler = function(h,...){
     dev.set(dev.list()[pre_dev+2])
     svalue(stat_bar) <- "Plotting fishing points data summary..."
+
+    enabled(eff_g_top) <- FALSE
+
     Sys.sleep(1)
     my_project$fleet$plotFishPoinStat()
     svalue(stat_bar) <- ""
+
+    enabled(eff_g_top) <- TRUE
+
   })
   # addSpring(eff_g_top1b)
+  addSpring(eff_g_top1b)
+
   addSpring(eff_g_top)
 
   eff_g_top_IO <- ggroup(horizontal = FALSE, container = eff_g_top)
   addSpring(eff_g_top_IO)
   gbutton("Load AA data", container = eff_g_top_IO, handler = function(h,...){
     svalue(stat_bar) <- "Loading AA data..."
+
+    enabled(eff_g_top) <- FALSE
+
     Sys.sleep(1)
 
     #### SKIPPED LOADING rData
@@ -745,11 +778,16 @@ smart_gui <- function(){
     my_project$ggplotGridEffort(names(my_project$fleet$rawEffort)[1])
 
     svalue(stat_bar) <- ""
+
+    enabled(eff_g_top) <- TRUE
+
   })
   addSpring(eff_g_top_IO)
   gbutton("Save AA data", container = eff_g_top_IO, handler = function(h,...){
     svalue(stat_bar) <- "Saving AA data..."
     Sys.sleep(1)
+
+    enabled(eff_g_top) <- FALSE
 
     #### SKIPPED SAVING rData
     #     tmp_files <- gfile(text = "Select AA effort data", type = "save",
@@ -766,6 +804,9 @@ smart_gui <- function(){
     saveRDS(my_project$fleet$rawEffort, tmp_file)
 
     svalue(stat_bar) <- ""
+
+    enabled(eff_g_top) <- TRUE
+
   })
   addSpring(eff_g_top_IO)
 
@@ -781,25 +822,43 @@ smart_gui <- function(){
   gbutton("Raw Effort", container = eff_g_top2_ver, handler = function(h,...){
     dev.set(dev.list()[pre_dev+2])
     svalue(stat_bar) <- "Plotting raw effort..."
+
+    enabled(eff_g_top) <- FALSE
+
     Sys.sleep(1)
     my_project$ggplotRawPoints(svalue(effvie_drop))
     svalue(stat_bar) <- ""
+
+    enabled(eff_g_top) <- TRUE
+
   })
   addSpring(eff_g_top2_ver)
   gbutton("Fishing Points", container = eff_g_top2_ver, handler = function(h,...){
     dev.set(dev.list()[pre_dev+2])
     svalue(stat_bar) <- "Plotting fishing points..."
+
+    enabled(eff_g_top) <- FALSE
+
     Sys.sleep(1)
     my_project$ggplotFishingPoints(svalue(effvie_drop))
     svalue(stat_bar) <- ""
+
+    enabled(eff_g_top) <- TRUE
+
   })
   addSpring(eff_g_top2_ver)
   gbutton("Gridded Effort", container = eff_g_top2_ver, handler = function(h,...){
     dev.set(dev.list()[pre_dev+2])
     svalue(stat_bar) <- "Plotting gridded effort..."
+
+    enabled(eff_g_top) <- FALSE
+
     Sys.sleep(1)
     my_project$ggplotGridEffort(svalue(effvie_drop))
     svalue(stat_bar) <- ""
+
+    enabled(eff_g_top) <- TRUE
+
   })
   addSpring(eff_g_top2_ver)
   addSpring(eff_g_top2)
