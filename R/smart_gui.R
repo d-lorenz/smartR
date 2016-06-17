@@ -1027,17 +1027,19 @@ smart_gui <- function(){
     my_project$fleet$setEffoProdAll()
     # my_project$fleet$setSpecSett()
     spe_drop[] <- sort(names(my_project$fleet$specSett))
+    enabled(spe_drop) <- TRUE
   })
   addSpring(pro_g_top1)
 
   addSpace(pro_g_top1, 20)
   spe_fra <- gframe(text = "Specie", container = pro_g_top1, horizontal = TRUE, expand = TRUE)
-  addSpace(spe_fra, 20)
+  # addSpace(spe_fra, 20)
   spe_drop <- gcombobox("Specie list", selected = 1,
                         editable = FALSE, container = spe_fra, expand = TRUE)
-  addSpace(spe_fra, 20)
-  addSpace(pro_g_top1, 20)
-  addSpring(pro_g_top)
+  # addSpace(spe_fra, 20)
+  addSpace(pro_g_top, 50)
+  # addSpring(pro_g_top)
+  enabled(spe_drop) <- FALSE
 
   pro_g_top2 <- ggroup(horizontal = FALSE, container = pro_g_top)
   addSpring(pro_g_top2)
