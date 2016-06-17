@@ -1004,6 +1004,7 @@ smart_gui <- function(){
     my_project$fleet$setProdSpec()
     my_project$fleet$setEffoProdAll()
     # my_project$fleet$setSpecSett()
+    spe_drop[] <- sort(names(my_project$fleet$specSett))
   })
   addSpring(pro_g_top1)
 
@@ -1014,6 +1015,7 @@ smart_gui <- function(){
                         editable = FALSE, container = spe_fra, expand = TRUE)
   addSpace(spe_fra, 20)
   addSpace(pro_g_top1, 20)
+  addSpring(pro_g_top)
 
   pro_g_top2 <- ggroup(horizontal = FALSE, container = pro_g_top)
   addSpring(pro_g_top2)
