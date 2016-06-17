@@ -984,6 +984,7 @@ smart_gui <- function(){
     #                                  "All files" = list(patterns = c("*"))),
     #                    multi = TRUE)
     # my_project$fleet$loadProduction(tmp_files)
+    svalue(stat_bar) <- "\n\nLoading landings..."
 
     dev.set(dev.list()[pre_dev+5])
     my_project$fleet$rawProduction <- readRDS("/Users/Lomo/Documents/Uni/PhD/TESI/landings/LandAll.rData")
