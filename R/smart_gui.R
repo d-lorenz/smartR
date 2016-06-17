@@ -1068,6 +1068,7 @@ smart_gui <- function(){
     # my_project$fleet$loadProduction(tmp_files)
     enabled(pro_g_top) <- FALSE
     svalue(stat_bar) <- "\n\nLoading landings..."
+    Sys.sleep(1)
 
     dev.set(dev.list()[pre_dev+5])
     my_project$fleet$rawProduction <- readRDS("/Users/Lomo/Documents/Uni/PhD/TESI/landings/LandAll.rData")
@@ -1448,6 +1449,7 @@ smart_gui <- function(){
   gbutton("Predict\nProduction", container = pro_g_top3, handler = function(h,...){
 
     enabled(pro_g_top) <- FALSE
+    Sys.sleep(1)
 
     my_project$fleet$setEffoMont()
     my_project$fleet$setEffoAll()
