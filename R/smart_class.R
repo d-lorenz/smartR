@@ -2206,7 +2206,7 @@ SampleMap <- R6Class("sampleMap",
                                                         lims(x = extendrange(plotRange[1:2]),
                                                              y = extendrange(plotRange[3:4])) +
                                                         xlab("Longitude") + ylab("Latitude") + ggtitle("Bathymetry"))
-                       }
+                       },
                        ggplotGridBathy = function(){
                          suppressWarnings(print(ggDepth))
                        },
