@@ -1974,6 +1974,7 @@ SampleMap <- R6Class("sampleMap",
                        cutResShpCent = NULL,
                        cutResShpFort = NULL,
                        ggBioDF = NULL,
+                       ggDepth = NULL,
                        ggDepthFGbox = NULL,
                        ggEffoFGbox = NULL,
                        ggEffoFGmap = NULL,
@@ -2187,16 +2188,16 @@ SampleMap <- R6Class("sampleMap",
                        loadGridBath = function(bathy_path){
                          gridBathy <<- readRDS(bathy_path)
                          getCentDept()
+                         setGgDepth()
                        },
                        getCentDept = function(){
                          centDept <<- get.depth(gridBathy, x = griCent[,1], y = griCent[,2], locator = FALSE)
                        },
-                       ggplotGridBathy = function(isoLine = c(-200, -1000)){
-                         # def.par <- par(no.readonly = TRUE)
+                       setGgDepth = function(isoLine = c(-200, -1000)){
                          f_bathy <- fortify.bathy(gridBathy)
                          f_bathy$z[f_bathy$z > 0] <- 0
                          colnames(f_bathy) <- c("lon", "lat", "Depth")
-                         the_plot <- suppressMessages(gooMapPlot +
+                         ggDepth <<- suppressMessages(gooMapPlot +
                                                         geom_contour(aes(z = Depth, colour = factor(..level..)), data = f_bathy,
                                                                      linetype = "solid", size = 0.35,
                                                                      breaks = isoLine, alpha = 1) +
@@ -2205,8 +2206,9 @@ SampleMap <- R6Class("sampleMap",
                                                         lims(x = extendrange(plotRange[1:2]),
                                                              y = extendrange(plotRange[3:4])) +
                                                         xlab("Longitude") + ylab("Latitude") + ggtitle("Bathymetry"))
-                         suppressWarnings(print(the_plot))
-                         # par(def.par)
+                       }
+                       ggplotGridBathy = function(){
+                         suppressWarnings(print(ggDepth))
                        },
                        plotSamMap = function(title = "", celCol = NULL){
                          par(mar = c(3,3,1.5,0.5))
