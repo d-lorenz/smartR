@@ -470,23 +470,16 @@ smart_gui <- function(){
   addSpring(gri_g_top1)
 
   addSpring(gri_g_top)
+
   gri_g_top2 <- ggroup(horizontal = FALSE, container = gri_g_top)
+  addSpring(gri_g_top2)
   gri_l1 <- glabel("Polyset: ", container = gri_g_top2)
   gri_l2 <- glabel("N. Cells: ", container = gri_g_top2)
   gri_l3 <- glabel("GCenter: ", container = gri_g_top2)
+  addSpring(gri_g_top2)
+
   addSpring(gri_g_top)
-  addSpace(gri_g_top2, 2)
-  # gri_g_top3 <- gframe(text = "View", horizontal = TRUE, container = gri_g_top, expand = TRUE)
-  # addSpring(gri_g_top3)
-  # spevie_drop <- gcombobox(items = "Specie", selected = 1, container = gri_g_top3, expand = TRUE, editable = FALSE)
-  # addSpring(gri_g_top3)
-  # gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = gri_g_top3,
-  #        handler = function(h,...){
-  #          dev.set(dev.list()[pre_dev+1])
-  #          my_project$speDisPlot(svalue(spevie_drop))
-  #        })
-  # addSpring(gri_g_top3)
-  addSpring(gri_g_top)
+
   gri_p <- ggraphics(container = gri_g, width = 550, height = 250, expand = TRUE)
 
 
