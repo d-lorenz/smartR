@@ -1973,6 +1973,7 @@ SampleMap <- R6Class("sampleMap",
                        cutResShp = NULL,
                        cutResShpCent = NULL,
                        cutResShpFort = NULL,
+                       ggBioDF = NULL,
                        ggDepthFGbox = NULL,
                        ggEffoFGbox = NULL,
                        ggEffoFGmap = NULL,
@@ -2123,6 +2124,7 @@ SampleMap <- R6Class("sampleMap",
                        },
                        loadBioDF = function(bio_path){
                          bioDF <<- readRDS(bio_path)
+                         setGgBioDF()
                        },
                        plotBioDF = function(){
                          def.par <- par(no.readonly = TRUE)
@@ -2140,8 +2142,7 @@ SampleMap <- R6Class("sampleMap",
                          legend(x = 0, y = 0.5, legend = colnames(bioDF), fill = color_clas, bty = "n")
                          par(def.par)
                        },
-                       ggplotBioDF = function(){
-                         # def.par <- par(no.readonly = TRUE)
+                       setGgBioDF = function(){
                          cell_bed <- apply(bioDF, 1, function(x) which(x == 1))
                          tmp_dat <- colnames(bioDF)[cell_bed]
                          color_clas <- rainbow(max(cell_bed))
@@ -2150,14 +2151,15 @@ SampleMap <- R6Class("sampleMap",
                                            data.frame(x = as.numeric(names(tmp_dat)), y = tmp_dat), all = TRUE)
                          all_cell[is.na(all_cell)] <- 0
                          grid_data <- cbind(gridPolySet, Seabed = all_cell[,2])
-                         tmp_plot <- suppressMessages(gooMapPlot +
+                         ggBioDF <<- suppressMessages(gooMapPlot +
                                                         geom_polygon(aes(x = X, y = Y, group = PID, fill = Seabed), size = 0.2,
                                                                      data = grid_data, alpha = 0.8) +
                                                         lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4])) +
                                                         xlab("Longitude") + ylab("Latitude") +
                                                         ggtitle("Seabed"))
-                         suppressWarnings(print(tmp_plot))
-                         # par(def.par)
+                       },
+                       ggplotBioDF = function(){
+                         suppressWarnings(print(ggBioDF))
                        },
                        createPolySet = function(){
                          gridPolySet <<- as.data.frame(SpatialPolygons2PolySet(gridShp))
