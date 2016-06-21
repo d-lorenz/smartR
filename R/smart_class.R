@@ -2375,7 +2375,7 @@ SampleMap <- R6Class("sampleMap",
                          ggEffoFGmap <<- suppressMessages(gooMapPlot + geom_polygon(aes(x = long, y = lat, group = group, fill = Hours),
                                                                                     colour = "black", size = 0.1,
                                                                                     data = grid_data, alpha = 0.8) +
-                                                            scale_fill_gradient(low = "Yellow", high = "coral") +
+                                                            scale_fill_gradient(low = "Yellow", high = "coral", trans = "log") +
                                                             geom_text(aes(label = FG, x = Lon, y = Lat),
                                                                       data = cutResShpCent, size = 2) +
                                                             lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4])) +
