@@ -2323,6 +2323,11 @@ SampleMap <- R6Class("sampleMap",
                                     celCol = (rainbow(length(unique(clusMat[,ind_clu]))))[clusMat[,ind_clu]])
                          par(def.par)
                        },
+                       # setCutResShpCent = function(){
+                       #   cutResShpCent <<- getLabBuffer(cutResShp)
+                       #   cutResShpCent$id <<- rownames(cutResShpCent)
+                       #   names(cutResShpCent) <<- c("Lon", "Lat", "FG")
+                       # },
                        setCutResult = function(ind_clu){
                          tmpCut <<- ind_clu
                          # cutResult <<- data.frame(clusInpu, FG = as.factor(clusMat[,ind_clu]))
@@ -2330,9 +2335,14 @@ SampleMap <- R6Class("sampleMap",
                          cutResEffo <<- data.frame(Effort = apply(cutResult[, grep("Year", colnames(cutResult))],1, mean),
                                                    Cluster = cutResult[,ncol(cutResult)])
                          cutResShp <<- unionSpatialPolygons(gridShp, IDs = clusMat[,ind_clu])
-                         cutResShpCent <<- as.data.frame(coordinates(cutResShp))
+
+                         # cutResShpCent <<- as.data.frame(coordinates(cutResShp))
+                         # cutResShpCent <<- as.data.frame(getLabBuffer(cutResShp))
+                         plot.new()
+                         cutResShpCent <<- as.data.frame(polygonsLabel(cutResShp, method = "maxdist", doPlot = FALSE))
                          cutResShpCent$id <<- rownames(cutResShpCent)
                          names(cutResShpCent) <<- c("Lon", "Lat", "FG")
+
                          cutResShpFort <<- fortify(cutResShp)
                          cutResShpFort$FG <<- as.factor(cutResShpFort$id)
 
