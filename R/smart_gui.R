@@ -369,7 +369,6 @@ smart_gui <- function(){
 
     Sys.sleep(1)
     my_project$sampMap$getGridBath()
-    my_project$sampMap$getCentDept()
     svalue(stat_bar) <- "Plotting Bathymetry..."
     Sys.sleep(1)
     my_project$sampMap$ggplotGridBathy()
