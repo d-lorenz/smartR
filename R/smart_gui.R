@@ -865,9 +865,8 @@ smart_gui <- function(){
 
   fig_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Fishing Grounds")
   fig_g_top <- gframe(horizontal = TRUE, container = fig_g)
-  #   addSpace(fig_g_top, 2)
-  #   clus_data <- NULL
 
+  addSpring(fig_g_top)
   fig_g_top_vars <- gframe(text = "Variables and Weights", horizontal = FALSE, container = fig_g_top, expand = TRUE)
   addSpring(fig_g_top_vars)
   gbutton("\nSelect\n", container = fig_g_top_vars, handler = function(h,...){
