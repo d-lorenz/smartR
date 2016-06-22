@@ -2181,6 +2181,8 @@ SampleMap <- R6Class("sampleMap",
                                                      lon2 = lon_ran[2],
                                                      lat1 = lat_ran[1],
                                                      lat2 = lat_ran[2], resolution = 1)
+                         getCentDept()
+                         setGgDepth()
                        },
                        saveGridBath = function(bathy_path){
                          saveRDS(object = gridBathy, file = bathy_path)
