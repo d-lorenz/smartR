@@ -2342,7 +2342,8 @@ SampleMap <- R6Class("sampleMap",
                          # cutResShpCent <<- as.data.frame(getLabBuffer(cutResShp))
                          plot.new()
                          cutResShpCent <<- as.data.frame(polygonsLabel(cutResShp, method = "inpolygon", doPlot = FALSE))
-                         cutResShpCent$id <<- rownames(cutResShpCent)
+                         # cutResShpCent$id <<- rownames(cutResShpCent)
+                         cutResShpCent$id <<- names(cutResShp)
                          names(cutResShpCent) <<- c("Lon", "Lat", "FG")
 
                          cutResShpFort <<- fortify(cutResShp)
