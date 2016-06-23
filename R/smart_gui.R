@@ -2075,6 +2075,8 @@ smart_gui <- function(){
   addSpring(go_g)
   # save_b <- gbutton ("  SAVE  ", container = go_g)
   addSpring(cont_g)
+  addSpace(mix_g_top, 20)
+
   mix_p <- ggraphics(container = mix_g, width = 550, height = 250, expand = TRUE)
 
 
