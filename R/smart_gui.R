@@ -1702,11 +1702,13 @@ smart_gui <- function(){
 
   addSpring(fis_g_top)
   fis_g_top2 <- ggroup(horizontal = FALSE, container = fis_g_top)
+  addSpring(fis_g_top2)
   fis_l1 <- glabel("Specie: ", container = fis_g_top2)
+  addSpace(fis_g_top2, 2)
   fis_l3 <- glabel("Years: ", container = fis_g_top2)
+  addSpring(fis_g_top2)
   addSpring(fis_g_top)
   addSpace(fis_g_top, 2)
-  addSpace(fis_g_top2, 2)
 
   gbutton("Open\nLFD\nViewer", container = fis_g_top, handler = function(h,...){
 
