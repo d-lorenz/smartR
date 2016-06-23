@@ -1180,10 +1180,10 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                  # Input formating for JAGS
                                  alpha = rep(1, Nclust)
                                  # alpha = c(0.1, 1, 10, 1)
-                                 Z = rep(NA, N)  # initial allocations
 
-                                 # Z[which.min(y)] = 1  # smallest value assigned to cluster 1
-                                 # Z[which.max(y)] = Nclust  # highest value assigned to cluster Nclust
+                                 Z = rep(NA, N)
+                                 Z[which.min(y)] = 1
+                                 Z[which.max(y)] = Nclust
 
                                  dataList = list(y=y, tt=tt, FG=FG, nFG=nFG, N=N, Nclust=Nclust, Z=Z, alpha=alpha)
 
