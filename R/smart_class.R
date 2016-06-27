@@ -2338,6 +2338,9 @@ SampleMap <- R6Class("sampleMap",
                                                    Cluster = cutResult[,ncol(cutResult)])
                          cutResShp <<- unionSpatialPolygons(gridShp, IDs = clusMat[,ind_clu])
 
+                         num_cell <- getinfo.shape(cutResShp)$entities
+                         cutResShp@plotOrder <- 1:num_cell
+
                          # cutResShpCent <<- as.data.frame(coordinates(cutResShp))
                          # cutResShpCent <<- as.data.frame(getLabBuffer(cutResShp))
                          plot.new()
