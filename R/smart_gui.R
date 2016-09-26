@@ -306,7 +306,9 @@ smart_gui <- function(){
     enabled(gri_g_top) <- FALSE
     Sys.sleep(1)
     dev.set(dev.list()[pre_dev+1])
-    my_project$loadMap("/Users/Lomo/Documents/Uni/Lab/Proj/SMART_All/SMART1.0/Geo/Grid/GFCM_Grid_6min_GSA16.shp")
+
+    # my_project$loadMap("/Users/Lomo/Documents/Uni/R/smart/data/Grid/grid_sos_3NM/seabed_SoS_grid3NM.shp")
+    my_project$loadMap("/Users/Lomo/Documents/Uni/PhD/TESI/Grid/GFCM_Grid_6min_GSA16.shp")
 
     ### automatic download of google map
     my_project$sampMap$getGooMap()       ### FIX add a check if sampMap is loaded
@@ -392,7 +394,8 @@ smart_gui <- function(){
 
     Sys.sleep(1)
 
-    load_path <- "/Users/Lomo/Documents/Uni/Lab/Proj/smart\ gui/SMART_GUI/bathy_test.rData"
+    # load_path <- "/Users/Lomo/Documents/Uni/R/smart/data/seabedSos_Bathy.rData"
+    load_path <- "/Users/Lomo/Documents/Uni/PhD/TESI/BioM.rData"
 
     my_project$sampMap$loadGridBath(load_path)
     # my_project$sampMap$getCentDept()
@@ -421,7 +424,10 @@ smart_gui <- function(){
     Sys.sleep(1)
     dev.set(dev.list()[pre_dev+1])
     svalue(stat_bar) <- "Loading biocenosis data.frame..."
-    my_project$sampMap$loadBioDF("/Users/Lomo/Documents/Uni/R/smart/data/BioM.rData")
+
+    # my_project$sampMap$loadBioDF("/Users/Lomo/Documents/Uni/R/smart/data/SeaBed/SoSBiocMat.rData")
+    my_project$sampMap$loadBioDF("/Users/Lomo/Documents/Uni/PhD/TESI/BioM.rData")
+
     if(!is.null(my_project$sampMap$gooMap)){
       my_project$sampMap$ggplotBioDF()
     }else{
@@ -508,6 +514,7 @@ smart_gui <- function(){
     enabled(eff_g_top) <- FALSE
 
     tmp_file <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/smart_rawEffort_new.rData"
+    # tmp_file <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
 
     cat("\nLoading effort from rData...", sep = "")
     svalue(stat_bar) <- "Loading effort from rData..."
@@ -548,6 +555,7 @@ smart_gui <- function(){
     #     my_project$loadFleeEffoDbs(tmp_files)
 
     tmp_file <- "/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/smart_rawEffort_new.rData"
+    # tmp_file <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
 
     cat("\nLoading effort from vmsbase db...", sep = "")
     svalue(stat_bar) <- "Loading effort from vmsbase db..."
@@ -754,6 +762,7 @@ smart_gui <- function(){
     #                        multi = TRUE)
     #
 
+    # tmp_file <- "/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/smart_rawEffort_new.rData"
     tmp_file <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
 
     cat("\nLoading effort from AA data...", sep = "")
@@ -787,6 +796,7 @@ smart_gui <- function(){
     #                        multi = TRUE)
     #
 
+    # tmp_file <- "/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/smart_rawEffort_new.rData"
     tmp_file <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
 
     cat("\nSaving AA effort to rData...", sep = "")
@@ -1013,7 +1023,7 @@ smart_gui <- function(){
   addSpace(reg_g_top, 2)
   addSpring(reg_g_top)
   gbutton("Load EU register", container = reg_g_top, handler = function(h,...){
-    my_project$fleet$loadFleetRegis("/Users/Lomo/Documents/Uni/Lab/Data/FLEET/ITA_export.csv")
+    my_project$fleet$loadFleetRegis("/Users/Lomo/Documents/Uni/R/smart/data/Fleet/ITA_export_smart-ed.csv")
     my_project$fleet$cleanRegister()
     # my_project$fleet$splitFleet()
     dev.set(dev.list()[pre_dev+4])
@@ -1070,7 +1080,7 @@ smart_gui <- function(){
     Sys.sleep(1)
 
     dev.set(dev.list()[pre_dev+5])
-    my_project$fleet$rawProduction <- readRDS("/Users/Lomo/Documents/Uni/PhD/TESI/landings/LandAll.rData")
+    my_project$fleet$rawProduction <- readRDS("/Users/Lomo/Documents/Uni/R/smart/data/Landings/LandAll.rData")
 
     my_project$fleet$setProdIds()
 
@@ -1660,7 +1670,7 @@ smart_gui <- function(){
   gbutton("Load Sample", container = fis_g_top1, handler = function(h,...){
     svalue(stat_bar) <- "Loading Data..."
     Sys.sleep(1)
-    my_project$loadFisheryLFD(csv_path = "/Users/Lomo/Documents/Uni/R/smart/data/Resource - Fishery/fishery_data_CampBiol.csv")
+    my_project$loadFisheryLFD(csv_path = "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Fishery/fishery_merge_CampBiol.csv")
 
     if(!is.null(my_project$rawDataFishery)){ #update_pop_gui()
 
