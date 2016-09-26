@@ -1354,15 +1354,17 @@ FishFleet <- R6Class("fishFleet",
                        prodMeltYear = NULL,
                        fishPoinPara = NULL,
                        loadFleetRegis = function(register_path){
-                         cat("Loading raw Fleet Register data...\n", sep = "")
+                         cat("\nLoading raw Fleet Register data... ", sep = "")
                          rawRegister <<- readRegisterEU(register_path)
+                         cat("Done!", sep = "")
                        },
                        loadMatEffort = function(effort_path){
-                         cat("Loading Effort data...\n", sep = "")
+                         cat("\nLoading Effort data... ", sep = "")
                          rawEffort <<- readRDS(effort_path)
+                         cat("Done!", sep = "")
                        },
                        loadProduction = function(production_path){
-                         cat("Loading Production data... ", sep = "")
+                         cat("\nLoading Production data... ", sep = "")
                          sort_files <- sort(production_path)
                          rawProduction <<- list()
                          for(i in 1:length(sort_files)){
