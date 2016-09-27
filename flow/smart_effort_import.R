@@ -6,6 +6,32 @@
 ###   Initialize smart project
 my_sampling <- SmartProject$new()
 
+### File input
+# GRID
+# pathGridShp <- "/Users/Lomo/Documents/Uni/R/smart/data/Grid/grid_sos_3NM/seabed_SoS_grid3NM.shp"
+pathGridShp <- "/Users/Lomo/Documents/Uni/PhD/TESI/Grid/GFCM_Grid_6min_GSA16.shp"
+
+# SEABED
+# pathSeabed <- "/Users/Lomo/Documents/Uni/R/smart/data/SeaBed/SoSBiocMat.rData"
+pathSeabed <- "/Users/Lomo/Documents/Uni/PhD/TESI/BioM.rData"
+
+# BATHYMETRY
+# pathBathymetry <- "/Users/Lomo/Documents/Uni/R/smart/data/seabedSos_Bathy.rData"
+pathBathymetry <- "/Users/Lomo/Documents/Uni/R/smart/data/Grid/bathy_test.rData"
+
+# RAW VMS
+# pathRawVMS <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
+pathRawVMS <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/smart_rawEffort_new.rData"
+
+# GRID EFFORT AA
+pathEffortAA <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
+# pathEffortAA <- "/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/smart_rawEffort_new.rData"
+
+
+
+pathClusMat <- "/Users/Lomo/Documents/Uni/R/smart/data/out/FG_cut/fg_sos/clusMat_BedEffDep.rData"
+cambBiolCSV <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Fishery/fishery_merge_CampBiol.csv"
+rawDataPath <- "/Users/Lomo/Documents/Uni/R/mixture/fisherySampling.rData"
 
 
 ##################################
@@ -14,12 +40,8 @@ my_sampling <- SmartProject$new()
 # tmp_Grid <- gridFromShp(shapeFilePath = "/Users/Lomo/Documents/Uni/R/smart/data/SeaBed/SoSBioc.shp", cellSize = 5, clip = TRUE)
 # writeSpatialShape(tmp_Grid, "/Users/Lomo/Documents/Uni/Lab/Maps/GFCM\ -\ GSAs/r_grids/seabed_SoS_grid5NM")
 
-
 ###   Load grid shapefile
-my_sampling$loadMap("/Users/Lomo/Documents/Uni/R/smart/data/Grid/GFCM_Grid_6min_GSA16.shp")
-
-# ## BIG grid
-# my_sampling$loadMap("/Users/Lomo/Documents/Uni/Lab/Maps/GFCM\ -\ GSAs/r_grids/test_grid.shp")
+my_sampling$loadMap(pathGridShp)
 
 ###   Get google hybrid map
 my_sampling$sampMap$getGooMap()       ### FIX add a check if sampMap is loaded
@@ -44,8 +66,18 @@ my_sampling$sampMap$plotGooBbox()
 ##################################
 ##########   Seabed   ############
 ##################################
-my_sampling$sampMap$loadBioDF("/Users/Lomo/Documents/Uni/R/smart/data/BioM.rData")
-my_sampling$sampMap$setGgBioDF()
+
+
+# my_project$sampMap$loadBioDF("/Users/Lomo/Documents/Uni/R/smart/data/SeaBed/SoSBiocMat.rData")
+my_project$sampMap$loadBioDF("/Users/Lomo/Documents/Uni/PhD/TESI/BioM.rData")
+
+my_project$sampMap$loadBioDF(pathSeabed)
+
+if(!is.null(my_project$sampMap$gooMap)){
+  my_project$sampMap$ggplotBioDF()
+}else{
+  my_project$sampMap$plotBioDF()
+}
 
 # ### load seabed shp
 # tmp_bioc <- readShapePoly("/Users/Lomo/Documents/Uni/R/smart/data/SeaBed/SoSBioc.shp")
@@ -60,28 +92,14 @@ my_sampling$sampMap$setGgBioDF()
 # res_cast <- ifelse(is.na(res_cast), 0, 1)
 
 
-# my_sampling$sampMap$plotBioDF()
-# my_sampling$sampMap$ggplotBioDF()
-# ggsave(filename = "/media/fish_team/SANDISK/smart/data/out/ggmap_seabed.jpeg",
-#        units = "cm", width = 20, height = 15, scale = 1.5)
-
-
 ##################################
 ########   Bathymetry   ##########
 ##################################
 
 ###   Load saved depth
-my_sampling$sampMap$loadGridBath("/Users/Lomo/Documents/Uni/R/smart/data/Grid/bathy_test.rData")
+my_sampling$sampMap$loadGridBath(pathBathymetry)
 
-###   Get from nooa
-# my_sampling$sampMap$getGridBath()
-my_sampling$sampMap$getCentDept()
-my_sampling$sampMap$setGgDepth(isoLine = c(-200))
-###   Plot bathymetry
-# my_sampling$sampMap$plotGridBathy()
 my_sampling$sampMap$ggplotGridBathy()               ###  Increase line width + set legend title
-# ggsave(filename = "/media/fish_team/SANDISK/smart/data/out/ggmap_bathy.jpeg",
-#        units = "cm", width = 20, height = 15, scale = 1.5)
 
 
 
@@ -106,7 +124,7 @@ my_sampling$createFleet()
 # my_sampling$loadFleeEffoDbs(tmp_files, met_nam = "OTB", onBox = TRUE, perOnBox = 0.9)
 
 ###   Load raw effort from rData
-my_sampling$fleet$rawEffort <- readRDS("/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/smart_rawEffort_new.rData")
+my_sampling$fleet$rawEffort <- readRDS(pathRawVMS)
 
 # ###   Plot raw points
 # my_sampling$ggplotRawPoints("2009")       ####  FIX add a check if exists gooMapPlot
@@ -163,15 +181,12 @@ my_sampling$setCellPoin()                 # head(my_sampling$fleet$rawEffort[["2
 ###   Set weeknum x track
 my_sampling$fleet$setWeekMonthNum()            # head(my_sampling$fleet$rawEffort[["2009"]])
 
-saveRDS(my_sampling$fleet$rawEffort, "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData")
-###   Load raw effort from rData
-my_sampling$fleet$rawEffort <- readRDS("/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData")
+# saveRDS(my_sampling$fleet$rawEffort, "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData")
 
 
 
 ### Load Effort After all
-tmp_file <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
-my_project$fleet$rawEffort <- readRDS(tmp_file)
+my_project$fleet$rawEffort <- readRDS(pathEffortAA)
 my_project$fleet$setEffortIds()
 my_project$ggplotGridEffort(names(my_project$fleet$rawEffort)[1])
 ###
@@ -186,6 +201,7 @@ my_sampling$setAvailData()
 my_sampling$sampMap$setClusInpu()
 # my_sampling$sampMap$setClusInpu(howData = c("0.5X", "2X", "2X"))
 
+
 skater_methods <- c("euclidean", "manhattan", "maximum", "binary", "canberra", "minkowski")
 
 my_sampling$sampMap$calcFishGrou(numCuts = 50, minsize = 10, modeska = "S", skater_method = skater_methods[1])
@@ -198,47 +214,6 @@ num_FG <- 12
 
 my_sampling$setFishGround(numCut = num_FG)            # head(my_sampling$fleet$rawEffort[["2009"]])
 
-## Export cutted shp file
-tmp_shp <- SpatialPolygonsDataFrame(my_sampling$sampMap$cutResShp,
-                                    data = aggregate(formula = . ~ FG, data = my_sampling$sampMap$cutResult, FUN = mean))
-writeSpatialShape(tmp_shp, "/Users/Lomo/Documents/Uni/R/smart/data/out/FG_cut/fg_19cuts")
-
-
-### setDayEffoMatrGround                          ####    FIX output string
-my_sampling$fleet$setDayEffoMatrGround()          ### head(my_sampling$fleet$dayEffoMatr[["2009"]])
-
-# library(maptools)
-# my_sampling$sampMap$setCutResult(ind_clu = num_FG)
-#
-# ## depth barplot
-# my_sampling$sampMap$setDepthFGbox()
-# suppressWarnings(print(my_sampling$sampMap$ggDepthFGbox))
-#
-# ## effort barplot
-# my_sampling$sampMap$setEffoFGbox()
-# suppressWarnings(print(my_sampling$sampMap$ggEffoFGbox))
-#
-# ### effort plot
-# my_sampling$sampMap$setEffoFGmap()
-# suppressWarnings(print(my_sampling$sampMap$ggEffoFGmap))
-#
-# ## biocen matrix
-# my_sampling$sampMap$setBioFGmat()
-# suppressWarnings(print(my_sampling$sampMap$ggBioFGmat))
-#
-# ###   plot groups
-# my_sampling$sampMap$setCutFGmap()
-# suppressWarnings(print(my_sampling$sampMap$ggCutFGmap))
-#
-# ###   plot CH index
-# my_sampling$sampMap$setIchFGlin()
-# suppressWarnings(print(my_sampling$sampMap$ggIchFGlin))
-#
-# ###   plot silhouette
-# my_sampling$sampMap$setSilFGlin()
-# suppressWarnings(print(my_sampling$sampMap$ggSilFGlin))
-#
-# library(gridExtra)
 suppressWarnings(grid.arrange(my_sampling$sampMap$ggIchFGlin,
                               my_sampling$sampMap$ggSilFGlin,
                               my_sampling$sampMap$ggCutFGmap,
@@ -247,18 +222,15 @@ suppressWarnings(grid.arrange(my_sampling$sampMap$ggIchFGlin,
                               my_sampling$sampMap$ggEffoFGmap,
                               my_sampling$sampMap$ggBioFGmat,
                               layout_matrix = rbind(c(1,3,3,4,5,7),c(2,6,6,4,5,7))))
-#
-# suppressWarnings(grid.arrange(my_sampling$sampMap$ggIchFGlin,
-#                               my_sampling$sampMap$ggSilFGlin,
-#                               my_sampling$sampMap$ggCutFGmap,
-#                               layout_matrix = rbind(c(1,3,3),c(2,3,3))))
-#
-# suppressWarnings(grid.arrange(my_sampling$sampMap$ggEffoFGmap,
-#                               my_sampling$sampMap$ggDepthFGbox,
-#                               my_sampling$sampMap$ggEffoFGbox,
-#                               my_sampling$sampMap$ggBioFGmat,
-#                               layout_matrix = rbind(c(1,1,1,2,3,4),c(1,1,1,2,3,4))))
 
+# ## Export cutted shp file
+# tmp_shp <- SpatialPolygonsDataFrame(my_sampling$sampMap$cutResShp,
+#                                     data = aggregate(formula = . ~ FG, data = my_sampling$sampMap$cutResult, FUN = mean))
+# writeSpatialShape(tmp_shp, "/Users/Lomo/Documents/Uni/R/smart/data/out/FG_cut/fg_19cuts")
+
+
+### setDayEffoMatrGround                          ####    FIX output string
+my_sampling$fleet$setDayEffoMatrGround()          ### head(my_sampling$fleet$dayEffoMatr[["2009"]])
 
 
 # ####  Set weekly effort matrix for fishing grounds
