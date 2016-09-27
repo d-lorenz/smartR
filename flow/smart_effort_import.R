@@ -199,16 +199,18 @@ my_sampling$sampMap$setClusInpu()
 
 skater_methods <- c("euclidean", "manhattan", "maximum", "binary", "canberra", "minkowski")
 
-my_sampling$sampMap$calcFishGrou(numCuts = 50, minsize = 10, modeska = "S", skater_method = skater_methods[1])
+my_sampling$sampMap$calcFishGrou(numCuts = 50, minsize = 10, modeska = "S",
+                                 skater_method = skater_methods[1])
 
 
-num_FG <- 12
+num_FG <- 22
 # my_sampling$sampMap$plotFishGrou(num_FG)
 
 # # head(my_sampling$sampMap$clusMat)
 
 my_sampling$setFishGround(numCut = num_FG)            # head(my_sampling$fleet$rawEffort[["2009"]])
 
+# library(gridExtra)
 suppressWarnings(grid.arrange(my_sampling$sampMap$ggIchFGlin,
                               my_sampling$sampMap$ggSilFGlin,
                               my_sampling$sampMap$ggCutFGmap,
