@@ -27,10 +27,11 @@ pathRawVMS <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/smart_rawEffort_
 pathEffortAA <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
 # pathEffortAA <- "/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/smart_rawEffort_new.rData"
 
+# FISHERY DATA
+pathFishery <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Fishery/fishery_merge_CampBiol.csv"
 
 
 pathClusMat <- "/Users/Lomo/Documents/Uni/R/smart/data/out/FG_cut/fg_sos/clusMat_BedEffDep.rData"
-cambBiolCSV <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Fishery/fishery_merge_CampBiol.csv"
 rawDataPath <- "/Users/Lomo/Documents/Uni/R/mixture/fisherySampling.rData"
 
 
