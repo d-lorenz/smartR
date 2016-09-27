@@ -168,33 +168,13 @@ saveRDS(my_sampling$fleet$rawEffort, "/Users/Lomo/Documents/Uni/R/smart/data/Raw
 my_sampling$fleet$rawEffort <- readRDS("/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData")
 
 
-## set effort x cell
-tmp_effXcel <- data.frame(Cell = 1:nrow(my_sampling$sampMap$gridShp@data),
-                          row.names = 0:(nrow(my_sampling$sampMap$gridShp@data)-1))
-for(i in names(my_sampling$fleet$rawEffort)){
-  # newName <- paste("Eff_", i, sep = "")
-  # tmp_effo <- as.data.frame(apply(my_sampling$fleet$weekEffoMatr[[i]][,4:ncol(my_sampling$fleet$weekEffoMatr[[i]])], 2, sum))
-  tmp_effo <- as.data.frame(table(my_sampling$fleet$rawEffort[[i]]$Cell[which(my_sampling$fleet$rawEffort[[i]]$FishPoint)]))
-  names(tmp_effo) <- c("Cell", "Freq")
-  tmp_effo$Cell <- as.numeric(as.character(tmp_effo$Cell))
-  miss_rows <- as.numeric(setdiff(as.character(my_sampling$sampMap$gridShp@plotOrder), as.character(tmp_effo$Cell)))
-  if(length(miss_rows) > 0){
-    # cat(length(miss_rows), " cells with no points... ", sep = "")
-    tmp_effo <- rbind(tmp_effo, data.frame(Cell = miss_rows, Freq = 0))
-    tmp_effo <- tmp_effo[order(tmp_effo[,1]),]
-  }
-  # tmp_effo <- as.numeric(tmp_effo[,2])
-  # names(tmp_effo) <- c("Cell", paste("Year_", i, sep = ""))
-  tmp_effXcel <- cbind(tmp_effXcel, tmp_effo[,2])
-  colnames(tmp_effXcel)[ncol(tmp_effXcel)] <- paste("Year_", i, sep = "")
-}
 
-## Export shp file
-tmp_shp <- SpatialPolygonsDataFrame(my_sampling$sampMap$gridShp,
-                                    data = tmp_effXcel)
-writeSpatialShape(tmp_shp, "/Users/Lomo/Documents/Uni/R/smart/data/out/Effort/SoS_effort")
-
-
+### Load Effort After all
+tmp_file <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
+my_project$fleet$rawEffort <- readRDS(tmp_file)
+my_project$fleet$setEffortIds()
+my_project$ggplotGridEffort(names(my_project$fleet$rawEffort)[1])
+###
 
 
 
