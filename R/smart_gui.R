@@ -993,7 +993,6 @@ smart_gui <- function(){
   fg_plotCut <- gcombobox(items = 2:50,
                           container = fig_g_top_plot, handler = function(h,...){
                             dev.set(dev.list()[pre_dev+3])
-                            # my_project$sampMap$plotFishGrou(svalue(fg_plotCut))
                             my_project$sampMap$setCutResult(ind_clu = svalue(fg_plotCut))
 
                             suppressWarnings(grid.arrange(my_project$sampMap$ggIchFGlin,
