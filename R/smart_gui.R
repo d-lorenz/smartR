@@ -14,6 +14,33 @@ smart_gui <- function(){
 
   my_project <<- SmartProject$new()
   # assign("my_project", SmartProject$new(),.GlobalEnv)
+
+  ### File input
+  # GRID
+  # pathGridShp <- "/Users/Lomo/Documents/Uni/R/smart/data/Grid/grid_sos_3NM/seabed_SoS_grid3NM.shp"
+  pathGridShp <- "/Users/Lomo/Documents/Uni/PhD/TESI/Grid/GFCM_Grid_6min_GSA16.shp"
+
+  # SEABED
+  # pathSeabed <- "/Users/Lomo/Documents/Uni/R/smart/data/SeaBed/SoSBiocMat.rData"
+  pathSeabed <- "/Users/Lomo/Documents/Uni/PhD/TESI/BioM.rData"
+
+  # BATHYMETRY
+  # pathBathymetry <- "/Users/Lomo/Documents/Uni/R/smart/data/seabedSos_Bathy.rData"
+  pathBathymetry <- "/Users/Lomo/Documents/Uni/R/smart/data/Grid/bathy_test.rData"
+
+  # RAW VMS
+  # pathRawVMS <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
+  pathRawVMS <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/smart_rawEffort_new.rData"
+
+  # GRID EFFORT AA
+  pathEffortAA <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
+  # pathEffortAA <- "/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/smart_rawEffort_new.rData"
+
+  pathClusMat <- "/Users/Lomo/Documents/Uni/R/smart/data/out/FG_cut/fg_sos/clusMat_BedEffDep.rData"
+  cambBiolCSV <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Fishery/fishery_merge_CampBiol.csv"
+  rawDataPath <- "/Users/Lomo/Documents/Uni/R/mixture/fisherySampling.rData"
+
+
   my_project$createFleet()
 
   pre_dev <- length(dev.list())
