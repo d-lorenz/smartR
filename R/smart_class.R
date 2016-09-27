@@ -1142,7 +1142,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                }
                              },
                              setPreMix = function(){
-                               preMix <<- weight2number(rawLFD[,c("DATE","LCLASS","UNSEX")])
+                               # preMix <<- weight2number(rawLFD[,c("DATE","LCLASS","UNSEX")])
                              },
                              calcMixDate = function(nAdap = 100, nSamp = 2000){
                                mixPar <<- list('Female' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)),
