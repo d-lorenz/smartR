@@ -174,14 +174,16 @@ my_sampling$setCellPoin()                 # head(my_sampling$fleet$rawEffort[["2
 ###   Set weeknum x track
 my_sampling$fleet$setWeekMonthNum()            # head(my_sampling$fleet$rawEffort[["2009"]])
 
-# saveRDS(my_sampling$fleet$rawEffort, "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData")
+# saveRDS(my_sampling$fleet$rawEffort, pathEffortAA)
 
 
 
 ### Load Effort After all
-my_project$fleet$rawEffort <- readRDS(pathEffortAA)
-my_project$fleet$setEffortIds()
-my_project$ggplotGridEffort(names(my_project$fleet$rawEffort)[1])
+my_sampling$fleet$rawEffort <- readRDS(pathEffortAA)
+my_sampling$fleet$setEffortIds()
+my_sampling$ggplotRawPoints(names(my_sampling$fleet$rawEffort)[1])
+my_sampling$ggplotFishingPoints(names(my_sampling$fleet$rawEffort)[1])
+my_sampling$ggplotGridEffort(names(my_sampling$fleet$rawEffort)[1])
 ###
 
 
