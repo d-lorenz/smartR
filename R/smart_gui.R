@@ -334,8 +334,7 @@ smart_gui <- function(){
     Sys.sleep(1)
     dev.set(dev.list()[pre_dev+1])
 
-    # my_project$loadMap("/Users/Lomo/Documents/Uni/R/smart/data/Grid/grid_sos_3NM/seabed_SoS_grid3NM.shp")
-    my_project$loadMap("/Users/Lomo/Documents/Uni/PhD/TESI/Grid/GFCM_Grid_6min_GSA16.shp")
+    my_project$loadMap(pathGridShp)
 
     ### automatic download of google map
     my_project$sampMap$getGooMap()       ### FIX add a check if sampMap is loaded
@@ -421,10 +420,7 @@ smart_gui <- function(){
 
     Sys.sleep(1)
 
-    # load_path <- "/Users/Lomo/Documents/Uni/R/smart/data/seabedSos_Bathy.rData"
-    load_path <- "/Users/Lomo/Documents/Uni/PhD/TESI/BioM.rData"
-
-    my_project$sampMap$loadGridBath(load_path)
+    my_project$sampMap$loadGridBath(pathBathymetry)
     # my_project$sampMap$getCentDept()
     svalue(stat_bar) <- "Plotting Bathymetry..."
     Sys.sleep(1)
@@ -452,8 +448,7 @@ smart_gui <- function(){
     dev.set(dev.list()[pre_dev+1])
     svalue(stat_bar) <- "Loading biocenosis data.frame..."
 
-    # my_project$sampMap$loadBioDF("/Users/Lomo/Documents/Uni/R/smart/data/SeaBed/SoSBiocMat.rData")
-    my_project$sampMap$loadBioDF("/Users/Lomo/Documents/Uni/PhD/TESI/BioM.rData")
+    my_project$sampMap$loadBioDF(pathSeabed)
 
     if(!is.null(my_project$sampMap$gooMap)){
       my_project$sampMap$ggplotBioDF()
@@ -540,14 +535,11 @@ smart_gui <- function(){
 
     enabled(eff_g_top) <- FALSE
 
-    tmp_file <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/smart_rawEffort_new.rData"
-    # tmp_file <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
-
     cat("\nLoading effort from rData...", sep = "")
     svalue(stat_bar) <- "Loading effort from rData..."
     Sys.sleep(1)
 
-    my_project$fleet$rawEffort <- readRDS(tmp_file)
+    my_project$fleet$rawEffort <- readRDS(pathRawVMS)
     my_project$fleet$setEffortIds()
     # cat("   Done!", sep = "")
     svalue(stat_bar) <- ""
@@ -789,14 +781,11 @@ smart_gui <- function(){
     #                        multi = TRUE)
     #
 
-    # tmp_file <- "/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/smart_rawEffort_new.rData"
-    tmp_file <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
-
     cat("\nLoading effort from AA data...", sep = "")
     svalue(stat_bar) <- "Loading effort from AA data..."
     Sys.sleep(1)
 
-    my_project$fleet$rawEffort <- readRDS(tmp_file)
+    my_project$fleet$rawEffort <- readRDS(pathEffortAA)
     my_project$fleet$setEffortIds()
 
     effvie_drop[] <- names(my_project$fleet$rawEffort)
