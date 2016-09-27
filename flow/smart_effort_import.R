@@ -476,13 +476,14 @@ my_sampling$cohoDisPlot(3, "All", "All", FALSE)
 ##################################
 
 ### "Load Sample"
-my_project$loadFisheryLFD(csv_path = "/Users/Lomo/Documents/Uni/R/smart/data/Resource - Fishery/fishery_data_CampBiol.csv")
+my_sampling$loadFisheryLFD(csv_path = pathFishery)
+
 # head(my_project$rawDataFishery)
 # head(my_project$fisheryBySpecie[[1]]$rawLFD)
 # "Splitting Fishery Population"
-if(!is.null(my_project$sampMap)){
+if(!is.null(my_sampling$sampMap)){
   # svalue(stat_bar) <- "Splitting Fishery Population... "
-  my_project$setLFDPopFishery()     # -> calcLFDPopFishery
+  my_sampling$setLFDPopFishery()     # -> calcLFDPopFishery
 }
 
 # Set raw_data
