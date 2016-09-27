@@ -50,34 +50,26 @@ my_sampling$sampMap$getGooMap()       ### FIX add a check if sampMap is loaded
 ###   Set google map + grid plot
 my_sampling$sampMap$setGooGrid()
 
-# ###   Plot google map + grid
-# my_sampling$sampMap$plotGooGrid()
-# ggsave(filename = "/media/fish_team/SANDISK/smart/data/out/ggmap_grid.jpeg",
-#        units = "cm", width = 15, height = 15, scale = 1.5)
+###   Plot google map + grid
+my_sampling$sampMap$plotGooGrid()
 
 ###   Set google map + grid + bbox
 my_sampling$sampMap$setGooBbox()
 
-# ###   Plot google map + grid + bbox
+###   Plot google map + grid + bbox
 my_sampling$sampMap$plotGooBbox()
-# ggsave(filename = "/media/fish_team/SANDISK/smart/data/out/ggmap_bbox.jpeg",
-#        units = "cm", width = 15, height = 15, scale = 1.5)
 
 
 ##################################
 ##########   Seabed   ############
 ##################################
 
+my_sampling$sampMap$loadBioDF(pathSeabed)
 
-# my_project$sampMap$loadBioDF("/Users/Lomo/Documents/Uni/R/smart/data/SeaBed/SoSBiocMat.rData")
-my_project$sampMap$loadBioDF("/Users/Lomo/Documents/Uni/PhD/TESI/BioM.rData")
-
-my_project$sampMap$loadBioDF(pathSeabed)
-
-if(!is.null(my_project$sampMap$gooMap)){
-  my_project$sampMap$ggplotBioDF()
+if(!is.null(my_sampling$sampMap$gooMap)){
+  my_sampling$sampMap$ggplotBioDF()
 }else{
-  my_project$sampMap$plotBioDF()
+  my_sampling$sampMap$plotBioDF()
 }
 
 # ### load seabed shp
