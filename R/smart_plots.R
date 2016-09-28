@@ -88,7 +88,7 @@ set_spatAbbTbl <- function(inSpat){
 }
 
 
-set_spatAbbFreq <- function(inSpat){
+set_spatAbsFreq <- function(inSpat){
   suppressMessages(
     ggplot(inSpat, aes(x = FG, y = Freq)) +
       theme_tufte(base_size = 14, ticks = F) +
