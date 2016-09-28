@@ -1214,11 +1214,11 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                              setSpatPlot = function(sampSex){
                                if(sampSex == "Female"){
                                  plotFemale[["spatAbbTbl"]] <<- set_spatAbbTbl(spatFemale)
-                                 plotFemale[["spatAbbFreq"]] <<- set_spatAbbFreq(spatFemale)
+                                 plotFemale[["spatAbsFreq"]] <<- set_spatAbsFreq(spatFemale)
                                  plotFemale[["spatRelFreq"]] <<- set_spatRelFreq(spatFemale)
                                }else{
                                  plotMale[["spatAbbTbl"]] <<- set_spatAbbTbl(spatMale)
-                                 plotMale[["spatAbbFreq"]] <<- set_spatAbbFreq(spatMale)
+                                 plotMale[["spatAbsFreq"]] <<- set_spatAbsFreq(spatMale)
                                  plotMale[["spatRelFreq"]] <<- set_spatRelFreq(spatMale)
                                }
                              },
