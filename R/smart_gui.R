@@ -1909,8 +1909,16 @@ smart_gui <- function(){
 
     visible(temp_dia) <- TRUE
 
-    my_project$plotGooSpe(whiSpe = "All", whiSou = "Fishery")
-
+    # my_project$plotGooSpe(whiSpe = "All", whiSou = "Fishery")
+    suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSamp,
+                                  my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["spatAbbFreq"]],
+                                  my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["spatRelFreq"]],
+                                  my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["spatAbbTbl"]],
+                                  layout_matrix = rbind(c(NA,1,1,1),
+                                                        c(4,1,1,1),
+                                                        c(4,2,2,2),
+                                                        c(NA,3,3,3))
+    ))
   })
 
   addSpring(fis_g_top)
