@@ -17,6 +17,7 @@ set_ggHistLfdTot <- function(inLfd){
                            axis.ticks.y = element_blank()))
 }
 
+
 set_ggHistUtcTot <- function(inLfd){
   suppressMessages(
     ggplot(data.frame(UTC = unique(inLfd$UTC)), aes(x = UTC, y = ..count..)) +
@@ -34,7 +35,6 @@ set_ggHistUtcTot <- function(inLfd){
       scale_x_chron(n = 10)
   )
 }
-
 
 
 set_ggDotUtcSplit <- function(inLfd){
