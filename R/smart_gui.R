@@ -1715,10 +1715,10 @@ smart_gui <- function(){
       # svalue(cohYea_drop) <- "All"
 
 
-      if(!is.null(my_project$sampMap)){
-        svalue(stat_bar) <- "Splitting Fishery Population..."
-        my_project$setLFDPopFishery()
-      }
+      # if(!is.null(my_project$sampMap)){
+      #   svalue(stat_bar) <- "Splitting Fishery Population..."
+      #   my_project$setLFDPopFishery()
+      # }
 
       svalue(stat_bar) <- ""
 
