@@ -1773,50 +1773,50 @@ smart_gui <- function(){
                            selected = 1, container = spec_b, expand = TRUE,
                            editable = FALSE, handler = function(h,...){
 
-      spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
-      svalue(sex_drop) <- "Female"
-      suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histLfdTot"]],
-                                    my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histUtcLfd"]],
-                                    my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histUtcTot"]],
-                                    my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["dotUtcSplit"]],
-                                    layout_matrix = rbind(c(1,1,1,1),
-                                                          c(2,2,2,2),
-                                                          c(2,2,2,2),
-                                                          c(3,3,4,4))))
-    })
+                             spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
+                             svalue(sex_drop) <- "Female"
+                             suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histLfdTot"]],
+                                                           my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histUtcLfd"]],
+                                                           my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histUtcTot"]],
+                                                           my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["dotUtcSplit"]],
+                                                           layout_matrix = rbind(c(1,1,1,1),
+                                                                                 c(2,2,2,2),
+                                                                                 c(2,2,2,2),
+                                                                                 c(3,3,4,4))))
+                           })
     addSpring(spec_b)
     sex_b <- gframe("Sex", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
     addSpring(lfdfra_g)
     addSpring(sex_b)
     sex_drop <- gcombobox(items = c("Female", "Male"),
-                           selected = 1, container = sex_b, expand = TRUE,
-                           editable = FALSE, handler = function(h,...){
-      spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
-      if(svalue(sex_b) == "Female"){
-        suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histLfdTot"]],
-                                      my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histUtcLfd"]],
-                                      my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histUtcTot"]],
-                                      my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["dotUtcSplit"]],
-                                      layout_matrix = rbind(c(1,1,1,1),
-                                                            c(2,2,2,2),
-                                                            c(2,2,2,2),
-                                                            c(3,3,4,4))))
-      }else{
-        suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotMale[["histLfdTot"]],
-                                      my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotMale[["histUtcLfd"]],
-                                      my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotMale[["histUtcTot"]],
-                                      my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotMale[["dotUtcSplit"]],
-                                      layout_matrix = rbind(c(1,1,1,1),
-                                                            c(2,2,2,2),
-                                                            c(2,2,2,2),
-                                                            c(3,3,4,4))))
-      }
-    })
+                          selected = 1, container = sex_b, expand = TRUE,
+                          editable = FALSE, handler = function(h,...){
+                            spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
+                            if(svalue(sex_b) == "Female"){
+                              suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histLfdTot"]],
+                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histUtcLfd"]],
+                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histUtcTot"]],
+                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["dotUtcSplit"]],
+                                                            layout_matrix = rbind(c(1,1,1,1),
+                                                                                  c(2,2,2,2),
+                                                                                  c(2,2,2,2),
+                                                                                  c(3,3,4,4))))
+                            }else{
+                              suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotMale[["histLfdTot"]],
+                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotMale[["histUtcLfd"]],
+                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotMale[["histUtcTot"]],
+                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotMale[["dotUtcSplit"]],
+                                                            layout_matrix = rbind(c(1,1,1,1),
+                                                                                  c(2,2,2,2),
+                                                                                  c(2,2,2,2),
+                                                                                  c(3,3,4,4))))
+                            }
+                          })
     addSpring(sex_b)
 
     addSpring(lfdfra_g)
     addSpace(pop_g_top, 2)
-    pop_p <- ggraphics(container = pop_g, width = 300, height = 550, expand = TRUE)
+    pop_p <- ggraphics(container = pop_g, width = 450, height = 550, expand = TRUE)
 
     gbutton("Close", container = pop_g_top, handler = function(h,...){
       dispose(temp_dia)
