@@ -1194,6 +1194,34 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                  setSprePlot(sampSex = sex)
                                }
                              },
+                             setSpatDistSing = function(){
+                               for(sex in c("Female", "Male")){
+                                 tmp_fishSpat <- rawDataFishery[!is.na(rawDataFishery$numFG),c("Lon","Lat", "numFG", sex)]
+
+                                 barploFgAll <- data.frame(table(tmp_fishSpat$NumFG))
+                                 barploFgAll <- barploFgAll[order(as.numeric(as.character(barploFgAll[,1]))),]
+                                 barploFgAll$FG <- factor(barploFgAll$Var1, levels = barploFgAll$Var1)
+                                 barploFgAll$relFreq = round(100*barploFgAll$Freq/sum(barploFgAll$Freq),1)
+
+                                 if(sex == "Female"){
+                                   spatFemale <<- barploFgAll
+                                 }else{
+                                   spatMale <<- barploFgAll
+                                 }
+                                 setSpatPlot(sampSex = sex)
+                               }
+                             },
+                             setSpatPlot = function(sampSex){
+                               if(sampSex == "Female"){
+                                 plotFemale[["spatAbbTbl"]] <<- set_spatAbbTbl(spatFemale)
+                                 plotFemale[["spatAbbFreq"]] <<- set_spatAbbFreq(spatFemale)
+                                 plotFemale[["spatRelFreq"]] <<- set_spatRelFreq(spatFemale)
+                               }else{
+                                 plotMale[["spatAbbTbl"]] <<- set_spatAbbTbl(spatMale)
+                                 plotMale[["spatAbbFreq"]] <<- set_spatAbbFreq(spatMale)
+                                 plotMale[["spatRelFreq"]] <<- set_spatRelFreq(spatMale)
+                               }
+                             },
                              setPreMix = function(){
                                # preMix <<- weight2number(rawLFD[,c("DATE","LCLASS","UNSEX")])
                              },
