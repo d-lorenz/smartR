@@ -1695,7 +1695,7 @@ smart_gui <- function(){
       my_project$setSpreaDistAll()
       my_project$setSpatDistAll()
 
-      my_project$sampMap$set_ggMapFgSamp()
+      my_project$sampMap$set_ggMapFgSamp(my_project$rawDataFishery)
     }
 
 
