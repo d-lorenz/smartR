@@ -141,3 +141,4 @@ set_spatRelFreq <- function(inSpat){
             axis.text.y = element_text(size = 5),
             axis.title.y = element_blank())
   )
+}
