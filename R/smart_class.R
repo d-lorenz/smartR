@@ -40,7 +40,7 @@ SmartProject <- R6Class("smartProject",
 
                             # rawDataFishery$FEMALE <<- rawDataFishery$UNSEX/2
                             # rawDataFishery$MALE <<- rawDataFishery$UNSEX/2
-
+                            fisheryBySpecie <<- list()
                             cat("\nSetting Years... ", sep = "")
                             setYearFishery()
                             cat(" from ", min(levels(yearInFishery)[as.numeric(yearInFishery)]), " to ", max(levels(yearInFishery)[as.numeric(yearInFishery)]),"\nSetting Species... ", sep = "")
