@@ -1689,6 +1689,12 @@ smart_gui <- function(){
     Sys.sleep(1)
     my_project$loadFisheryLFD(csv_path = pathFishery)
 
+    if(!is.null(my_project$sampMap$cutResShp)){
+      my_project$addFg2Fishery()
+      my_project$setSpreaDistAll()
+    }
+
+
     if(!is.null(my_project$rawDataFishery)){ #update_pop_gui()
 
       fis_t[] <- my_project$rawDataFishery[sample(1:nrow(my_project$rawDataFishery), 100, replace = FALSE),]
