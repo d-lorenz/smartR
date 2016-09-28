@@ -28,7 +28,10 @@ pathEffortAA <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seab
 # pathEffortAA <- "/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/smart_rawEffort_new.rData"
 
 # FISHERY DATA
-pathFishery <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Fishery/fishery_merge_CampBiol.csv"
+pathFishery <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Fishery/fishery_data_CampBiol_noExpLand.csv"
+# pathFishery <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Fishery/fishery_merge_CampBiol.csv"
+
+cambBiolCSV <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Fishery/fishery_merge_CampBiol.csv"
 
 
 pathClusMat <- "/Users/Lomo/Documents/Uni/R/smart/data/out/FG_cut/fg_sos/clusMat_BedEffDep.rData"
@@ -350,9 +353,9 @@ my_sampling$fleet$rawRegister$Gear.Main.Code[active_vms][which(substr(my_samplin
 
 ###   Set list items
 my_project$fleet$setSpecSettItm(specie = "Merluccius merluccius",
-                                 thresh = 20,
-                                 brea = 100,
-                                 max_xlim = 200)
+                                thresh = 20,
+                                brea = 100,
+                                max_xlim = 200)
 
 ###   Get logit
 my_project$fleet$setSpecLogit("Merluccius merluccius")
@@ -453,7 +456,7 @@ emme_k <- tmp_g[2,4:5]
 emme_t0 <- tmp_g[2,6:7]
 
 my_sampling$surveyBySpecie[[spe_ind]]$setPrior(f_linf = effe_linf, f_k = effe_k, f_t0 = effe_t0,
-                                         m_linf = emme_linf, m_k = emme_k, m_t0 = emme_t0)
+                                               m_linf = emme_linf, m_k = emme_k, m_t0 = emme_t0)
 
 ##   Num of Cohorts
 ncih_sb <- 3
@@ -478,55 +481,40 @@ my_sampling$cohoDisPlot(3, "All", "All", FALSE)
 ### "Load Sample"
 my_sampling$loadFisheryLFD(csv_path = pathFishery)
 
-# head(my_project$rawDataFishery)
-# head(my_project$fisheryBySpecie[[1]]$rawLFD)
-# "Splitting Fishery Population"
-if(!is.null(my_sampling$sampMap)){
-  # svalue(stat_bar) <- "Splitting Fishery Population... "
-  my_sampling$setLFDPopFishery()     # -> calcLFDPopFishery
+# head(my_sampling$rawDataFishery)
+# head(my_sampling$fisheryBySpecie[[1]]$rawLFD)
+
+# # "Splitting Fishery Population"
+# if(!is.null(my_sampling$sampMap)){
+#   # svalue(stat_bar) <- "Splitting Fishery Population... "
+#   my_sampling$setLFDPopFishery()     # -> calcLFDPopFishery
+# }
+
+if(!is.null(my_sampling$sampMap$cutResShp)){
+  my_sampling$addFg2Fishery()
 }
 
-# Set raw_data
-# my_project$fisheryBySpecie[[1]]$setPreMix
+# Set fisheryRawIn
+my_sampling$setSpreaDistAll()
 
-specie <- "MUL"
-for(sex in c("Female", "Male")){
-  tmp_spre = my_project$fisheryBySpecie[[1]]$rawLFD[my_project$fisheryBySpecie[[1]]$rawLFD$Specie == specie & !is.na(my_project$fisheryBySpecie[[1]]$rawLFD$numFG), c("Date","Class", "numFG", sex)]
+suppressWarnings(grid.arrange(my_sampling$fisheryBySpecie[[1]]$plotFemale[["histLfdTot"]],
+                              my_sampling$fisheryBySpecie[[1]]$plotFemale[["histUtcLfd"]],
+                              my_sampling$fisheryBySpecie[[1]]$plotFemale[["histUtcTot"]],
+                              my_sampling$fisheryBySpecie[[1]]$plotFemale[["dotUtcSplit"]],
+                              layout_matrix = rbind(c(1,1,1,1),
+                                                    c(2,2,2,2),
+                                                    c(2,2,2,2),
+                                                    c(3,3,4,4))
+))
 
-  num_sex <- sum(tmp_spre[,4])
-  cat("\nFound", num_sex, sex, as.character(specie), "samples", sep = " ")
 
-  spreDist <- data.frame(UTC = rep(tmp_spre$Date, tmp_spre[,4]),
-                Length = rep(tmp_spre$Class, tmp_spre[,4]) + runif(num_sex, -0.5, 0.5),
-                NumFG = rep(tmp_spre$numFG, tmp_spre[,4]))
 
-  spreDist$Year <- years(spreDist$UTC)
-  spreDist$Month <- months(spreDist$UTC)
 
-  ifelse(sex == "Female",
-         my_project$fisheryBySpecie[[1]]$spreFemale <<- spreDist,
-         my_project$fisheryBySpecie[[1]]$spreMale <<- spreDist)
-}
 
-my_project$fisheryBySpecie[[1]]$spreFemale
-raw_data <- my_project$fisheryBySpecie[[1]]$spreFemale
 
-suppressMessages(
-  ggplot(raw_data, aes(x = Length, y = ..count..)) +
-    geom_hline(yintercept = pretty(range(hist(raw_data$Length,50, plot = FALSE)$counts),
-                                   n = 5), col="grey75", lwd = 0.5, lty = 2) +
-    geom_histogram(bins = 50, fill = "grey0", alpha = 0.7, col = "grey10") +
-    annotate("text", x = min(raw_data$Length)+3, y = Inf, hjust = 0.5, vjust = 1.5,
-             family="serif", label = c("Absolute frequency of \nlength values.")) +
-    geom_vline(xintercept = mean(raw_data$Length), col = "white", lwd = 0.6, lty = 2) +
-    theme_tufte(base_size=14, ticks=F) +
-    theme(legend.position = "none",
-          axis.text.x = element_text(size = 5),
-          axis.title.x = element_text(size = 7),
-          axis.text.y = element_text(size = 5),
-          axis.title.y = element_blank(),
-          axis.ticks.y = element_blank())
-)
+
+
+
 
 ###
 
@@ -536,8 +524,8 @@ suppressMessages(
 
 ### "Open\nLFD\nViewer"
 # my_cel_dat <- my_project$fisheryBySpecie[[1]]$rawLFD[,c("Class","Female","Male")]
-# the_reclfd <- RecLFD(my_cel_dat, my_project$fisheryBySpecie[[1]]$lengClas, 1)
-# plotRecLFD(the_reclfd)
+# the_reclfd <- smartR:::RecLFD(my_cel_dat, my_project$fisheryBySpecie[[1]]$lengClas, 1)
+# smartR:::plotRecLFD(the_reclfd)
 ###
 
 ### "View\nSpatial\nDistribution"
@@ -566,7 +554,7 @@ my_sampling$fisheryBySpecie[[1]]$setNCoho(7)
 
 ### Compute mixture
 my_project$fisheryBySpecie[[1]]$calcMixDate(nAdap = as.numeric(svalue(mc_niter)),
-                                             nSamp = as.numeric(svalue(mc_nsamp)))
+                                            nSamp = as.numeric(svalue(mc_nsamp)))
 ###
 
 ### Transform length to cohorts
@@ -598,7 +586,7 @@ emme_k <- tmp_g[2,4:5]
 emme_t0 <- tmp_g[2,6:7]
 
 my_sampling$fisheryBySpecie[[1]]$setPrior(f_linf = effe_linf, f_k = effe_k, f_t0 = effe_t0,
-                                               m_linf = emme_linf, m_k = emme_k, m_t0 = emme_t0)
+                                          m_linf = emme_linf, m_k = emme_k, m_t0 = emme_t0)
 
 my_sampling$fisheryBySpecie[[1]]$setPreMix()
 
