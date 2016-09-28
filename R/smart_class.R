@@ -2092,6 +2092,31 @@ SampleMap <- R6Class("sampleMap",
                          colnames(tmp_dbf) <- c("XCOORD", "YCOORD", "Name")
                          harbDbf <<- tmp_dbf
                        },
+                       set_ggMapFgSamp = function(rawSampCoo){
+                         ggMapFgSamp <<- suppressMessages(
+                           gooMapPlot +
+                             geom_polygon(data = cutResShpFort,
+                                          aes(x = long, y = lat, group = group),
+                                          colour = "grey10", size = 0.1, alpha = 0.8) +
+                             lims(x = extendrange(plotRange[1:2]),
+                                  y = extendrange(plotRange[3:4])) +
+                             theme(legend.position = "left",
+                                   axis.text.x = element_text(size = 5),
+                                   axis.title.x = element_text(size = 7),
+                                   axis.text.y = element_text(size = 5),
+                                   legend.key.size = unit(0.5, "cm"),
+                                   axis.title.y = element_text(size = 7)) +
+                             geom_jitter(data = rawSampCoo[,c("Lon","Lat","Specie")],
+                                         aes(x = Lon, y = Lat, shape = Specie, color = Specie),
+                                         size = 1, width = 0.1, height = 0.1, alpha = 0.35) +
+                             geom_point(data = unique(rawSampCoo[,c("Lon","Lat")]),
+                                        aes(x = Lon, y = Lat),
+                                        color = "darkolivegreen1", shape = 4, size = 0.5, alpha = 0.6) +
+                             geom_text(data = cutResShpCent,
+                                       aes(label = FG, x = Lon, y = Lat),
+                                       size = 2, color = "grey72")
+                         )
+                       },
                        createGridBbox = function(){
                          gridBbox <<- bbox(gridShp)
                          gridBboxExt <<- make_bbox(lon = gridBbox[1,],
