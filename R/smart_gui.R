@@ -1851,11 +1851,51 @@ smart_gui <- function(){
     spec_b <- gframe("Specie", horizontal = FALSE, container = pop_g_top, expand = TRUE)
 
     addSpring(spec_b)
-    spec_drop <- gcombobox(items = c("All", as.character(my_project$specieInFishery)), selected = 2, container = spec_b, editable = FALSE, handler = function(h,...){
-      my_project$plotGooSpe(whiSpe = svalue(spec_drop), whiSou = "Fishery")
-    })
-    addSpring(spec_b)
+    spec_drop <- gcombobox(items = as.character(my_project$specieInFishery), selected = 2,
+                           container = spec_b, editable = FALSE, handler = function(h,...){
+                             # my_project$plotGooSpe(whiSpe = svalue(spec_drop), whiSou = "Fishery")
 
+                             suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSamp,
+                                                           my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["spatAbbFreq"]],
+                                                           my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["spatRelFreq"]],
+                                                           my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["spatAbbTbl"]],
+                                                           layout_matrix = rbind(c(NA,1,1,1),
+                                                                                 c(4,1,1,1),
+                                                                                 c(4,2,2,2),
+                                                                                 c(NA,3,3,3))
+                             ))
+                           })
+    addSpring(spec_b)
+    sex_b <- gframe("Sex", horizontal = FALSE, container = pop_g_top, expand = TRUE)
+    addSpring(pop_g_top)
+    addSpring(sex_b)
+    sex_drop <- gcombobox(items = c("Female", "Male"),
+                          selected = 1, container = sex_b, expand = TRUE,
+                          editable = FALSE, handler = function(h,...){
+                            spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
+                            if(svalue(sex_b) == "Female"){
+                              suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSamp,
+                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["spatAbbFreq"]],
+                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["spatRelFreq"]],
+                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["spatAbbTbl"]],
+                                                            layout_matrix = rbind(c(NA,1,1,1),
+                                                                                  c(4,1,1,1),
+                                                                                  c(4,2,2,2),
+                                                                                  c(NA,3,3,3))
+                              ))
+                            }else{
+                              suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSamp,
+                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotMale[["spatAbbFreq"]],
+                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotMale[["spatRelFreq"]],
+                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotMale[["spatAbbTbl"]],
+                                                            layout_matrix = rbind(c(NA,1,1,1),
+                                                                                  c(4,1,1,1),
+                                                                                  c(4,2,2,2),
+                                                                                  c(NA,3,3,3))
+                              ))
+                            }
+                          })
+    addSpring(sex_b)
     addSpring(pop_g_top)
 
     gbutton("Close", container = pop_g_top, handler = function(h,...){
