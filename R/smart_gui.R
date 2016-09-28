@@ -1859,7 +1859,9 @@ smart_gui <- function(){
   addSpring(fis_g_top)
 
   gbutton("Assign FG", container = fis_g_top, handler = function(h,...){
-    my_project$addFg2Fishery()
+    if(!is.null(my_project$sampMap$cutResShp)){
+      my_project$addFg2Fishery()
+    }
     fis_t[] <- my_project$rawDataFishery[sample(1:nrow(my_project$rawDataFishery), 100, replace = FALSE),]
   })
   addSpring(fis_g_top)
