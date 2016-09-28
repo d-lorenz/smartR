@@ -1198,7 +1198,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                for(sex in c("Female", "Male")){
                                  tmp_fishSpat <- rawLFD[!is.na(rawLFD$numFG),c("Lon","Lat", "numFG", sex)]
 
-                                 barploFgAll <- data.frame(table(tmp_fishSpat$NumFG))
+                                 barploFgAll <- data.frame(table(tmp_fishSpat$numFG))
                                  barploFgAll <- barploFgAll[order(as.numeric(as.character(barploFgAll[,1]))),]
                                  barploFgAll$FG <- factor(barploFgAll$Var1, levels = barploFgAll$Var1)
                                  barploFgAll$relFreq = round(100*barploFgAll$Freq/sum(barploFgAll$Freq),1)
