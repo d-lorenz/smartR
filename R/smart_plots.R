@@ -72,3 +72,72 @@ set_ggHistUtcLfd <- function(inLfd){
             axis.ticks.y = element_blank())
   )
 }
+
+
+set_spatAbbTbl <- function(inSpat){
+  out_FgTbl <- data.frame(FG = inSpat$FG,
+                          AbsFreq = inSpat$Freq,
+                          RelFreq = inSpat$relFreq)
+
+  fgAbbTheme <- gridExtra::ttheme_default(
+    core = list(fg_params=list(cex = 0.4)),
+    colhead = list(fg_params=list(cex = 0.6)),
+    rowhead = list(fg_params=list(cex = 0.4)))
+
+  return(tableGrob(out_FgTbl, theme = fgAbbTheme))
+}
+
+
+set_spatAbbFreq <- function(inSpat){
+  suppressMessages(
+    ggplot(inSpat, aes(x = FG, y = Freq)) +
+      theme_tufte(base_size = 14, ticks = F) +
+      geom_bar(width=0.25, fill = "gray35", stat = "identity") +
+      theme(axis.title = element_blank()) +
+      scale_y_continuous(breaks = pretty(inSpat$Freq, n = 5)) +
+      geom_hline(yintercept = pretty(inSpat$Freq, n = 5),
+                 col = "white", lwd = 1) +
+      geom_hline(yintercept = pretty(inSpat$Freq, n = 5),
+                 col = "grey75", lwd = 0.25, lty = 2) +
+      geom_hline(yintercept = 0, col = "gray60", lwd = 0.6) +
+      annotate("text", x = 5, y = max(inSpat$Freq)/2,
+               hjust = 0.5,  family="serif", size = 4,
+               label = c("Absolute number of obsevartions\nin each fishing ground")) +
+      annotate("text", x = 1:nrow(inSpat), y = inSpat$Freq+1000,
+               hjust = 0.5, family="serif", size = 3,
+               label = ifelse(inSpat$Freq == 0, "", inSpat$Freq)) +
+      # coord_flip() +
+      theme(legend.position = "none",
+            axis.text.x = element_text(size = 5),
+            axis.title.x = element_blank(),
+            axis.text.y = element_text(size = 5),
+            axis.title.y = element_blank())
+  )
+}
+
+
+set_spatRelFreq <- function(inSpat){
+  suppressMessages(
+    ggplot(inSpat, aes(x = FG, y = relFreq)) +
+      theme_tufte(base_size = 14, ticks = F) +
+      geom_bar(width=0.25, fill = "gray35", stat = "identity") +
+      theme(axis.title = element_blank()) +
+      scale_y_continuous(breaks = pretty(inSpat$relFreq, n = 5)) +
+      geom_hline(yintercept = pretty(inSpat$relFreq, n = 5),
+                 col = "white", lwd = 1) +
+      geom_hline(yintercept = pretty(inSpat$relFreq, n = 5),
+                 col = "grey75", lwd = 0.25, lty = 2) +
+      geom_hline(yintercept = 0, col = "gray60", lwd = 0.6) +
+      annotate("text", x = 5, y = max(inSpat$relFreq)/2,
+               hjust = 0.5,  family="serif", size = 4,
+               label = c("Relative number of obsevartions\nin each fishing ground")) +
+      annotate("text", x = 1:nrow(inSpat), y = inSpat$relFreq+2,
+               hjust = 0.5, family="serif", size = 3,
+               label = ifelse(inSpat$relFreq == 0, "", inSpat$relFreq)) +
+      # coord_flip() +
+      theme(legend.position = "none",
+            axis.text.x = element_text(size = 5),
+            axis.title.x = element_blank(),
+            axis.text.y = element_text(size = 5),
+            axis.title.y = element_blank())
+  )
