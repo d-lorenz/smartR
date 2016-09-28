@@ -1755,18 +1755,20 @@ smart_gui <- function(){
   gbutton("Open\nLFD\nViewer", container = fis_g_top, handler = function(h,...){
 
     temp_dia <- gwindow(title="Fishery Length Frequency Distribution Viewer", visible = FALSE,
-                        parent = main_win, width = 450, height = 800)
+                        parent = main_win, width = 350, height = 600)
 
     pop_g <- ggroup(horizontal = FALSE, container = temp_dia, label = "Population")
     pop_g_top <- gframe(horizontal = TRUE, container = pop_g, spacing = 10)
-    addSpring(pop_g_top)
+    # addSpring(pop_g_top)
     lfdfra_g <- gframe("LFD data", horizontal = TRUE, container = pop_g_top, expand = TRUE)
     addSpring(lfdfra_g)
 
     spec_b <- gframe("Specie", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
     addSpring(lfdfra_g)
     addSpring(spec_b)
-    spec_drop <- gcombobox(items = my_project$specieInFishery, selected = 1, container = spec_b, editable = FALSE, handler = function(h,...){
+    spec_drop <- gcombobox(items = my_project$specieInFishery,
+                           selected = 1, container = spec_b, expand = TRUE,
+                           editable = FALSE, handler = function(h,...){
 
       spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
       svalue(sex_drop) <- "Female"
@@ -1784,7 +1786,7 @@ smart_gui <- function(){
     addSpring(lfdfra_g)
     addSpring(sex_b)
     sex_drop <- gcombobox(items = c("Female", "Male"),
-                           selected = 1, container = sex_b,
+                           selected = 1, container = sex_b, expand = TRUE,
                            editable = FALSE, handler = function(h,...){
       spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
       if(svalue(sex_b) == "Female"){
@@ -1807,17 +1809,28 @@ smart_gui <- function(){
                                                             c(3,3,4,4))))
       }
     })
-    addSpring(year_b)
+    addSpring(sex_b)
 
     addSpring(lfdfra_g)
-    addSpring(pop_g_top)
     addSpace(pop_g_top, 2)
-    pop_p <- ggraphics(container = pop_g, width = 400, height = 750, expand = TRUE)
+    pop_p <- ggraphics(container = pop_g, width = 300, height = 550, expand = TRUE)
 
     gbutton("Close", container = pop_g_top, handler = function(h,...){
       dispose(temp_dia)
     })
+
+    addSpring(pop_g_top)
+
     visible(temp_dia) <- TRUE
+
+    suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histLfdTot"]],
+                                  my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histUtcLfd"]],
+                                  my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histUtcTot"]],
+                                  my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["dotUtcSplit"]],
+                                  layout_matrix = rbind(c(1,1,1,1),
+                                                        c(2,2,2,2),
+                                                        c(2,2,2,2),
+                                                        c(3,3,4,4))))
   })
 
   addSpring(fis_g_top)
