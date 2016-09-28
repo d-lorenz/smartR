@@ -492,10 +492,12 @@ my_sampling$loadFisheryLFD(csv_path = pathFishery)
 
 if(!is.null(my_sampling$sampMap$cutResShp)){
   my_sampling$addFg2Fishery()
+  my_sampling$setSpreaDistAll()
+
+  my_sampling$sampMap$set_ggMapFgSamp()
 }
 
 # Set fisheryRawIn
-my_sampling$setSpreaDistAll()
 
 suppressWarnings(grid.arrange(my_sampling$fisheryBySpecie[[1]]$plotFemale[["histLfdTot"]],
                               my_sampling$fisheryBySpecie[[1]]$plotFemale[["histUtcLfd"]],
@@ -506,15 +508,6 @@ suppressWarnings(grid.arrange(my_sampling$fisheryBySpecie[[1]]$plotFemale[["hist
                                                     c(2,2,2,2),
                                                     c(3,3,4,4))
 ))
-
-
-
-
-
-
-
-
-
 
 ###
 
@@ -529,13 +522,24 @@ suppressWarnings(grid.arrange(my_sampling$fisheryBySpecie[[1]]$plotFemale[["hist
 ###
 
 ### "View\nSpatial\nDistribution"
-my_sampling$plotGooSpe(whiSpe = "All", whiSou = "Fishery")
+# my_sampling$plotGooSpe(whiSpe = "All", whiSou = "Fishery")
+suppressWarnings(my_sampling$sampMap$ggMapFgSamp)
+
+my_sampling$setSpatDistAll()
+
+
+suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSamp,
+                              my_project$fisheryBySpecie[[1]]$plotFemale[["spatAbbFreq"]],
+                              my_project$fisheryBySpecie[[1]]$plotFemale[["spatRelFreq"]],
+                              my_project$fisheryBySpecie[[1]]$plotFemale[["spatAbbTbl"]],
+                              layout_matrix = rbind(c(NA,1,1,1),
+                                                    c(4,1,1,1),
+                                                    c(4,2,2,2),
+                                                    c(NA,3,3,3))
+))
 ###
 
-### "Assign FG"
-my_sampling$addFg2Fishery()
-# head(my_project$rawDataFishery)
-###
+
 
 
 
