@@ -1150,6 +1150,43 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                  }
                                }
                              },
+                             setSprePlot = function(sampSex){
+                               if(sampSex == "Female"){
+                                 plotFemale <<- list()
+                                 plotFemale[["histLfdTot"]] <<- set_ggHistLfdTot(spreFemale)
+                                 plotFemale[["histUtcTot"]] <<- set_ggHistUtcTot(spreFemale)
+                                 plotFemale[["dotUtcSplit"]] <<- set_ggDotUtcSplit(spreFemale)
+                                 plotFemale[["histUtcLfd"]] <<- set_ggHistUtcLfd(spreFemale)
+                               }else{
+                                 plotMale <<- list()
+                                 plotMale[["histLfdTot"]] <<- set_ggHistLfdTot(spreMale)
+                                 plotMale[["histUtcTot"]] <<- set_ggHistUtcTot(spreMale)
+                                 plotMale[["dotUtcSplit"]] <<- set_ggDotUtcSplit(spreMale)
+                                 plotMale[["histUtcLfd"]] <<- set_ggHistUtcLfd(spreMale)
+                               }
+                             },
+                             setSpreDistSing = function(){
+                               for(sex in c("Female", "Male")){
+                                 tmp_spre = rawLFD[!is.na(rawLFD$numFG),c("Date","Class", "numFG", sex)]
+
+                                 num_sex <- sum(tmp_spre[,4])
+                                 cat("\nFound", num_sex, sex, as.character(specie), "samples", sep = " ")
+
+                                 spreDist <- data.frame(UTC = rep(tmp_spre$Date, tmp_spre[,4]),
+                                                        Length = rep(tmp_spre$Class, tmp_spre[,4]) + runif(num_sex, -0.5, 0.5),
+                                                        NumFG = rep(tmp_spre$numFG, tmp_spre[,4]))
+
+                                 spreDist$Year <- years(spreDist$UTC)
+                                 spreDist$Month <- months(spreDist$UTC)
+
+                                 if(sex == "Female"){
+                                   spreFemale <<- spreDist
+                                 }else{
+                                   spreMale <<- spreDist
+                                 }
+                                 setSprePlot(sampSex = sex)
+                               }
+                             },
                              setPreMix = function(){
                                # preMix <<- weight2number(rawLFD[,c("DATE","LCLASS","UNSEX")])
                              },
