@@ -1839,7 +1839,7 @@ smart_gui <- function(){
   gbutton("View\nSpatial\nDistribution", container = fis_g_top, handler = function(h,...){
 
     temp_dia <- gwindow(title="Spatial Distribution of Fishery sampling", visible = FALSE,
-                        parent = main_win, width = 600, height = 500)
+                        parent = main_win, width = 700, height = 500)
 
     pop_g <- ggroup(horizontal = FALSE, container = temp_dia)
 
