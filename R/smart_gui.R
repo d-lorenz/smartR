@@ -1758,7 +1758,7 @@ smart_gui <- function(){
   gbutton("Open\nLFD\nViewer", container = fis_g_top, handler = function(h,...){
 
     temp_dia <- gwindow(title="Fishery Length Frequency Distribution Viewer", visible = FALSE,
-                        parent = main_win, width = 600, height = 500)
+                        parent = main_win, width = 800, height = 500)
 
     pop_g <- ggroup(horizontal = FALSE, container = temp_dia, label = "Population")
     pop_g_top <- gframe(horizontal = TRUE, container = pop_g, spacing = 10)
@@ -1813,7 +1813,7 @@ smart_gui <- function(){
 
     addSpring(lfdfra_g)
     addSpace(pop_g_top, 2)
-    pop_p <- ggraphics(container = pop_g, width = 550, height = 450, expand = TRUE)
+    pop_p <- ggraphics(container = pop_g, width = 750, height = 450, expand = TRUE)
     addSpring(pop_g_top)
 
     gbutton("Close", container = pop_g_top, handler = function(h,...){
