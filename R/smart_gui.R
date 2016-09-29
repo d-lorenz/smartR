@@ -1858,10 +1858,8 @@ smart_gui <- function(){
                                                            my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatAbsFreq"]],
                                                            my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatRelFreq"]],
                                                            my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatAbbTbl"]],
-                                                           layout_matrix = rbind(c(NA,1,1,1),
-                                                                                 c(4,1,1,1),
-                                                                                 c(4,2,2,2),
-                                                                                 c(NA,3,3,3))
+                                                           layout_matrix = rbind(c(4,1,1,2),
+                                                                                 c(4,1,1,3))
                              ))
                            })
     addSpring(spec_b)
@@ -1877,20 +1875,16 @@ smart_gui <- function(){
                                                             my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatAbsFreq"]],
                                                             my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatRelFreq"]],
                                                             my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatAbbTbl"]],
-                                                            layout_matrix = rbind(c(NA,1,1,1),
-                                                                                  c(4,1,1,1),
-                                                                                  c(4,2,2,2),
-                                                                                  c(NA,3,3,3))
+                                                            layout_matrix = rbind(c(4,1,1,2),
+                                                                                  c(4,1,1,3))
                               ))
                             }else{
                               suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSamp,
                                                             my_project$fisheryBySpecie[[spe_ind]]$plotMale[["spatAbsFreq"]],
                                                             my_project$fisheryBySpecie[[spe_ind]]$plotMale[["spatRelFreq"]],
                                                             my_project$fisheryBySpecie[[spe_ind]]$plotMale[["spatAbbTbl"]],
-                                                            layout_matrix = rbind(c(NA,1,1,1),
-                                                                                  c(4,1,1,1),
-                                                                                  c(4,2,2,2),
-                                                                                  c(NA,3,3,3))
+                                                            layout_matrix = rbind(c(4,1,1,2),
+                                                                                  c(4,1,1,3))
                               ))
                             }
                           })
@@ -1904,7 +1898,7 @@ smart_gui <- function(){
 
     addSpace(pop_g_top, 10)
 
-    pop_p <- ggraphics(container = pop_g, width = 450, height = 550, expand = TRUE)
+    pop_p <- ggraphics(container = pop_g, width = 550, height = 450, expand = TRUE)
 
     visible(temp_dia) <- TRUE
 
@@ -1915,10 +1909,8 @@ smart_gui <- function(){
                                   my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatAbsFreq"]],
                                   my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatRelFreq"]],
                                   my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatAbbTbl"]],
-                                  layout_matrix = rbind(c(NA,1,1,1),
-                                                        c(4,1,1,1),
-                                                        c(4,2,2,2),
-                                                        c(NA,3,3,3))
+                                  layout_matrix = rbind(c(4,1,1,2),
+                                                        c(4,1,1,3))
     ))
   })
 
