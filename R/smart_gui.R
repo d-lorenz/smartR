@@ -1758,7 +1758,7 @@ smart_gui <- function(){
   gbutton("Open\nLFD\nViewer", container = fis_g_top, handler = function(h,...){
 
     temp_dia <- gwindow(title="Fishery Length Frequency Distribution Viewer", visible = FALSE,
-                        parent = main_win, width = 500, height = 600)
+                        parent = main_win, width = 600, height = 500)
 
     pop_g <- ggroup(horizontal = FALSE, container = temp_dia, label = "Population")
     pop_g_top <- gframe(horizontal = TRUE, container = pop_g, spacing = 10)
@@ -1779,10 +1779,9 @@ smart_gui <- function(){
                                                            my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["histUtcLfd"]],
                                                            my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["histUtcTot"]],
                                                            my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["dotUtcSplit"]],
-                                                           layout_matrix = rbind(c(1,1,1,1),
-                                                                                 c(2,2,2,2),
-                                                                                 c(2,2,2,2),
-                                                                                 c(3,3,4,4))))
+                                                           layout_matrix = rbind(c(1,1,1,3),
+                                                                                 c(2,2,2,4),
+                                                                                 c(2,2,2,4))))
                            })
     addSpring(spec_b)
     sex_b <- gframe("Sex", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
@@ -1797,26 +1796,25 @@ smart_gui <- function(){
                                                             my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["histUtcLfd"]],
                                                             my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["histUtcTot"]],
                                                             my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["dotUtcSplit"]],
-                                                            layout_matrix = rbind(c(1,1,1,1),
-                                                                                  c(2,2,2,2),
-                                                                                  c(2,2,2,2),
-                                                                                  c(3,3,4,4))))
+                                                            layout_matrix = rbind(c(1,1,1,3),
+                                                                                  c(2,2,2,4),
+                                                                                  c(2,2,2,4))))
                             }else{
                               suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[spe_ind]]$plotMale[["histLfdTot"]],
                                                             my_project$fisheryBySpecie[[spe_ind]]$plotMale[["histUtcLfd"]],
                                                             my_project$fisheryBySpecie[[spe_ind]]$plotMale[["histUtcTot"]],
                                                             my_project$fisheryBySpecie[[spe_ind]]$plotMale[["dotUtcSplit"]],
-                                                            layout_matrix = rbind(c(1,1,1,1),
-                                                                                  c(2,2,2,2),
-                                                                                  c(2,2,2,2),
-                                                                                  c(3,3,4,4))))
+                                                            layout_matrix = rbind(c(1,1,1,3),
+                                                                                  c(2,2,2,4),
+                                                                                  c(2,2,2,4))))
                             }
                           })
     addSpring(sex_b)
 
     addSpring(lfdfra_g)
     addSpace(pop_g_top, 2)
-    pop_p <- ggraphics(container = pop_g, width = 450, height = 550, expand = TRUE)
+    pop_p <- ggraphics(container = pop_g, width = 550, height = 450, expand = TRUE)
+    addSpring(pop_g_top)
 
     gbutton("Close", container = pop_g_top, handler = function(h,...){
       dispose(temp_dia)
@@ -1831,10 +1829,9 @@ smart_gui <- function(){
                                   my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["histUtcLfd"]],
                                   my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["histUtcTot"]],
                                   my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["dotUtcSplit"]],
-                                  layout_matrix = rbind(c(1,1,1,1),
-                                                        c(2,2,2,2),
-                                                        c(2,2,2,2),
-                                                        c(3,3,4,4))))
+                                  layout_matrix = rbind(c(1,1,1,3),
+                                                        c(2,2,2,4),
+                                                        c(2,2,2,4))))
   })
 
   addSpring(fis_g_top)
@@ -1842,7 +1839,7 @@ smart_gui <- function(){
   gbutton("View\nSpatial\nDistribution", container = fis_g_top, handler = function(h,...){
 
     temp_dia <- gwindow(title="Spatial Distribution of Fishery sampling", visible = FALSE,
-                        parent = main_win, width = 500, height = 600)
+                        parent = main_win, width = 600, height = 500)
 
     pop_g <- ggroup(horizontal = FALSE, container = temp_dia)
 
