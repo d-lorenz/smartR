@@ -1858,7 +1858,7 @@ smart_gui <- function(){
                              spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
 
                              suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSamp,
-                                                           my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatAbbFreq"]],
+                                                           my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatAbsFreq"]],
                                                            my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatRelFreq"]],
                                                            my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatAbbTbl"]],
                                                            layout_matrix = rbind(c(NA,1,1,1),
@@ -1877,7 +1877,7 @@ smart_gui <- function(){
                             spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
                             if(svalue(sex_b) == "Female"){
                               suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSamp,
-                                                            my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatAbbFreq"]],
+                                                            my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatAbsFreq"]],
                                                             my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatRelFreq"]],
                                                             my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatAbbTbl"]],
                                                             layout_matrix = rbind(c(NA,1,1,1),
@@ -1887,7 +1887,7 @@ smart_gui <- function(){
                               ))
                             }else{
                               suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSamp,
-                                                            my_project$fisheryBySpecie[[spe_ind]]$plotMale[["spatAbbFreq"]],
+                                                            my_project$fisheryBySpecie[[spe_ind]]$plotMale[["spatAbsFreq"]],
                                                             my_project$fisheryBySpecie[[spe_ind]]$plotMale[["spatRelFreq"]],
                                                             my_project$fisheryBySpecie[[spe_ind]]$plotMale[["spatAbbTbl"]],
                                                             layout_matrix = rbind(c(NA,1,1,1),
@@ -1915,7 +1915,7 @@ smart_gui <- function(){
 
     # my_project$plotGooSpe(whiSpe = "All", whiSou = "Fishery")
     suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSamp,
-                                  my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatAbbFreq"]],
+                                  my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatAbsFreq"]],
                                   my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatRelFreq"]],
                                   my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatAbbTbl"]],
                                   layout_matrix = rbind(c(NA,1,1,1),
