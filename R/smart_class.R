@@ -2100,7 +2100,7 @@ SampleMap <- R6Class("sampleMap",
                                           colour = "grey10", size = 0.1, alpha = 0.8) +
                              lims(x = extendrange(plotRange[1:2]),
                                   y = extendrange(plotRange[3:4])) +
-                             theme(legend.position = "left",
+                             theme(legend.position = "right",
                                    axis.text.x = element_text(size = 5),
                                    axis.title.x = element_text(size = 7),
                                    axis.text.y = element_text(size = 5),
