@@ -2105,6 +2105,8 @@ SampleMap <- R6Class("sampleMap",
                                    axis.title.x = element_text(size = 7),
                                    axis.text.y = element_text(size = 5),
                                    legend.key.size = unit(0.5, "cm"),
+                                   legend.text = element_text(size = 4),
+                                   legend.title = element_text(size = 5),
                                    axis.title.y = element_text(size = 7)) +
                              geom_jitter(data = rawSampCoo[,c("Lon","Lat","Specie")],
                                          aes(x = Lon, y = Lat, shape = Specie, color = Specie),
