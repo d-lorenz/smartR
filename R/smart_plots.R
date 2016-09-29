@@ -94,13 +94,12 @@ set_spatAbsFreq <- function(inSpat){
       theme_tufte(base_size = 14, ticks = F) +
       geom_bar(width = 0.45, fill = "gray35", stat = "identity") +
       scale_y_continuous(breaks = pretty(inSpat$Freq, n = 5)) +
-      annotate("text", x = Inf, y = Inf,
-               hjust = 1, vjust = 1, family="serif", size = 4,
-               label = c("Absolute number of obsevartions\nin each fishing ground")) +
+      ggtitle("Absolute number of obsevartions in each fishing ground") +
       annotate("text", x = 1:nrow(inSpat), y = inSpat$Freq+max(inSpat$Freq)/20,
                hjust = 0.5, family="serif", size = 3,
                label = ifelse(inSpat$Freq == 0, "", inSpat$Freq)) +
       theme(legend.position = "none",
+            title = element_text(size = 10),
             panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
             axis.title = element_blank(),
             axis.text.x = element_text(size = 5),
@@ -117,14 +116,13 @@ set_spatRelFreq <- function(inSpat){
       theme_tufte(base_size = 14, ticks = F) +
       geom_bar(width = 0.45, fill = "gray35", stat = "identity") +
       scale_y_continuous(breaks = pretty(inSpat$relFreq, n = 5)) +
-      annotate("text", x = Inf, y = Inf,
-               hjust = 1, vjust = 1, family="serif", size = 4,
-               label = c("Relative number of obsevartions\nin each fishing ground")) +
+      ggtitle("Relative number of obsevartions in each fishing ground") +
       annotate("text", x = 1:nrow(inSpat), y = inSpat$relFreq+max(inSpat$relFreq)/20,
                hjust = 0.5, family="serif", size = 3,
                label = ifelse(inSpat$relFreq == 0, "", inSpat$relFreq)) +
       theme(legend.position = "none",
             panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+            title = element_text(size = 10),
             axis.title = element_blank(),
             axis.text.x = element_text(size = 5),
             axis.title.x = element_blank(),
