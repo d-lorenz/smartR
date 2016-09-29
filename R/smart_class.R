@@ -1196,7 +1196,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                              },
                              setSpatDistSing = function(){
                                for(sex in c("Female", "Male")){
-                                 tmp_fishSpat <- rawLFD[!is.na(rawLFD$numFG),c("Lon","Lat", "numFG", sex)]
+                                 tmp_fishSpat <- rawLFD[!is.na(rawLFD$numFG) & rawLFD[,sex] > 0,c("Lon","Lat", "numFG", sex)]
 
                                  barploFgAll <- data.frame(table(tmp_fishSpat$numFG))
                                  barploFgAll <- barploFgAll[order(as.numeric(as.character(barploFgAll[,1]))),]
