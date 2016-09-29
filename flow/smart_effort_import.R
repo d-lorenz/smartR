@@ -532,10 +532,8 @@ suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSamp,
                               my_project$fisheryBySpecie[[1]]$plotFemale[["spatAbbFreq"]],
                               my_project$fisheryBySpecie[[1]]$plotFemale[["spatRelFreq"]],
                               my_project$fisheryBySpecie[[1]]$plotFemale[["spatAbbTbl"]],
-                              layout_matrix = rbind(c(NA,1,1,1),
-                                                    c(4,1,1,1),
-                                                    c(4,2,2,2),
-                                                    c(NA,3,3,3))
+                              layout_matrix = rbind(c(4,1,1,2),
+                                                    c(4,1,1,3))
 ))
 ###
 
