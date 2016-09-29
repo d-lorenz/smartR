@@ -1792,7 +1792,7 @@ smart_gui <- function(){
                           selected = 1, container = sex_b, expand = TRUE,
                           editable = FALSE, handler = function(h,...){
                             spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
-                            if(svalue(sex_b) == "Female"){
+                            if(svalue(sex_drop) == "Female"){
                               suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["histLfdTot"]],
                                                             my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["histUtcLfd"]],
                                                             my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["histUtcTot"]],
@@ -1875,7 +1875,7 @@ smart_gui <- function(){
                           selected = 1, container = sex_b, expand = TRUE,
                           editable = FALSE, handler = function(h,...){
                             spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
-                            if(svalue(sex_b) == "Female"){
+                            if(svalue(sex_drop) == "Female"){
                               suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSamp,
                                                             my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatAbsFreq"]],
                                                             my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatRelFreq"]],
