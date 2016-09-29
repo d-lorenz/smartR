@@ -1775,10 +1775,10 @@ smart_gui <- function(){
 
                              spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
                              svalue(sex_drop) <- "Female"
-                             suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histLfdTot"]],
-                                                           my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histUtcLfd"]],
-                                                           my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histUtcTot"]],
-                                                           my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["dotUtcSplit"]],
+                             suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["histLfdTot"]],
+                                                           my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["histUtcLfd"]],
+                                                           my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["histUtcTot"]],
+                                                           my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["dotUtcSplit"]],
                                                            layout_matrix = rbind(c(1,1,1,1),
                                                                                  c(2,2,2,2),
                                                                                  c(2,2,2,2),
@@ -1793,19 +1793,19 @@ smart_gui <- function(){
                           editable = FALSE, handler = function(h,...){
                             spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
                             if(svalue(sex_b) == "Female"){
-                              suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histLfdTot"]],
-                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histUtcLfd"]],
-                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histUtcTot"]],
-                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["dotUtcSplit"]],
+                              suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["histLfdTot"]],
+                                                            my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["histUtcLfd"]],
+                                                            my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["histUtcTot"]],
+                                                            my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["dotUtcSplit"]],
                                                             layout_matrix = rbind(c(1,1,1,1),
                                                                                   c(2,2,2,2),
                                                                                   c(2,2,2,2),
                                                                                   c(3,3,4,4))))
                             }else{
-                              suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotMale[["histLfdTot"]],
-                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotMale[["histUtcLfd"]],
-                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotMale[["histUtcTot"]],
-                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotMale[["dotUtcSplit"]],
+                              suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[spe_ind]]$plotMale[["histLfdTot"]],
+                                                            my_project$fisheryBySpecie[[spe_ind]]$plotMale[["histUtcLfd"]],
+                                                            my_project$fisheryBySpecie[[spe_ind]]$plotMale[["histUtcTot"]],
+                                                            my_project$fisheryBySpecie[[spe_ind]]$plotMale[["dotUtcSplit"]],
                                                             layout_matrix = rbind(c(1,1,1,1),
                                                                                   c(2,2,2,2),
                                                                                   c(2,2,2,2),
@@ -1825,11 +1825,12 @@ smart_gui <- function(){
     addSpring(pop_g_top)
 
     visible(temp_dia) <- TRUE
+    spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
 
-    suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histLfdTot"]],
-                                  my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histUtcLfd"]],
-                                  my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["histUtcTot"]],
-                                  my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["dotUtcSplit"]],
+    suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["histLfdTot"]],
+                                  my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["histUtcLfd"]],
+                                  my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["histUtcTot"]],
+                                  my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["dotUtcSplit"]],
                                   layout_matrix = rbind(c(1,1,1,1),
                                                         c(2,2,2,2),
                                                         c(2,2,2,2),
@@ -1851,14 +1852,15 @@ smart_gui <- function(){
     spec_b <- gframe("Specie", horizontal = FALSE, container = pop_g_top, expand = TRUE)
 
     addSpring(spec_b)
-    spec_drop <- gcombobox(items = as.character(my_project$specieInFishery), selected = 2,
+    spec_drop <- gcombobox(items = as.character(my_project$specieInFishery), selected = 1,
                            container = spec_b, editable = FALSE, handler = function(h,...){
                              # my_project$plotGooSpe(whiSpe = svalue(spec_drop), whiSou = "Fishery")
+                             spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
 
                              suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSamp,
-                                                           my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["spatAbbFreq"]],
-                                                           my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["spatRelFreq"]],
-                                                           my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["spatAbbTbl"]],
+                                                           my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatAbbFreq"]],
+                                                           my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatRelFreq"]],
+                                                           my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatAbbTbl"]],
                                                            layout_matrix = rbind(c(NA,1,1,1),
                                                                                  c(4,1,1,1),
                                                                                  c(4,2,2,2),
@@ -1875,9 +1877,9 @@ smart_gui <- function(){
                             spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
                             if(svalue(sex_b) == "Female"){
                               suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSamp,
-                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["spatAbbFreq"]],
-                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["spatRelFreq"]],
-                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["spatAbbTbl"]],
+                                                            my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatAbbFreq"]],
+                                                            my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatRelFreq"]],
+                                                            my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatAbbTbl"]],
                                                             layout_matrix = rbind(c(NA,1,1,1),
                                                                                   c(4,1,1,1),
                                                                                   c(4,2,2,2),
@@ -1885,9 +1887,9 @@ smart_gui <- function(){
                               ))
                             }else{
                               suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSamp,
-                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotMale[["spatAbbFreq"]],
-                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotMale[["spatRelFreq"]],
-                                                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotMale[["spatAbbTbl"]],
+                                                            my_project$fisheryBySpecie[[spe_ind]]$plotMale[["spatAbbFreq"]],
+                                                            my_project$fisheryBySpecie[[spe_ind]]$plotMale[["spatRelFreq"]],
+                                                            my_project$fisheryBySpecie[[spe_ind]]$plotMale[["spatAbbTbl"]],
                                                             layout_matrix = rbind(c(NA,1,1,1),
                                                                                   c(4,1,1,1),
                                                                                   c(4,2,2,2),
@@ -1909,11 +1911,13 @@ smart_gui <- function(){
 
     visible(temp_dia) <- TRUE
 
+    spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
+
     # my_project$plotGooSpe(whiSpe = "All", whiSou = "Fishery")
     suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSamp,
-                                  my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["spatAbbFreq"]],
-                                  my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["spatRelFreq"]],
-                                  my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop))]]$plotFemale[["spatAbbTbl"]],
+                                  my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatAbbFreq"]],
+                                  my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatRelFreq"]],
+                                  my_project$fisheryBySpecie[[spe_ind]]$plotFemale[["spatAbbTbl"]],
                                   layout_matrix = rbind(c(NA,1,1,1),
                                                         c(4,1,1,1),
                                                         c(4,2,2,2),
