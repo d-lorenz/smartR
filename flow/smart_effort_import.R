@@ -568,7 +568,7 @@ my_sampling$fisheryBySpecie[[1]]$setNCoho(7)
 
 modelGomGro
 
-modelGomGro <- system.file("inst/model/gompGrow.jags", package = "smartR")
+modelGomGro <- paste(system.file("", package = "smartR"), "inst/model/gompGrow.jags", sep = "")
 ###
 
 ######
@@ -581,6 +581,8 @@ Nsamp <- 500
 
 outPalette <- rainbow(Nclust)
 
+
+###
 sub_idx <- sample(1:nrow(spreFemale), size = Nsamp)
 sub_data <- spreFemale[sub_idx,]
 
