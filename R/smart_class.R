@@ -1230,6 +1230,227 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                #                 'Male' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)))
                                # for(sex in c("Female", "Male")){ }
 
+                               ######
+                               ### FishBase data
+                               mut_popgrowth <- popgrowth("Mullus barbatus barbatus")
+                               ###
+
+                               sub_idx <- sample(1:nrow(spreFemale), size = Nsamp)
+                               sub_data <- spreFemale[sub_idx,]
+
+                               N <- length(sub_data$Length)
+                               alpha = rep(1, Nclust)
+                               Z = rep(NA, N)
+                               Z[which.min(sub_data$Length)] = 1
+                               Z[which.max(sub_data$Length)] = Nclust
+
+                               dataList <- list(y = sub_data$Length,
+                                                maxLeng = max(sub_data$Length),         ## !!!
+                                                alpha = alpha,
+                                                Z = Z,
+                                                N = N,
+                                                Nclust = Nclust)
+
+                               inits = list(list(Linf = max(sub_data$Length), k = 0.5, t0 = 0.0),
+                                            list(Linf = max(sub_data$Length), k = 0.5, t0 = 0.0),
+                                            list(Linf = max(sub_data$Length), k = 0.5, t0 = 0.0))
+
+                               tt = as.POSIXlt(chron(spreFemale$UTC))$yday / 366
+
+                               ######
+                               ### MCMC model setup
+                               n.adapt <- 500
+                               jags.m <- jags.model(textConnection(modelGomGro),
+                                                    data = dataList,
+                                                    inits = inits,
+                                                    n.chains = 3,
+                                                    n.adapt = n.adapt)
+                               ###
+
+                               ######
+                               ### MCMC chain sampling
+                               n.iter <- 500
+                               obsNode <- c('Linf', 'k', 't0', 'tau', 'p')
+                               samps <- coda.samples(jags.m, obsNode, n.iter = n.iter)
+                               ###
+
+                               ######
+                               ### MCMC estimates
+                               vecLinf <- as.matrix(samps[,"Linf"])
+                               vecKapp <- as.matrix(samps[,"k"])
+                               vecTzer <- as.matrix(samps[,"t0"])
+                               LHat = mean(vecLinf)
+                               kHat = mean(vecKapp)
+                               t0Hat = mean(vecTzer)
+                               taus <- as.matrix(samps[,grep("tau" ,varnames(samps))])
+                               sigma2s = 1/taus
+                               sigma2Hat = apply(sigma2s, 2, mean)
+                               pArray <- do.call(rbind, samps[,grep("p" ,varnames(samps))])
+                               pHat <- matrix(apply(pArray, 2, mean), byrow = FALSE, ncol = Nclust)
+                               ###
+
+                               ######
+                               ### MCMC chain trace
+                               dfLinf <- data.frame(Parameter = "Linf",
+                                                    Iter = 1:n.iter,
+                                                    Chain = as.matrix(samps[,"Linf"], chains = TRUE)[,1],
+                                                    Value = as.matrix(samps[,"Linf"], chains = TRUE)[,2])
+                               dfKapp <- data.frame(Parameter = "Kappa",
+                                                    Iter = 1:n.iter,
+                                                    Chain = as.matrix(samps[,"k"], chains = TRUE)[,1],
+                                                    Value = as.matrix(samps[,"k"], chains = TRUE)[,2])
+                               dfTzer <- data.frame(Parameter = "t0",
+                                                    Iter = 1:n.iter,
+                                                    Chain = as.matrix(samps[,"t0"], chains = TRUE)[,1],
+                                                    Value = as.matrix(samps[,"t0"], chains = TRUE)[,2])
+                               ###
+
+                               ######
+                               ### MCMC chain Traceplot
+                               ggdataSamps <- rbind(dfLinf, dfKapp)
+
+                               traceChain <- suppressMessages(
+                                 ggplot(data = ggdataSamps,
+                                        mapping = aes(x = Iter, y = Value, color = factor(Chain)))+
+                                   geom_line(alpha = 0.7) +
+                                   facet_wrap(~ Parameter, nrow = 3, ncol = 1, scales = "free", switch = "y") +
+                                   scale_color_brewer(palette = "Dark2", "Chain") +
+                                   theme_tufte(base_size = 14, ticks = F) +
+                                   theme(title = element_text(size = 10),
+                                         legend.position = "none",
+                                         legend.title = element_text(size = 7),
+                                         panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+                                         axis.text.x = element_text(size = 6),
+                                         axis.title.x = element_blank(),
+                                         axis.text.y = element_text(size = 6),
+                                         axis.title.y = element_blank(),
+                                         axis.ticks.y = element_blank())
+                               )
+                               ###
+
+                               ######
+                               ### MCMC chain scatterplot
+                               ggdataSampScat <- cbind(dfLinf[,2:3], Linf = dfLinf[,4], Kappa = dfKapp[,4])
+
+
+                               # IF mut_popgrowth
+                               scatLK <- suppressMessages(
+                                 ggplot()+
+                                   geom_point(data = ggdataSampScat,
+                                              mapping = aes(x = Linf, y = Kappa, color = factor(Chain)),
+                                              size = 0.25, alpha = 0.25) +
+                                   annotate("point", x = mut_popgrowth$Loo, y = mut_popgrowth$K, color = "grey25", size = 0.7) +
+                                   annotate("point", x = LHat, y = kHat, color = "goldenrod1",
+                                            shape = 42, size = 12, alpha = 0.9) +
+                                   annotate("point", x = mean(mut_popgrowth$Loo), y = mean(mut_popgrowth$K), color = "firebrick",
+                                            shape = 20, size = 5, alpha = 0.9) +
+                                   annotate("text", x = Inf, y = Inf, label = paste("LHat = ", round(LHat, 2), "\nKHat = ", round(kHat, 3), sep = ""), hjust = 1, vjust = 1, color = "goldenrod1", fontface = "bold") +
+                                   scale_color_brewer(palette = "Dark2", "Chain") +
+                                   theme_tufte(base_size = 14, ticks = F) +
+                                   theme(legend.position = "top",
+                                         legend.title = element_text(size = 9),
+                                         panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+                                         axis.text.x = element_text(size = 6),
+                                         axis.title.x = element_text(size = 8),
+                                         axis.text.y = element_text(size = 6),
+                                         axis.title.y = element_text(size = 8),
+                                         axis.ticks.y = element_blank()) +
+                                   guides(colour = guide_legend(override.aes = list(size = 3,
+                                                                                    alpha = 0.9,
+                                                                                    fill = NA)))
+                               )
+                               ###
+
+                               ######
+                               ### MCMC chain Boxplot Tau
+                               cohoPreci <- melt(taus[,1:(max(AA)+1)])
+                               names(cohoPreci) <- c("Iter", "Cohort", "Value")
+                               cohoPreci$Cohort <- factor(as.numeric(cohoPreci$Cohort), levels = 1:(Nclust))
+                               stsPreci <- boxplot.stats(cohoPreci$Value)$stats ## from: http://stackoverflow.com/questions/21533158/remove-outliers-fully-from-multiple-boxplots-made-with-ggplot2-in-r-and-display
+
+                               cohoPreciGG <- suppressMessages(
+                                 ggplot(cohoPreci, aes(x = Cohort, y = Value, fill = Cohort)) +
+                                   geom_boxplot(alpha = 0.6, outlier.color = "grey30", outlier.size = 0.35, notch = TRUE) +
+                                   ggtitle("Precision") +
+                                   scale_x_discrete(labels = 0:(Nclust-1)) +
+                                   scale_fill_manual(values = outPalette) +
+                                   theme_tufte(base_size = 14, ticks = FALSE) +
+                                   theme(legend.position = "none",
+                                         title = element_text(size = 9),
+                                         panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+                                         axis.text.x = element_text(size = 8),
+                                         axis.title.x = element_text(size = 8),
+                                         axis.text.y = element_text(size = 8),
+                                         axis.title.y = element_blank()) +
+                                   coord_cartesian(ylim = c(stsPreci[2]/2,max(stsPreci)*1.25)) ## from: http://stackoverflow.com/questions/21533158/remove-outliers-fully-from-multiple-boxplots-made-with-ggplot2-in-r-and-display
+
+                               )
+                               ###
+
+                               ######
+                               ### MCMC Boxplot Sigma
+
+                               cohoVari <- melt(sqrt(sigma2s[,1:(max(AA)+1)]))
+                               names(cohoVari) <- c("Iter", "Cohort", "Value")
+                               cohoVari$Cohort <- factor(as.numeric(cohoVari$Cohort), levels = 1:(Nclust))
+                               stsVari <- boxplot.stats(cohoVari$Value)$stats ## from: http://stackoverflow.com/questions/21533158/remove-outliers-fully-from-multiple-boxplots-made-with-ggplot2-in-r-and-display
+
+                               cohoVariGG <- suppressMessages(
+                                 ggplot(cohoVari, aes(x = Cohort, y = Value, fill = Cohort)) +
+                                   geom_boxplot(alpha = 0.6, outlier.color = "grey30", outlier.size = 0.35, notch = TRUE) +
+                                   ggtitle("SD") +
+                                   scale_x_discrete(labels = 0:(Nclust-1)) +
+                                   scale_fill_manual(values = outPalette) +
+                                   theme_tufte(base_size = 14, ticks = FALSE) +
+                                   theme(legend.position = "none",
+                                         title = element_text(size = 9),
+                                         panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+                                         axis.text.x = element_text(size = 8),
+                                         axis.title.x = element_text(size = 8),
+                                         axis.text.y = element_text(size = 8),
+                                         axis.title.y = element_blank()) +
+                                   coord_cartesian(ylim = c(stsVari[2]/2,max(stsVari)*1.25)) ## from: http://stackoverflow.com/questions/21533158/remove-outliers-fully-from-multiple-boxplots-made-with-ggplot2-in-r-and-display
+
+                               )
+                               ###
+
+                               ageSeq <- seq(0, Nclust, by = 0.1)
+
+                               fishBaseMut <- data.frame(exp = 1,
+                                                         Age = ageSeq,
+                                                         Length = calcGomp(elle = mut_popgrowth$Loo[1],
+                                                                           kappa = mut_popgrowth$K[1],
+                                                                           ageVector = ageSeq))
+                               for(i in 2:nrow(mut_popgrowth)){
+                                 fishBaseMut <- rbind(fishBaseMut, data.frame(exp = i, Age = ageSeq, Length = calcGomp(elle = mut_popgrowth$Loo[i], kappa = mut_popgrowth$K[i], ageVector = ageSeq)))
+                               }
+
+                               groCurv <- suppressMessages(
+                                 ggplot() +
+                                   geom_path(data = fishBaseMut,
+                                             mapping = aes(x = Age, y = Length, group = factor(exp)),
+                                             size = 0.4, color = "grey25", alpha = 0.3) +
+                                   annotate("line", x = ageSeq, y = calcGomp(mean(mut_popgrowth$Loo), mean(mut_popgrowth$K), ageSeq), color = "firebrick", linetype = 2, size = 1, alpha = 0.6) +
+                                   annotate("line", x = ageSeq, y = calcGomp(LHat, kHat, ageSeq), color = "goldenrod1", linetype = 1, size = 1.5, alpha = 0.8) +
+                                   theme_tufte(base_size = 14, ticks = F) +
+                                   theme(legend.position = "bottom",
+                                         legend.title = element_text(size = 8),
+                                         panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+                                         axis.text.x = element_text(size = 7),
+                                         axis.title.x = element_text(size = 9),
+                                         axis.text.y = element_text(size = 7),
+                                         axis.title.y = element_text(size = 9))
+                               )
+
+                               suppressWarnings(grid.arrange(traceChain,
+                                                             scatLK,
+                                                             groCurv,
+                                                             cohoPreciGG,
+                                                             cohoVariGG,
+                                                             layout_matrix = rbind(c(1,1),
+                                                                                   c(2,NA),
+                                                                                   c(3,4))
+                               ))
 
 
 
