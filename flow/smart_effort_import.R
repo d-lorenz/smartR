@@ -567,6 +567,8 @@ my_sampling$fisheryBySpecie[[1]]$setNCoho(7)
 ### MCMC model definition
 
 modelGomGro
+
+modelGomGro <- system.file("inst/model/gompGrow.jags", package = "smartR")
 ###
 
 ######
