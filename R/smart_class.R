@@ -1235,21 +1235,21 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                mut_popgrowth <- popgrowth("Mullus barbatus barbatus")
                                ###
 
-                               sub_idx <- sample(1:nrow(spreFemale), size = Nsamp)
+                               sub_idx <- sample(1:nrow(spreFemale), size = nSamp)
                                sub_data <- spreFemale[sub_idx,]
 
                                N <- length(sub_data$Length)
-                               alpha = rep(1, Nclust)
+                               alpha = rep(1, nCoho)
                                Z = rep(NA, N)
                                Z[which.min(sub_data$Length)] = 1
-                               Z[which.max(sub_data$Length)] = Nclust
+                               Z[which.max(sub_data$Length)] = nCoho
 
                                dataList <- list(y = sub_data$Length,
                                                 maxLeng = max(sub_data$Length),         ## !!!
                                                 alpha = alpha,
                                                 Z = Z,
                                                 N = N,
-                                                Nclust = Nclust)
+                                                Nclust = nCoho)
 
                                inits = list(list(Linf = max(sub_data$Length), k = 0.5, t0 = 0.0),
                                             list(Linf = max(sub_data$Length), k = 0.5, t0 = 0.0),
@@ -1259,12 +1259,14 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 
                                ######
                                ### MCMC model setup
-                               n.adapt <- 500
-                               jags.m <- jags.model(textConnection(modelGomGro),
+                               # n.adapt <- 500
+                               modelGomGro <- paste(system.file("", package = "smartR"), "inst/model/gompGrow.jags", sep = "")
+
+                               jags.m <- jags.model(modelGomGro,
                                                     data = dataList,
                                                     inits = inits,
                                                     n.chains = 3,
-                                                    n.adapt = n.adapt)
+                                                    n.adapt = nAdap)
                                ###
 
                                ######
@@ -1286,7 +1288,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                sigma2s = 1/taus
                                sigma2Hat = apply(sigma2s, 2, mean)
                                pArray <- do.call(rbind, samps[,grep("p" ,varnames(samps))])
-                               pHat <- matrix(apply(pArray, 2, mean), byrow = FALSE, ncol = Nclust)
+                               pHat <- matrix(apply(pArray, 2, mean), byrow = FALSE, ncol = nCoho)
                                ###
 
                                ######
@@ -1365,14 +1367,14 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                ### MCMC chain Boxplot Tau
                                cohoPreci <- melt(taus[,1:(max(AA)+1)])
                                names(cohoPreci) <- c("Iter", "Cohort", "Value")
-                               cohoPreci$Cohort <- factor(as.numeric(cohoPreci$Cohort), levels = 1:(Nclust))
+                               cohoPreci$Cohort <- factor(as.numeric(cohoPreci$Cohort), levels = 1:(nCoho))
                                stsPreci <- boxplot.stats(cohoPreci$Value)$stats ## from: http://stackoverflow.com/questions/21533158/remove-outliers-fully-from-multiple-boxplots-made-with-ggplot2-in-r-and-display
 
                                cohoPreciGG <- suppressMessages(
                                  ggplot(cohoPreci, aes(x = Cohort, y = Value, fill = Cohort)) +
                                    geom_boxplot(alpha = 0.6, outlier.color = "grey30", outlier.size = 0.35, notch = TRUE) +
                                    ggtitle("Precision") +
-                                   scale_x_discrete(labels = 0:(Nclust-1)) +
+                                   scale_x_discrete(labels = 0:(nCoho-1)) +
                                    scale_fill_manual(values = outPalette) +
                                    theme_tufte(base_size = 14, ticks = FALSE) +
                                    theme(legend.position = "none",
@@ -1392,14 +1394,14 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 
                                cohoVari <- melt(sqrt(sigma2s[,1:(max(AA)+1)]))
                                names(cohoVari) <- c("Iter", "Cohort", "Value")
-                               cohoVari$Cohort <- factor(as.numeric(cohoVari$Cohort), levels = 1:(Nclust))
+                               cohoVari$Cohort <- factor(as.numeric(cohoVari$Cohort), levels = 1:(nCoho))
                                stsVari <- boxplot.stats(cohoVari$Value)$stats ## from: http://stackoverflow.com/questions/21533158/remove-outliers-fully-from-multiple-boxplots-made-with-ggplot2-in-r-and-display
 
                                cohoVariGG <- suppressMessages(
                                  ggplot(cohoVari, aes(x = Cohort, y = Value, fill = Cohort)) +
                                    geom_boxplot(alpha = 0.6, outlier.color = "grey30", outlier.size = 0.35, notch = TRUE) +
                                    ggtitle("SD") +
-                                   scale_x_discrete(labels = 0:(Nclust-1)) +
+                                   scale_x_discrete(labels = 0:(nCoho-1)) +
                                    scale_fill_manual(values = outPalette) +
                                    theme_tufte(base_size = 14, ticks = FALSE) +
                                    theme(legend.position = "none",
@@ -1414,7 +1416,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                )
                                ###
 
-                               ageSeq <- seq(0, Nclust, by = 0.1)
+                               ageSeq <- seq(0, nCoho, by = 0.1)
 
                                fishBaseMut <- data.frame(exp = 1,
                                                          Age = ageSeq,
