@@ -1,5 +1,75 @@
 
 
+calcGomp <- function(elle, kappa, ageVector){
+  return(elle *  exp(-(1/kappa * exp(-kappa * ageVector))))
+}
+
+
+calcVonBert <- function(elle, kappa, ageVector){
+  return(elle * (1 - exp(-kappa * ageVector)))
+}
+
+
+modelGomGro <- paste('model{
+                   # Likelihood:
+                     for(i in 1:N){
+                     y[i] ~ dnorm(mean[i], tau[Z[i]])
+
+                     # Gompertz
+                     mean[i] <- Linf * exp(-(1/k * exp(-k * Age[i])))
+
+                     # VonBertalanfy
+                     # mean[i] <- Linf * (1 - exp(-k * (Age[i])))
+
+                     Age[i] <- Z[i] - 1 - t0
+                     Z[i] ~ dcat(p[1:Nclust])
+                     }
+
+                     # Prior:
+                     Linf ~ dnorm(0.0, 1E-6) I(maxLeng, )
+                     k ~ dnorm(0.0, 1E-6) I(0, )
+                     t0 ~ dnorm(0.0, 1E-6) I(0, )
+
+                     p[1:Nclust] ~ ddirch(alpha)
+
+                     for(clustIdx in 1:Nclust){
+                     tau0[clustIdx] ~ dgamma(1.0E-4, 1.0E-4)
+                     }
+                     tauS[1:Nclust] <- sort(tau0)
+                     for(NumCoho in 1:Nclust){
+                     tau[NumCoho] <- tauS[Nclust-NumCoho+1]
+                     }
+                     }', sep = "")
+
+modelBerGro <- paste('model{
+                   # Likelihood:
+                     for(i in 1:N){
+                     y[i] ~ dnorm(mean[i], tau[Z[i]])
+
+                     # VonBertalanfy
+                     mean[i] <- Linf * (1 - exp(-k * (Age[i])))
+
+                     Age[i] <- Z[i] - 1 - t0
+                     Z[i] ~ dcat(p[1:Nclust])
+                     }
+
+                     # Prior:
+                     Linf ~ dnorm(0.0, 1E-6) I(maxLeng, )
+                     k ~ dnorm(0.0, 1E-6) I(0, )
+                     t0 ~ dnorm(0.0, 1E-6) I(0, )
+
+                     p[1:Nclust] ~ ddirch(alpha)
+
+                     for(clustIdx in 1:Nclust){
+                     tau0[clustIdx] ~ dgamma(1.0E-4, 1.0E-4)
+                     }
+                     tauS[1:Nclust] <- sort(tau0)
+                     for(NumCoho in 1:Nclust){
+                     tau[NumCoho] <- tauS[Nclust-NumCoho+1]
+                     }
+                     }', sep = "")
+
+
 RecLFD <- function(MAT,RANGE,NH){
   vecL <- matrix(0,2,length(RANGE))
   colnames(vecL) <- as.character(RANGE)
