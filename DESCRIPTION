@@ -52,5 +52,7 @@ Imports:
     mtsdi,
     gridExtra,
     rgeos,
-    scales
+    scales,
+    grDevices,
+    ggthemes
 RoxygenNote: 5.0.1
