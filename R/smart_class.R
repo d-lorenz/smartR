@@ -1360,29 +1360,9 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 
                                ######
                                ### MCMC Boxplot Sigma
-
-                               cohoVari <- melt(sqrt(sigma2s[,1:(max(AA)+1)]))
-                               names(cohoVari) <- c("Iter", "Cohort", "Value")
-                               cohoVari$Cohort <- factor(as.numeric(cohoVari$Cohort), levels = 1:(nCoho))
-                               stsVari <- boxplot.stats(cohoVari$Value)$stats ## from: http://stackoverflow.com/questions/21533158/remove-outliers-fully-from-multiple-boxplots-made-with-ggplot2-in-r-and-display
-
-                               cohoVariGG <- suppressMessages(
-                                 ggplot(cohoVari, aes(x = Cohort, y = Value, fill = Cohort)) +
-                                   geom_boxplot(alpha = 0.6, outlier.color = "grey30", outlier.size = 0.35, notch = TRUE) +
-                                   ggtitle("SD") +
-                                   scale_x_discrete(labels = 0:(nCoho-1)) +
-                                   scale_fill_manual(values = outPalette) +
-                                   theme_tufte(base_size = 14, ticks = FALSE) +
-                                   theme(legend.position = "none",
-                                         title = element_text(size = 9),
-                                         panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
-                                         axis.text.x = element_text(size = 8),
-                                         axis.title.x = element_text(size = 8),
-                                         axis.text.y = element_text(size = 8),
-                                         axis.title.y = element_blank()) +
-                                   coord_cartesian(ylim = c(stsVari[2]/2,max(stsVari)*1.25)) ## from: http://stackoverflow.com/questions/21533158/remove-outliers-fully-from-multiple-boxplots-made-with-ggplot2-in-r-and-display
-
-                               )
+                               cohoVariGG <- set_ggSigmaBox(df_sigma = sigma2s[,1:(max(AA)+1)],
+                                                            sigPalette = outPalette,
+                                                            numCoho = nCoho)
                                ###
 
                                # ageSeq <- seq(0, nCoho, by = 0.1)
