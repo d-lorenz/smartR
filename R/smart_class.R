@@ -1000,12 +1000,12 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                              nCoho = NULL,
                              prior = NULL,
                              preMix = NULL,
-                             spreFemale = NULL,
-                             spreMale = NULL,
-                             spatFemale = NULL,
-                             spatMale = NULL,
-                             plotFemale = NULL,
-                             plotMale = NULL,
+                             femaleSpre = NULL,
+                             maleSpre = NULL,
+                             femaleSpat = NULL,
+                             maleSpat = NULL,
+                             femalePlot = NULL,
+                             malePlot = NULL,
                              Coh_A = NULL,
                              Coh_A_Int = NULL,
                              # Fis_Gro = NULL,
@@ -1159,17 +1159,17 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                              },
                              setSprePlot = function(sampSex){
                                if(sampSex == "Female"){
-                                 plotFemale <<- list()
-                                 plotFemale[["histLfdTot"]] <<- set_ggHistLfdTot(spreFemale)
-                                 plotFemale[["histUtcTot"]] <<- set_ggHistUtcTot(spreFemale)
-                                 plotFemale[["dotUtcSplit"]] <<- set_ggDotUtcSplit(spreFemale)
-                                 plotFemale[["histUtcLfd"]] <<- set_ggHistUtcLfd(spreFemale)
+                                 femalePlot <<- list()
+                                 femalePlot[["histLfdTot"]] <<- set_ggHistLfdTot(femaleSpre)
+                                 femalePlot[["histUtcTot"]] <<- set_ggHistUtcTot(femaleSpre)
+                                 femalePlot[["dotUtcSplit"]] <<- set_ggDotUtcSplit(femaleSpre)
+                                 femalePlot[["histUtcLfd"]] <<- set_ggHistUtcLfd(femaleSpre)
                                }else{
-                                 plotMale <<- list()
-                                 plotMale[["histLfdTot"]] <<- set_ggHistLfdTot(spreMale)
-                                 plotMale[["histUtcTot"]] <<- set_ggHistUtcTot(spreMale)
-                                 plotMale[["dotUtcSplit"]] <<- set_ggDotUtcSplit(spreMale)
-                                 plotMale[["histUtcLfd"]] <<- set_ggHistUtcLfd(spreMale)
+                                 malePlot <<- list()
+                                 malePlot[["histLfdTot"]] <<- set_ggHistLfdTot(maleSpre)
+                                 malePlot[["histUtcTot"]] <<- set_ggHistUtcTot(maleSpre)
+                                 malePlot[["dotUtcSplit"]] <<- set_ggDotUtcSplit(maleSpre)
+                                 malePlot[["histUtcLfd"]] <<- set_ggHistUtcLfd(maleSpre)
                                }
                              },
                              setSpreDistSing = function(){
@@ -1187,9 +1187,9 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                  spreDist$Month <- months(spreDist$UTC)
 
                                  if(sex == "Female"){
-                                   spreFemale <<- spreDist
+                                   femaleSpre <<- spreDist
                                  }else{
-                                   spreMale <<- spreDist
+                                   maleSpre <<- spreDist
                                  }
                                  setSprePlot(sampSex = sex)
                                }
@@ -1204,22 +1204,22 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                  barploFgAll$relFreq = round(100*barploFgAll$Freq/sum(barploFgAll$Freq),1)
 
                                  if(sex == "Female"){
-                                   spatFemale <<- barploFgAll
+                                   femaleSpat <<- barploFgAll
                                  }else{
-                                   spatMale <<- barploFgAll
+                                   maleSpat <<- barploFgAll
                                  }
                                  setSpatPlot(sampSex = sex)
                                }
                              },
                              setSpatPlot = function(sampSex){
                                if(sampSex == "Female"){
-                                 plotFemale[["spatAbbTbl"]] <<- set_spatAbbTbl(spatFemale)
-                                 plotFemale[["spatAbsFreq"]] <<- set_spatAbsFreq(spatFemale)
-                                 plotFemale[["spatRelFreq"]] <<- set_spatRelFreq(spatFemale)
+                                 femalePlot[["spatAbbTbl"]] <<- set_spatAbbTbl(femaleSpat)
+                                 femalePlot[["spatAbsFreq"]] <<- set_spatAbsFreq(femaleSpat)
+                                 femalePlot[["spatRelFreq"]] <<- set_spatRelFreq(femaleSpat)
                                }else{
-                                 plotMale[["spatAbbTbl"]] <<- set_spatAbbTbl(spatMale)
-                                 plotMale[["spatAbsFreq"]] <<- set_spatAbsFreq(spatMale)
-                                 plotMale[["spatRelFreq"]] <<- set_spatRelFreq(spatMale)
+                                 malePlot[["spatAbbTbl"]] <<- set_spatAbbTbl(maleSpat)
+                                 malePlot[["spatAbsFreq"]] <<- set_spatAbsFreq(maleSpat)
+                                 malePlot[["spatRelFreq"]] <<- set_spatRelFreq(maleSpat)
                                }
                              },
                              setPreMix = function(){
@@ -1238,9 +1238,9 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                # ###
 
                                if(sexDrop == "Female"){
-                                 curDistri <- spreFemale
+                                 curDistri <- femaleSpre
                                }else{
-                                 curDistri <- spreMale
+                                 curDistri <- maleSpre
                                }
 
                                sub_idx <- sample(1:nrow(curDistri), size = nSamp)
@@ -1295,8 +1295,8 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                taus <- as.matrix(samps[,grep("tau" ,varnames(samps))])
                                sigma2s = 1/taus
                                sigma2Hat = apply(sigma2s, 2, mean)
-                               pArray <- do.call(rbind, samps[,grep("p" ,varnames(samps))])
-                               pHat <- matrix(apply(pArray, 2, mean), byrow = FALSE, ncol = nCoho)
+                               # pArray <- do.call(rbind, samps[,grep("p" ,varnames(samps))])
+                               # pHat <- matrix(apply(pArray, 2, mean), byrow = FALSE, ncol = nCoho)
                                ###
 
                                ######
@@ -1309,10 +1309,10 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                                     Iter = 1:n.iter,
                                                     Chain = as.matrix(samps[,"k"], chains = TRUE)[,1],
                                                     Value = as.matrix(samps[,"k"], chains = TRUE)[,2])
-                               dfTzer <- data.frame(Parameter = "t0",
-                                                    Iter = 1:n.iter,
-                                                    Chain = as.matrix(samps[,"t0"], chains = TRUE)[,1],
-                                                    Value = as.matrix(samps[,"t0"], chains = TRUE)[,2])
+                               # dfTzer <- data.frame(Parameter = "t0",
+                               #                      Iter = 1:n.iter,
+                               #                      Chain = as.matrix(samps[,"t0"], chains = TRUE)[,1],
+                               #                      Value = as.matrix(samps[,"t0"], chains = TRUE)[,2])
                                ###
 
                                ######
