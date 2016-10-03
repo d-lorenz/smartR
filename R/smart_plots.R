@@ -6,7 +6,7 @@ set_ggSigmaBox <- function(df_sigma, sigPalette, numCoho){
   cohoVari$Cohort <- factor(as.numeric(cohoVari$Cohort), levels = 1:numCoho)
   stsVari <- boxplot.stats(cohoVari$Value)$stats ## from: http://stackoverflow.com/questions/21533158/remove-outliers-fully-from-multiple-boxplots-made-with-ggplot2-in-r-and-display
   cohoVariGG <- suppressMessages(
-    ggplot(cohoVari, aes(x = Cohort, y = Value, fill = Cohort)) +
+    ggplot(cohoVari, aes_(x = ~Cohort, y = ~Value, fill = ~Cohort)) +
       geom_boxplot(alpha = 0.6, outlier.color = "grey30", outlier.size = 0.35, notch = TRUE) +
       ggtitle("SD") +
       scale_x_discrete(labels = 0:(numCoho-1)) +
@@ -34,7 +34,7 @@ set_ggTausBox <- function(df_taus, tauPalette, numCoho){
   stsPreci <- boxplot.stats(cohoPreci$Value)$stats ## from: http://stackoverflow.com/questions/21533158/remove-outliers-fully-from-multiple-boxplots-made-with-ggplot2-in-r-and-display
 
   cohoPreciGG <- suppressMessages(
-    ggplot(cohoPreci, aes(x = Cohort, y = Value, fill = Cohort)) +
+    ggplot(cohoPreci, aes_(x = ~Cohort, y = ~Value, fill = ~Cohort)) +
       geom_boxplot(alpha = 0.6, outlier.color = "grey30", outlier.size = 0.35, notch = TRUE) +
       ggtitle("Precision") +
       scale_x_discrete(labels = 0:(numCoho-1)) +
@@ -139,7 +139,7 @@ set_ggHistLfdTot <- function(inLfd){
 
 set_ggHistUtcTot <- function(inLfd){
   suppressMessages(
-    ggplot(data.frame(UTC = unique(inLfd$UTC)), aes(x = UTC, y = ..count..)) +
+    ggplot(data.frame(UTC = unique(inLfd$UTC)), aes_(x = ~UTC, y = ~..count..)) +
       geom_histogram(bins = 100, fill = "grey0", alpha = 0.7) +
       annotate("text", x = -Inf, y = Inf, hjust = 0, vjust = 1,
                family="serif", label = "Time coverage") +
@@ -161,7 +161,7 @@ set_ggDotUtcSplit <- function(inLfd){
   names(sampPunch) <- c("Year", "Month", "Frequency")
   sampPunch$Year <- factor(sampPunch$Year, levels = sort(unique(sampPunch$Year), decreasing = TRUE))
   suppressMessages(
-    ggplot(sampPunch, aes(x = Month, y = Year, size = log10(Frequency))) +
+    ggplot(sampPunch, aes_(x = ~Month, y = ~Year, size = ~log10(Frequency))) +
       geom_point() +
       scale_y_discrete(breaks = unique(sampPunch$Year), expand = c(0.1, 0.1)) +
       theme_tufte(base_size = 14, ticks = F) +
@@ -178,7 +178,7 @@ set_ggDotUtcSplit <- function(inLfd){
 
 set_ggHistUtcLfd <- function(inLfd){
   suppressMessages(
-    ggplot(inLfd, aes(x = ~Length, y = ~..count..)) +
+    ggplot(inLfd, aes_(x = ~Length, y = ~..count..)) +
       geom_histogram(bins = 30, fill = "grey1", alpha = 0.7) +
       facet_grid(Year~Month, switch = "y") +
       theme_few() +
@@ -211,7 +211,7 @@ set_spatAbbTbl <- function(inSpat){
 
 set_spatAbsFreq <- function(inSpat){
   suppressMessages(
-    ggplot(inSpat, aes(x = ~FG, y = ~Freq)) +
+    ggplot(inSpat, aes_(x = ~FG, y = ~Freq)) +
       theme_tufte(base_size = 14, ticks = F) +
       geom_bar(width = 0.45, fill = "gray35", stat = "identity") +
       scale_y_continuous(breaks = pretty(inSpat$Freq, n = 5)) +
@@ -233,7 +233,7 @@ set_spatAbsFreq <- function(inSpat){
 
 set_spatRelFreq <- function(inSpat){
   suppressMessages(
-    ggplot(inSpat, aes(x = ~FG, y = ~relFreq)) +
+    ggplot(inSpat, aes_(x = ~FG, y = ~relFreq)) +
       theme_tufte(base_size = 14, ticks = F) +
       geom_bar(width = 0.45, fill = "gray35", stat = "identity") +
       scale_y_continuous(breaks = pretty(inSpat$relFreq, n = 5)) +
