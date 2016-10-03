@@ -11,14 +11,51 @@ set_ggChainTrace <- function(df_LK){
         scale_color_brewer(palette = "Dark2", "Chain") +
         theme_tufte(base_size = 14, ticks = F) +
         theme(title = element_text(size = 10),
-              legend.position = "none",
+              legend.position = "right",
               legend.title = element_text(size = 7),
               panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
               axis.text.x = element_text(size = 6),
               axis.title.x = element_blank(),
               axis.text.y = element_text(size = 6),
               axis.title.y = element_blank(),
-              axis.ticks.y = element_blank())
+              axis.ticks.y = element_blank())+
+        guides(colour = guide_legend(override.aes = list(size = 3,
+                                                         alpha = 0.9,
+                                                         fill = NA)))
+    )
+  )
+}
+###
+
+######
+### MCMC chain scatterplot
+set_ggChainScatter <- function(gg_DFscat){
+  return(
+    suppressMessages(
+      ggplot()+
+        geom_point(data = gg_DFscat,
+                   mapping = aes(x = Linf, y = Kappa, color = factor(Chain)),
+                   size = 0.25, alpha = 0.25) +
+        # annotate("point", x = mut_popgrowth$Loo, y = mut_popgrowth$K, color = "grey25", size = 0.7) +
+        annotate("point", x = LHat, y = kHat, color = "goldenrod1",
+                 shape = 42, size = 12, alpha = 0.9) +
+        # annotate("point", x = mean(mut_popgrowth$Loo), y = mean(mut_popgrowth$K), color = "firebrick",
+        #          shape = 20, size = 5, alpha = 0.9) +
+        annotate("text", x = Inf, y = Inf, label = paste("LHat = ", round(LHat, 2), "\nKHat = ", round(kHat, 3), sep = ""),
+                 hjust = 1, vjust = 1, color = "goldenrod1", fontface = "bold") +
+        scale_color_brewer(palette = "Dark2", "Chain") +
+        theme_tufte(base_size = 14, ticks = F) +
+        theme(legend.position = "none",
+              legend.title = element_text(size = 9),
+              panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+              axis.text.x = element_text(size = 6),
+              axis.title.x = element_text(size = 8),
+              axis.text.y = element_text(size = 6),
+              axis.title.y = element_text(size = 8),
+              axis.ticks.y = element_blank()) +
+        guides(colour = guide_legend(override.aes = list(size = 3,
+                                                         alpha = 0.9,
+                                                         fill = NA)))
     )
   )
 }
