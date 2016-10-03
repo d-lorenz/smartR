@@ -1232,10 +1232,10 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 
                                outPalette <- rainbow(nCoho)
 
-                               ######
-                               ### FishBase data
-                               mut_popgrowth <- popgrowth("Mullus barbatus barbatus")
-                               ###
+                               # ######
+                               # ### FishBase data
+                               # mut_popgrowth <- popgrowth("Mullus barbatus barbatus")
+                               # ###
 
                                if(sexDrop == "Female"){
                                  curDistri <- spreFemale
@@ -1349,11 +1349,11 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                    geom_point(data = ggdataSampScat,
                                               mapping = aes(x = Linf, y = Kappa, color = factor(Chain)),
                                               size = 0.25, alpha = 0.25) +
-                                   annotate("point", x = mut_popgrowth$Loo, y = mut_popgrowth$K, color = "grey25", size = 0.7) +
+                                   # annotate("point", x = mut_popgrowth$Loo, y = mut_popgrowth$K, color = "grey25", size = 0.7) +
                                    annotate("point", x = LHat, y = kHat, color = "goldenrod1",
                                             shape = 42, size = 12, alpha = 0.9) +
-                                   annotate("point", x = mean(mut_popgrowth$Loo), y = mean(mut_popgrowth$K), color = "firebrick",
-                                            shape = 20, size = 5, alpha = 0.9) +
+                                   # annotate("point", x = mean(mut_popgrowth$Loo), y = mean(mut_popgrowth$K), color = "firebrick",
+                                   #          shape = 20, size = 5, alpha = 0.9) +
                                    annotate("text", x = Inf, y = Inf, label = paste("LHat = ", round(LHat, 2), "\nKHat = ", round(kHat, 3), sep = ""), hjust = 1, vjust = 1, color = "goldenrod1", fontface = "bold") +
                                    scale_color_brewer(palette = "Dark2", "Chain") +
                                    theme_tufte(base_size = 14, ticks = F) +
@@ -1449,42 +1449,42 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                )
                                ###
 
-                               ageSeq <- seq(0, nCoho, by = 0.1)
-
-                               fishBaseMut <- data.frame(exp = 1,
-                                                         Age = ageSeq,
-                                                         Length = calcGomp(elle = mut_popgrowth$Loo[1],
-                                                                           kappa = mut_popgrowth$K[1],
-                                                                           ageVector = ageSeq))
-                               for(i in 2:nrow(mut_popgrowth)){
-                                 fishBaseMut <- rbind(fishBaseMut, data.frame(exp = i, Age = ageSeq, Length = calcGomp(elle = mut_popgrowth$Loo[i], kappa = mut_popgrowth$K[i], ageVector = ageSeq)))
-                               }
-
-                               groCurv <- suppressMessages(
-                                 ggplot() +
-                                   geom_path(data = fishBaseMut,
-                                             mapping = aes(x = Age, y = Length, group = factor(exp)),
-                                             size = 0.4, color = "grey25", alpha = 0.3) +
-                                   annotate("line", x = ageSeq, y = calcGomp(mean(mut_popgrowth$Loo), mean(mut_popgrowth$K), ageSeq), color = "firebrick", linetype = 2, size = 1, alpha = 0.6) +
-                                   annotate("line", x = ageSeq, y = calcGomp(LHat, kHat, ageSeq), color = "goldenrod1", linetype = 1, size = 1.5, alpha = 0.8) +
-                                   theme_tufte(base_size = 14, ticks = F) +
-                                   theme(legend.position = "bottom",
-                                         legend.title = element_text(size = 8),
-                                         panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
-                                         axis.text.x = element_text(size = 7),
-                                         axis.title.x = element_text(size = 9),
-                                         axis.text.y = element_text(size = 7),
-                                         axis.title.y = element_text(size = 9))
-                               )
+                               # ageSeq <- seq(0, nCoho, by = 0.1)
+                               #
+                               # fishBaseMut <- data.frame(exp = 1,
+                               #                           Age = ageSeq,
+                               #                           Length = calcGomp(elle = mut_popgrowth$Loo[1],
+                               #                                             kappa = mut_popgrowth$K[1],
+                               #                                             ageVector = ageSeq))
+                               # for(i in 2:nrow(mut_popgrowth)){
+                               #   fishBaseMut <- rbind(fishBaseMut, data.frame(exp = i, Age = ageSeq, Length = calcGomp(elle = mut_popgrowth$Loo[i], kappa = mut_popgrowth$K[i], ageVector = ageSeq)))
+                               # }
+                               #
+                               # groCurv <- suppressMessages(
+                               #   ggplot() +
+                               #     geom_path(data = fishBaseMut,
+                               #               mapping = aes(x = Age, y = Length, group = factor(exp)),
+                               #               size = 0.4, color = "grey25", alpha = 0.3) +
+                               #     annotate("line", x = ageSeq, y = calcGomp(mean(mut_popgrowth$Loo), mean(mut_popgrowth$K), ageSeq), color = "firebrick", linetype = 2, size = 1, alpha = 0.6) +
+                               #     annotate("line", x = ageSeq, y = calcGomp(LHat, kHat, ageSeq), color = "goldenrod1", linetype = 1, size = 1.5, alpha = 0.8) +
+                               #     theme_tufte(base_size = 14, ticks = F) +
+                               #     theme(legend.position = "bottom",
+                               #           legend.title = element_text(size = 8),
+                               #           panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+                               #           axis.text.x = element_text(size = 7),
+                               #           axis.title.x = element_text(size = 9),
+                               #           axis.text.y = element_text(size = 7),
+                               #           axis.title.y = element_text(size = 9))
+                               # )
 
                                suppressWarnings(grid.arrange(traceChain,
                                                              scatLK,
-                                                             groCurv,
+                                                             # groCurv,
                                                              cohoPreciGG,
                                                              cohoVariGG,
-                                                             layout_matrix = rbind(c(1,1),
-                                                                                   c(2,3),
-                                                                                   c(4,5))
+                                                             layout_matrix = rbind(c(1,1,1,2),
+                                                                                   c(1,1,1,2),
+                                                                                   c(4,4,5,5))
                                ))
 
 
