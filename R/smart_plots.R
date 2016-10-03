@@ -83,7 +83,7 @@ set_ggChainTrace <- function(df_LK){
 
 ######
 ### MCMC chain scatterplot
-set_ggChainScatter <- function(gg_DFscat){
+set_ggChainScatter <- function(gg_DFscat, meanL, meanK){
   return(
     suppressMessages(
       ggplot()+
@@ -91,11 +91,13 @@ set_ggChainScatter <- function(gg_DFscat){
                    mapping = aes(x = Linf, y = Kappa, color = factor(Chain)),
                    size = 0.25, alpha = 0.25) +
         # annotate("point", x = mut_popgrowth$Loo, y = mut_popgrowth$K, color = "grey25", size = 0.7) +
-        annotate("point", x = LHat, y = kHat, color = "goldenrod1",
+        annotate("point", x = meanL, y = meanK, color = "goldenrod1",
                  shape = 42, size = 12, alpha = 0.9) +
         # annotate("point", x = mean(mut_popgrowth$Loo), y = mean(mut_popgrowth$K), color = "firebrick",
         #          shape = 20, size = 5, alpha = 0.9) +
-        annotate("text", x = Inf, y = Inf, label = paste("LHat = ", round(LHat, 2), "\nKHat = ", round(kHat, 3), sep = ""),
+        annotate("text", x = Inf, y = Inf,
+                 label = paste("LHat = ", round(meanL, 2),
+                               "\nKHat = ", round(meanK, 3), sep = ""),
                  hjust = 1, vjust = 1, color = "goldenrod1", fontface = "bold") +
         scale_color_brewer(palette = "Dark2", "Chain") +
         theme_tufte(base_size = 14, ticks = F) +
