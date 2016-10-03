@@ -1353,28 +1353,9 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 
                                ######
                                ### MCMC chain Boxplot Tau
-                               cohoPreci <- melt(taus[,1:(max(AA)+1)])
-                               names(cohoPreci) <- c("Iter", "Cohort", "Value")
-                               cohoPreci$Cohort <- factor(as.numeric(cohoPreci$Cohort), levels = 1:(nCoho))
-                               stsPreci <- boxplot.stats(cohoPreci$Value)$stats ## from: http://stackoverflow.com/questions/21533158/remove-outliers-fully-from-multiple-boxplots-made-with-ggplot2-in-r-and-display
-
-                               cohoPreciGG <- suppressMessages(
-                                 ggplot(cohoPreci, aes(x = Cohort, y = Value, fill = Cohort)) +
-                                   geom_boxplot(alpha = 0.6, outlier.color = "grey30", outlier.size = 0.35, notch = TRUE) +
-                                   ggtitle("Precision") +
-                                   scale_x_discrete(labels = 0:(nCoho-1)) +
-                                   scale_fill_manual(values = outPalette) +
-                                   theme_tufte(base_size = 14, ticks = FALSE) +
-                                   theme(legend.position = "none",
-                                         title = element_text(size = 9),
-                                         panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
-                                         axis.text.x = element_text(size = 8),
-                                         axis.title.x = element_text(size = 8),
-                                         axis.text.y = element_text(size = 8),
-                                         axis.title.y = element_blank()) +
-                                   coord_cartesian(ylim = c(stsPreci[2]/2,max(stsPreci)*1.25)) ## from: http://stackoverflow.com/questions/21533158/remove-outliers-fully-from-multiple-boxplots-made-with-ggplot2-in-r-and-display
-
-                               )
+                               cohoPreciGG <- set_ggTausBox(df_taus = taus[,1:(max(AA)+1)],
+                                                            tauPalette = outPalette,
+                                                            numCoho = nCoho)
                                ###
 
                                ######
