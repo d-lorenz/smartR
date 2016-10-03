@@ -1288,64 +1288,65 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 
                                ######
                                ### MCMC estimates
-                               vecLinf <- as.matrix(samps[,"Linf"])
-                               vecKapp <- as.matrix(samps[,"k"])
-                               vecTzer <- as.matrix(samps[,"t0"])
-                               LHat = mean(vecLinf)
-                               kHat = mean(vecKapp)
-                               t0Hat = mean(vecTzer)
-                               taus <- as.matrix(samps[,grep("tau" ,varnames(samps))])
-                               sigma2s = 1/taus
-                               sigma2Hat = apply(sigma2s, 2, mean)
-                               # pArray <- do.call(rbind, samps[,grep("p" ,varnames(samps))])
-                               # pHat <- matrix(apply(pArray, 2, mean), byrow = FALSE, ncol = nCoho)
-                               ###
+
+                               if(sexDrop == "Female"){
+                                 dfLinf <- data.frame(Parameter = "Linf",
+                                                      Iter = 1:n.iter,
+                                                      Chain = as.matrix(samps[,"Linf"], chains = TRUE)[,1],
+                                                      Value = as.matrix(samps[,"Linf"], chains = TRUE)[,2])
+                                 dfKapp <- data.frame(Parameter = "Kappa",
+                                                      Iter = 1:n.iter,
+                                                      Chain = as.matrix(samps[,"k"], chains = TRUE)[,1],
+                                                      Value = as.matrix(samps[,"k"], chains = TRUE)[,2])
+
+                                 ggdataSamps <- rbind(dfLinf, dfKapp)
+                                 ggdataSampScat <- cbind(dfLinf[,2:3],
+                                                         Linf = dfLinf[,4],
+                                                         Kappa = dfKapp[,4])
+
+                                 LHat = mean(as.matrix(samps[,"Linf"]))
+                                 kHat = mean(as.matrix(samps[,"k"]))
+                                 t0Hat = mean(as.matrix(samps[,"t0"]))
+                                 taus <- as.matrix(samps[,grep("tau" ,varnames(samps))])
+                                 sigma2s = 1/taus
+                                 sigma2Hat = apply(sigma2s, 2, mean)
+                               }else{
+
+                                 ## Same as female
+
+                               }
 
                                ######
-                               ### MCMC chain trace
-                               dfLinf <- data.frame(Parameter = "Linf",
-                                                    Iter = 1:n.iter,
-                                                    Chain = as.matrix(samps[,"Linf"], chains = TRUE)[,1],
-                                                    Value = as.matrix(samps[,"Linf"], chains = TRUE)[,2])
-                               dfKapp <- data.frame(Parameter = "Kappa",
-                                                    Iter = 1:n.iter,
-                                                    Chain = as.matrix(samps[,"k"], chains = TRUE)[,1],
-                                                    Value = as.matrix(samps[,"k"], chains = TRUE)[,2])
-                               # dfTzer <- data.frame(Parameter = "t0",
-                               #                      Iter = 1:n.iter,
-                               #                      Chain = as.matrix(samps[,"t0"], chains = TRUE)[,1],
-                               #                      Value = as.matrix(samps[,"t0"], chains = TRUE)[,2])
+                               ### age estimation
+                               means.f = matrix(0, nrow(curDistri), nCoho)
+                               zHat = numeric(nrow(curDistri))
+                               for(iObs in 1:nrow(curDistri)){
+
+                                 ## GGF
+                                 ##  temp = LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho) - 1 - t0Hat))))
+                                 temp = LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho)-1+tt[iObs]))))  ##BEST
+                                 ##  temp = LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho)-1+tt[iObs] - t0Hat))))
+
+                                 # VBGF
+                                 # temp = LHat * (1 - exp(-kHat*(((1:nCoho)-1+tt[iObs]) - t0Hat)))
+
+                                 means.f[iObs,] = temp
+                                 postProbs = dnorm(curDistri$Length[iObs], temp, sqrt(sigma2Hat))
+                                 zHat[iObs] = as.numeric(names(which.max(table(sample(1:nCoho, size = 150, prob = postProbs, replace = TRUE)))))
+                               }
+
+                               ages.f = zHat -1 + tt #- t0Hat
+
+                               AA = floor(ages.f)
                                ###
 
                                ######
                                ### MCMC chain Traceplot
-                               ggdataSamps <- rbind(dfLinf, dfKapp)
-
-                               traceChain <- suppressMessages(
-                                 ggplot(data = ggdataSamps,
-                                        mapping = aes(x = Iter, y = Value, color = factor(Chain)))+
-                                   geom_line(alpha = 0.7) +
-                                   facet_wrap(~ Parameter, nrow = 3, ncol = 1, scales = "free", switch = "y") +
-                                   scale_color_brewer(palette = "Dark2", "Chain") +
-                                   theme_tufte(base_size = 14, ticks = F) +
-                                   theme(title = element_text(size = 10),
-                                         legend.position = "none",
-                                         legend.title = element_text(size = 7),
-                                         panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
-                                         axis.text.x = element_text(size = 6),
-                                         axis.title.x = element_blank(),
-                                         axis.text.y = element_text(size = 6),
-                                         axis.title.y = element_blank(),
-                                         axis.ticks.y = element_blank())
-                               )
+                               traceChain <- set_ggChainTrace(ggdataSamps)
                                ###
 
                                ######
                                ### MCMC chain scatterplot
-                               ggdataSampScat <- cbind(dfLinf[,2:3], Linf = dfLinf[,4], Kappa = dfKapp[,4])
-
-
-                               # IF mut_popgrowth
                                scatLK <- suppressMessages(
                                  ggplot()+
                                    geom_point(data = ggdataSampScat,
@@ -1371,30 +1372,6 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                                                                     alpha = 0.9,
                                                                                     fill = NA)))
                                )
-                               ###
-
-                               ######
-                               ### age estimation
-                               means.f = matrix(0, nrow(curDistri), nCoho)
-                               zHat = numeric(nrow(curDistri))
-                               for(iObs in 1:nrow(curDistri)){
-
-                                 ## GGF
-                                 ##  temp = LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho) - 1 - t0Hat))))
-                                 temp = LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho)-1+tt[iObs]))))  ##BEST
-                                 ##  temp = LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho)-1+tt[iObs] - t0Hat))))
-
-                                 # VBGF
-                                 # temp = LHat * (1 - exp(-kHat*(((1:nCoho)-1+tt[iObs]) - t0Hat)))
-
-                                 means.f[iObs,] = temp
-                                 postProbs = dnorm(curDistri$Length[iObs], temp, sqrt(sigma2Hat))
-                                 zHat[iObs] = as.numeric(names(which.max(table(sample(1:nCoho, size = 150, prob = postProbs, replace = TRUE)))))
-                               }
-
-                               ages.f = zHat -1 + tt #- t0Hat
-
-                               AA = floor(ages.f)
                                ###
 
 
