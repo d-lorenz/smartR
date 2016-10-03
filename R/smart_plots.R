@@ -9,7 +9,7 @@ set_ggSigmaBox <- function(df_sigma, sigPalette, numCoho){
     ggplot(cohoVari, aes(x = Cohort, y = Value, fill = Cohort)) +
       geom_boxplot(alpha = 0.6, outlier.color = "grey30", outlier.size = 0.35, notch = TRUE) +
       ggtitle("SD") +
-      scale_x_discrete(labels = 0:(nCoho-1)) +
+      scale_x_discrete(labels = 0:(numCoho-1)) +
       scale_fill_manual(values = sigPalette) +
       theme_tufte(base_size = 14, ticks = FALSE) +
       theme(legend.position = "none",
