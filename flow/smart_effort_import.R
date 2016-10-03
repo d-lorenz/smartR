@@ -568,7 +568,7 @@ my_sampling$fisheryBySpecie[[1]]$setNCoho(7)
 
 modelGomGro
 
-modelGomGro <- paste(system.file("", package = "smartR"), "inst/model/gompGrow.jags", sep = "")
+modelGomGro <- system.file("model/gompGrow.jags", package = "smartR")
 ###
 
 ######
