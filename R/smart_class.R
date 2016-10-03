@@ -1225,18 +1225,26 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                              setPreMix = function(){
                                # preMix <<- weight2number(rawLFD[,c("DATE","LCLASS","UNSEX")])
                              },
-                             calcMixDate = function(nAdap = 100, nSamp = 2000){
+                             calcMixDate = function(nAdap = 100, nSamp = 2000, sexDrop = "Female"){
                                # mixPar <<- list('Female' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)),
                                #                 'Male' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)))
                                # for(sex in c("Female", "Male")){ }
+
+                               outPalette <- rainbow(nCoho)
 
                                ######
                                ### FishBase data
                                mut_popgrowth <- popgrowth("Mullus barbatus barbatus")
                                ###
 
-                               sub_idx <- sample(1:nrow(spreFemale), size = nSamp)
-                               sub_data <- spreFemale[sub_idx,]
+                               if(sexDrop == "Female"){
+                                 curDistri <- spreFemale
+                               }else{
+                                 curDistri <- spreMale
+                               }
+
+                               sub_idx <- sample(1:nrow(curDistri), size = nSamp)
+                               sub_data <- curDistri[sub_idx,]
 
                                N <- length(sub_data$Length)
                                alpha = rep(1, nCoho)
@@ -1255,12 +1263,12 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                             list(Linf = max(sub_data$Length), k = 0.5, t0 = 0.0),
                                             list(Linf = max(sub_data$Length), k = 0.5, t0 = 0.0))
 
-                               tt = as.POSIXlt(chron(spreFemale$UTC))$yday / 366
+                               tt = as.POSIXlt(chron(curDistri$UTC))$yday / 366
 
                                ######
                                ### MCMC model setup
                                # n.adapt <- 500
-                               modelGomGro <- paste(system.file("", package = "smartR"), "inst/model/gompGrow.jags", sep = "")
+                               modelGomGro <- system.file("model/gompGrow.jags", package = "smartR")
 
                                jags.m <- jags.model(modelGomGro,
                                                     data = dataList,
@@ -1364,6 +1372,31 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                ###
 
                                ######
+                               ### age estimation
+                               means.f = matrix(0, nrow(curDistri), nCoho)
+                               zHat = numeric(nrow(curDistri))
+                               for(iObs in 1:nrow(curDistri)){
+
+                                 ## GGF
+                                 ##  temp = LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho) - 1 - t0Hat))))
+                                 temp = LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho)-1+tt[iObs]))))  ##BEST
+                                 ##  temp = LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho)-1+tt[iObs] - t0Hat))))
+
+                                 # VBGF
+                                 # temp = LHat * (1 - exp(-kHat*(((1:nCoho)-1+tt[iObs]) - t0Hat)))
+
+                                 means.f[iObs,] = temp
+                                 postProbs = dnorm(curDistri$Length[iObs], temp, sqrt(sigma2Hat))
+                                 zHat[iObs] = as.numeric(names(which.max(table(sample(1:nCoho, size = 150, prob = postProbs, replace = TRUE)))))
+                               }
+
+                               ages.f = zHat -1 + tt #- t0Hat
+
+                               AA = floor(ages.f)
+                               ###
+
+
+                               ######
                                ### MCMC chain Boxplot Tau
                                cohoPreci <- melt(taus[,1:(max(AA)+1)])
                                names(cohoPreci) <- c("Iter", "Cohort", "Value")
@@ -1450,8 +1483,8 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                                              cohoPreciGG,
                                                              cohoVariGG,
                                                              layout_matrix = rbind(c(1,1),
-                                                                                   c(2,NA),
-                                                                                   c(3,4))
+                                                                                   c(2,3),
+                                                                                   c(4,5))
                                ))
 
 
