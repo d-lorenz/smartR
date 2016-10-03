@@ -1,5 +1,31 @@
 
 
+### MCMC chain Traceplot
+set_ggChainTrace <- function(df_LK){
+  return(
+    suppressMessages(
+      ggplot(data = df_LK,
+             mapping = aes(x = Iter, y = Value, color = factor(Chain)))+
+        geom_line(alpha = 0.7) +
+        facet_wrap(~ Parameter, nrow = 3, ncol = 1, scales = "free", switch = "y") +
+        scale_color_brewer(palette = "Dark2", "Chain") +
+        theme_tufte(base_size = 14, ticks = F) +
+        theme(title = element_text(size = 10),
+              legend.position = "none",
+              legend.title = element_text(size = 7),
+              panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+              axis.text.x = element_text(size = 6),
+              axis.title.x = element_blank(),
+              axis.text.y = element_text(size = 6),
+              axis.title.y = element_blank(),
+              axis.ticks.y = element_blank())
+    )
+  )
+}
+###
+
+
+
 set_ggHistLfdTot <- function(inLfd){
   suppressMessages(ggplot(inLfd, aes(x = Length, y = ..count..)) +
                      geom_histogram(bins = 50, fill = "grey0", alpha = 0.7, col = "grey10") +
