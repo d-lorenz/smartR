@@ -1346,7 +1346,9 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 
                                ######
                                ### MCMC chain scatterplot
-                               scatLK <- set_ggChainScatter(ggdataSampScat)
+                               scatLK <- set_ggChainScatter(gg_DFscat = ggdataSampScat,
+                                                            meanL = LHat,
+                                                            meanK = kHat)
                                ###
 
                                ######
