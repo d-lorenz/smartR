@@ -1288,7 +1288,6 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 
                                ######
                                ### MCMC estimates
-
                                if(sexDrop == "Female"){
                                  dfLinf <- data.frame(Parameter = "Linf",
                                                       Iter = 1:n.iter,
@@ -1350,7 +1349,6 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                scatLK <- set_ggChainScatter(ggdataSampScat)
                                ###
 
-
                                ######
                                ### MCMC chain Boxplot Tau
                                cohoPreciGG <- set_ggTausBox(df_taus = taus[,1:(max(AA)+1)],
@@ -1365,34 +1363,6 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                                             numCoho = nCoho)
                                ###
 
-                               # ageSeq <- seq(0, nCoho, by = 0.1)
-                               #
-                               # fishBaseMut <- data.frame(exp = 1,
-                               #                           Age = ageSeq,
-                               #                           Length = calcGomp(elle = mut_popgrowth$Loo[1],
-                               #                                             kappa = mut_popgrowth$K[1],
-                               #                                             ageVector = ageSeq))
-                               # for(i in 2:nrow(mut_popgrowth)){
-                               #   fishBaseMut <- rbind(fishBaseMut, data.frame(exp = i, Age = ageSeq, Length = calcGomp(elle = mut_popgrowth$Loo[i], kappa = mut_popgrowth$K[i], ageVector = ageSeq)))
-                               # }
-                               #
-                               # groCurv <- suppressMessages(
-                               #   ggplot() +
-                               #     geom_path(data = fishBaseMut,
-                               #               mapping = aes(x = Age, y = Length, group = factor(exp)),
-                               #               size = 0.4, color = "grey25", alpha = 0.3) +
-                               #     annotate("line", x = ageSeq, y = calcGomp(mean(mut_popgrowth$Loo), mean(mut_popgrowth$K), ageSeq), color = "firebrick", linetype = 2, size = 1, alpha = 0.6) +
-                               #     annotate("line", x = ageSeq, y = calcGomp(LHat, kHat, ageSeq), color = "goldenrod1", linetype = 1, size = 1.5, alpha = 0.8) +
-                               #     theme_tufte(base_size = 14, ticks = F) +
-                               #     theme(legend.position = "bottom",
-                               #           legend.title = element_text(size = 8),
-                               #           panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
-                               #           axis.text.x = element_text(size = 7),
-                               #           axis.title.x = element_text(size = 9),
-                               #           axis.text.y = element_text(size = 7),
-                               #           axis.title.y = element_text(size = 9))
-                               # )
-
                                suppressWarnings(grid.arrange(traceChain,
                                                              scatLK,
                                                              # groCurv,
@@ -1402,8 +1372,6 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                                                                    c(1,1,1,2),
                                                                                    c(4,4,5,5))
                                ))
-
-
 
                              }))
 
