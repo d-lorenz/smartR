@@ -1961,17 +1961,19 @@ smart_gui <- function(){
   addSpring(spec_mix_f)
   spec_drop_mix <- gcombobox(items = "Specie", selected = 1, container = spec_mix_f, editable = FALSE, expand = TRUE)
   addSpring(spec_mix_f)
+  sex_drop_mix <- gcombobox(items = c("Female", "Male"), selected = 1, container = spec_mix_f, editable = FALSE, expand = TRUE)
+  addSpring(spec_mix_f)
   addSpring(cont_g)
   ncoh_f <- gframe("N. cohorts", horizontal = FALSE, container = cont_g)
   addSpring(ncoh_f)
   ncih_sb <- gspinbutton (from = 1, to = 100, by = 1, value = 3, digits = 0, container = ncoh_f)
   addSpring(ncoh_f)
-  addSpring(cont_g)
-  prio_g <- ggroup(horizontal = TRUE, container = cont_g)
-  addSpring(prio_g)
-  prio_b <- gbutton ("Set Priors", container = prio_g,
-                     handler = function(h,...){ })
-  addSpring(prio_g)
+  # addSpring(cont_g)
+  # prio_g <- ggroup(horizontal = TRUE, container = cont_g)
+  # addSpring(prio_g)
+  # prio_b <- gbutton ("Set Priors", container = prio_g,
+  #                    handler = function(h,...){ })
+  # addSpring(prio_g)
   addSpring(cont_g)
   go_g <- gframe("MCMC sim", horizontal = TRUE, container = cont_g, expand = TRUE)
   addSpring(go_g)
@@ -2015,7 +2017,9 @@ smart_gui <- function(){
                        # Set number of cohorts
                        my_project$fisheryBySpecie[[ind_spe]]$setNCoho(as.numeric(svalue(ncih_sb)))
                        # Compute mixture
-                       my_project$fisheryBySpecie[[ind_spe]]$calcMixDate(nAdap = as.numeric(svalue(mc_niter)), nSamp = as.numeric(svalue(mc_nsamp)))
+                       my_project$fisheryBySpecie[[ind_spe]]$calcMixDate(nAdap = as.numeric(svalue(mc_niter)),
+                                                                         nSamp = as.numeric(svalue(mc_nsamp)),
+                                                                         sexDrop = svalue(sex_drop_mix))
 
                        # Transform length to cohorts
                        # my_project$calcCoh_A_Fishery(ind_spe)
