@@ -59,7 +59,7 @@ set_ggChainTrace <- function(df_LK){
   return(
     suppressMessages(
       ggplot(data = df_LK,
-             mapping = aes(x = Iter, y = Value, color = factor(Chain)))+
+             mapping = aes_(x = ~Iter, y = ~Value, color = ~factor(Chain)))+
         geom_line(alpha = 0.7) +
         facet_wrap(~ Parameter, nrow = 3, ncol = 1, scales = "free", switch = "y") +
         scale_color_brewer(palette = "Dark2", "Chain") +
@@ -88,7 +88,7 @@ set_ggChainScatter <- function(gg_DFscat, meanL, meanK){
     suppressMessages(
       ggplot()+
         geom_point(data = gg_DFscat,
-                   mapping = aes(x = Linf, y = Kappa, color = factor(Chain)),
+                   mapping = aes_(x = ~Linf, y = ~Kappa, color = ~factor(Chain)),
                    size = 0.25, alpha = 0.25) +
         # annotate("point", x = mut_popgrowth$Loo, y = mut_popgrowth$K, color = "grey25", size = 0.7) +
         annotate("point", x = meanL, y = meanK, color = "goldenrod1",
@@ -178,7 +178,7 @@ set_ggDotUtcSplit <- function(inLfd){
 
 set_ggHistUtcLfd <- function(inLfd){
   suppressMessages(
-    ggplot(inLfd, aes(x = Length, y = ..count..)) +
+    ggplot(inLfd, aes(x = ~Length, y = ~..count..)) +
       geom_histogram(bins = 30, fill = "grey1", alpha = 0.7) +
       facet_grid(Year~Month, switch = "y") +
       theme_few() +
@@ -211,7 +211,7 @@ set_spatAbbTbl <- function(inSpat){
 
 set_spatAbsFreq <- function(inSpat){
   suppressMessages(
-    ggplot(inSpat, aes(x = FG, y = Freq)) +
+    ggplot(inSpat, aes(x = ~FG, y = ~Freq)) +
       theme_tufte(base_size = 14, ticks = F) +
       geom_bar(width = 0.45, fill = "gray35", stat = "identity") +
       scale_y_continuous(breaks = pretty(inSpat$Freq, n = 5)) +
@@ -233,7 +233,7 @@ set_spatAbsFreq <- function(inSpat){
 
 set_spatRelFreq <- function(inSpat){
   suppressMessages(
-    ggplot(inSpat, aes(x = FG, y = relFreq)) +
+    ggplot(inSpat, aes(x = ~FG, y = ~relFreq)) +
       theme_tufte(base_size = 14, ticks = F) +
       geom_bar(width = 0.45, fill = "gray35", stat = "identity") +
       scale_y_continuous(breaks = pretty(inSpat$relFreq, n = 5)) +
