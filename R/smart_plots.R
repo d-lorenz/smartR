@@ -120,7 +120,7 @@ set_ggChainScatter <- function(gg_DFscat, meanL, meanK){
 
 
 set_ggHistLfdTot <- function(inLfd){
-  suppressMessages(ggplot(inLfd, aes(x = Length, y = ..count..)) +
+  suppressMessages(ggplot(inLfd, aes_(x = ~Length, y = ~..count..)) +
                      geom_histogram(bins = 50, fill = "grey0", alpha = 0.7, col = "grey10") +
                      annotate("text", x = 0, y = Inf, hjust = 0, vjust = 1,
                               family="serif", label = "Absolute frequency of \nlength values") +
