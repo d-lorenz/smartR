@@ -52,6 +52,5 @@ Imports:
     mtsdi,
     gridExtra,
     rgeos,
-    scales,
-    rfishbase
+    scales
 RoxygenNote: 5.0.1
