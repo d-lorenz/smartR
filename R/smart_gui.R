@@ -2021,6 +2021,8 @@ smart_gui <- function(){
                                                                          nSamp = as.numeric(svalue(mc_nsamp)),
                                                                          sexDrop = svalue(sex_drop_mix))
 
+                       my_project$fisheryBySpecie[[ind_spe]]$ggplotMcmcOut(selSex = svalue(sex_drop_mix))
+
                        # Transform length to cohorts
                        # my_project$calcCoh_A_Fishery(ind_spe)
                        # Interpolate cohorts
