@@ -2040,10 +2040,11 @@ smart_gui <- function(){
   view_radio <- gradio(c("MCMC", "Key", "Birth"), selected = 1,
                        horizontal = FALSE, container = view_g,
                        handler = function(h,...){
+                         dev.set(dev.list()[pre_dev+6])
+
                          my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_mix))]]$ggplotMcmcOut(selCompo = svalue(view_radio),
                                                                              selSex = svalue(sex_drop_mix))
                        })
-
 
   addSpring(cont_g)
   addSpace(mix_g_top, 20)
