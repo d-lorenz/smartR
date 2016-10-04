@@ -1401,7 +1401,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 
                                mix_out$Year <- years(mix_out$Date)
                                mix_out$Month <- as.numeric(months(mix_out$Date))
-                               mix_out$MonthChar <- spreFemale$Month
+                               mix_out$MonthChar <- curDistri$Month
                                mix_out$Quarter <- as.numeric(quarters(mix_out$Date))
                                mix_out$Birth <- as.numeric(as.character(mix_out$Year)) - mix_out$Age
 
