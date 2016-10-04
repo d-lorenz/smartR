@@ -2034,6 +2034,16 @@ smart_gui <- function(){
   addSpring(go_g)
   # save_b <- gbutton ("  SAVE  ", container = go_g)
   addSpring(cont_g)
+  view_g <- gframe("View", horizontal = TRUE, container = cont_g, expand = TRUE)
+  view_radio <- gradio(c("MCMC", "Key", "Birth"), selected = 1,
+                       horizontal = FALSE, container = view_g,
+                       handler = function(h,...){
+                         my_project$fisheryBySpecie[[ind_spe]]$ggplotMcmcOut(selCompo = svalue(view_radio),
+                                                                             selSex = svalue(sex_drop_mix))
+                       })
+
+
+  addSpring(cont_g)
   addSpace(mix_g_top, 20)
 
   mix_p <- ggraphics(container = mix_g, width = 550, height = 250, expand = TRUE)
