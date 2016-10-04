@@ -2040,7 +2040,7 @@ smart_gui <- function(){
   view_radio <- gradio(c("MCMC", "Key", "Birth"), selected = 1,
                        horizontal = FALSE, container = view_g,
                        handler = function(h,...){
-                         my_project$fisheryBySpecie[[ind_spe]]$ggplotMcmcOut(selCompo = svalue(view_radio),
+                         my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_mix))]]$ggplotMcmcOut(selCompo = svalue(view_radio),
                                                                              selSex = svalue(sex_drop_mix))
                        })
 
