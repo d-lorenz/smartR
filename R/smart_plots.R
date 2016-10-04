@@ -28,7 +28,7 @@ set_ggCatchLine <- function(df_birth){
   return(
     suppressMessages(
       ggplot() +
-        geom_line(data = birth_melt, aes_(x = ~Catch, y = ~Qty, group = ~Birth, color = ~Birth)) +
+        geom_line(data = df_birth, aes_(x = ~Catch, y = ~Qty, group = ~Birth, color = ~Birth)) +
         scale_color_brewer(palette = "Paired") +
         theme_tufte(base_size = 14, ticks = F) +
         scale_x_discrete(drop = FALSE) +
