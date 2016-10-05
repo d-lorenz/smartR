@@ -1335,6 +1335,12 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                samps <- coda.samples(jags.m, obsNode, n.iter = n.iter)
                                ###
 
+                               if(sexDrop == "Female"){
+                                 femaleMcmc <<- samps
+                               }else{
+                                 maleMcmc <<- samps
+                               }
+
                                ######
                                ### MCMC estimates
                                dfLinf <- data.frame(Parameter = "Linf",
