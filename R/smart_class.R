@@ -1413,6 +1413,12 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                                           levels = paste(rep(sort(unique(mix_out$Year)), each = 12),
                                                                          sort(unique(zeroedMonth)), sep = "-"))
 
+                               if(sexDrop == "Female"){
+                                 femaleMixOut <<- mix_out
+                               }else{
+                                 maleMixOut <<- mix_out
+                               }
+
                                # mix_out$CorrBirth <- mix_out$Birth
                                # mix_out$CorrBirth[which(mix_out$AgeNF %% 1 + 0.25 > 1)] <- mix_out$CorrBirth[which(mix_out$AgeNF %% 1 + 0.25 > 1)] + 1
                                # mix_out$CorrBirth[which(mix_out$AgeNF - mix_out$Age > 0.81)] <- mix_out$CorrBirth[which(mix_out$AgeNF - mix_out$Age > 0.81)] - 1
