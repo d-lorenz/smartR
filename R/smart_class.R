@@ -1392,7 +1392,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                  idx_FG = which(FGlabels == FGnames[FGname])
                                  FG[idx_FG] = rep(FGname, length(idx_FG))
                                }
-                               nFG = length(unique(FG))
+                               # nFG = length(unique(FG))
 
                                mix_out <- data.frame(Length = curDistri$Length,
                                                      Date = curDistri$UTC,
