@@ -555,6 +555,16 @@ my_sampling$fisheryBySpecie[[1]]$ggplotMcmcOut(selCompo = c("MCMC", "Key", "Birt
 ###
 
 
+table(my_sampling$fisheryBySpecie[[1]]$femaleMixOut$Year, my_sampling$fisheryBySpecie[[1]]$femaleMixOut$Age)
+table(my_sampling$fisheryBySpecie[[1]]$femaleMixOut$Month, my_sampling$fisheryBySpecie[[1]]$femaleMixOut$Age)
+table(my_sampling$fisheryBySpecie[[1]]$femaleMixOut$FG, my_sampling$fisheryBySpecie[[1]]$femaleMixOut$Age)
+
+
+
+table(my_sampling$fisheryBySpecie[[1]]$femaleMixOut$CatcDate, my_sampling$fisheryBySpecie[[1]]$femaleMixOut$Age)
+
+
+
 
 
 ### Transform length to cohorts
