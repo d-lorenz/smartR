@@ -1094,7 +1094,7 @@ smart_gui <- function(){
     #                    multi = TRUE)
     # my_project$fleet$loadProduction(tmp_files)
     enabled(pro_g_top) <- FALSE
-    svalue(stat_bar) <- "\n\nLoading landings..."
+    svalue(stat_bar) <- "Loading landings..."
     Sys.sleep(1)
 
     dev.set(dev.list()[pre_dev+5])
