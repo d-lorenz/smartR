@@ -1698,7 +1698,6 @@ smart_gui <- function(){
       my_project$sampMap$set_ggMapFgSamp(my_project$rawDataFishery)
     }
 
-
     if(!is.null(my_project$rawDataFishery)){ #update_pop_gui()
 
       fis_t[] <- my_project$rawDataFishery[sample(1:nrow(my_project$rawDataFishery), 100, replace = FALSE),]
