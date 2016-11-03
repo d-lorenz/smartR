@@ -853,9 +853,9 @@ smart_gui <- function(){
 
   })
   addSpring(eff_g_top2_ver)
-  gbutton("Gridded Effort", container = eff_g_top2_ver, handler = function(h,...){
+  gbutton("Gridded Points", container = eff_g_top2_ver, handler = function(h,...){
     dev.set(dev.list()[pre_dev+2])
-    svalue(stat_bar) <- "Plotting gridded effort..."
+    svalue(stat_bar) <- "Plotting gridded points..."
 
     enabled(eff_g_top) <- FALSE
 
