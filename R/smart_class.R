@@ -41,8 +41,6 @@ SmartProject <- R6Class("smartProject",
                             cat("\nLoading fishery data...", sep = "")
                             rawDataFishery <<- read.table(file = csv_path, sep = ";", dec = ".", header = TRUE)
 
-                            # rawDataFishery$FEMALE <<- rawDataFishery$UNSEX/2
-                            # rawDataFishery$MALE <<- rawDataFishery$UNSEX/2
                             fisheryBySpecie <<- list()
                             cat("\nSetting Years... ", sep = "")
                             setYearFishery()
