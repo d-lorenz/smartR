@@ -2068,10 +2068,10 @@ smart_gui <- function(){
 
 
 
-  ####   Prediction   ##############################################################
+  ####   Assess   ##################################################################
 
 
-  pre_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Prediction")
+  ass_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Assess")
 
 
 
@@ -2083,7 +2083,7 @@ smart_gui <- function(){
   visible(pro_eg) <- TRUE
   visible(raw_eg) <- TRUE
   visible(eff_eg) <- TRUE
-  visible(pre_eg) <- TRUE
+  visible(ass_eg) <- TRUE
   visible(sim_eg) <- TRUE
   visible(main_win) <- TRUE
 
