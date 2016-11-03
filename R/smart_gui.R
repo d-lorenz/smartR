@@ -96,8 +96,8 @@ smart_gui <- function(){
   gbutton(text = "Cohorts", container = raw_eg, handler = function(h,...){
     svalue(uti_gn) <- 10})
 
-  pre_eg <- gexpandgroup("Predictive", horizontal = FALSE, container = lef_g)
-  gbutton(text = "Predict", container = pre_eg, handler = function(h,...){
+  ass_eg <- gexpandgroup("Assessment", horizontal = FALSE, container = lef_g)
+  gbutton(text = "Assess", container = ass_eg, handler = function(h,...){
     svalue(uti_gn) <- 11})
   sim_eg <- gexpandgroup("Simulation", horizontal = FALSE, container = lef_g)
   gbutton(text = "Simulate", container = sim_eg, handler = function(h,...){
