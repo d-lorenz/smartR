@@ -83,28 +83,25 @@ smart_gui <- function(){
   gbutton(text = "Production", container = eff_eg, handler = function(h,...){
     svalue(uti_gn) <- 6})       #    svalue(uti_gn) <- 10})
 
-  gbutton(text = "Selectivity", container = eff_eg, handler = function(h,...){
-    svalue(uti_gn) <- 7})      #    svalue(uti_gn) <- 11})
+
 
 
   raw_eg <- gexpandgroup("Resources", horizontal = FALSE, container = lef_g)
   gbutton(text = "Survey", container = raw_eg, handler = function(h,...){
-    svalue(uti_gn) <- 8})
+    svalue(uti_gn) <- 7})
   gbutton(text = "Fishery", container = raw_eg, handler = function(h,...){
-    svalue(uti_gn) <- 9})
-  # gbutton(text = "Population", container = raw_eg, handler = function(h,...){
-  #   svalue(uti_gn) <- 5})
+    svalue(uti_gn) <- 8})
   gbutton(text = "Mixture", container = raw_eg, handler = function(h,...){
-    svalue(uti_gn) <- 10})
+    svalue(uti_gn) <- 9})
   gbutton(text = "Cohorts", container = raw_eg, handler = function(h,...){
-    svalue(uti_gn) <- 11})
+    svalue(uti_gn) <- 10})
 
   pre_eg <- gexpandgroup("Predictive", horizontal = FALSE, container = lef_g)
   gbutton(text = "Predict", container = pre_eg, handler = function(h,...){
-    svalue(uti_gn) <- 12})
+    svalue(uti_gn) <- 11})
   sim_eg <- gexpandgroup("Simulation", horizontal = FALSE, container = lef_g)
   gbutton(text = "Simulate", container = sim_eg, handler = function(h,...){
-    svalue(uti_gn) <- 13})
+    svalue(uti_gn) <- 12})
   addSpring(lef_g)
   stat_bar <- gstatusbar("", container = lef_g, visible = TRUE)
 
@@ -251,7 +248,7 @@ smart_gui <- function(){
   # n_cell_g <- glabel("   ---", container = effo_g)
   addSpring(effo_g)
   effo_b <- gbutton(text = "Show data", container = effo_g, handler = function(h,..){
-    svalue(uti_gn) <- 8
+    svalue(uti_gn) <- 7
   })
   effo_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
@@ -265,7 +262,7 @@ smart_gui <- function(){
   # n_cell_g <- glabel("   ---", container = effo_g)
   addSpring(figr_g)
   figr_b <- gbutton(text = "Show data", container = figr_g, handler = function(h,..){
-    svalue(uti_gn) <- 9
+    svalue(uti_gn) <- 8
   })
   figr_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   figr_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
@@ -279,7 +276,7 @@ smart_gui <- function(){
   # n_cell_g <- glabel("   ---", container = regi_g)
   addSpring(regi_g)
   regi_b <- gbutton(text = "Show data", container = regi_g, handler = function(h,..){
-    svalue(uti_gn) <- 10
+    svalue(uti_gn) <- 9
   })
   regi_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   regi_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
@@ -293,24 +290,12 @@ smart_gui <- function(){
   # n_cell_g <- glabel("   ---", container = prod_g)
   addSpring(prod_g)
   prod_b <- gbutton(text = "Show data", container = prod_g, handler = function(h,..){
-    svalue(uti_gn) <- 11
+    svalue(uti_gn) <- 10
   })
   prod_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   add(prod_g, prod_sta)
   #   enabled(prod_b) <- FALSE
 
-
-  addSpring(pro_g_mid)
-  # gbutton("Selectivity", container = pro_g_mid)
-  sele_g <- gframe(text = "Selectivity", horizontal = FALSE, container = pro_g_mid)
-  # n_cell_g <- glabel("   ---", container = effo_g)
-  addSpring(sele_g)
-  sele_b <- gbutton(text = "Show data", container = sele_g, handler = function(h,..){
-    svalue(uti_gn) <- 12
-  })
-  sele_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
-  add(sele_g, sele_sta)
-  #   enabled(sele_b) <- FALSE
 
   addSpring(pro_g_mid)
   addSpace(pro_g_mid, 2)
@@ -1531,30 +1516,6 @@ smart_gui <- function(){
   proGro_p <- ggraphics(container = pro_g, width = 550, height = 250, expand = TRUE)
 
 
-  ##############################################################
-  ####   Selectivity   #########################################
-  ##############################################################
-
-  sel_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Selectivity")
-  sel_g_top <- gframe(horizontal = TRUE, container = sel_g)
-  addSpace(sel_g_top, 2)
-  addSpring(sel_g_top)
-  sel_g_top1 <- ggroup(horizontal = FALSE, container = sel_g_top)
-  addSpring(sel_g_top1)
-  gbutton("Edit Raw Selectivity", container = sel_g_top1, handler = function(h,...){
-
-  })
-  gbutton("Load Data", container = sel_g_top1, handler = function(h,...){
-
-  })
-  addSpring(sel_g_top1)
-  addSpring(sel_g_top)
-  gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"),
-         container = sel_g_top)
-  addSpring(sel_g_top)
-  addSpace(sel_g_top, 2)
-
-
 
   ##############################################################
   ####     Survey     ##########################################
@@ -2137,8 +2098,7 @@ smart_gui <- function(){
   svalue(uti_gn) <- 10
   svalue(uti_gn) <- 11
   svalue(uti_gn) <- 12
-  svalue(uti_gn) <- 13
-  # svalue(uti_gn) <- 14
+
   svalue(uti_gn) <- 1
   # visible(main_win) <- TRUE
 
