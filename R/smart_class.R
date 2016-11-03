@@ -26,6 +26,9 @@ SmartProject <- R6Class("smartProject",
                           loadSurveyLFD = function(csv_path) {
                             cat("\nLoading survey data...", sep = "")
                             rawDataSurvey <<- read.table(file = csv_path, sep = ";", dec = ".", colClasses = c("character", "numeric", "numeric", "factor", "numeric", "numeric", "numeric", "numeric"), header = TRUE)
+
+                            surveyBySpecie <<- list()
+
                             cat("\nSetting Years... ", sep = "")
                             setYearSurvey()
                             cat(" from ", min(levels(yearInSurvey)[as.numeric(yearInSurvey)]), " to ", max(levels(yearInSurvey)[as.numeric(yearInSurvey)]),"\nSetting Species... ", sep = "")
