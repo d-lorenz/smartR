@@ -536,7 +536,7 @@ smart_gui <- function(){
     svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
     dev.set(dev.list()[pre_dev+2])
 
-    svalue(stat_bar) <- "Plotting raw effort..."
+    svalue(stat_bar) <- "Plotting raw points..."
     my_project$ggplotRawPoints(svalue(effvie_drop))
     svalue(stat_bar) <- ""
 
@@ -825,9 +825,9 @@ smart_gui <- function(){
 
   eff_g_top2_ver <- ggroup(horizontal = FALSE, container = eff_g_top2)
   addSpring(eff_g_top2_ver)
-  gbutton("Raw Effort", container = eff_g_top2_ver, handler = function(h,...){
+  gbutton("Raw Points", container = eff_g_top2_ver, handler = function(h,...){
     dev.set(dev.list()[pre_dev+2])
-    svalue(stat_bar) <- "Plotting raw effort..."
+    svalue(stat_bar) <- "Plotting raw points..."
 
     enabled(eff_g_top) <- FALSE
 
