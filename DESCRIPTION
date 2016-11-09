@@ -54,5 +54,6 @@ Imports:
     rgeos,
     scales,
     grDevices,
-    ggthemes
+    ggthemes,
+    vegan
 RoxygenNote: 5.0.1

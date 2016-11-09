@@ -38,6 +38,7 @@ importFrom("graphics", "abline", "barplot", "hist", "par", "points", "text")
 importFrom("stats", "as.formula", "dist", "dnorm", "glm", "predict", "quantile", "runif")
 importFrom("utils", "capture.output", "read.table")
 importFrom("ggthemes", "theme_tufte", "theme_few")
+importFrom("vegan", "decostand")
 
 export(smart_gui)
 export(SmartProject)
