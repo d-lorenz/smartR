@@ -2092,11 +2092,21 @@ smart_gui <- function(){
   assSou_r <- gradio(c("Survey", "Fishery"), selected = 1, horizontal = FALSE, container = assSou_g,
                      handler = function(...){
                        if(svalue(assSou_r) == "Survey"){
-                         assSpe_g[] <- my_project$specieInSurvey
-                         svalue(assSpe_g) <- my_project$specieInSurvey[1]
+                         if(is.null(my_project$specieInSurvey)){
+                           assSpe_drop[] <- "No data"
+                           svalue(assSpe_drop) <- "No data"
+                         }else{
+                           assSpe_drop[] <- my_project$specieInSurvey
+                           svalue(assSpe_drop) <- my_project$specieInSurvey[1]
+                         }
                        }else{
-                         assSpe_g[] <- my_project$specieInFishery
-                         svalue(assSpe_g) <- my_project$specieInFishery[1]
+                         if(is.null(my_project$specieInFishery)){
+                           assSpe_drop[] <- "No data"
+                           svalue(assSpe_drop) <- "No data"
+                         }else{
+                           assSpe_drop[] <- my_project$specieInFishery
+                           svalue(assSpe_drop) <- my_project$specieInFishery[1]
+                         }
                        }
                      })
   addSpring(assSou_g)
@@ -2152,10 +2162,10 @@ smart_gui <- function(){
 
       if(svalue(assSou_r) == "Survey"){
         if(svalue(lwRel_sex_drop) == "Female"){
-        my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(assSpe_drop))]]$Lwpar[["Female"]] <- list(alpha = svalue(tmp_alpha), beta = svalue(tmp_beta))
-      }else{
-        my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(assSpe_drop))]]$Lwpar[["Male"]] <- list(alpha = svalue(tmp_alpha), beta = svalue(tmp_beta))
-      }
+          my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(assSpe_drop))]]$Lwpar[["Female"]] <- list(alpha = svalue(tmp_alpha), beta = svalue(tmp_beta))
+        }else{
+          my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(assSpe_drop))]]$Lwpar[["Male"]] <- list(alpha = svalue(tmp_alpha), beta = svalue(tmp_beta))
+        }
       }else{
         if(svalue(lwRel_sex_drop) == "Female"){
           my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(assSpe_drop))]]$Lwpar[["Female"]] <- list(alpha = svalue(tmp_alpha), beta = svalue(tmp_beta))
