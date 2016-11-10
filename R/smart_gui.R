@@ -2065,7 +2065,8 @@ smart_gui <- function(){
                        # Compute mixture
                        my_project$fisheryBySpecie[[ind_spe]]$calcMixDate(nAdap = as.numeric(svalue(mc_niter)),
                                                                          nSamp = as.numeric(svalue(mc_nsamp)),
-                                                                         sexDrop = svalue(sex_drop_mix))
+                                                                         sexDrop = svalue(sex_drop_mix),
+                                                                         curveSel = svalue(gcurv_r))
 
                        my_project$fisheryBySpecie[[ind_spe]]$ggplotMcmcOut(selSex = svalue(sex_drop_mix))
 
