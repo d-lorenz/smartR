@@ -2003,7 +2003,7 @@ smart_gui <- function(){
                          dev.set(dev.list()[pre_dev+6])
 
                          my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_mix))]]$ggplotMcmcOut(selCompo = svalue(view_radio),
-                                                                             selSex = svalue(sex_drop_mix))
+                                                                                                                                selSex = svalue(sex_drop_mix))
                        })
 
   addSpring(cont_g)
