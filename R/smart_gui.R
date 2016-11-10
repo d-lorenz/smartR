@@ -2080,7 +2080,7 @@ smart_gui <- function(){
   assSou_g <- gframe("Source", horizontal = FALSE, container = assfra_g, expand = TRUE)
   addSpring(assSou_g)
   assSou_r <- gradio(c("Survey", "Fishery"), selected = 1, horizontal = FALSE, container = assSou_g,
-                     handler = function(h,...){
+                     handler = function(...){
                        if(svalue(assSou_r) == "Survey"){
                          assSpe_g[] <- my_project$specieInSurvey
                          svalue(assSpe_g) <- my_project$specieInSurvey[1]
