@@ -1906,6 +1906,7 @@ smart_gui <- function(){
     if(svalue(sourceMix_r) == "Survey"){
       if(is.null(my_project$specieInSurvey)){
         spec_drop_mix[] <- "No data"
+        svalue(spec_drop_mix) <- "No data"
       }else{
         spec_drop_mix[] <- my_project$specieInSurvey
         svalue(spec_drop_mix) <- my_project$specieInSurvey[1]
@@ -1913,6 +1914,7 @@ smart_gui <- function(){
     }else{
       if(is.null(my_project$specieInFishery)){
         spec_drop_mix[] <- "No data"
+        svalue(spec_drop_mix) <- "No data"
       }else{
         spec_drop_mix[] <- my_project$specieInFishery
         svalue(spec_drop_mix) <- my_project$specieInFishery[1]
