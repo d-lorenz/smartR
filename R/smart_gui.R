@@ -1904,11 +1904,19 @@ smart_gui <- function(){
   addSpring(cont_g)
   sourceMix_r <- gradio(items = c("Survey", "Fishery"), horizontal = FALSE, container = cont_g, expand = TRUE, handler = function(...){
     if(svalue(sourceMix_r) == "Survey"){
-      spec_drop_mix[] <- my_project$specieInSurvey
-      svalue(spec_drop_mix) <- my_project$specieInSurvey[1]
+      if(is.null(my_project$specieInSurvey)){
+        spec_drop_mix[] <- "No data"
+      }else{
+        spec_drop_mix[] <- my_project$specieInSurvey
+        svalue(spec_drop_mix) <- my_project$specieInSurvey[1]
+      }
     }else{
-      spec_drop_mix[] <- my_project$specieInFishery
-      svalue(spec_drop_mix) <- my_project$specieInFishery[1]
+      if(is.null(my_project$specieInFishery)){
+        spec_drop_mix[] <- "No data"
+      }else{
+        spec_drop_mix[] <- my_project$specieInFishery
+        svalue(spec_drop_mix) <- my_project$specieInFishery[1]
+      }
     }
   })
   spec_mix_f <- gframe(" Specie ", horizontal = FALSE, container = cont_g, expand = TRUE)
