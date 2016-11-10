@@ -1277,7 +1277,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                  )
                                }
                              },
-                             calcMixDate = function(nAdap = 100, nSamp = 2000, sexDrop = "Female"){
+                             calcMixDate = function(nAdap = 100, nSamp = 2000, sexDrop = "Female", curveSel = "von Bertalanffy"){
                                # mixPar <<- list('Female' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)),
                                #                 'Male' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)))
                                # for(sex in c("Female", "Male")){ }
@@ -1320,7 +1320,8 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                ######
                                ### MCMC model setup
                                # n.adapt <- 500
-                               modelGomGro <- system.file("model/gompGrow.jags", package = "smartR")
+                               modelGomGro <- ifelse(curveSel == "von Bertalanffy", system.file("model/bertGrow.jags", package = "smartR"),system.file("model/gompGrow.jags", package = "smartR"))
+                               # modelGomGro <- system.file("model/gompGrow.jags", package = "smartR")
 
                                jags.m <- jags.model(modelGomGro,
                                                     data = dataList,
@@ -1372,9 +1373,15 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                zHat = numeric(nrow(curDistri))
                                for(iObs in 1:nrow(curDistri)){
 
+                                 if(curveSel == "von Bertalanffy"){
+                                   temp <- LHat * (1 - exp(-kHat*(((1:nCoho)-1+tt[iObs]))))
+                                 }else{
+                                   temp <- LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho)-1+tt[iObs]))))
+                                 }
+
                                  ## GGF
                                  ##  temp = LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho) - 1 - t0Hat))))
-                                 temp = LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho)-1+tt[iObs]))))  ##BEST
+                                 # temp = LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho)-1+tt[iObs]))))  ##BEST
                                  ##  temp = LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho)-1+tt[iObs] - t0Hat))))
 
                                  # VBGF
@@ -1434,7 +1441,13 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                                       Date = rep(levels(mix_out$CatcDate), times = length(min(mix_out$Birth):(min(mix_out$Birth)+11))),
                                                       Length = NA)
                                growPath$Age <- as.numeric(strtrim(growPath$Date, 4)) - growPath$Birth + as.numeric(substr(growPath$Date, 6,7))/12
-                               growPath$Length <- calcGomp(LHat, kHat, growPath$Age)
+
+                               if(curveSel == "von Bertalanffy"){
+                                 growPath$Length <- calcVonBert(LHat, kHat, growPath$Age)
+                               }else{
+                                 growPath$Length <- calcGomp(LHat, kHat, growPath$Age)
+                               }
+
                                growPath$Date <- factor(growPath$Date, levels = levels(mix_out$CatcDate))
                                # growPath <- growPath[growPath$Age > 0,]
                                growPath <- growPath[growPath$Length > floor(min(mix_out$Length)),]
