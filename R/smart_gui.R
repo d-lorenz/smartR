@@ -2011,13 +2011,16 @@ smart_gui <- function(){
   addSpring(ncoh_f)
   ncih_sb <- gspinbutton (from = 1, to = 100, by = 1, value = 3, digits = 0, container = ncoh_f)
   addSpring(ncoh_f)
-  # addSpring(cont_g)
-  # prio_g <- ggroup(horizontal = TRUE, container = cont_g)
-  # addSpring(prio_g)
-  # prio_b <- gbutton ("Set Priors", container = prio_g,
-  #                    handler = function(h,...){ })
-  # addSpring(prio_g)
+
   addSpring(cont_g)
+
+  gcurv_f <- gframe("Growth Curve", horizontal = FALSE, container = cont_g)
+  addSpring(gcurv_f)
+  gcurv_r <- gradio(items = c("von Bertalanffy", "Gompertz"), horizontal = FALSE, container = gcurv_f, expand = TRUE)
+  addSpring(gcurv_f)
+
+  addSpring(cont_g)
+
   go_g <- gframe("MCMC sim", horizontal = TRUE, container = cont_g, expand = TRUE)
   addSpring(go_g)
   go_g_ada <- ggroup(horizontal = FALSE, container = go_g, expand = TRUE)
