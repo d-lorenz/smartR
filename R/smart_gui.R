@@ -2072,8 +2072,19 @@ smart_gui <- function(){
 
 
   ass_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Assess")
+  ass_g_top <- gframe(horizontal = TRUE, container = ass_g, spacing = 10)
+  addSpring(ass_g_top)
 
+  assfra_g <- gframe("Input setup", horizontal = TRUE, container = ass_g_top, expand = TRUE)
+  addSpring(assfra_g)
 
+  assSou_g <- gframe("Source", horizontal = FALSE, container = assfra_g, expand = TRUE)
+  addSpring(assSou_g)
+  assSou_r <- gradio(c("Survey", "Fishery"), selected = 1, horizontal = FALSE, container = assSou_g)
+  addSpring(assSou_g)
+
+  addSpring(assfra_g)
+  addSpring(ass_g_top)
 
   ####   Simulation   ##############################################################
 
