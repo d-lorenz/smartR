@@ -1320,10 +1320,9 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                ######
                                ### MCMC model setup
                                # n.adapt <- 500
-                               modelGomGro <- ifelse(curveSel == "von Bertalanffy", system.file("model/bertGrow.jags", package = "smartR"),system.file("model/gompGrow.jags", package = "smartR"))
-                               # modelGomGro <- system.file("model/gompGrow.jags", package = "smartR")
+                               modelGrow <- ifelse(curveSel == "von Bertalanffy", system.file("model/bertGrow.jags", package = "smartR"),system.file("model/gompGrow.jags", package = "smartR"))
 
-                               jags.m <- jags.model(modelGomGro,
+                               jags.m <- jags.model(modelGrow,
                                                     data = dataList,
                                                     inits = inits,
                                                     n.chains = 3,
