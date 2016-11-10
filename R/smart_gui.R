@@ -2111,7 +2111,7 @@ smart_gui <- function(){
 
     addSpace(lwRel_g_top,15)
 
-    lwRel_f_sex <- gframe("Sex", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
+    lwRel_f_sex <- gframe("Sex", horizontal = FALSE, container = lwRel_g_top, expand = TRUE)
     addSpace(lwRel_f_sex, 10)
     lwRel_sex_drop <- gcombobox(items = c("Female", "Male"),
                                 selected = 1, container = lwRel_f_sex, expand = TRUE,
