@@ -1043,10 +1043,8 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                                             't0' = list('Mean' = m_t0[1], 'StD' = m_t0[2])))
 
                              },
-                             setLWpar = function(aF, bF, aM, bM){
-                               LWpar <<- array(dim=c(2,2))
-                               LWpar[1,] <<- c(aF, bF)
-                               LWpar[2,] <<- c(aM, bM)
+                             setLWpar = function(alphaVal, betaVal, sex){
+                               LWpar[[sex]] <<- list(alpha = alphaVal, beta = betaVal)
                              },
                              setBrefs = function(b_value){
                                bRefs <<- b_value
