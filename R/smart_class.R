@@ -1284,7 +1284,6 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 
                                outPalette <- rainbow(nCoho)
 
-                               # ######
                                # ### FishBase data
                                # mut_popgrowth <- popgrowth("Mullus barbatus barbatus")
                                # ###
@@ -1317,10 +1316,10 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 
                                tt = as.POSIXlt(chron(curDistri$UTC))$yday / 366
 
-                               ######
                                ### MCMC model setup
-                               # n.adapt <- 500
-                               modelGrow <- ifelse(curveSel == "von Bertalanffy", system.file("model/bertGrow.jags", package = "smartR"),system.file("model/gompGrow.jags", package = "smartR"))
+                               modelGrow <- ifelse(curveSel == "von Bertalanffy",
+                                                   system.file("model/bertGrow.jags", package = "smartR"),
+                                                   system.file("model/gompGrow.jags", package = "smartR"))
 
                                jags.m <- jags.model(modelGrow,
                                                     data = dataList,
@@ -1329,7 +1328,6 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                                     n.adapt = nAdap)
                                ###
 
-                               ######
                                ### MCMC chain sampling
                                n.iter <- 500
                                obsNode <- c('Linf', 'k', 't0', 'tau', 'p')
@@ -1342,7 +1340,6 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                  maleMcmc <<- samps
                                }
 
-                               ######
                                ### MCMC estimates
                                dfLinf <- data.frame(Parameter = "Linf",
                                                     Iter = 1:n.iter,
@@ -1365,8 +1362,6 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                sigma2s = 1/taus
                                sigma2Hat = apply(sigma2s, 2, mean)
 
-
-                               ######
                                ### age estimation
                                means.f = matrix(0, nrow(curDistri), nCoho)
                                zHat = numeric(nrow(curDistri))
@@ -1394,9 +1389,6 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                ages.f = zHat -1 + tt #- t0Hat
                                AA = floor(ages.f)
 
-
-
-                               ######
                                ### MCMC output
                                FGlabels = as.numeric(as.character(curDistri$NumFG))
                                FGnames = unique(FGlabels)
@@ -1455,7 +1447,6 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                                 coh.mean = mean(Length), coh.var = var(Length), coh.num = length(Length))
                                ###
 
-                               ######
                                ### MCMC calc birth
                                out_birth <- table(paste(mix_out$Year, mix_out$Quarter, sep = "_"),  mix_out$Birth)
                                birth_melt <- melt(out_birth)
@@ -1466,8 +1457,6 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                birth_melt <- birth_melt[birth_melt$Qty != 0,]
                                ###
 
-
-                               ######
                                ### MCMC Calc Survivors
                                tot_count <- apply(out_birth,2, sum)
                                surv_tbl <- out_birth
@@ -1508,23 +1497,20 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                  femalePlot[["cohoVariGG"]] <<- set_ggSigmaBox(df_sigma = sigma2s[,1:(max(AA)+1)], sigPalette = outPalette, numCoho = nCoho)
                                  ###
 
-                                 ######
                                  ### MCMC Plot Age-Length
                                  femalePlot[["ageLength"]] <<- set_ggAgeLength(df_mix = mix_out, mixPalette = outPalette)
                                  ### MCMC Age-Length Key
                                  femalePlot[["ageLengthTbl"]] <<- set_tblAgeLength(df_mix = mix_out)
                                  ### MCMC output cohort stats
                                  femalePlot[["cohoStatTbl"]] <<- set_tblCohoStat(df_coho = coho_AL)
-                                 ######
 
-                                 ######
                                  ### MCMC quarter vertical hist
                                  femalePlot[["histBirth"]] <<- set_ggHistBirth(df_mix = mix_out, df_grow = growPath)
                                  ### MCMC Catch * Quarters
                                  femalePlot[["lineCatch"]] <<- set_ggCatchLine(df_birth = birth_melt)
                                  ### MCMC Survivors * quarter
                                  femalePlot[["lineSurv"]] <<- set_ggSurvLine(df_surv = surv_melt)
-                                 ######
+
                                }else{
 
                                  ## Same as female
