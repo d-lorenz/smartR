@@ -2135,7 +2135,9 @@ smart_gui <- function(){
     addSpace(lwRel_f_sex, 10)
     lwRel_sex_drop <- gcombobox(items = c("Female", "Male"),
                                 selected = 1, container = lwRel_f_sex, expand = TRUE,
-                                editable = FALSE)
+                                editable = FALSE, handler = function(...){
+                                  svalue(sex_label) <- svalue(lwRel_sex_drop)
+                                })
     addSpace(lwRel_f_sex, 10)
 
     addSpace(lwRel_g_top,15)
