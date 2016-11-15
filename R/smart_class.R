@@ -1275,6 +1275,13 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                  )
                                }
                              },
+                             setWeight = function(sexVal = "Female", alphaVal = 1, betaVal = 3){
+                               if(sexVal == "Female"){
+                                 femaleMixOut$Weight <<- alphaVal * mix_out$Length ^ betaVal
+                               }else{
+                                 maleMixOut$Weight <<- alphaVal * mix_out$Length ^ betaVal
+                               }
+                             },
                              calcMixDate = function(nAdap = 100, nSamp = 2000, sexDrop = "Female", curveSel = "von Bertalanffy"){
                                # mixPar <<- list('Female' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)),
                                #                 'Male' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)))
