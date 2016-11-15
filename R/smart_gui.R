@@ -2215,12 +2215,17 @@ smart_gui <- function(){
     ## Compute from values
     lwRel_f_comp <- gframe(text = "Compute", horizontal = TRUE, container = lwRel_g_top, spacing = 10)
     addSpace(lwRel_f_comp, 10)
-    gbutton("Compute", container = lwRel_f_comp, handler = function(h,...){
+    gbutton("Set Weight", container = lwRel_f_comp, handler = function(h,...){
 
-      mix_out$Weight <<- svalue(valu_lyt[1,2]) * mix_out$Length ^ svalue(valu_lyt[2,2])
+      my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(assSpe_drop))]]$setWeight(sexVal = svalue(lwRel_sex_drop),
+                                                                                                       alphaVal = svalue(valu_lyt[1,2]),
+                                                                                                       betaVal = svalue(valu_lyt[2,2]))
+
+      # mix_out$Weight <<- svalue(valu_lyt[1,2]) * mix_out$Length ^ svalue(valu_lyt[2,2])
 
     })
     addSpace(lwRel_f_comp, 10)
+    sex_label <- glabel(text = "Female", container = lwRel_f_comp)
 
     addSpring(lwRel_g_top)
     gbutton("Close", container = lwRel_g_top, handler = function(h,...){
