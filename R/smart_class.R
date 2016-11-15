@@ -1277,9 +1277,9 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                              },
                              setWeight = function(sexVal = "Female", alphaVal = 1, betaVal = 3){
                                if(sexVal == "Female"){
-                                 femaleMixOut$Weight <<- alphaVal * mix_out$Length ^ betaVal
+                                 femaleMixOut$Weight <<- alphaVal * femaleMixOut$Length ^ betaVal
                                }else{
-                                 maleMixOut$Weight <<- alphaVal * mix_out$Length ^ betaVal
+                                 maleMixOut$Weight <<- alphaVal * maleMixOut$Length ^ betaVal
                                }
                              },
                              calcMixDate = function(nAdap = 100, nSamp = 2000, sexDrop = "Female", curveSel = "von Bertalanffy"){
