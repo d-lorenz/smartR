@@ -2217,10 +2217,16 @@ smart_gui <- function(){
     addSpace(lwRel_f_comp, 10)
     gbutton("Set Weight", container = lwRel_f_comp, handler = function(h,...){
 
-      my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(assSpe_drop))]]$setWeight(sexVal = svalue(lwRel_sex_drop),
-                                                                                                       alphaVal = svalue(valu_lyt[1,2]),
-                                                                                                       betaVal = svalue(valu_lyt[2,2]))
+      if(svalue(assSou_r) == "Survey"){
+        my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(assSpe_drop))]]$setWeight(sexVal = svalue(lwRel_sex_drop),
+                                                                                                         alphaVal = svalue(valu_lyt[1,2]),
+                                                                                                         betaVal = svalue(valu_lyt[2,2]))
+      }else{
+        my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(assSpe_drop))]]$setWeight(sexVal = svalue(lwRel_sex_drop),
+                                                                                                         alphaVal = svalue(valu_lyt[1,2]),
+                                                                                                         betaVal = svalue(valu_lyt[2,2]))
 
+      }
       # mix_out$Weight <<- svalue(valu_lyt[1,2]) * mix_out$Length ^ svalue(valu_lyt[2,2])
 
     })
