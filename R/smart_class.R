@@ -1313,11 +1313,13 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                # mut_popgrowth <- popgrowth("Mullus barbatus barbatus")
                                # ###
 
-                               if(sexDrop == "Female"){
-                                 curDistri <- femaleSpre
-                               }else{
-                                 curDistri <- maleSpre
-                               }
+                               curDistri <- spreDist[[sexDrop]]
+
+                               # if(sexDrop == "Female"){
+                               #   curDistri <- femaleSpre
+                               # }else{
+                               #   curDistri <- maleSpre
+                               # }
 
                                sub_idx <- sample(1:nrow(curDistri), size = nSamp)
                                sub_data <- curDistri[sub_idx,]
