@@ -1882,9 +1882,9 @@ smart_gui <- function(){
 
     # my_project$plotGooSpe(whiSpe = "All", whiSou = "Fishery")
     suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSamp,
-                                  my_project$fisheryBySpecie[[spe_ind]]$femalePlot[["spatAbsFreq"]],
-                                  my_project$fisheryBySpecie[[spe_ind]]$femalePlot[["spatRelFreq"]],
-                                  my_project$fisheryBySpecie[[spe_ind]]$femalePlot[["spatAbbTbl"]],
+                                  my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
+                                  my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatRelFreq"]],
+                                  my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbbTbl"]],
                                   layout_matrix = rbind(c(NA,1,1),
                                                         c(4,1,1),
                                                         c(NA,2,3))
