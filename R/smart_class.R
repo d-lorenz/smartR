@@ -1246,51 +1246,74 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                # preMix <<- weight2number(rawLFD[,c("DATE","LCLASS","UNSEX")])
                              },
                              ggplotMcmcOut = function(selCompo = "MCMC", selSex = "Female"){
-                               if(selSex == "Female"){
-                                 switch(selCompo,
-                                       MCMC = suppressWarnings(grid.arrange(femalePlot[["traceChain"]],
-                                                                            femalePlot[["scatLK"]],
-                                                                            femalePlot[["cohoPreciGG"]],
-                                                                            femalePlot[["cohoVariGG"]],
-                                                                            layout_matrix = rbind(c(1,1,1,2),
-                                                                                                  c(1,1,1,2),
-                                                                                                  c(4,4,5,5)))),
-                                       Key = suppressWarnings(grid.arrange(femalePlot[["ageLength"]],
-                                                                           femalePlot[["ageLengthTbl"]],
-                                                                           femalePlot[["cohoStatTbl"]],
-                                                                           layout_matrix = rbind(c(1,1,2),
-                                                                                                 c(1,1,2),
-                                                                                                 c(1,1,3)))),
-                                       Birth = suppressWarnings(grid.arrange(femalePlot[["histBirth"]],
-                                                                             femalePlot[["lineCatch"]],
-                                                                             femalePlot[["lineSurv"]],
-                                                                             layout_matrix = rbind(c(1,1),
-                                                                                                   c(1,1),
-                                                                                                   c(2,3))))
-                                 )
-                               }else{
-                                 switch(selCompo,
-                                       MCMC = suppressWarnings(grid.arrange(malePlot[["traceChain"]],
-                                                                            malePlot[["scatLK"]],
-                                                                            malePlot[["cohoPreciGG"]],
-                                                                            malePlot[["cohoVariGG"]],
-                                                                            layout_matrix = rbind(c(1,1,1,2),
-                                                                                                  c(1,1,1,2),
-                                                                                                  c(4,4,5,5)))),
-                                       Key = suppressWarnings(grid.arrange(malePlot[["ageLength"]],
-                                                                           malePlot[["ageLengthTbl"]],
-                                                                           malePlot[["cohoStatTbl"]],
-                                                                           layout_matrix = rbind(c(1,1,2),
-                                                                                                 c(1,1,2),
-                                                                                                 c(1,1,3)))),
-                                       Birth = suppressWarnings(grid.arrange(malePlot[["histBirth"]],
-                                                                             malePlot[["lineCatch"]],
-                                                                             malePlot[["lineSurv"]],
-                                                                             layout_matrix = rbind(c(1,1),
-                                                                                                   c(1,1),
-                                                                                                   c(2,3))))
-                                 )
-                               }
+
+                               switch(selCompo,
+                                      MCMC = suppressWarnings(grid.arrange(sprePlot[[selSex]][["traceChain"]],
+                                                                           sprePlot[[selSex]][["scatLK"]],
+                                                                           sprePlot[[selSex]][["cohoPreciGG"]],
+                                                                           sprePlot[[selSex]][["cohoVariGG"]],
+                                                                           layout_matrix = rbind(c(1,1,1,2),
+                                                                                                 c(1,1,1,2),
+                                                                                                 c(4,4,5,5)))),
+                                      Key = suppressWarnings(grid.arrange(sprePlot[[selSex]][["ageLength"]],
+                                                                          sprePlot[[selSex]][["ageLengthTbl"]],
+                                                                          sprePlot[[selSex]][["cohoStatTbl"]],
+                                                                          layout_matrix = rbind(c(1,1,2),
+                                                                                                c(1,1,2),
+                                                                                                c(1,1,3)))),
+                                      Birth = suppressWarnings(grid.arrange(sprePlot[[selSex]][["histBirth"]],
+                                                                            sprePlot[[selSex]][["lineCatch"]],
+                                                                            sprePlot[[selSex]][["lineSurv"]],
+                                                                            layout_matrix = rbind(c(1,1),
+                                                                                                  c(1,1),
+                                                                                                  c(2,3))))
+                               )
+
+                               # if(selSex == "Female"){
+                               #   switch(selCompo,
+                               #         MCMC = suppressWarnings(grid.arrange(femalePlot[["traceChain"]],
+                               #                                              femalePlot[["scatLK"]],
+                               #                                              femalePlot[["cohoPreciGG"]],
+                               #                                              femalePlot[["cohoVariGG"]],
+                               #                                              layout_matrix = rbind(c(1,1,1,2),
+                               #                                                                    c(1,1,1,2),
+                               #                                                                    c(4,4,5,5)))),
+                               #         Key = suppressWarnings(grid.arrange(femalePlot[["ageLength"]],
+                               #                                             femalePlot[["ageLengthTbl"]],
+                               #                                             femalePlot[["cohoStatTbl"]],
+                               #                                             layout_matrix = rbind(c(1,1,2),
+                               #                                                                   c(1,1,2),
+                               #                                                                   c(1,1,3)))),
+                               #         Birth = suppressWarnings(grid.arrange(femalePlot[["histBirth"]],
+                               #                                               femalePlot[["lineCatch"]],
+                               #                                               femalePlot[["lineSurv"]],
+                               #                                               layout_matrix = rbind(c(1,1),
+                               #                                                                     c(1,1),
+                               #                                                                     c(2,3))))
+                               #   )
+                               # }else{
+                               #   switch(selCompo,
+                               #         MCMC = suppressWarnings(grid.arrange(malePlot[["traceChain"]],
+                               #                                              malePlot[["scatLK"]],
+                               #                                              malePlot[["cohoPreciGG"]],
+                               #                                              malePlot[["cohoVariGG"]],
+                               #                                              layout_matrix = rbind(c(1,1,1,2),
+                               #                                                                    c(1,1,1,2),
+                               #                                                                    c(4,4,5,5)))),
+                               #         Key = suppressWarnings(grid.arrange(malePlot[["ageLength"]],
+                               #                                             malePlot[["ageLengthTbl"]],
+                               #                                             malePlot[["cohoStatTbl"]],
+                               #                                             layout_matrix = rbind(c(1,1,2),
+                               #                                                                   c(1,1,2),
+                               #                                                                   c(1,1,3)))),
+                               #         Birth = suppressWarnings(grid.arrange(malePlot[["histBirth"]],
+                               #                                               malePlot[["lineCatch"]],
+                               #                                               malePlot[["lineSurv"]],
+                               #                                               layout_matrix = rbind(c(1,1),
+                               #                                                                     c(1,1),
+                               #                                                                     c(2,3))))
+                               #   )
+                               # }
                              },
                              setWeight = function(sexVal = "Female"){
 
@@ -1518,36 +1541,60 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                # surv_melt$Zeta <- 0.2*(surv_melt$Zeta)/(1/surv_melt$Zeta)
                                ###
 
-                               if(sexDrop == "Female"){
-                                 ### MCMC chain Traceplot
-                                 femalePlot[["traceChain"]] <<- set_ggChainTrace(ggdataSamps)
-                                 ### MCMC chain scatterplot
-                                 femalePlot[["scatLK"]] <<- set_ggChainScatter(gg_DFscat = ggdataSampScat, meanL = LHat, meanK = kHat)
-                                 ### MCMC chain Boxplot Tau
-                                 femalePlot[["cohoPreciGG"]] <<- set_ggTausBox(df_taus = taus[,1:(max(AA)+1)], tauPalette = outPalette, numCoho = nCoho)
-                                 ### MCMC Boxplot Sigma
-                                 femalePlot[["cohoVariGG"]] <<- set_ggSigmaBox(df_sigma = sigma2s[,1:(max(AA)+1)], sigPalette = outPalette, numCoho = nCoho)
-                                 ###
+                               ### MCMC chain Traceplot
+                               sprePlot[[selSex]][["traceChain"]] <<- set_ggChainTrace(ggdataSamps)
+                               ### MCMC chain scatterplot
+                               sprePlot[[selSex]][["scatLK"]] <<- set_ggChainScatter(gg_DFscat = ggdataSampScat, meanL = LHat, meanK = kHat)
+                               ### MCMC chain Boxplot Tau
+                               sprePlot[[selSex]][["cohoPreciGG"]] <<- set_ggTausBox(df_taus = taus[,1:(max(AA)+1)], tauPalette = outPalette, numCoho = nCoho)
+                               ### MCMC Boxplot Sigma
+                               sprePlot[[selSex]][["cohoVariGG"]] <<- set_ggSigmaBox(df_sigma = sigma2s[,1:(max(AA)+1)], sigPalette = outPalette, numCoho = nCoho)
+                               ###
 
-                                 ### MCMC Plot Age-Length
-                                 femalePlot[["ageLength"]] <<- set_ggAgeLength(df_mix = mix_out, mixPalette = outPalette)
-                                 ### MCMC Age-Length Key
-                                 femalePlot[["ageLengthTbl"]] <<- set_tblAgeLength(df_mix = mix_out)
-                                 ### MCMC output cohort stats
-                                 femalePlot[["cohoStatTbl"]] <<- set_tblCohoStat(df_coho = coho_AL)
+                               ### MCMC Plot Age-Length
+                               sprePlot[[selSex]][["ageLength"]] <<- set_ggAgeLength(df_mix = mix_out, mixPalette = outPalette)
+                               ### MCMC Age-Length Key
+                               sprePlot[[selSex]][["ageLengthTbl"]] <<- set_tblAgeLength(df_mix = mix_out)
+                               ### MCMC output cohort stats
+                               sprePlot[[selSex]][["cohoStatTbl"]] <<- set_tblCohoStat(df_coho = coho_AL)
 
-                                 ### MCMC quarter vertical hist
-                                 femalePlot[["histBirth"]] <<- set_ggHistBirth(df_mix = mix_out, df_grow = growPath)
-                                 ### MCMC Catch * Quarters
-                                 femalePlot[["lineCatch"]] <<- set_ggCatchLine(df_birth = birth_melt)
-                                 ### MCMC Survivors * quarter
-                                 femalePlot[["lineSurv"]] <<- set_ggSurvLine(df_surv = surv_melt)
+                               ### MCMC quarter vertical hist
+                               sprePlot[[selSex]][["histBirth"]] <<- set_ggHistBirth(df_mix = mix_out, df_grow = growPath)
+                               ### MCMC Catch * Quarters
+                               sprePlot[[selSex]][["lineCatch"]] <<- set_ggCatchLine(df_birth = birth_melt)
+                               ### MCMC Survivors * quarter
+                               sprePlot[[selSex]][["lineSurv"]] <<- set_ggSurvLine(df_surv = surv_melt)
 
-                               }else{
-
-                                 ## Same as female
-
-                               }
+                               # if(sexDrop == "Female"){
+                               #   ### MCMC chain Traceplot
+                               #   femalePlot[["traceChain"]] <<- set_ggChainTrace(ggdataSamps)
+                               #   ### MCMC chain scatterplot
+                               #   femalePlot[["scatLK"]] <<- set_ggChainScatter(gg_DFscat = ggdataSampScat, meanL = LHat, meanK = kHat)
+                               #   ### MCMC chain Boxplot Tau
+                               #   femalePlot[["cohoPreciGG"]] <<- set_ggTausBox(df_taus = taus[,1:(max(AA)+1)], tauPalette = outPalette, numCoho = nCoho)
+                               #   ### MCMC Boxplot Sigma
+                               #   femalePlot[["cohoVariGG"]] <<- set_ggSigmaBox(df_sigma = sigma2s[,1:(max(AA)+1)], sigPalette = outPalette, numCoho = nCoho)
+                               #   ###
+                               #
+                               #   ### MCMC Plot Age-Length
+                               #   femalePlot[["ageLength"]] <<- set_ggAgeLength(df_mix = mix_out, mixPalette = outPalette)
+                               #   ### MCMC Age-Length Key
+                               #   femalePlot[["ageLengthTbl"]] <<- set_tblAgeLength(df_mix = mix_out)
+                               #   ### MCMC output cohort stats
+                               #   femalePlot[["cohoStatTbl"]] <<- set_tblCohoStat(df_coho = coho_AL)
+                               #
+                               #   ### MCMC quarter vertical hist
+                               #   femalePlot[["histBirth"]] <<- set_ggHistBirth(df_mix = mix_out, df_grow = growPath)
+                               #   ### MCMC Catch * Quarters
+                               #   femalePlot[["lineCatch"]] <<- set_ggCatchLine(df_birth = birth_melt)
+                               #   ### MCMC Survivors * quarter
+                               #   femalePlot[["lineSurv"]] <<- set_ggSurvLine(df_surv = surv_melt)
+                               #
+                               # }else{
+                               #
+                               #   ## Same as female
+                               #
+                               # }
 
                              }))
 
