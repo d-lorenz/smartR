@@ -1044,7 +1044,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 
                              },
                              setLWpar = function(alphaVal, betaVal, sex){
-                               LWpar[[sex]] <<- list(alpha = alphaVal, beta = betaVal)
+                               LWpar[[sex]] <<- list(alpha = as.numeric(alphaVal), beta = as.numeric(betaVal))
                              },
                              setBrefs = function(b_value){
                                bRefs <<- b_value
