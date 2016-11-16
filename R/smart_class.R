@@ -1218,24 +1218,29 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                  barploFgAll$FG <- factor(barploFgAll$Var1, levels = barploFgAll$Var1)
                                  barploFgAll$relFreq = round(100*barploFgAll$Freq/sum(barploFgAll$Freq),1)
 
-                                 if(sex == "Female"){
-                                   femaleSpat <<- barploFgAll
-                                 }else{
-                                   maleSpat <<- barploFgAll
-                                 }
+                                 spreSpat[[sex]] <<- barploFgAll
+                                 # if(sex == "Female"){
+                                 #   femaleSpat <<- barploFgAll
+                                 # }else{
+                                 #   maleSpat <<- barploFgAll
+                                 # }
                                  setSpatPlot(sampSex = sex)
                                }
                              },
                              setSpatPlot = function(sampSex){
-                               if(sampSex == "Female"){
-                                 femalePlot[["spatAbbTbl"]] <<- set_spatAbbTbl(femaleSpat)
-                                 femalePlot[["spatAbsFreq"]] <<- set_spatAbsFreq(femaleSpat)
-                                 femalePlot[["spatRelFreq"]] <<- set_spatRelFreq(femaleSpat)
-                               }else{
-                                 malePlot[["spatAbbTbl"]] <<- set_spatAbbTbl(maleSpat)
-                                 malePlot[["spatAbsFreq"]] <<- set_spatAbsFreq(maleSpat)
-                                 malePlot[["spatRelFreq"]] <<- set_spatRelFreq(maleSpat)
-                               }
+                               sprePlot[[sampSex]][["spatAbbTbl"]] <<- set_spatAbbTbl(spreSpat[[sampSex]])
+                               sprePlot[[sampSex]][["spatAbsFreq"]] <<- set_spatAbsFreq(spreSpat[[sampSex]])
+                               sprePlot[[sampSex]][["spatRelFreq"]] <<- set_spatRelFreq(spreSpat[[sampSex]])
+
+                               # if(sampSex == "Female"){
+                               #   femalePlot[["spatAbbTbl"]] <<- set_spatAbbTbl(femaleSpat)
+                               #   femalePlot[["spatAbsFreq"]] <<- set_spatAbsFreq(femaleSpat)
+                               #   femalePlot[["spatRelFreq"]] <<- set_spatRelFreq(femaleSpat)
+                               # }else{
+                               #   malePlot[["spatAbbTbl"]] <<- set_spatAbbTbl(maleSpat)
+                               #   malePlot[["spatAbsFreq"]] <<- set_spatAbsFreq(maleSpat)
+                               #   malePlot[["spatRelFreq"]] <<- set_spatRelFreq(maleSpat)
+                               # }
                              },
                              setPreMix = function(){
                                # preMix <<- weight2number(rawLFD[,c("DATE","LCLASS","UNSEX")])
