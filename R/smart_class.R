@@ -1200,11 +1200,12 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                  spreDist$Year <- years(spreDist$UTC)
                                  spreDist$Month <- months(spreDist$UTC)
 
-                                 if(sex == "Female"){
-                                   femaleSpre <<- spreDist
-                                 }else{
-                                   maleSpre <<- spreDist
-                                 }
+                                 spreDist[[sex]] <<- spreDist
+                                 # if(sex == "Female"){
+                                 #   femaleSpre <<- spreDist
+                                 # }else{
+                                 #   maleSpre <<- spreDist
+                                 # }
                                  setSprePlot(sampSex = sex)
                                }
                              },
