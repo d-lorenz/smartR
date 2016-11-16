@@ -1542,28 +1542,28 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                ###
 
                                ### MCMC chain Traceplot
-                               sprePlot[[selSex]][["traceChain"]] <<- set_ggChainTrace(ggdataSamps)
+                               sprePlot[[sexDrop]][["traceChain"]] <<- set_ggChainTrace(ggdataSamps)
                                ### MCMC chain scatterplot
-                               sprePlot[[selSex]][["scatLK"]] <<- set_ggChainScatter(gg_DFscat = ggdataSampScat, meanL = LHat, meanK = kHat)
+                               sprePlot[[sexDrop]][["scatLK"]] <<- set_ggChainScatter(gg_DFscat = ggdataSampScat, meanL = LHat, meanK = kHat)
                                ### MCMC chain Boxplot Tau
-                               sprePlot[[selSex]][["cohoPreciGG"]] <<- set_ggTausBox(df_taus = taus[,1:(max(AA)+1)], tauPalette = outPalette, numCoho = nCoho)
+                               sprePlot[[sexDrop]][["cohoPreciGG"]] <<- set_ggTausBox(df_taus = taus[,1:(max(AA)+1)], tauPalette = outPalette, numCoho = nCoho)
                                ### MCMC Boxplot Sigma
-                               sprePlot[[selSex]][["cohoVariGG"]] <<- set_ggSigmaBox(df_sigma = sigma2s[,1:(max(AA)+1)], sigPalette = outPalette, numCoho = nCoho)
+                               sprePlot[[sexDrop]][["cohoVariGG"]] <<- set_ggSigmaBox(df_sigma = sigma2s[,1:(max(AA)+1)], sigPalette = outPalette, numCoho = nCoho)
                                ###
 
                                ### MCMC Plot Age-Length
-                               sprePlot[[selSex]][["ageLength"]] <<- set_ggAgeLength(df_mix = mix_out, mixPalette = outPalette)
+                               sprePlot[[sexDrop]][["ageLength"]] <<- set_ggAgeLength(df_mix = mix_out, mixPalette = outPalette)
                                ### MCMC Age-Length Key
-                               sprePlot[[selSex]][["ageLengthTbl"]] <<- set_tblAgeLength(df_mix = mix_out)
+                               sprePlot[[sexDrop]][["ageLengthTbl"]] <<- set_tblAgeLength(df_mix = mix_out)
                                ### MCMC output cohort stats
-                               sprePlot[[selSex]][["cohoStatTbl"]] <<- set_tblCohoStat(df_coho = coho_AL)
+                               sprePlot[[sexDrop]][["cohoStatTbl"]] <<- set_tblCohoStat(df_coho = coho_AL)
 
                                ### MCMC quarter vertical hist
-                               sprePlot[[selSex]][["histBirth"]] <<- set_ggHistBirth(df_mix = mix_out, df_grow = growPath)
+                               sprePlot[[sexDrop]][["histBirth"]] <<- set_ggHistBirth(df_mix = mix_out, df_grow = growPath)
                                ### MCMC Catch * Quarters
-                               sprePlot[[selSex]][["lineCatch"]] <<- set_ggCatchLine(df_birth = birth_melt)
+                               sprePlot[[sexDrop]][["lineCatch"]] <<- set_ggCatchLine(df_birth = birth_melt)
                                ### MCMC Survivors * quarter
-                               sprePlot[[selSex]][["lineSurv"]] <<- set_ggSurvLine(df_surv = surv_melt)
+                               sprePlot[[sexDrop]][["lineSurv"]] <<- set_ggSurvLine(df_surv = surv_melt)
 
                                # if(sexDrop == "Female"){
                                #   ### MCMC chain Traceplot
