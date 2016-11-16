@@ -2222,9 +2222,11 @@ smart_gui <- function(){
       }else{
         my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(assSpe_drop))]]$setWeight(sexVal = svalue(lwRel_sex_drop))
       }
+
     })
     addSpace(lwRel_f_comp, 10)
     sex_label <- glabel(text = "Female", container = lwRel_f_comp)
+    addSpace(lwRel_f_comp, 10)
 
     addSpring(lwRel_g_top)
     gbutton("Close", container = lwRel_g_top, handler = function(h,...){
