@@ -2147,12 +2147,6 @@ smart_gui <- function(){
     addSpace(lwRel_f_esti, 10)
     gbutton("Load sample", container = lwRel_f_esti, handler = function(h,...){
 
-      if(svalue(assSou_r) == "Survey"){
-        cat("survey", svalue(assSpe_drop))
-      }else{
-        cat("fishery", svalue(assSpe_drop))
-      }
-
       lw_data <- read.csv("/Users/Lomo/Documents/Uni/R/smart/package/inputDataFormat/lwRel_input.csv")
       lw_fit <- nls(Weight ~ I(alpha * Length ^ beta),
                     data = lw_data[,c("Length", "Weight")],
