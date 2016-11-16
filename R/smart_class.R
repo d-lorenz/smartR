@@ -1166,19 +1166,25 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                }
                              },
                              setSprePlot = function(sampSex){
-                               if(sampSex == "Female"){
-                                 femalePlot <<- list()
-                                 femalePlot[["histLfdTot"]] <<- set_ggHistLfdTot(femaleSpre)
-                                 femalePlot[["histUtcTot"]] <<- set_ggHistUtcTot(femaleSpre)
-                                 femalePlot[["dotUtcSplit"]] <<- set_ggDotUtcSplit(femaleSpre)
-                                 femalePlot[["histUtcLfd"]] <<- set_ggHistUtcLfd(femaleSpre)
-                               }else{
-                                 malePlot <<- list()
-                                 malePlot[["histLfdTot"]] <<- set_ggHistLfdTot(maleSpre)
-                                 malePlot[["histUtcTot"]] <<- set_ggHistUtcTot(maleSpre)
-                                 malePlot[["dotUtcSplit"]] <<- set_ggDotUtcSplit(maleSpre)
-                                 malePlot[["histUtcLfd"]] <<- set_ggHistUtcLfd(maleSpre)
-                               }
+
+                               sprePlot[[sampSex]] <<- list(histLfdTot = set_ggHistLfdTot(spreDist[[sampSex]]),
+                                                            histUtcTot = set_ggHistUtcTot(spreDist[[sampSex]]),
+                                                            dotUtcSplit = set_ggDotUtcSplit(spreDist[[sampSex]]),
+                                                            histUtcLfd = set_ggHistUtcLfd(spreDist[[sampSex]]))
+
+                               # if(sampSex == "Female"){
+                               #   femalePlot <<- list()
+                               #   femalePlot[["histLfdTot"]] <<- set_ggHistLfdTot(femaleSpre)
+                               #   femalePlot[["histUtcTot"]] <<- set_ggHistUtcTot(femaleSpre)
+                               #   femalePlot[["dotUtcSplit"]] <<- set_ggDotUtcSplit(femaleSpre)
+                               #   femalePlot[["histUtcLfd"]] <<- set_ggHistUtcLfd(femaleSpre)
+                               # }else{
+                               #   malePlot <<- list()
+                               #   malePlot[["histLfdTot"]] <<- set_ggHistLfdTot(maleSpre)
+                               #   malePlot[["histUtcTot"]] <<- set_ggHistUtcTot(maleSpre)
+                               #   malePlot[["dotUtcSplit"]] <<- set_ggDotUtcSplit(maleSpre)
+                               #   malePlot[["histUtcLfd"]] <<- set_ggHistUtcLfd(maleSpre)
+                               # }
                              },
                              setSpreDistSing = function(){
                                for(sex in c("Female", "Male")){
