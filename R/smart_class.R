@@ -301,8 +301,8 @@ SmartProject <- R6Class("smartProject",
                           setPlotBetaMeltYear = function(specie, year){
                             tmp_melt_sub <- subset(fleet$betaMeltYear[[specie]], Year == year)
                             all_cell <- merge(x = sampMap$cutResShpFort$id,
-                                              data.frame(x = substr(as.character(tmp_melt_sub$FishGround),4,
-                                                                    nchar(as.character(tmp_melt_sub$FishGround))),
+                                              data.frame(x = as.numeric(substr(as.character(tmp_melt_sub$FishGround),4,
+                                                                               nchar(as.character(tmp_melt_sub$FishGround)))),
                                                          y = tmp_melt_sub$Productivity), all = TRUE)
                             all_cell[is.na(all_cell)] <- 0
                             grid_data <- cbind(sampMap$cutResShpFort, Beta = all_cell[,2])
