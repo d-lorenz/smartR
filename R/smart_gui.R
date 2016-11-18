@@ -43,6 +43,8 @@ smart_gui <- function(){
   pathClusMat <- "/Users/Lomo/Documents/Uni/R/smart/data/out/FG_cut/fg_sos/clusMat_BedEffDep.rData"
   rawDataPath <- "/Users/Lomo/Documents/Uni/R/mixture/fisherySampling.rData"
 
+  # LANDINGS DATA
+  pathLanding <- "/Users/Lomo/Documents/Uni/R/smart/data/Landings/LandAll.rData"
 
   my_project$createFleet()
 
@@ -1083,7 +1085,7 @@ smart_gui <- function(){
     Sys.sleep(1)
 
     dev.set(dev.list()[pre_dev+5])
-    my_project$fleet$rawProduction <- readRDS("/Users/Lomo/Documents/Uni/R/smart/data/Landings/LandAll.rData")
+    my_project$fleet$rawProduction <- readRDS(pathLanding)
 
     my_project$fleet$setProdIds()
 
