@@ -559,12 +559,23 @@ SmartProject <- R6Class("smartProject",
                             }
                             cat("\nNNLS: ", nSce, " actual scenarios - ", nfitted, " fitted", "(", floor(100*(nSce-nno)/nSce), "%)", sep = "")
                             blist <- vector(mode="list",length=4)
-                            colnames(bmat) <- paste("BE_", 1:ncol(bmat), sep = "")
-                            if(anyNA(bmat)){
-                              blist[[1]] <- fillbetas(bmat)
+                            colnames(bmat) <- paste("BE_", ifelse(nchar(1:ncol(bmat)) == 2, 1:ncol(bmat), paste("0", 1:ncol(bmat), sep = "")), sep = "")
+
+                            if (anyNA(bmat)) {
+                              zero_chk <- which(apply(bmat[which(!is.na(bmat),arr.ind = TRUE),], 2, sum,na.rm=TRUE) == 0)
+                              if(length(zero_chk) > 0){
+                                par_betas <- fillbetas(bmat[,-zero_chk])
+                                zero_beta <- matrix(0, dim(as.data.frame(bmat[,zero_chk])))
+                                colnames(zero_beta) <- names(zero_chk)
+                                full_betas <- cbind(par_betas, zero_beta)
+                                blist[[1]] <- full_betas[,order(colnames(full_betas))]
+                              }else{
+                                blist[[1]] <- fillbetas(bmat)
+                              }
                             }else{
                               blist[[1]] <- bmat
                             }
+
                             blist[[2]] <- unlist(obsY)
                             blist[[3]] <- unlist(fittedY)
                             blist[[4]] <- unlist(nnls_r2)
