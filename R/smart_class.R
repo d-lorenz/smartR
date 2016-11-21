@@ -565,7 +565,7 @@ SmartProject <- R6Class("smartProject",
                               zero_chk <- which(apply(bmat[which(!is.na(bmat),arr.ind = TRUE),], 2, sum,na.rm=TRUE) == 0)
                               if(length(zero_chk) > 0){
                                 par_betas <- fillbetas(bmat[,-zero_chk])
-                                zero_beta <- matrix(0, dim(as.data.frame(bmat[,zero_chk])))
+                                zero_beta <- matrix(0, nrow = nrow(bmat[,zero_chk]), ncol = ncol(bmat[,zero_chk]))
                                 colnames(zero_beta) <- names(zero_chk)
                                 full_betas <- cbind(par_betas, zero_beta)
                                 blist[[1]] <- full_betas[,order(colnames(full_betas))]
