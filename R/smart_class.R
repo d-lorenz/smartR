@@ -1901,16 +1901,16 @@ FishFleet <- R6Class("fishFleet",
                          effoProdAllLoa <<- sqldf("select * from tmp_effoProd left join (select * from tmp_loa) using (I_NCEE)")
                        },
                        setEffoAllLoa = function(){
-                         cat("\nSetting effort/LOA... ", sep = "")
+                         cat("\nSetting Effort LOA... ", sep = "")
                          tmp_effo <- effoAll
                          tmp_loa <- rawRegister[,c("CFR","Loa")]
                          tmp_loa$CFR <- substr(tmp_loa$CFR, 4, nchar(tmp_loa$CFR[1]))
                          names(tmp_loa) <- c("I_NCEE", "Loa")
                          effoAllLoa <<- sqldf("select * from tmp_effo left join (select * from tmp_loa) using (I_NCEE)")
-                         cat("Done!", sep = "")
+                         cat("Done!\n", sep = "")
                        },
                        setProdIds = function(){
-                         cat("\nSetting Production IDs year ", sep = "")
+                         cat("\nSetting Production IDs x year\n", sep = "")
                          productionIds <<- list()
                          for(i in names(rawProduction)){
                            cat(i, "... ", sep = "")
@@ -1919,7 +1919,7 @@ FishFleet <- R6Class("fishFleet",
                            productionIds[[tmp_key]] <<- tmp_ids
                          }
                          productionIds[["All"]] <<- unique(unlist(productionIds))
-                         cat("Done!", sep = "")
+                         cat("Done!\n", sep = "")
                        },
                        setIdsEffoProd = function(){
                          ###   Set IDs cross match effort/production
