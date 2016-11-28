@@ -1286,21 +1286,18 @@ smart_gui <- function(){
                          selected = 1, horizontal = FALSE, container = mod_fra, handler = function(...){
                            switch(svalue(mod_radSel),
                                   GLM = {
-                                    enabled(par_modSel[1,2]) <- TRUE
-                                    lapply(par_modSel[2:4,2], function(x) enabled(x) <- FALSE)
-                                    },
+                                    lapply(par_modSel[1,2], function(x) enabled(x) <- TRUE)
+                                    lapply(par_modSel[2:4,2], function(x) enabled(x) <- FALSE)},
                                   CART = {
-                                    enabled(par_modSel[2,2]) <- TRUE
-                                    lapply(par_modSel[c(1,3:4),2], function(x) enabled(x) <- FALSE)
-                                  },
+                                    lapply(par_modSel[2,2], function(x) enabled(x) <- TRUE)
+                                    lapply(par_modSel[c(1,3:4),2], function(x) enabled(x) <- FALSE)},
                                   RF = {
-                                    enabled(par_modSel[3,2]) <- TRUE
-                                    lapply(par_modSel[c(1:2,4),2], function(x) enabled(x) <- FALSE)
-                                  },
+                                    lapply(par_modSel[3,2], function(x) enabled(x) <- TRUE)
+                                    lapply(par_modSel[c(1:2,4),2], function(x) enabled(x) <- FALSE)},
                                   NN = {
-                                    enabled(par_modSel[4,2]) <- TRUE
-                                    lapply(par_modSel[1:3,2], function(x) enabled(x) <- FALSE)
-                                  })
+                                    lapply(par_modSel[4,2], function(x) enabled(x) <- TRUE)
+                                    lapply(par_modSel[1:3,2], function(x) enabled(x) <- FALSE)}
+                                  )
                          })
     addSpace(up_fra, 20)
     par_fra <- gframe(text = "Parameters", container = up_fra, horizontal = TRUE, expand = TRUE)
