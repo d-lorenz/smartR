@@ -1273,19 +1273,19 @@ smart_gui <- function(){
 
     up_g <- ggroup(horizontal = FALSE, container = temp_dia)
     up_fra <- gframe(container = up_g, horizontal = TRUE, expand = TRUE)
-    # addSpring(up_fra)
     addSpace(up_fra, 20)
-    spe_fra <- gframe(text = "Specie", container = up_fra, horizontal = TRUE, expand = TRUE)
-    addSpring(spe_fra)
-    glabel(text = svalue(spe_drop), container = spe_fra)
-    # spe_drop <- gcombobox(sort(names(my_project$fleet$specSett)[which(!unlist(lapply(my_project$fleet$specSett, is.null)))]), selected = 1,
-    #                       editable = FALSE, container = spe_fra, expand = TRUE,
-    #                       handler = function(...){
 
-    # })
-    addSpring(spe_fra)
+    spe_fra <- gframe(text = "Specie", container = up_fra, horizontal = TRUE, expand = TRUE)
+    addSpace(spe_fra, 10)
+    glabel(text = svalue(spe_drop), container = spe_fra)
+    addSpace(spe_fra, 10)
+
     addSpace(up_fra, 20)
-    # addSpring(up_fra)
+    mod_fra <- gframe(text = "Model", container = up_fra, horizontal = TRUE, expand = TRUE)
+    mod_radSel <- gradio(items = c("GLM", "CART", "Random Forest", "Neural Network"),
+                         selected = 1, horizontal = FALSE, container = mod_fra)
+
+    addSpring(up_fra)
 
     gbutton(text = "Get\nLogit", container = up_fra, handler = function(...){
       my_project$fleet$setSpecLogit(svalue(spe_drop))
@@ -1325,7 +1325,7 @@ smart_gui <- function(){
     addSpring(set_gru_up)
     addSpace(up_fra, 20)
 
-    addSpring(up_fra)
+    # addSpring(up_fra)
     gbutton(text = " Close\nWindow", container = up_fra, handler = function(...){
       dispose(temp_dia)
     })
