@@ -1286,16 +1286,16 @@ smart_gui <- function(){
                          selected = 1, horizontal = FALSE, container = mod_fra, handler = function(...){
                            switch(svalue(mod_radSel),
                                   GLM = {
-                                    lapply(par_modSel[1,2], function(x) enabled(x) <- TRUE)
+                                    lapply(list(par_modSel[1,2]), function(x) enabled(x) <- TRUE)
                                     lapply(par_modSel[2:4,2], function(x) enabled(x) <- FALSE)},
                                   CART = {
-                                    lapply(par_modSel[2,2], function(x) enabled(x) <- TRUE)
+                                    lapply(list(par_modSel[2,2]), function(x) enabled(x) <- TRUE)
                                     lapply(par_modSel[c(1,3:4),2], function(x) enabled(x) <- FALSE)},
                                   RF = {
-                                    lapply(par_modSel[3,2], function(x) enabled(x) <- TRUE)
+                                    lapply(list(par_modSel[3,2]), function(x) enabled(x) <- TRUE)
                                     lapply(par_modSel[c(1:2,4),2], function(x) enabled(x) <- FALSE)},
                                   NN = {
-                                    lapply(par_modSel[4,2], function(x) enabled(x) <- TRUE)
+                                    lapply(list(par_modSel[4,2]), function(x) enabled(x) <- TRUE)
                                     lapply(par_modSel[1:3,2], function(x) enabled(x) <- FALSE)}
                                   )
                          })
