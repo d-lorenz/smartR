@@ -1867,7 +1867,7 @@ FishFleet <- R6Class("fishFleet",
                          return(tmp_mat)
                        },
                        setEffoProdAll = function(){
-                         cat("\nSetting effort/production year ", sep = "")
+                         cat("\nSetting Effort x Production year\n", sep = "")
                          tmp_spe <- sort(prodSpec[["Cross"]])
                          for(i in names(effoProdMont)){
                            cat(i, "... ", sep = "")
