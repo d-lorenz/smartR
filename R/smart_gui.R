@@ -1286,22 +1286,20 @@ smart_gui <- function(){
                          selected = 1, horizontal = FALSE, container = mod_fra, handler = function(...){
                            switch(svalue(mod_radSel),
                                   GLM = {
-                                    enabled(par_modSel[1,1:2]) <- TRUE
-                                    enabled(par_modSel[2:4,1:2]) <- FALSE
+                                    enabled(par_modSel[1,2]) <- TRUE
+                                    lapply(par_modSel[2:4,2], function(x) enabled(x) <- FALSE)
                                     },
                                   CART = {
-                                    enabled(par_modSel[2,1:2]) <- TRUE
-                                    enabled(par_modSel[1,1:2]) <- FALSE
-                                    enabled(par_modSel[3:4,1:2]) <- FALSE
+                                    enabled(par_modSel[2,2]) <- TRUE
+                                    lapply(par_modSel[c(1,3:4),2], function(x) enabled(x) <- FALSE)
                                   },
                                   RF = {
-                                    enabled(par_modSel[3,1:2]) <- TRUE
-                                    enabled(par_modSel[1:2,1:2]) <- FALSE
-                                    enabled(par_modSel[4,1:2]) <- FALSE
+                                    enabled(par_modSel[3,2]) <- TRUE
+                                    lapply(par_modSel[c(1:2,4),2], function(x) enabled(x) <- FALSE)
                                   },
                                   NN = {
-                                    enabled(par_modSel[4,1:2]) <- TRUE
-                                    enabled(par_modSel[1:3,1:2]) <- FALSE
+                                    enabled(par_modSel[4,2]) <- TRUE
+                                    lapply(par_modSel[1:3,2], function(x) enabled(x) <- FALSE)
                                   })
                          })
     addSpace(up_fra, 20)
@@ -1316,7 +1314,7 @@ smart_gui <- function(){
     par_modSel[4,1] <- "Iter"
     par_modSel[4,2] <- gspinbutton(from = 100, to = 1000, by = 100, value = 100, container = par_modSel)
 
-    enabled(par_modSel[2:4,1:2]) <- FALSE
+    lapply(par_modSel[2:4,2], function(x) enabled(x) <- FALSE)
 
     addSpring(up_fra)
 
