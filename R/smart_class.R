@@ -1973,15 +1973,18 @@ FishFleet <- R6Class("fishFleet",
                        },
                        setEffoProdMatr = function(){
                          effoProd <<- list()
+                         cat("\nCreating Effort x Production matrix\n", sep = "")
                          for(i in names(rawEffort)){
+                           cat(i,"... ", sep = "")
                            tmp_effo <- dayEffoMatr[[i]]
                            tmp_prod <- prodMatr[[i]]
                            effoProd[[i]] <<- sqldf("select * from tmp_effo, tmp_prod where I_NCEE = NUMUE and DATE >= UTC_S and DATE <= UTC_E")
                          }
+                         cat("Done!")
                        },
                        setEffoProdMont = function(){
                          effoProdMont <<- list()
-                         cat("\nGenerating year ", sep = "")
+                         cat("\nMatching EFfort x FG with Production\n", sep = "")
                          for(i in names(effoProd)){
                            cat(i,"... ", sep = "")
                            dis_vesmon <- unique(effoProd[[i]][,c("I_NCEE", "MonthNum")])
