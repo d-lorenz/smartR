@@ -1739,7 +1739,7 @@ FishFleet <- R6Class("fishFleet",
                          par(op)
                        },
                        setEffortIds = function(){
-                         cat("\nSetting Effort IDs year ", sep = "")
+                         cat("\nSetting Effort IDs x year\n", sep = "")
                          effortIds <<- list()
                          for(i in names(rawEffort)){
                            cat(i, "... ", sep = "")
@@ -1748,11 +1748,11 @@ FishFleet <- R6Class("fishFleet",
                            effortIds[[tmp_key]] <<- tmp_ids
                          }
                          effortIds[["All"]] <<- unique(unlist(effortIds))
-                         cat("Done!", sep = "")
+                         cat("Done!\n", sep = "")
                        },
                        setProdSpec = function(){
                          prodSpec <<- list()
-                         cat("\nSetting Species year ", sep = "")
+                         cat("\nSetting species list x year\n", sep = "")
                          for(i in names(effoProdMont)){
                            cat(i, "... ", sep = "")
                            prodSpec[[i]] <<- colnames(effoProdMont[[i]])[ncol(dayEffoMatr[[i]]):ncol(effoProdMont[[i]])]
