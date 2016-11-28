@@ -1288,6 +1288,15 @@ smart_gui <- function(){
     par_fra <- gframe(text = "Parameters", container = up_fra, horizontal = TRUE, expand = TRUE)
     par_modSel <- glayout(container = par_fra)
 
+    par_modSel[1,1] <- "None"
+    par_modSel[2,1] <- "cp"
+    par_modSel[2,2] <- gspinbutton(from = 0, to = 1, by = 0.001, value = 0.01, container = par_modSel)
+    par_modSel[3,1] <- "CV"
+    par_modSel[3,2] <- gspinbutton(from = 2, to = 10, by = 1, value = 5, container = par_modSel)
+    par_modSel[4,1] <- "Iter"
+    par_modSel[4,2] <- gspinbutton(from = 100, to = 1000, by = 100, value = 100, container = par_modSel)
+
+
     addSpace(up_fra, 20)
 
     addSpring(up_fra)
