@@ -1999,7 +1999,7 @@ FishFleet <- R6Class("fishFleet",
                        },
                        setEffoMont = function(){
                          effoMont <<- list()
-                         cat("\nGenerating year ", sep = "")
+                         cat("\nAggregating year by month\n", sep = "")
                          for(i in names(dayEffoMatr)){
                            cat(i,"... ", sep = "")
                            dis_vesmon <- unique(dayEffoMatr[[i]][,c("I_NCEE", "MonthNum")])
