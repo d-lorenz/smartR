@@ -1764,7 +1764,7 @@ FishFleet <- R6Class("fishFleet",
                          }
                          setSpecSett()
                          setNNLS()
-                         cat("Done!", sep = "")
+                         cat("Done!\n", sep = "")
                        },
                        setSpecSett = function(){
                          specSett <<- vector(mode = "list", length = length(prodSpec[["Cross"]]))
@@ -1879,10 +1879,10 @@ FishFleet <- R6Class("fishFleet",
                              effoProdAll <<- rbind(effoProdAll, cbind(Year = i, effoProdMont[[i]][,c(1:(ncol(dayEffoMatr[[i]])-1), tmp_cols[order(tmp_nam[tmp_cols])])]))
                            }
                          }
-                         cat("Done!", sep = "")
+                         cat("Done!\n", sep = "")
                        },
                        setEffoAll = function(){
-                         cat("\nSetting effort year ", sep = "")
+                         cat("\nSetting Effort x Year\n", sep = "")
                          for(i in names(effoMont)){
                            cat(i, "... ", sep = "")
                            if(i == names(effoMont)[1]){
