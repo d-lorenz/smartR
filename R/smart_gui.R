@@ -1284,6 +1284,11 @@ smart_gui <- function(){
     mod_fra <- gframe(text = "Model", container = up_fra, horizontal = TRUE, expand = TRUE)
     mod_radSel <- gradio(items = c("GLM", "CART", "Random Forest", "Neural Network"),
                          selected = 1, horizontal = FALSE, container = mod_fra)
+    addSpace(up_fra, 20)
+    par_fra <- gframe(text = "Parameters", container = up_fra, horizontal = TRUE, expand = TRUE)
+    par_modSel <- glayout(container = par_fra)
+
+    addSpace(up_fra, 20)
 
     addSpring(up_fra)
 
