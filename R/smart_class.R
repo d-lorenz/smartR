@@ -1980,11 +1980,11 @@ FishFleet <- R6Class("fishFleet",
                            tmp_prod <- prodMatr[[i]]
                            effoProd[[i]] <<- sqldf("select * from tmp_effo, tmp_prod where I_NCEE = NUMUE and DATE >= UTC_S and DATE <= UTC_E")
                          }
-                         cat("Done!")
+                         cat("Done!\n")
                        },
                        setEffoProdMont = function(){
                          effoProdMont <<- list()
-                         cat("\nMatching EFfort x FG with Production\n", sep = "")
+                         cat("\nMatching Effort x FG with Production\n", sep = "")
                          for(i in names(effoProd)){
                            cat(i,"... ", sep = "")
                            dis_vesmon <- unique(effoProd[[i]][,c("I_NCEE", "MonthNum")])
