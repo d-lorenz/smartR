@@ -409,12 +409,12 @@ SmartProject <- R6Class("smartProject",
                             sampMap$setCutResult(ind_clu = numCut)
                             tmp_clust <- cbind(Cell = 1:sampMap$nCells,
                                                FishGround = sampMap$clusMat[,numCut])
-                            cat("\n\nSetting Fishing Ground year ", sep = "")
+                            cat("\n\nSetting Fishing Ground year\n", sep = "")
                             for(j in names(fleet$rawEffort)){
                               cat(j, "... ", sep = "")
                               fleet$rawEffort[[j]]$FishGround <<- tmp_clust[fleet$rawEffort[[j]]$Cell,2]
                             }
-                            cat("Done!", sep = "")
+                            cat("Done!\n", sep = "")
                           },
                           addFg2Fishery = function(){
 
