@@ -2027,7 +2027,7 @@ FishFleet <- R6Class("fishFleet",
                        },
                        setDayEffoMatrGround = function(){
                          dayEffoMatr <<- list()
-                         cat("\nCreating weekly matrix for year ", sep = "")
+                         cat("\nCreating daily effort x Fishing Ground matrix\n", sep = "")
                          for(j in names(rawEffort)){
                            cat(j, "... ", sep = "")
                            tmp_dat <- rawEffort[[j]][rawEffort[[j]]$FishPoint == TRUE & rawEffort[[j]]$P_INT == 1 & !is.na(rawEffort[[j]]$Cell),c("I_NCEE","DATE", "MonthNum", "FishGround", "FishPoint")]
