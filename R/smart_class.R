@@ -1998,7 +1998,7 @@ FishFleet <- R6Class("fishFleet",
                              effoProdMont[[i]][j,(ncol(dayEffoMatr[[i]])):ncol(effoProdMont[[i]])] <<- apply(tmp_prod_itm[,2:ncol(tmp_prod_itm)], 2, sum)
                            }
                          }
-                         cat("Done!")
+                         cat("Done!\n")
                        },
                        setEffoMont = function(){
                          effoMont <<- list()
@@ -2051,7 +2051,7 @@ FishFleet <- R6Class("fishFleet",
                            }
                            dayEffoMatr[[j]] <<- tmp_matrix
                          }
-                         cat("Done!", sep = "")
+                         cat("Done!\n", sep = "")
                        },
                        getLoa4Prod = function(){
                          if(!is.null(productionIds) & !is.null(registerIds)){
