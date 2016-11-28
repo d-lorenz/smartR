@@ -1311,15 +1311,13 @@ smart_gui <- function(){
     addSpace(up_fra, 20)
     addSpace(thr_fra, 20)
 
-    gbutton(text = "\n   Save   \n", container = up_fra, handler = function(...){
+    set_gru_up <- ggroup(container = up_fra, horizontal = FALSE)
+    addSpring(set_gru_up)
+    gbutton(text = "\n   Save   \n", container = set_gru_up, handler = function(...){
       svalue(set_lab) <- "Saved"
       delete(set_gru, set_gru$children[[length(set_gru$children)]])
       add(set_gru, logi_sta_n)
     })
-
-    addSpace(up_fra, 20)
-    set_gru_up <- ggroup(container = up_fra, horizontal = FALSE)
-    addSpring(set_gru_up)
     set_lab <- glabel(text = "Not Saved", container = set_gru_up)
     set_gru <- ggroup(container = set_gru_up, horizontal = TRUE)
     addSpring(set_gru_up)
