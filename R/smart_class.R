@@ -1832,13 +1832,8 @@ FishFleet <- R6Class("fishFleet",
                          tuning <- cbind(analysis$thresholds,analysis$sensitivities+analysis$specificities)
                          specLogit[[specie]]$optCut <<- tuning[which.max(tuning[,2]),1]
                        },
-                       plotLogitROC = function(specie){
-                         base_seq <- seq(specLogit[[specie]]$optCut-0.1,specLogit[[specie]]$optCut+0.1,0.05)
-                         base_seq <- base_seq[-which(base_seq == specLogit[[specie]]$optCut)]
-                         plot(specLogit[[specie]]$ROCRperf, main = "ROC curve - Tpr/Fpr",
-                              print.cutoffs.at = c(base_seq ,specLogit[[specie]]$optCut),
-                              text.cex = c(rep(0.85, length(base_seq)), 1.5),
-                              text.col = c(rep("grey70", length(base_seq)), "black"),
+                       plotLogitROC = function(selSpecie){
+                         plot(specLogit[[selSpecie]]$logit$Roc, colorize = TRUE, print.cutoffs.at = seq(0,1,0.1),
                               text.adj = c(-0.2, 1.7))
                        },
                        setSpecLogitConf = function(specie, cutoff = specLogit[[specie]]$optCut){
