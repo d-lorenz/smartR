@@ -1878,12 +1878,12 @@ FishFleet <- R6Class("fishFleet",
                          specLogit[[selSpecie]]$logit$Cut <<- tuning[which.max(tuning[,2]),1]
                        },
                        setLogitConf = function(selSpecie, test){
-                         specLogit[[selSpecie]]$logit$Confusion <<- switch(specLogit[[selSpecie]]$logit[["Name"]],
-                                                                           GLM  = {caret::confusionMatrix(1 * (specLogit[[selSpecie]]$logit[["Predict"]] > specLogit[[selSpecie]]$logit$Cut),
+                         specLogit[[selSpecie]]$logit$Confusion <<- switch(specLogit[[selSpecie]]$logit$Name,
+                                                                           GLM  = {caret::confusionMatrix(specLogit[[selSpecie]]$logit$Predict,
                                                                                                           test$Fish)},
-                                                                           CART = {caret::confusionMatrix(specLogit[[selSpecie]]$logit[["Predict"]],
+                                                                           CART = {caret::confusionMatrix(specLogit[[selSpecie]]$logit$Predict,
                                                                                                           test$Fish)},
-                                                                           RF   = {caret::confusionMatrix(specLogit[[selSpecie]]$logit[["Predict"]],
+                                                                           RF   = {caret::confusionMatrix(specLogit[[selSpecie]]$logit$Predict,
                                                                                                           test$Target)},
                                                                            NN   = {   })
                        },
