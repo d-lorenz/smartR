@@ -1383,7 +1383,7 @@ smart_gui <- function(){
     if(!is.null(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Roc)){
       my_project$fleet$plotLogitROC(svalue(spe_drop))
       svalue(tmp_txt) <- capture.output({cat("\n")
-        print(my_project$fleet$specLogit[[svalue(spe_drop)]]$confMatrix)})
+        print(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Conf)})
     }
 
   })
