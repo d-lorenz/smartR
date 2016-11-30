@@ -1857,9 +1857,9 @@ FishFleet <- R6Class("fishFleet",
                                                                          GLM  = {predict(specLogit[[selSpecie]]$logit$Model,
                                                                                          newdata = test, type = "response")},
                                                                          CART = {predict(specLogit[[selSpecie]]$logit$Model,
-                                                                                         newdata = test, type="class")},
+                                                                                         newdata = test, type="prob")},
                                                                          RF   = {predict(specLogit[[selSpecie]]$logit$Model,
-                                                                                         newdata = test)},
+                                                                                         newdata = test, type = "prob")},
                                                                          NN   = {   })
                        },
                        setLogitRoc = function(selSpecie, test, ...){
