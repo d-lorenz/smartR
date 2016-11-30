@@ -1895,7 +1895,7 @@ FishFleet <- R6Class("fishFleet",
 
                          colnames(tmp_mat)[ncol(tmp_mat)] <- "Target"
                          specLogit[[selSpecie]]$Landings <<- tmp_mat$Target
-                         tmp_mat$Target <- tmp_mat$Target > specSett[[selSpecie]]$threshold
+                         tmp_mat$Target <- as.factor(tmp_mat$Target > specSett[[selSpecie]]$threshold)
 
                          split = caret::createDataPartition(y = tmp_mat$Target, p = 0.7, list = FALSE)[,1]
                          train <- tmp_mat[split,]
