@@ -1825,7 +1825,7 @@ FishFleet <- R6Class("fishFleet",
                          specLogit[[specie]]$ROCRperf <<- performance(ROCRpred, "tpr", "fpr")
                        },
                        setSpecLogitOptCut = function(specie){
-                         analysis <- roc(response = specLogit[[specie]]$landings, predictor = specLogit[[specie]]$predict)
+                         analysis <- pROC::roc(response = specLogit[[specie]]$landings, predictor = specLogit[[specie]]$predict)
                          tuning <- cbind(analysis$thresholds,analysis$sensitivities+analysis$specificities)
                          specLogit[[specie]]$optCut <<- tuning[which.max(tuning[,2]),1]
                        },
@@ -1833,15 +1833,34 @@ FishFleet <- R6Class("fishFleet",
                          plot(specLogit[[selSpecie]]$logit$Roc, colorize = TRUE, print.cutoffs.at = seq(0,1,0.1),
                               text.adj = c(-0.2, 1.7))
                        },
-                       setSpecLogitConf = function(specie, cutoff = specLogit[[specie]]$optCut){
-                         predict <- factor(as.numeric(specLogit[[specie]]$predict > cutoff))
-                         truth <- factor(1*(specLogit[[specie]]$landings > specSett[[specie]]$threshold))
+                       setSpecLogitConf = function(specie, cutoff = specLogit[[specie]]$logit$Cut){
+                         predict <- factor(as.numeric(specLogit[[specie]]$logit$Predict > cutoff))
+                         truth <- factor(1*(specLogit[[specie]]$Landings > specSett[[specie]]$threshold))
                          tmp_Tbl <- table(predict, truth)
-                         specLogit[[specie]]$confMatrix <<- confusionMatrix(tmp_Tbl)
+                         specLogit[[specie]]$logit$Conf <<- caret::confusionMatrix(tmp_Tbl)
                        },
-                       setSpecLogit = function(specie){
+                       setLogitTrain = function(selSpecie, train, ...){
+                         specLogit[[selSpecie]]$logit$Model <<- switch(specLogit[[selSpecie]]$logit[["Name"]],
+                                                                       GLM = {glm(Target ~ ., family = binomial(logit), data = train)},
+                                                                       CART = {rpart::rpart(Target ~ ., data = train, method = "class", control = rpart.control( cp = 0.01))},
+                                                                       RF = {caret::train(Target ~ . , data = train, method = "rf",
+                                                                                          trControl = trainControl(method = "cv", number = 5),
+                                                                                          prox = TRUE, allowParallel = TRUE)},
+                                                                       NN = {   })
+                       },
+                       setLogitTest = function(selSpecie, test){
+                         specLogit[[selSpecie]]$logit$Predict <<- switch(specLogit[[selSpecie]]$logit[["Name"]],
+                                                                         GLM  = {predict(specLogit[[selSpecie]]$logit[["Model"]],
+                                                                                         newdata = test, type = "response")},
+                                                                         CART = {predict(specLogit[[selSpecie]]$logit[["Model"]],
                                                                                          newdata = test, type="class")},
+                                                                         RF   = {predict(specLogit[[selSpecie]]$logit[["Model"]],
                                                                                          newdata = test)},
+                                                                         NN   = {   })
+                       },
+                       setLogitRoc = function(selSpecie, test, ...){
+                         switch(specLogit[[selSpecie]]$logit[["Name"]],
+                                GLM = {ROCRpred_glm <- ROCR::prediction(specLogit[[selSpecie]]$logit[["Predict"]],
                                                                         test$Target)
                                 return(ROCR::performance(ROCRpred_glm, "tpr", "fpr"))},
                                 CART = {ROCRpred_cart <- ROCR::prediction(predict(specLogit[[selSpecie]]$logit[["Model"]],
