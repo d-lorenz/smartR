@@ -1873,7 +1873,7 @@ FishFleet <- R6Class("fishFleet",
                        },
                        setLogitCut = function(selSpecie, test){
                          analysis <- pROC::roc(response = test$Target,
-                                               predictor = specLogit[[selSpecie]]$Predict)
+                                               predictor = specLogit[[selSpecie]]$logit$Predict)
                          tuning <- cbind(analysis$thresholds,analysis$sensitivities+analysis$specificities)
                          specLogit[[selSpecie]]$logit$Cut <<- tuning[which.max(tuning[,2]),1]
                        },
