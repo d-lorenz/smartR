@@ -1820,9 +1820,6 @@ FishFleet <- R6Class("fishFleet",
                                                            breaks = brea,
                                                            max_x = max_xlim)
                        },
-                       setSpecLogitPredict = function(specie){
-                         specLogit[[specie]]$predict <<- predict(specLogit[[specie]]$logit$logit_f, type = "response")
-                       },
                        setSpecLogitROCR = function(specie){
                          ROCRpred <- prediction(specLogit[[specie]]$predict, 1*(specLogit[[specie]]$landings > specSett[[specie]]$threshold))
                          specLogit[[specie]]$ROCRperf <<- performance(ROCRpred, "tpr", "fpr")
