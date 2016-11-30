@@ -1380,7 +1380,7 @@ smart_gui <- function(){
     logi_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
     add(set_gru, logi_sta)
 
-    if(!is.null(my_project$fleet$specLogit[[svalue(spe_drop)]]$ROCRperf)){
+    if(!is.null(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Roc)){
       my_project$fleet$plotLogitROC(svalue(spe_drop))
       svalue(tmp_txt) <- capture.output({cat("\n")
         print(my_project$fleet$specLogit[[svalue(spe_drop)]]$confMatrix)})
