@@ -1322,12 +1322,14 @@ smart_gui <- function(){
     addSpring(up_fra)
 
     gbutton(text = "Get\nLogit", container = up_fra, handler = function(...){
-      my_project$fleet$setSpecLogit(svalue(spe_drop))
-      my_project$fleet$plotLogitROC(svalue(spe_drop))
+      my_project$fleet$setSpecLogit(selSpecie = svalue(spe_drop),
+                                    selModel = svalue(mod_radSel))
 
-      svalue(thr_spin) <- round(my_project$fleet$specLogit[[svalue(spe_drop)]]$optCut, 2)
+      my_project$fleet$plotLogitROC(selSpecie = svalue(spe_drop))
+
+      svalue(thr_spin) <- round(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Cut, 2)
       svalue(tmp_txt) <- capture.output({cat("\n")
-        print(my_project$fleet$specLogit[[svalue(spe_drop)]]$confMatrix)})
+        print(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Conf)})
     })
     addSpace(up_fra, 20)
 
