@@ -1825,7 +1825,7 @@ FishFleet <- R6Class("fishFleet",
                          specLogit[[specie]]$ROCRperf <<- performance(ROCRpred, "tpr", "fpr")
                        },
                        setSpecLogitOptCut = function(specie){
-                         analysis <- pROC::roc(response = specLogit[[specie]]$landings, predictor = specLogit[[specie]]$predict)
+                         analysis <- pROC::roc(response = specLogit[[specie]]$landings, predictor = specLogit[[specie]]$logit$Predict)
                          tuning <- cbind(analysis$thresholds,analysis$sensitivities+analysis$specificities)
                          specLogit[[specie]]$optCut <<- tuning[which.max(tuning[,2]),1]
                        },
