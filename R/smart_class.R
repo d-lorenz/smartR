@@ -1867,11 +1867,11 @@ FishFleet <- R6Class("fishFleet",
                                 GLM = {ROCRpred_glm <- ROCR::prediction(specLogit[[selSpecie]]$logit$Predict,
                                                                         test$Target)
                                 return(ROCR::performance(ROCRpred_glm, "tpr", "fpr"))},
-                                CART = {ROCRpred_cart <- ROCR::prediction(predict(specLogit[[selSpecie]]$logit$Model,
-                                                                                  newdata = test, type = "prob")[,2], test$Target)
+                                CART = {ROCRpred_cart <- ROCR::prediction(specLogit[[selSpecie]]$logit$Prodict[,2],
+                                                                          test$Target)
                                 return(ROCR::performance(ROCRpred_cart, "tpr", "fpr"))},
-                                RF = {ROCRpred_caretRF <- ROCR::prediction(predict(specLogit[[selSpecie]]$logit$Model,
-                                                                                   newdata = test, type = "prob")[,2], test$Target)
+                                RF = {ROCRpred_caretRF <- ROCR::prediction(specLogit[[selSpecie]]$logit$Predict[,2],
+                                                                           test$Target)
                                 return(ROCR::performance(ROCRpred_caretRF, "tpr", "fpr"))},
                                 NN = {   })
                        },
