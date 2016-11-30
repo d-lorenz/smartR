@@ -1881,7 +1881,7 @@ FishFleet <- R6Class("fishFleet",
                                                  predictor = as.numeric(specLogit[[selSpecie]]$logit$Predict > specLogit[[selSpecie]]$logit$Cut))
                          }else{
                            analysis <- pROC::roc(response = as.numeric(test$Target),
-                                                 predictor = as.numeric(specLogit[[selSpecie]]$logit$Predict))
+                                                 predictor = as.numeric(specLogit[[selSpecie]]$logit$Predict[,2] > specLogit[[selSpecie]]$logit$Cut))
                          }
                          tuning <- cbind(analysis$thresholds,analysis$sensitivities+analysis$specificities)
                          specLogit[[selSpecie]]$logit$Cut <<- tuning[which.max(tuning[,2]),1]
