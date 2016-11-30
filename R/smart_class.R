@@ -1871,8 +1871,8 @@ FishFleet <- R6Class("fishFleet",
                                 return(ROCR::performance(ROCRpred_caretRF, "tpr", "fpr"))},
                                 NN = {   })
                        },
-                       setLogitCut = function(selSpecie){
-                         analysis <- pROC::roc(response = specLogit[[selSpecie]]$Landings,
+                       setLogitCut = function(selSpecie, test){
+                         analysis <- pROC::roc(response = test$Target,
                                                predictor = specLogit[[selSpecie]]$Predict)
                          tuning <- cbind(analysis$thresholds,analysis$sensitivities+analysis$specificities)
                          specLogit[[selSpecie]]$logit$Cut <<- tuning[which.max(tuning[,2]),1]
@@ -1909,7 +1909,7 @@ FishFleet <- R6Class("fishFleet",
                          # ROC
                          specLogit[[selSpecie]]$logit$Roc <<- setLogitRoc(selSpecie, test)
                          # Cutoff
-                         setLogitCut(selSpecie)
+                         setLogitCut(selSpecie, test)
                          # Confusion
                          setLogitConf(selSpecie, test)
                        },
