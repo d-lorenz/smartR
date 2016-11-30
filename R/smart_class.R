@@ -1849,12 +1849,12 @@ FishFleet <- R6Class("fishFleet",
                                                                        NN = {   })
                        },
                        setLogitTest = function(selSpecie, test){
-                         specLogit[[selSpecie]]$logit$Predict <<- switch(specLogit[[selSpecie]]$logit[["Name"]],
-                                                                         GLM  = {predict(specLogit[[selSpecie]]$logit[["Model"]],
+                         specLogit[[selSpecie]]$logit$Predict <<- switch(specLogit[[selSpecie]]$logit$Name,
+                                                                         GLM  = {predict(specLogit[[selSpecie]]$logit$Model,
                                                                                          newdata = test, type = "response")},
-                                                                         CART = {predict(specLogit[[selSpecie]]$logit[["Model"]],
+                                                                         CART = {predict(specLogit[[selSpecie]]$logit$Model,
                                                                                          newdata = test, type="class")},
-                                                                         RF   = {predict(specLogit[[selSpecie]]$logit[["Model"]],
+                                                                         RF   = {predict(specLogit[[selSpecie]]$logit$Model,
                                                                                          newdata = test)},
                                                                          NN   = {   })
                        },
