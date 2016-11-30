@@ -1887,14 +1887,13 @@ FishFleet <- R6Class("fishFleet",
                          specLogit[[selSpecie]]$logit$Cut <<- tuning[which.max(tuning[,2]),1]
                        },
                        setLogitConf = function(selSpecie, test){
-                         specLogit[[selSpecie]]$logit$Confusion <<- switch(specLogit[[selSpecie]]$logit$Name,
-                                                                           GLM  = {caret::confusionMatrix(as.factor(specLogit[[selSpecie]]$logit$Predict > specLogit[[selSpecie]]$logit$Cut),
-                                                                                                          test$Target)},
-                                                                           CART = {caret::confusionMatrix(specLogit[[selSpecie]]$logit$Predict,
-                                                                                                          test$Target)},
-                                                                           RF   = {caret::confusionMatrix(specLogit[[selSpecie]]$logit$Predict,
-                                                                                                          test$Target)},
-                                                                           NN   = {   })
+                         if(specLogit[[selSpecie]]$logit$Name == "GLM"){
+                           specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(as.factor(specLogit[[selSpecie]]$logit$Predict > specLogit[[selSpecie]]$logit$Cut),
+                                                  test$Target)
+                         }else{
+                           specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(as.factor(specLogit[[selSpecie]]$logit$Predict[,2] > specLogit[[selSpecie]]$logit$Cut),
+                                                  test$Target)
+                           }
                        },
                        setSpecLogit = function(selSpecie, selModel = c("GLM", "CART", "RF", "NN")[1]){
                          if(is.null(specLogit)) specLogit <<- list()
