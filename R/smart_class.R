@@ -1840,18 +1840,59 @@ FishFleet <- R6Class("fishFleet",
                          specLogit[[specie]]$confMatrix <<- confusionMatrix(tmp_Tbl)
                        },
                        setSpecLogit = function(specie){
+                                                                                         newdata = test, type="class")},
+                                                                                         newdata = test)},
+                                                                        test$Target)
+                                return(ROCR::performance(ROCRpred_glm, "tpr", "fpr"))},
+                                CART = {ROCRpred_cart <- ROCR::prediction(predict(specLogit[[selSpecie]]$logit[["Model"]],
+                                                                                  newdata = test, type = "prob")[,2], test$Target)
+                                return(ROCR::performance(ROCRpred_cart, "tpr", "fpr"))},
+                                RF = {ROCRpred_caretRF <- ROCR::prediction(predict(specLogit[[selSpecie]]$logit[["Model"]],
+                                                                                   newdata = test, type = "prob")[,2], test$Target)
+                                return(ROCR::performance(ROCRpred_caretRF, "tpr", "fpr"))},
+                                NN = {   })
+                       },
+                       setLogitCut = function(selSpecie){
+                         analysis <- pROC::roc(response = specLogit[[selSpecie]]$Landings,
+                                               predictor = specLogit[[selSpecie]]$Predict)
+                         tuning <- cbind(analysis$thresholds,analysis$sensitivities+analysis$specificities)
+                         specLogit[[selSpecie]]$logit$Cut <<- tuning[which.max(tuning[,2]),1]
+                       },
+                       setLogitConf = function(selSpecie, test){
+                         specLogit[[selSpecie]]$logit$Confusion <<- switch(specLogit[[selSpecie]]$logit[["Name"]],
+                                                                           GLM  = {caret::confusionMatrix(1 * (specLogit[[selSpecie]]$logit[["Predict"]] > specLogit[[selSpecie]]$logit$Cut),
+                                                                                                          test$Fish)},
+                                                                           CART = {caret::confusionMatrix(specLogit[[selSpecie]]$logit[["Predict"]],
+                                                                                                          test$Fish)},
+                                                                           RF   = {caret::confusionMatrix(specLogit[[selSpecie]]$logit[["Predict"]],
+                                                                                                          test$Target)},
+                                                                           NN   = {   })
+                       },
+                       setSpecLogit = function(selSpecie, selModel = c("GLM", "CART", "RF", "NN")[1]){
                          if(is.null(specLogit)) specLogit <<- list()
-                         if(is.null(specLogit[[specie]])) specLogit[[specie]] <<- list()
-                         tmp_mat <- getMatSpeLand(specie)
-                         specLogit[[specie]]$landings <<- tmp_mat[,ncol(tmp_mat)]
-                         specLogit[[specie]]$logit <<- getLogit(Lit = specLogit[[specie]]$landings, X = tmp_mat[,1:(ncol(tmp_mat)-1)],
-                                                                thrB = specSett[[specie]]$threshold,
-                                                                ptrain = 80, ptest = 20)
-                         setSpecLogitPredict(specie)
-                         setSpecLogitROCR(specie)
-                         setSpecLogitOptCut(specie)
-                         # plotLogitROC(specie)
-                         setSpecLogitConf(specie)
+                         if(is.null(specLogit[[selSpecie]])) specLogit[[selSpecie]] <<- list()
+
+                         tmp_mat <- getMatSpeLand(selSpecie)
+
+                         colnames(tmp_mat)[ncol(tmp_mat)] <- "Target"
+                         specLogit[[selSpecie]]$Landings <<- tmp_mat$Target
+                         tmp_mat$Target <- tmp_mat$Target > specSett[[selSpecie]]$threshold
+
+                         split = caret::createDataPartition(y = tmp_mat$Target, p = 0.7, list = FALSE)[,1]
+                         train <- tmp_mat[split,]
+                         test <- tmp_mat[-split,]
+
+                         specLogit[[selSpecie]]$logit$Name <<- selModel
+                         # Train
+                         setLogitTrain(selSpecie, train)
+                         # Test
+                         setLogitTest(selSpecie, test)
+                         # ROC
+                         specLogit[[selSpecie]]$logit$Roc <<- setLogitRoc(selSpecie, test)
+                         # Cutoff
+                         setLogitCut(selSpecie, test)
+                         # Confusion
+                         setLogitConf(selSpecie, test)
                        },
                        getMatSpeLand = function(specie){
                          tmp_mat <- effoProdAll[,c(1,3:(ncol(dayEffoMatr[[1]])),which(colnames(effoProdAll) == specie))]
