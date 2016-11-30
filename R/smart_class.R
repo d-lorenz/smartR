@@ -1888,10 +1888,10 @@ FishFleet <- R6Class("fishFleet",
                        },
                        setLogitConf = function(selSpecie, test){
                          if(specLogit[[selSpecie]]$logit$Name == "GLM"){
-                           specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(as.factor(specLogit[[selSpecie]]$logit$Predict > specLogit[[selSpecie]]$logit$Cut),
+                           specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(as.factor(specLogit[[selSpecie]]$logit$Predict > specSett[[selSpecie]]$threshold),
                                                   test$Target)
                          }else{
-                           specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(as.factor(specLogit[[selSpecie]]$logit$Predict[,2] > specLogit[[selSpecie]]$logit$Cut),
+                           specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(as.factor(specLogit[[selSpecie]]$logit$Predict[,2] > specSett[[selSpecie]]$threshold),
                                                   test$Target)
                            }
                        },
