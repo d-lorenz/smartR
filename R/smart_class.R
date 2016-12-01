@@ -1841,7 +1841,7 @@ FishFleet <- R6Class("fishFleet",
                          }
                          truth <- factor(1*(specLogit[[selSpecie]]$Landings[-specLogit[[selSpecie]]$logit$Split] > specSett[[selSpecie]]$threshold))
                          tmp_Tbl <- table(predict, truth)
-                         specLogit[[selSpecie]]$logit$Conf <<- caret::confusionMatrix(tmp_Tbl)
+                         specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(tmp_Tbl)
                        },
                        setLogitTrain = function(selSpecie, train, ...){
                          specLogit[[selSpecie]]$logit$Model <<- switch(specLogit[[selSpecie]]$logit$Name,
