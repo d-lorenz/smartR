@@ -1867,7 +1867,7 @@ FishFleet <- R6Class("fishFleet",
                                 GLM = {ROCRpred_glm <- ROCR::prediction(specLogit[[selSpecie]]$logit$Predict,
                                                                         test$Target)
                                 return(ROCR::performance(ROCRpred_glm, "tpr", "fpr"))},
-                                CART = {ROCRpred_cart <- ROCR::prediction(specLogit[[selSpecie]]$logit$Prodict[,2],
+                                CART = {ROCRpred_cart <- ROCR::prediction(specLogit[[selSpecie]]$logit$Predict[,2],
                                                                           test$Target)
                                 return(ROCR::performance(ROCRpred_cart, "tpr", "fpr"))},
                                 RF = {ROCRpred_caretRF <- ROCR::prediction(specLogit[[selSpecie]]$logit$Predict[,2],
@@ -1878,20 +1878,20 @@ FishFleet <- R6Class("fishFleet",
                        setLogitCut = function(selSpecie, test){
                          if(specLogit[[selSpecie]]$logit$Name == "GLM"){
                            analysis <- pROC::roc(response = as.numeric(test$Target),
-                                                 predictor = as.numeric(specLogit[[selSpecie]]$logit$Predict > specLogit[[selSpecie]]$logit$Cut))
+                                                 predictor = as.numeric(specLogit[[selSpecie]]$logit$Predict > specSett[[selSpecie]]$threshold))
                          }else{
                            analysis <- pROC::roc(response = as.numeric(test$Target),
-                                                 predictor = as.numeric(specLogit[[selSpecie]]$logit$Predict[,2] > specLogit[[selSpecie]]$logit$Cut))
+                                                 predictor = as.numeric(specLogit[[selSpecie]]$logit$Predict[,2] > specSett[[selSpecie]]$threshold))
                          }
                          tuning <- cbind(analysis$thresholds,analysis$sensitivities+analysis$specificities)
                          specLogit[[selSpecie]]$logit$Cut <<- tuning[which.max(tuning[,2]),1]
                        },
                        setLogitConf = function(selSpecie, test){
                          if(specLogit[[selSpecie]]$logit$Name == "GLM"){
-                           specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(as.factor(specLogit[[selSpecie]]$logit$Predict > specSett[[selSpecie]]$threshold),
+                           specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(as.factor(specLogit[[selSpecie]]$logit$Predict > specLogit[[selSpecie]]$logit$Cut),
                                                   test$Target)
                          }else{
-                           specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(as.factor(specLogit[[selSpecie]]$logit$Predict[,2] > specSett[[selSpecie]]$threshold),
+                           specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(as.factor(specLogit[[selSpecie]]$logit$Predict[,2] > specLogit[[selSpecie]]$logit$Cut),
                                                   test$Target)
                            }
                        },
@@ -1914,10 +1914,10 @@ FishFleet <- R6Class("fishFleet",
                          setLogitTrain(selSpecie, train)
                          # Test
                          setLogitTest(selSpecie, test)
-                         # ROC
-                         specLogit[[selSpecie]]$logit$Roc <<- setLogitRoc(selSpecie, test)
                          # Cutoff
                          setLogitCut(selSpecie, test)
+                         # ROC
+                         specLogit[[selSpecie]]$logit$Roc <<- setLogitRoc(selSpecie, test)
                          # Confusion
                          setLogitConf(selSpecie, test)
                        },
