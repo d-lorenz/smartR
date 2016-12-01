@@ -1915,10 +1915,12 @@ FishFleet <- R6Class("fishFleet",
                          setLogitTrain(selSpecie, train)
                          # Test
                          setLogitTest(selSpecie, test)
+                         # Prediction
+                         setLogitPred(selSpecie, test)
                          # Cutoff
                          setLogitCut(selSpecie, test)
                          # ROC
-                         specLogit[[selSpecie]]$logit$Roc <<- setLogitRoc(selSpecie, test)
+                         setLogitRoc(selSpecie, test)
                          # Confusion
                          setLogitConf(selSpecie, test)
                        },
