@@ -1843,13 +1843,13 @@ FishFleet <- R6Class("fishFleet",
                          tmp_Tbl <- table(predict, truth)
                          specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(tmp_Tbl)
                        },
-                       setLogitTrain = function(selSpecie, train, ...){
+                       setLogitTrain = function(selSpecie, train, cp_val = 0.01, cv_val = 2){
                          specLogit[[selSpecie]]$logit$Model <<- switch(specLogit[[selSpecie]]$logit$Name,
                                                                        GLM = {glm(Target ~ ., family = binomial(logit), data = train)},
                                                                        CART = {rpart::rpart(Target ~ ., data = train, method = "class",
-                                                                                            control = rpart.control( cp = 0.01))},
+                                                                                            control = rpart.control(cp = cp_val))},
                                                                        RF = {caret::train(Target ~ . , data = train, method = "rf",
-                                                                                          trControl = trainControl(method = "cv", number = 5),
+                                                                                          trControl = trainControl(method = "cv", number = cv_val),
                                                                                           prox = TRUE, allowParallel = TRUE)},
                                                                        NN = {   })
                        },
@@ -1888,7 +1888,8 @@ FishFleet <- R6Class("fishFleet",
                                                   test$Target)
                            }
                        },
-                       setSpecLogit = function(selSpecie, selModel = c("GLM", "CART", "RF", "NN")[1]){
+                       setSpecLogit = function(selSpecie, selModel = c("GLM", "CART", "RF", "NN")[1],
+                                               cp = 0.01, cv = 2){
                          if(is.null(specLogit)) specLogit <<- list()
                          if(is.null(specLogit[[selSpecie]])) specLogit[[selSpecie]] <<- list()
 
@@ -1904,7 +1905,7 @@ FishFleet <- R6Class("fishFleet",
                          specLogit[[selSpecie]]$logit$Split <<- split
                          specLogit[[selSpecie]]$logit$Name <<- selModel
                          # Train
-                         setLogitTrain(selSpecie, train)
+                         setLogitTrain(selSpecie, train, cp_val = cp, cv_val = cv)
                          # Test
                          setLogitTest(selSpecie, test)
                          # Prediction
