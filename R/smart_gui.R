@@ -1323,7 +1323,9 @@ smart_gui <- function(){
 
     gbutton(text = "Get\nLogit", container = up_fra, handler = function(...){
       my_project$fleet$setSpecLogit(selSpecie = svalue(spe_drop),
-                                    selModel = svalue(mod_radSel))
+                                    selModel = svalue(mod_radSel),
+                                    cp = svalue(par_modSel[2,2]),
+                                    cv = svalue(par_modSel[3,2]))
 
       my_project$fleet$plotLogitROC(selSpecie = svalue(spe_drop))
 
