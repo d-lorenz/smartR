@@ -1830,7 +1830,7 @@ FishFleet <- R6Class("fishFleet",
                        #   specLogit[[specie]]$optCut <<- tuning[which.max(tuning[,2]),1]
                        # },
                        plotLogitROC = function(selSpecie){
-                         plot(specLogit[[selSpecie]]$logit$Roc, colorize = TRUE, print.cutoffs.at = seq(0,1,0.1),
+                         plot(specLogit[[selSpecie]]$logit$Roc, print.cutoffs.at = seq(0,1,0.1),
                               text.adj = c(-0.2, 1.7))
                        },
                        setSpecLogitConf = function(selSpecie, cutoff = specLogit[[specie]]$logit$Cut){
