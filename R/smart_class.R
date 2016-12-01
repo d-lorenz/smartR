@@ -1833,7 +1833,7 @@ FishFleet <- R6Class("fishFleet",
                          plot(specLogit[[selSpecie]]$logit$Roc, colorize = TRUE, print.cutoffs.at = seq(0,1,0.1),
                               text.adj = c(-0.2, 1.7))
                        },
-                       setSpecLogitConf = function(specie, cutoff = specLogit[[specie]]$logit$Cut){
+                       setSpecLogitConf = function(selSpecie, cutoff = specLogit[[specie]]$logit$Cut){
                          if(specLogit[[selSpecie]]$logit$Name == "GLM"){
                            predict <- factor(as.numeric(specLogit[[specie]]$logit$Predict > cutoff))
                          }else{
