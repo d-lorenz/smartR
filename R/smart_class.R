@@ -1820,15 +1820,15 @@ FishFleet <- R6Class("fishFleet",
                                                            breaks = brea,
                                                            max_x = max_xlim)
                        },
-                       setSpecLogitROCR = function(specie){
-                         ROCRpred <- prediction(specLogit[[specie]]$logit$Predict, 1*(specLogit[[specie]]$landings > specSett[[specie]]$threshold))
-                         specLogit[[specie]]$ROCRperf <<- performance(ROCRpred, "tpr", "fpr")
-                       },
-                       setSpecLogitOptCut = function(specie){
-                         analysis <- pROC::roc(response = specLogit[[specie]]$landings, predictor = specLogit[[specie]]$logit$Predict)
-                         tuning <- cbind(analysis$thresholds,analysis$sensitivities+analysis$specificities)
-                         specLogit[[specie]]$optCut <<- tuning[which.max(tuning[,2]),1]
-                       },
+                       # setSpecLogitROCR = function(specie){
+                       #   ROCRpred <- prediction(specLogit[[specie]]$logit$Predict, 1*(specLogit[[specie]]$landings > specSett[[specie]]$threshold))
+                       #   specLogit[[specie]]$ROCRperf <<- performance(ROCRpred, "tpr", "fpr")
+                       # },
+                       # setSpecLogitOptCut = function(specie){
+                       #   analysis <- pROC::roc(response = specLogit[[specie]]$landings, predictor = specLogit[[specie]]$logit$Predict)
+                       #   tuning <- cbind(analysis$thresholds,analysis$sensitivities+analysis$specificities)
+                       #   specLogit[[specie]]$optCut <<- tuning[which.max(tuning[,2]),1]
+                       # },
                        plotLogitROC = function(selSpecie){
                          plot(specLogit[[selSpecie]]$logit$Roc, colorize = TRUE, print.cutoffs.at = seq(0,1,0.1),
                               text.adj = c(-0.2, 1.7))
