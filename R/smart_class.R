@@ -1872,11 +1872,11 @@ FishFleet <- R6Class("fishFleet",
                                                                                         test$Target)
                          }
                        },
-                       setLogitCut = function(selSpecie, test){
-                         perf <- ROCR::performance(ROCRpred_caretRF, "acc")
+                       setLogitCut = function(selSpecie){
+                         perf <- ROCR::performance(specLogit[[selSpecie]]$logit$Prediction, "acc")
                          specLogit[[selSpecie]]$logit$Cut <<- perf@x.values[[1]][which.max(perf@y.values[[1]])]
                        },
-                       setLogitRoc = function(selSpecie, test){
+                       setLogitRoc = function(selSpecie){
                          specLogit[[selSpecie]]$logit$Roc <<- ROCR::performance(specLogit[[selSpecie]]$logit$Prediction, "tpr", "fpr")
                        },
                        setLogitConf = function(selSpecie, test){
@@ -1910,9 +1910,9 @@ FishFleet <- R6Class("fishFleet",
                          # Prediction
                          setLogitPred(selSpecie, test)
                          # Cutoff
-                         setLogitCut(selSpecie, test)
+                         setLogitCut(selSpecie)
                          # ROC
-                         setLogitRoc(selSpecie, test)
+                         setLogitRoc(selSpecie)
                          # Confusion
                          setLogitConf(selSpecie, test)
                        },
