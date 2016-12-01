@@ -1331,7 +1331,7 @@ smart_gui <- function(){
 
       svalue(thr_spin) <- round(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Cut, 2)
       svalue(tmp_txt) <- capture.output({cat("\n")
-        print(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Conf)})
+        print(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Confusion)})
     })
     addSpace(up_fra, 20)
 
@@ -1343,7 +1343,7 @@ smart_gui <- function(){
                           if(!is.null(my_project$fleet$specLogit[[svalue(spe_drop)]])){
                             my_project$fleet$setSpecLogitConf(selSpecie = svalue(spe_drop), cutoff = svalue(thr_spin))
                             svalue(tmp_txt) <- capture.output({cat("\n")
-                              print(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Conf)})
+                              print(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Confusion)})
                           }
                         })
     addSpace(up_fra, 20)
@@ -1385,7 +1385,7 @@ smart_gui <- function(){
     if(!is.null(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Roc)){
       my_project$fleet$plotLogitROC(svalue(spe_drop))
       svalue(tmp_txt) <- capture.output({cat("\n")
-        print(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Conf)})
+        print(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Confusion)})
     }
 
   })
