@@ -1901,7 +1901,7 @@ FishFleet <- R6Class("fishFleet",
                          split = caret::createDataPartition(y = tmp_mat$Target, p = 0.7, list = FALSE)[,1]
                          train <- tmp_mat[split,]
                          test <- tmp_mat[-split,]
-
+                         specLogit[[selSpecie]]$logit$Split <<- Split
                          specLogit[[selSpecie]]$logit$Name <<- selModel
                          # Train
                          setLogitTrain(selSpecie, train)
