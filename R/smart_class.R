@@ -270,7 +270,12 @@ SmartProject <- R6Class("smartProject",
                             datalog <- fleet$effoAllLoa
                             datalog$MonthNum <- as.factor(datalog$MonthNum)
                             datalog$Year <- as.factor(datalog$Year)
-                            infish <- which(predict(fleet$specLogit[[specie]]$logit$logit_f, datalog, type="response") > fleet$specLogit[[specie]]$optCut)
+                            if(fleet$specLogit[[specie]]$logit$Name == "GLM"){
+                              infish <- which(predict(fleet$specLogit[[specie]]$logit$Model, datalog, type = "response") > fleet$specLogit[[specie]]$optCut)
+                            }else{
+                              infish <- which(predict(fleet$specLogit[[specie]]$logit$Model, datalog, type = "prob")[,2] > fleet$specLogit[[specie]]$optCut)
+                            }
+                            # infish <- which(predict(fleet$specLogit[[specie]]$logit$logit_f, datalog, type="response") > fleet$specLogit[[specie]]$optCut)
                             for(i in 1:length(infish)){
                               idata <- as.numeric(fleet$effoAllLoa[infish[i], fgClms])
                               iloa <- as.numeric(fleet$effoAllLoa[infish[i], "Loa"])
