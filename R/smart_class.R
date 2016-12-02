@@ -1886,13 +1886,15 @@ FishFleet <- R6Class("fishFleet",
                          specLogit[[selSpecie]]$logit$Roc <<- ROCR::performance(specLogit[[selSpecie]]$logit$Prediction, "tpr", "fpr")
                        },
                        setLogitConf = function(selSpecie, test){
-                         if(specLogit[[selSpecie]]$logit$Name == "GLM"){
-                           specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(as.factor(specLogit[[selSpecie]]$logit$Predict > specLogit[[selSpecie]]$logit$Cut),
-                                                  test$Target)
-                         }else{
-                           specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(as.factor(specLogit[[selSpecie]]$logit$Predict[,2] > specLogit[[selSpecie]]$logit$Cut),
-                                                  test$Target)
-                           }
+                         specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(as.factor(specLogit[[selSpecie]]$logit$Predict > specLogit[[selSpecie]]$logit$Cut),
+                                                                                           test$Target)
+                         # if(specLogit[[selSpecie]]$logit$Name == "GLM"){
+                         #   specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(as.factor(specLogit[[selSpecie]]$logit$Predict > specLogit[[selSpecie]]$logit$Cut),
+                         #                          test$Target)
+                         # }else{
+                         #   specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(as.factor(specLogit[[selSpecie]]$logit$Predict[,2] > specLogit[[selSpecie]]$logit$Cut),
+                         #                          test$Target)
+                         #   }
                        },
                        setSpecLogit = function(selSpecie, selModel = c("GLM", "CART", "RF", "NN")[1],
                                                cp = 0.01, cv = 2){
