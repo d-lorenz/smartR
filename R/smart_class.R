@@ -1869,13 +1869,14 @@ FishFleet <- R6Class("fishFleet",
                                                                          NN   = {   })
                        },
                        setLogitPred = function(selSpecie, test){
-                         if(specLogit[[selSpecie]]$logit$Name == "GLM"){
-                           specLogit[[selSpecie]]$logit$Prediction <<- ROCR::prediction(specLogit[[selSpecie]]$logit$Predict,
-                                                                                        test$Target)
-                         }else{
-                           specLogit[[selSpecie]]$logit$Prediction <<- ROCR::prediction(specLogit[[selSpecie]]$logit$Predict[,2],
-                                                                                        test$Target)
-                         }
+                         specLogit[[selSpecie]]$logit$Prediction <<- ROCR::prediction(specLogit[[selSpecie]]$logit$Predict, test$Target)
+                         # if(specLogit[[selSpecie]]$logit$Name == "GLM"){
+                         #   specLogit[[selSpecie]]$logit$Prediction <<- ROCR::prediction(specLogit[[selSpecie]]$logit$Predict,
+                         #                                                                test$Target)
+                         # }else{
+                         #   specLogit[[selSpecie]]$logit$Prediction <<- ROCR::prediction(specLogit[[selSpecie]]$logit$Predict[,2],
+                         #                                                                test$Target)
+                         # }
                        },
                        setLogitCut = function(selSpecie){
                          perf <- ROCR::performance(specLogit[[selSpecie]]$logit$Prediction, "acc")
