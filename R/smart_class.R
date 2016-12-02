@@ -271,9 +271,9 @@ SmartProject <- R6Class("smartProject",
                             datalog$MonthNum <- as.factor(datalog$MonthNum)
                             datalog$Year <- as.factor(datalog$Year)
                             if(fleet$specLogit[[specie]]$logit$Name == "GLM"){
-                              infish <- which(predict(fleet$specLogit[[specie]]$logit$Model, datalog, type = "response") > fleet$specLogit[[specie]]$optCut)
+                              infish <- which(predict(fleet$specLogit[[specie]]$logit$Model, datalog, type = "response") > fleet$specLogit[[specie]]$logit$Cut)
                             }else{
-                              infish <- which(predict(fleet$specLogit[[specie]]$logit$Model, datalog, type = "prob")[,2] > fleet$specLogit[[specie]]$optCut)
+                              infish <- which(predict(fleet$specLogit[[specie]]$logit$Model, datalog, type = "prob")[,2] > fleet$specLogit[[specie]]$logit$Cut)
                             }
                             # infish <- which(predict(fleet$specLogit[[specie]]$logit$logit_f, datalog, type="response") > fleet$specLogit[[specie]]$optCut)
                             for(i in 1:length(infish)){
