@@ -270,7 +270,12 @@ SmartProject <- R6Class("smartProject",
                             datalog <- fleet$effoAllLoa
                             datalog$MonthNum <- as.factor(datalog$MonthNum)
                             datalog$Year <- as.factor(datalog$Year)
-                            infish <- which(predict(fleet$specLogit[[specie]]$logit$logit_f, datalog, type="response") > fleet$specLogit[[specie]]$optCut)
+                            if(fleet$specLogit[[specie]]$logit$Name == "GLM"){
+                              infish <- which(predict(fleet$specLogit[[specie]]$logit$Model, datalog, type = "response") > fleet$specLogit[[specie]]$logit$Cut)
+                            }else{
+                              infish <- which(predict(fleet$specLogit[[specie]]$logit$Model, datalog, type = "prob")[,2] > fleet$specLogit[[specie]]$logit$Cut)
+                            }
+                            # infish <- which(predict(fleet$specLogit[[specie]]$logit$logit_f, datalog, type="response") > fleet$specLogit[[specie]]$optCut)
                             for(i in 1:length(infish)){
                               idata <- as.numeric(fleet$effoAllLoa[infish[i], fgClms])
                               iloa <- as.numeric(fleet$effoAllLoa[infish[i], "Loa"])
@@ -409,12 +414,12 @@ SmartProject <- R6Class("smartProject",
                             sampMap$setCutResult(ind_clu = numCut)
                             tmp_clust <- cbind(Cell = 1:sampMap$nCells,
                                                FishGround = sampMap$clusMat[,numCut])
-                            cat("\n\nSetting Fishing Ground year ", sep = "")
+                            cat("\n\nSetting Fishing Ground year\n", sep = "")
                             for(j in names(fleet$rawEffort)){
                               cat(j, "... ", sep = "")
                               fleet$rawEffort[[j]]$FishGround <<- tmp_clust[fleet$rawEffort[[j]]$Cell,2]
                             }
-                            cat("Done!", sep = "")
+                            cat("Done!\n", sep = "")
                           },
                           addFg2Fishery = function(){
 
@@ -1739,7 +1744,7 @@ FishFleet <- R6Class("fishFleet",
                          par(op)
                        },
                        setEffortIds = function(){
-                         cat("\nSetting Effort IDs year ", sep = "")
+                         cat("\nSetting Effort IDs x year\n", sep = "")
                          effortIds <<- list()
                          for(i in names(rawEffort)){
                            cat(i, "... ", sep = "")
@@ -1748,11 +1753,11 @@ FishFleet <- R6Class("fishFleet",
                            effortIds[[tmp_key]] <<- tmp_ids
                          }
                          effortIds[["All"]] <<- unique(unlist(effortIds))
-                         cat("Done!", sep = "")
+                         cat("Done!\n", sep = "")
                        },
                        setProdSpec = function(){
                          prodSpec <<- list()
-                         cat("\nSetting Species year ", sep = "")
+                         cat("\nSetting species list x year\n", sep = "")
                          for(i in names(effoProdMont)){
                            cat(i, "... ", sep = "")
                            prodSpec[[i]] <<- colnames(effoProdMont[[i]])[ncol(dayEffoMatr[[i]]):ncol(effoProdMont[[i]])]
@@ -1764,7 +1769,7 @@ FishFleet <- R6Class("fishFleet",
                          }
                          setSpecSett()
                          setNNLS()
-                         cat("Done!", sep = "")
+                         cat("Done!\n", sep = "")
                        },
                        setSpecSett = function(){
                          specSett <<- vector(mode = "list", length = length(prodSpec[["Cross"]]))
@@ -1820,46 +1825,106 @@ FishFleet <- R6Class("fishFleet",
                                                            breaks = brea,
                                                            max_x = max_xlim)
                        },
-                       setSpecLogitPredict = function(specie){
-                         specLogit[[specie]]$predict <<- predict(specLogit[[specie]]$logit$logit_f, type = "response")
-                       },
-                       setSpecLogitROCR = function(specie){
-                         ROCRpred <- prediction(specLogit[[specie]]$predict, 1*(specLogit[[specie]]$landings > specSett[[specie]]$threshold))
-                         specLogit[[specie]]$ROCRperf <<- performance(ROCRpred, "tpr", "fpr")
-                       },
-                       setSpecLogitOptCut = function(specie){
-                         analysis <- roc(response = specLogit[[specie]]$landings, predictor = specLogit[[specie]]$predict)
-                         tuning <- cbind(analysis$thresholds,analysis$sensitivities+analysis$specificities)
-                         specLogit[[specie]]$optCut <<- tuning[which.max(tuning[,2]),1]
-                       },
-                       plotLogitROC = function(specie){
-                         base_seq <- seq(specLogit[[specie]]$optCut-0.1,specLogit[[specie]]$optCut+0.1,0.05)
-                         base_seq <- base_seq[-which(base_seq == specLogit[[specie]]$optCut)]
-                         plot(specLogit[[specie]]$ROCRperf, main = "ROC curve - Tpr/Fpr",
-                              print.cutoffs.at = c(base_seq ,specLogit[[specie]]$optCut),
-                              text.cex = c(rep(0.85, length(base_seq)), 1.5),
-                              text.col = c(rep("grey70", length(base_seq)), "black"),
+                       # setSpecLogitROCR = function(specie){
+                       #   ROCRpred <- prediction(specLogit[[specie]]$logit$Predict, 1*(specLogit[[specie]]$landings > specSett[[specie]]$threshold))
+                       #   specLogit[[specie]]$ROCRperf <<- performance(ROCRpred, "tpr", "fpr")
+                       # },
+                       # setSpecLogitOptCut = function(specie){
+                       #   analysis <- pROC::roc(response = specLogit[[specie]]$landings, predictor = specLogit[[specie]]$logit$Predict)
+                       #   tuning <- cbind(analysis$thresholds,analysis$sensitivities+analysis$specificities)
+                       #   specLogit[[specie]]$optCut <<- tuning[which.max(tuning[,2]),1]
+                       # },
+                       plotLogitROC = function(selSpecie){
+                         plot(specLogit[[selSpecie]]$logit$Roc, print.cutoffs.at = seq(0,1,0.1),
                               text.adj = c(-0.2, 1.7))
                        },
-                       setSpecLogitConf = function(specie, cutoff = specLogit[[specie]]$optCut){
-                         predict <- factor(as.numeric(specLogit[[specie]]$predict > cutoff))
-                         truth <- factor(1*(specLogit[[specie]]$landings > specSett[[specie]]$threshold))
+                       setSpecLogitConf = function(selSpecie, cutoff = specLogit[[selSpecie]]$logit$Cut){
+                         predict <- factor(as.numeric(specLogit[[selSpecie]]$logit$Predict > cutoff))
+                         # if(specLogit[[selSpecie]]$logit$Name == "GLM"){
+                         #   predict <- factor(as.numeric(specLogit[[selSpecie]]$logit$Predict > cutoff))
+                         # }else{
+                         #   predict <- factor(as.numeric(specLogit[[selSpecie]]$logit$Predict[,2] > cutoff))
+                         # }
+                         truth <- factor(1*(specLogit[[selSpecie]]$Landings[-specLogit[[selSpecie]]$logit$Split] > specSett[[selSpecie]]$threshold))
                          tmp_Tbl <- table(predict, truth)
-                         specLogit[[specie]]$confMatrix <<- confusionMatrix(tmp_Tbl)
+                         specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(tmp_Tbl)
                        },
-                       setSpecLogit = function(specie){
+                       setLogitTrain = function(selSpecie, train, cp_val = 0.01, cv_val = 2){
+                         specLogit[[selSpecie]]$logit$Model <<- switch(specLogit[[selSpecie]]$logit$Name,
+                                                                       GLM = {glm(Target ~ ., family = binomial(logit), data = train)},
+                                                                       CART = {rpart::rpart(Target ~ ., data = train, method = "class",
+                                                                                            control = rpart.control(cp = cp_val))},
+                                                                       RF = {caret::train(Target ~ . , data = train, method = "rf",
+                                                                                          trControl = trainControl(method = "cv", number = cv_val),
+                                                                                          prox = TRUE, allowParallel = TRUE)},
+                                                                       NN = {   })
+                       },
+                       setLogitTest = function(selSpecie, test){
+                         specLogit[[selSpecie]]$logit$Predict <<- switch(specLogit[[selSpecie]]$logit$Name,
+                                                                         GLM  = {predict(specLogit[[selSpecie]]$logit$Model,
+                                                                                         newdata = test, type = "response")},
+                                                                         CART = {predict(specLogit[[selSpecie]]$logit$Model,
+                                                                                         newdata = test, type="prob")[,2]},
+                                                                         RF   = {predict(specLogit[[selSpecie]]$logit$Model,
+                                                                                         newdata = test, type = "prob")[,2]},
+                                                                         NN   = {   })
+                       },
+                       setLogitPred = function(selSpecie, test){
+                         specLogit[[selSpecie]]$logit$Prediction <<- ROCR::prediction(specLogit[[selSpecie]]$logit$Predict, test$Target)
+                         # if(specLogit[[selSpecie]]$logit$Name == "GLM"){
+                         #   specLogit[[selSpecie]]$logit$Prediction <<- ROCR::prediction(specLogit[[selSpecie]]$logit$Predict,
+                         #                                                                test$Target)
+                         # }else{
+                         #   specLogit[[selSpecie]]$logit$Prediction <<- ROCR::prediction(specLogit[[selSpecie]]$logit$Predict[,2],
+                         #                                                                test$Target)
+                         # }
+                       },
+                       setLogitCut = function(selSpecie){
+                         perf <- ROCR::performance(specLogit[[selSpecie]]$logit$Prediction, "acc")
+                         specLogit[[selSpecie]]$logit$Cut <<- perf@x.values[[1]][which.max(perf@y.values[[1]])]
+                       },
+                       setLogitRoc = function(selSpecie){
+                         specLogit[[selSpecie]]$logit$Roc <<- ROCR::performance(specLogit[[selSpecie]]$logit$Prediction, "tpr", "fpr")
+                       },
+                       setLogitConf = function(selSpecie, test){
+                         specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(as.factor(specLogit[[selSpecie]]$logit$Predict > specLogit[[selSpecie]]$logit$Cut),
+                                                                                           test$Target)
+                         # if(specLogit[[selSpecie]]$logit$Name == "GLM"){
+                         #   specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(as.factor(specLogit[[selSpecie]]$logit$Predict > specLogit[[selSpecie]]$logit$Cut),
+                         #                          test$Target)
+                         # }else{
+                         #   specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(as.factor(specLogit[[selSpecie]]$logit$Predict[,2] > specLogit[[selSpecie]]$logit$Cut),
+                         #                          test$Target)
+                         #   }
+                       },
+                       setSpecLogit = function(selSpecie, selModel = c("GLM", "CART", "RF", "NN")[1],
+                                               cp = 0.01, cv = 2){
                          if(is.null(specLogit)) specLogit <<- list()
-                         if(is.null(specLogit[[specie]])) specLogit[[specie]] <<- list()
-                         tmp_mat <- getMatSpeLand(specie)
-                         specLogit[[specie]]$landings <<- tmp_mat[,ncol(tmp_mat)]
-                         specLogit[[specie]]$logit <<- getLogit(Lit = specLogit[[specie]]$landings, X = tmp_mat[,1:(ncol(tmp_mat)-1)],
-                                                                thrB = specSett[[specie]]$threshold,
-                                                                ptrain = 80, ptest = 20)
-                         setSpecLogitPredict(specie)
-                         setSpecLogitROCR(specie)
-                         setSpecLogitOptCut(specie)
-                         # plotLogitROC(specie)
-                         setSpecLogitConf(specie)
+                         if(is.null(specLogit[[selSpecie]])) specLogit[[selSpecie]] <<- list()
+
+                         tmp_mat <- getMatSpeLand(selSpecie)
+
+                         colnames(tmp_mat)[ncol(tmp_mat)] <- "Target"
+                         specLogit[[selSpecie]]$Landings <<- tmp_mat$Target
+                         tmp_mat$Target <- as.factor(tmp_mat$Target > specSett[[selSpecie]]$threshold)
+
+                         split = caret::createDataPartition(y = tmp_mat$Target, p = 0.7, list = FALSE)[,1]
+                         train <- tmp_mat[split,]
+                         test <- tmp_mat[-split,]
+                         specLogit[[selSpecie]]$logit$Split <<- split
+                         specLogit[[selSpecie]]$logit$Name <<- selModel
+                         # Train
+                         setLogitTrain(selSpecie, train, cp_val = cp, cv_val = cv)
+                         # Test
+                         setLogitTest(selSpecie, test)
+                         # Prediction
+                         setLogitPred(selSpecie, test)
+                         # Cutoff
+                         setLogitCut(selSpecie)
+                         # ROC
+                         setLogitRoc(selSpecie)
+                         # Confusion
+                         setLogitConf(selSpecie, test)
                        },
                        getMatSpeLand = function(specie){
                          tmp_mat <- effoProdAll[,c(1,3:(ncol(dayEffoMatr[[1]])),which(colnames(effoProdAll) == specie))]
@@ -1867,7 +1932,7 @@ FishFleet <- R6Class("fishFleet",
                          return(tmp_mat)
                        },
                        setEffoProdAll = function(){
-                         cat("\nSetting effort/production year ", sep = "")
+                         cat("\nSetting Effort x Production year\n", sep = "")
                          tmp_spe <- sort(prodSpec[["Cross"]])
                          for(i in names(effoProdMont)){
                            cat(i, "... ", sep = "")
@@ -1879,10 +1944,10 @@ FishFleet <- R6Class("fishFleet",
                              effoProdAll <<- rbind(effoProdAll, cbind(Year = i, effoProdMont[[i]][,c(1:(ncol(dayEffoMatr[[i]])-1), tmp_cols[order(tmp_nam[tmp_cols])])]))
                            }
                          }
-                         cat("Done!", sep = "")
+                         cat("Done!\n", sep = "")
                        },
                        setEffoAll = function(){
-                         cat("\nSetting effort year ", sep = "")
+                         cat("\nSetting Effort x Year\n", sep = "")
                          for(i in names(effoMont)){
                            cat(i, "... ", sep = "")
                            if(i == names(effoMont)[1]){
@@ -1901,16 +1966,16 @@ FishFleet <- R6Class("fishFleet",
                          effoProdAllLoa <<- sqldf("select * from tmp_effoProd left join (select * from tmp_loa) using (I_NCEE)")
                        },
                        setEffoAllLoa = function(){
-                         cat("\nSetting effort/LOA... ", sep = "")
+                         cat("\nSetting Effort LOA... ", sep = "")
                          tmp_effo <- effoAll
                          tmp_loa <- rawRegister[,c("CFR","Loa")]
                          tmp_loa$CFR <- substr(tmp_loa$CFR, 4, nchar(tmp_loa$CFR[1]))
                          names(tmp_loa) <- c("I_NCEE", "Loa")
                          effoAllLoa <<- sqldf("select * from tmp_effo left join (select * from tmp_loa) using (I_NCEE)")
-                         cat("Done!", sep = "")
+                         cat("Done!\n", sep = "")
                        },
                        setProdIds = function(){
-                         cat("\nSetting Production IDs year ", sep = "")
+                         cat("\nSetting Production IDs x year\n", sep = "")
                          productionIds <<- list()
                          for(i in names(rawProduction)){
                            cat(i, "... ", sep = "")
@@ -1919,7 +1984,7 @@ FishFleet <- R6Class("fishFleet",
                            productionIds[[tmp_key]] <<- tmp_ids
                          }
                          productionIds[["All"]] <<- unique(unlist(productionIds))
-                         cat("Done!", sep = "")
+                         cat("Done!\n", sep = "")
                        },
                        setIdsEffoProd = function(){
                          ###   Set IDs cross match effort/production
@@ -1980,11 +2045,11 @@ FishFleet <- R6Class("fishFleet",
                            tmp_prod <- prodMatr[[i]]
                            effoProd[[i]] <<- sqldf("select * from tmp_effo, tmp_prod where I_NCEE = NUMUE and DATE >= UTC_S and DATE <= UTC_E")
                          }
-                         cat("Done!")
+                         cat("Done!\n")
                        },
                        setEffoProdMont = function(){
                          effoProdMont <<- list()
-                         cat("\nMatching EFfort x FG with Production\n", sep = "")
+                         cat("\nMatching Effort x FG with Production\n", sep = "")
                          for(i in names(effoProd)){
                            cat(i,"... ", sep = "")
                            dis_vesmon <- unique(effoProd[[i]][,c("I_NCEE", "MonthNum")])
@@ -1998,7 +2063,7 @@ FishFleet <- R6Class("fishFleet",
                              effoProdMont[[i]][j,(ncol(dayEffoMatr[[i]])):ncol(effoProdMont[[i]])] <<- apply(tmp_prod_itm[,2:ncol(tmp_prod_itm)], 2, sum)
                            }
                          }
-                         cat("Done!")
+                         cat("Done!\n")
                        },
                        setEffoMont = function(){
                          effoMont <<- list()
@@ -2051,7 +2116,7 @@ FishFleet <- R6Class("fishFleet",
                            }
                            dayEffoMatr[[j]] <<- tmp_matrix
                          }
-                         cat("Done!", sep = "")
+                         cat("Done!\n", sep = "")
                        },
                        getLoa4Prod = function(){
                          if(!is.null(productionIds) & !is.null(registerIds)){

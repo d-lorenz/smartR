@@ -1273,27 +1273,65 @@ smart_gui <- function(){
 
     up_g <- ggroup(horizontal = FALSE, container = temp_dia)
     up_fra <- gframe(container = up_g, horizontal = TRUE, expand = TRUE)
-    # addSpring(up_fra)
     addSpace(up_fra, 20)
-    spe_fra <- gframe(text = "Specie", container = up_fra, horizontal = TRUE, expand = TRUE)
-    addSpring(spe_fra)
-    glabel(text = svalue(spe_drop), container = spe_fra)
-    # spe_drop <- gcombobox(sort(names(my_project$fleet$specSett)[which(!unlist(lapply(my_project$fleet$specSett, is.null)))]), selected = 1,
-    #                       editable = FALSE, container = spe_fra, expand = TRUE,
-    #                       handler = function(...){
 
-    # })
-    addSpring(spe_fra)
+    spe_fra <- gframe(text = "Specie", container = up_fra, horizontal = TRUE, expand = TRUE)
+    addSpace(spe_fra, 10)
+    glabel(text = svalue(spe_drop), container = spe_fra)
+    addSpace(spe_fra, 10)
+
     addSpace(up_fra, 20)
-    # addSpring(up_fra)
+    mod_fra <- gframe(text = "Model", container = up_fra, horizontal = TRUE, expand = TRUE)
+    addSpace(mod_fra, 20)
+    mod_radSel <- gradio(items = c("GLM", "CART", "RF", "NN"),
+                         selected = 1, horizontal = FALSE, container = mod_fra, handler = function(...){
+                           switch(svalue(mod_radSel),
+                                  GLM = {
+                                    lapply(list(par_modSel[1,2]), function(x) enabled(x) <- TRUE)
+                                    lapply(par_modSel[2:4,2], function(x) enabled(x) <- FALSE)},
+                                  CART = {
+                                    lapply(list(par_modSel[2,2]), function(x) enabled(x) <- TRUE)
+                                    lapply(par_modSel[c(1,3:4),2], function(x) enabled(x) <- FALSE)},
+                                  RF = {
+                                    lapply(list(par_modSel[3,2]), function(x) enabled(x) <- TRUE)
+                                    lapply(par_modSel[c(1:2,4),2], function(x) enabled(x) <- FALSE)},
+                                  NN = {
+                                    lapply(list(par_modSel[4,2]), function(x) enabled(x) <- TRUE)
+                                    lapply(par_modSel[1:3,2], function(x) enabled(x) <- FALSE)}
+                                  )
+                         })
+    addSpace(mod_fra, 20)
+
+    addSpace(up_fra, 20)
+    par_fra <- gframe(text = "Parameters", container = up_fra, horizontal = TRUE, expand = TRUE)
+    addSpace(par_fra, 20)
+
+    par_modSel <- glayout(container = par_fra)
+    par_modSel[1,1:2] <- "None"
+    par_modSel[2,1] <- "cp"
+    par_modSel[2,2] <- gspinbutton(from = 0, to = 1, by = 0.001, value = 0.01, container = par_modSel)
+    par_modSel[3,1] <- "CV"
+    par_modSel[3,2] <- gspinbutton(from = 2, to = 10, by = 1, value = 5, container = par_modSel)
+    par_modSel[4,1] <- "Iter"
+    par_modSel[4,2] <- gspinbutton(from = 100, to = 1000, by = 100, value = 100, container = par_modSel)
+
+    addSpace(par_fra, 20)
+
+    lapply(par_modSel[2:4,2], function(x) enabled(x) <- FALSE)
+
+    addSpring(up_fra)
 
     gbutton(text = "Get\nLogit", container = up_fra, handler = function(...){
-      my_project$fleet$setSpecLogit(svalue(spe_drop))
-      my_project$fleet$plotLogitROC(svalue(spe_drop))
+      my_project$fleet$setSpecLogit(selSpecie = svalue(spe_drop),
+                                    selModel = svalue(mod_radSel),
+                                    cp = svalue(par_modSel[2,2]),
+                                    cv = svalue(par_modSel[3,2]))
 
-      svalue(thr_spin) <- round(my_project$fleet$specLogit[[svalue(spe_drop)]]$optCut, 2)
+      my_project$fleet$plotLogitROC(selSpecie = svalue(spe_drop))
+
+      svalue(thr_spin) <- round(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Cut, 2)
       svalue(tmp_txt) <- capture.output({cat("\n")
-        print(my_project$fleet$specLogit[[svalue(spe_drop)]]$confMatrix)})
+        print(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Confusion)})
     })
     addSpace(up_fra, 20)
 
@@ -1303,29 +1341,27 @@ smart_gui <- function(){
                         by = 0.01, value = 0.5, container = thr_fra, expand = TRUE,
                         handler = function(...){
                           if(!is.null(my_project$fleet$specLogit[[svalue(spe_drop)]])){
-                            my_project$fleet$setSpecLogitConf(specie = svalue(spe_drop), cutoff = svalue(thr_spin))
+                            my_project$fleet$setSpecLogitConf(selSpecie = svalue(spe_drop), cutoff = svalue(thr_spin))
                             svalue(tmp_txt) <- capture.output({cat("\n")
-                              print(my_project$fleet$specLogit[[svalue(spe_drop)]]$confMatrix)})
+                              print(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Confusion)})
                           }
                         })
     addSpace(up_fra, 20)
     addSpace(thr_fra, 20)
 
-    gbutton(text = "\n   Save   \n", container = up_fra, handler = function(...){
+    set_gru_up <- ggroup(container = up_fra, horizontal = FALSE)
+    addSpring(set_gru_up)
+    gbutton(text = "\n   Save   \n", container = set_gru_up, handler = function(...){
       svalue(set_lab) <- "Saved"
       delete(set_gru, set_gru$children[[length(set_gru$children)]])
       add(set_gru, logi_sta_n)
     })
-
-    addSpace(up_fra, 20)
-    set_gru_up <- ggroup(container = up_fra, horizontal = FALSE)
-    addSpring(set_gru_up)
     set_lab <- glabel(text = "Not Saved", container = set_gru_up)
     set_gru <- ggroup(container = set_gru_up, horizontal = TRUE)
     addSpring(set_gru_up)
     addSpace(up_fra, 20)
 
-    addSpring(up_fra)
+    # addSpring(up_fra)
     gbutton(text = " Close\nWindow", container = up_fra, handler = function(...){
       dispose(temp_dia)
     })
@@ -1346,10 +1382,10 @@ smart_gui <- function(){
     logi_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
     add(set_gru, logi_sta)
 
-    if(!is.null(my_project$fleet$specLogit[[svalue(spe_drop)]]$ROCRperf)){
+    if(!is.null(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Roc)){
       my_project$fleet$plotLogitROC(svalue(spe_drop))
       svalue(tmp_txt) <- capture.output({cat("\n")
-        print(my_project$fleet$specLogit[[svalue(spe_drop)]]$confMatrix)})
+        print(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Confusion)})
     }
 
   })
