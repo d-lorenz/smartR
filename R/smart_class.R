@@ -1839,11 +1839,12 @@ FishFleet <- R6Class("fishFleet",
                               text.adj = c(-0.2, 1.7))
                        },
                        setSpecLogitConf = function(selSpecie, cutoff = specLogit[[selSpecie]]$logit$Cut){
-                         if(specLogit[[selSpecie]]$logit$Name == "GLM"){
-                           predict <- factor(as.numeric(specLogit[[selSpecie]]$logit$Predict > cutoff))
-                         }else{
-                           predict <- factor(as.numeric(specLogit[[selSpecie]]$logit$Predict[,2] > cutoff))
-                         }
+                         predict <- factor(as.numeric(specLogit[[selSpecie]]$logit$Predict > cutoff))
+                         # if(specLogit[[selSpecie]]$logit$Name == "GLM"){
+                         #   predict <- factor(as.numeric(specLogit[[selSpecie]]$logit$Predict > cutoff))
+                         # }else{
+                         #   predict <- factor(as.numeric(specLogit[[selSpecie]]$logit$Predict[,2] > cutoff))
+                         # }
                          truth <- factor(1*(specLogit[[selSpecie]]$Landings[-specLogit[[selSpecie]]$logit$Split] > specSett[[selSpecie]]$threshold))
                          tmp_Tbl <- table(predict, truth)
                          specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(tmp_Tbl)
