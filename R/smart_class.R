@@ -1856,7 +1856,8 @@ FishFleet <- R6Class("fishFleet",
                                                                                             control = rpart.control(cp = cp_val))},
                                                                        RF = {caret::train(Target ~ . , data = train, method = "rf",
                                                                                           trControl = trainControl(method = "cv", number = cv_val),
-                                                                                          prox = TRUE, allowParallel = TRUE)},
+                                                                                          prox = TRUE, allowParallel = TRUE, metric = "Kappa",
+                                                                                          maximize = TRUE)},
                                                                        NN = {   })
                        },
                        setLogitTest = function(selSpecie, test){
