@@ -1101,6 +1101,7 @@ smart_gui <- function(){
     my_project$fleet$setEffoProdMont()
     my_project$fleet$setProdSpec()
     my_project$fleet$setEffoProdAll()
+    my_project$fleet$setEffoProdAllLoa()
     # my_project$fleet$setSpecSett()
     spe_drop[] <- sort(names(my_project$fleet$specSett))
     provie_drop[] <- names(my_project$fleet$effoProdMont)
