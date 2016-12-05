@@ -1966,7 +1966,8 @@ FishFleet <- R6Class("fishFleet",
                          tmp_loa <- rawRegister[,c("CFR","Loa")]
                          tmp_loa$CFR <- substr(tmp_loa$CFR, 4, nchar(tmp_loa$CFR[1]))
                          names(tmp_loa) <- c("I_NCEE", "Loa")
-                         effoProdAllLoa <<- sqldf("select * from tmp_effoProd left join (select * from tmp_loa) using (I_NCEE)")
+                         tmp_allLoa <- sqldf("select * from tmp_effoProd left join (select * from tmp_loa) using (I_NCEE)")
+                         effoProdAllLoa <<- tmp_allLoa[-which(is.na(tmp_allLoa), arr.ind = TRUE)[,1],]
                        },
                        setEffoAllLoa = function(){
                          cat("\nSetting Effort LOA... ", sep = "")
