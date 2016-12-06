@@ -59,7 +59,7 @@ smart_gui <- function(){
   ##############################################################
 
   lef_g <- ggroup(horizontal = FALSE, container = big_g)
-  addSpring(lef_g)
+  # addSpring(lef_g)
   # gimage("/Users/Lomo/Documents/Uni/Lab/Proj/smart\ gui/SMART_GUI/SMART_Logo.2.jpg", container = lef_g)
   gimage(system.file("SMART_Logo.2.jpg", package="smartR"), container = lef_g)
   pro_eg <- gexpandgroup("Project", horizontal = FALSE, container = lef_g)
