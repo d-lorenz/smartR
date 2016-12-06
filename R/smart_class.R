@@ -574,14 +574,15 @@ SmartProject <- R6Class("smartProject",
                                                     ncol = ncol(data.frame(bmat[,zero_chk])))
                                 colnames(zero_beta) <- names(zero_chk)
                                 full_betas <- cbind(par_betas, zero_beta)
-                                blist[[1]] <- full_betas[,order(colnames(full_betas))]
+                                bmat <- full_betas[,order(colnames(full_betas))]
                               }else{
-                                blist[[1]] <- fillbetas(bmat)
+                                bmat <- fillbetas(bmat)
                               }
-                            }else{
-                              blist[[1]] <- bmat
                             }
 
+                            if(any(bmat < 0)) bmat[which(bmat < 0)] <- 0
+
+                            blist[[1]] <- bmat
                             blist[[2]] <- unlist(obsY)
                             blist[[3]] <- unlist(fittedY)
                             blist[[4]] <- unlist(nnls_r2)
