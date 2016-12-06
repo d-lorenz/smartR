@@ -50,7 +50,7 @@ smart_gui <- function(){
 
   pre_dev <- length(dev.list())
 
-  main_win <- gwindow(paste("SMART - Version ", "1.1", sep = ""),width = 1200, height= 625, visible = FALSE)
+  main_win <- gwindow(paste("SMART - Version ", "1.1", sep = ""),width = 1200, height= 600, visible = FALSE)
   big_g <- ggroup(horizontal = TRUE, container = main_win)
 
 
