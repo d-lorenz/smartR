@@ -566,7 +566,7 @@ SmartProject <- R6Class("smartProject",
                             blist <- vector(mode="list",length=4)
                             colnames(bmat) <- paste("BE_", ifelse(nchar(1:ncol(bmat)) == 2, 1:ncol(bmat), paste("0", 1:ncol(bmat), sep = "")), sep = "")
 
-                            if (anyNA(bmat)) {
+                            if(anyNA(bmat)){
                               zero_chk <- which(apply(bmat[which(!is.na(bmat),arr.ind = TRUE),], 2, sum,na.rm=TRUE) == 0)
                               if(length(zero_chk) > 0){
                                 par_betas <- fillbetas(bmat[,-zero_chk])
