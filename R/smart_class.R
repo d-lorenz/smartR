@@ -2556,7 +2556,8 @@ SampleMap <- R6Class("sampleMap",
                          color_clas <- rainbow(max(cell_bed))
                          names(tmp_dat) <- 1:length(tmp_dat)
                          all_cell <- merge(x = gridPolySet$PID,
-                                           data.frame(x = as.numeric(names(tmp_dat)), y = tmp_dat), all = TRUE)
+                                           data.frame(x = as.numeric(names(tmp_dat)), y = tmp_dat,
+                                                      stringsAsFactors = FALSE), all = TRUE)
                          all_cell[is.na(all_cell)] <- 0
                          grid_data <- cbind(gridPolySet, Seabed = all_cell[,2])
                          ggBioDF <<- suppressMessages(gooMapPlot +
