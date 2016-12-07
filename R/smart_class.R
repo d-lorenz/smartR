@@ -2552,7 +2552,13 @@ SampleMap <- R6Class("sampleMap",
                        },
                        setGgBioDF = function(){
                          cell_bed <- apply(bioDF, 1, which.max)
+
+                         zero_cell <- which(apply(bioDF, 1, sum) == 0)
+
                          tmp_dat <- colnames(bioDF)[cell_bed]
+
+                         if(length(zero_cell) > 0) tmp_dat[zero_cell] <- "No Data"
+
                          color_clas <- rainbow(max(cell_bed))
                          names(tmp_dat) <- 1:length(tmp_dat)
                          all_cell <- merge(x = gridPolySet$PID,
