@@ -2551,7 +2551,7 @@ SampleMap <- R6Class("sampleMap",
                          par(def.par)
                        },
                        setGgBioDF = function(){
-                         cell_bed <- apply(bioDF, 1, function(x) which(x == 1))
+                         cell_bed <- apply(bioDF, 1, which.max)
                          tmp_dat <- colnames(bioDF)[cell_bed]
                          color_clas <- rainbow(max(cell_bed))
                          names(tmp_dat) <- 1:length(tmp_dat)
