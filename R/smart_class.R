@@ -2682,6 +2682,7 @@ SampleMap <- R6Class("sampleMap",
                        },
                        calcFishGrou = function(numCuts = 50,
                                                minsize = 10,
+                                               maxsize = 100,
                                                modeska = "S",
                                                skater_method,
                                                nei_queen = TRUE){
@@ -2700,7 +2701,10 @@ SampleMap <- R6Class("sampleMap",
                          mst.bh <- mstree(nb.w, ini = 1)
                          clusMat <<- matrix(NA, nCells, numCuts)
                          cat("\nClustering", sep = "")
-                         res1 <- skater(mst.bh[,1:2], clusInpu, ncuts = 1, minsize,
+                         res1 <- skater(edges = mst.bh[,1:2],
+                                        data = clusInpu,
+                                        ncuts = 1,
+                                        crit = c(minsize, maxsize),
                                         method = skater_method)
                          clusMat[,1] <<- res1$groups
 
