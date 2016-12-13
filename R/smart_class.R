@@ -2704,7 +2704,7 @@ SampleMap <- R6Class("sampleMap",
                          res1 <- skater(edges = mst.bh[,1:2],
                                         data = clusInpu,
                                         ncuts = 1,
-                                        crit = c(minsize, maxsize),
+                                        crit = minsize,
                                         method = skater_method)
                          clusMat[,1] <<- res1$groups
 
@@ -2714,8 +2714,16 @@ SampleMap <- R6Class("sampleMap",
                            ##  Spatial 'K'luster Analysis by Tree Edge Removal
                            #                            res1 <- skater(mst.bh[,1:2], cells_data, ncuts = nCuts, minsize,
                            #                                           method = skater_method)
-                           res1 <- skater(res1, clusInpu, ncuts = 1, minsize,
-                                          method = skater_method)
+
+                           if(nCuts > ceiling(nrow(clusInpu)/maxsize)){
+                             res1 <- skater(res1, clusInpu, ncuts = 1,
+                                            crit = c(minsize, maxsize),
+                                            method = skater_method)
+                           }else{
+                             res1 <- skater(res1, clusInpu, ncuts = 1,
+                                            crit = minsize,
+                                            method = skater_method)
+                           }
                            clusMat[,nCuts] <<- res1$groups
                          }
                          cat(" Done!", sep = "")
