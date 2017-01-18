@@ -2223,7 +2223,7 @@ smart_gui <- function(){
       print(
         ggplot() +
           geom_jitter(data = lw_data,
-                      mapping = aes(x = Length, y = Weight),
+                      mapping = aes(x = ~Length, y = ~Weight),
                       width = 0.5, size = 0.25, alpha = 0.25, color = "grey5") +
           theme_tufte(base_size = 14, ticks = F) +
           annotate("line", x = sort(unique(lw_data$Length)),
