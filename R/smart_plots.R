@@ -6,7 +6,7 @@ ggplot_TotalProduction <- function(df_Prod){
   return(
     suppressMessages(
       ggplot() +
-        geom_line(data = df_Prod, mapping = aes(x = ~Year, y = ~Production)) +
+        geom_line(data = df_Prod, mapping = aes_(x = ~Year, y = ~Production)) +
         ylab("Kilogram") +
         theme_tufte(base_size = 14, ticks=F) +
         theme(legend.position = "none",
@@ -24,7 +24,7 @@ ggplot_FGProduction <- function(df_FGProd){
     suppressMessages(
       ggplot() +
         geom_line(data = df_FGProd,
-                  mapping = aes(x = ~Year, y = ~Production,
+                  mapping = aes_(x = ~Year, y = ~Production,
                                 color = ~FishGround, group = ~FishGround)) +
         ylab("Kilogram") +
         theme_tufte(base_size = 14, ticks=F) +
