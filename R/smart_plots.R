@@ -18,6 +18,26 @@ ggplot_TotalProduction <- function(df_Prod){
   )
 }
 
+## Production by Fishing Ground path ----
+ggplot_FGProduction <- function(df_FGProd){
+  return(
+    suppressMessages(
+      ggplot() +
+        geom_line(data = df_FGProd,
+                  mapping = aes(x = ~Year, y = ~Production,
+                                color = ~FishGround, group = ~FishGround)) +
+        ylab("Kilogram") +
+        theme_tufte(base_size = 14, ticks=F) +
+        theme(legend.position = "right",
+              axis.text.x = element_text(size = 10),
+              panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+              axis.text.y = element_text(size = 10),
+              axis.ticks.y = element_blank()) +
+        labs(color = "Fishing Ground")
+    )
+  )
+}
+
 ## MCMC Survivors * quarter ----
 set_ggSurvLine <- function(df_surv){
   return(
