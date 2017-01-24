@@ -1540,13 +1540,16 @@ smart_gui <- function(){
     dev.set(dev.list()[pre_dev+5])
     svalue(stat_bar) <- "Plotting production..."
     Sys.sleep(1)
-
     my_project$setPlotProdMeltYear(specie = svalue(spe_drop), year = svalue(provie_drop))
     suppressWarnings(grid.arrange(my_project$sampMap$ggProdFGmap,
                                   my_project$sampMap$ggProdFGbox,
                                   layout_matrix = rbind(c(1,1,1,2),c(1,1,1,2))))
 
     svalue(stat_bar) <- ""
+  })
+  addSpring(pro_g_top2_ver)
+  gbutton("Total\nProduction", container = pro_g_top2_view, handler = function(h,...){
+
   })
   addSpring(pro_g_top2_ver)
   addSpring(pro_g_top2_view)
