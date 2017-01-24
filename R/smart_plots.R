@@ -7,7 +7,7 @@ ggplot_TotalProduction <- function(df_Prod){
     suppressMessages(
       ggplot() +
         geom_line(data = df_Prod, mapping = aes(x = ~Year, y = ~Production)) +
-        ylab("Production (Kilogram)") +
+        ylab("Kilogram") +
         theme_tufte(base_size = 14, ticks=F) +
         theme(legend.position = "none",
               axis.text.x = element_text(size = 10),
