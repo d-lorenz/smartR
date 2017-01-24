@@ -1,7 +1,7 @@
 
+# SmartR Plots ----
 
-######
-### MCMC Survivors * quarter
+## MCMC Survivors * quarter ----
 set_ggSurvLine <- function(df_surv){
   return(
     suppressMessages(
@@ -21,9 +21,8 @@ set_ggSurvLine <- function(df_surv){
     )
   )
 }
-###
 
-### MCMC Catch * Quarters
+## MCMC Catch * Quarters ----
 set_ggCatchLine <- function(df_birth){
   return(
     suppressMessages(
@@ -45,9 +44,8 @@ set_ggCatchLine <- function(df_birth){
     )
   )
 }
-###
 
-### MCMC quarter vertical hist
+## MCMC Quarters Histogram ----
 set_ggHistBirth <- function(df_mix, df_grow){
   return(
     suppressMessages(
@@ -74,10 +72,8 @@ set_ggHistBirth <- function(df_mix, df_grow){
     )
   )
 }
-###
 
-######
-### MCMC output cohort stats
+## MCMC Cohort Summary Table ----
 set_tblCohoStat <- function(df_coho){
   cohSliTheme <- gridExtra::ttheme_default(
     core = list(fg_params=list(cex = 0.4)),
@@ -85,10 +81,8 @@ set_tblCohoStat <- function(df_coho){
     rowhead = list(fg_params=list(cex = 0.4)))
   return(tableGrob(round(df_coho, 2), theme = cohSliTheme, rows=NULL))
 }
-###
 
-######
-### MCMC Age-Length Key
+## MCMC Age-Length Table ----
 set_tblAgeLength <- function(df_mix){
   ageLenTheme <- gridExtra::ttheme_default(
     core = list(fg_params=list(cex = 0.4)),
@@ -96,10 +90,8 @@ set_tblAgeLength <- function(df_mix){
     rowhead = list(fg_params=list(cex = 0.3)))
   return(tableGrob(table(round(df_mix$Length), df_mix$Age), theme = ageLenTheme))
 }
-###
 
-######
-### MCMC Plot Age-Length
+## MCMC Plot Age-Length ----
 set_ggAgeLength <- function(df_mix, mixPalette){
   return(
     suppressMessages(
@@ -120,10 +112,8 @@ set_ggAgeLength <- function(df_mix, mixPalette){
     )
   )
 }
-###
 
-######
-### MCMC Boxplot Sigma
+## MCMC Chains Boxplot Sigma ----
 set_ggSigmaBox <- function(df_sigma, sigPalette, numCoho){
   cohoVari <- melt(sqrt(df_sigma))
   names(cohoVari) <- c("Iter", "Cohort", "Value")
@@ -147,10 +137,8 @@ set_ggSigmaBox <- function(df_sigma, sigPalette, numCoho){
   )
   return(cohoVariGG)
 }
-###
 
-######
-### MCMC chain Boxplot Tau
+## MCMC Chains Boxplot Tau ----
 set_ggTausBox <- function(df_taus, tauPalette, numCoho){
   cohoPreci <- melt(df_taus)
   names(cohoPreci) <- c("Iter", "Cohort", "Value")
@@ -176,9 +164,8 @@ set_ggTausBox <- function(df_taus, tauPalette, numCoho){
 
   return(cohoPreciGG)
 }
-###
 
-### MCMC chain Traceplot
+## MCMC Chains Traceplot ----
 set_ggChainTrace <- function(df_LK){
   return(
     suppressMessages(
@@ -203,10 +190,8 @@ set_ggChainTrace <- function(df_LK){
     )
   )
 }
-###
 
-######
-### MCMC chain scatterplot
+## MCMC Chains Scatterplot ----
 set_ggChainScatter <- function(gg_DFscat, meanL, meanK){
   return(
     suppressMessages(
@@ -239,10 +224,8 @@ set_ggChainScatter <- function(gg_DFscat, meanL, meanK){
     )
   )
 }
-###
 
-
-
+## Length Frequency Distribution Histogram ----
 set_ggHistLfdTot <- function(inLfd){
   suppressMessages(ggplot(inLfd, aes_(x = ~Length, y = ~..count..)) +
                      geom_histogram(bins = 50, fill = "grey0", alpha = 0.7, col = "grey10") +
@@ -260,7 +243,7 @@ set_ggHistLfdTot <- function(inLfd){
                            axis.ticks.y = element_blank()))
 }
 
-
+## UTC Coverage Histogram ----
 set_ggHistUtcTot <- function(inLfd){
   suppressMessages(
     ggplot(data.frame(UTC = unique(inLfd$UTC)), aes_(x = ~UTC, y = ~..count..)) +
@@ -279,7 +262,7 @@ set_ggHistUtcTot <- function(inLfd){
   )
 }
 
-
+## UTC split Dot Chart ----
 set_ggDotUtcSplit <- function(inLfd){
   sampPunch <- melt(table(inLfd$Year, inLfd$Month))
   names(sampPunch) <- c("Year", "Month", "Frequency")
@@ -299,7 +282,7 @@ set_ggDotUtcSplit <- function(inLfd){
   )
 }
 
-
+## UTC LFD Histogram ----
 set_ggHistUtcLfd <- function(inLfd){
   suppressMessages(
     ggplot(inLfd, aes_(x = ~Length, y = ~..count..)) +
@@ -318,7 +301,7 @@ set_ggHistUtcLfd <- function(inLfd){
   )
 }
 
-
+## Abundance Frequency Table ----
 set_spatAbbTbl <- function(inSpat){
   out_FgTbl <- data.frame(FG = inSpat$FG,
                           AbsFreq = inSpat$Freq,
@@ -332,7 +315,7 @@ set_spatAbbTbl <- function(inSpat){
   return(tableGrob(out_FgTbl, theme = fgAbbTheme))
 }
 
-
+## Abundance Absolute Frequency Bars ----
 set_spatAbsFreq <- function(inSpat){
   suppressMessages(
     ggplot(inSpat, aes_(x = ~FG, y = ~Freq)) +
@@ -354,7 +337,7 @@ set_spatAbsFreq <- function(inSpat){
   )
 }
 
-
+## Abundance Relative Frequency Bars ----
 set_spatRelFreq <- function(inSpat){
   suppressMessages(
     ggplot(inSpat, aes_(x = ~FG, y = ~relFreq)) +
