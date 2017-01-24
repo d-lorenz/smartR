@@ -1495,33 +1495,35 @@ smart_gui <- function(){
   addSpring(pro_g_top2)
   addSpring(pro_g_top)
 
+  pro_g_topBeta <- ggroup(horizontal = FALSE, container = pro_g_top)
+  addSpring(pro_g_topBeta)
+  gbutton("Tune\nBetas", container = pro_g_topBeta, handler = function(h,...){
+
+
+
+  })
+  addSpring(pro_g_topBeta)
+
   pro_g_top3 <- ggroup(horizontal = FALSE, container = pro_g_top)
   addSpring(pro_g_top3)
   gbutton("Predict\nProduction", container = pro_g_top3, handler = function(h,...){
-
     enabled(pro_g_top) <- FALSE
     Sys.sleep(1)
-
     my_project$fleet$setEffoMont()
     my_project$fleet$setEffoAll()
     my_project$fleet$setEffoAllLoa()
     my_project$predictProduction(svalue(spe_drop))
     my_project$fleet$setProdMeltYear(svalue(spe_drop))
-
     enabled(pro_g_top) <- TRUE
-
   })
   addSpring(pro_g_top3)
 
   addSpring(pro_g_top)
-
   pro_g_top2_view_g <- ggroup(horizontal = FALSE, container = pro_g_top, expand = TRUE)
   pro_g_top2_view <- gframe(text = "View", horizontal = TRUE, container = pro_g_top2_view_g, expand = TRUE)
   addSpring(pro_g_top2_view)
   provie_drop <- gcombobox(items = "Year", selected = 1, container = pro_g_top2_view,
                            expand = TRUE, editable = FALSE)
-  # prospe_drop <- gcombobox(items = "Specie", selected = 1, container = pro_g_top2_view,
-  #                          expand = TRUE, editable = FALSE)
   addSpring(pro_g_top2_view)
   pro_g_top2_ver <- ggroup(horizontal = FALSE, container = pro_g_top2_view)
   addSpring(pro_g_top2_ver)
