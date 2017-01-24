@@ -1,6 +1,23 @@
 
 # SmartR Plots ----
 
+## Production Total path ----
+ggplot_TotalProduction <- function(df_Prod){
+  return(
+    suppressMessages(
+      ggplot() +
+        geom_line(data = df_Prod, mapping = aes(x = ~Year, y = ~Production)) +
+        ylab("Production (Kilogram)") +
+        theme_tufte(base_size = 14, ticks=F) +
+        theme(legend.position = "none",
+              axis.text.x = element_text(size = 10),
+              panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+              axis.text.y = element_text(size = 10),
+              axis.ticks.y = element_blank())
+    )
+  )
+}
+
 ## MCMC Survivors * quarter ----
 set_ggSurvLine <- function(df_surv){
   return(
