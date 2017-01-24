@@ -1551,7 +1551,12 @@ smart_gui <- function(){
   })
   addSpring(pro_g_top2_ver)
   gbutton("Total\nProduction", container = pro_g_top2_view, handler = function(h,...){
-
+    year_Prod <- aggregate(. ~ Year, my_project$fleet$prodMeltYear[[svalue(spe_drop)]][,c(1,3)], sum)
+    year_Prod[,1] <- as.numeric(as.character(year_Prod[,1]))
+    suppressWarnings(grid.arrange(ggplot_TotalProduction(year_Prod),
+                                  ggplot_FGProduction(my_project$fleet$prodMeltYear[[svalue(spe_drop)]]),
+                                  layout_matrix = rbind(c(1,1,2),c(1,1,2)),
+                                  top = "Production"))
   })
   addSpring(pro_g_top2_ver)
   addSpring(pro_g_top2_view)
