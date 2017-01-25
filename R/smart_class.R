@@ -1797,6 +1797,14 @@ FishFleet <- R6Class("fishFleet",
                                                          variable.name = "FishGround", value.name = "Production")
 
                        },
+                       plotTotProd = function(specie){
+                         year_Prod <- aggregate(. ~ Year, prodMeltYear[[specie]][,c(1,3)], sum)
+                         year_Prod[,1] <- as.numeric(as.character(year_Prod[,1]))
+                         grid.arrange(ggplot_TotalProduction(year_Prod),
+                                      ggplot_FGProduction(prodMeltYear[[specie]]),
+                                      layout_matrix = rbind(c(1,1,2),c(1,1,2)),
+                                      top = "Production")
+                       },
                        plotNNLS = function(specie, thresR2){
                          tmp_df <- data.frame(R2 = "R2",
                                               Values = as.numeric(resNNLS[[specie]][["nnls_r2"]]))
