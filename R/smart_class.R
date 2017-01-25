@@ -1800,8 +1800,10 @@ FishFleet <- R6Class("fishFleet",
                        plotTotProd = function(specie){
                          year_Prod <- aggregate(. ~ Year, prodMeltYear[[specie]][,c(1,3)], sum)
                          year_Prod[,1] <- as.numeric(as.character(year_Prod[,1]))
-                         grid.arrange(ggplot_TotalProduction(year_Prod),
-                                      ggplot_FGProduction(prodMeltYear[[specie]]),
+                         tot_prod <- ggplot_TotalProduction(year_Prod)
+                         fg_prod <- ggplot_FGProduction(prodMeltYear[[specie]])
+                         grid.arrange(tot_prod,
+                                      fg_prod,
                                       layout_matrix = rbind(c(1,1,2),c(1,1,2)),
                                       top = "Production")
                        },
