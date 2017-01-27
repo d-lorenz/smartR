@@ -1692,10 +1692,10 @@ FishFleet <- R6Class("fishFleet",
                        prodMeltYear = NULL,
                        fishPoinPara = NULL,
                        setRegHarbs = function(){
-                         harb_cur <- rawRegister[as.numeric(substr(rawRegister$CFR, 4, nchar(rawRegister$CFR[1]))) %in% effortIds$All,]
-                         harb_cur_uni <- data.frame(Name = sort(unique(harb_cur$Port.Name)), Lon = NA, Lat = NA)
+                         regHarbsAll <<- suppressWarnings(rawRegister[as.numeric(substr(rawRegister$CFR, 4, nchar(rawRegister$CFR[1]))) %in% effortIds$All,])
+                         harb_cur_uni <- data.frame(Name = sort(unique(regHarbsAll$Port.Name)), Lon = NA, Lat = NA)
                          harb_cur_uni[,2:3] <- geocode(as.character(harb_cur_uni[,1]), output = "latlon" , source = "google")
-                         regHarbs <<- harb_cur_uni
+                         regHarbsUni <<- harb_cur_uni
                        },
                        setBetaAvg = function(sel_specie){
                          tmp_df <- data.frame(Month = resNNLS[[sel_specie]]$SceMat$MONTH,
