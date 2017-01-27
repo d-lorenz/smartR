@@ -34,7 +34,7 @@ SmartProject <- R6Class("smartProject",
                             for(i in 1:ncol(harb_fg_dist)){
                               harb_wei_dist[i] <- weighted.mean(harb_fg_dist[,i], fleet$regHarbsBox$relFreq)
                             }
-                            fgWeigDist <<- harb_wei_dist
+                            sampMap$fgWeigDist <<- harb_wei_dist
                           },
                           setRegHarbBox = function(){
                             tmp_dist <- gDistance(sampMap$gridShp,
