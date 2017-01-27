@@ -23,6 +23,19 @@ SmartProject <- R6Class("smartProject",
                           fisheryBySpecie = NULL,
                           sampMap = NULL,
                           fleet = NULL,
+                          setFgWeigDist = function(){
+                            harb_fg_dist <- spDists(y = as.matrix(sampMap$cutResShpCent[,1:2]),
+                                                    x = as.matrix(fleet$regHarbsBox[,2:3]), longlat = TRUE)
+                            dimnames(harb_fg_dist) <- list(as.character(fleet$regHarbsBox$Name),
+                                                           paste("FG", sampMap$cutResShpCent$FG, sep = ""))
+                            harb_fg_dist <- data.frame(harb_fg_dist)
+                            harb_wei_dist <- numeric(length = ncol(harb_fg_dist))
+                            names(harb_wei_dist) <- names(harb_fg_dist)
+                            for(i in 1:ncol(harb_fg_dist)){
+                              harb_wei_dist[i] <- weighted.mean(harb_fg_dist[,i], fleet$regHarbsBox$relFreq)
+                            }
+                            fgWeigDist <<- harb_wei_dist
+                          },
                           setRegHarbBox = function(){
                             tmp_dist <- gDistance(sampMap$gridShp,
                                                   SpatialPoints(fleet$harb_cur_uni[,2:3]),
@@ -2394,6 +2407,7 @@ SampleMap <- R6Class("sampleMap",
                        cutResShp = NULL,
                        cutResShpCent = NULL,
                        cutResShpFort = NULL,
+                       fgWeigDist = NULL,
                        ggBioDF = NULL,
                        ggDepth = NULL,
                        ggDepthFGbox = NULL,
