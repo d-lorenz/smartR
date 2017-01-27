@@ -23,6 +23,13 @@ SmartProject <- R6Class("smartProject",
                           fisheryBySpecie = NULL,
                           sampMap = NULL,
                           fleet = NULL,
+                          setRegHarbBox = function(){
+                            tmp_dist <- gDistance(sampMap$gridShp,
+                                                  SpatialPoints(fleet$harb_cur_uni[,2:3]),
+                                                  byid = TRUE)
+                            fleet$harb_cur_uni$shpDist <<- apply(tmp_dist,1,min)
+                            fleet$regHarbsBox <<- harb_cur_uni[harb_cur_uni$shpDist < 0.5,]
+                          },
                           loadSurveyLFD = function(csv_path) {
                             cat("\nLoading survey data...", sep = "")
                             rawDataSurvey <<- read.table(file = csv_path, sep = ";", dec = ".", colClasses = c("character", "numeric", "numeric", "factor", "numeric", "numeric", "numeric", "numeric"), header = TRUE)
@@ -1645,6 +1652,7 @@ FishFleet <- R6Class("fishFleet",
                        effoAll = NULL,
                        trackHarbs = NULL,
                        regHarbs = NULL,
+                       regHarbsBox = NULL,
                        rawSelectivity = NULL,
                        rawProduction = NULL,
                        registerIds = NULL,
