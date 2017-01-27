@@ -29,6 +29,12 @@ SmartProject <- R6Class("smartProject",
                                                   byid = TRUE)
                             fleet$harb_cur_uni$shpDist <<- apply(tmp_dist,1,min)
                             fleet$regHarbsBox <<- harb_cur_uni[harb_cur_uni$shpDist < 0.5,]
+
+                            harb_cur_box <- as.data.frame(table(fleet$harb_cur_uni[fleet$harb_cur_uni$Port.Name %in% fleet$regHarbsBox$Name,]$Port.Name))
+                            colnames(harb_cur_box) <- c("Name", "absFreq")
+                            harb_cur_box$relFreq <- harb_cur_box$absFreq/sum(harb_cur_box$absFreq)
+
+                            fleet$regHarbsBox <<- merge(fleet$regHarbsBox, harb_cur_box)
                           },
                           loadSurveyLFD = function(csv_path) {
                             cat("\nLoading survey data...", sep = "")
