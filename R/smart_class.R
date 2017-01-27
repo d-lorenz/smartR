@@ -43,7 +43,7 @@ SmartProject <- R6Class("smartProject",
                             fleet$regHarbsUni$shpDist <<- apply(tmp_dist,1,min)
                             fleet$regHarbsBox <<- fleet$regHarbsUni[fleet$regHarbsUni$shpDist < 0.5,]
 
-                            harb_cur_box <- as.data.frame(table(fleet$regHarbsAll[fleet$regHarbsAll$Name %in% fleet$regHarbsBox$Name,]$Name))
+                            harb_cur_box <- as.data.frame(table(fleet$regHarbsAll[fleet$regHarbsAll$Port.Name %in% fleet$regHarbsBox$Name,]$Port.Name))
                             colnames(harb_cur_box) <- c("Name", "absFreq")
                             harb_cur_box$relFreq <- harb_cur_box$absFreq/sum(harb_cur_box$absFreq)
 
