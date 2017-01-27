@@ -38,12 +38,12 @@ SmartProject <- R6Class("smartProject",
                           },
                           setRegHarbBox = function(){
                             tmp_dist <- gDistance(sampMap$gridShp,
-                                                  SpatialPoints(fleet$regHarbs[,2:3]),
+                                                  SpatialPoints(fleet$regHarbsUni[,2:3]),
                                                   byid = TRUE)
-                            fleet$regHarbs$shpDist <<- apply(tmp_dist,1,min)
-                            fleet$regHarbsBox <<- fleet$regHarbs[fleet$regHarbs$shpDist < 0.5,]
+                            fleet$regHarbsUni$shpDist <<- apply(tmp_dist,1,min)
+                            fleet$regHarbsBox <<- fleet$regHarbsUni[fleet$regHarbsUni$shpDist < 0.5,]
 
-                            harb_cur_box <- as.data.frame(table(fleet$regHarbs[fleet$regHarbs$Name %in% fleet$regHarbsBox$Name,]$Name))
+                            harb_cur_box <- as.data.frame(table(fleet$regHarbsAll[fleet$regHarbsAll$Name %in% fleet$regHarbsBox$Name,]$Name))
                             colnames(harb_cur_box) <- c("Name", "absFreq")
                             harb_cur_box$relFreq <- harb_cur_box$absFreq/sum(harb_cur_box$absFreq)
 
