@@ -1658,9 +1658,26 @@ FishFleet <- R6Class("fishFleet",
                        effoProdAllLoa = NULL,
                        effoAllLoa = NULL,
                        resNNLS = NULL,
+                       betaAvg = NULL,
+                       effortAvg = NULL,
                        betaMeltYear = NULL,
                        prodMeltYear = NULL,
                        fishPoinPara = NULL,
+                       setRegHarbs = function(){
+                         harb_cur <- rawRegister[as.numeric(substr(rawRegister$CFR, 4, nchar(rawRegister$CFR[1]))) %in% effortIds$All,]
+                         harb_cur_uni <- data.frame(Name = sort(unique(harb_cur$Port.Name)), Lon = NA, Lat = NA)
+                         harb_cur_uni[,2:3] <- geocode(as.character(harb_cur_uni[,1]), output = "latlon" , source = "google")
+                         regHarbs <<- harb_cur_uni
+                       },
+                       setBetaAvg = function(sel_specie){
+                         tmp_df <- data.frame(Month = resNNLS[[sel_specie]]$SceMat$MONTH,
+                                              resNNLS[[sel_specie]]$bmat)
+                         betaAvg <<- aggregate(. ~ Month, tmp_df, mean)
+                       },
+                       setEffortAvg = function(){
+                         tmp_effo <- aggregate(. ~ Year + MonthNum, effoAllLoa[,-c(2,ncol(effoAllLoa))], sum)
+                         effortAvg <<- aggregate(. ~ MonthNum, tmp_effo[,-1], mean)
+                       },
                        loadFleetRegis = function(register_path){
                          cat("\nLoading raw Fleet Register data... ", sep = "")
                          rawRegister <<- readRegisterEU(register_path)
