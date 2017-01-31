@@ -2531,16 +2531,18 @@ SampleMap <- R6Class("sampleMap",
                                                   ymax=gridBboxExt[4])
                        },
                        setGooGrid = function(){
-                         #                          gooGrid <<- gooMapPlot + geom_polygon(aes(x = X, y = Y, group = PID),
-                         #                                                                fill = 'grey', size = 0.2,
-                         #                                                                color = 'gainsboro', data = gridPolySet, alpha = 0.5) +
-                         #                            coord_fixed(xlim = extendrange(plotRange[1:2]),
-                         #                                        ylim = extendrange(plotRange[3:4]), expand = TRUE)
                          gooGrid <<- suppressMessages(gooMapPlot + geom_polygon(aes(x = long, y = lat, group = group),
-                                                                                fill = 'grey', size = 0.2,
+                                                                                fill = 'grey', size = 0.1,
                                                                                 color = 'gainsboro', data = gridFortify, alpha = 0.5) +
                                                         lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4])) +
-                                                        xlab("Longitude") + ylab("Latitude"))
+                                                        xlab("Longitude") + ylab("Latitude")+
+                                                        theme_tufte(base_size = 14, ticks=T) +
+                                                        theme(legend.position = "none",
+                                                              axis.text.x = element_text(size = 6),
+                                                              axis.title.x = element_text(size = 8),
+                                                              panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+                                                              axis.text.y = element_text(size = 6),
+                                                              axis.title.y = element_text(size = 8)))
                        },
                        plotGooGrid = function(){
                          suppressWarnings(print(gooGrid))
