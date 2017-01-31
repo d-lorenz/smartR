@@ -2665,7 +2665,16 @@ SampleMap <- R6Class("sampleMap",
                                                                      data = grid_data, alpha = 0.8) +
                                                         lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4])) +
                                                         xlab("Longitude") + ylab("Latitude") +
-                                                        ggtitle("Seabed"))
+                                                        theme_tufte(base_size = 14, ticks=T) +
+                                                        theme(legend.position = "right",
+                                                              axis.text.x = element_text(size = 6),
+                                                              axis.title.x = element_text(size = 8),
+                                                              panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+                                                              axis.text.y = element_text(size = 6),
+                                                              axis.title.y = element_text(size = 8),
+                                                              legend.text = element_text(size = 6),
+                                                              legend.title = element_text(size = 8),
+                                                              plot.title = element_blank()))
                        },
                        ggplotBioDF = function(){
                          suppressWarnings(print(ggBioDF))
