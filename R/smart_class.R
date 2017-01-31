@@ -239,14 +239,30 @@ SmartProject <- R6Class("smartProject",
                           ggplotRawPoints = function(year){
                             tmp_dat <- fleet$rawEffort[[year]][sample(1:nrow(fleet$rawEffort[[year]]), min(c(50000, nrow(fleet$rawEffort[[year]])))),
                                                                c("LON","LAT","W_HARB")]
-                            tmp_dat$Status <- factor(tmp_dat$W_HARB, levels = c("0", "1"), labels = c("At sea", "In harbour"))
+                            tmp_dat$Status <- factor(tmp_dat$W_HARB, levels = c("0", "1"),
+                                                     labels = c("At sea", "In harbour"))
                             tmp_plot <- suppressMessages(sampMap$gooMapPlot +
                                                            geom_point(data = tmp_dat,
-                                                                      aes(x = LON, y = LAT, shape = Status, color = Status), size = 0.6, alpha = 0.3)+
+                                                                      aes(x = LON, y = LAT, shape = Status, color = Status),
+                                                                      size = 0.6, alpha = 0.3)+
+                                                           geom_point(data = subset(tmp_dat, Status == "In harbour"),
+                                                                      aes(x = LON, y = LAT, shape = Status, color = Status),
+                                                                      size = 0.6, alpha = 0.3) +
                                                            scale_colour_manual(values = c("coral", "darkseagreen1")) +
-                                                           lims(x = extendrange(sampMap$plotRange[1:2]), y = extendrange(sampMap$plotRange[3:4])) +
+                                                           lims(x = extendrange(sampMap$plotRange[1:2]),
+                                                                y = extendrange(sampMap$plotRange[3:4])) +
                                                            guides(colour = guide_legend(override.aes = list(size=3, alpha = 1))) +
-                                                           ggtitle(paste("Sample raw points - ", year, sep = "")))
+                                                           ggtitle(paste("Sample raw points - ", year, sep = ""))+
+                                                           theme_tufte(base_size = 14, ticks=T) +
+                                                           theme(legend.position = "right",
+                                                                 axis.text.x = element_text(size = 8),
+                                                                 axis.title.x = element_text(size = 10),
+                                                                 panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+                                                                 axis.text.y = element_text(size = 8),
+                                                                 axis.title.y = element_text(size = 10),
+                                                                 legend.text = element_text(size = 8),
+                                                                 legend.title = element_text(size = 10),
+                                                                 plot.title = element_blank()))
                             suppressWarnings(print(tmp_plot))
                           },
                           ggplotFgWeigDists = function(){
