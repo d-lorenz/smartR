@@ -369,7 +369,16 @@ SmartProject <- R6Class("smartProject",
                                                            scale_colour_manual(values = c("coral", "darkseagreen1")) +
                                                            lims(x = extendrange(sampMap$plotRange[1:2]), y = extendrange(sampMap$plotRange[3:4])) +
                                                            guides(colour = guide_legend(override.aes = list(size=3, alpha = 1))) +
-                                                           ggtitle(paste("Sample fishing points - ", year, sep = "")))
+                                                           ggtitle(paste("Sample fishing points - ", year, sep = ""))+
+                                                           theme_tufte(base_size = 14, ticks=T) +
+                                                           theme(legend.position = "right",
+                                                                 axis.text.x = element_text(size = 8),
+                                                                 axis.title.x = element_text(size = 10),
+                                                                 panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+                                                                 axis.text.y = element_text(size = 8),
+                                                                 axis.title.y = element_text(size = 10),
+                                                                 legend.text = element_text(size = 8),
+                                                                 legend.title = element_text(size = 10)))
                             suppressWarnings(print(tmp_plot))
                           },
                           setPlotBetaMeltYear = function(specie, year){
