@@ -2579,13 +2579,20 @@ SampleMap <- R6Class("sampleMap",
                        setGooBbox = function(){
                          text_x <- mean(gridBboxExt[c(1,3)])
                          text_y <- mean(gridBboxExt[c(2,4)])
-                         gooBbox <<- gooGrid + geom_rect(data=plotRange, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
+                         gooBbox <<- suppressMessages(gooGrid + geom_rect(data=plotRange, aes(xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax),
                                                          color="firebrick",
                                                          fill = alpha('red', 0.2),
                                                          inherit.aes = FALSE) +
                            annotate("label", x = text_x, y = text_y,
                                     label="Bounding\nBox", family="serif", fontface="italic",
-                                    colour="firebrick", size=6, fill = "grey80")
+                                    colour="firebrick", size=6, fill = "grey80") +
+                           theme_tufte(base_size = 14, ticks=T) +
+                           theme(legend.position = "none",
+                                 axis.text.x = element_text(size = 6),
+                                 axis.title.x = element_text(size = 8),
+                                 panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+                                 axis.text.y = element_text(size = 6),
+                                 axis.title.y = element_text(size = 8)))
                        },
                        plotGooBbox = function(){
                          suppressWarnings(print(gooBbox))
