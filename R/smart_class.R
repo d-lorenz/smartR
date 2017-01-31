@@ -261,8 +261,7 @@ SmartProject <- R6Class("smartProject",
                                                                  axis.text.y = element_text(size = 8),
                                                                  axis.title.y = element_text(size = 10),
                                                                  legend.text = element_text(size = 8),
-                                                                 legend.title = element_text(size = 10),
-                                                                 plot.title = element_blank()))
+                                                                 legend.title = element_text(size = 10)))
                             suppressWarnings(print(tmp_plot))
                           },
                           ggplotFgWeigDists = function(){
