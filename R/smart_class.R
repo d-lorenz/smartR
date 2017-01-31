@@ -1821,7 +1821,16 @@ FishFleet <- R6Class("fishFleet",
                          fishStatPlot <- ggplot(data = tmp_stat, aes(x = Year, y = Value, fill = Status)) +
                            geom_bar(stat="identity", position = position_dodge(), colour="black") +
                            ggtitle("Number of Fishing Points each Year") +
-                           scale_fill_manual(values=c("gainsboro", "grey50")) + theme_linedraw()
+                           scale_fill_manual(values=c("gainsboro", "grey50")) +
+                           theme_tufte(base_size = 14, ticks=T) +
+                           theme(legend.position = "right",
+                                 axis.text.x = element_text(size = 8),
+                                 axis.title.x = element_text(size = 10),
+                                 panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+                                 axis.text.y = element_text(size = 8),
+                                 axis.title.y = element_text(size = 10),
+                                 legend.text = element_text(size = 8),
+                                 legend.title = element_text(size = 10))
 
                          print(fishStatPlot)
                        },
