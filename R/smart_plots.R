@@ -35,7 +35,27 @@ ggplot_registerSecGear <- function(df_Register){
               panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
               axis.text.y = element_text(size = 10),
               axis.ticks.y = element_blank())
+    )
+  )
+}
 
+## Fleet Register - Hull Material ----
+ggplot_registerHullMaterial <- function(df_Register){
+  return(
+    suppressMessages(
+      ggplot() +
+        geom_bar(data = df_Register,
+                 mapping = aes_(factor(~Hull.Material,
+                                      levels = c(1, 2, 3, 4, 5),
+                                      labels = c("Wood", "Metal", "Plastic", "Other", "Unknown")))) +
+        theme_tufte(base_size = 14, ticks=F) +
+        ggtitle("Hull Material") +
+        theme(legend.position = "none",
+              axis.text.x = element_text(size = 10),
+              axis.title = element_blank(),
+              panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+              axis.text.y = element_text(size = 10),
+              axis.ticks.y = element_blank())
     )
   )
 }
