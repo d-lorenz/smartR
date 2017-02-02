@@ -90,7 +90,7 @@ ggplot_registerLoa <- function(df_Register){
                        mapping = aes_(~Loa),
                        bins = 100) +
         theme_tufte(base_size = 14, ticks=F) +
-        scale_x_continuous(breaks = pretty(my_project$fleet$rawRegister$Loa)) +
+        scale_x_continuous(breaks = pretty(df_Register$Loa)) +
         ggtitle("Length Over All") +
         theme(legend.position = "none",
               axis.text.x = element_text(size = 10),
