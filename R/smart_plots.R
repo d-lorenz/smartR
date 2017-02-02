@@ -95,10 +95,12 @@ ggplot_registerLoa <- function(df_Register){
                        mapping = aes_(~Loa),
                        bins = 100) +
         theme_tufte(base_size = 14, ticks=F) +
-        scale_x_continuous(breaks = pretty(df_Register$Loa)) +
+        scale_x_continuous(breaks = pretty(df_Register$Loa),
+                           limits = range(pretty(df_Register$Loa))) +
         ggtitle("Length Over All") +
         theme(legend.position = "none",
-              axis.text.x = element_text(size = 10),
+              plot.title = element_text(size = 14),
+              axis.text.x = element_text(size = 8),
               axis.title = element_blank(),
               panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
               axis.text.y = element_text(size = 10),
