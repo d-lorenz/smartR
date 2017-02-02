@@ -2957,9 +2957,17 @@ SampleMap <- R6Class("sampleMap",
                        },
                        setEffoFGbox = function(){
                          ggEffoFGbox <<- suppressMessages(ggplot(cutResEffo, aes(x = Cluster, y = Effort, group = Cluster)) +
-                                                            geom_boxplot() +
+                                                            geom_boxplot(color = "grey23") +
                                                             coord_flip() +
-                                                            theme(legend.position='none'))
+                                                            theme_tufte(base_size = 14, ticks=T) +
+                                                            theme(legend.position = "none",
+                                                                  axis.text.x = element_text(size = 8),
+                                                                  axis.title.x = element_text(size = 10),
+                                                                  panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+                                                                  axis.text.y = element_text(size = 8),
+                                                                  axis.title.y = element_text(size = 10),
+                                                                  legend.text = element_text(size = 8),
+                                                                  legend.title = element_text(size = 10)))
                        },
                        setEffoFGmap = function(){
                          agg_eff <- aggregate(formula = Effort ~ Cluster, data = cutResEffo, FUN = mean)
