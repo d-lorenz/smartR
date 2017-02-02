@@ -2998,7 +2998,15 @@ SampleMap <- R6Class("sampleMap",
                                                                     x = rep(4, length(levels(bio2plot$Substrate))),
                                                                     label = levels(bio2plot$Substrate),
                                                                     angle = rep(90, length(levels(bio2plot$Substrate)))) +
-                                                           theme(legend.position = 'none', axis.text.x = element_text(colour = "white")))
+                                                           theme_tufte(base_size = 14, ticks=T) +
+                                                           theme(legend.position = "none",
+                                                                 axis.text.x = element_text(size = 8),
+                                                                 axis.title.x = element_text(size = 10, colour = "white"),
+                                                                 panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+                                                                 axis.text.y = element_text(size = 8),
+                                                                 axis.title.y = element_text(size = 10),
+                                                                 legend.text = element_text(size = 8),
+                                                                 legend.title = element_text(size = 10)))
                          # }
                        },
                        setCutFGmap = function(){
