@@ -69,7 +69,7 @@ ggplot_registerConstYear <- function(df_Register){
                        mapping = aes_(~Construction.Year),
                        bins = 100) +
         theme_tufte(base_size = 14, ticks=F) +
-        scale_x_continuous(breaks = pretty(my_project$fleet$rawRegister$Construction.Year)) +
+        scale_x_continuous(breaks = pretty(df_Register$Construction.Year)) +
         ggtitle("Construction Year") +
         theme(legend.position = "none",
               axis.text.x = element_text(size = 10),
