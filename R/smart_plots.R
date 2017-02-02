@@ -25,7 +25,7 @@ ggplot_FGProduction <- function(df_FGProd){
       ggplot() +
         geom_line(data = df_FGProd,
                   mapping = aes_(x = ~Year, y = ~Production,
-                                color = ~FishGround, group = ~FishGround)) +
+                                 color = ~FishGround, group = ~FishGround)) +
         ylab("Kilogram") +
         theme_tufte(base_size = 14, ticks=F) +
         theme(legend.position = "right",
