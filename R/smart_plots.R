@@ -20,6 +20,26 @@ ggplot_registerMainGear <- function(df_Register){
   )
 }
 
+## Fleet Register - Secondary Gear ----
+ggplot_registerSecGear <- function(df_Register){
+  return(
+    suppressMessages(
+      ggplot() +
+        geom_bar(data = df_Register,
+                 mapping = aes_(~Gear.Sec.Code)) +
+        theme_tufte(base_size = 14, ticks=F) +
+        ggtitle("Secondary Gear") +
+        theme(legend.position = "none",
+              axis.text.x = element_text(size = 10),
+              axis.title = element_blank(),
+              panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+              axis.text.y = element_text(size = 10),
+              axis.ticks.y = element_blank())
+
+    )
+  )
+}
+
 ## Production Total path ----
 ggplot_TotalProduction <- function(df_Prod){
   return(
