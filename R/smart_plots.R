@@ -60,6 +60,27 @@ ggplot_registerHullMaterial <- function(df_Register){
   )
 }
 
+## Fleet Register - Construction Year ----
+ggplot_registerConstYear <- function(df_Register){
+  return(
+    suppressMessages(
+      ggplot() +
+        geom_histogram(data = df_Register,
+                       mapping = aes_(~Construction.Year),
+                       bins = 100) +
+        theme_tufte(base_size = 14, ticks=F) +
+        scale_x_continuous(breaks = pretty(my_project$fleet$rawRegister$Construction.Year)) +
+        ggtitle("Construction Year") +
+        theme(legend.position = "none",
+              axis.text.x = element_text(size = 10),
+              axis.title = element_blank(),
+              panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+              axis.text.y = element_text(size = 10),
+              axis.ticks.y = element_blank())
+    )
+  )
+}
+
 ## Production Total path ----
 ggplot_TotalProduction <- function(df_Prod){
   return(
