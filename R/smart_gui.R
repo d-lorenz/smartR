@@ -1030,6 +1030,7 @@ smart_gui <- function(){
   gbutton("Load EU register", container = reg_g_top, handler = function(h,...){
     my_project$fleet$loadFleetRegis("/Users/Lomo/Documents/Uni/R/smart/data/Fleet/ITA_export_smart-ed.csv")
     my_project$fleet$cleanRegister()
+    my_project$fleet$setVmsRegister()
     # my_project$fleet$splitFleet()
     dev.set(dev.list()[pre_dev+4])
     my_project$fleet$plotRegSum()
