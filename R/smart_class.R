@@ -2134,7 +2134,16 @@ FishFleet <- R6Class("fishFleet",
                            geom_text(aes(y=Ids, label = Ids), position= position_dodge(width=1),
                                      vjust=2.5, color="grey20") +
                            ggtitle("Count of Distinct Vessels") +
-                           ylab("N. of IDs")
+                           ylab("N. of IDs") +
+                           theme_tufte(base_size = 14, ticks=T) +
+                           theme(legend.position = "none",
+                                 axis.text.x = element_text(size = 8),
+                                 axis.title.x = element_text(size = 10),
+                                 panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+                                 axis.text.y = element_text(size = 8),
+                                 axis.title.y = element_text(size = 10),
+                                 legend.text = element_text(size = 8),
+                                 legend.title = element_text(size = 10))
                          print(tmp_plot)
                        },
                        plotCountIDsEffo = function(){
