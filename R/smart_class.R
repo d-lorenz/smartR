@@ -1764,7 +1764,7 @@ FishFleet <- R6Class("fishFleet",
                        loadFleetRegis = function(register_path){
                          cat("\nLoading raw Fleet Register data... ", sep = "")
                          rawRegister <<- readRegisterEU(register_path)
-                         cat("Done!", sep = "")
+                         cat("\nFleet Register loading completed!", sep = "")
                        },
                        loadMatEffort = function(effort_path){
                          cat("\nLoading Effort data... ", sep = "")
@@ -2302,12 +2302,12 @@ FishFleet <- R6Class("fishFleet",
                        #
                        #                        },
                        readRegisterEU = function(reg_path){
-                         cat("Checking EU Fleet Register format...\n", sep = "")
+                         cat("\n\tChecking EU Fleet Register format...", sep = "")
                          two_rows <- readLines(con = reg_path, n = 2)
                          last_char <- substr(two_rows[2], nchar(two_rows[2]), nchar(two_rows[2]))
                          raw_fleet <- readLines(con = reg_path, n = -1)
                          if(last_char == ";"){
-                           cat("Trailing character found! Cleaning...\n", sep = "")
+                           cat("\n\tTrailing character found! Cleaning...", sep = "")
                            tmp_flee <- paste(unlist(lapply(strsplit(raw_fleet, split = ";"), paste, collapse = ";")), collapse = "\n")
                          }else{
                            tmp_flee <- paste(raw_fleet, collapse = "\n")
@@ -2316,13 +2316,13 @@ FishFleet <- R6Class("fishFleet",
                            tmp_flee <- gsub("\\;",",", tmp_flee)
                            new_path <- paste(substr(reg_path, 1, nchar(reg_path)-4), "_smart-ed",
                                              substr(reg_path, nchar(reg_path)-3, nchar(reg_path)), sep = "")
-                           cat("\nWriting edited Fleet register in:\n", new_path, "\n\n", sep = "")
+                           cat("\nWriting edited Fleet register in:\n", new_path, "\n", sep = "")
                            write(tmp_flee, file = new_path)
                            reg_path <- new_path
                          }
-                         cat("Loading file... ", sep = "")
+                         cat("\nLoading file... ", sep = "")
                          re_fleet <- read.csv(reg_path, stringsAsFactors = FALSE)
-                         cat("OK\n", sep = "")
+                         cat("OK", sep = "")
                          return(re_fleet)
                        },
                        cleanRegister = function(){
