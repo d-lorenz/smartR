@@ -43,7 +43,7 @@ SmartProject <- R6Class("smartProject",
                             fleet$regHarbsUni$shpDist <<- apply(tmp_dist,1,min)
                             fleet$regHarbsBox <<- fleet$regHarbsUni[fleet$regHarbsUni$shpDist < 0.5,]
 
-                            harb_cur_box <- as.data.frame(table(fleet$regHarbsAll[fleet$regHarbsAll$Port.Name %in% fleet$regHarbsBox$Name,]$Port.Name))
+                            harb_cur_box <- as.data.frame(table(fleet$vmsRegister[fleet$vmsRegister$Port.Name %in% fleet$regHarbsBox$Name,]$Port.Name))
                             colnames(harb_cur_box) <- c("Name", "absFreq")
                             harb_cur_box$relFreq <- harb_cur_box$absFreq/sum(harb_cur_box$absFreq)
 
@@ -1712,6 +1712,7 @@ FishFleet <- R6Class("fishFleet",
                      class = TRUE,
                      public = list(
                        rawRegister = NULL,
+                       vmsRegister = NULL,
                        rawEffort = NULL,
                        weekEffoMatr = NULL,
                        dayEffoMatr = NULL,
@@ -1722,7 +1723,6 @@ FishFleet <- R6Class("fishFleet",
                        effoProdAll = NULL,
                        effoAll = NULL,
                        trackHarbs = NULL,
-                       regHarbsAll = NULL,
                        regHarbsUni = NULL,
                        regHarbsBox = NULL,
                        rawSelectivity = NULL,
@@ -1744,9 +1744,11 @@ FishFleet <- R6Class("fishFleet",
                        betaMeltYear = NULL,
                        prodMeltYear = NULL,
                        fishPoinPara = NULL,
+                       setVmsRegister = function(){
+                         vmsRegister <<- suppressWarnings(rawRegister[as.numeric(substr(rawRegister$CFR, 4, nchar(rawRegister$CFR[1]))) %in% effortIds$All,])
+                       },
                        setRegHarbs = function(){
-                         regHarbsAll <<- suppressWarnings(rawRegister[as.numeric(substr(rawRegister$CFR, 4, nchar(rawRegister$CFR[1]))) %in% effortIds$All,])
-                         harb_cur_uni <- data.frame(Name = sort(unique(regHarbsAll$Port.Name)), Lon = NA, Lat = NA)
+                         harb_cur_uni <- data.frame(Name = sort(unique(vmsRegister$Port.Name)), Lon = NA, Lat = NA)
                          harb_cur_uni[,2:3] <- geocode(as.character(harb_cur_uni[,1]), output = "latlon" , source = "google")
                          regHarbsUni <<- harb_cur_uni
                        },
