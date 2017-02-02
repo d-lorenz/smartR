@@ -118,10 +118,12 @@ ggplot_registerMainPower <- function(df_Register){
                        mapping = aes_(~Power.Main),
                        bins = 100) +
         theme_tufte(base_size = 14, ticks=F) +
-        scale_x_continuous(breaks = pretty(df_Register$Power.Main)) +
+        scale_x_continuous(breaks = pretty(df_Register$Power.Main),
+                           limits = range(pretty(df_Register$Power.Main))) +
         ggtitle("Main Engine Power (Kw)") +
         theme(legend.position = "none",
-              axis.text.x = element_text(size = 10),
+              plot.title = element_text(size = 14),
+              axis.text.x = element_text(size = 8),
               axis.title = element_blank(),
               panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
               axis.text.y = element_text(size = 10),
