@@ -48,8 +48,8 @@ ggplot_registerHullMaterial <- function(df_Register){
       ggplot() +
         geom_bar(data = df_Register,
                  mapping = aes_(~factor(Hull.Material,
-                                      levels = c(1, 2, 3, 4, 5),
-                                      labels = c("Wood", "Metal", "Plastic", "Other", "Unknown")))) +
+                                        levels = c(1, 2, 3, 4, 5),
+                                        labels = c("Wood", "Metal", "Plastic", "Other", "Unknown")))) +
         theme_tufte(base_size = 14, ticks=F) +
         ggtitle("Hull Material") +
         theme(legend.position = "none",
