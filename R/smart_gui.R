@@ -1027,13 +1027,16 @@ smart_gui <- function(){
   reg_g_top <- gframe(horizontal = TRUE, container = reg_g)
   addSpace(reg_g_top, 2)
   addSpring(reg_g_top)
-  gbutton("Load EU register", container = reg_g_top, handler = function(h,...){
+  reg_g_top_raw <- gframe(horizontal = FALSE, container = reg_g_top)
+  addSpring(reg_g_top_raw)
+  gbutton("Load EU register", container = reg_g_top_raw, handler = function(h,...){
     my_project$fleet$loadFleetRegis("/Users/Lomo/Documents/Uni/R/smart/data/Fleet/ITA_export_smart-ed.csv")
     my_project$fleet$cleanRegister()
     my_project$fleet$setVmsRegister()
     # my_project$fleet$splitFleet()
     dev.set(dev.list()[pre_dev+4])
-    my_project$fleet$plotRegSum()
+    # my_project$fleet$plotRegSum()
+    ggplot_registerDispatch(curRegister = my_project$fleet$rawRegister, selPlot = "Summary")
 
     ### Update Register Status
     if(!is.null(my_project$fleet$rawRegister)){
@@ -1041,8 +1044,8 @@ smart_gui <- function(){
       add(regi_g, regi_sta_n)
     }
   })
-  addSpring(reg_g_top)
-  gbutton("View Fleet", container = reg_g_top, handler = function(h,...){
+  addSpring(reg_g_top_raw)
+  gbutton("View Raw Data", container = reg_g_top_raw, handler = function(h,...){
     temp_flee <- gbasicdialog(title="Explore Fleet Register", parent = main_win)
     tmp_data <- my_project$fleet$rawRegister
     tmp_data[which(is.na(tmp_data), arr.ind = TRUE)] <- "NA"
@@ -1050,11 +1053,39 @@ smart_gui <- function(){
     size(temp_flee) <- c(600, 400)
     visible(temp_flee)
   })
+  addSpring(reg_g_top_raw)
   addSpring(reg_g_top)
+  reg_g_top_view <- gframe(horizontal = TRUE, container = reg_g_top)
+  addSpring(reg_g_top_view)
+  sel_regSet <- gradio(c("All", "Vms"), selected = 1, horizontal = FALSE,
+                       container = reg_g_top_view, handler = function(h,...){
+                         dev.set(dev.list()[pre_dev+4])
+                         if(svalue(sel_regSet) == "All"){
+                           ggplot_registerDispatch(curRegister = my_project$fleet$rawRegister, selPlot = svalue(sel_regPlot))
+                         }else{
+                           ggplot_registerDispatch(curRegister = my_project$fleet$vmsRegister, selPlot = svalue(sel_regPlot))
+                         }
+                       })
+  addSpring(reg_g_top_view)
+  sel_regPlot <- gradio(c("Summary", "Main Gear", "Secondary Gear", "Hull Material",
+                          "Construction Year", "Length Over All", "Main Power"), selected = 1, horizontal = TRUE,
+                        container = reg_g_top_view, handler = function(h,...){
+                          dev.set(dev.list()[pre_dev+4])
+                          if(svalue(sel_regSet) == "All"){
+                            ggplot_registerDispatch(curRegister = my_project$fleet$rawRegister, selPlot = svalue(sel_regPlot))
+                          }else{
+                            ggplot_registerDispatch(curRegister = my_project$fleet$vmsRegister, selPlot = svalue(sel_regPlot))
+                          }
+                        })
   gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"),
          container = reg_g_top, handler = function(h,...){
            dev.set(dev.list()[pre_dev+4])
-           my_project$fleet$plotRegSum()
+           # my_project$fleet$plotRegSum()
+           if(svalue(sel_regSet) == "All"){
+             ggplot_registerDispatch(curRegister = my_project$fleet$rawRegister, selPlot = svalue(sel_regPlot))
+           }else{
+             ggplot_registerDispatch(curRegister = my_project$fleet$vmsRegister, selPlot = svalue(sel_regPlot))
+           }
          })
   addSpring(reg_g_top)
   addSpace(reg_g_top, 2)
