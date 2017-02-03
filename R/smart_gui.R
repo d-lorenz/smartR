@@ -1078,16 +1078,7 @@ smart_gui <- function(){
                                ggplot_registerDispatch(curRegister = my_project$fleet$vmsRegister, selPlot = svalue(sel_regPlot))
                              }
                            })
-  gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"),
-         container = reg_g_top, handler = function(h,...){
-           dev.set(dev.list()[pre_dev+4])
-           # my_project$fleet$plotRegSum()
-           if(svalue(sel_regSet) == "All"){
-             ggplot_registerDispatch(curRegister = my_project$fleet$rawRegister, selPlot = svalue(sel_regPlot))
-           }else{
-             ggplot_registerDispatch(curRegister = my_project$fleet$vmsRegister, selPlot = svalue(sel_regPlot))
-           }
-         })
+
   addSpring(reg_g_top)
   addSpace(reg_g_top, 2)
   regGro_p <- ggraphics(container = reg_g, width = 550, height = 250, expand = TRUE)
