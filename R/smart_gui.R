@@ -1331,7 +1331,7 @@ smart_gui <- function(){
                                   NN = {
                                     lapply(list(par_modSel[4,2]), function(x) enabled(x) <- TRUE)
                                     lapply(par_modSel[1:3,2], function(x) enabled(x) <- FALSE)}
-                                  )
+                           )
                          })
     addSpace(mod_fra, 20)
 
