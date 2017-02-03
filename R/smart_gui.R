@@ -83,8 +83,6 @@ smart_gui <- function(){
     svalue(uti_gn) <- 6})       #    svalue(uti_gn) <- 10})
 
 
-
-
   raw_eg <- gexpandgroup("Resources", horizontal = FALSE, container = lef_g)
   gbutton(text = "Survey", container = raw_eg, handler = function(h,...){
     svalue(uti_gn) <- 7})
@@ -151,7 +149,6 @@ smart_gui <- function(){
       add(samp_g, samp_sta_n)
     }
 
-
     ### Update grid Status
 
     if(!is.null(my_project$sampMap)){
@@ -162,7 +159,6 @@ smart_gui <- function(){
       delete(grid_g, grid_g$children[[length(grid_g$children)]])
       add(grid_g, grid_sta_n)
     }
-
 
     ### Update Effort Status
 
@@ -183,7 +179,6 @@ smart_gui <- function(){
       delete(figr_g, figr_g$children[[length(figr_g$children)]])
       add(figr_g, figr_sta_n)
     }
-
 
     ### Update Register Status
 
@@ -237,7 +232,6 @@ smart_gui <- function(){
   add(samp_g, samp_sta)
   #   enabled(samp_b) <- FALSE
 
-
   addSpring(pro_g_mid)
   # gbutton("Effort", container = pro_g_mid)
   effo_g <- gframe(text = "Effort", horizontal = FALSE, container = pro_g_mid)
@@ -250,7 +244,6 @@ smart_gui <- function(){
   effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
   add(effo_g, effo_sta)
   #   enabled(effo_b) <- FALSE
-
 
   addSpring(pro_g_mid)
   # gbutton("Fishing Ground", container = pro_g_mid)
@@ -265,7 +258,6 @@ smart_gui <- function(){
   add(figr_g, figr_sta)
   #   enabled(effo_b) <- FALSE
 
-
   addSpring(pro_g_mid)
   # gbutton("Register", container = pro_g_mid)
   regi_g <- gframe(text = "Register", horizontal = FALSE, container = pro_g_mid)
@@ -278,7 +270,6 @@ smart_gui <- function(){
   regi_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
   add(regi_g, regi_sta)
   #   enabled(regi_b) <- FALSE
-
 
   addSpring(pro_g_mid)
   # gbutton("Production", container = pro_g_mid)
@@ -2315,6 +2306,3 @@ smart_gui <- function(){
   # visible(main_win) <- TRUE
 
 }
-
-###########################################
-
