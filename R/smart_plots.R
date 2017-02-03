@@ -1,6 +1,25 @@
 
 # SmartR Plots ----
 
+## Fleet Register - Plot Dispatch ----
+ggplot_registerDispatch = function(curRegister, selPlot){
+  switch(selPlot,
+         "Summary" = grid.arrange(ggplot_registerMainGear(df_Register = curRegister),
+                                  ggplot_registerSecGear(df_Register = curRegister),
+                                  ggplot_registerHullMaterial(df_Register = curRegister[!is.na(curRegister),]),
+                                  ggplot_registerConstYear(df_Register = curRegister),
+                                  ggplot_registerLoa(df_Register = curRegister),
+                                  ggplot_registerMainPower(df_Register = curRegister),
+                                  layout_matrix = rbind(c(1,2,3),c(4,5,6))),
+         "Main Gear" = ggplot_registerMainGear(df_Register = curRegister),
+         "Secondary Gear" = ggplot_registerSecGear(df_Register = curRegister),
+         "Hull Material" = ggplot_registerHullMaterial(df_Register = curRegister[!is.na(curRegister),]),
+         "Construction Year" = ggplot_registerConstYear(df_Register = curRegister),
+         "Length Over All" = ggplot_registerLoa(df_Register = curRegister),
+         "Main Power" = ggplot_registerMainPower(df_Register = curRegister))
+}
+
+
 ## Fleet Register - Main Gear ----
 ggplot_registerMainGear <- function(df_Register){
   return(
