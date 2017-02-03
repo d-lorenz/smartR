@@ -1055,7 +1055,7 @@ smart_gui <- function(){
   })
   addSpring(reg_g_top_raw)
   addSpring(reg_g_top)
-  reg_g_top_view <- gframe(horizontal = TRUE, container = reg_g_top)
+  reg_g_top_view <- gframe(horizontal = TRUE, container = reg_g_top, expand = TRUE)
   addSpring(reg_g_top_view)
   sel_regSet <- gradio(c("All", "Vms"), selected = 1, horizontal = FALSE,
                        container = reg_g_top_view, handler = function(h,...){
