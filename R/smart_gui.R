@@ -1067,16 +1067,17 @@ smart_gui <- function(){
                          }
                        })
   addSpring(reg_g_top_view)
-  sel_regPlot <- gradio(c("Summary", "Main Gear", "Secondary Gear", "Hull Material",
-                          "Construction Year", "Length Over All", "Main Power"), selected = 1, horizontal = TRUE,
-                        container = reg_g_top_view, handler = function(h,...){
-                          dev.set(dev.list()[pre_dev+4])
-                          if(svalue(sel_regSet) == "All"){
-                            ggplot_registerDispatch(curRegister = my_project$fleet$rawRegister, selPlot = svalue(sel_regPlot))
-                          }else{
-                            ggplot_registerDispatch(curRegister = my_project$fleet$vmsRegister, selPlot = svalue(sel_regPlot))
-                          }
-                        })
+  sel_regPlot <- gcombobox(c("Summary", "Main Gear", "Secondary Gear", "Hull Material",
+                             "Construction Year", "Length Over All", "Main Power"),
+                           selected = 1, editable = FALSE, container = reg_g_top_view,
+                           handler = function(h,...){
+                             dev.set(dev.list()[pre_dev+4])
+                             if(svalue(sel_regSet) == "All"){
+                               ggplot_registerDispatch(curRegister = my_project$fleet$rawRegister, selPlot = svalue(sel_regPlot))
+                             }else{
+                               ggplot_registerDispatch(curRegister = my_project$fleet$vmsRegister, selPlot = svalue(sel_regPlot))
+                             }
+                           })
   gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"),
          container = reg_g_top, handler = function(h,...){
            dev.set(dev.list()[pre_dev+4])
