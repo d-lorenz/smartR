@@ -281,25 +281,32 @@ SmartProject <- R6Class("smartProject",
                             all_cell[is.na(all_cell)] <- 0
                             grid_data <- cbind(sampMap$cutResShpFort, DistAvg = all_cell[,2])
 
-                            sampMap$gooMapPlot +
-                              geom_polygon(aes(x = long, y = lat,
-                                               group = group, fill = DistAvg),
-                                           colour = "black", size = 0.1,
-                                           data = grid_data, alpha = 0.8) +
-                              scale_fill_gradient("Dist\nValues", low = "snow1", high = "orange1") +
-                              geom_text(aes(label = FG, x = Lon, y = Lat),
-                                        data = sampMap$cutResShpCent, size = 2) +
-                              ggtitle("Average Distance x Fishing Ground") +
-                              xlab("Longitude") + ylab("Latitude") +
-                              lims(x = extendrange(sampMap$plotRange[1:2]),
-                                   y = extendrange(sampMap$plotRange[3:4])) +
-                              geom_point(data = fleet$regHarbsBox,
-                                         mapping = aes(x = Lon, y = Lat, size = absFreq),
-                                         fill = NA, color = "tomato3", shape = 21) +
-                              scale_size_continuous(breaks = pretty(fleet$regHarbsBox$absFreq, 4),
-                                                    range = c(1,10)) +
-                              geom_label_repel(data = fleet$regHarbsBox, mapping = aes(x = Lon, y = Lat, label = Name),
-                                               size = 2, nudge_x = 0.1, nudge_y = 0.1, color = "grey13", alpha = 0.7)
+                            print(
+                              suppressWarnings(
+                                suppressMessages(
+                                  sampMap$gooMapPlot +
+                                    geom_polygon(aes(x = long, y = lat,
+                                                     group = group, fill = DistAvg),
+                                                 colour = "black", size = 0.1,
+                                                 data = grid_data, alpha = 0.8) +
+                                    scale_fill_gradient("Weighted\nDistance", low = "snow1", high = "orange1") +
+                                    geom_text(aes(label = FG, x = Lon, y = Lat),
+                                              data = sampMap$cutResShpCent, size = 2) +
+                                    ggtitle("Average Distance x Fishing Ground") +
+                                    xlab("Longitude") + ylab("Latitude") +
+                                    lims(x = extendrange(sampMap$plotRange[1:2]),
+                                         y = extendrange(sampMap$plotRange[3:4])) +
+                                    geom_point(data = fleet$regHarbsBox,
+                                               mapping = aes(x = Lon, y = Lat, size = absFreq),
+                                               fill = NA, color = "tomato3", shape = 21) +
+                                    scale_size_continuous("Number of\nVessels",
+                                                          breaks = pretty(fleet$regHarbsBox$absFreq, 5),
+                                                          range = c(1, 15)) +
+                                    geom_label_repel(data = fleet$regHarbsBox, mapping = aes(x = Lon, y = Lat, label = Name),
+                                                     size = 3, nudge_x = 0.1, nudge_y = 0.1, color = "grey3", fill ="grey89")
+                                )
+                              )
+                            )
                           },
                           setAvailData = function(){
                             sampMap$availData <<- character(0)
