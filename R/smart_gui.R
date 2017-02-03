@@ -1053,10 +1053,20 @@ smart_gui <- function(){
   addSpace(reg_g_top_view, 10)
   addSpring(reg_g_top)
   reg_g_top_harbs <- gframe(text = "Harbour Distance", horizontal = TRUE, container = reg_g_top, expand = TRUE)
+  addSpace(reg_g_top_harbs, 10)
   gbutton("Get Harbours", container = reg_g_top_harbs, handler = function(h,...){
+    dev.set(dev.list()[pre_dev+4])
     my_project$getHarbFgDist()
+    my_project$ggplotFgWeigDists()
   })
-  addSpace(reg_g_top, 2)
+  addSpace(reg_g_top_harbs, 10)
+  gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = reg_g_top_harbs,
+         handler = function(h,...){
+           dev.set(dev.list()[pre_dev+4])
+           my_project$ggplotFgWeigDists()
+         })
+  addSpace(reg_g_top_harbs, 10)
+  addSpring(reg_g_top)
   regGro_p <- ggraphics(container = reg_g, width = 550, height = 250, expand = TRUE)
 
 
