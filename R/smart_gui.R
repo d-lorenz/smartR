@@ -53,10 +53,7 @@ smart_gui <- function(){
   main_win <- gwindow(paste("SMART - Version ", "1.1", sep = ""),width = 1200, height= 600, visible = FALSE)
   big_g <- ggroup(horizontal = TRUE, container = main_win)
 
-
-  ##############################################################
-  ####   Left panel   ##########################################
-  ##############################################################
+  ####   Left panel   ####
 
   lef_g <- ggroup(horizontal = FALSE, container = big_g)
   # addSpring(lef_g)
@@ -107,10 +104,7 @@ smart_gui <- function(){
   addSpring(lef_g)
   stat_bar <- gstatusbar("", container = lef_g, visible = TRUE)
 
-
-  ##############################################################
-  ####   Right panel   #########################################
-  ##############################################################
+  ####   Right panel   ####
 
   rig_g <- ggroup(horizontal = FALSE, container = big_g, expand = TRUE)
   uti_gn <- gnotebook(tab.pos = 3, container = rig_g, expand = TRUE)
@@ -298,15 +292,11 @@ smart_gui <- function(){
   add(prod_g, prod_sta)
   #   enabled(prod_b) <- FALSE
 
-
   addSpring(pro_g_mid)
   addSpace(pro_g_mid, 2)
 
 
-
-  ##############################################################
-  ####   Environment   #########################################
-  ##############################################################
+  ####   Environment   ####
 
   gri_g <- gvbox(container = uti_gn, label = "Grid", expand = TRUE)
   # addSpace(gri_g, 2, horizontal = TRUE)
@@ -500,12 +490,7 @@ smart_gui <- function(){
   gri_p <- ggraphics(container = gri_g, width = 550, height = 250, expand = TRUE)
 
 
-
-  ##############################################################
-  ####   Effort   ##############################################
-  ##############################################################
-
-  ### TO DO:
+  ####   Effort   ####
 
   eff_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Effort")
   eff_g_top <- gframe(horizontal = TRUE, container = eff_g)
@@ -875,9 +860,7 @@ smart_gui <- function(){
   eff_p <- ggraphics(container = eff_g, width = 550, height = 250, expand = TRUE)
 
 
-  ##############################################################
-  ####   Fishing Grounds   #####################################
-  ##############################################################
+  ####   Fishing Grounds   ####
 
   fig_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Fishing Grounds")
   fig_g_top <- gframe(horizontal = TRUE, container = fig_g)
@@ -1019,9 +1002,7 @@ smart_gui <- function(){
   fisGro_p <- ggraphics(container = fig_g, width = 550, height = 250, expand = TRUE)
 
 
-  ##############################################################
-  ####   Register   ############################################
-  ##############################################################
+  ####   Register   ####
 
   reg_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Register")
   reg_g_top <- gframe(horizontal = TRUE, container = reg_g)
@@ -1084,9 +1065,7 @@ smart_gui <- function(){
   regGro_p <- ggraphics(container = reg_g, width = 550, height = 250, expand = TRUE)
 
 
-  ##############################################################
-  ####   Production   ##########################################
-  ##############################################################
+  ####   Production   ####
 
   pro_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Production")
   pro_g_top <- gframe(horizontal = TRUE, container = pro_g)
@@ -1584,10 +1563,7 @@ smart_gui <- function(){
   proGro_p <- ggraphics(container = pro_g, width = 550, height = 250, expand = TRUE)
 
 
-
-  ##############################################################
-  ####     Survey     ##########################################
-  ##############################################################
+  ####     Survey     ####
 
   raw_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Survey")
   raw_g_top <- gframe(horizontal = TRUE, container = raw_g)
@@ -1703,10 +1679,7 @@ smart_gui <- function(){
   raw_t <- gtable(blankDF, container = raw_g, expand = TRUE)
 
 
-
-  ##############################################################
-  ####     Fishery     #########################################
-  ##############################################################
+  ####     Fishery     ####
 
   fis_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Fishery")
   fis_g_top <- gframe(horizontal = TRUE, container = fis_g)
@@ -1979,10 +1952,7 @@ smart_gui <- function(){
   fis_t <- gtable(blankDF, container = fis_g, expand = TRUE)
 
 
-
-  ##############################################################
-  ####   Mixture   #############################################
-  ##############################################################
+  ####   Mixture   ####
 
   mix_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Mixture")
   mix_g_top <- gframe(horizontal = TRUE, container = mix_g) #if expand bad
@@ -2107,9 +2077,7 @@ smart_gui <- function(){
   mix_p <- ggraphics(container = mix_g, width = 550, height = 250, expand = TRUE)
 
 
-  ##############################################################
-  ####   Cohorts   #############################################
-  ##############################################################
+  ####   Cohorts   ####
 
   cohoP_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Cohorts")
   cohoP_g_top <- gframe(horizontal = TRUE, container = cohoP_g, spacing = 10)
@@ -2160,11 +2128,7 @@ smart_gui <- function(){
   cohPop_p <- ggraphics(container = cohoP_g, width = 550, height = 250, expand = TRUE)
 
 
-
-
-
-  ####   Assess   ##################################################################
-
+  ####   Assess   ####
 
   ass_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Assess")
   ass_g_top <- gframe(horizontal = TRUE, container = ass_g, spacing = 10)
@@ -2323,8 +2287,8 @@ smart_gui <- function(){
   addSpring(assfra_g)
   addSpring(ass_g_top)
 
-  ####   Simulation   ##############################################################
 
+  ####   Simulation   ####
 
   sim_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Simulation")
 
