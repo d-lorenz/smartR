@@ -1056,7 +1056,7 @@ smart_gui <- function(){
   addSpring(reg_g_top_raw)
   addSpring(reg_g_top)
   reg_g_top_view <- gframe(horizontal = TRUE, container = reg_g_top, expand = TRUE)
-  addSpring(reg_g_top_view)
+  addSpace(reg_g_top_view, 10)
   sel_regSet <- gradio(c("All", "Vms"), selected = 1, horizontal = FALSE,
                        container = reg_g_top_view, handler = function(h,...){
                          dev.set(dev.list()[pre_dev+4])
@@ -1066,7 +1066,7 @@ smart_gui <- function(){
                            ggplot_registerDispatch(curRegister = my_project$fleet$vmsRegister, selPlot = svalue(sel_regPlot))
                          }
                        })
-  addSpring(reg_g_top_view)
+  addSpace(reg_g_top_view, 10)
   sel_regPlot <- gcombobox(c("Summary", "Main Gear", "Secondary Gear", "Hull Material",
                              "Construction Year", "Length Over All", "Main Power"),
                            selected = 1, editable = FALSE, expand = TRUE, container = reg_g_top_view,
@@ -1078,7 +1078,7 @@ smart_gui <- function(){
                                ggplot_registerDispatch(curRegister = my_project$fleet$vmsRegister, selPlot = svalue(sel_regPlot))
                              }
                            })
-
+  addSpace(reg_g_top_view, 10)
   addSpring(reg_g_top)
   addSpace(reg_g_top, 2)
   regGro_p <- ggraphics(container = reg_g, width = 550, height = 250, expand = TRUE)
