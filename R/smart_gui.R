@@ -1052,6 +1052,10 @@ smart_gui <- function(){
                            })
   addSpace(reg_g_top_view, 10)
   addSpring(reg_g_top)
+  reg_g_top_harbs <- gframe(text = "Harbour Distance", horizontal = TRUE, container = reg_g_top, expand = TRUE)
+  gbutton("Get Harbours", container = reg_g_top_harbs, handler = function(h,...){
+    my_project$getHarbFgDist()
+  })
   addSpace(reg_g_top, 2)
   regGro_p <- ggraphics(container = reg_g, width = 550, height = 250, expand = TRUE)
 
