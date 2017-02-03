@@ -1027,7 +1027,7 @@ smart_gui <- function(){
   reg_g_top <- gframe(horizontal = TRUE, container = reg_g)
   addSpace(reg_g_top, 2)
   addSpring(reg_g_top)
-  reg_g_top_raw <- gframe(horizontal = FALSE, container = reg_g_top)
+  reg_g_top_raw <- ggroup(horizontal = FALSE, container = reg_g_top)
   addSpring(reg_g_top_raw)
   gbutton("Load EU register", container = reg_g_top_raw, handler = function(h,...){
     my_project$fleet$loadFleetRegis("/Users/Lomo/Documents/Uni/R/smart/data/Fleet/ITA_export_smart-ed.csv")
