@@ -2326,7 +2326,7 @@ FishFleet <- R6Class("fishFleet",
                          return(re_fleet)
                        },
                        cleanRegister = function(){
-                         cat("Ordering Fleet Register by CFR... ", sep = "")
+                         cat("\n\tOrdering Fleet Register by CFR... ", sep = "")
                          rawRegister$CFR <<- as.character(rawRegister$CFR)
                          rawRegister <<- rawRegister[order(rawRegister$CFR),]
                          rawRegister$Country.Code <<- as.character(rawRegister$Country.Code)
