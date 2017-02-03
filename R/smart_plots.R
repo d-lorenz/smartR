@@ -11,12 +11,12 @@ ggplot_registerDispatch = function(curRegister, selPlot){
                                   ggplot_registerLoa(df_Register = curRegister),
                                   ggplot_registerMainPower(df_Register = curRegister),
                                   layout_matrix = rbind(c(1,2,3),c(4,5,6))),
-         "Main Gear" = ggplot_registerMainGear(df_Register = curRegister),
-         "Secondary Gear" = ggplot_registerSecGear(df_Register = curRegister),
-         "Hull Material" = ggplot_registerHullMaterial(df_Register = curRegister[!is.na(curRegister$Hull.Material),]),
-         "Construction Year" = ggplot_registerConstYear(df_Register = curRegister),
-         "Length Over All" = ggplot_registerLoa(df_Register = curRegister),
-         "Main Power" = ggplot_registerMainPower(df_Register = curRegister))
+         "Main Gear" = print(ggplot_registerMainGear(df_Register = curRegister)),
+         "Secondary Gear" = print(ggplot_registerSecGear(df_Register = curRegister)),
+         "Hull Material" = print(ggplot_registerHullMaterial(df_Register = curRegister[!is.na(curRegister$Hull.Material),])),
+         "Construction Year" = print(ggplot_registerConstYear(df_Register = curRegister)),
+         "Length Over All" = print(ggplot_registerLoa(df_Register = curRegister)),
+         "Main Power" = print(ggplot_registerMainPower(df_Register = curRegister)))
 }
 
 
