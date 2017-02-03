@@ -23,6 +23,13 @@ SmartProject <- R6Class("smartProject",
                           fisheryBySpecie = NULL,
                           sampMap = NULL,
                           fleet = NULL,
+                          getHarbFgDist = function(){
+                            cat("\nRunnnig Fishing ground average distances routine... ", cat = "")
+                            fleet$setRegHarbs()
+                            setRegHarbBox()
+                            setFgWeigDist()
+                            cat("\nFishing ground average distances routine completed!", cat = "")
+                          },
                           setFgWeigDist = function(){
                             harb_fg_dist <- spDists(y = as.matrix(sampMap$cutResShpCent[,1:2]),
                                                     x = as.matrix(fleet$regHarbsBox[,2:3]), longlat = TRUE)
