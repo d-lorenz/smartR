@@ -1069,7 +1069,7 @@ smart_gui <- function(){
   addSpring(reg_g_top_view)
   sel_regPlot <- gcombobox(c("Summary", "Main Gear", "Secondary Gear", "Hull Material",
                              "Construction Year", "Length Over All", "Main Power"),
-                           selected = 1, editable = FALSE, container = reg_g_top_view,
+                           selected = 1, editable = FALSE, expand = TRUE, container = reg_g_top_view,
                            handler = function(h,...){
                              dev.set(dev.list()[pre_dev+4])
                              if(svalue(sel_regSet) == "All"){
