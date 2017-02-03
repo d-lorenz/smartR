@@ -46,17 +46,17 @@ SmartProject <- R6Class("smartProject",
                             cat(" OK!", cat = "")
                           },
                           setRegHarbBox = function(){
+                            cat("\n\tComputing Harbours - Fishing ground distances...", cat = "")
                             tmp_dist <- gDistance(sampMap$gridShp,
                                                   SpatialPoints(fleet$regHarbsUni[,2:3]),
                                                   byid = TRUE)
                             fleet$regHarbsUni$shpDist <<- apply(tmp_dist,1,min)
                             fleet$regHarbsBox <<- fleet$regHarbsUni[fleet$regHarbsUni$shpDist < 0.5,]
-
                             harb_cur_box <- as.data.frame(table(fleet$vmsRegister[fleet$vmsRegister$Port.Name %in% fleet$regHarbsBox$Name,]$Port.Name))
                             colnames(harb_cur_box) <- c("Name", "absFreq")
                             harb_cur_box$relFreq <- harb_cur_box$absFreq/sum(harb_cur_box$absFreq)
-
                             fleet$regHarbsBox <<- merge(fleet$regHarbsBox, harb_cur_box)
+                            cat(" OK!", cat = "")
                           },
                           loadSurveyLFD = function(csv_path) {
                             cat("\nLoading survey data...", sep = "")
