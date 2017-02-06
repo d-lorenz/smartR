@@ -2156,7 +2156,7 @@ FishFleet <- R6Class("fishFleet",
                            ggtitle("Count of Distinct Vessels") +
                            ylab("N. of IDs") +
                            theme_tufte(base_size = 14, ticks=T) +
-                           theme(legend.position = "none",
+                           theme(legend.position = "right",
                                  axis.text.x = element_text(size = 8),
                                  axis.title.x = element_text(size = 10),
                                  panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
