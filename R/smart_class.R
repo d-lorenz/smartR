@@ -42,7 +42,7 @@ SmartProject <- R6Class("smartProject",
                             for(i in 1:ncol(harb_fg_dist)){
                               harb_wei_dist[i] <- weighted.mean(harb_fg_dist[,i], fleet$regHarbsBox$relFreq)
                             }
-                            sampMap$fgWeigDist <<- harb_wei_dist
+                            sampMap$fgWeigDist <<- harb_wei_dist[order(as.numeric(substr(names(harb_wei_dist),3, nchar(names(harb_wei_dist)))))]
                             cat(" OK!", cat = "")
                           },
                           setRegHarbBox = function(){
