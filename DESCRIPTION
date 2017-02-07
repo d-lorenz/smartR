@@ -55,5 +55,6 @@ Imports:
     grDevices,
     ggthemes,
     vegan,
-    rpart
+    rpart,
+    ggrepel
 RoxygenNote: 5.0.1
