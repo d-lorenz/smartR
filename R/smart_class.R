@@ -23,6 +23,13 @@ SmartProject <- R6Class("smartProject",
                           fisheryBySpecie = NULL,
                           sampMap = NULL,
                           fleet = NULL,
+                          setEffortIndex = function(){
+                            # Check fleet$effoAllLoa sampMap$cutFG sampMap$fgWeigDist
+                            fleet$effortIndex <<- fleet$effoAllLoa
+                            fleet$effortIndex[, 4:(sampMap$cutFG+4)] <<- data.frame(mapply(`*`,
+                                                                                          fleet$effortIndex[, 4:(sampMap$cutFG+4)],
+                                                                                               sampMap$fgWeigDist))
+                          },
                           getHarbFgDist = function(){
                             cat("\nRunnnig Fishing ground average distances routine... ", cat = "")
                             fleet$setRegHarbs()
