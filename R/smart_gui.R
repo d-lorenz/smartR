@@ -2315,6 +2315,13 @@ smart_gui <- function(){
 
   addSpring(sim_g_top)
 
+  sim_g_top2 <- ggroup(horizontal = FALSE, container = sim_g_top)
+  addSpring(sim_g_top2)
+  gbutton("Load\nCost Data", container = sim_g_top2, handler = function(h,...){
+
+  })
+  addSpring(sim_g_top2)
+
 
   visible(pro_eg) <- TRUE
   visible(raw_eg) <- TRUE
