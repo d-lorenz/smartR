@@ -23,12 +23,18 @@ SmartProject <- R6Class("smartProject",
                           fisheryBySpecie = NULL,
                           sampMap = NULL,
                           fleet = NULL,
+                          setDaysAtSea = function(){
+                            fleet$setDaysAtSeaRaw()
+                            fleet$daysAtSea <<- merge(fleet$daysAtSea, data.frame(I_NCEE = substr(fleet$rawRegister$CFR, 4, nchar(fleet$rawRegister$CFR)),
+                                                                                  Loa = fleet$rawRegister$Loa,
+                                                                                  Kw = fleet$rawRegister$Power.Main), all.x = TRUE)
+                          },
                           setEffortIndex = function(){
                             # Check fleet$effoAllLoa sampMap$cutFG sampMap$fgWeigDist
                             fleet$effortIndex <<- fleet$effoAllLoa
                             fleet$effortIndex[, 4:(sampMap$cutFG+4)] <<- data.frame(mapply(`*`,
-                                                                                          fleet$effortIndex[, 4:(sampMap$cutFG+4)],
-                                                                                               sampMap$fgWeigDist))
+                                                                                           fleet$effortIndex[, 4:(sampMap$cutFG+4)],
+                                                                                           sampMap$fgWeigDist))
                           },
                           getHarbFgDist = function(){
                             cat("\nRunnnig Fishing ground average distances routine... ", cat = "")
