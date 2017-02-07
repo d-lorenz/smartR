@@ -2309,6 +2309,9 @@ smart_gui <- function(){
     my_project$setDaysAtSea()
   })
   addSpring(sim_g_top1)
+  gbutton("Get\nProduction Index", container = sim_g_top1, handler = function(h,...){
+  })
+  addSpring(sim_g_top1)
 
   addSpring(sim_g_top)
 
