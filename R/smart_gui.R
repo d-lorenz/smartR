@@ -2296,6 +2296,22 @@ smart_gui <- function(){
   ####   Simulation   ####
 
   sim_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Simulation")
+  sim_g_top <- gframe(horizontal = TRUE, container = sim_g, spacing = 10)
+  addSpring(sim_g_top)
+
+  sim_g_top1 <- ggroup(horizontal = FALSE, container = sim_g_top)
+  addSpring(sim_g_top1)
+  gbutton("Get\nEffort Index", container = sim_g_top1, handler = function(h,...){
+    my_project$setEffortIndex()
+  })
+  addSpring(sim_g_top1)
+  gbutton("Get\nDays At Sea", container = sim_g_top1, handler = function(h,...){
+    my_project$setDaysAtSea()
+  })
+  addSpring(sim_g_top1)
+
+  addSpring(sim_g_top)
+
 
   visible(pro_eg) <- TRUE
   visible(raw_eg) <- TRUE
