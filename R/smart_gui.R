@@ -2240,7 +2240,7 @@ smart_gui <- function(){
                    y = quantile(lw_data$Weight, 0.999) - 10, parse = TRUE,
                    label = paste("beta == ", svalue(valu_lyt[2,2]), sep = "")) +
           theme(legend.position = "none",
-                panel.grid = element_line(size = 2, linetype = 2, colour = "grey20"),
+                panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
                 axis.text.x = element_text(size = 9),
                 axis.title.x = element_text(size = 10),
                 axis.text.y = element_text(size = 9),
