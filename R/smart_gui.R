@@ -2297,7 +2297,7 @@ smart_gui <- function(){
 
   sim_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Simulation")
   sim_g_top <- gframe(horizontal = TRUE, container = sim_g, spacing = 10)
-  addSpring(sim_g_top)
+  addSpace(sim_g_top, 20)
 
   sim_g_top1 <- ggroup(horizontal = FALSE, container = sim_g_top)
   addSpring(sim_g_top1)
