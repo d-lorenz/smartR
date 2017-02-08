@@ -2301,15 +2301,15 @@ smart_gui <- function(){
 
   sim_g_top1 <- ggroup(horizontal = FALSE, container = sim_g_top)
   addSpring(sim_g_top1)
-  gbutton("Get\nEffort Index", container = sim_g_top1, handler = function(h,...){
+  gbutton("Get Effort Index", container = sim_g_top1, handler = function(h,...){
     my_project$setEffortIndex()
   })
   addSpring(sim_g_top1)
-  gbutton("Get\nDays At Sea", container = sim_g_top1, handler = function(h,...){
+  gbutton("Get Days At Sea", container = sim_g_top1, handler = function(h,...){
     my_project$setDaysAtSea()
   })
   addSpring(sim_g_top1)
-  gbutton("Get\nProduction Index", container = sim_g_top1, handler = function(h,...){
+  gbutton("Get Production Index", container = sim_g_top1, handler = function(h,...){
   })
   addSpring(sim_g_top1)
 
@@ -2317,11 +2317,12 @@ smart_gui <- function(){
 
   sim_g_top2 <- ggroup(horizontal = FALSE, container = sim_g_top)
   addSpring(sim_g_top2)
-  gbutton("Load\nCost Data", container = sim_g_top2, handler = function(h,...){
+  gbutton("Load Cost Data", container = sim_g_top2, handler = function(h,...){
 
   })
   addSpring(sim_g_top2)
 
+  addSpring(sim_g_top)
 
   visible(pro_eg) <- TRUE
   visible(raw_eg) <- TRUE
