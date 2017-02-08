@@ -2005,7 +2005,7 @@ FishFleet <- R6Class("fishFleet",
                        # },
                        plotLogitROC = function(selSpecie){
                          plot(specLogit[[selSpecie]]$logit$Roc, print.cutoffs.at = seq(0,1,0.1),
-                              text.adj = c(-0.2, 1.7))
+                              text.adj = c(-0.2, 1.7), main = "Logit ROC results")
                        },
                        setSpecLogitConf = function(selSpecie, cutoff = specLogit[[selSpecie]]$logit$Cut){
                          predict <- factor(as.numeric(specLogit[[selSpecie]]$logit$Predict > cutoff))
