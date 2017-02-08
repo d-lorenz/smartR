@@ -38,9 +38,9 @@ SmartProject <- R6Class("smartProject",
                               }
                             }
                             tmp_days$Freq <- tmp_days$Freq/6/24
-                            fleet$daysAtSea <<- merge(tmp_days, data.frame(I_NCEE = as.numeric(substr(fleet$rawRegister$CFR, 4, nchar(fleet$rawRegister$CFR))),
+                            fleet$daysAtSea <<- suppressWarnings(merge(tmp_days, data.frame(I_NCEE = as.numeric(substr(fleet$rawRegister$CFR, 4, nchar(fleet$rawRegister$CFR))),
                                                                                   Loa = fleet$rawRegister$Loa,
-                                                                                  Kw = fleet$rawRegister$Power.Main), all.x = TRUE)
+                                                                                  Kw = fleet$rawRegister$Power.Main), all.x = TRUE))
                             cat(" Completed!", sep = "")
                           },
                           setEffortIndex = function(){
