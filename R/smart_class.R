@@ -24,10 +24,24 @@ SmartProject <- R6Class("smartProject",
                           sampMap = NULL,
                           fleet = NULL,
                           setDaysAtSea = function(){
-                            fleet$setDaysAtSeaRaw()
-                            fleet$daysAtSea <<- merge(fleet$daysAtSea, data.frame(I_NCEE = substr(fleet$rawRegister$CFR, 4, nchar(fleet$rawRegister$CFR)),
+                            cat("\nProcessing year: ", sep = "")
+                            for(year in names(fleet$rawEffort)){
+                              cat(year, "... ", sep = "")
+                              if(year == names(fleet$rawEffort)[1]){
+                                tmp_days <<- data.frame(effYear = year,
+                                                         table(I_NCEE = fleet$rawEffort[[year]]$I_NCEE[fleet$rawEffort[[year]]$P_INT == 1],
+                                                               monthNum = fleet$rawEffort[[year]]$MonthNum[fleet$rawEffort[[year]]$P_INT == 1]))
+                              }else{
+                                tmp_days <<- rbind(tmp_days, data.frame(effYear = year,
+                                                                          table(I_NCEE = fleet$rawEffort[[year]]$I_NCEE[fleet$rawEffort[[year]]$P_INT == 1],
+                                                                                monthNum = fleet$rawEffort[[year]]$MonthNum[fleet$rawEffort[[year]]$P_INT == 1])))
+                              }
+                            }
+                            tmp_days$Freq <- tmp_days$Freq/6/24
+                            fleet$daysAtSea <<- merge(tmp_days, data.frame(I_NCEE = as.numeric(substr(fleet$rawRegister$CFR, 4, nchar(fleet$rawRegister$CFR))),
                                                                                   Loa = fleet$rawRegister$Loa,
                                                                                   Kw = fleet$rawRegister$Power.Main), all.x = TRUE)
+                            cat(" Completed!", sep = "")
                           },
                           setEffortIndex = function(){
                             # Check fleet$effoAllLoa sampMap$cutFG sampMap$fgWeigDist
