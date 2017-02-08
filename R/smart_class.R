@@ -45,10 +45,12 @@ SmartProject <- R6Class("smartProject",
                           },
                           setEffortIndex = function(){
                             # Check fleet$effoAllLoa sampMap$cutFG sampMap$fgWeigDist
+                            cat("\nComputing Effort Index...", sep = "")
                             fleet$effortIndex <<- fleet$effoAllLoa
                             fleet$effortIndex[, 4:(sampMap$cutFG+4)] <<- data.frame(mapply(`*`,
                                                                                            fleet$effortIndex[, 4:(sampMap$cutFG+4)],
                                                                                            sampMap$fgWeigDist))
+                            cat(" Completed!", sep = "")
                           },
                           getHarbFgDist = function(){
                             cat("\nRunnnig Fishing ground average distances routine... ", cat = "")
