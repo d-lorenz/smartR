@@ -1775,23 +1775,6 @@ FishFleet <- R6Class("fishFleet",
                        betaMeltYear = NULL,
                        prodMeltYear = NULL,
                        fishPoinPara = NULL,
-                       setDaysAtSeaRaw = function(){
-                         cat("\nProcessing year: ", sep = "")
-                         for(year in names(rawEffort)){
-                           cat(year, "... ", sep = "")
-                           if(year == names(rawEffort)[1]){
-                             daysAtSea <<- data.frame(effYear = year,
-                                                     table(I_NCEE = rawEffort[[year]]$I_NCEE[rawEffort[[year]]$P_INT == 1],
-                                                           monthNum = rawEffort[[year]]$MonthNum[rawEffort[[year]]$P_INT == 1]))
-                           }else{
-                             daysAtSea <<- rbind(daysAtSea, data.frame(effYear = year,
-                                                                      table(I_NCEE = rawEffort[[year]]$I_NCEE[rawEffort[[year]]$P_INT == 1],
-                                                                            monthNum = rawEffort[[year]]$MonthNum[rawEffort[[year]]$P_INT == 1])))
-                           }
-                         }
-                         daysAtSea$Freq <<- daysAtSea$Freq/6/24
-                         cat(" Completed!", sep = "")
-                       },
                        setVmsRegister = function(){
                          vmsRegister <<- suppressWarnings(rawRegister[as.numeric(substr(rawRegister$CFR, 4, nchar(rawRegister$CFR[1]))) %in% effortIds$All,])
                        },
