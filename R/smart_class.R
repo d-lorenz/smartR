@@ -30,7 +30,7 @@ SmartProject <- R6Class("smartProject",
                               tmp_vmsY <- fleet$rawEffort[[year]][,c("I_NCEE", "DATE", "MonthNum")]
                               tmp_vmsY$DATE <- floor(tmp_vmsY$DATE)
                               tmp_vmsY <- tmp_vmsY[!duplicated(tmp_vmsY),]
-                              out_tbl <- table(tmp_vmsY$I_NCEE, tmp_vmsY$MonthNum)
+                              out_tbl <- table(I_NCEE = tmp_vmsY$I_NCEE, Month = tmp_vmsY$MonthNum)
                               if(year == names(fleet$rawEffort)[1]){
                                 tmp_days <- data.frame(effYear = year, out_tbl)
                               }else{
@@ -38,7 +38,6 @@ SmartProject <- R6Class("smartProject",
                                                   data.frame(effYear = year, out_tbl))
                               }
                             }
-                            tmp_days$Freq <- tmp_days$Freq/6/24
                             fleet$daysAtSea <<- suppressWarnings(merge(tmp_days, data.frame(I_NCEE = as.numeric(substr(fleet$rawRegister$CFR, 4, nchar(fleet$rawRegister$CFR))),
                                                                                             Loa = fleet$rawRegister$Loa,
                                                                                             Kw = fleet$rawRegister$Power.Main), all.x = TRUE))
