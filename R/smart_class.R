@@ -27,14 +27,15 @@ SmartProject <- R6Class("smartProject",
                             cat("\nProcessing year: ", sep = "")
                             for(year in names(fleet$rawEffort)){
                               cat(year, "... ", sep = "")
+                              tmp_vmsY <- fleet$rawEffort[[year]][,c("I_NCEE", "DATE", "MonthNum")]
+                              tmp_vmsY$DATE <- floor(tmp_vmsY$DATE)
+                              tmp_vmsY <- tmp_vmsY[!duplicated(tmp_vmsY),]
+                              out_tbl <- table(tmp_vmsY$I_NCEE, tmp_vmsY$MonthNum)
                               if(year == names(fleet$rawEffort)[1]){
-                                tmp_days <- data.frame(effYear = year,
-                                                       table(I_NCEE = fleet$rawEffort[[year]]$I_NCEE[fleet$rawEffort[[year]]$P_INT == 1],
-                                                             monthNum = fleet$rawEffort[[year]]$MonthNum[fleet$rawEffort[[year]]$P_INT == 1]))
+                                tmp_days <- data.frame(effYear = year, out_tbl)
                               }else{
-                                tmp_days <- rbind(tmp_days, data.frame(effYear = year,
-                                                                       table(I_NCEE = fleet$rawEffort[[year]]$I_NCEE[fleet$rawEffort[[year]]$P_INT == 1],
-                                                                             monthNum = fleet$rawEffort[[year]]$MonthNum[fleet$rawEffort[[year]]$P_INT == 1])))
+                                tmp_days <- rbind(tmp_days,
+                                                  data.frame(effYear = year, out_tbl))
                               }
                             }
                             tmp_days$Freq <- tmp_days$Freq/6/24
