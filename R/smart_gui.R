@@ -2322,6 +2322,11 @@ smart_gui <- function(){
   })
   addSpring(sim_g_top2)
 
+  gbutton("Set Size Class", container = sim_g_top3, handler = function(h,...){
+
+  })
+  addSpring(sim_g_top2)
+
   addSpring(sim_g_top)
 
   visible(pro_eg) <- TRUE
