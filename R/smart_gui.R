@@ -1095,21 +1095,36 @@ smart_gui <- function(){
     dev.set(dev.list()[pre_dev+5])
     my_project$fleet$rawProduction <- readRDS(pathLanding)
 
+    svalue(stat_bar) <- "Setting Ids..."
+    Sys.sleep(1)
     my_project$fleet$setProdIds()
 
     # my_project$fleet$plotCountIDsProd()
 
     my_project$fleet$setIdsEffoProd()
 
+    svalue(stat_bar) <- "Plotting Ids..."
+    Sys.sleep(1)
     my_project$fleet$plotCountIDsEffoProd()
 
+    svalue(stat_bar) <- "Setting Production Matrix..."
+    Sys.sleep(1)
     my_project$fleet$setProdMatr()
     my_project$fleet$setDayEffoMatrGround()
     my_project$fleet$setEffoProdMatr()
     my_project$fleet$setEffoProdMont()
+
+    svalue(stat_bar) <- "Setting Species..."
+    Sys.sleep(1)
     my_project$fleet$setProdSpec()
     my_project$fleet$setEffoProdAll()
+
+    svalue(stat_bar) <- "Getting Loa..."
+    Sys.sleep(1)
     my_project$fleet$setEffoProdAllLoa()
+
+    svalue(stat_bar) <- ""
+    Sys.sleep(1)
     # my_project$fleet$setSpecSett()
     spe_drop[] <- sort(names(my_project$fleet$specSett))
     provie_drop[] <- names(my_project$fleet$effoProdMont)
