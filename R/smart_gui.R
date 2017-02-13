@@ -2319,12 +2319,31 @@ smart_gui <- function(){
   addSpring(sim_g_top2)
   gbutton("Set Cost Data", container = sim_g_top2, handler = function(h,...){
 
+    tempWind_Cost <- gwindow(title = "Fishing Cost Data", visible = FALSE,
+                              parent = main_win,
+                              width = 800, height = 500)
+
+    cost_g <- ggroup(horizontal = FALSE, container = tempWind_Cost, spacing = 15)
+    cost_g_top <- gframe(horizontal = TRUE, container = cost_g, spacing = 10)
+
+    gbutton("Load Cost Data", container = cost_g_top, handler = function(h,...){
+
+    })
+
+    gbutton("Get Cost Regression", container = cost_g_top, handler = function(h,...){
+
+    })
+
+    visible(tempWind_Cost) <- TRUE
+
+    cost_p <- ggraphics(container = cost_g, width = 550, height = 250, expand = TRUE)
+
   })
   addSpring(sim_g_top2)
 
-  gbutton("Set Size Class", container = sim_g_top3, handler = function(h,...){
-
-  })
+  # gbutton("Set Size Class", container = sim_g_top3, handler = function(h,...){
+  #
+  # })
   addSpring(sim_g_top2)
 
   addSpring(sim_g_top)
