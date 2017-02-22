@@ -1410,52 +1410,6 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                                                                                   c(1,1),
                                                                                                   c(2,3))))
                                )
-
-                               # if(selSex == "Female"){
-                               #   switch(selCompo,
-                               #         MCMC = suppressWarnings(grid.arrange(femalePlot[["traceChain"]],
-                               #                                              femalePlot[["scatLK"]],
-                               #                                              femalePlot[["cohoPreciGG"]],
-                               #                                              femalePlot[["cohoVariGG"]],
-                               #                                              layout_matrix = rbind(c(1,1,1,2),
-                               #                                                                    c(1,1,1,2),
-                               #                                                                    c(4,4,5,5)))),
-                               #         Key = suppressWarnings(grid.arrange(femalePlot[["ageLength"]],
-                               #                                             femalePlot[["ageLengthTbl"]],
-                               #                                             femalePlot[["cohoStatTbl"]],
-                               #                                             layout_matrix = rbind(c(1,1,2),
-                               #                                                                   c(1,1,2),
-                               #                                                                   c(1,1,3)))),
-                               #         Birth = suppressWarnings(grid.arrange(femalePlot[["histBirth"]],
-                               #                                               femalePlot[["lineCatch"]],
-                               #                                               femalePlot[["lineSurv"]],
-                               #                                               layout_matrix = rbind(c(1,1),
-                               #                                                                     c(1,1),
-                               #                                                                     c(2,3))))
-                               #   )
-                               # }else{
-                               #   switch(selCompo,
-                               #         MCMC = suppressWarnings(grid.arrange(malePlot[["traceChain"]],
-                               #                                              malePlot[["scatLK"]],
-                               #                                              malePlot[["cohoPreciGG"]],
-                               #                                              malePlot[["cohoVariGG"]],
-                               #                                              layout_matrix = rbind(c(1,1,1,2),
-                               #                                                                    c(1,1,1,2),
-                               #                                                                    c(4,4,5,5)))),
-                               #         Key = suppressWarnings(grid.arrange(malePlot[["ageLength"]],
-                               #                                             malePlot[["ageLengthTbl"]],
-                               #                                             malePlot[["cohoStatTbl"]],
-                               #                                             layout_matrix = rbind(c(1,1,2),
-                               #                                                                   c(1,1,2),
-                               #                                                                   c(1,1,3)))),
-                               #         Birth = suppressWarnings(grid.arrange(malePlot[["histBirth"]],
-                               #                                               malePlot[["lineCatch"]],
-                               #                                               malePlot[["lineSurv"]],
-                               #                                               layout_matrix = rbind(c(1,1),
-                               #                                                                     c(1,1),
-                               #                                                                     c(2,3))))
-                               #   )
-                               # }
                              },
                              setWeight = function(sexVal = "Female"){
 
