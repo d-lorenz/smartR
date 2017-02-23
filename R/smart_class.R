@@ -1475,12 +1475,6 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 
                                sampMcmc[[sexDrop]] <<- samps
 
-                               # if(sexDrop == "Female"){
-                               #   femaleMcmc <<- samps
-                               # }else{
-                               #   maleMcmc <<- samps
-                               # }
-
                                ### MCMC estimates
                                dfLinf <- data.frame(Parameter = "Linf",
                                                     Iter = 1:n.iter,
@@ -1562,12 +1556,6 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 
                                groMixout[[sexDrop]] <<- mix_out
 
-                               # if(sexDrop == "Female"){
-                               #   femaleMixOut <<- mix_out
-                               # }else{
-                               #   maleMixOut <<- mix_out
-                               # }
-
                                # mix_out$CorrBirth <- mix_out$Birth
                                # mix_out$CorrBirth[which(mix_out$AgeNF %% 1 + 0.25 > 1)] <- mix_out$CorrBirth[which(mix_out$AgeNF %% 1 + 0.25 > 1)] + 1
                                # mix_out$CorrBirth[which(mix_out$AgeNF - mix_out$Age > 0.81)] <- mix_out$CorrBirth[which(mix_out$AgeNF - mix_out$Age > 0.81)] - 1
@@ -1638,7 +1626,6 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                sprePlot[[sexDrop]][["cohoPreciGG"]] <<- set_ggTausBox(df_taus = taus[,1:(max(AA)+1)], tauPalette = outPalette, numCoho = nCoho)
                                ### MCMC Boxplot Sigma
                                sprePlot[[sexDrop]][["cohoVariGG"]] <<- set_ggSigmaBox(df_sigma = sigma2s[,1:(max(AA)+1)], sigPalette = outPalette, numCoho = nCoho)
-                               ###
 
                                ### MCMC Plot Age-Length
                                sprePlot[[sexDrop]][["ageLength"]] <<- set_ggAgeLength(df_mix = mix_out, mixPalette = outPalette)
@@ -1653,38 +1640,6 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                sprePlot[[sexDrop]][["lineCatch"]] <<- set_ggCatchLine(df_birth = birth_melt)
                                ### MCMC Survivors * quarter
                                sprePlot[[sexDrop]][["lineSurv"]] <<- set_ggSurvLine(df_surv = surv_melt)
-
-                               # if(sexDrop == "Female"){
-                               #   ### MCMC chain Traceplot
-                               #   femalePlot[["traceChain"]] <<- set_ggChainTrace(ggdataSamps)
-                               #   ### MCMC chain scatterplot
-                               #   femalePlot[["scatLK"]] <<- set_ggChainScatter(gg_DFscat = ggdataSampScat, meanL = LHat, meanK = kHat)
-                               #   ### MCMC chain Boxplot Tau
-                               #   femalePlot[["cohoPreciGG"]] <<- set_ggTausBox(df_taus = taus[,1:(max(AA)+1)], tauPalette = outPalette, numCoho = nCoho)
-                               #   ### MCMC Boxplot Sigma
-                               #   femalePlot[["cohoVariGG"]] <<- set_ggSigmaBox(df_sigma = sigma2s[,1:(max(AA)+1)], sigPalette = outPalette, numCoho = nCoho)
-                               #   ###
-                               #
-                               #   ### MCMC Plot Age-Length
-                               #   femalePlot[["ageLength"]] <<- set_ggAgeLength(df_mix = mix_out, mixPalette = outPalette)
-                               #   ### MCMC Age-Length Key
-                               #   femalePlot[["ageLengthTbl"]] <<- set_tblAgeLength(df_mix = mix_out)
-                               #   ### MCMC output cohort stats
-                               #   femalePlot[["cohoStatTbl"]] <<- set_tblCohoStat(df_coho = coho_AL)
-                               #
-                               #   ### MCMC quarter vertical hist
-                               #   femalePlot[["histBirth"]] <<- set_ggHistBirth(df_mix = mix_out, df_grow = growPath)
-                               #   ### MCMC Catch * Quarters
-                               #   femalePlot[["lineCatch"]] <<- set_ggCatchLine(df_birth = birth_melt)
-                               #   ### MCMC Survivors * quarter
-                               #   femalePlot[["lineSurv"]] <<- set_ggSurvLine(df_surv = surv_melt)
-                               #
-                               # }else{
-                               #
-                               #   ## Same as female
-                               #
-                               # }
-
                              }))
 
 
