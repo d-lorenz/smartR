@@ -476,7 +476,7 @@ set_ggHistUtcLfd <- function(inLfd){
   suppressMessages(
     ggplot(inLfd, aes_(x = ~Length, y = ~..count..)) +
       geom_histogram(bins = 30, fill = "grey1", alpha = 0.7) +
-      facet_grid(Year~Month, switch = "y") +
+      facet_grid(Year~Month, strip.position = "left") +
       theme_few() +
       scale_x_continuous(breaks = pretty(inLfd$Length, 5)) +
       theme(legend.position = "none",
