@@ -2158,10 +2158,10 @@ smart_gui <- function(){
   gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = cohofra_g,
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+7])
-           my_project$cohoDisPlot(which(my_project$specieInSurvey == svalue(cohSpe_drop)),
-                                  ifelse(svalue(cohCoh_drop) == "All", "All", as.numeric(svalue(cohCoh_drop))),
-                                  ifelse(svalue(cohYea_drop) == "All", "All", which(my_project$yearInSurvey == svalue(cohYea_drop))),
-                                  ifelse(svalue(cohInt_r) == "Yes", TRUE, FALSE))
+           # my_project$cohoDisPlot(which(my_project$specieInSurvey == svalue(cohSpe_drop)),
+           #                        ifelse(svalue(cohCoh_drop) == "All", "All", as.numeric(svalue(cohCoh_drop))),
+           #                        ifelse(svalue(cohYea_drop) == "All", "All", which(my_project$yearInSurvey == svalue(cohYea_drop))),
+           #                        ifelse(svalue(cohInt_r) == "Yes", TRUE, FALSE))
          })
   addSpring(cohofra_g)
   addSpring(cohoP_g_top)
