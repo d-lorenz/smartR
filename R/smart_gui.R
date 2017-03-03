@@ -2155,12 +2155,6 @@ smart_gui <- function(){
   cohYea_drop <- gcombobox(items = "Year", selected = 1, container = cohYea_b, editable = FALSE)
   addSpring(cohYea_b)
 
-  cohInt_g <- gframe("Interpolated", horizontal = FALSE, container = cohofra_g, expand = TRUE)
-  addSpring(cohofra_g)
-  addSpring(cohInt_g)
-  cohInt_r <- gradio(c("Yes", "No"), selected = 1, horizontal = TRUE, container = cohInt_g)
-  addSpring(cohInt_g)
-
   gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = cohofra_g,
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+7])
