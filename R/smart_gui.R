@@ -2105,6 +2105,27 @@ smart_gui <- function(){
 
   cohofra_g <- gframe("Cohort data", horizontal = TRUE, container = cohoP_g_top, expand = TRUE)
   addSpring(cohofra_g)
+
+  sourceCoh_r <- gradio(items = c("Survey", "Fishery"), horizontal = FALSE, container = cohofra_g, expand = TRUE, handler = function(...){
+    if(svalue(sourceCoh_r) == "Survey"){
+      # if(is.null(my_project$specieInSurvey)){
+      #   spec_drop_mix[] <- "No data"
+      #   svalue(spec_drop_mix) <- "No data"
+      # }else{
+      #   spec_drop_mix[] <- my_project$specieInSurvey
+      #   svalue(spec_drop_mix) <- my_project$specieInSurvey[1]
+      # }
+    }else{
+      # if(is.null(my_project$specieInFishery)){
+      #   spec_drop_mix[] <- "No data"
+      #   svalue(spec_drop_mix) <- "No data"
+      # }else{
+      #   spec_drop_mix[] <- my_project$specieInFishery
+      #   svalue(spec_drop_mix) <- my_project$specieInFishery[1]
+      # }
+    }
+  })
+
   cohSpe_b <- gframe("Specie", horizontal = FALSE, container = cohofra_g, expand = TRUE)
   addSpring(cohofra_g)
   addSpring(cohSpe_b)
