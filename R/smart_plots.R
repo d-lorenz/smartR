@@ -361,7 +361,7 @@ set_ggChainTrace <- function(df_LK){
       ggplot(data = df_LK,
              mapping = aes_(x = ~Iter, y = ~Value, color = ~factor(Chain)))+
         geom_line(alpha = 0.7) +
-        facet_wrap(~ Parameter, nrow = 3, ncol = 1, scales = "free", switch = "y") +
+        facet_wrap(~ Parameter, nrow = 3, ncol = 1, scales = "free", strip.position = "left") +
         scale_color_brewer(palette = "Dark2", "Chain") +
         theme_tufte(base_size = 14, ticks = F) +
         theme(title = element_text(size = 10),
