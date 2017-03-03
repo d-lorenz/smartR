@@ -2137,6 +2137,12 @@ smart_gui <- function(){
   })
   addSpring(cohSpe_b)
 
+  cohSex_b <- gframe("Sex", horizontal = FALSE, container = cohofra_g, expand = TRUE)
+  addSpring(cohofra_g)
+  addSpring(cohSex_b)
+  sex_drop_coh <- gcombobox(items = c("Female", "Male"), selected = 1, container = cohSex_b, editable = FALSE, expand = TRUE)
+  addSpring(cohSex_b)
+
   cohCoh_b <- gframe("Cohort", horizontal = FALSE, container = cohofra_g, expand = TRUE)
   addSpring(cohofra_g)
   addSpring(cohCoh_b)
