@@ -2163,14 +2163,51 @@ smart_gui <- function(){
   cohCoh_b <- gframe("Cohort", horizontal = FALSE, container = cohofra_g, expand = TRUE)
   addSpring(cohofra_g)
   addSpring(cohCoh_b)
-  cohCoh_drop <- gcombobox(items = "Cohort", selected = 1, container = cohCoh_b, editable = FALSE)
+  cohCoh_drop <- gcombobox(items = "Cohort", selected = 1, container = cohCoh_b, editable = FALSE, handler = function(h,...){
+    # svalue(sourceCoh_r)   # source = "Survey"
+    # svalue(spec_drop_coh) # specie = 1
+    # svalue(sexRadio_coh)     # sex = "Female"
+    # svalue(gruRadio_coh)   # group = "Age"
+    # svalue(cohTyp_drop)    #  type = "LFD"
+
+    if(svalue(sourceCoh_r) == "Survey"){
+      cohSpe_ind <- which(my_project$specieInSurvey == svalue(spec_drop_coh))
+      if(svalue(cohTyp_drop) == "LFD"){
+
+      }else{
+
+      }
+    }else{
+      cohSpe_ind <- which(my_project$specieInFishery == svalue(spec_drop_coh))
+      if(svalue(cohTyp_drop) == "LFD"){
+        if(svalue(gruRadio_coh) == "Age"){
+          tmpLFD <- my_project$fisheryBySpecie[[cohSpe_ind]]$groMixout[[svalue(sexRadio_coh)]][my_project$fisheryBySpecie[[cohSpe_ind]]$groMixout[[svalue(sexRadio_coh)]]$Age == svalue(cohCoh_drop),]
+          tmpLFD$UTC <- tmpLFD$Date
+        }else{
+          tmpLFD <- my_project$fisheryBySpecie[[cohSpe_ind]]$groMixout[[svalue(sexRadio_coh)]][my_project$fisheryBySpecie[[cohSpe_ind]]$groMixout[[svalue(sexRadio_coh)]]$Birth == svalue(cohCoh_drop),]
+          tmpLFD$UTC <- tmpLFD$Date
+        }
+        dev.set(dev.list()[pre_dev+7])
+
+        suppressWarnings(grid.arrange(set_ggHistLfdTot(inLfd = tmpLFD),
+                                      set_ggHistUtcLfd(inLfd = tmpLFD),
+                                      set_ggHistUtcTot(inLfd = tmpLFD),
+                                      set_ggDotUtcSplit(inLfd = tmpLFD),
+                                      layout_matrix = rbind(c(1,1,1,3),
+                                                            c(2,2,2,4),
+                                                            c(2,2,2,4))))
+      }else{
+
+      }
+    }
+  })
   addSpring(cohCoh_b)
 
-  cohYea_b <- gframe("Year", horizontal = FALSE, container = cohofra_g, expand = TRUE)
+  cohTyp_b <- gframe("Type", horizontal = FALSE, container = cohofra_g, expand = TRUE)
   addSpring(cohofra_g)
-  addSpring(cohYea_b)
-  cohYea_drop <- gcombobox(items = "Year", selected = 1, container = cohYea_b, editable = FALSE)
-  addSpring(cohYea_b)
+  addSpring(cohTyp_b)
+  cohTyp_drop <- gcombobox(items = c("LFD", "Spatial"), selected = 1, container = cohTyp_b, editable = FALSE)
+  addSpring(cohTyp_b)
 
   gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = cohofra_g,
          handler = function(h,...){
