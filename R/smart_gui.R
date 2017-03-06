@@ -2118,11 +2118,13 @@ smart_gui <- function(){
   spec_drop_coh <- gcombobox(items = "Specie", selected = 1, container = cohSpe_b, editable = FALSE, handler = function(h,...){
     svalue(sexRadio_coh) <- "Female"
     svalue(gruRadio_coh) <- "Age"
+    svalue(cohTyp_drop) <- "LFD"
     if(svalue(sourceCoh_r) == "Survey"){
       cohCoh_drop[] <- c("All", sort(unique(my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age)))
     }else{
       cohCoh_drop[] <- c("All", sort(unique(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age)))
     }
+    svalue(cohCoh_drop) <- "All"
   })
   addSpring(cohSpe_b)
 
