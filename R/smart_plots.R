@@ -424,7 +424,7 @@ set_ggHistLfdTot <- function(inLfd){
                      scale_x_continuous(breaks = pretty(inLfd$Length, 10)) +
                      theme_tufte(base_size=14, ticks=F) +
                      theme(legend.position = "none",
-                           panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+                           panel.grid = element_line(size = 0.25, linetype = 2, colour = "grey20"),
                            axis.text.x = element_text(size = 5),
                            axis.title.x = element_text(size = 7),
                            axis.text.y = element_text(size = 5),
@@ -441,7 +441,7 @@ set_ggHistUtcTot <- function(inLfd){
                family="serif", label = "Time coverage") +
       theme_tufte(base_size = 14, ticks = F) +
       theme(legend.position = "none",
-            panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+            panel.grid = element_line(size = 0.25, linetype = 2, colour = "grey20"),
             axis.text.x = element_text(size = 5),
             axis.title.x = element_blank(),
             axis.text.y = element_text(size = 5),
@@ -462,7 +462,7 @@ set_ggDotUtcSplit <- function(inLfd){
       scale_y_discrete(breaks = unique(sampPunch$Year), expand = c(0.1, 0.1)) +
       theme_tufte(base_size = 14, ticks = F) +
       theme(legend.position = "none",
-            panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+            panel.grid = element_line(size = 0.25, linetype = 2, colour = "grey20"),
             axis.text.x = element_text(size = 5),
             axis.title.x = element_blank(),
             axis.text.y = element_text(size = 5),
@@ -480,6 +480,7 @@ set_ggHistUtcLfd <- function(inLfd){
       theme_few() +
       scale_x_continuous(breaks = pretty(inLfd$Length, 5)) +
       theme(legend.position = "none",
+            panel.grid = element_line(size = 0.25, linetype = 2, colour = "grey20"),
             axis.text.x = element_text(size = 4),
             strip.text.x = element_text(size = 5),
             axis.title.x = element_text(size = 7),
