@@ -2121,7 +2121,7 @@ smart_gui <- function(){
   cohSex_b <- gframe("Sex", horizontal = FALSE, container = cohofra_g, expand = TRUE)
   addSpring(cohofra_g)
   addSpring(cohSex_b)
-  sex_drop_coh <- gcombobox(items = c("Female", "Male"), selected = 1, container = cohSex_b, editable = FALSE, expand = TRUE, handler = function(h,...){
+  sexRadio_coh <- gradio(items = c("Female", "Male"), selected = 1, container = cohSex_b, expand = TRUE, handler = function(h,...){
     # if(length(my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(cohSpe_drop))]]$nCoho) > 0){
     #   cohCoh_drop[] <- c("All", seq(1, my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(cohSpe_drop))]]$nCoho, by = 1))
     #   svalue(cohCoh_drop) <- "All"
