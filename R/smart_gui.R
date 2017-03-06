@@ -2129,6 +2129,13 @@ smart_gui <- function(){
   })
   addSpring(cohSex_b)
 
+  cohGru_b <- gframe("Group", horizontal = FALSE, container = cohofra_g, expand = TRUE)
+  addSpring(cohofra_g)
+  addSpring(cohGru_b)
+  gruRadio_coh <- gradio(items = c("Age", "Birth"), selected = 1, container = cohGru_b, expand = TRUE, handler = function(h,...){
+  })
+  addSpring(cohGru_b)
+
   cohCoh_b <- gframe("Cohort", horizontal = FALSE, container = cohofra_g, expand = TRUE)
   addSpring(cohofra_g)
   addSpring(cohCoh_b)
