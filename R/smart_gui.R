@@ -2342,8 +2342,8 @@ smart_gui <- function(){
   gbutton("Set Cost Data", container = sim_g_top2, handler = function(h,...){
 
     tempWind_Cost <- gwindow(title = "Fishing Cost Data", visible = FALSE,
-                              parent = main_win,
-                              width = 800, height = 500)
+                             parent = main_win,
+                             width = 800, height = 500)
 
     cost_g <- ggroup(horizontal = FALSE, container = tempWind_Cost, spacing = 15)
     cost_g_top <- gframe(horizontal = TRUE, container = cost_g, spacing = 10)
