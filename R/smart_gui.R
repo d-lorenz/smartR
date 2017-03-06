@@ -2118,8 +2118,11 @@ smart_gui <- function(){
   spec_drop_coh <- gcombobox(items = "Specie", selected = 1, container = cohSpe_b, editable = FALSE, handler = function(h,...){
     svalue(sexRadio_coh) <- "Female"
     svalue(gruRadio_coh) <- "Age"
-    cohCoh_drop[] <- c("All")
-
+    if(svalue(sourceCoh_r) == "Survey"){
+      cohCoh_drop[] <- c("All", sort(unique(my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age)))
+    }else{
+      cohCoh_drop[] <- c("All", sort(unique(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age)))
+    }
   })
   addSpring(cohSpe_b)
 
@@ -2127,10 +2130,11 @@ smart_gui <- function(){
   addSpring(cohofra_g)
   addSpring(cohSex_b)
   sexRadio_coh <- gradio(items = c("Female", "Male"), selected = 1, container = cohSex_b, expand = TRUE, handler = function(h,...){
-    # if(length(my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(cohSpe_drop))]]$nCoho) > 0){
-    #   cohCoh_drop[] <- c("All", seq(1, my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(cohSpe_drop))]]$nCoho, by = 1))
-    #   svalue(cohCoh_drop) <- "All"
-    # }
+    if(svalue(sourceCoh_r) == "Survey"){
+      cohCoh_drop[] <- c("All", sort(unique(my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age)))
+    }else{
+      cohCoh_drop[] <- c("All", sort(unique(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age)))
+    }
   })
   addSpring(cohSex_b)
 
@@ -2138,6 +2142,19 @@ smart_gui <- function(){
   addSpring(cohofra_g)
   addSpring(cohGru_b)
   gruRadio_coh <- gradio(items = c("Age", "Birth"), selected = 1, container = cohGru_b, expand = TRUE, handler = function(h,...){
+    if(svalue(gruRadio_coh) == "Age"){
+      if(svalue(sourceCoh_r) == "Survey"){
+        cohCoh_drop[] <- c("All", sort(unique(my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age)))
+      }else{
+        cohCoh_drop[] <- c("All", sort(unique(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age)))
+      }
+    }else{
+      if(svalue(sourceCoh_r) == "Survey"){
+        cohCoh_drop[] <- c("All", sort(unique(my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Birth)))
+      }else{
+        cohCoh_drop[] <- c("All", sort(unique(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Birth)))
+      }
+    }
   })
   addSpring(cohGru_b)
 
