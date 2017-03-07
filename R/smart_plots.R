@@ -457,15 +457,15 @@ set_ggDotUtcSplit <- function(inLfd){
   names(sampPunch) <- c("Year", "Month", "Frequency")
   sampPunch$Year <- factor(sampPunch$Year, levels = sort(unique(sampPunch$Year), decreasing = TRUE))
   suppressMessages(
-    ggplot(sampPunch, aes_(x = ~Month, y = ~Year, size = ~log10(Frequency))) +
+    ggplot(sampPunch, aes_(x = ~Month, y = ~Year, size = ~log10(Frequency), color = ~factor(1))) +
       geom_point() +
       scale_y_discrete(breaks = unique(sampPunch$Year), expand = c(0.1, 0.1)) +
       theme_tufte(base_size = 14, ticks = F) +
       theme(legend.position = "none",
             panel.grid = element_line(size = 0.25, linetype = 2, colour = "grey20"),
-            axis.text.x = element_text(size = 5),
+            axis.text.x = element_text(size = 8),
             axis.title.x = element_blank(),
-            axis.text.y = element_text(size = 5),
+            axis.text.y = element_text(size = 8),
             axis.title.y = element_blank(),
             axis.ticks.y = element_blank())
   )
@@ -474,18 +474,18 @@ set_ggDotUtcSplit <- function(inLfd){
 ## UTC LFD Histogram ----
 set_ggHistUtcLfd <- function(inLfd){
   suppressMessages(
-    ggplot(inLfd, aes_(x = ~Length, y = ~..count..)) +
-      geom_histogram(bins = 30, fill = "grey1", alpha = 0.7) +
+    ggplot(inLfd, aes_(x = ~Length, y = ~..count.., fill = ~factor(1))) +
+      geom_histogram(bins = 30, alpha = 0.7) +
       facet_grid(Year~Month, switch = "y") +
       theme_few() +
       scale_x_continuous(breaks = pretty(inLfd$Length, 5)) +
       theme(legend.position = "none",
             panel.grid = element_line(size = 0.25, linetype = 2, colour = "grey20"),
-            axis.text.x = element_text(size = 4),
-            strip.text.x = element_text(size = 5),
-            axis.title.x = element_text(size = 7),
-            axis.text.y = element_text(size = 4),
-            strip.text.y = element_text(size = 5),
+            axis.text.x = element_text(size = 6),
+            strip.text.x = element_text(size = 8),
+            axis.title.x = element_text(size = 10),
+            axis.text.y = element_blank(),
+            strip.text.y = element_text(size = 10),
             axis.title.y = element_blank(),
             axis.ticks.y = element_blank())
   )
