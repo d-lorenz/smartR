@@ -416,18 +416,18 @@ set_ggChainScatter <- function(gg_DFscat, meanL, meanK){
 
 ## Length Frequency Distribution Histogram ----
 set_ggHistLfdTot <- function(inLfd){
-  suppressMessages(ggplot(inLfd, aes_(x = ~Length, y = ~..count..)) +
-                     geom_histogram(bins = 50, fill = "grey0", alpha = 0.7, col = "grey10") +
-                     annotate("text", x = 0, y = Inf, hjust = 0, vjust = 1,
-                              family="serif", label = "Absolute frequency of \nlength values") +
+  suppressMessages(ggplot(inLfd, aes_(x = ~Length, y = ~..count.., fill = ~factor(1))) +
+                     geom_histogram(bins = 50, alpha = 0.7, col = "grey10") +
+                     # annotate("text", x = 0, y = Inf, hjust = 0, vjust = 1,
+                     #          family="serif", label = "Absolute frequency of \nlength values") +
                      geom_vline(xintercept = mean(inLfd$Length), col = "grey90", lwd = 0.6, lty = 2) +
                      scale_x_continuous(breaks = pretty(inLfd$Length, 10)) +
                      theme_tufte(base_size=14, ticks=F) +
                      theme(legend.position = "none",
                            panel.grid = element_line(size = 0.25, linetype = 2, colour = "grey20"),
-                           axis.text.x = element_text(size = 5),
-                           axis.title.x = element_text(size = 7),
-                           axis.text.y = element_text(size = 5),
+                           axis.text.x = element_text(size = 8),
+                           axis.title.x = element_text(size = 10),
+                           axis.text.y = element_text(size = 8),
                            axis.title.y = element_blank(),
                            axis.ticks.y = element_blank()))
 }
@@ -435,16 +435,16 @@ set_ggHistLfdTot <- function(inLfd){
 ## UTC Coverage Histogram ----
 set_ggHistUtcTot <- function(inLfd){
   suppressMessages(
-    ggplot(data.frame(UTC = unique(inLfd$UTC)), aes_(x = ~UTC, y = ~..count..)) +
-      geom_histogram(bins = 100, fill = "grey0", alpha = 0.7) +
+    ggplot(data.frame(UTC = unique(inLfd$UTC)), aes_(x = ~UTC, y = ~..count.., fill = ~factor(1))) +
+      geom_histogram(bins = 100, alpha = 0.7) +
       annotate("text", x = -Inf, y = Inf, hjust = 0, vjust = 1,
                family="serif", label = "Time coverage") +
       theme_tufte(base_size = 14, ticks = F) +
       theme(legend.position = "none",
             panel.grid = element_line(size = 0.25, linetype = 2, colour = "grey20"),
-            axis.text.x = element_text(size = 5),
+            axis.text.x = element_text(size = 8, angle = 45),
             axis.title.x = element_blank(),
-            axis.text.y = element_text(size = 5),
+            axis.text.y = element_text(size = 8),
             axis.title.y = element_blank(),
             axis.ticks.y = element_blank()) +
       scale_x_chron(n = 10)
