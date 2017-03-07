@@ -2120,11 +2120,11 @@ smart_gui <- function(){
     svalue(gruRadio_coh) <- "Age"
     svalue(cohTyp_drop) <- "LFD"
     if(svalue(sourceCoh_r) == "Survey"){
-      cohCoh_drop[] <- c("All", sort(unique(my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age)))
+      cohCoh_drop[] <- sort(unique(my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age))
     }else{
-      cohCoh_drop[] <- c("All", sort(unique(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age)))
+      cohCoh_drop[] <- sort(unique(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age))
     }
-    svalue(cohCoh_drop) <- "All"
+    svalue(cohCoh_drop, index = TRUE) <- 1
   })
   addSpring(cohSpe_b)
 
@@ -2133,9 +2133,9 @@ smart_gui <- function(){
   addSpring(cohSex_b)
   sexRadio_coh <- gradio(items = c("Female", "Male"), selected = 1, container = cohSex_b, expand = TRUE, handler = function(h,...){
     if(svalue(sourceCoh_r) == "Survey"){
-      cohCoh_drop[] <- c("All", sort(unique(my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age)))
+      cohCoh_drop[] <- sort(unique(my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age))
     }else{
-      cohCoh_drop[] <- c("All", sort(unique(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age)))
+      cohCoh_drop[] <- sort(unique(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age))
     }
   })
   addSpring(cohSex_b)
@@ -2146,15 +2146,15 @@ smart_gui <- function(){
   gruRadio_coh <- gradio(items = c("Age", "Birth"), selected = 1, container = cohGru_b, expand = TRUE, handler = function(h,...){
     if(svalue(gruRadio_coh) == "Age"){
       if(svalue(sourceCoh_r) == "Survey"){
-        cohCoh_drop[] <- c("All", sort(unique(my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age)))
+        cohCoh_drop[] <- sort(unique(my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age))
       }else{
-        cohCoh_drop[] <- c("All", sort(unique(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age)))
+        cohCoh_drop[] <- sort(unique(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age))
       }
     }else{
       if(svalue(sourceCoh_r) == "Survey"){
-        cohCoh_drop[] <- c("All", sort(unique(my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Birth)))
+        cohCoh_drop[] <- sort(unique(my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Birth))
       }else{
-        cohCoh_drop[] <- c("All", sort(unique(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Birth)))
+        cohCoh_drop[] <- sort(unique(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Birth))
       }
     }
   })
@@ -2169,6 +2169,7 @@ smart_gui <- function(){
     # svalue(sexRadio_coh)     # sex = "Female"
     # svalue(gruRadio_coh)   # group = "Age"
     # svalue(cohTyp_drop)    #  type = "LFD"
+    dev.set(dev.list()[pre_dev+7])
 
     if(svalue(sourceCoh_r) == "Survey"){
       cohSpe_ind <- which(my_project$specieInSurvey == svalue(spec_drop_coh))
@@ -2183,19 +2184,28 @@ smart_gui <- function(){
         if(svalue(gruRadio_coh) == "Age"){
           tmpLFD <- my_project$fisheryBySpecie[[cohSpe_ind]]$groMixout[[svalue(sexRadio_coh)]][my_project$fisheryBySpecie[[cohSpe_ind]]$groMixout[[svalue(sexRadio_coh)]]$Age == svalue(cohCoh_drop),]
           tmpLFD$UTC <- tmpLFD$Date
+          tmp_palette <- rainbow(max(cohCoh_drop[])+1)
+          suppressWarnings(grid.arrange(set_ggHistLfdTot(inLfd = tmpLFD) + scale_fill_manual(values = tmp_palette[svalue(cohCoh_drop)+1]),
+                                        set_ggHistUtcLfd(inLfd = tmpLFD) + scale_fill_manual(values = tmp_palette[svalue(cohCoh_drop)+1]),
+                                        set_ggHistUtcTot(inLfd = tmpLFD) + scale_fill_manual(values = tmp_palette[svalue(cohCoh_drop)+1]),
+                                        set_ggDotUtcSplit(inLfd = tmpLFD) + scale_color_manual(values = tmp_palette[svalue(cohCoh_drop)+1]),
+                                        layout_matrix = rbind(c(1,1,1,3),
+                                                              c(2,2,2,4),
+                                                              c(2,2,2,4))))
         }else{
           tmpLFD <- my_project$fisheryBySpecie[[cohSpe_ind]]$groMixout[[svalue(sexRadio_coh)]][my_project$fisheryBySpecie[[cohSpe_ind]]$groMixout[[svalue(sexRadio_coh)]]$Birth == svalue(cohCoh_drop),]
           tmpLFD$UTC <- tmpLFD$Date
-        }
-        dev.set(dev.list()[pre_dev+7])
+          tmpLFD$Month <- factor(tmpLFD$MonthChar, levels = month.abb)
 
-        suppressWarnings(grid.arrange(set_ggHistLfdTot(inLfd = tmpLFD),
-                                      set_ggHistUtcLfd(inLfd = tmpLFD),
-                                      set_ggHistUtcTot(inLfd = tmpLFD),
-                                      set_ggDotUtcSplit(inLfd = tmpLFD),
-                                      layout_matrix = rbind(c(1,1,1,3),
-                                                            c(2,2,2,4),
-                                                            c(2,2,2,4))))
+          tmp_palette <- brewer.pal(12, "Paired")
+          suppressWarnings(grid.arrange(set_ggHistLfdTot(inLfd = tmpLFD) + scale_fill_manual(values = tmp_palette[svalue(cohCoh_drop)-min(cohCoh_drop[])]),
+                                        set_ggHistUtcLfd(inLfd = tmpLFD) + scale_fill_manual(values = tmp_palette[svalue(cohCoh_drop)-min(cohCoh_drop[])]),
+                                        set_ggHistUtcTot(inLfd = tmpLFD) + scale_fill_manual(values = tmp_palette[svalue(cohCoh_drop)-min(cohCoh_drop[])]),
+                                        set_ggDotUtcSplit(inLfd = tmpLFD) + scale_color_manual(values = tmp_palette[svalue(cohCoh_drop)-min(cohCoh_drop[])]),
+                                        layout_matrix = rbind(c(1,1,1,3),
+                                                              c(2,2,2,4),
+                                                              c(2,2,2,4))))
+        }
       }else{
 
       }
