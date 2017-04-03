@@ -137,15 +137,15 @@ LFDtoBcell <- function(LCspe, abbF, abbM, LWpar){
 }
 
 
-GenOgiveSel <- function(lenCla, SelPar){
-  LCspe <- lenCla + (lenCla[2]-lenCla[1])/2
-  L50 <- SelPar[1]
-  L75 <- SelPar[2]
-  S1 <- L50 * log(3) /(L75 - L50)
-  S2 <- log(3) /(L75 - L50)
-  SL <- 1/(1 + exp(S1 - S2*LCspe))
-  return(SL)
-}
+# GenOgiveSel <- function(lenCla, SelPar){
+#   LCspe <- lenCla + (lenCla[2]-lenCla[1])/2
+#   L50 <- SelPar[1]
+#   L75 <- SelPar[2]
+#   S1 <- L50 * log(3) /(L75 - L50)
+#   S2 <- log(3) /(L75 - L50)
+#   SL <- 1/(1 + exp(S1 - S2*LCspe))
+#   return(SL)
+# }
 
 
 getLogit <- function(Lit, X, thrB, ptrain = 80, ptest = 20){
