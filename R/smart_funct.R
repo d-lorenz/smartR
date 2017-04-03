@@ -72,14 +72,14 @@ IntInvDis <- function(xdata, RefCell, IntCell,
 }
 
 
-FindCenters=function(vertexes,nvert){
-  ncenters=nrow(vertexes)/nvert
-  coords=matrix(0,ncenters,2)
-  colnames(coords)=c("LON","LAT")
-  for(i in 1:ncenters)	  coords[i,]=c(mean(vertexes[(i+4*(i-1)):(i+4*(i-1)+4),4]),
-                                      mean(vertexes[(i+4*(i-1)):(i+4*(i-1)+4),5]))
-  return(coords)
-}
+# FindCenters=function(vertexes,nvert){
+#   ncenters=nrow(vertexes)/nvert
+#   coords=matrix(0,ncenters,2)
+#   colnames(coords)=c("LON","LAT")
+#   for(i in 1:ncenters)	  coords[i,]=c(mean(vertexes[(i+4*(i-1)):(i+4*(i-1)+4),4]),
+#                                       mean(vertexes[(i+4*(i-1)):(i+4*(i-1)+4),5]))
+#   return(coords)
+# }
 
 ###############
 
