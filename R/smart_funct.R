@@ -177,42 +177,42 @@ LFDtoBcell <- function(LCspe, abbF, abbM, LWpar){
 # }
 
 
-FindFG <- function(grid_shp,
-                   grid_polyset,
-                   grid_centres,
-                   ncells,
-                   cells_data,
-                   numCuts = 50,
-                   minsize = 10,
-                   modeska="S",
-                   skater_method){
-  set.seed(123)
-  #Build the neighboorhod list
-  Grid.bh <- grid_shp[1]
-  bh.nb <- poly2nb(Grid.bh, queen=TRUE)
-  bh.mat <- cbind(rep(1:length(bh.nb),lapply(bh.nb,length)),unlist(bh.nb))
-  #Compute the basic objects for clustering
-  lcosts <- nbcosts(bh.nb,cells_data)
-  nb.w <- nb2listw(bh.nb, lcosts, style=modeska)
-  mst.bh <- mstree(nb.w, ini=1)
-  index <- 0
-  clu_matrix <- matrix(NA,ncells,length(numCuts))
-  #Perform the first CC (without removing spurious clusters)
-  for(nCuts in numCuts){
-    cat("Performing CC with ",nCuts," cuts.......")
-    index <- index +1
-    res1 <- skater(mst.bh[,1:2], cells_data, ncuts = nCuts, minsize,
-                   method=skater_method)
-    clu_matrix[,index] <- res1$groups
-    cat("Done","\n")
-  }
-  IndexS <- IndexCH <- numeric(ncol(clu_matrix))
-  for(i in 1:ncol(clu_matrix)){
-    IndexS <- silhouette(clu_matrix[,i],dist(cells_data,
-                                             method=skater_method))
-    IndexCH <-  get_CH(cells_data,clu_matrix[,i])
-  }
-}
+# FindFG <- function(grid_shp,
+#                    grid_polyset,
+#                    grid_centres,
+#                    ncells,
+#                    cells_data,
+#                    numCuts = 50,
+#                    minsize = 10,
+#                    modeska="S",
+#                    skater_method){
+#   set.seed(123)
+#   #Build the neighboorhod list
+#   Grid.bh <- grid_shp[1]
+#   bh.nb <- poly2nb(Grid.bh, queen=TRUE)
+#   bh.mat <- cbind(rep(1:length(bh.nb),lapply(bh.nb,length)),unlist(bh.nb))
+#   #Compute the basic objects for clustering
+#   lcosts <- nbcosts(bh.nb,cells_data)
+#   nb.w <- nb2listw(bh.nb, lcosts, style=modeska)
+#   mst.bh <- mstree(nb.w, ini=1)
+#   index <- 0
+#   clu_matrix <- matrix(NA,ncells,length(numCuts))
+#   #Perform the first CC (without removing spurious clusters)
+#   for(nCuts in numCuts){
+#     cat("Performing CC with ",nCuts," cuts.......")
+#     index <- index +1
+#     res1 <- skater(mst.bh[,1:2], cells_data, ncuts = nCuts, minsize,
+#                    method=skater_method)
+#     clu_matrix[,index] <- res1$groups
+#     cat("Done","\n")
+#   }
+#   IndexS <- IndexCH <- numeric(ncol(clu_matrix))
+#   for(i in 1:ncol(clu_matrix)){
+#     IndexS <- silhouette(clu_matrix[,i],dist(cells_data,
+#                                              method=skater_method))
+#     IndexCH <-  get_CH(cells_data,clu_matrix[,i])
+#   }
+# }
 
 getNNLS <- function(subX, subY, zeroFG){
   nnls_fit = nnls(as.matrix(subX), subY)
