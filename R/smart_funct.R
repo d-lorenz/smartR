@@ -148,33 +148,33 @@ LFDtoBcell <- function(LCspe, abbF, abbM, LWpar){
 # }
 
 
-getLogit <- function(Lit, X, thrB, ptrain = 80, ptest = 20){
-  Litb = 1*(Lit > thrB)
-  # wcol <- which(substr(colnames(X),1,2) %in% c("FG","MO","YE"))
-  XY <- cbind(X,Litb)
-  itrain <- sample(1:nrow(XY),floor(nrow(XY)*ptrain/100),replace = FALSE)
-  itest <- setdiff(1:nrow(XY),unique(itrain))
-
-  # wFG <- which(substr(colnames(XY),1,2) =="FG")
-  wFG <- c(3:(ncol(XY)-1))
-  FGsum <- apply(XY[,wFG],2,sum)
-  zeroFG <- which(FGsum==0)
-  if(length(zeroFG)>0) XY <- XY[,-wFG[zeroFG]]
-
-  logit_f <- glm(Litb ~. , family = "binomial", data = as.data.frame(XY[itrain,]))
-  predf <- 1*(predict(logit_f, newdata = as.data.frame(XY[itest,-ncol(XY)]), type = "response")>0.5)
-
-  #Result #1: % of correct fish/non fish prediction
-  confm <- 100*sum(diag(table(predf,Litb[itest])))/sum(table(predf,Litb[itest]))
-  cat("\nLogit preliminary performance = ", confm, "%", sep = "")
-  logit_f <- glm(Litb ~. , family="binomial", data = as.data.frame(XY))
-  LogitList <- vector(mode="list", length=3)
-  LogitList[[1]] <- confm
-  LogitList[[2]] <- logit_f
-  LogitList[[3]] <- zeroFG
-  names(LogitList) <- c("confm","logit_f","zeroFG")
-  return(LogitList)
-}
+# getLogit <- function(Lit, X, thrB, ptrain = 80, ptest = 20){
+#   Litb = 1*(Lit > thrB)
+#   # wcol <- which(substr(colnames(X),1,2) %in% c("FG","MO","YE"))
+#   XY <- cbind(X,Litb)
+#   itrain <- sample(1:nrow(XY),floor(nrow(XY)*ptrain/100),replace = FALSE)
+#   itest <- setdiff(1:nrow(XY),unique(itrain))
+#
+#   # wFG <- which(substr(colnames(XY),1,2) =="FG")
+#   wFG <- c(3:(ncol(XY)-1))
+#   FGsum <- apply(XY[,wFG],2,sum)
+#   zeroFG <- which(FGsum==0)
+#   if(length(zeroFG)>0) XY <- XY[,-wFG[zeroFG]]
+#
+#   logit_f <- glm(Litb ~. , family = "binomial", data = as.data.frame(XY[itrain,]))
+#   predf <- 1*(predict(logit_f, newdata = as.data.frame(XY[itest,-ncol(XY)]), type = "response")>0.5)
+#
+#   #Result #1: % of correct fish/non fish prediction
+#   confm <- 100*sum(diag(table(predf,Litb[itest])))/sum(table(predf,Litb[itest]))
+#   cat("\nLogit preliminary performance = ", confm, "%", sep = "")
+#   logit_f <- glm(Litb ~. , family="binomial", data = as.data.frame(XY))
+#   LogitList <- vector(mode="list", length=3)
+#   LogitList[[1]] <- confm
+#   LogitList[[2]] <- logit_f
+#   LogitList[[3]] <- zeroFG
+#   names(LogitList) <- c("confm","logit_f","zeroFG")
+#   return(LogitList)
+# }
 
 
 FindFG <- function(grid_shp,
