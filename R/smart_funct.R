@@ -83,24 +83,24 @@ IntInvDis <- function(xdata, RefCell, IntCell,
 
 ###############
 
-GenS <- function(Abbmat, num_cla, qqM, LCspe, yea, num_coh, MixtureP){
-  new_dim <- dim(Abbmat)
-  new_dim[2] <- num_cla
-  new_dim[3] <- 1
-  TempArray <- array(0,dim=new_dim)
-  for(sex in 1:2){
-    for(coh in 1:num_coh){
-      mmcoh <- MixtureP[[sex]]$Means[yea,coh]
-      sdcoh <- MixtureP[[sex]]$Sigmas[yea,coh]
-      for(ij in 1:dim(TempArray)[1]){
-        abbcoh <- Abbmat[ij,coh,yea,sex]
-        add <- floor((1/qqM)*abbcoh*dnorm(LCspe,mmcoh,sdcoh))
-        TempArray[ij,,1,sex] <- TempArray[ij,,1,sex]+add
-      }
-    }
-  }
-  return(TempArray)
-}
+# GenS <- function(Abbmat, num_cla, qqM, LCspe, yea, num_coh, MixtureP){
+#   new_dim <- dim(Abbmat)
+#   new_dim[2] <- num_cla
+#   new_dim[3] <- 1
+#   TempArray <- array(0,dim=new_dim)
+#   for(sex in 1:2){
+#     for(coh in 1:num_coh){
+#       mmcoh <- MixtureP[[sex]]$Means[yea,coh]
+#       sdcoh <- MixtureP[[sex]]$Sigmas[yea,coh]
+#       for(ij in 1:dim(TempArray)[1]){
+#         abbcoh <- Abbmat[ij,coh,yea,sex]
+#         add <- floor((1/qqM)*abbcoh*dnorm(LCspe,mmcoh,sdcoh))
+#         TempArray[ij,,1,sex] <- TempArray[ij,,1,sex]+add
+#       }
+#     }
+#   }
+#   return(TempArray)
+# }
 
 
 GenPop <- function(Abbmat, num_cla, LCspe, RA, qMM, num_ye, num_coh, MixtureP){
