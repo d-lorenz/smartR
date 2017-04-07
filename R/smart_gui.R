@@ -1524,6 +1524,74 @@ smart_gui <- function(){
 
 
 
+    temp_dia <- gwindow(title="Set Max Beta", visible = FALSE,
+                        parent = main_win,
+                        width = 950, height = 500)
+
+    up_g <- ggroup(horizontal = FALSE, container = temp_dia, expand = TRUE)
+    up_fra <- gframe(container = up_g, horizontal = TRUE, expand = TRUE)
+    # addSpring(up_fra)
+    addSpace(up_fra, 20)
+    spe_fra <- gframe(text = "Specie", container = up_fra, horizontal = TRUE, expand = TRUE)
+    addSpring(spe_fra)
+    glabel(text = svalue(spe_drop), container = spe_fra)
+    # spe_drop <- gcombobox(sort(names(my_project$fleet$specSett)[which(!unlist(lapply(my_project$fleet$specSett, is.null)))]), selected = 1,
+    #                       editable = FALSE, container = spe_fra, expand = TRUE,
+    #                       handler = function(...){
+    #
+    #                       })
+
+    addSpring(spe_fra)
+    addSpace(up_fra, 20)
+
+    thr_fra <- gframe(text = "Max Beta", container = up_fra, expand = TRUE, horizontal = TRUE)
+
+    addSpace(thr_fra, 20)
+    thr_spin <- gslider(from = 1, to = 1,
+                        by = 0.1, value = 0, container = thr_fra, expand = TRUE,
+                        handler = function(...){
+
+                        })
+    addSpace(up_fra, 20)
+    addSpace(thr_fra, 20)
+
+    gbutton(text = "\n   Save   \n", container = up_fra, handler = function(...){
+
+      ggplot_betasBoxplot(df_YearFGprod = my_project$fleet$betaMeltYear[[svalue(spe_drop)]])
+
+      svalue(set_lab) <- "Saved"
+      delete(set_gru, set_gru$children[[length(set_gru$children)]])
+      add(set_gru, logi_sta_n)
+    })
+
+    addSpace(up_fra, 20)
+    set_gru_up <- ggroup(container = up_fra, horizontal = FALSE)
+    addSpring(set_gru_up)
+    set_lab <- glabel(text = "Not Saved", container = set_gru_up)
+    set_gru <- ggroup(container = set_gru_up, horizontal = TRUE)
+    addSpring(set_gru_up)
+    addSpace(up_fra, 20)
+
+    # addSpring(up_fra)
+    gbutton(text = " Close\nWindow", container = up_fra, handler = function(...){
+      dispose(temp_dia)
+    })
+    addSpace(up_fra, 20)
+    # addSpace(up_g, 20)
+    bot_g <- ggroup(horizontal = TRUE, container = up_g)
+
+
+    nnls_gra <- ggraphics(width = 300, height = 400, container = bot_g, expand = TRUE)
+    visible(temp_dia) <- TRUE
+    addSpace(bot_g, 10)
+
+    logi_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
+    logi_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
+    add(set_gru, logi_sta)
+
+
+
+
   })
   addSpring(pro_g_topBeta)
 
