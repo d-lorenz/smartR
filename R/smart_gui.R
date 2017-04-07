@@ -1557,7 +1557,7 @@ smart_gui <- function(){
 
     gbutton(text = "\n   Save   \n", container = up_fra, handler = function(...){
 
-      ggplot_betasBoxplot(df_YearFGprod = my_project$fleet$betaMeltYear[[svalue(spe_drop)]])
+      print(ggplot_betasBoxplot(df_YearFGprod = my_project$fleet$betaMeltYear[[svalue(spe_drop)]]))
 
       svalue(set_lab) <- "Saved"
       delete(set_gru, set_gru$children[[length(set_gru$children)]])
