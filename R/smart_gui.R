@@ -1544,16 +1544,16 @@ smart_gui <- function(){
     addSpring(spe_fra)
     addSpace(up_fra, 20)
 
-    thr_fra <- gframe(text = "Max Beta", container = up_fra, expand = TRUE, horizontal = TRUE)
+    maxb_fra <- gframe(text = "Max Beta", container = up_fra, expand = TRUE, horizontal = TRUE)
 
-    addSpace(thr_fra, 20)
-    thr_spin <- gslider(from = 1, to = 1,
-                        by = 0.1, value = 0, container = thr_fra, expand = TRUE,
+    addSpace(maxb_fra, 20)
+    maxb_spin <- gslider(from = 1, to = 5000,
+                        by = 0.1, value = 0, container = maxb_fra, expand = TRUE,
                         handler = function(...){
 
                         })
     addSpace(up_fra, 20)
-    addSpace(thr_fra, 20)
+    addSpace(maxb_fra, 20)
 
     gbutton(text = "\n   Save   \n", container = up_fra, handler = function(...){
 
