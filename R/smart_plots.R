@@ -1,6 +1,28 @@
 
 # SmartR Plots ----
 
+## Production - Betas x FG Boxplot
+ggplot_betasBoxplot = function(df_YearFGprod){
+  return(
+    suppressMessages(
+      ggplot(df_YearFGprod,
+             aes_(x = ~FishGround, y = ~Productivity,
+                  group = ~FishGround)) +
+        geom_boxplot() +
+        geom_jitter(data = df_YearFGprod,
+                    aes_(x = ~FishGround, y = ~Productivity,
+                         # fill = ~Productivity,
+                         group = ~FishGround,
+                         color = ~Year),
+                    size = 2, shape = 19, alpha = 0.6,
+                    height = 0) +
+        theme_tufte(base_size = 14, ticks=F) +
+        xlab("Fishing Ground") +
+        theme(legend.position='right')
+    )
+  )
+}
+
 ## Fleet Register - Plot Dispatch ----
 ggplot_registerDispatch = function(curRegister, selPlot){
   suppressWarnings(
