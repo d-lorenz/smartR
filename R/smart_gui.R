@@ -1557,8 +1557,6 @@ smart_gui <- function(){
 
     gbutton(text = "\n   Save   \n", container = up_fra, handler = function(...){
 
-      print(ggplot_betasBoxplot(df_YearFGprod = my_project$fleet$betaMeltYear[[svalue(spe_drop)]]))
-
       svalue(set_lab) <- "Saved"
       delete(set_gru, set_gru$children[[length(set_gru$children)]])
       add(set_gru, logi_sta_n)
@@ -1580,7 +1578,6 @@ smart_gui <- function(){
     # addSpace(up_g, 20)
     bot_g <- ggroup(horizontal = TRUE, container = up_g)
 
-
     nnls_gra <- ggraphics(width = 300, height = 400, container = bot_g, expand = TRUE)
     visible(temp_dia) <- TRUE
     addSpace(bot_g, 10)
@@ -1588,6 +1585,8 @@ smart_gui <- function(){
     logi_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
     logi_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
     add(set_gru, logi_sta)
+
+    print(ggplot_betasBoxplot(df_YearFGprod = my_project$fleet$betaMeltYear[[svalue(spe_drop)]]))
 
 
 
