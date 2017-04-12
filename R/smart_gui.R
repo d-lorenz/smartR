@@ -36,6 +36,9 @@ smart_gui <- function(){
   pathEffortAA <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
   # pathEffortAA <- "/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/smart_rawEffort_new.rData"
 
+  # SURVEY DATA
+  pathSurvey <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Survey/survey_data_MEDITS.csv"
+
   # FISHERY DATA
   # pathFishery <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Fishery/fishery_merge_CampBiol.csv"
   pathFishery <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Fishery/fishery_data_CampBiol_noExpLand.csv"
@@ -1661,7 +1664,7 @@ smart_gui <- function(){
   gbutton("Load Sample", container = raw_g_top1, handler = function(h,...){
     svalue(stat_bar) <- "Loading Data..."
     Sys.sleep(1)
-    my_project$loadSurveyLFD(csv_path = "/Users/Lomo/Documents/Uni/Lab/Proj/smart\ gui/SMART_GUI/SampleData_ed.csv")
+    my_project$loadSurveyLFD(csv_path = pathSurvey)
 
     if(!is.null(my_project$rawDataSurvey)){ #update_pop_gui()
 
