@@ -132,9 +132,9 @@ smart_gui <- function(){
       # spec_drop[] <- my_project$specieInSurvey            ##  droplist from population tab
       spec_drop_mix[] <- my_project$specieInSurvey
       # spevie_drop[] <- c("All", my_project$specieInSurvey)
-      cohSpe_drop[] <- my_project$specieInSurvey
+      # cohSpe_drop[] <- my_project$specieInSurvey
       # svalue(spec_drop) <- my_project$specieInSurvey[1]   ##  droplist from population tab
-      svalue(cohSpe_drop) <- my_project$specieInSurvey[1]
+      # svalue(cohSpe_drop) <- my_project$specieInSurvey[1]
       # svalue(spevie_drop) <- "All"
       svalue(spec_drop_mix) <- my_project$specieInSurvey[1]
       year_drop[] <- c("All", as.character(my_project$yearInSurvey))
@@ -1675,9 +1675,9 @@ smart_gui <- function(){
       # spec_drop[] <- my_project$specieInSurvey
       spec_drop_mix[] <- my_project$specieInSurvey
       # spevie_drop[] <- c("All", my_project$specieInSurvey)
-      cohSpe_drop[] <- my_project$specieInSurvey
+      # cohSpe_drop[] <- my_project$specieInSurvey
       # svalue(spec_drop) <- my_project$specieInSurvey[1]
-      svalue(cohSpe_drop) <- my_project$specieInSurvey[1]
+      # svalue(cohSpe_drop) <- my_project$specieInSurvey[1]
       # svalue(spevie_drop) <- "All"
       svalue(spec_drop_mix) <- my_project$specieInSurvey[1]
       # year_drop[] <- c("All", as.character(my_project$yearInSurvey))
