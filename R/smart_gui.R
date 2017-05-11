@@ -1681,9 +1681,9 @@ smart_gui <- function(){
       # svalue(spevie_drop) <- "All"
       svalue(spec_drop_mix) <- my_project$specieInSurvey[1]
       # year_drop[] <- c("All", as.character(my_project$yearInSurvey))
-      cohYea_drop[] <- c("All", as.character(my_project$yearInSurvey))
+      # cohYea_drop[] <- c("All", as.character(my_project$yearInSurvey))
       # svalue(year_drop) <- my_project$yearInSurvey[1]
-      svalue(cohYea_drop) <- "All"
+      # svalue(cohYea_drop) <- "All"
 
       if(!is.null(my_project$sampMap)){
         svalue(stat_bar) <- "Splitting Survey Population..."
