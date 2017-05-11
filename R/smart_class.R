@@ -147,6 +147,11 @@ SmartProject <- R6Class("smartProject",
                               fisheryBySpecie[[i]]$setSpatDistSing()
                             }
                           },
+                          setDepthSurvey = function(){
+                            for(i in 1:length(surveyBySpecie)){
+                              surveyBySpecie[[i]]$setDepth(bathyMatrix = sampMap$gridBathy)
+                            }
+                          },
                           setLFDPopSurvey = function(){
                             if(length(specieInSurvey) == 1){
                               calcLFDPopSurvey(1)
