@@ -994,6 +994,9 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                             setYears = function(){year <<- sort(unique(rawLFD[,"Year"]), decreasing = FALSE)},
                             setSpecie = function(){specie <<- unique(rawLFD[,"SPECIE"])},
                             setLClass = function(){lengClas <<- seq(from = min(rawLFD[,"LCLASS"]), to = max(rawLFD[,"LCLASS"]), by = 1) },
+                            setDepth = function(bathyMatrix){
+                              rawLFD$Depth <<- get.depth(bathyMatrix, x = rawLFD$LON, y = rawLFD$LAT, locator = FALSE)[,3]
+                            },
                             setNCoho = function(num_coh){nCoho <<- num_coh},
                             setPrior = function(f_linf, f_k, f_t0, m_linf, m_k, m_t0){
                               prior <<- list('Female' = list('Linf' = list('Mean' = f_linf[1], 'StD' = f_linf[2]),
