@@ -1002,6 +1002,10 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                             setDepth = function(bathyMatrix){
                               rawLFD$Depth <<- get.depth(bathyMatrix, x = rawLFD$LON, y = rawLFD$LAT, locator = FALSE)[,3]
                             },
+                            setStratum = function(vecStrata = c(0, 10, 100, 1000, Inf)){
+                              tmp_mem <- findInterval(x = -rawLFD$Depth, vec = vecStrata)
+                              rawLFD$Stratum <<- factor(tmp_mem, levels = 1:(length(vecStrata)-1), labels = paste(vecStrata[-length(vecStrata)], vecStrata[-1], sep = " - "))
+                            },
                             setNCoho = function(num_coh){nCoho <<- num_coh},
                             setPrior = function(f_linf, f_k, f_t0, m_linf, m_k, m_t0){
                               prior <<- list('Female' = list('Linf' = list('Mean' = f_linf[1], 'StD' = f_linf[2]),
