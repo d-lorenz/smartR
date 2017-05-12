@@ -152,6 +152,11 @@ SmartProject <- R6Class("smartProject",
                               surveyBySpecie[[i]]$setDepth(bathyMatrix = sampMap$gridBathy)
                             }
                           },
+                          setStratumSurvey = function(vectorStrata = c(0, 10, 100, 1000, Inf)){
+                            for(i in 1:length(surveyBySpecie)){
+                              surveyBySpecie[[i]]$setStratum(vecStrata = vectorStrata)
+                            }
+                          },
                           setLFDPopSurvey = function(){
                             if(length(specieInSurvey) == 1){
                               calcLFDPopSurvey(1)
