@@ -2499,7 +2499,7 @@ SampleMap <- R6Class("sampleMap",
                          proj4string(tmp_grid) <- proj4string(clipDept)
                          clipDept[which(is.na(over(clipDept, tmp_grid)))] <- NA
                          clipDept <- as.bathy(clipDept)
-                         areaGrid <<- get.area(clipDept, level.inf = -Inf, level.sup = 0)
+                         areaGrid <<- get.area(clipDept, level.inf = -Inf, level.sup = 0)[[1]]
                        },
                        setAreaStrata = function(vectorStrata = c(0, 10, 100, 1000, Inf)){
                          clipDept <- as.SpatialGridDataFrame(gridBathy)
