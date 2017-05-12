@@ -2513,9 +2513,7 @@ SampleMap <- R6Class("sampleMap",
                                                 "-",
                                                 vectorStrata[stratum+1],
                                                 sep = "")
-                           strataList[[stratum_ith]] <- marmap::get.area(clipDept,
-                                                                         level.inf = -vectorStrata[stratum+1],
-                                                                         level.sup = -vectorStrata[stratum])
+                           strataList[[stratum_ith]] <- get.area(clipDept, level.inf = -vectorStrata[stratum+1], level.sup = -vectorStrata[stratum])
                          }
                          areaStrata <<- unlist(lapply(strataList, "[[", 1))
                        },
