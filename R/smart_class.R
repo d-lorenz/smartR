@@ -2490,6 +2490,35 @@ SampleMap <- R6Class("sampleMap",
                          setGridCenter()
                          createGridBbox()
                        },
+                       setAreaGrid = function(){
+                         clipDept <- as.SpatialGridDataFrame(gridBathy)
+                         tmp_grid <- gridShp
+                         proj4string(tmp_grid) <- proj4string(clipDept)
+                         clipDept[which(is.na(over(clipDept, tmp_grid)))] <- NA
+                         clipDept <- as.bathy(clipDept)
+                         areaGrid <<- get.area(clipDept, level.inf = -Inf, level.sup = 0)
+                       },
+                       setAreaStrata = function(vectorStrata = c(0, 10, 100, 1000, Inf)){
+                         clipDept <- as.SpatialGridDataFrame(gridBathy)
+                         tmp_grid <- gridShp
+                         proj4string(tmp_grid) <- proj4string(clipDept)
+                         clipDept[which(is.na(over(clipDept, tmp_grid)))] <- NA
+                         clipDept <- as.bathy(clipDept)
+                         strataList <- list()
+                         for(stratum in 1:(length(vectorStrata)-1)){
+                           stratum_ith <- paste(vectorStrata[stratum],
+                                                "-",
+                                                vectorStrata[stratum+1],
+                                                sep = "")
+                           strataList[[stratum_ith]] <- marmap::get.area(clipDept,
+                                                                         level.inf = -vectorStrata[stratum+1],
+                                                                         level.sup = -vectorStrata[stratum])
+                         }
+                         areaStrata <<- unlist(lapply(strataList, "[[", 1))
+                       },
+                       setWeightStrata = function(){
+                         weightStrata <<- areaStrata/areaGrid
+                       },
                        loadHarbDbf = function(dbf_path){
                          tmp_dbf <- read.dbf(file = dbf_path)
                          colnames(tmp_dbf) <- c("XCOORD", "YCOORD", "Name")
