@@ -47,8 +47,8 @@ SmartProject <- R6Class("smartProject",
                             # Check fleet$effoAllLoa sampMap$cutFG sampMap$fgWeigDist
                             cat("\nComputing Effort Index...", sep = "")
                             tmp_ei <- apply(data.frame(mapply(`*`,
-                                       my_project$fleet$effoAllLoa[, 4:(my_project$sampMap$cutFG+4)],
-                                       my_project$sampMap$fgWeigDist)), 1, sum)
+                                                              my_project$fleet$effoAllLoa[, 4:(my_project$sampMap$cutFG+4)],
+                                                              my_project$sampMap$fgWeigDist)), 1, sum)
                             fleet$effortIndex <<- data.frame(my_project$fleet$effoAllLoa[,c(1:3,ncol(my_project$fleet$effoAllLoa))],
                                                              EffInd = tmp_ei)
                             cat(" Completed!", sep = "")
