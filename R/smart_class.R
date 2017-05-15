@@ -812,8 +812,8 @@ SmartProject <- R6Class("smartProject",
                             for(y in 1:length(surveyBySpecie[[ind_num]]$year)){
                               subLFD <- surveyBySpecie[[ind_num]]$rawLFD[which(surveyBySpecie[[ind_num]]$rawLFD$Year==surveyBySpecie[[ind_num]]$year[y]),]
                               poinOver <- as.numeric(sp::over(SpatialPoints(subLFD[,c("Lon","Lat")]), SpatialPolygons(sampMap$gridShp@polygons)))
-                              subLFD <- cbind(subLFD[,c("Class", "Female", "MALE")], poinOver)
-                              colnames(subLFD) <- c("Class", "Female", "MALE", "Cell")
+                              subLFD <- cbind(subLFD[,c("Class", "Female", "Male")], poinOver)
+                              colnames(subLFD) <- c("Class", "Female", "Male", "Cell")
                               for(IDcell in 1:sampMap$nCells){
                                 if(length(which(subLFD[,"Cell"] == IDcell))>0){
                                   cell.data <- subLFD[which(subLFD[,"Cell"] == IDcell),]
