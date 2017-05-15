@@ -1758,6 +1758,10 @@ smart_gui <- function(){
 
   addSpring(raw_g_top)
 
+
+
+  addSpring(raw_g_top)
+
   raw_g_top2 <- ggroup(horizontal = FALSE, container = raw_g_top)
   raw_l1 <- glabel("Specie: ", container = raw_g_top2)
   raw_l3 <- glabel("Years: ", container = raw_g_top2)
