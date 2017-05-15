@@ -148,7 +148,7 @@ SmartProject <- R6Class("smartProject",
                             }
                           },
                           setDepthSurvey = function(){
-                            cat("\nSetting depth of survey data:", sep = "")
+                            cat("\n\nSetting depth of survey data:", sep = "")
                             for(i in 1:length(surveyBySpecie)){
                               cat("\n\t", surveyBySpecie[[i]]$specie, "... ", sep = "")
                               surveyBySpecie[[i]]$setDepth(bathyMatrix = sampMap$gridBathy)
@@ -156,8 +156,11 @@ SmartProject <- R6Class("smartProject",
                             }
                           },
                           setStratumSurvey = function(vectorStrata = c(0, 10, 100, 1000, Inf)){
+                            cat("\n\nSetting stratum of survey data:", sep = "")
                             for(i in 1:length(surveyBySpecie)){
+                              cat("\n\t", surveyBySpecie[[i]]$specie, "... ", sep = "")
                               surveyBySpecie[[i]]$setStratum(vecStrata = vectorStrata)
+                              cat("Done!", sep = "")
                             }
                           },
                           setLFDPopSurvey = function(){
