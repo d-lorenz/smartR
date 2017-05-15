@@ -163,6 +163,16 @@ SmartProject <- R6Class("smartProject",
                               cat("Done!", sep = "")
                             }
                           },
+                          setAbuAvgAll = function(){
+                            cat("\n\nComputing average Number of individuals x Size x Stratum: ", sep = "")
+                            for(i in 1:length(surveyBySpecie)){
+                              cat("\n\t", surveyBySpecie[[i]]$specie, "... ", sep = "")
+                              surveyBySpecie[[i]]$abuAvg$indFem <- surveyBySpecie[[i]]$abuAvg$Female*sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
+                              surveyBySpecie[[i]]$abuAvg$indMal <- surveyBySpecie[[i]]$abuAvg$Male*sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
+                              surveyBySpecie[[i]]$abuAvg$indUns <- surveyBySpecie[[i]]$abuAvg$Unsex*sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
+                              cat("Done!", sep = "")
+                            }
+                          },
                           setLFDPopSurvey = function(){
                             if(length(specieInSurvey) == 1){
                               calcLFDPopSurvey(1)
