@@ -183,6 +183,7 @@ SmartProject <- R6Class("smartProject",
                               surveyBySpecie[[i]]$abuAvg$indUns <- surveyBySpecie[[i]]$abuAvg$Unsex*sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
                               cat("Done!", sep = "")
                             }
+                            cat("\nCompleted!", sep = "")
                           },
                           setLFDPopSurvey = function(){
                             if(length(specieInSurvey) == 1){
