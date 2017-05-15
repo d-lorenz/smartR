@@ -1758,7 +1758,53 @@ smart_gui <- function(){
 
   addSpring(raw_g_top)
 
+  gbutton("   Get\nMEDITS index", container = raw_g_top, handler = function(h,...){
 
+    strataVect <- c(0, 10, 50, 100, 200, 500, 800, Inf)
+
+    temp_dia <- gwindow(title="Medits index calculator", visible = FALSE,
+                        parent = main_win,
+                        width = 550, height = 400)
+
+    med_g <- ggroup(horizontal = FALSE, container = temp_dia)
+    med_g_top <- gframe(horizontal = TRUE, container = med_g, spacing = 10)
+
+    addSpace(med_g_top, 10)
+
+    comfra_g <- gframe("Compute", horizontal = TRUE, container = med_g_top, expand = TRUE)
+    addSpring(comfra_g)
+
+    depth_b <- gbutton(text = "Set Strata", container = comfra_g, handler = function(h,...){
+      my_project$setDepthSurvey()
+      my_project$setStratumSurvey(vectorStrata = strataVect)
+    })
+
+    addSpring(comfra_g)
+
+    area_b <- gbutton(text = "Set Areas", container = comfra_g, handler = function(h,...){
+      my_project$sampMap$setAreaGrid()
+      my_project$sampMap$setAreaStrata(vectorStrata = strataVect)
+      my_project$sampMap$setWeightStrata()
+    })
+
+    addSpring(comfra_g)
+
+    area_b <- gbutton(text = "Get Index", container = comfra_g, handler = function(h,...){
+
+    })
+
+    addSpring(comfra_g)
+    addSpring(med_g_top)
+    pop_p <- ggraphics(container = med_g, width = 550, height = 250, expand = TRUE)
+
+    gbutton("Close", container = med_g_top, handler = function(h,...){
+      dispose(temp_dia)
+    })
+    addSpace(med_g_top, 10)
+
+    visible(temp_dia) <- TRUE
+
+  })
 
   addSpring(raw_g_top)
 
