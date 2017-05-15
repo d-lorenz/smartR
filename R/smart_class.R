@@ -162,6 +162,7 @@ SmartProject <- R6Class("smartProject",
                               surveyBySpecie[[i]]$setStratum(vecStrata = vectorStrata)
                               cat("Done!", sep = "")
                             }
+                            cat("\nCompleted!", sep = "")
                           },
                           setAbuAvgAll = function(){
                             cat("\n\nComputing average Number of individuals x Size x Stratum: ", sep = "")
