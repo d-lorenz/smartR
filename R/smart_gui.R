@@ -1792,6 +1792,7 @@ smart_gui <- function(){
     area_b <- gbutton(text = "Get Index", container = comfra_g, handler = function(h,...){
       my_project$setAbuAvgAll()
       my_project$setStrataAbu()
+      my_project$setMeditsIndex()
     })
 
     addSpring(comfra_g)
