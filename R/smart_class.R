@@ -1044,6 +1044,11 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               tmp_mem <- findInterval(x = -rawLFD$Depth, vec = vecStrata)
                               rawLFD$Stratum <<- factor(tmp_mem, levels = 1:(length(vecStrata)-1), labels = paste(vecStrata[-length(vecStrata)], vecStrata[-1], sep = " - "))
                             },
+                            setIndSpe = function(){
+                              abuAvg$indFem <<- aggregate(weiFem ~ Class, data = abuAvg, sum)
+                              abuAvg$indMal <<- aggregate(weiMal ~ Class, data = abuAvg, sum)
+                              abuAvg$indUns <<- aggregate(weiUns ~ Class, data = abuAvg, sum)
+                            },
                             setAbuAvg = function(){
                               tmp_aggFem <- aggregate(Female ~ Class + Stratum, data = rawLFD, mean)
                               tmp_aggMal <- aggregate(Male ~ Class + Stratum, data = rawLFD, mean)
