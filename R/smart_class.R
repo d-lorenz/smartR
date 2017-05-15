@@ -119,14 +119,14 @@ SmartProject <- R6Class("smartProject",
                           setYearFishery = function(){yearInFishery <<- sort(unique(years(rawDataFishery[,"Date"])), decreasing = FALSE)},
                           loadMap = function(map_path){sampMap <<- SampleMap$new(map_path)},
                           createFleet = function(){fleet <<- FishFleet$new()},
-                          setSpecieSurvey = function(){specieInSurvey <<- unique(rawDataSurvey[,"SPECIE"])},
+                          setSpecieSurvey = function(){specieInSurvey <<- unique(rawDataSurvey[,"Specie"])},
                           setSpecieFishery = function(){specieInFishery <<- unique(rawDataFishery[,"Specie"])},
                           splitSpecieSurvey = function(){
                             if(length(specieInSurvey) == 1){
                               addSpecieSurvey(rawDataSurvey)
                             }else{
                               for(i in 1:length(specieInSurvey)){
-                                addSpecieSurvey(rawDataSurvey[rawDataSurvey[,"SPECIE"] == specieInSurvey[i],])}}
+                                addSpecieSurvey(rawDataSurvey[rawDataSurvey[,"Specie"] == specieInSurvey[i],])}}
                           },
                           splitSpecieFishery = function(){
                             if(length(specieInFishery) == 1){
@@ -251,11 +251,11 @@ SmartProject <- R6Class("smartProject",
                           plotGooSpe = function(whiSpe, whiSou){
                             if(whiSou == "Survey"){
                               if(whiSpe == "All"){
-                                tmp_data <- unique(rawDataSurvey[,c("SPECIE", "LAT", "LON")])
+                                tmp_data <- unique(rawDataSurvey[,c("Specie", "LAT", "LON")])
                               }else{
-                                tmp_data <- unique(rawDataSurvey[which(rawDataSurvey$SPECIE == whiSpe),c("SPECIE", "LAT", "LON")])
+                                tmp_data <- unique(rawDataSurvey[which(rawDataSurvey$Specie == whiSpe),c("Specie", "LAT", "LON")])
                               }
-                              # levels(tmp_data[,1]) <- unique(rawDataSurvey[,"SPECIE"])
+                              # levels(tmp_data[,1]) <- unique(rawDataSurvey[,"Specie"])
 
                               sampMap$plotGooSpeSur(tmp_data)
                             }else{
@@ -997,7 +997,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               setLClass()
                             },
                             setYears = function(){year <<- sort(unique(rawLFD[,"Year"]), decreasing = FALSE)},
-                            setSpecie = function(){specie <<- unique(rawLFD[,"SPECIE"])},
+                            setSpecie = function(){specie <<- unique(rawLFD[,"Specie"])},
                             setLClass = function(){lengClas <<- seq(from = min(rawLFD[,"LCLASS"]), to = max(rawLFD[,"LCLASS"]), by = 1) },
                             setDepth = function(bathyMatrix){
                               rawLFD$Depth <<- get.depth(bathyMatrix, x = rawLFD$LON, y = rawLFD$LAT, locator = FALSE)[,3]
@@ -2611,11 +2611,11 @@ SampleMap <- R6Class("sampleMap",
                        setSampColScale = function(fac_col){
                          myColors <- brewer.pal(length(fac_col), "Set1")
                          names(myColors) <- fac_col
-                         sampColScale <<- scale_colour_manual(name = "SPECIE",values = myColors)
+                         sampColScale <<- scale_colour_manual(name = "Specie",values = myColors)
                        },
                        plotGooSpeSur = function(poi_data){
                          temp_pos <- suppressMessages(gooGrid + geom_jitter(data = poi_data,
-                                                                            aes(x = LON, y = LAT, shape = SPECIE, color = SPECIE),
+                                                                            aes(x = LON, y = LAT, shape = Specie, color = Specie),
                                                                             width = 0.05, height = 0.05, alpha = 0.95) + sampColScale)
                          suppressWarnings(print(temp_pos))
                        },
