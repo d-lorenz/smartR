@@ -172,6 +172,7 @@ SmartProject <- R6Class("smartProject",
                               surveyBySpecie[[i]]$setAbuAvg()
                               cat("Done!", sep = "")
                             }
+                            cat("\nCompleted!", sep = "")
                           },
                           setStrataAbu = function(){
                             cat("\n\nComputing weighted Number of individuals x Size x Stratum: ", sep = "")
