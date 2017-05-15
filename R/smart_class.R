@@ -2507,9 +2507,10 @@ SampleMap <- R6Class("sampleMap",
                          clipDept[which(is.na(over(clipDept, tmp_grid)))] <- NA
                          clipDept <- as.bathy(clipDept)
                          areaGrid <<- get.area(clipDept, level.inf = -Inf, level.sup = 0)[[1]]
-                         cat("Done!", sep = "")
+                         cat("Completed!", sep = "")
                        },
                        setAreaStrata = function(vectorStrata = c(0, 10, 100, 1000, Inf)){
+                         cat("\n\nComputing Area of Strata: ", sep = "")
                          clipDept <- as.SpatialGridDataFrame(gridBathy)
                          tmp_grid <- gridShp
                          proj4string(tmp_grid) <- proj4string(clipDept)
