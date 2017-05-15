@@ -174,13 +174,22 @@ SmartProject <- R6Class("smartProject",
                             }
                             cat("\nCompleted!", sep = "")
                           },
+                          setMeditsIndex = function(){
+                            cat("\n\nComputing MEDITS index: ", sep = "")
+                            for(i in 1:length(surveyBySpecie)){
+                              cat("\n\t", surveyBySpecie[[i]]$specie, "... ", sep = "")
+                              surveyBySpecie[[i]]$setIndSpe()
+                              cat("Done!", sep = "")
+                            }
+                            cat("\nCompleted!", sep = "")
+                          },
                           setStrataAbu = function(){
                             cat("\n\nComputing weighted Number of individuals x Size x Stratum: ", sep = "")
                             for(i in 1:length(surveyBySpecie)){
                               cat("\n\t", surveyBySpecie[[i]]$specie, "... ", sep = "")
-                              surveyBySpecie[[i]]$abuAvg$indFem <- surveyBySpecie[[i]]$abuAvg$Female*sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
-                              surveyBySpecie[[i]]$abuAvg$indMal <- surveyBySpecie[[i]]$abuAvg$Male*sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
-                              surveyBySpecie[[i]]$abuAvg$indUns <- surveyBySpecie[[i]]$abuAvg$Unsex*sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
+                              surveyBySpecie[[i]]$abuAvg$weiFem <- surveyBySpecie[[i]]$abuAvg$Female*sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
+                              surveyBySpecie[[i]]$abuAvg$weiMal <- surveyBySpecie[[i]]$abuAvg$Male*sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
+                              surveyBySpecie[[i]]$abuAvg$weiUns <- surveyBySpecie[[i]]$abuAvg$Unsex*sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
                               cat("Done!", sep = "")
                             }
                             cat("\nCompleted!", sep = "")
