@@ -1723,7 +1723,7 @@ smart_gui <- function(){
 
       spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
       svalue(year_drop) <- "All"
-      my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[,c("Class","FEMALE","MALE")]
+      my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[,c("Class","Female","MALE")]
       the_reclfd <- RecLFD(my_cel_dat, my_project$surveyBySpecie[[spe_ind]]$lengClas, 1)
       plotRecLFD(the_reclfd)
 
@@ -1734,7 +1734,7 @@ smart_gui <- function(){
     addSpring(year_b)
     year_drop <- gcombobox(items = c("All", as.character(my_project$yearInSurvey)), selected = 1, container = year_b, editable = FALSE, handler = function(h,...){
       spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
-      ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[,c("Class","FEMALE","MALE")], my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[which(my_project$surveyBySpecie[[spe_ind]]$rawLFD[,"Year"] ==  svalue(year_drop)),c("Class","FEMALE","MALE")])
+      ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[,c("Class","Female","MALE")], my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[which(my_project$surveyBySpecie[[spe_ind]]$rawLFD[,"Year"] ==  svalue(year_drop)),c("Class","Female","MALE")])
       the_reclfd <- RecLFD(my_cel_dat, my_project$surveyBySpecie[[spe_ind]]$lengClas, 1)
       plotRecLFD(the_reclfd)
     })
@@ -1751,7 +1751,7 @@ smart_gui <- function(){
 
     visible(temp_dia) <- TRUE
 
-    my_cel_dat <- my_project$surveyBySpecie[[1]]$rawLFD[,c("Class","FEMALE","MALE")]
+    my_cel_dat <- my_project$surveyBySpecie[[1]]$rawLFD[,c("Class","Female","MALE")]
     the_reclfd <- RecLFD(my_cel_dat, my_project$surveyBySpecie[[1]]$lengClas, 1)
     plotRecLFD(the_reclfd)
   })
@@ -1769,7 +1769,7 @@ smart_gui <- function(){
   addSpace(raw_g_top, 2)
   addSpace(raw_g_top2, 2)
 
-  blankDF = data.frame(Specie = character(0), Lat = numeric(0), Lon = numeric(0), Year = character(0), Class = numeric(0), FEMALE = character(0), MALE = character(0), UNSEX = character(0), stringsAsFactors=FALSE)
+  blankDF = data.frame(Specie = character(0), Lat = numeric(0), Lon = numeric(0), Year = character(0), Class = numeric(0), Female = character(0), MALE = character(0), UNSEX = character(0), stringsAsFactors=FALSE)
   raw_t <- gtable(blankDF, container = raw_g, expand = TRUE)
 
 
