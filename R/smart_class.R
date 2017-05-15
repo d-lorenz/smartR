@@ -167,6 +167,14 @@ SmartProject <- R6Class("smartProject",
                             cat("\n\nComputing average Number of individuals x Size x Stratum: ", sep = "")
                             for(i in 1:length(surveyBySpecie)){
                               cat("\n\t", surveyBySpecie[[i]]$specie, "... ", sep = "")
+                              surveyBySpecie[[i]]$setAbuAvg()
+                              cat("Done!", sep = "")
+                            }
+                          },
+                          setStrataAbu = function(){
+                            cat("\n\nComputing weighted Number of individuals x Size x Stratum: ", sep = "")
+                            for(i in 1:length(surveyBySpecie)){
+                              cat("\n\t", surveyBySpecie[[i]]$specie, "... ", sep = "")
                               surveyBySpecie[[i]]$abuAvg$indFem <- surveyBySpecie[[i]]$abuAvg$Female*sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
                               surveyBySpecie[[i]]$abuAvg$indMal <- surveyBySpecie[[i]]$abuAvg$Male*sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
                               surveyBySpecie[[i]]$abuAvg$indUns <- surveyBySpecie[[i]]$abuAvg$Unsex*sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
