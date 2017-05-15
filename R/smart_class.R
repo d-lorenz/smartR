@@ -241,19 +241,19 @@ SmartProject <- R6Class("smartProject",
                             if(whoPlo == "All"){
                               sampMap$plotSamMap("All species")
                               for(i in 1:length(specieInSurvey)){
-                                points(surveyBySpecie[[i]]$rawLFD[,c("LON","Lat")], pch = 20, col = 1+i, cex = 0.4)
+                                points(surveyBySpecie[[i]]$rawLFD[,c("Lon","Lat")], pch = 20, col = 1+i, cex = 0.4)
                               }
                             }else{
                               sampMap$plotSamMap(whoPlo)
-                              points(surveyBySpecie[[which(specieInSurvey == whoPlo)]]$rawLFD[,c("LON","Lat")], pch = 20, col = 1+which(specieInSurvey == whoPlo), cex = 0.4)
+                              points(surveyBySpecie[[which(specieInSurvey == whoPlo)]]$rawLFD[,c("Lon","Lat")], pch = 20, col = 1+which(specieInSurvey == whoPlo), cex = 0.4)
                             }
                           },
                           plotGooSpe = function(whiSpe, whiSou){
                             if(whiSou == "Survey"){
                               if(whiSpe == "All"){
-                                tmp_data <- unique(rawDataSurvey[,c("Specie", "Lat", "LON")])
+                                tmp_data <- unique(rawDataSurvey[,c("Specie", "Lat", "Lon")])
                               }else{
-                                tmp_data <- unique(rawDataSurvey[which(rawDataSurvey$Specie == whiSpe),c("Specie", "Lat", "LON")])
+                                tmp_data <- unique(rawDataSurvey[which(rawDataSurvey$Specie == whiSpe),c("Specie", "Lat", "Lon")])
                               }
                               # levels(tmp_data[,1]) <- unique(rawDataSurvey[,"Specie"])
 
@@ -811,7 +811,7 @@ SmartProject <- R6Class("smartProject",
                             surveyBySpecie[[ind_num]]$LFDPop <<- array(dim=c(sampMap$nCells, length(surveyBySpecie[[ind_num]]$lengClas),length(surveyBySpecie[[ind_num]]$year),2))
                             for(y in 1:length(surveyBySpecie[[ind_num]]$year)){
                               subLFD <- surveyBySpecie[[ind_num]]$rawLFD[which(surveyBySpecie[[ind_num]]$rawLFD$Year==surveyBySpecie[[ind_num]]$year[y]),]
-                              poinOver <- as.numeric(sp::over(SpatialPoints(subLFD[,c("LON","Lat")]), SpatialPolygons(sampMap$gridShp@polygons)))
+                              poinOver <- as.numeric(sp::over(SpatialPoints(subLFD[,c("Lon","Lat")]), SpatialPolygons(sampMap$gridShp@polygons)))
                               subLFD <- cbind(subLFD[,c("LCLASS", "FEMALE", "MALE")], poinOver)
                               colnames(subLFD) <- c("LCLASS", "FEMALE", "MALE", "Cell")
                               for(IDcell in 1:sampMap$nCells){
@@ -915,9 +915,9 @@ SmartProject <- R6Class("smartProject",
                               for(sex in 1:2){
                                 for(coh in 1:surveyBySpecie[[ind_num]]$nCoho){
                                   xdata <- cbind(sampMap$griCent, surveyBySpecie[[ind_num]]$Coh_A[,coh,y,sex])
-                                  colnames(xdata) <- c("LON","Lat","Coh")
+                                  colnames(xdata) <- c("Lon","Lat","Coh")
                                   xdata <- as.data.frame(xdata)
-                                  yea_poi <- surveyBySpecie[[ind_num]]$rawLFD[which(surveyBySpecie[[ind_num]]$rawLFD$Year == surveyBySpecie[[ind_num]]$year[y]),c("LON", "Lat")]
+                                  yea_poi <- surveyBySpecie[[ind_num]]$rawLFD[which(surveyBySpecie[[ind_num]]$rawLFD$Year == surveyBySpecie[[ind_num]]$year[y]),c("Lon", "Lat")]
                                   cMEDITS <- which(!is.na(over(sampMap$gridShp, SpatialPoints(unique(yea_poi)))))
                                   noMEDITS <- setdiff(c(1:sampMap$nCells),cMEDITS)
                                   Areacell <- 9.091279*11.112
@@ -936,7 +936,7 @@ SmartProject <- R6Class("smartProject",
                               for(sex in 1:2){
                                 for(coh in 1:fisheryBySpecie[[ind_num]]$nCoho){
                                   xdata <- cbind(sampMap$griCent, fisheryBySpecie[[ind_num]]$Coh_A[,coh,y,sex])
-                                  colnames(xdata) <- c("LON","Lat","Coh")
+                                  colnames(xdata) <- c("Lon","Lat","Coh")
                                   xdata <- as.data.frame(xdata)
                                   yea_poi <- fisheryBySpecie[[ind_num]]$rawLFD[which(fisheryBySpecie[[ind_num]]$rawLFD$Year == fisheryBySpecie[[ind_num]]$year[y]),c("Lon", "Lat")]
                                   cMEDITS <- which(!is.na(over(sampMap$gridShp, SpatialPoints(unique(yea_poi)))))
@@ -1000,7 +1000,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                             setSpecie = function(){specie <<- unique(rawLFD[,"Specie"])},
                             setLClass = function(){lengClas <<- seq(from = min(rawLFD[,"LCLASS"]), to = max(rawLFD[,"LCLASS"]), by = 1) },
                             setDepth = function(bathyMatrix){
-                              rawLFD$Depth <<- get.depth(bathyMatrix, x = rawLFD$LON, y = rawLFD$Lat, locator = FALSE)[,3]
+                              rawLFD$Depth <<- get.depth(bathyMatrix, x = rawLFD$Lon, y = rawLFD$Lat, locator = FALSE)[,3]
                             },
                             setStratum = function(vecStrata = c(0, 10, 100, 1000, Inf)){
                               tmp_mem <- findInterval(x = -rawLFD$Depth, vec = vecStrata)
@@ -2615,7 +2615,7 @@ SampleMap <- R6Class("sampleMap",
                        },
                        plotGooSpeSur = function(poi_data){
                          temp_pos <- suppressMessages(gooGrid + geom_jitter(data = poi_data,
-                                                                            aes(x = LON, y = Lat, shape = Specie, color = Specie),
+                                                                            aes(x = Lon, y = Lat, shape = Specie, color = Specie),
                                                                             width = 0.05, height = 0.05, alpha = 0.95) + sampColScale)
                          suppressWarnings(print(temp_pos))
                        },
