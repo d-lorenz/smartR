@@ -154,6 +154,7 @@ SmartProject <- R6Class("smartProject",
                               surveyBySpecie[[i]]$setDepth(bathyMatrix = sampMap$gridBathy)
                               cat("Done!", sep = "")
                             }
+                            cat("\nCompleted!", sep = "")
                           },
                           setStratumSurvey = function(vectorStrata = c(0, 10, 100, 1000, Inf)){
                             cat("\n\nSetting stratum of survey data:", sep = "")
