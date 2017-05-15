@@ -1010,6 +1010,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                             year = NULL,
                             rawLFD = NULL,
                             abuAvg = NULL,
+                            meditsIndex = NULL,
                             lengClas = NULL, #LClass
                             LFDPop = NULL,
                             mixPar = NULL, # MixtureP e ncohorts
