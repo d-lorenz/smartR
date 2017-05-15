@@ -988,6 +988,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                             specie = NULL,
                             year = NULL,
                             rawLFD = NULL,
+                            abuAvg = NULL,
                             lengClas = NULL, #LClass
                             LFDPop = NULL,
                             mixPar = NULL, # MixtureP e ncohorts
@@ -1022,6 +1023,14 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               tmp_mem <- findInterval(x = -rawLFD$Depth, vec = vecStrata)
                               rawLFD$Stratum <<- factor(tmp_mem, levels = 1:(length(vecStrata)-1), labels = paste(vecStrata[-length(vecStrata)], vecStrata[-1], sep = " - "))
                             },
+                            setAbuAvg = function(){
+                              tmp_aggFem <- aggregate(Female ~ Class + Stratum, data = rawLFD, mean)
+                              tmp_aggMal <- aggregate(Male ~ Class + Stratum, data = rawLFD, mean)
+                              tmp_aggUns <- aggregate(Unsex ~ Class + Stratum, data = rawLFD, mean)
+                              tmp_all <- merge(x = tmp_aggFem, y = tmp_aggMal, all = TRUE)
+                              tmp_all <- merge(x = tmp_all, y = tmp_aggUns, all = TRUE)
+                              abuAvg <<- tmp_all
+                            }
                             setNCoho = function(num_coh){nCoho <<- num_coh},
                             setPrior = function(f_linf, f_k, f_t0, m_linf, m_k, m_t0){
                               prior <<- list('Female' = list('Linf' = list('Mean' = f_linf[1], 'StD' = f_linf[2]),
