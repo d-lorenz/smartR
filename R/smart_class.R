@@ -2521,9 +2521,12 @@ SampleMap <- R6Class("sampleMap",
                                                 "-",
                                                 vectorStrata[stratum+1],
                                                 sep = "")
+                           cat("\n\t", stratum_ith, "... ", sep = "")
                            strataList[[stratum_ith]] <- get.area(clipDept, level.inf = -vectorStrata[stratum+1], level.sup = -vectorStrata[stratum])
+                           cat("Done!", sep = "")
                          }
                          areaStrata <<- unlist(lapply(strataList, "[[", 1))
+                         cat("\nCompleted!", sep = "")
                        },
                        setWeightStrata = function(){
                          weightStrata <<- areaStrata/areaGrid
