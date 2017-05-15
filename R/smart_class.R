@@ -1392,7 +1392,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                # }
                              },
                              setPreMix = function(){
-                               # preMix <<- weight2number(rawLFD[,c("DATE","Class","UNSEX")])
+                               # preMix <<- weight2number(rawLFD[,c("DATE","Class","Unsex")])
                              },
                              ggplotMcmcOut = function(selCompo = "MCMC", selSex = "Female"){
 
