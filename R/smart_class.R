@@ -2530,7 +2530,9 @@ SampleMap <- R6Class("sampleMap",
                          cat("\nCompleted!", sep = "")
                        },
                        setWeightStrata = function(){
+                         cat("\n\nComputing Strata Weighted Area... ", sep = "")
                          weightStrata <<- areaStrata/areaGrid
+                         cat("Completed!")
                        },
                        loadHarbDbf = function(dbf_path){
                          tmp_dbf <- read.dbf(file = dbf_path)
