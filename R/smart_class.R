@@ -812,8 +812,8 @@ SmartProject <- R6Class("smartProject",
                             for(y in 1:length(surveyBySpecie[[ind_num]]$year)){
                               subLFD <- surveyBySpecie[[ind_num]]$rawLFD[which(surveyBySpecie[[ind_num]]$rawLFD$Year==surveyBySpecie[[ind_num]]$year[y]),]
                               poinOver <- as.numeric(sp::over(SpatialPoints(subLFD[,c("Lon","Lat")]), SpatialPolygons(sampMap$gridShp@polygons)))
-                              subLFD <- cbind(subLFD[,c("LCLASS", "FEMALE", "MALE")], poinOver)
-                              colnames(subLFD) <- c("LCLASS", "FEMALE", "MALE", "Cell")
+                              subLFD <- cbind(subLFD[,c("Class", "FEMALE", "MALE")], poinOver)
+                              colnames(subLFD) <- c("Class", "FEMALE", "MALE", "Cell")
                               for(IDcell in 1:sampMap$nCells){
                                 if(length(which(subLFD[,"Cell"] == IDcell))>0){
                                   cell.data <- subLFD[which(subLFD[,"Cell"] == IDcell),]
@@ -998,7 +998,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                             },
                             setYears = function(){year <<- sort(unique(rawLFD[,"Year"]), decreasing = FALSE)},
                             setSpecie = function(){specie <<- unique(rawLFD[,"Specie"])},
-                            setLClass = function(){lengClas <<- seq(from = min(rawLFD[,"LCLASS"]), to = max(rawLFD[,"LCLASS"]), by = 1) },
+                            setLClass = function(){lengClas <<- seq(from = min(rawLFD[,"Class"]), to = max(rawLFD[,"Class"]), by = 1) },
                             setDepth = function(bathyMatrix){
                               rawLFD$Depth <<- get.depth(bathyMatrix, x = rawLFD$Lon, y = rawLFD$Lat, locator = FALSE)[,3]
                             },
@@ -1392,7 +1392,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                # }
                              },
                              setPreMix = function(){
-                               # preMix <<- weight2number(rawLFD[,c("DATE","LCLASS","UNSEX")])
+                               # preMix <<- weight2number(rawLFD[,c("DATE","Class","UNSEX")])
                              },
                              ggplotMcmcOut = function(selCompo = "MCMC", selSex = "Female"){
 
