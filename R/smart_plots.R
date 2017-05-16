@@ -1,7 +1,30 @@
 
 # SmartR Plots ----
 
-## Production - Betas x FG Boxplot
+# ## Survey - Hauls x Stratum x Year ----
+# ggplot_surveyStrataYear = function(df_uniHaul, specieName){
+#   return(
+#     suppressMessages(
+#       ggplot() +
+#         geom_bin2d(data = df_uniHaul,
+#                    mapping = aes(x = Year, y = Stratum)) +
+#         scale_fill_gradient(low = "#F0F8FF", high = "#1C86EE") +
+#         geom_text(data = data.frame(table(df_uniHaul$Year, df_uniHaul$Stratum)),
+#                   mapping = aes(y = Var2, x = Var1, label = Freq)) +
+#         theme_tufte(base_size = 14, ticks=F) +
+#         ggtitle(paste("Number of Hauls x Year with ", specieName, sep = "")) +
+#         theme(legend.position = "none",
+#               plot.title = element_text(size = 14),
+#               axis.text.x = element_text(size = 10),
+#               axis.title = element_blank(),
+#               panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+#               axis.text.y = element_text(size = 10),
+#               axis.ticks.y = element_blank())
+#     )
+#   )
+# }
+
+## Production - Betas x FG Boxplot ----
 ggplot_betasBoxplot = function(df_YearFGprod){
   return(
     suppressMessages(
