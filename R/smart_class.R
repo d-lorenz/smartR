@@ -2572,12 +2572,12 @@ SampleMap <- R6Class("sampleMap",
                            strataList[[stratum_ith]] <- get.area(clipDept, level.inf = -vectorStrata[stratum+1], level.sup = -vectorStrata[stratum])
                            cat("Done!", sep = "")
                          }
-                         areaStrata <<- unlist(lapply(strataList, "[[", 1))
+                         areaStrata <<- strataList
                          cat("\nCompleted!", sep = "")
                        },
                        setWeightStrata = function(){
                          cat("\n\nComputing Strata Weighted Area... ", sep = "")
-                         weightStrata <<- areaStrata/areaGrid
+                         weightStrata <<- unlist(lapply(areaStrata, "[[", 1))/areaGrid
                          cat("Completed!")
                        },
                        loadHarbDbf = function(dbf_path){
