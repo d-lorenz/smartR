@@ -44,7 +44,6 @@ SmartProject <- R6Class("smartProject",
                             cat(" Completed!", sep = "")
                           },
                           setEffortIndex = function(){
-                            # Check fleet$effoAllLoa sampMap$cutFG sampMap$fgWeigDist
                             cat("\nComputing Effort Index... ", sep = "")
                             if(is.null(sampMap$fgWeigDist)) stop("Missing Harbours Weighted Distance")
                             if(is.null(sampMap$cutFG)) stop("Missing Fishing Grounds")
