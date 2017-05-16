@@ -45,13 +45,16 @@ SmartProject <- R6Class("smartProject",
                           },
                           setEffortIndex = function(){
                             # Check fleet$effoAllLoa sampMap$cutFG sampMap$fgWeigDist
-                            cat("\nComputing Effort Index...", sep = "")
+                            cat("\nComputing Effort Index... ", sep = "")
+                            if(is.null(sampMap$fgWeigDist)) stop("Missing Harbours Weighted Distance")
+                            if(is.null(sampMap$cutFG)) stop("Missing Fishing Grounds")
+                            if(is.null(fleet$effoAllLoa)) stop("Missing Effort-LOA data")
                             tmp_ei <- apply(data.frame(mapply(`*`,
                                                               fleet$effoAllLoa[, 4:(sampMap$cutFG+4)],
                                                               sampMap$fgWeigDist)), 1, sum)
                             fleet$effortIndex <<- data.frame(fleet$effoAllLoa[,c(1:3,ncol(fleet$effoAllLoa))],
                                                              EffInd = tmp_ei)
-                            cat(" Completed!", sep = "")
+                            cat("Completed!", sep = "")
                           },
                           getHarbFgDist = function(){
                             cat("\nRunnnig Fishing ground average distances routine... ", cat = "")
