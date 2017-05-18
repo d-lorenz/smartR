@@ -2536,6 +2536,9 @@ smart_gui <- function(){
   })
   addSpring(sim_g_top1)
   gbutton("Get Production Index", container = sim_g_top1, handler = function(h,...){
+    my_project$setProductionIndex()
+    dev.set(dev.list()[pre_dev+8])
+    print(ggplot_prodIndBoxplot(df_ProdInde = my_project$fleet$prodIndex))
   })
   addSpring(sim_g_top1)
 
