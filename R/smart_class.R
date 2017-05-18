@@ -55,6 +55,12 @@ SmartProject <- R6Class("smartProject",
                                                              EffInd = tmp_ei)
                             cat("Completed!", sep = "")
                           },
+                          setProductionIndex = function(){
+                            fleet$prodIndex <<- data.frame(Year = fleet$effoProdAllLoa$Year,
+                                                          I_NCEE = fleet$effoProdAllLoa$I_NCEE,
+                                                          MonthNum = fleet$effoProdAllLoa$MonthNum,
+                                                          Production = apply(fleet$effoProdAllLoa[,(4+sampMap$cutFG+1):ncol(fleet$effoProdAllLoa)],1, sum))
+                          },
                           getHarbFgDist = function(){
                             cat("\nRunnnig Fishing ground average distances routine... ", cat = "")
                             fleet$setRegHarbs()
@@ -1749,6 +1755,7 @@ FishFleet <- R6Class("fishFleet",
                        effoAllLoa = NULL,
                        effortIndex = NULL,
                        daysAtSea = NULL,
+                       prodIndex = NULL,
                        resNNLS = NULL,
                        betaAvg = NULL,
                        effortAvg = NULL,
