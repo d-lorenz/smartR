@@ -24,6 +24,27 @@
 #   )
 # }
 
+## Pre-Sim - Effort Index x Year Boxplot ----
+ggplot_effoIndBoxplot = function(df_EffoInde){
+  return(
+    suppressMessages(
+      ggplot(df_EffoInde,
+             aes_(x = ~Year, y = ~EffInd,
+                  group = ~Year)) +
+        geom_boxplot() +
+        geom_jitter(data = df_EffoInde,
+                    aes_(x = ~Year, y = ~EffInd,
+                         group = ~Year,
+                         color = ~Year),
+                    size = 1, shape = 19, alpha = 0.05,
+                    height = 0, width = 0.25) +
+        ylab("Effort Index") +
+        theme_tufte(base_size = 14, ticks=F) +
+        theme(legend.position = 'none')
+    )
+  )
+}
+
 ## Production - Betas x FG Boxplot ----
 ggplot_betasBoxplot = function(df_YearFGprod){
   return(
