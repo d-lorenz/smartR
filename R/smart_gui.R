@@ -2531,6 +2531,8 @@ smart_gui <- function(){
   addSpring(sim_g_top1)
   gbutton("Get Days At Sea", container = sim_g_top1, handler = function(h,...){
     my_project$setDaysAtSea()
+    dev.set(dev.list()[pre_dev+8])
+    print(ggplot_seaDaysBoxplot(df_seaDays = my_project$fleet$daysAtSea))
   })
   addSpring(sim_g_top1)
   gbutton("Get Production Index", container = sim_g_top1, handler = function(h,...){
