@@ -53,7 +53,7 @@ smart_gui <- function(){
 
   pre_dev <- length(dev.list())
 
-  main_win <- gwindow(paste("SMART - Version ", "1.1", sep = ""),width = 1200, height= 600, visible = FALSE)
+  main_win <- gwindow(paste("SMART - Version ", "1.1", sep = ""),width = 1200, height= 600, visible = TRUE)
   big_g <- ggroup(horizontal = TRUE, container = main_win)
 
   ####   Left panel   ####
@@ -2743,7 +2743,7 @@ smart_gui <- function(){
   visible(eff_eg) <- TRUE
   visible(ass_eg) <- TRUE
   visible(sim_eg) <- TRUE
-  visible(main_win) <- TRUE
+  # visible(main_win) <- TRUE
 
   svalue(uti_gn) <- 2
   svalue(uti_gn) <- 3
@@ -2759,5 +2759,4 @@ smart_gui <- function(){
 
   svalue(uti_gn) <- 1
   # visible(main_win) <- TRUE
-
 }
