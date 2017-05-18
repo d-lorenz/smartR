@@ -38,7 +38,7 @@ ggplot_effoIndBoxplot = function(df_EffoInde){
                          color = ~Year),
                     size = 1, shape = 19, alpha = 0.05,
                     height = 0, width = 0.25) +
-        ylab("Effort Index") +
+        ggtitle("Effort Index") +
         theme_tufte(base_size = 14, ticks=F) +
         theme(legend.position = 'none')
     )
