@@ -2735,6 +2735,9 @@ smart_gui <- function(){
 
   addSpring(sim_g_top)
 
+  sim_p <- ggraphics(container = sim_g, width = 550, height = 250, expand = TRUE)
+
+
   visible(pro_eg) <- TRUE
   visible(raw_eg) <- TRUE
   visible(eff_eg) <- TRUE
