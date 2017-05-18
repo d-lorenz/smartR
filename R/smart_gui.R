@@ -2546,19 +2546,182 @@ smart_gui <- function(){
                              width = 800, height = 500)
 
     cost_g <- ggroup(horizontal = FALSE, container = tempWind_Cost, spacing = 15)
-    cost_g_top <- gframe(horizontal = TRUE, container = cost_g, spacing = 10)
+    cost_g_top <- gframe(horizontal = TRUE, container = cost_g, spacing = 20)
 
-    gbutton("Load Cost Data", container = cost_g_top, handler = function(h,...){
-
+    addSpring(cost_g_top)
+    gbutton("   Load\nCost Data", container = cost_g_top, handler = function(h,...){
+      # obsCost <- read.csv(file = pathCosts)
+      # obsCost <- obsCost[1:2,]
+      # obsCost$Year <- 2014
     })
-
-    gbutton("Get Cost Regression", container = cost_g_top, handler = function(h,...){
-
+    addSpring(cost_g_top)
+    gbutton("         Get\nCost Regression", container = cost_g_top, handler = function(h,...){
+      # # Spatial based cost
+      # agg_EffInd <- aggregate(EffInd ~ I_NCEE + Year + Loa, my_project$fleet$effortIndex, sum)
+      # # input
+      # spatialCostIn <- merge(x = obsCost, y = agg_EffInd, by.x = c("UE", "Year"), by.y = c("I_NCEE", "Year"))
+      #
+      # # regression
+      # spatialCostLm <<- lm(formula = Spatial.Based.Costs ~ EffInd - 1, data = spatialCostIn)
+      # # plot result
+      # spatialCostGgplot <<- ggplot(spatialCostIn, aes(x = EffInd, y = Spatial.Based.Costs)) +
+      #   geom_point() +
+      #   stat_smooth(method = "lm", col = "Firebrick") +
+      #   ggtitle("Spatial Based Cost Regression") +
+      #   scale_x_continuous("Spatial Index",
+      #                      breaks = pretty(spatialCostIn$EffInd, 4)) +
+      #   scale_y_continuous("",
+      #                      breaks = pretty(spatialCostIn$Spatial.Based.Costs, 10)) +
+      #   theme_tufte(base_size = 14, ticks=F) +
+      #   theme(legend.position = "none",
+      #         plot.title = element_text(size = 18),
+      #         axis.text.x = element_text(size = 10),
+      #         axis.title.x = element_text(size = 12),
+      #         panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+      #         axis.text.y = element_text(size = 12),
+      #         axis.ticks.y = element_blank())
+      #
+      #
+      # ## Effort based cost
+      # agg_DaysAtSea <- aggregate(Freq ~ I_NCEE + effYear + Loa + Kw, my_project$fleet$daysAtSea, sum)
+      # # input
+      # effortCostIn <- merge(x = obsCost, y = agg_DaysAtSea,
+      #                       by.x = c("UE", "Year"), by.y = c("I_NCEE", "effYear"))
+      #
+      # # regression
+      # effortCostLm <<- lm(formula = Effort.Based.Costs ~ Freq + Loa + Kw - 1, data = effortCostIn)
+      #
+      # # plot result
+      # effortCostGgplot <<- ggplot(effortCostIn, aes(x = Freq, y = Effort.Based.Costs)) +
+      #   geom_point() +
+      #   stat_smooth(method = "lm", col = "Firebrick") +
+      #   ggtitle("Effort Based Cost Regression") +
+      #   scale_x_continuous("Effort Index",
+      #                      breaks = pretty(effortCostIn$Freq, 4)) +
+      #   scale_y_continuous("",
+      #                      breaks = pretty(effortCostIn$Effort.Based.Costs, 10)) +
+      #   theme_tufte(base_size = 14, ticks=F) +
+      #   theme(legend.position = "none",
+      #         plot.title = element_text(size = 18),
+      #         axis.text.x = element_text(size = 10),
+      #         axis.title.x = element_text(size = 12),
+      #         panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+      #         axis.text.y = element_text(size = 12),
+      #         axis.ticks.y = element_blank())
+      #
+      #
+      # # Production Based Cost
+      # tmp_Prod <- data.frame(Year = my_project$fleet$effoAllLoa$Year,
+      #                        I_NCEE = my_project$fleet$effoAllLoa$I_NCEE,
+      #                        MonthNum = my_project$fleet$effoAllLoa$MonthNum,
+      #                        Production = apply(data.frame(lapply(my_project$fleet$predProd, apply, 1, sum)), 1, sum))
+      # agg_Prod <- aggregate(Production ~ I_NCEE + Year, tmp_Prod, sum)
+      # # input
+      # prodCostIn <- merge(x = obsCost, y = agg_Prod,
+      #                     by.x = c("UE", "Year"), by.y = c("I_NCEE", "Year"))
+      # # regression
+      # prodCostLm <<- lm(formula = Production.Based.Costs ~ Production - 1, data = prodCostIn)
+      #
+      # # plot result
+      # prodCostGgplot <<- ggplot(prodCostIn, aes(x = Production, y = Production.Based.Costs)) +
+      #   geom_point() +
+      #   stat_smooth(method = "lm", col = "Firebrick") +
+      #   ggtitle("Production Based Cost Regression") +
+      #   scale_x_continuous("Production Index",
+      #                      breaks = pretty(prodCostIn$Production, 4)) +
+      #   scale_y_continuous("",
+      #                      breaks = pretty(prodCostIn$Production.Based.Costs, 10)) +
+      #   theme_tufte(base_size = 14, ticks=F) +
+      #   theme(legend.position = "none",
+      #         plot.title = element_text(size = 18),
+      #         axis.text.x = element_text(size = 10),
+      #         axis.title.x = element_text(size = 12),
+      #         panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+      #         axis.text.y = element_text(size = 12),
+      #         axis.ticks.y = element_blank())
+      #
+      #
+      # grid.arrange(spatialCostGgplot, effortCostGgplot, prodCostGgplot,
+      #              layout_matrix = rbind(c(1,2,3),c(1,2,3)))
     })
+    addSpace(cost_g_top, 10)
+    gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = cost_g_top,
+           handler = function(h,...){
+             # grid.arrange(spatialCostGgplot, effortCostGgplot, prodCostGgplot,
+             #              layout_matrix = rbind(c(1,2,3),c(1,2,3)))
+           })
+    addSpring(cost_g_top)
+    gbutton("         Set\nCost Prediction", container = cost_g_top, handler = function(h,...){
+      # my_project$fleet$effortIndex$spatialCostPred <- predict(spatialCostLm, my_project$fleet$effortIndex)
+      # my_project$fleet$daysAtSea$effortCostPred <- predict(effortCostLm, my_project$fleet$daysAtSea)
+      # tmp_Prod$prodCostPred <- predict(prodCostLm, tmp_Prod)
+      #
+      # spatialCostGgplotPred <<- ggplot(my_project$fleet$effortIndex, aes(x = EffInd, y = spatialCostPred)) +
+      #   geom_point() +
+      #   stat_smooth(method = "lm", col = "Firebrick") +
+      #   ggtitle("Predicted Spatial Based Cost") +
+      #   scale_x_continuous("Spatial Index",
+      #                      breaks = pretty(my_project$fleet$effortIndex$EffInd, 4)) +
+      #   scale_y_continuous("",
+      #                      breaks = pretty(my_project$fleet$effortIndex$spatialCostPred, 10)) +
+      #   theme_tufte(base_size = 14, ticks=F) +
+      #   theme(legend.position = "none",
+      #         plot.title = element_text(size = 18),
+      #         axis.text.x = element_text(size = 10),
+      #         axis.title.x = element_text(size = 12),
+      #         panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+      #         axis.text.y = element_text(size = 12),
+      #         axis.ticks.y = element_blank())
+      #
+      # effortCostGgplotPred <<- ggplot(my_project$fleet$daysAtSea, aes(x = Freq + (effortCostLm$coefficients[2] * Loa), y = effortCostPred)) +
+      #   geom_point() +
+      #   stat_smooth(method = "lm", col = "Firebrick") +
+      #   ggtitle("Predicted Effort Based Cost") +
+      #   scale_x_continuous("Effort Index",
+      #                      breaks = pretty(my_project$fleet$daysAtSea$Freq + (effortCostLm$coefficients[2] * my_project$fleet$daysAtSea$Loa), 4)) +
+      #   scale_y_continuous("",
+      #                      breaks = pretty(my_project$fleet$daysAtSea$effortCostPred, 10)) +
+      #   theme_tufte(base_size = 14, ticks=F) +
+      #   theme(legend.position = "none",
+      #         plot.title = element_text(size = 18),
+      #         axis.text.x = element_text(size = 10),
+      #         axis.title.x = element_text(size = 12),
+      #         panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+      #         axis.text.y = element_text(size = 12),
+      #         axis.ticks.y = element_blank())
+      #
+      # prodCostGgplotPred <<- ggplot(tmp_Prod, aes(x = Production, y = prodCostPred)) +
+      #   geom_point() +
+      #   stat_smooth(method = "lm", col = "Firebrick") +
+      #   ggtitle("Predicted Production Based Cost") +
+      #   scale_x_continuous("Production Index",
+      #                      breaks = pretty(tmp_Prod$Production, 4)) +
+      #   scale_y_continuous("",
+      #                      breaks = pretty(tmp_Prod$prodCostPred, 10)) +
+      #   theme_tufte(base_size = 14, ticks=F) +
+      #   theme(legend.position = "none",
+      #         plot.title = element_text(size = 18),
+      #         axis.text.x = element_text(size = 10),
+      #         axis.title.x = element_text(size = 12),
+      #         panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+      #         axis.text.y = element_text(size = 12),
+      #         axis.ticks.y = element_blank())
+      #
+      # grid.arrange(spatialCostGgplotPred, effortCostGgplotPred, prodCostGgplotPred,
+      #              layout_matrix = rbind(c(1,2,3),c(1,2,3)))
+    })
+    addSpace(cost_g_top, 10)
+    gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = cost_g_top,
+           handler = function(h,...){
+             # grid.arrange(spatialCostGgplotPred, effortCostGgplotPred, prodCostGgplotPred,
+             #              layout_matrix = rbind(c(1,2,3),c(1,2,3)))
+           })
+    addSpring(cost_g_top)
 
     visible(tempWind_Cost) <- TRUE
 
     cost_p <- ggraphics(container = cost_g, width = 550, height = 250, expand = TRUE)
+
 
   })
   addSpring(sim_g_top2)
