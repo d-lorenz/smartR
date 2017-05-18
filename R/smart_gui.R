@@ -2525,6 +2525,8 @@ smart_gui <- function(){
   addSpring(sim_g_top1)
   gbutton("Get Effort Index", container = sim_g_top1, handler = function(h,...){
     my_project$setEffortIndex()
+    dev.set(dev.list()[pre_dev+8])
+    ggplot_effoIndBoxplot(df_EffoInde = my_project$fleet$effortIndex)
   })
   addSpring(sim_g_top1)
   gbutton("Get Days At Sea", container = sim_g_top1, handler = function(h,...){
