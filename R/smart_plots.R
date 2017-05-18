@@ -45,6 +45,28 @@ ggplot_effoIndBoxplot = function(df_EffoInde){
   )
 }
 
+## Pre-Sim - Days at Sea x Year Boxplot ----
+ggplot_seaDaysBoxplot = function(df_seaDays){
+  return(
+    suppressMessages(
+      ggplot(df_seaDays,
+             aes_(x = ~effYear, y = ~Freq,
+                  group = ~effYear)) +
+        geom_boxplot() +
+        geom_jitter(data = df_seaDays,
+                    aes_(x = ~effYear, y = ~Freq,
+                         group = ~effYear,
+                         color = ~effYear),
+                    size = 1, shape = 19, alpha = 0.05,
+                    height = 0, width = 0.25) +
+        ggtitle("Days at Sea") +
+        theme_tufte(base_size = 14, ticks=F) +
+        theme(legend.position = 'none')
+    )
+  )
+}
+
+
 ## Production - Betas x FG Boxplot ----
 ggplot_betasBoxplot = function(df_YearFGprod){
   return(
