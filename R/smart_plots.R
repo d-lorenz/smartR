@@ -24,6 +24,27 @@
 #   )
 # }
 
+## Pre-Sim - Production Index x Year Boxplot ----
+ggplot_prodIndBoxplot = function(df_ProdInde){
+  return(
+    suppressMessages(
+      ggplot(df_ProdInde,
+             aes_(x = ~Year, y = ~Production,
+                  group = ~Year)) +
+        geom_boxplot() +
+        geom_jitter(data = df_ProdInde,
+                    aes_(x = ~Year, y = ~Production,
+                         group = ~Year,
+                         color = ~Year),
+                    size = 1, shape = 19, alpha = 0.05,
+                    height = 0, width = 0.25) +
+        ggtitle("Production Index") +
+        theme_tufte(base_size = 14, ticks=F) +
+        theme(legend.position = 'none')
+    )
+  )
+}
+
 ## Pre-Sim - Effort Index x Year Boxplot ----
 ggplot_effoIndBoxplot = function(df_EffoInde){
   return(
