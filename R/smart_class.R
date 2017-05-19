@@ -1819,6 +1819,45 @@ FishFleet <- R6Class("fishFleet",
                          rawEffort <<- readRDS(effort_path)
                          cat("Done!", sep = "")
                        },
+                       loadRawEconomy = function(economic_path){
+                         cat("\nLoading Economic data... ", sep = "")
+                         rawEconomy <<- read.csv(file = economic_path, stringsAsFactors = FALSE)
+                         cat("Done!", sep = "")
+                       },
+                       setYearEconomy = function(){
+                         rawEconomy$Year <<- as.numeric(substr(rawEconomy$DateStart, 7, nchar(rawEconomy$DateStart)))
+                       },
+                       setInSpatial = function(){
+                         agg_EffInd <- aggregate(EffInd ~ I_NCEE + Year + Loa, effortIndex, sum)
+                         tmp_spatCost <- rawEconomy[,c("VessID", "Year", "SpatialCost")]
+                         inSpatialReg <<- merge(x = tmp_spatCost, y = agg_EffInd,
+                                                by.x = c("VessID", "Year"), by.y = c("I_NCEE", "Year"))
+                       },
+                       setInEffort = function(){
+                         agg_DaysAtSea <- aggregate(Freq ~ I_NCEE + effYear + Loa + Kw, daysAtSea, sum)
+                         tmp_effoCost <- rawEconomy[,c("VessID", "Year", "EffortCost")]
+                         inEffortReg <<- merge(x = tmp_effoCost, y = agg_DaysAtSea,
+                                                by.x = c("VessID", "Year"), by.y = c("I_NCEE", "Year"))
+                       },
+                       getRegSpatial = function(){
+                         outSpatialReg <<- lm(formula = SpatialCost ~ EffInd - 1, data = inSpatialReg)
+                       },
+                       getRegEffort = function(){
+                         outEffortReg <<- lm(formula = EffortCost ~ Freq + Loa + Kw - 1, data = inEffortReg)
+                       },
+                       getRegProduction = function(){
+                         outProductionReg <<- lm(formula = ProductionCost ~ Production - 1, data = inProductionReg)
+                       },
+                       getCostOutput = function(){
+                         getRegSpatial()
+                         getRegEffort()
+                         getRegProduction()
+                       },
+                       setCostPlot = function(){
+                         plotSpatialReg <<- ggplot_spatialRegression(df_spatialIn = inSpatialReg, reg_spatialOut = outSpatialReg)
+                         plotEffortReg <<- ggplot_effortRegression(df_effortIn = inEffortReg, reg_effortOut = outEffortReg)
+                         plotProductionReg <<- ggplot_productionRegression(df_productionIn = inProductionReg, reg_productionOut = outProductionReg)
+                       },
                        loadProduction = function(production_path){
                          cat("\nLoading Production data... ", sep = "")
                          sort_files <- sort(production_path)
