@@ -23,6 +23,24 @@ SmartProject <- R6Class("smartProject",
                           fisheryBySpecie = NULL,
                           sampMap = NULL,
                           fleet = NULL,
+                          setCostInput = function(){
+                            if(is.null(fleet$effortIndex)) stop("Missing Effort Index")
+                            if(is.null(fleet$daysAtSea)) stop("Missing Days at Sea Index")
+                            if(is.null(fleet$effoAllLoa)) stop("Missing Production Index")
+                            fleet$setInSpatial()
+                            fleet$setInEffort()
+                            setInProduction()
+                          },
+                          setInProduction = function(){
+                            tmp_Prod <- data.frame(Year = fleet$effoProdAllLoa$Year,
+                                                   I_NCEE = fleet$effoProdAllLoa$I_NCEE,
+                                                   MonthNum = fleet$effoProdAllLoa$MonthNum,
+                                                   Production = apply(fleet$effoProdAllLoa[,(4+sampMap$cutFG+1):ncol(fleet$effoProdAllLoa)],1, sum))
+                            agg_Prod <- aggregate(Production ~ I_NCEE + Year, tmp_Prod, sum)
+                            tmp_effoCost <- rawEconomy[,c("VessID", "Year", "ProductionCost")]
+                            fleet$inProductionReg <<- merge(x = tmp_effoCost, y = agg_Prod,
+                                                  by.x = c("VessID", "Year"), by.y = c("I_NCEE", "Year"))
+                          },
                           setDaysAtSea = function(){
                             cat("\nProcessing year: ", sep = "")
                             for(year in names(fleet$rawEffort)){
