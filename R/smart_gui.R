@@ -1554,10 +1554,10 @@ smart_gui <- function(){
 
     addSpace(maxb_fra, 20)
     maxb_spin <- gslider(from = 1, to = 5000,
-                        by = 0.1, value = 0, container = maxb_fra, expand = TRUE,
-                        handler = function(...){
+                         by = 0.1, value = 0, container = maxb_fra, expand = TRUE,
+                         handler = function(...){
 
-                        })
+                         })
     addSpace(up_fra, 20)
     addSpace(maxb_fra, 20)
 
