@@ -37,7 +37,7 @@ SmartProject <- R6Class("smartProject",
                                                    MonthNum = fleet$effoProdAllLoa$MonthNum,
                                                    Production = apply(fleet$effoProdAllLoa[,(4+sampMap$cutFG+1):ncol(fleet$effoProdAllLoa)],1, sum))
                             agg_Prod <- aggregate(Production ~ I_NCEE + Year, tmp_Prod, sum)
-                            tmp_effoCost <- rawEconomy[,c("VessID", "Year", "ProductionCost")]
+                            tmp_effoCost <- fleet$rawEconomy[,c("VessID", "Year", "ProductionCost")]
                             fleet$inProductionReg <<- merge(x = tmp_effoCost, y = agg_Prod,
                                                   by.x = c("VessID", "Year"), by.y = c("I_NCEE", "Year"))
                           },
