@@ -49,6 +49,9 @@ smart_gui <- function(){
   # LANDINGS DATA
   pathLanding <- "/Users/Lomo/Documents/Uni/R/smart/data/Landings/LandAll.rData"
 
+  # Economic Data
+  pathCosts <- "/Users/Lomo/Documents/Uni/Lab/Data/Economics/sos_adri_cleanCosts.csv"
+
   my_project$createFleet()
 
   pre_dev <- length(dev.list())
