@@ -88,6 +88,75 @@ ggplot_seaDaysBoxplot = function(df_seaDays){
 }
 
 
+## Economy - Spatial Regression scatter plot ----
+ggplot_spatialRegression = function(df_spatialIn, reg_spatialOut){
+  return(
+    suppressMessages(
+      ggplot(df_spatialIn, aes_(x = reg_spatialOut$coefficients[1] * ~EffInd + reg_spatialOut$coefficients[2] * ~Loa, y = ~SpatialCost)) +
+        geom_point() +
+        stat_smooth(method = "lm", col = "Firebrick") +
+        ggtitle("Spatial Based Cost Regression") +
+        scale_x_continuous("Spatial Index", breaks = pretty(df_spatialIn$EffInd, 4)) +
+        scale_y_continuous("Spatial Cost", breaks = pretty(df_spatialIn$SpatialCost, 10)) +
+        theme_tufte(base_size = 14, ticks=F) +
+        theme(legend.position = "none",
+              plot.title = element_text(size = 18),
+              axis.text.x = element_text(size = 10),
+              axis.title.x = element_text(size = 12),
+              panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+              axis.text.y = element_text(size = 12),
+              axis.ticks.y = element_blank())
+    )
+  )
+}
+
+
+## Economy - Effort Regression scatter plot ----
+ggplot_effortRegression = function(df_effortIn, reg_effortOut){
+  return(
+    suppressMessages(
+      ggplot(df_effortIn, aes_(x = reg_effortOut$coefficients[1] * ~Freq + reg_effortOut$coefficients[2] * ~Loa + reg_effortOut$coefficients[3] * ~Kw, y = ~EffortCost)) +
+        geom_point() +
+        stat_smooth(method = "lm", col = "Firebrick") +
+        ggtitle("Effort Based Cost Regression") +
+        scale_x_continuous("Effort Index", breaks = pretty(df_effortIn$Freq, 4)) +
+        scale_y_continuous("Effort Cost", breaks = pretty(df_effortIn$EffortCost, 10)) +
+        theme_tufte(base_size = 14, ticks=F) +
+        theme(legend.position = "none",
+              plot.title = element_text(size = 18),
+              axis.text.x = element_text(size = 10),
+              axis.title.x = element_text(size = 12),
+              panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+              axis.text.y = element_text(size = 12),
+              axis.ticks.y = element_blank())
+    )
+  )
+}
+
+
+## Economy - Production Regression scatter plot ----
+ggplot_productionRegression = function(df_productionIn, reg_productionOut){
+  return(
+    suppressMessages(
+      ggplot(df_productionIn, aes_(x = reg_productionOut$coefficients[1] * ~Production, y = ~ProductionCost)) +
+        geom_point() +
+        stat_smooth(method = "lm", col = "Firebrick") +
+        ggtitle("Production Based Cost Regression") +
+        scale_x_continuous("Production Index", breaks = pretty(df_productionIn$Production, 4)) +
+        scale_y_continuous("", breaks = pretty(df_productionIn$ProductionCost, 10)) +
+        theme_tufte(base_size = 14, ticks=F) +
+        theme(legend.position = "none",
+              plot.title = element_text(size = 18),
+              axis.text.x = element_text(size = 10),
+              axis.title.x = element_text(size = 12),
+              panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+              axis.text.y = element_text(size = 12),
+              axis.ticks.y = element_blank())
+    )
+  )
+}
+
+
 ## Production - Betas x FG Boxplot ----
 ggplot_betasBoxplot = function(df_YearFGprod){
   return(
