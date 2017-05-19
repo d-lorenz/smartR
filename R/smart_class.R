@@ -2213,7 +2213,7 @@ FishFleet <- R6Class("fishFleet",
                        setEffoProdMatr = function(){
                          effoProd <<- list()
                          cat("\nCreating Effort x Production matrix\n", sep = "")
-                         for(i in names(rawEffort)){
+                         for(i in intersect(names(dayEffoMatr), names(prodMatr))){
                            cat(i,"... ", sep = "")
                            tmp_effo <- dayEffoMatr[[i]]
                            tmp_prod <- prodMatr[[i]]
