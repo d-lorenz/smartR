@@ -866,7 +866,7 @@ smart_gui <- function(){
 
     temp_dia <- gwindow(title="Select variables and weights", visible = FALSE,
                         parent = main_win,
-                        width = 550, height = 400)
+                        width = 350, height = 200)
 
     up_g_top <- ggroup(horizontal = FALSE, container = temp_dia)
     addSpring(up_g_top)
