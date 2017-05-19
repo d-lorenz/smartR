@@ -2257,7 +2257,7 @@ FishFleet <- R6Class("fishFleet",
                        },
                        setProdMatr = function(){
                          prodMatr <<- list()
-                         for(i in names(rawEffort)){
+                         for(i in names(rawProduction)){
                            tmp_prod <- rawProduction[[i]]
                            tmp_prod <- tmp_prod[tmp_prod$NUMUE %in% idsEffoProd[[i]],]
                            tmp_matrix <- dcast(tmp_prod,
