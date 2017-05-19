@@ -50,10 +50,10 @@ SmartProject <- R6Class("smartProject",
                               tmp_vmsY <- tmp_vmsY[!duplicated(tmp_vmsY),]
                               out_tbl <- table(I_NCEE = tmp_vmsY$I_NCEE, Month = tmp_vmsY$MonthNum)
                               if(year == names(fleet$rawEffort)[1]){
-                                tmp_days <- data.frame(effYear = year, out_tbl)
+                                tmp_days <- data.frame(Year = year, out_tbl)
                               }else{
                                 tmp_days <- rbind(tmp_days,
-                                                  data.frame(effYear = year, out_tbl))
+                                                  data.frame(Year = year, out_tbl))
                               }
                             }
                             fleet$daysAtSea <<- suppressWarnings(merge(tmp_days, data.frame(I_NCEE = as.numeric(substr(fleet$rawRegister$CFR, 4, nchar(fleet$rawRegister$CFR))),
@@ -1834,7 +1834,7 @@ FishFleet <- R6Class("fishFleet",
                                                 by.x = c("VessID", "Year"), by.y = c("I_NCEE", "Year"))
                        },
                        setInEffort = function(){
-                         agg_DaysAtSea <- aggregate(Freq ~ I_NCEE + effYear + Loa + Kw, daysAtSea, sum)
+                         agg_DaysAtSea <- aggregate(Freq ~ I_NCEE + Year + Loa + Kw, daysAtSea, sum)
                          tmp_effoCost <- rawEconomy[,c("VessID", "Year", "EffortCost")]
                          inEffortReg <<- merge(x = tmp_effoCost, y = agg_DaysAtSea,
                                                 by.x = c("VessID", "Year"), by.y = c("I_NCEE", "Year"))
