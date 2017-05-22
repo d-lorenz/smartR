@@ -1840,7 +1840,7 @@ FishFleet <- R6Class("fishFleet",
                                                 by.x = c("VessID", "Year"), by.y = c("I_NCEE", "Year"))
                        },
                        getRegSpatial = function(){
-                         outSpatialReg <<- lm(formula = SpatialCost ~ EffInd - 1, data = inSpatialReg)
+                         outSpatialReg <<- lm(formula = SpatialCost ~ EffInd + Loa - 1, data = inSpatialReg)
                        },
                        getRegEffort = function(){
                          outEffortReg <<- lm(formula = EffortCost ~ Freq + Loa + Kw - 1, data = inEffortReg)
