@@ -1061,6 +1061,10 @@ smart_gui <- function(){
   reg_g_top_harbs <- gframe(text = "Harbour Distance", horizontal = TRUE, container = reg_g_top, expand = TRUE)
   addSpace(reg_g_top_harbs, 10)
   gbutton("Get Harbours", container = reg_g_top_harbs, handler = function(h,...){
+    my_project$fleet$setRegHarbs()
+  })
+  addSpace(reg_g_top_harbs, 10)
+  gbutton("Set Weighted\nDistance", container = reg_g_top_harbs, handler = function(h,...){
     dev.set(dev.list()[pre_dev+4])
     my_project$getHarbFgDist()
     my_project$ggplotFgWeigDists()
