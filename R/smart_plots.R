@@ -138,13 +138,14 @@ ggplot_effortRegression = function(df_effortIn, reg_effortOut){
 
 ## Economy - Production Regression scatter plot ----
 ggplot_productionRegression = function(df_productionIn, reg_productionOut){
+  df_productionIn$Response <- reg_productionOut$coefficients[1] * df_productionIn$Production
   return(
     suppressMessages(
-      ggplot(df_productionIn, aes_(x = reg_productionOut$coefficients[1] * ~Production, y = ~ProductionCost)) +
+      ggplot(df_productionIn, aes_(x = ~Response, y = ~ProductionCost)) +
         geom_point() +
         stat_smooth(method = "lm", col = "Firebrick") +
         ggtitle("Production Based Cost Regression") +
-        scale_x_continuous("Production Index", breaks = pretty(df_productionIn$Production, 4)) +
+        scale_x_continuous("Production Index", breaks = pretty(df_productionIn$Response, 4)) +
         scale_y_continuous("", breaks = pretty(df_productionIn$ProductionCost, 10)) +
         theme_tufte(base_size = 14, ticks=F) +
         theme(legend.position = "none",
