@@ -114,13 +114,14 @@ ggplot_spatialRegression = function(df_spatialIn, reg_spatialOut){
 
 ## Economy - Effort Regression scatter plot ----
 ggplot_effortRegression = function(df_effortIn, reg_effortOut){
+  df_effortIn$Response <- reg_effortOut$coefficients[1] * df_effortIn$Freq + reg_effortOut$coefficients[2] * df_effortIn$Loa + reg_effortOut$coefficients[3] * df_effortIn$Kw
   return(
     suppressMessages(
-      ggplot(df_effortIn, aes_(x = reg_effortOut$coefficients[1] * ~Freq + reg_effortOut$coefficients[2] * ~Loa + reg_effortOut$coefficients[3] * ~Kw, y = ~EffortCost)) +
+      ggplot(df_effortIn, aes_(x = ~Response, y = ~EffortCost)) +
         geom_point() +
         stat_smooth(method = "lm", col = "Firebrick") +
         ggtitle("Effort Based Cost Regression") +
-        scale_x_continuous("Effort Index", breaks = pretty(df_effortIn$Freq, 4)) +
+        scale_x_continuous("Effort Index", breaks = pretty(df_effortIn$Response, 4)) +
         scale_y_continuous("Effort Cost", breaks = pretty(df_effortIn$EffortCost, 10)) +
         theme_tufte(base_size = 14, ticks=F) +
         theme(legend.position = "none",
