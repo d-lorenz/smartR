@@ -90,13 +90,14 @@ ggplot_seaDaysBoxplot = function(df_seaDays){
 
 ## Economy - Spatial Regression scatter plot ----
 ggplot_spatialRegression = function(df_spatialIn, reg_spatialOut){
+  df_spatialIn$Response <- df_spatialIn$EffInd * reg_spatialOut$coefficients[1] + df_spatialIn$Loa * reg_spatialOut$coefficients[2]
   return(
     suppressMessages(
-      ggplot(df_spatialIn, aes_(x = reg_spatialOut$coefficients[1] * ~EffInd + reg_spatialOut$coefficients[2] * ~Loa, y = ~SpatialCost)) +
+      ggplot(df_spatialIn, aes_(x = ~Response, y = ~SpatialCost)) +
         geom_point() +
         stat_smooth(method = "lm", col = "Firebrick") +
         ggtitle("Spatial Based Cost Regression") +
-        scale_x_continuous("Spatial Index", breaks = pretty(df_spatialIn$EffInd, 4)) +
+        scale_x_continuous("Spatial Index", breaks = pretty(df_spatialIn$Response, 4)) +
         scale_y_continuous("Spatial Cost", breaks = pretty(df_spatialIn$SpatialCost, 10)) +
         theme_tufte(base_size = 14, ticks=F) +
         theme(legend.position = "none",
