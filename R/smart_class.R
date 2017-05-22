@@ -80,8 +80,8 @@ SmartProject <- R6Class("smartProject",
                                                           Production = apply(fleet$effoProdAllLoa[,(4+sampMap$cutFG+1):ncol(fleet$effoProdAllLoa)],1, sum))
                           },
                           getHarbFgDist = function(){
+                            if(is.null(fleet$regHarbsUni)) stop("Missing Harbours Coordinates")
                             cat("\nRunnnig Fishing ground average distances routine... ", cat = "")
-                            fleet$setRegHarbs()
                             setRegHarbBox()
                             setFgWeigDist()
                             cat("\nFishing ground average distances routine completed!", cat = "")
