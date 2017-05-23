@@ -1064,6 +1064,29 @@ smart_gui <- function(){
     my_project$fleet$setRegHarbs()
   })
   addSpace(reg_g_top_harbs, 10)
+
+  reg_g_harb_ico <- ggroup(horizontal = FALSE, container = reg_g_top_harbs)
+  addSpring(reg_g_harb_ico)
+  gimage(system.file("ico/folder-man.png", package="smartR"), container = reg_g_harb_ico,
+         handler = function(h,...){
+
+         })
+  addSpring(reg_g_harb_ico)
+  gimage(system.file("ico/document-save-2.ico", package="smartR"), container = reg_g_harb_ico,
+         handler = function(h,...){
+           if(is.null(my_project$fleet$regHarbsUni)) stop("Missing Harbour Data List")
+
+           save_dest <- gfile(text = "Select file name and destination directory", type = "save",
+                              initial.filename = "Smart_Harbour_List.rData", initial.dir = my_project$sampMap$gridPath)
+           if(rev(unlist(strsplit(save_dest, "[.]")))[1] != "rData"){
+             save_dest <- paste(save_dest, ".rData", sep = "")
+           }
+
+           my_project$fleet$saveFleetHarb(save_dest)
+         })
+  addSpring(reg_g_harb_ico)
+
+  addSpace(reg_g_top_harbs, 10)
   gbutton("Set Weighted\nDistance", container = reg_g_top_harbs, handler = function(h,...){
     dev.set(dev.list()[pre_dev+4])
     my_project$getHarbFgDist()
