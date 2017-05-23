@@ -40,6 +40,7 @@ importFrom("utils", "capture.output", "read.table", "read.csv")
 importFrom("ggthemes", "theme_tufte", "theme_few")
 importFrom("ggrepel","geom_label_repel")
 importFrom("vegan", "decostand")
+inportFrom("rgdal", "readOGR")
 
 export(smart_gui)
 export(SmartProject)
