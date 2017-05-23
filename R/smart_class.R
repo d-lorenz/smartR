@@ -39,7 +39,7 @@ SmartProject <- R6Class("smartProject",
                             agg_Prod <- aggregate(Production ~ I_NCEE + Year, tmp_Prod, sum)
                             tmp_effoCost <- fleet$rawEconomy[,c("VessID", "Year", "ProductionCost")]
                             fleet$inProductionReg <<- merge(x = tmp_effoCost, y = agg_Prod,
-                                                  by.x = c("VessID", "Year"), by.y = c("I_NCEE", "Year"))
+                                                            by.x = c("VessID", "Year"), by.y = c("I_NCEE", "Year"))
                           },
                           setDaysAtSea = function(){
                             cat("\nProcessing year: ", sep = "")
@@ -75,9 +75,9 @@ SmartProject <- R6Class("smartProject",
                           },
                           setProductionIndex = function(){
                             fleet$prodIndex <<- data.frame(Year = fleet$effoProdAllLoa$Year,
-                                                          I_NCEE = fleet$effoProdAllLoa$I_NCEE,
-                                                          MonthNum = fleet$effoProdAllLoa$MonthNum,
-                                                          Production = apply(fleet$effoProdAllLoa[,(4+sampMap$cutFG+1):ncol(fleet$effoProdAllLoa)],1, sum))
+                                                           I_NCEE = fleet$effoProdAllLoa$I_NCEE,
+                                                           MonthNum = fleet$effoProdAllLoa$MonthNum,
+                                                           Production = apply(fleet$effoProdAllLoa[,(4+sampMap$cutFG+1):ncol(fleet$effoProdAllLoa)],1, sum))
                           },
                           getHarbFgDist = function(){
                             if(is.null(fleet$regHarbsUni)) stop("Missing Harbours Coordinates")
@@ -1843,7 +1843,7 @@ FishFleet <- R6Class("fishFleet",
                          agg_DaysAtSea <- aggregate(Freq ~ I_NCEE + Year + Loa + Kw, daysAtSea, sum)
                          tmp_effoCost <- rawEconomy[,c("VessID", "Year", "EffortCost")]
                          inEffortReg <<- merge(x = tmp_effoCost, y = agg_DaysAtSea,
-                                                by.x = c("VessID", "Year"), by.y = c("I_NCEE", "Year"))
+                                               by.x = c("VessID", "Year"), by.y = c("I_NCEE", "Year"))
                        },
                        getRegSpatial = function(){
                          outSpatialReg <<- lm(formula = SpatialCost ~ EffInd + Loa - 1, data = inSpatialReg)
