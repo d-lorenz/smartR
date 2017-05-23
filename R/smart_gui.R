@@ -1798,6 +1798,12 @@ smart_gui <- function(){
   gbutton("   Get\nMEDITS index", container = raw_g_top, handler = function(h,...){
 
     strataVect <- c(0, 10, 50, 100, 200, 500, 800, Inf)
+    icoStrata_off <- gimage(system.file("ico/user-invisible.png", package="smartR"))
+    icoStrata_on <- gimage(system.file("ico/user-available.png", package="smartR"))
+    icoArea_off <- gimage(system.file("ico/user-invisible.png", package="smartR"))
+    icoArea_on <- gimage(system.file("ico/user-available.png", package="smartR"))
+    icoMedit_off <- gimage(system.file("ico/user-invisible.png", package="smartR"))
+    icoMedit_on <- gimage(system.file("ico/user-available.png", package="smartR"))
 
     temp_dia <- gwindow(title="Medits index calculator", visible = FALSE,
                         parent = main_win,
