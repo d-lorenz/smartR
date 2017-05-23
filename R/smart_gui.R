@@ -2554,6 +2554,13 @@ smart_gui <- function(){
 
   ####   Simulation   ####
 
+  icoEffIndex_off <- gimage(system.file("ico/user-invisible.png", package="smartR"))
+  icoEffIndex_on <- gimage(system.file("ico/user-available.png", package="smartR"))
+  icoSeaIndex_off <- gimage(system.file("ico/user-invisible.png", package="smartR"))
+  icoSeaIndex_on <- gimage(system.file("ico/user-available.png", package="smartR"))
+  icoProdIndex_off <- gimage(system.file("ico/user-invisible.png", package="smartR"))
+  icoProdIndex_on <- gimage(system.file("ico/user-available.png", package="smartR"))
+
   sim_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Simulation")
   sim_g_top <- gframe(horizontal = TRUE, container = sim_g, spacing = 10)
   addSpace(sim_g_top, 20)
