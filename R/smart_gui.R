@@ -1092,7 +1092,7 @@ smart_gui <- function(){
          })
   addSpring(reg_g_harb_ico)
 
-  addSpace(reg_g_top_harbs, 10)
+  addSpring(reg_g_top_harbs)
   gbutton("Set Weighted\nDistance", container = reg_g_top_harbs, handler = function(h,...){
     dev.set(dev.list()[pre_dev+4])
     my_project$getHarbFgDist()
