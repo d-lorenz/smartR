@@ -1072,7 +1072,7 @@ smart_gui <- function(){
 
            load_path <- gfile(text = "Select Harbour List file", type = "open", filter = list("R files" = list(patterns = c("*.rData"))))
 
-           if(length(out_file) == 0) stop("Missing File to Load!")
+           if(length(load_path) == 0) stop("Missing File to Load!")
 
            cat("\nLoading Harbour List from ", load_path, sep = "")
 
