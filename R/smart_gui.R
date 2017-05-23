@@ -1845,7 +1845,7 @@ smart_gui <- function(){
       my_project$setAbuAvgAll()
       my_project$setStrataAbu()
       my_project$setMeditsIndex()
-      delete(medInd_f, sim_g_Prod$children[[length(sim_g_Prod$children)]])
+      delete(medInd_f, medInd_f$children[[length(medInd_f$children)]])
       add(medInd_f, icoMedit_on)
     })
     add(medInd_f, icoMedit_off)
