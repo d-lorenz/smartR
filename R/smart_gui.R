@@ -2566,8 +2566,11 @@ smart_gui <- function(){
     my_project$setEffortIndex()
     dev.set(dev.list()[pre_dev+8])
     print(ggplot_effoIndBoxplot(df_EffoInde = my_project$fleet$effortIndex))
-    delete(sim_g_Effo, sim_g_Effo$children[[length(sim_g_Effo$children)]])
-    add(sim_g_Effo, regi_sta_n)
+
+    if(!is.null(fleet$effortIndex)){
+      delete(sim_g_Effo, sim_g_Effo$children[[length(sim_g_Effo$children)]])
+      add(sim_g_Effo, regi_sta_n)
+    }
   })
   add(sim_g_Effo, regi_sta)
   addSpace(sim_g_top, 10)
@@ -2577,8 +2580,11 @@ smart_gui <- function(){
     my_project$setDaysAtSea()
     dev.set(dev.list()[pre_dev+8])
     print(ggplot_seaDaysBoxplot(df_seaDays = my_project$fleet$daysAtSea))
-    delete(sim_g_SeaDays, sim_g_SeaDays$children[[length(sim_g_SeaDays$children)]])
-    add(sim_g_SeaDays, regi_sta_n)
+
+    if(!is.null(fleet$daysAtSea)){
+      delete(sim_g_SeaDays, sim_g_SeaDays$children[[length(sim_g_SeaDays$children)]])
+      add(sim_g_SeaDays, regi_sta_n)
+    }
   })
   add(sim_g_SeaDays, regi_sta)
   addSpace(sim_g_top, 10)
@@ -2588,8 +2594,11 @@ smart_gui <- function(){
     my_project$setProductionIndex()
     dev.set(dev.list()[pre_dev+8])
     print(ggplot_prodIndBoxplot(df_ProdInde = my_project$fleet$prodIndex))
-    delete(sim_g_Prod, sim_g_Prod$children[[length(sim_g_Prod$children)]])
-    add(sim_g_Prod, regi_sta_n)
+
+    if(!is.null(fleet$prodIndex)){
+      delete(sim_g_Prod, sim_g_Prod$children[[length(sim_g_Prod$children)]])
+      add(sim_g_Prod, regi_sta_n)
+    }
   })
   add(sim_g_Prod, regi_sta)
 
