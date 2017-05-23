@@ -600,9 +600,6 @@ smart_gui <- function(){
     temp_dia <- gwindow(title="Set Fishing Points", visible = FALSE,
                         width = 650, height = 450, parent = main_win)
 
-    temp_dia <- gwindow(title="Set Fishing Points", visible = FALSE,
-                        width = 650, height = 450)
-
     up_g <- ggroup(horizontal = FALSE, container = temp_dia)
     up_fra <- gframe(container = up_g, horizontal = TRUE)
     addSpring(up_fra)
