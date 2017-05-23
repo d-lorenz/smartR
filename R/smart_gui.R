@@ -1074,6 +1074,8 @@ smart_gui <- function(){
 
            if(length(out_file) == 0) stop("Missing File to Load!")
 
+           cat("\nLoading Harbour List from ", load_path, sep = "")
+
            my_project$fleet$loadFleetHarb(harb_path = load_path)
 
          })
@@ -1089,6 +1091,8 @@ smart_gui <- function(){
            }
 
            my_project$fleet$saveFleetHarb(harb_path = save_dest)
+
+           cat("\nHarbour List saved in: ", save_dest, sep = "")
          })
   addSpring(reg_g_harb_ico)
 
