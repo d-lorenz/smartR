@@ -1821,7 +1821,7 @@ smart_gui <- function(){
     depth_b <- gbutton(text = "Set", container = strata_f, handler = function(h,...){
       my_project$setDepthSurvey()
       my_project$setStratumSurvey(vectorStrata = strataVect)
-      delete(strata_f, sim_g_Prod$children[[length(sim_g_Prod$children)]])
+      delete(strata_f, strata_f$children[[length(strata_f$children)]])
       add(strata_f, icoStrata_on)
     })
     add(strata_f, icoStrata_off)
