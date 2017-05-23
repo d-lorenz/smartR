@@ -2573,10 +2573,10 @@ smart_gui <- function(){
 
     if(!is.null(fleet$effortIndex)){
       delete(sim_g_Effo, sim_g_Effo$children[[length(sim_g_Effo$children)]])
-      add(sim_g_Effo, regi_sta_n)
+      add(sim_g_Effo, icoEffIndex_on)
     }
   })
-  add(sim_g_Effo, regi_sta)
+  add(sim_g_Effo, icoEffIndex_off)
   addSpace(sim_g_top, 10)
 
   sim_g_SeaDays <- gframe(text = "Days At Sea", horizontal = FALSE, container = sim_g_top)
@@ -2587,10 +2587,10 @@ smart_gui <- function(){
 
     if(!is.null(fleet$daysAtSea)){
       delete(sim_g_SeaDays, sim_g_SeaDays$children[[length(sim_g_SeaDays$children)]])
-      add(sim_g_SeaDays, regi_sta_n)
+      add(sim_g_SeaDays, icoSeaIndex_on)
     }
   })
-  add(sim_g_SeaDays, regi_sta)
+  add(sim_g_SeaDays, icoSeaIndex_off)
   addSpace(sim_g_top, 10)
 
   sim_g_Prod <- gframe(text = "Production Index", horizontal = FALSE, container = sim_g_top)
@@ -2601,10 +2601,10 @@ smart_gui <- function(){
 
     if(!is.null(fleet$prodIndex)){
       delete(sim_g_Prod, sim_g_Prod$children[[length(sim_g_Prod$children)]])
-      add(sim_g_Prod, regi_sta_n)
+      add(sim_g_Prod, icoProdIndex_on)
     }
   })
-  add(sim_g_Prod, regi_sta)
+  add(sim_g_Prod, icoProdIndex_off)
 
   addSpring(sim_g_top)
 
