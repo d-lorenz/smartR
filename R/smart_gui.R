@@ -2561,26 +2561,29 @@ smart_gui <- function(){
   sim_g_top <- gframe(horizontal = TRUE, container = sim_g, spacing = 10)
   addSpace(sim_g_top, 20)
 
-  sim_g_top1 <- ggroup(horizontal = FALSE, container = sim_g_top)
-  addSpring(sim_g_top1)
-  gbutton("Get Effort Index", container = sim_g_top1, handler = function(h,...){
+  sim_g_Effo <- gframe(text = "Effort Index", horizontal = FALSE, container = sim_g_top)
+  gbutton("Get", container = sim_g_Effo, handler = function(h,...){
     my_project$setEffortIndex()
     dev.set(dev.list()[pre_dev+8])
     print(ggplot_effoIndBoxplot(df_EffoInde = my_project$fleet$effortIndex))
   })
-  addSpring(sim_g_top1)
-  gbutton("Get Days At Sea", container = sim_g_top1, handler = function(h,...){
+  addSpace(sim_g_top, 10)
+
+  sim_g_SeaDays <- gframe(text = "Days At Sea", horizontal = FALSE, container = sim_g_top)
+  gbutton("Get", container = sim_g_SeaDays, handler = function(h,...){
     my_project$setDaysAtSea()
     dev.set(dev.list()[pre_dev+8])
     print(ggplot_seaDaysBoxplot(df_seaDays = my_project$fleet$daysAtSea))
   })
-  addSpring(sim_g_top1)
-  gbutton("Get Production Index", container = sim_g_top1, handler = function(h,...){
+  addSpace(sim_g_top, 10)
+
+  sim_g_Prod <- gframe(text = "Production Index", horizontal = FALSE, container = sim_g_top)
+  gbutton("Get", container = sim_g_Prod, handler = function(h,...){
     my_project$setProductionIndex()
     dev.set(dev.list()[pre_dev+8])
     print(ggplot_prodIndBoxplot(df_ProdInde = my_project$fleet$prodIndex))
   })
-  addSpring(sim_g_top1)
+  addSpace(sim_g_top, 10)
 
   addSpring(sim_g_top)
 
