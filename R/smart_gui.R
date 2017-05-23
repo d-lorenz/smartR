@@ -1070,6 +1070,12 @@ smart_gui <- function(){
   gimage(system.file("ico/folder-man.png", package="smartR"), container = reg_g_harb_ico,
          handler = function(h,...){
 
+           load_path <- gfile(text = "Select Harbour List file", type = "open", filter = list("R files" = list(patterns = c("*.rData"))))
+
+           if(length(out_file) == 0) stop("Missing File to Load!")
+
+           my_project$fleet$loadFleetHarb(harb_path = load_path)
+
          })
   addSpring(reg_g_harb_ico)
   gimage(system.file("ico/document-save-2.ico", package="smartR"), container = reg_g_harb_ico,
