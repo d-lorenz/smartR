@@ -1833,7 +1833,7 @@ smart_gui <- function(){
       my_project$sampMap$setAreaGrid()
       my_project$sampMap$setAreaStrata(vectorStrata = strataVect)
       my_project$sampMap$setWeightStrata()
-      delete(areas_f, sim_g_Prod$children[[length(sim_g_Prod$children)]])
+      delete(areas_f, areas_f$children[[length(areas_f$children)]])
       add(areas_f, icoArea_on)
     })
     add(areas_f, icoArea_off)
