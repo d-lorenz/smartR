@@ -56,5 +56,6 @@ Imports:
     ggthemes,
     vegan,
     rpart,
-    ggrepel
+    ggrepel,
+    rgdal
 RoxygenNote: 5.0.1
