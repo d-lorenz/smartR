@@ -1088,7 +1088,7 @@ smart_gui <- function(){
              save_dest <- paste(save_dest, ".rData", sep = "")
            }
 
-           my_project$fleet$saveFleetHarb(save_dest)
+           my_project$fleet$saveFleetHarb(harb_path = save_dest)
          })
   addSpring(reg_g_harb_ico)
 
