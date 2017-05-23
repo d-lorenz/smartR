@@ -1803,6 +1803,9 @@ FishFleet <- R6Class("fishFleet",
                        saveFleetHarb = function(harb_path){
                          saveRDS(object = regHarbsUni, file = harb_path)
                        },
+                       laodFleetHarb = function(harb_path){
+                         regHarbsUni <<- readRDS(file = harb_path)
+                       },
                        setBetaAvg = function(sel_specie){
                          tmp_df <- data.frame(Month = resNNLS[[sel_specie]]$SceMat$MONTH,
                                               resNNLS[[sel_specie]]$bmat)
