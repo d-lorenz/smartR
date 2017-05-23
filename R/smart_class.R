@@ -384,8 +384,9 @@ SmartProject <- R6Class("smartProject",
                             all_cell[is.na(all_cell)] <- 0
                             grid_data <- cbind(sampMap$cutResShpFort, DistAvg = all_cell[,2])
 
-                            print(
-                              suppressWarnings(
+
+                            suppressWarnings(
+                              print(
                                 suppressMessages(
                                   sampMap$gooMapPlot +
                                     geom_polygon(aes(x = long, y = lat,
