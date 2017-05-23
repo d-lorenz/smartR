@@ -1817,26 +1817,38 @@ smart_gui <- function(){
     comfra_g <- gframe("Compute", horizontal = TRUE, container = med_g_top, expand = TRUE)
     addSpring(comfra_g)
 
-    depth_b <- gbutton(text = "Set Strata", container = comfra_g, handler = function(h,...){
+    strata_f <- gframe("Strata", horizontal = FALSE, container = comfra_g, expand = TRUE)
+    depth_b <- gbutton(text = "Set", container = strata_f, handler = function(h,...){
       my_project$setDepthSurvey()
       my_project$setStratumSurvey(vectorStrata = strataVect)
+      delete(strata_f, sim_g_Prod$children[[length(sim_g_Prod$children)]])
+      add(strata_f, icoStrata_on)
     })
+    add(strata_f, icoStrata_off)
 
     addSpring(comfra_g)
 
-    area_b <- gbutton(text = "Set Areas", container = comfra_g, handler = function(h,...){
+    areas_f <- gframe("Areas", horizontal = FALSE, container = comfra_g, expand = TRUE)
+    area_b <- gbutton(text = "Set", container = areas_f, handler = function(h,...){
       my_project$sampMap$setAreaGrid()
       my_project$sampMap$setAreaStrata(vectorStrata = strataVect)
       my_project$sampMap$setWeightStrata()
+      delete(areas_f, sim_g_Prod$children[[length(sim_g_Prod$children)]])
+      add(areas_f, icoArea_on)
     })
+    add(areas_f, icoArea_off)
 
     addSpring(comfra_g)
 
-    area_b <- gbutton(text = "Get Index", container = comfra_g, handler = function(h,...){
+    medInd_f <- gframe("MEDITS Index", horizontal = FALSE, container = comfra_g, expand = TRUE)
+    medInd_b <- gbutton(text = "Set", container = medInd_f, handler = function(h,...){
       my_project$setAbuAvgAll()
       my_project$setStrataAbu()
       my_project$setMeditsIndex()
+      delete(medInd_f, sim_g_Prod$children[[length(sim_g_Prod$children)]])
+      add(medInd_f, icoMedit_on)
     })
+    add(medInd_f, icoMedit_off)
 
     addSpring(comfra_g)
     addSpring(med_g_top)
