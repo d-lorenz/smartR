@@ -2801,7 +2801,7 @@ SampleMap <- R6Class("sampleMap",
                          gridName <<- substr(tmp_name, 1, nchar(tmp_name)-4)
                        },
                        loadGridShp = function(){
-                         gridShp <<- readShapePoly(gridPath)
+                         gridShp <<- readOGR(gridPath)
                        },
                        setBioPath = function(path2bio){
                          bioPath <<- path2bio
@@ -2812,7 +2812,7 @@ SampleMap <- R6Class("sampleMap",
                          bioName <<- substr(tmp_name, 1, nchar(tmp_name)-4)
                        },
                        loadBioShp = function(){
-                         bioShp <<- readShapePoly(bioPath)
+                         bioShp <<- readOGR(bioPath)
                        },
                        addBioShp = function(bio_path){
                          setBioPath(bio_path)
