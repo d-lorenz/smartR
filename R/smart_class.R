@@ -1267,15 +1267,15 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                              setSpecie = function(){specie <<- unique(rawLFD[,"Specie"])},
                              setLClass = function(){lengClas <<- seq(from = min(rawLFD[,"Class"]), to = max(rawLFD[,"Class"]), by = 1) },
                              setNCoho = function(num_coh){nCoho <<- num_coh},
-                             setPrior = function(f_linf, f_k, f_t0, m_linf, m_k, m_t0){
-                               prior <<- list('Female' = list('Linf' = list('Mean' = f_linf[1], 'StD' = f_linf[2]),
-                                                              'K' = list('Mean' = f_k[1], 'StD' = f_k[2]),
-                                                              't0' = list('Mean' = f_t0[1], 'StD' = f_t0[2])),
-                                              'Male' = list('Linf' = list('Mean' = m_linf[1], 'StD' = m_linf[2]),
-                                                            'K' = list('Mean' = m_k[1], 'StD' = m_k[2]),
-                                                            't0' = list('Mean' = m_t0[1], 'StD' = m_t0[2])))
-
-                             },
+                             # setPrior = function(f_linf, f_k, f_t0, m_linf, m_k, m_t0){
+                             #   prior <<- list('Female' = list('Linf' = list('Mean' = f_linf[1], 'StD' = f_linf[2]),
+                             #                                  'K' = list('Mean' = f_k[1], 'StD' = f_k[2]),
+                             #                                  't0' = list('Mean' = f_t0[1], 'StD' = f_t0[2])),
+                             #                  'Male' = list('Linf' = list('Mean' = m_linf[1], 'StD' = m_linf[2]),
+                             #                                'K' = list('Mean' = m_k[1], 'StD' = m_k[2]),
+                             #                                't0' = list('Mean' = m_t0[1], 'StD' = m_t0[2])))
+                             #
+                             # },
                              setLWpar = function(alphaVal, betaVal, sex){
                                LWpar[[sex]] <<- list(alpha = as.numeric(alphaVal), beta = as.numeric(betaVal))
                              },
