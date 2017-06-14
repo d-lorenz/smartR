@@ -1242,23 +1242,9 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                         #       }
                         #     }
                         calcMixDate = function(nAdap = 100, nSamp = 2000, sexDrop = "Female", curveSel = "von Bertalanffy"){
-                          # mixPar <<- list('Female' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)),
-                          #                 'Male' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)))
-                          # for(sex in c("Female", "Male")){ }
-
                           outPalette <- rainbow(nCoho)
 
-                          # ### FishBase data
-                          # mut_popgrowth <- popgrowth("Mullus barbatus barbatus")
-                          # ###
-
                           curDistri <- spreDist[[sexDrop]]
-
-                          # if(sexDrop == "Female"){
-                          #   curDistri <- femaleSpre
-                          # }else{
-                          #   curDistri <- maleSpre
-                          # }
 
                           sub_idx <- sample(1:nrow(curDistri), size = nSamp)
                           sub_data <- curDistri[sub_idx,]
@@ -1279,8 +1265,6 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                           inits = list(list(Linf = max(sub_data$Length), k = 0.5, t0 = 0.0),
                                        list(Linf = max(sub_data$Length), k = 0.5, t0 = 0.0),
                                        list(Linf = max(sub_data$Length), k = 0.5, t0 = 0.0))
-
-                          tt = as.POSIXlt(chron(curDistri$UTC))$yday / 366
 
                           ### MCMC model setup
                           modelGrow <- ifelse(curveSel == "von Bertalanffy",
@@ -1330,25 +1314,17 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                           for(iObs in 1:nrow(curDistri)){
 
                             if(curveSel == "von Bertalanffy"){
-                              temp <- LHat * (1 - exp(-kHat*(((1:nCoho)-1+tt[iObs]))))
+                              temp <- LHat * (1 - exp(-kHat*(((1:nCoho)-1))))
                             }else{
-                              temp <- LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho)-1+tt[iObs]))))
+                              temp <- LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho)-1))))
                             }
-
-                            ## GGF
-                            ##  temp = LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho) - 1 - t0Hat))))
-                            # temp = LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho)-1+tt[iObs]))))  ##BEST
-                            ##  temp = LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho)-1+tt[iObs] - t0Hat))))
-
-                            # VBGF
-                            # temp = LHat * (1 - exp(-kHat*(((1:nCoho)-1+tt[iObs]) - t0Hat)))
 
                             means.f[iObs,] = temp
                             postProbs = dnorm(curDistri$Length[iObs], temp, sqrt(sigma2Hat))
                             zHat[iObs] = as.numeric(names(which.max(table(sample(1:nCoho, size = 150, prob = postProbs, replace = TRUE)))))
                           }
 
-                          ages.f = zHat -1 + tt #- t0Hat
+                          ages.f = zHat - 1
                           AA = floor(ages.f)
 
                           ### MCMC output
@@ -1362,24 +1338,16 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                           # nFG = length(unique(FG))
 
                           mix_out <- data.frame(Length = curDistri$Length,
-                                                Date = curDistri$UTC,
+                                                Year = curDistri$Year,
                                                 Day = tt,
                                                 Age = AA,
                                                 AgeNF = ages.f,
                                                 FG = FGlabels)
 
-                          mix_out$Year <- years(mix_out$Date)
-                          mix_out$Month <- as.numeric(months(mix_out$Date))
-                          mix_out$MonthChar <- curDistri$Month
-                          mix_out$Quarter <- as.numeric(quarters(mix_out$Date))
                           mix_out$Birth <- as.numeric(as.character(mix_out$Year)) - mix_out$Age
 
-                          zeroedMonth <- ifelse(nchar(mix_out$Month) == 2, mix_out$Month, paste("0", mix_out$Month, sep = ""))
-                          mix_out$CatcDate <- factor(paste(mix_out$Year,
-                                                           zeroedMonth, sep = "-"),
-                                                     levels = paste(rep(sort(unique(mix_out$Year)), each = 12),
-                                                                    sort(unique(zeroedMonth)), sep = "-"))
-
+                          mix_out$CatcDate <- factor(mix_out$Year,
+                                                     levels = min(mix_out$Year):max(mix_out$Year))
 
                           groMixout[[sexDrop]] <<- mix_out
 
@@ -1407,7 +1375,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                           ###
 
                           ### MCMC calc birth
-                          out_birth <- table(paste(mix_out$Year, mix_out$Quarter, sep = "_"),  mix_out$Birth)
+                          out_birth <- table(mix_out$Year,  mix_out$Birth)
                           birth_melt <- melt(out_birth)
                           names(birth_melt) <- c("Catch", "Birth", "Qty")
                           birth_melt$Catch <- factor(birth_melt$Catch, levels = paste(rep(levels(mix_out$Year), each = 4),
