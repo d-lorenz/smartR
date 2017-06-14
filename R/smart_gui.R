@@ -1910,11 +1910,6 @@ smart_gui <- function(){
       svalue(fis_l1) <- paste("Specie: ", paste(my_project$specieInFishery, collapse = " - "))
       svalue(fis_l3) <- paste("Years: from", min(as.numeric(as.character(my_project$yearInFishery))), " to ", max(as.numeric(as.character(my_project$yearInFishery))))
 
-      # if(!is.null(my_project$sampMap)){
-      #   svalue(stat_bar) <- "Splitting Fishery Population..."
-      #   my_project$setLFDPopFishery()
-      # }
-
       svalue(stat_bar) <- ""
 
       # ### Update Sampling Status
