@@ -1896,7 +1896,7 @@ smart_gui <- function(){
 
     if(!is.null(my_project$sampMap$cutResShp)){
       my_project$addFg2Fishery()
-      my_project$setSpreaDistAll()
+      my_project$setSpreaFishery()
       my_project$setSpatDistAll()
 
       my_project$sampMap$set_ggMapFgSamp(my_project$rawDataFishery)

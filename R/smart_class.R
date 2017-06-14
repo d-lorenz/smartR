@@ -163,7 +163,7 @@ SmartProject <- R6Class("smartProject",
                           },
                           addSpecieSurvey = function(sing_spe){surveyBySpecie <<- c(surveyBySpecie, SurveyBySpecie$new(sing_spe))},
                           addSpecieFishery = function(sing_spe){fisheryBySpecie <<- c(fisheryBySpecie, FisheryBySpecie$new(sing_spe))},
-                          setSpreaDistAll = function(){
+                          setSpreaFishery = function(){
                             for(i in 1:length(fisheryBySpecie)){
                               fisheryBySpecie[[i]]$setSpreDistSing()
                             }
