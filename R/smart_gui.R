@@ -1765,26 +1765,27 @@ smart_gui <- function(){
     spec_drop <- gcombobox(items = my_project$specieInSurvey, selected = 1, container = spec_b, editable = FALSE, handler = function(h,...){
 
       spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
-      # svalue(year_drop) <- "All"
-      # my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[,c("Class","Female","Male")]
-      # the_reclfd <- RecLFD(my_cel_dat, my_project$surveyBySpecie[[spe_ind]]$lengClas, 1)
-      # plotRecLFD(the_reclfd)
       suppressWarnings(grid.arrange(my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histLfdTot"]],
                                     my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histYearLfd"]],
                                     layout_matrix = rbind(c(1,1),
                                                           c(2,2))))
     })
     addSpring(spec_b)
-    year_b <- gframe("Year", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
+
+    sex_b <- gframe("Sex", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
+
     addSpring(lfdfra_g)
-    addSpring(year_b)
-    year_drop <- gcombobox(items = c("All", as.character(my_project$yearInSurvey)), selected = 1, container = year_b, editable = FALSE, handler = function(h,...){
-      spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
-      ifelse(svalue(year_drop) == "All", my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[,c("Class","Female","Male")], my_cel_dat <- my_project$surveyBySpecie[[spe_ind]]$rawLFD[which(my_project$surveyBySpecie[[spe_ind]]$rawLFD[,"Year"] ==  svalue(year_drop)),c("Class","Female","Male")])
-      the_reclfd <- RecLFD(my_cel_dat, my_project$surveyBySpecie[[spe_ind]]$lengClas, 1)
-      plotRecLFD(the_reclfd)
-    })
-    addSpring(year_b)
+    addSpring(sex_b)
+    sex_drop <- gcombobox(items = c("Female", "Male"),
+                          selected = 1, container = sex_b, expand = TRUE,
+                          editable = FALSE, handler = function(h,...){
+                            spe_ind <- which(my_project$surveyBySpecie == svalue(spec_drop))
+                            suppressWarnings(grid.arrange(my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histLfdTot"]],
+                                                          my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histYearLfd"]],
+                                                          layout_matrix = rbind(c(1,1),
+                                                                                c(2,2))))
+                          })
+    addSpring(sex_b)
 
     addSpring(lfdfra_g)
     addSpring(pop_g_top)
