@@ -1132,8 +1132,8 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               }
                             },
                             setSprePlot = function(sampSex){
-                              sprePlot[[sampSex]] <<- list(histLfdTot = set_ggHistLfdTot(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", "#63B8FF")),
-                                                           histYearLfd = set_ggHistYearLfd(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", "#63B8FF")))
+                              sprePlot[[sampSex]] <<- list(histLfdTot = set_ggHistLfdTot(spreDist[[sampSex]][sample(1, nrow(spreDist[[sampSex]]), 100000),]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", "#63B8FF")),
+                                                           histYearLfd = set_ggHistYearLfd(spreDist[[sampSex]][sample(1, nrow(spreDist[[sampSex]]), 100000),]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", "#63B8FF")))
                             },
                             calcMix = function(nAdap = 100, nSamp = 2000){
 
