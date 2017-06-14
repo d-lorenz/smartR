@@ -1439,11 +1439,6 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                  barploFgAll$relFreq = round(100*barploFgAll$Freq/sum(barploFgAll$Freq),1)
 
                                  spreSpat[[sex]] <<- barploFgAll
-                                 # if(sex == "Female"){
-                                 #   femaleSpat <<- barploFgAll
-                                 # }else{
-                                 #   maleSpat <<- barploFgAll
-                                 # }
                                  setSpatPlot(sampSex = sex)
                                }
                              },
