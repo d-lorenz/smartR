@@ -1239,7 +1239,233 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                         #         }
                         #       }
                         #     }
+                        calcMixDate = function(nAdap = 100, nSamp = 2000, sexDrop = "Female", curveSel = "von Bertalanffy"){
+                          # mixPar <<- list('Female' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)),
+                          #                 'Male' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)))
+                          # for(sex in c("Female", "Male")){ }
 
+                          outPalette <- rainbow(nCoho)
+
+                          # ### FishBase data
+                          # mut_popgrowth <- popgrowth("Mullus barbatus barbatus")
+                          # ###
+
+                          curDistri <- spreDist[[sexDrop]]
+
+                          # if(sexDrop == "Female"){
+                          #   curDistri <- femaleSpre
+                          # }else{
+                          #   curDistri <- maleSpre
+                          # }
+
+                          sub_idx <- sample(1:nrow(curDistri), size = nSamp)
+                          sub_data <- curDistri[sub_idx,]
+
+                          N <- length(sub_data$Length)
+                          alpha = rep(1, nCoho)
+                          Z = rep(NA, N)
+                          Z[which.min(sub_data$Length)] = 1
+                          Z[which.max(sub_data$Length)] = nCoho
+
+                          dataList <- list(y = sub_data$Length,
+                                           maxLeng = max(sub_data$Length),         ## !!!
+                                           alpha = alpha,
+                                           Z = Z,
+                                           N = N,
+                                           Nclust = nCoho)
+
+                          inits = list(list(Linf = max(sub_data$Length), k = 0.5, t0 = 0.0),
+                                       list(Linf = max(sub_data$Length), k = 0.5, t0 = 0.0),
+                                       list(Linf = max(sub_data$Length), k = 0.5, t0 = 0.0))
+
+                          tt = as.POSIXlt(chron(curDistri$UTC))$yday / 366
+
+                          ### MCMC model setup
+                          modelGrow <- ifelse(curveSel == "von Bertalanffy",
+                                              system.file("model/bertGrow.jags", package = "smartR"),
+                                              system.file("model/gompGrow.jags", package = "smartR"))
+
+                          jags.m <- jags.model(modelGrow,
+                                               data = dataList,
+                                               inits = inits,
+                                               n.chains = 3,
+                                               n.adapt = nAdap)
+                          ###
+
+                          ### MCMC chain sampling
+                          n.iter <- 500
+                          obsNode <- c('Linf', 'k', 't0', 'tau', 'p')
+                          samps <- coda.samples(jags.m, obsNode, n.iter = n.iter)
+                          ###
+
+                          sampMcmc[[sexDrop]] <<- samps
+
+                          ### MCMC estimates
+                          dfLinf <- data.frame(Parameter = "Linf",
+                                               Iter = 1:n.iter,
+                                               Chain = as.matrix(samps[,"Linf"], chains = TRUE)[,1],
+                                               Value = as.matrix(samps[,"Linf"], chains = TRUE)[,2])
+                          dfKapp <- data.frame(Parameter = "Kappa",
+                                               Iter = 1:n.iter,
+                                               Chain = as.matrix(samps[,"k"], chains = TRUE)[,1],
+                                               Value = as.matrix(samps[,"k"], chains = TRUE)[,2])
+
+                          ggdataSamps <- rbind(dfLinf, dfKapp)
+                          ggdataSampScat <- cbind(dfLinf[,2:3],
+                                                  Linf = dfLinf[,4],
+                                                  Kappa = dfKapp[,4])
+
+                          LHat = mean(as.matrix(samps[,"Linf"]))
+                          kHat = mean(as.matrix(samps[,"k"]))
+                          t0Hat = mean(as.matrix(samps[,"t0"]))
+                          taus <- as.matrix(samps[,grep("tau" ,varnames(samps))])
+                          sigma2s = 1/taus
+                          sigma2Hat = apply(sigma2s, 2, mean)
+
+                          ### age estimation
+                          means.f = matrix(0, nrow(curDistri), nCoho)
+                          zHat = numeric(nrow(curDistri))
+                          for(iObs in 1:nrow(curDistri)){
+
+                            if(curveSel == "von Bertalanffy"){
+                              temp <- LHat * (1 - exp(-kHat*(((1:nCoho)-1+tt[iObs]))))
+                            }else{
+                              temp <- LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho)-1+tt[iObs]))))
+                            }
+
+                            ## GGF
+                            ##  temp = LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho) - 1 - t0Hat))))
+                            # temp = LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho)-1+tt[iObs]))))  ##BEST
+                            ##  temp = LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho)-1+tt[iObs] - t0Hat))))
+
+                            # VBGF
+                            # temp = LHat * (1 - exp(-kHat*(((1:nCoho)-1+tt[iObs]) - t0Hat)))
+
+                            means.f[iObs,] = temp
+                            postProbs = dnorm(curDistri$Length[iObs], temp, sqrt(sigma2Hat))
+                            zHat[iObs] = as.numeric(names(which.max(table(sample(1:nCoho, size = 150, prob = postProbs, replace = TRUE)))))
+                          }
+
+                          ages.f = zHat -1 + tt #- t0Hat
+                          AA = floor(ages.f)
+
+                          ### MCMC output
+                          FGlabels = as.numeric(as.character(curDistri$NumFG))
+                          FGnames = unique(FGlabels)
+                          FG = numeric(length(FGlabels))
+                          for(FGname in 1:length(FGnames)){
+                            idx_FG = which(FGlabels == FGnames[FGname])
+                            FG[idx_FG] = rep(FGname, length(idx_FG))
+                          }
+                          # nFG = length(unique(FG))
+
+                          mix_out <- data.frame(Length = curDistri$Length,
+                                                Date = curDistri$UTC,
+                                                Day = tt,
+                                                Age = AA,
+                                                AgeNF = ages.f,
+                                                FG = FGlabels)
+
+                          mix_out$Year <- years(mix_out$Date)
+                          mix_out$Month <- as.numeric(months(mix_out$Date))
+                          mix_out$MonthChar <- curDistri$Month
+                          mix_out$Quarter <- as.numeric(quarters(mix_out$Date))
+                          mix_out$Birth <- as.numeric(as.character(mix_out$Year)) - mix_out$Age
+
+                          zeroedMonth <- ifelse(nchar(mix_out$Month) == 2, mix_out$Month, paste("0", mix_out$Month, sep = ""))
+                          mix_out$CatcDate <- factor(paste(mix_out$Year,
+                                                           zeroedMonth, sep = "-"),
+                                                     levels = paste(rep(sort(unique(mix_out$Year)), each = 12),
+                                                                    sort(unique(zeroedMonth)), sep = "-"))
+
+
+                          groMixout[[sexDrop]] <<- mix_out
+
+                          # mix_out$CorrBirth <- mix_out$Birth
+                          # mix_out$CorrBirth[which(mix_out$AgeNF %% 1 + 0.25 > 1)] <- mix_out$CorrBirth[which(mix_out$AgeNF %% 1 + 0.25 > 1)] + 1
+                          # mix_out$CorrBirth[which(mix_out$AgeNF - mix_out$Age > 0.81)] <- mix_out$CorrBirth[which(mix_out$AgeNF - mix_out$Age > 0.81)] - 1
+
+                          growPath <- data.frame(Birth = rep(min(mix_out$Birth):(min(mix_out$Birth)+11), each = length(levels(mix_out$CatcDate))),
+                                                 Date = rep(levels(mix_out$CatcDate), times = length(min(mix_out$Birth):(min(mix_out$Birth)+11))),
+                                                 Length = NA)
+                          growPath$Age <- as.numeric(strtrim(growPath$Date, 4)) - growPath$Birth + as.numeric(substr(growPath$Date, 6,7))/12
+
+                          if(curveSel == "von Bertalanffy"){
+                            growPath$Length <- calcVonBert(LHat, kHat, growPath$Age)
+                          }else{
+                            growPath$Length <- calcGomp(LHat, kHat, growPath$Age)
+                          }
+
+                          growPath$Date <- factor(growPath$Date, levels = levels(mix_out$CatcDate))
+                          # growPath <- growPath[growPath$Age > 0,]
+                          growPath <- growPath[growPath$Length > floor(min(mix_out$Length)),]
+
+                          coho_AL <- ddply(mix_out, .(Age), summarise,
+                                           coh.mean = mean(Length), coh.var = var(Length), coh.num = length(Length))
+                          ###
+
+                          ### MCMC calc birth
+                          out_birth <- table(paste(mix_out$Year, mix_out$Quarter, sep = "_"),  mix_out$Birth)
+                          birth_melt <- melt(out_birth)
+                          names(birth_melt) <- c("Catch", "Birth", "Qty")
+                          birth_melt$Catch <- factor(birth_melt$Catch, levels = paste(rep(levels(mix_out$Year), each = 4),
+                                                                                      rep(1:4, times = length(levels(mix_out$Year))), sep = "_"))
+                          birth_melt$Birth <- as.factor(birth_melt$Birth)
+                          birth_melt <- birth_melt[birth_melt$Qty != 0,]
+                          ###
+
+                          ### MCMC Calc Survivors
+                          tot_count <- apply(out_birth,2, sum)
+                          surv_tbl <- out_birth
+                          for(i in 1:nrow(out_birth)){
+                            surv_tbl[i,] <- tot_count
+                            tot_count <- tot_count - out_birth[i,]
+                          }
+
+                          surv_melt <- melt(surv_tbl)
+                          names(surv_melt) <- c("Catch", "Birth", "Qty")
+                          surv_melt$Catch <- factor(surv_melt$Catch, levels = paste(rep(levels(mix_out$Year), each = 4),
+                                                                                    rep(1:4, times = length(levels(mix_out$Year))), sep = "_"))
+                          surv_melt <- surv_melt[!duplicated(surv_melt[,2:3], fromLast = TRUE),]
+                          surv_melt <- surv_melt[surv_melt$Qty != 0,]
+                          surv_melt$Age <- as.numeric(strtrim(surv_melt$Catch, 4)) - surv_melt$Birth + as.numeric(substr(surv_melt$Catch, 6, 7))/4
+                          surv_melt$Birth <- as.factor(surv_melt$Birth)
+                          surv_melt$QtyNorm <- 100*round(as.numeric(surv_melt$Qty/apply(surv_tbl,2,max)[surv_melt$Birth]), 2)
+                          # surv_melt$QtyNorm <- 100*round(as.numeric(surv_melt$Qty/max(surv_tbl)), 1)
+
+                          surv_melt$Zeta <- 0
+                          for(i in unique(surv_melt$Birth)){
+                            tmp_surv_i <- surv_melt[surv_melt$Birth == i,]
+                            surv_melt$Zeta[surv_melt$Birth == i] <- c(0,-diff(tmp_surv_i$Qty)/diff(tmp_surv_i$Age)/tmp_surv_i$Qty[1])
+                            # surv_melt$Zeta[surv_melt$Birth == i] <- c(0,1/diff(tmp_surv_i$Age)*log(tmp_surv_i$Qty[-nrow(tmp_surv_i)]/tmp_surv_i$Qty[-1]))
+                            # surv_melt$Zeta[surv_melt$Birth == i] <- c(-diff(tmp_surv_i$Qty)/tmp_surv_i$Qty[-nrow(tmp_surv_i)], 0)
+                          }
+                          # surv_melt$Zeta <- 0.2*(surv_melt$Zeta)/(1/surv_melt$Zeta)
+                          ###
+
+                          ### MCMC chain Traceplot
+                          sprePlot[[sexDrop]][["traceChain"]] <<- set_ggChainTrace(ggdataSamps)
+                          ### MCMC chain scatterplot
+                          sprePlot[[sexDrop]][["scatLK"]] <<- set_ggChainScatter(gg_DFscat = ggdataSampScat, meanL = LHat, meanK = kHat)
+                          ### MCMC chain Boxplot Tau
+                          sprePlot[[sexDrop]][["cohoPreciGG"]] <<- set_ggTausBox(df_taus = taus[,1:(max(AA)+1)], tauPalette = outPalette, numCoho = nCoho)
+                          ### MCMC Boxplot Sigma
+                          sprePlot[[sexDrop]][["cohoVariGG"]] <<- set_ggSigmaBox(df_sigma = sigma2s[,1:(max(AA)+1)], sigPalette = outPalette, numCoho = nCoho)
+
+                          ### MCMC Plot Age-Length
+                          sprePlot[[sexDrop]][["ageLength"]] <<- set_ggAgeLength(df_mix = mix_out, mixPalette = outPalette)
+                          ### MCMC Age-Length Key
+                          sprePlot[[sexDrop]][["ageLengthTbl"]] <<- set_tblAgeLength(df_mix = mix_out)
+                          ### MCMC output cohort stats
+                          sprePlot[[sexDrop]][["cohoStatTbl"]] <<- set_tblCohoStat(df_coho = coho_AL)
+
+                          ### MCMC quarter vertical hist
+                          sprePlot[[sexDrop]][["histBirth"]] <<- set_ggHistBirth(df_mix = mix_out, df_grow = growPath)
+                          ### MCMC Catch * Quarters
+                          sprePlot[[sexDrop]][["lineCatch"]] <<- set_ggCatchLine(df_birth = birth_melt)
+                          ### MCMC Survivors * quarter
+                          sprePlot[[sexDrop]][["lineSurv"]] <<- set_ggSurvLine(df_surv = surv_melt)
+                        }
                             )
                           )
 
