@@ -1730,6 +1730,7 @@ smart_gui <- function(){
 
       if(!is.null(my_project$sampMap$cutResShp)){
         my_project$addFg2Survey()
+        my_project$setSpreaSurvey()
 
       }
 
