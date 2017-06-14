@@ -1798,9 +1798,6 @@ smart_gui <- function(){
 
     visible(temp_dia) <- TRUE
 
-    my_cel_dat <- my_project$surveyBySpecie[[1]]$rawLFD[,c("Class","Female","Male")]
-    the_reclfd <- RecLFD(my_cel_dat, my_project$surveyBySpecie[[1]]$lengClas, 1)
-    plotRecLFD(the_reclfd)
   })
 
   addSpring(raw_g_top)
