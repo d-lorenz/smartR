@@ -1154,91 +1154,94 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               sprePlot[[sampSex]][["spatAbsFreq"]] <<- set_spatAbsFreq(spreSpat[[sampSex]])
                               sprePlot[[sampSex]][["spatRelFreq"]] <<- set_spatRelFreq(spreSpat[[sampSex]])
                             },
-                            calcMix = function(nAdap = 100, nSamp = 2000){
+                        #     calcMix = function(nAdap = 100, nSamp = 2000){
+                        #
+                        #       mixPar <<- list('Female' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)),
+                        #                       'Male' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)))
+                        #
+                        #       for(sex in c('Female', 'Male')){
+                        #         ind_cou = apply(LFDPop[,,,ifelse(sex == 'Female', 1, 2)], 2, sum)      # Counts of males, per length
+                        #         num_ind = round(ind_cou/(9850/2))
+                        #         ind_dis = rep(lengClas, num_ind) + runif(sum(num_ind), 0, 1)
+                        #         Nclust = nCoho
+                        #         N = length(ind_dis)
+                        #         # Input formating for JAGS
+                        #         alpha = rep(5, Nclust)
+                        #         Z = rep(NA, N)  # initial allocations
+                        #         Z[which.min(ind_dis)] = 1  # smallest value assigned to cluster 1
+                        #         Z[which.max(ind_dis)] = Nclust  # highest value assigned to cluster Nclust
+                        #         dataList = list(y = ind_dis, N = N, Nclust = Nclust, Z = Z, alpha = alpha)
+                        #         model.str <- paste('model{
+                        #                      # Likelihood:
+                        #                      for(i in 1:N){
+                        #                      y[i] ~ dnorm(mean[i], tau[Z[i]])
+                        #                      mean[i] <- Linf * (1 - exp(-k * (Z[i] - t0)))
+                        #                      Z[i] ~ dcat(p[1:Nclust])
+                        #                      }
+                        #                      # Prior:
+                        #                      Linf ~ dnorm(', prior[[sex]][['Linf']][['Mean']],', ', 1/(prior[[sex]][['Linf']][['StD']])^2,')
+                        #                      k ~ dnorm(', prior[[sex]][['K']][['Mean']],', ', 1/(prior[[sex]][['K']][['StD']])^2,')
+                        #                      t0 ~ dnorm(', prior[[sex]][['t0']][['Mean']],', ', 1/(prior[[sex]][['t0']][['StD']])^2,')
+                        #                      p ~ ddirch(alpha)
+                        #                      for(clustIdx in 1:Nclust){
+                        #                      tau[clustIdx] ~ dgamma(1.0E-5, 1.0E-5)
+                        #                      }
+                        # }', sep = "")
+                        #         jags = jags.model(textConnection(model.str), data = dataList, n.chains = 1, n.adapt = nAdap)
+                        #         TT = nSamp
+                        #         samples = jags.samples(jags, c('Linf', 'k', 't0', 'tau', 'p', 'Z'), TT)
+                        #         # Estimates
+                        #         # predicted length at age
+                        #         LHat = mean(samples$Linf)
+                        #         kHat = mean(samples$k)
+                        #         t0Hat = mean(samples$t0)
+                        #         means = LHat * (1 - exp(-kHat*((1:Nclust) - t0Hat)))
+                        #         taus = matrix(as.numeric(samples$tau), ncol=Nclust, byrow=T)
+                        #         sigma2s = 1/taus
+                        #         tauHat = apply(taus, 2, mean)
+                        #         sigma2Hat = apply(sigma2s, 2, mean)
+                        #         ps = matrix(as.numeric(samples$p), ncol=Nclust, byrow=T)
+                        #         pHat = apply(ps, 2, mean)
+                        #         ma_zHat = numeric(length(lengClas))
+                        #         for(iObs in 1:length(lengClas)){
+                        #           postProbs = pHat * dnorm(lengClas[iObs], means, sqrt(sigma2Hat))
+                        #           ma_zHat[iObs] = which.max(postProbs)
+                        #         }
+                        #         asc = seq(min(ind_dis), max(ind_dis), length=200)
+                        #         densities = matrix(0, length(asc), Nclust)
+                        #         dens = numeric(length(asc))
+                        #         for(iasc in 1:length(asc)){
+                        #           densities[iasc,] = pHat * dnorm(asc[iasc], means, sqrt(sigma2Hat))
+                        #           dens[iasc] = sum(densities[iasc,])
+                        #         }
+                        #         dens2 = matrix(0, length(asc), length(means))
+                        #         for(j in 1:length(means)){
+                        #           dens2[,j] = pHat[j] * dnorm(asc, means[j], sqrt(sigma2Hat[j]))
+                        #         }
+                        #         plot(range(asc), c(0, max(hist(ind_dis, plot = FALSE)$density)+0.02), type='n',
+                        #              main = paste(sex, specie,"- LFD", sep = " "),
+                        #              xlab = "Density",
+                        #              ylab = "Length", cex.lab = 0.5)
+                        #         hist(ind_dis, breaks=30, freq=F, col='lightgray', add = TRUE)
+                        #         for(j in 1:length(means)){
+                        #           polygon(c(min(asc),asc,max(asc)), c(0,dens2[,j],0), col=
+                        #                     ifelse(sex == "Female", rgb(0.8,0.1,0.1,0.2), rgb(0.1,0.1,0.8,0.2)), border=F)
+                        #         }
+                        #         lines(asc, dens)
+                        #         for(yea in 1:length(year)){
+                        #           a_yea_abb <- cbind(apply(LFDPop[,,yea,ifelse(sex == 'Female', 1, 2)], 2, sum), lengClas, ma_zHat)
+                        #           for(coho in 1:nCoho){
+                        #             coho_ind <- which(a_yea_abb[,3] == coho)
+                        #             sim_pop <- rep(lengClas[coho_ind], a_yea_abb[coho_ind,1])
+                        #             mixPar[[sex]][['Means']][yea,coho] <<- mean(sim_pop)
+                        #             mixPar[[sex]][['Sigmas']][yea,coho] <<- sd(sim_pop)
+                        #           }
+                        #         }
+                        #       }
+                        #     }
 
-                              mixPar <<- list('Female' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)),
-                                              'Male' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)))
-
-                              for(sex in c('Female', 'Male')){
-                                ind_cou = apply(LFDPop[,,,ifelse(sex == 'Female', 1, 2)], 2, sum)      # Counts of males, per length
-                                num_ind = round(ind_cou/(9850/2))
-                                ind_dis = rep(lengClas, num_ind) + runif(sum(num_ind), 0, 1)
-                                Nclust = nCoho
-                                N = length(ind_dis)
-                                # Input formating for JAGS
-                                alpha = rep(5, Nclust)
-                                Z = rep(NA, N)  # initial allocations
-                                Z[which.min(ind_dis)] = 1  # smallest value assigned to cluster 1
-                                Z[which.max(ind_dis)] = Nclust  # highest value assigned to cluster Nclust
-                                dataList = list(y = ind_dis, N = N, Nclust = Nclust, Z = Z, alpha = alpha)
-                                model.str <- paste('model{
-                                             # Likelihood:
-                                             for(i in 1:N){
-                                             y[i] ~ dnorm(mean[i], tau[Z[i]])
-                                             mean[i] <- Linf * (1 - exp(-k * (Z[i] - t0)))
-                                             Z[i] ~ dcat(p[1:Nclust])
-                                             }
-                                             # Prior:
-                                             Linf ~ dnorm(', prior[[sex]][['Linf']][['Mean']],', ', 1/(prior[[sex]][['Linf']][['StD']])^2,')
-                                             k ~ dnorm(', prior[[sex]][['K']][['Mean']],', ', 1/(prior[[sex]][['K']][['StD']])^2,')
-                                             t0 ~ dnorm(', prior[[sex]][['t0']][['Mean']],', ', 1/(prior[[sex]][['t0']][['StD']])^2,')
-                                             p ~ ddirch(alpha)
-                                             for(clustIdx in 1:Nclust){
-                                             tau[clustIdx] ~ dgamma(1.0E-5, 1.0E-5)
-                                             }
-                        }', sep = "")
-                                jags = jags.model(textConnection(model.str), data = dataList, n.chains = 1, n.adapt = nAdap)
-                                TT = nSamp
-                                samples = jags.samples(jags, c('Linf', 'k', 't0', 'tau', 'p', 'Z'), TT)
-                                # Estimates
-                                # predicted length at age
-                                LHat = mean(samples$Linf)
-                                kHat = mean(samples$k)
-                                t0Hat = mean(samples$t0)
-                                means = LHat * (1 - exp(-kHat*((1:Nclust) - t0Hat)))
-                                taus = matrix(as.numeric(samples$tau), ncol=Nclust, byrow=T)
-                                sigma2s = 1/taus
-                                tauHat = apply(taus, 2, mean)
-                                sigma2Hat = apply(sigma2s, 2, mean)
-                                ps = matrix(as.numeric(samples$p), ncol=Nclust, byrow=T)
-                                pHat = apply(ps, 2, mean)
-                                ma_zHat = numeric(length(lengClas))
-                                for(iObs in 1:length(lengClas)){
-                                  postProbs = pHat * dnorm(lengClas[iObs], means, sqrt(sigma2Hat))
-                                  ma_zHat[iObs] = which.max(postProbs)
-                                }
-                                asc = seq(min(ind_dis), max(ind_dis), length=200)
-                                densities = matrix(0, length(asc), Nclust)
-                                dens = numeric(length(asc))
-                                for(iasc in 1:length(asc)){
-                                  densities[iasc,] = pHat * dnorm(asc[iasc], means, sqrt(sigma2Hat))
-                                  dens[iasc] = sum(densities[iasc,])
-                                }
-                                dens2 = matrix(0, length(asc), length(means))
-                                for(j in 1:length(means)){
-                                  dens2[,j] = pHat[j] * dnorm(asc, means[j], sqrt(sigma2Hat[j]))
-                                }
-                                plot(range(asc), c(0, max(hist(ind_dis, plot = FALSE)$density)+0.02), type='n',
-                                     main = paste(sex, specie,"- LFD", sep = " "),
-                                     xlab = "Density",
-                                     ylab = "Length", cex.lab = 0.5)
-                                hist(ind_dis, breaks=30, freq=F, col='lightgray', add = TRUE)
-                                for(j in 1:length(means)){
-                                  polygon(c(min(asc),asc,max(asc)), c(0,dens2[,j],0), col=
-                                            ifelse(sex == "Female", rgb(0.8,0.1,0.1,0.2), rgb(0.1,0.1,0.8,0.2)), border=F)
-                                }
-                                lines(asc, dens)
-                                for(yea in 1:length(year)){
-                                  a_yea_abb <- cbind(apply(LFDPop[,,yea,ifelse(sex == 'Female', 1, 2)], 2, sum), lengClas, ma_zHat)
-                                  for(coho in 1:nCoho){
-                                    coho_ind <- which(a_yea_abb[,3] == coho)
-                                    sim_pop <- rep(lengClas[coho_ind], a_yea_abb[coho_ind,1])
-                                    mixPar[[sex]][['Means']][yea,coho] <<- mean(sim_pop)
-                                    mixPar[[sex]][['Sigmas']][yea,coho] <<- sd(sim_pop)
-                                  }
-                                }
-                              }
-                            }))
+                            )
+                          )
 
 
 
@@ -1302,123 +1305,123 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                              #                                't0' = list('Mean' = m_t0[1], 'StD' = m_t0[2])))
                              #
                              # },
-                             setLWpar = function(alphaVal, betaVal, sex){
-                               LWpar[[sex]] <<- list(alpha = as.numeric(alphaVal), beta = as.numeric(betaVal))
-                             },
-                             setBrefs = function(b_value){
-                               bRefs <<- b_value
-                             },
-                             setSelPar = function(L50, L75){
-                               tmp_sel <- c(L50, L75)
-                               names(tmp_sel) <- c("L50","L75")
-                               selPar <<- tmp_sel
-                             },
-                             genMedmo = function(){
-
-                               LCspe <- lengClas + (lengClas[2]-lengClas[1])/2
-
-                               # !!
-                               Areacell <- 9.091279*11.112
-                               RateArea <- Areacell/100
-
-                               TempArray <- GenPop(Abbmat = Coh_A_Int, num_cla = length(lengClas),
-                                                   LCspe = LCspe, RA = RateArea, qMM = qMedits,
-                                                   num_ye = year, num_coh = nCoho, MixtureP = mixPar)
-
-                               #Check
-                               cat(specie,"Biomassa", as.character(year[length(year)]), " =",
-                                   sum(LFDtoBcell(LCspe = LCspe, abbF = TempArray[,,length(year),1], abbM = TempArray[,,length(year),2],
-                                                  LWpar = LWpar))/1000000 ,"\n")
-
-                               popGen <<- TempArray
-
-                             },
-                             calcMix = function(nAdap = 100, nSamp = 2000){
-
-                               mixPar <<- list('Female' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)),
-                                               'Male' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)))
-
-                               for(sex in c('Female', 'Male')){
-                                 ind_cou = apply(LFDPop[,,,ifelse(sex == 'Female', 1, 2)], 2, sum)      # Counts of males, per length
-                                 # num_ind = round(ind_cou/(9850/2))
-                                 num_ind = ind_cou
-                                 ind_dis = rep(lengClas, num_ind) + runif(sum(num_ind), 0, 1)
-                                 Nclust = nCoho
-                                 N = length(ind_dis)
-                                 # Input formating for JAGS
-                                 alpha = rep(5, Nclust)
-                                 Z = rep(NA, N)  # initial allocations
-                                 Z[which.min(ind_dis)] = 1  # smallest value assigned to cluster 1
-                                 Z[which.max(ind_dis)] = Nclust  # highest value assigned to cluster Nclust
-                                 dataList = list(y = ind_dis, N = N, Nclust = Nclust, Z = Z, alpha = alpha)
-                                 model.str <- paste('model{
-                                                 # Likelihood:
-                                                 for(i in 1:N){
-                                                 y[i] ~ dnorm(mean[i], tau[Z[i]])
-                                                 mean[i] <- Linf * (1 - exp(-k * (Z[i] - t0)))
-                                                 Z[i] ~ dcat(p[1:Nclust])
-                                                 }
-                                                 # Prior:
-                                                 Linf ~ dnorm(', prior[[sex]][['Linf']][['Mean']],', ', 1/(prior[[sex]][['Linf']][['StD']])^2,')
-                                                 k ~ dnorm(', prior[[sex]][['K']][['Mean']],', ', 1/(prior[[sex]][['K']][['StD']])^2,')
-                                                 t0 ~ dnorm(', prior[[sex]][['t0']][['Mean']],', ', 1/(prior[[sex]][['t0']][['StD']])^2,')
-                                                 p ~ ddirch(alpha)
-                                                 for(clustIdx in 1:Nclust){
-                                                 tau[clustIdx] ~ dgamma(1.0E-5, 1.0E-5)
-                                                 }
-                            }', sep = "")
-                                 jags = jags.model(textConnection(model.str), data = dataList, n.chains = 1, n.adapt = nAdap)
-                                 TT = nSamp
-                                 samples = jags.samples(jags, c('Linf', 'k', 't0', 'tau', 'p', 'Z'), TT)
-                                 # Estimates
-                                 # predicted length at age
-                                 LHat = mean(samples$Linf)
-                                 kHat = mean(samples$k)
-                                 t0Hat = mean(samples$t0)
-                                 means = LHat * (1 - exp(-kHat*((1:Nclust) - t0Hat)))
-                                 taus = matrix(as.numeric(samples$tau), ncol=Nclust, byrow=T)
-                                 sigma2s = 1/taus
-                                 tauHat = apply(taus, 2, mean)
-                                 sigma2Hat = apply(sigma2s, 2, mean)
-                                 ps = matrix(as.numeric(samples$p), ncol=Nclust, byrow=T)
-                                 pHat = apply(ps, 2, mean)
-                                 ma_zHat = numeric(length(lengClas))
-                                 for(iObs in 1:length(lengClas)){
-                                   postProbs = pHat * dnorm(lengClas[iObs], means, sqrt(sigma2Hat))
-                                   ma_zHat[iObs] = which.max(postProbs)
-                                 }
-                                 asc = seq(min(ind_dis), max(ind_dis), length=200)
-                                 densities = matrix(0, length(asc), Nclust)
-                                 dens = numeric(length(asc))
-                                 for(iasc in 1:length(asc)){
-                                   densities[iasc,] = pHat * dnorm(asc[iasc], means, sqrt(sigma2Hat))
-                                   dens[iasc] = sum(densities[iasc,])
-                                 }
-                                 dens2 = matrix(0, length(asc), length(means))
-                                 for(j in 1:length(means)){
-                                   dens2[,j] = pHat[j] * dnorm(asc, means[j], sqrt(sigma2Hat[j]))
-                                 }
-                                 plot(range(asc), c(0, max(hist(ind_dis, plot = FALSE)$density)+0.02), type='n',
-                                      main = paste(sex, specie,"- LFD", sep = " "),
-                                      xlab = "Density",
-                                      ylab = "Length", cex.lab = 0.5)
-                                 hist(ind_dis, breaks=30, freq=F, col='lightgray', add = TRUE)
-                                 for(j in 1:length(means)){
-                                   polygon(c(min(asc),asc,max(asc)), c(0,dens2[,j],0), col=
-                                             ifelse(sex == "Female", rgb(0.8,0.1,0.1,0.2), rgb(0.1,0.1,0.8,0.2)), border=F)
-                                 }
-                                 lines(asc, dens)
-                                 for(yea in 1:length(year)){
-                                   a_yea_abb <- cbind(apply(LFDPop[,,yea,ifelse(sex == 'Female', 1, 2)], 2, sum), lengClas, ma_zHat)
-                                   for(coho in 1:nCoho){
-                                     coho_ind <- which(a_yea_abb[,3] == coho)
-                                     sim_pop <- rep(lengClas[coho_ind], a_yea_abb[coho_ind,1])
-                                     mixPar[[sex]][['Means']][yea,coho] <<- mean(sim_pop)
-                                     mixPar[[sex]][['Sigmas']][yea,coho] <<- sd(sim_pop)
-                                   }
-                                 }
-                               }
-                             },
+                            #  setLWpar = function(alphaVal, betaVal, sex){
+                            #    LWpar[[sex]] <<- list(alpha = as.numeric(alphaVal), beta = as.numeric(betaVal))
+                            #  },
+                            #  setBrefs = function(b_value){
+                            #    bRefs <<- b_value
+                            #  },
+                            #  setSelPar = function(L50, L75){
+                            #    tmp_sel <- c(L50, L75)
+                            #    names(tmp_sel) <- c("L50","L75")
+                            #    selPar <<- tmp_sel
+                            #  },
+                            #  genMedmo = function(){
+                            #
+                            #    LCspe <- lengClas + (lengClas[2]-lengClas[1])/2
+                            #
+                            #    # !!
+                            #    Areacell <- 9.091279*11.112
+                            #    RateArea <- Areacell/100
+                            #
+                            #    TempArray <- GenPop(Abbmat = Coh_A_Int, num_cla = length(lengClas),
+                            #                        LCspe = LCspe, RA = RateArea, qMM = qMedits,
+                            #                        num_ye = year, num_coh = nCoho, MixtureP = mixPar)
+                            #
+                            #    #Check
+                            #    cat(specie,"Biomassa", as.character(year[length(year)]), " =",
+                            #        sum(LFDtoBcell(LCspe = LCspe, abbF = TempArray[,,length(year),1], abbM = TempArray[,,length(year),2],
+                            #                       LWpar = LWpar))/1000000 ,"\n")
+                            #
+                            #    popGen <<- TempArray
+                            #
+                            #  },
+                            #  calcMix = function(nAdap = 100, nSamp = 2000){
+                            #
+                            #    mixPar <<- list('Female' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)),
+                            #                    'Male' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)))
+                            #
+                            #    for(sex in c('Female', 'Male')){
+                            #      ind_cou = apply(LFDPop[,,,ifelse(sex == 'Female', 1, 2)], 2, sum)      # Counts of males, per length
+                            #      # num_ind = round(ind_cou/(9850/2))
+                            #      num_ind = ind_cou
+                            #      ind_dis = rep(lengClas, num_ind) + runif(sum(num_ind), 0, 1)
+                            #      Nclust = nCoho
+                            #      N = length(ind_dis)
+                            #      # Input formating for JAGS
+                            #      alpha = rep(5, Nclust)
+                            #      Z = rep(NA, N)  # initial allocations
+                            #      Z[which.min(ind_dis)] = 1  # smallest value assigned to cluster 1
+                            #      Z[which.max(ind_dis)] = Nclust  # highest value assigned to cluster Nclust
+                            #      dataList = list(y = ind_dis, N = N, Nclust = Nclust, Z = Z, alpha = alpha)
+                            #      model.str <- paste('model{
+                            #                      # Likelihood:
+                            #                      for(i in 1:N){
+                            #                      y[i] ~ dnorm(mean[i], tau[Z[i]])
+                            #                      mean[i] <- Linf * (1 - exp(-k * (Z[i] - t0)))
+                            #                      Z[i] ~ dcat(p[1:Nclust])
+                            #                      }
+                            #                      # Prior:
+                            #                      Linf ~ dnorm(', prior[[sex]][['Linf']][['Mean']],', ', 1/(prior[[sex]][['Linf']][['StD']])^2,')
+                            #                      k ~ dnorm(', prior[[sex]][['K']][['Mean']],', ', 1/(prior[[sex]][['K']][['StD']])^2,')
+                            #                      t0 ~ dnorm(', prior[[sex]][['t0']][['Mean']],', ', 1/(prior[[sex]][['t0']][['StD']])^2,')
+                            #                      p ~ ddirch(alpha)
+                            #                      for(clustIdx in 1:Nclust){
+                            #                      tau[clustIdx] ~ dgamma(1.0E-5, 1.0E-5)
+                            #                      }
+                            # }', sep = "")
+                            #      jags = jags.model(textConnection(model.str), data = dataList, n.chains = 1, n.adapt = nAdap)
+                            #      TT = nSamp
+                            #      samples = jags.samples(jags, c('Linf', 'k', 't0', 'tau', 'p', 'Z'), TT)
+                            #      # Estimates
+                            #      # predicted length at age
+                            #      LHat = mean(samples$Linf)
+                            #      kHat = mean(samples$k)
+                            #      t0Hat = mean(samples$t0)
+                            #      means = LHat * (1 - exp(-kHat*((1:Nclust) - t0Hat)))
+                            #      taus = matrix(as.numeric(samples$tau), ncol=Nclust, byrow=T)
+                            #      sigma2s = 1/taus
+                            #      tauHat = apply(taus, 2, mean)
+                            #      sigma2Hat = apply(sigma2s, 2, mean)
+                            #      ps = matrix(as.numeric(samples$p), ncol=Nclust, byrow=T)
+                            #      pHat = apply(ps, 2, mean)
+                            #      ma_zHat = numeric(length(lengClas))
+                            #      for(iObs in 1:length(lengClas)){
+                            #        postProbs = pHat * dnorm(lengClas[iObs], means, sqrt(sigma2Hat))
+                            #        ma_zHat[iObs] = which.max(postProbs)
+                            #      }
+                            #      asc = seq(min(ind_dis), max(ind_dis), length=200)
+                            #      densities = matrix(0, length(asc), Nclust)
+                            #      dens = numeric(length(asc))
+                            #      for(iasc in 1:length(asc)){
+                            #        densities[iasc,] = pHat * dnorm(asc[iasc], means, sqrt(sigma2Hat))
+                            #        dens[iasc] = sum(densities[iasc,])
+                            #      }
+                            #      dens2 = matrix(0, length(asc), length(means))
+                            #      for(j in 1:length(means)){
+                            #        dens2[,j] = pHat[j] * dnorm(asc, means[j], sqrt(sigma2Hat[j]))
+                            #      }
+                            #      plot(range(asc), c(0, max(hist(ind_dis, plot = FALSE)$density)+0.02), type='n',
+                            #           main = paste(sex, specie,"- LFD", sep = " "),
+                            #           xlab = "Density",
+                            #           ylab = "Length", cex.lab = 0.5)
+                            #      hist(ind_dis, breaks=30, freq=F, col='lightgray', add = TRUE)
+                            #      for(j in 1:length(means)){
+                            #        polygon(c(min(asc),asc,max(asc)), c(0,dens2[,j],0), col=
+                            #                  ifelse(sex == "Female", rgb(0.8,0.1,0.1,0.2), rgb(0.1,0.1,0.8,0.2)), border=F)
+                            #      }
+                            #      lines(asc, dens)
+                            #      for(yea in 1:length(year)){
+                            #        a_yea_abb <- cbind(apply(LFDPop[,,yea,ifelse(sex == 'Female', 1, 2)], 2, sum), lengClas, ma_zHat)
+                            #        for(coho in 1:nCoho){
+                            #          coho_ind <- which(a_yea_abb[,3] == coho)
+                            #          sim_pop <- rep(lengClas[coho_ind], a_yea_abb[coho_ind,1])
+                            #          mixPar[[sex]][['Means']][yea,coho] <<- mean(sim_pop)
+                            #          mixPar[[sex]][['Sigmas']][yea,coho] <<- sd(sim_pop)
+                            #        }
+                            #      }
+                            #    }
+                            #  },
                              setSprePlot = function(sampSex){
                                sprePlot[[sampSex]] <<- list(histLfdTot = set_ggHistLfdTot(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", "#63B8FF")),
                                                             histUtcTot = set_ggHistUtcTot(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", "#63B8FF")),
