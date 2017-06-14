@@ -1733,6 +1733,7 @@ smart_gui <- function(){
         my_project$setSpreaSurvey()
         my_project$setSpatSurvey()
 
+        my_project$sampMap$set_ggMapFgSurvey(my_project$rawDataSurvey)
       }
 
       ### Update Sampling Status
