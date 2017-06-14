@@ -2250,11 +2250,17 @@ smart_gui <- function(){
                        # Set number of cohorts
                        my_project$surveyBySpecie[[ind_spe]]$setNCoho(as.numeric(svalue(ncih_sb)))
                        # Compute mixture
-                       my_project$surveyBySpecie[[ind_spe]]$calcMix(nAdap = as.numeric(svalue(mc_niter)), nSamp = as.numeric(svalue(mc_nsamp)))
+                       # my_project$surveyBySpecie[[ind_spe]]$calcMix(nAdap = as.numeric(svalue(mc_niter)), nSamp = as.numeric(svalue(mc_nsamp)))
+                       my_project$surveyBySpecie[[ind_spe]]$calcMixDate(nAdap = as.numeric(svalue(mc_niter)),
+                                                                         nSamp = as.numeric(svalue(mc_nsamp)),
+                                                                         sexDrop = svalue(sex_drop_mix),
+                                                                         curveSel = svalue(gcurv_r))
+
+                       my_project$surveyBySpecie[[ind_spe]]$ggplotMcmcOut(selSex = svalue(sex_drop_mix))
                        # Transform length to cohorts
-                       my_project$calcCoh_A_Survey(ind_spe)
+                       # my_project$calcCoh_A_Survey(ind_spe)
                        # Interpolate cohorts
-                       my_project$intrpCoh_A_Survey(ind_spe)
+                       # my_project$intrpCoh_A_Survey(ind_spe)
                        cohCoh_drop[] <- c("All", seq(1, my_project$surveyBySpecie[[ind_spe]]$nCoho, by = 1))
 
                      }else{
