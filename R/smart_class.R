@@ -1065,6 +1065,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                             LFDPop = NULL,
                             mixPar = NULL, # MixtureP e ncohorts
                             nCoho = NULL,
+                            spreDist = list(),
                             prior = NULL,
                             Coh_A = NULL,
                             Coh_A_Int = NULL,
