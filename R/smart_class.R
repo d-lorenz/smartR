@@ -1455,16 +1455,6 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                sprePlot[[sampSex]][["spatAbbTbl"]] <<- set_spatAbbTbl(spreSpat[[sampSex]])
                                sprePlot[[sampSex]][["spatAbsFreq"]] <<- set_spatAbsFreq(spreSpat[[sampSex]])
                                sprePlot[[sampSex]][["spatRelFreq"]] <<- set_spatRelFreq(spreSpat[[sampSex]])
-
-                               # if(sampSex == "Female"){
-                               #   femalePlot[["spatAbbTbl"]] <<- set_spatAbbTbl(femaleSpat)
-                               #   femalePlot[["spatAbsFreq"]] <<- set_spatAbsFreq(femaleSpat)
-                               #   femalePlot[["spatRelFreq"]] <<- set_spatRelFreq(femaleSpat)
-                               # }else{
-                               #   malePlot[["spatAbbTbl"]] <<- set_spatAbbTbl(maleSpat)
-                               #   malePlot[["spatAbsFreq"]] <<- set_spatAbsFreq(maleSpat)
-                               #   malePlot[["spatRelFreq"]] <<- set_spatRelFreq(maleSpat)
-                               # }
                              },
                              # setPreMix = function(){
                              #   # preMix <<- weight2number(rawLFD[,c("DATE","Class","Unsex")])
