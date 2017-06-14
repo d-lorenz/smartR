@@ -10,35 +10,35 @@ calcVonBert <- function(elle, kappa, ageVector){
 }
 
 
-RecLFD <- function(MAT,RANGE,NH){
-  vecL <- matrix(0,2,length(RANGE))
-  colnames(vecL) <- as.character(RANGE)
-  rownames(vecL) <- c("Female","Male")
-  for(ii in 1:nrow(MAT)){
-    vecL[1,which(colnames(vecL)== as.character(MAT[ii,1]))]=vecL[1,which(colnames(vecL)== as.character(MAT[ii,1]))]+MAT[ii,2]
-    vecL[2,which(colnames(vecL)== as.character(MAT[ii,1]))]=vecL[2,which(colnames(vecL)== as.character(MAT[ii,1]))]+MAT[ii,3]
-  }
-  vecL <- vecL/NH
-  return(vecL)
-}
+# RecLFD <- function(MAT,RANGE,NH){
+#   vecL <- matrix(0,2,length(RANGE))
+#   colnames(vecL) <- as.character(RANGE)
+#   rownames(vecL) <- c("Female","Male")
+#   for(ii in 1:nrow(MAT)){
+#     vecL[1,which(colnames(vecL)== as.character(MAT[ii,1]))]=vecL[1,which(colnames(vecL)== as.character(MAT[ii,1]))]+MAT[ii,2]
+#     vecL[2,which(colnames(vecL)== as.character(MAT[ii,1]))]=vecL[2,which(colnames(vecL)== as.character(MAT[ii,1]))]+MAT[ii,3]
+#   }
+#   vecL <- vecL/NH
+#   return(vecL)
+# }
 
 
-plotRecLFD <- function(reclfd, perc = TRUE, besid = FALSE){
-  par(mar = c(1.5,2,3,0))
-  if(besid){
-    barplot(t(reclfd)/max(reclfd), col = c("skyblue3","pink3"), beside = TRUE, cex.axis = 0.8, cex.names = 0.5, font.main = 4, space = c(0,0.3))
-  }else{
-    if(perc == TRUE){
-      reclfd[1,] <- reclfd[1,]/max(reclfd[1,])
-      reclfd[2,] <- reclfd[2,]/max(reclfd[2,])
-    }
-    pre_mfrow <- par("mfrow")
-    par(mfrow = c(2, 1))
-    barplot(reclfd[1,], ylim = c(0,1), col = "pink3", main = "Female", cex.axis = 0.5, cex.names = 0.6, font.main = 4, las = 2)
-    barplot(reclfd[2,], ylim = c(0,1), col = "skyblue3", main = "Male", cex.axis = 0.5, cex.names = 0.6, font.main = 4)
-    par(mfrow = pre_mfrow)
-  }
-}
+# plotRecLFD <- function(reclfd, perc = TRUE, besid = FALSE){
+#   par(mar = c(1.5,2,3,0))
+#   if(besid){
+#     barplot(t(reclfd)/max(reclfd), col = c("skyblue3","pink3"), beside = TRUE, cex.axis = 0.8, cex.names = 0.5, font.main = 4, space = c(0,0.3))
+#   }else{
+#     if(perc == TRUE){
+#       reclfd[1,] <- reclfd[1,]/max(reclfd[1,])
+#       reclfd[2,] <- reclfd[2,]/max(reclfd[2,])
+#     }
+#     pre_mfrow <- par("mfrow")
+#     par(mfrow = c(2, 1))
+#     barplot(reclfd[1,], ylim = c(0,1), col = "pink3", main = "Female", cex.axis = 0.5, cex.names = 0.6, font.main = 4, las = 2)
+#     barplot(reclfd[2,], ylim = c(0,1), col = "skyblue3", main = "Male", cex.axis = 0.5, cex.names = 0.6, font.main = 4)
+#     par(mfrow = pre_mfrow)
+#   }
+# }
 
 
 IntInvDis <- function(xdata, RefCell, IntCell,
