@@ -173,6 +173,16 @@ SmartProject <- R6Class("smartProject",
                               fisheryBySpecie[[i]]$setSpatDistSing()
                             }
                           },
+                          setSpreaSurvey = function(){
+                            for(i in 1:length(surveyBySpecie)){
+                              surveyBySpecie[[i]]$setSpreDistSing()
+                            }
+                          },
+                          setSpatSurvey = function(){
+                            for(i in 1:length(surveyBySpecie)){
+                              surveyBySpecie[[i]]$setSpatDistSing()
+                            }
+                          },
                           setDepthSurvey = function(){
                             cat("\n\nSetting depth of survey data:", sep = "")
                             for(i in 1:length(surveyBySpecie)){
