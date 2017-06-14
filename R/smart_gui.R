@@ -1722,11 +1722,11 @@ smart_gui <- function(){
       # svalue(year_drop) <- my_project$yearInSurvey[1]
       # svalue(cohYea_drop) <- "All"
 
-      if(!is.null(my_project$sampMap)){
-        svalue(stat_bar) <- "Splitting Survey Population..."
-        my_project$setLFDPopSurvey()
-      }
-      svalue(stat_bar) <- ""
+      # if(!is.null(my_project$sampMap)){
+      #   svalue(stat_bar) <- "Splitting Survey Population..."
+      #   my_project$setLFDPopSurvey()
+      # }
+      # svalue(stat_bar) <- ""
 
       if(!is.null(my_project$sampMap$cutResShp)){
         my_project$addFg2Survey()
