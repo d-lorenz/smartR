@@ -635,6 +635,19 @@ SmartProject <- R6Class("smartProject",
 
                             cat(" Done!", sep = "")
                           },
+                          addFg2Survey = function(){
+                            cat("\n\nConnecting coordinates to fishing ground...", sep = "")
+                            rawDataSurvey$numFG <<- names(sampMap$cutResShp)[over(SpatialPoints(data.frame(Lon = rawDataSurvey$Lon,
+                                                                                                            Lat = rawDataSurvey$Lat)),
+                                                                                   sampMap$cutResShp)]
+
+                            for(i in 1:length(surveyBySpecie)){
+                              surveyBySpecie[[i]]$rawLFD$numFG <<- names(sampMap$cutResShp)[over(SpatialPoints(data.frame(Lon = surveyBySpecie[[i]]$rawLFD$Lon,
+                                                                                                                           Lat = surveyBySpecie[[i]]$rawLFD$Lat)),
+                                                                                                  sampMap$cutResShp)]
+                            }
+                            cat(" Done!", sep = "")
+                          },
                           setWeekEffoMatrCell = function(){
                             fleet$weekEffoMatr <<- list()
                             for(j in names(fleet$rawEffort)){
