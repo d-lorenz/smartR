@@ -1983,24 +1983,6 @@ smart_gui <- function(){
                                                           layout_matrix = rbind(c(1,1,1,3),
                                                                                 c(2,2,2,4),
                                                                                 c(2,2,2,4))))
-
-                            # if(svalue(sex_drop) == "Female"){
-                            #   suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histLfdTot"]],
-                            #                                 my_project$fisheryBySpecie[[spe_ind]]$femalePlot[["histUtcLfd"]],
-                            #                                 my_project$fisheryBySpecie[[spe_ind]]$femalePlot[["histUtcTot"]],
-                            #                                 my_project$fisheryBySpecie[[spe_ind]]$femalePlot[["dotUtcSplit"]],
-                            #                                 layout_matrix = rbind(c(1,1,1,3),
-                            #                                                       c(2,2,2,4),
-                            #                                                       c(2,2,2,4))))
-                            # }else{
-                            #   suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[spe_ind]]$malePlot[["histLfdTot"]],
-                            #                                 my_project$fisheryBySpecie[[spe_ind]]$malePlot[["histUtcLfd"]],
-                            #                                 my_project$fisheryBySpecie[[spe_ind]]$malePlot[["histUtcTot"]],
-                            #                                 my_project$fisheryBySpecie[[spe_ind]]$malePlot[["dotUtcSplit"]],
-                            #                                 layout_matrix = rbind(c(1,1,1,3),
-                            #                                                       c(2,2,2,4),
-                            #                                                       c(2,2,2,4))))
-                            # }
                           })
     addSpring(sex_b)
 
