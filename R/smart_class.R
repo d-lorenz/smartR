@@ -894,22 +894,22 @@ SmartProject <- R6Class("smartProject",
                               }
                             }
                           },
-                          setCoh_A_Survey = function(){
-                            if(length(specieInSurvey) == 1){
-                              calcCoh_A_Survey(1)
-                            }else{
-                              for(i in 1:length(specieInSurvey)){
-                                calcCoh_A_Survey(i)
-                              }}
-                          },
-                          setCoh_A_Fishery = function(){
-                            if(length(specieInFishery) == 1){
-                              calcCoh_A_Fishery(1)
-                            }else{
-                              for(i in 1:length(specieInFishery)){
-                                calcCoh_A_Fishery(i)
-                              }}
-                          },
+                          # setCoh_A_Survey = function(){
+                          #   if(length(specieInSurvey) == 1){
+                          #     calcCoh_A_Survey(1)
+                          #   }else{
+                          #     for(i in 1:length(specieInSurvey)){
+                          #       calcCoh_A_Survey(i)
+                          #     }}
+                          # },
+                          # setCoh_A_Fishery = function(){
+                          #   if(length(specieInFishery) == 1){
+                          #     calcCoh_A_Fishery(1)
+                          #   }else{
+                          #     for(i in 1:length(specieInFishery)){
+                          #       calcCoh_A_Fishery(i)
+                          #     }}
+                          # },
                           calcCoh_A_Survey = function(ind_num){
                             Pop <- surveyBySpecie[[ind_num]]$LFDPop
                             LC <- surveyBySpecie[[ind_num]]$lengClas[-length(surveyBySpecie[[ind_num]]$lengClas)]
