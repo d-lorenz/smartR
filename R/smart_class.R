@@ -1720,7 +1720,9 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                sprePlot[[sexDrop]][["lineCatch"]] <<- set_ggCatchLine(df_birth = birth_melt)
                                ### MCMC Survivors * quarter
                                sprePlot[[sexDrop]][["lineSurv"]] <<- set_ggSurvLine(df_surv = surv_melt)
-                             }))
+                             }
+                            )
+                           )
 
 
 
