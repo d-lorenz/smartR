@@ -1470,9 +1470,9 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                #   malePlot[["spatRelFreq"]] <<- set_spatRelFreq(maleSpat)
                                # }
                              },
-                             setPreMix = function(){
-                               # preMix <<- weight2number(rawLFD[,c("DATE","Class","Unsex")])
-                             },
+                             # setPreMix = function(){
+                             #   # preMix <<- weight2number(rawLFD[,c("DATE","Class","Unsex")])
+                             # },
                              ggplotMcmcOut = function(selCompo = "MCMC", selSex = "Female"){
 
                                switch(selCompo,
