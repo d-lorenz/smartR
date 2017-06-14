@@ -1238,7 +1238,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                              mixPar = NULL, # MixtureP e ncohorts
                              nCoho = NULL,
                              prior = NULL,
-                             preMix = NULL,
+                             # preMix = NULL,
                              spreDist = list(),
                              spreSpat = list(),
                              sprePlot = list(),
