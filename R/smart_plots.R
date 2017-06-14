@@ -672,6 +672,26 @@ set_ggHistUtcLfd <- function(inLfd){
   )
 }
 
+## Year LFD Histogram ----
+set_ggHistYearLfd <- function(inLfd){
+  suppressMessages(
+    ggplot(inLfd, aes_(x = ~Length, y = ~..count.., fill = ~factor(1))) +
+      geom_histogram(bins = 60, alpha = 0.7) +
+      facet_grid(Year~., switch = "y") +
+      theme_few() +
+      scale_x_continuous(breaks = pretty(inLfd$Length, 5)) +
+      theme(legend.position = "none",
+            panel.grid = element_line(size = 0.25, linetype = 2, colour = "grey20"),
+            axis.text.x = element_text(size = 6),
+            strip.text.x = element_text(size = 8),
+            axis.title.x = element_text(size = 10),
+            axis.text.y = element_blank(),
+            strip.text.y = element_text(size = 10),
+            axis.title.y = element_blank(),
+            axis.ticks.y = element_blank())
+  )
+}
+
 ## Abundance Frequency Table ----
 set_spatAbbTbl <- function(inSpat){
   out_FgTbl <- data.frame(FG = inSpat$FG,
