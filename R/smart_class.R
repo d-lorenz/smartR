@@ -1149,6 +1149,11 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                                 setSpatPlot(sampSex = sex)
                               }
                             },
+                            setSpatPlot = function(sampSex){
+                              sprePlot[[sampSex]][["spatAbbTbl"]] <<- set_spatAbbTbl(spreSpat[[sampSex]])
+                              sprePlot[[sampSex]][["spatAbsFreq"]] <<- set_spatAbsFreq(spreSpat[[sampSex]])
+                              sprePlot[[sampSex]][["spatRelFreq"]] <<- set_spatRelFreq(spreSpat[[sampSex]])
+                            },
                             calcMix = function(nAdap = 100, nSamp = 2000){
 
                               mixPar <<- list('Female' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)),
