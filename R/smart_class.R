@@ -168,7 +168,7 @@ SmartProject <- R6Class("smartProject",
                               fisheryBySpecie[[i]]$setSpreDistSing()
                             }
                           },
-                          setSpatDistAll = function(){
+                          setSpatFishery = function(){
                             for(i in 1:length(fisheryBySpecie)){
                               fisheryBySpecie[[i]]$setSpatDistSing()
                             }
