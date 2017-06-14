@@ -894,44 +894,6 @@ SmartProject <- R6Class("smartProject",
                               }
                             }
                           },
-                          # calcLFDPopSurvey = function(ind_num){
-                          #   surveyBySpecie[[ind_num]]$LFDPop <<- array(dim=c(sampMap$nCells, length(surveyBySpecie[[ind_num]]$lengClas),length(surveyBySpecie[[ind_num]]$year),2))
-                          #   for(y in 1:length(surveyBySpecie[[ind_num]]$year)){
-                          #     subLFD <- surveyBySpecie[[ind_num]]$rawLFD[which(surveyBySpecie[[ind_num]]$rawLFD$Year==surveyBySpecie[[ind_num]]$year[y]),]
-                          #     poinOver <- as.numeric(sp::over(SpatialPoints(subLFD[,c("Lon","Lat")]), SpatialPolygons(sampMap$gridShp@polygons)))
-                          #     subLFD <- cbind(subLFD[,c("Class", "Female", "Male")], poinOver)
-                          #     colnames(subLFD) <- c("Class", "Female", "Male", "Cell")
-                          #     for(IDcell in 1:sampMap$nCells){
-                          #       if(length(which(subLFD[,"Cell"] == IDcell))>0){
-                          #         cell.data <- subLFD[which(subLFD[,"Cell"] == IDcell),]
-                          #         cell.LFD <- RecLFD(cell.data,
-                          #                            surveyBySpecie[[ind_num]]$lengClas,
-                          #                            length(unique(cell.data[,1])))
-                          #         surveyBySpecie[[ind_num]]$LFDPop[IDcell,,y,1] <<- cell.LFD[1,]
-                          #         surveyBySpecie[[ind_num]]$LFDPop[IDcell,,y,2] <<- cell.LFD[2,]
-                          #       }else{
-                          #         surveyBySpecie[[ind_num]]$LFDPop[IDcell,,y,1] <<- rep(0,length(surveyBySpecie[[ind_num]]$lengClas))
-                          #         surveyBySpecie[[ind_num]]$LFDPop[IDcell,,y,2] <<- rep(0,length(surveyBySpecie[[ind_num]]$lengClas))
-                          #       }}}},
-                          # calcLFDPopFishery = function(ind_num){
-                          #   fisheryBySpecie[[ind_num]]$LFDPop <<- array(dim=c(sampMap$nCells, length(fisheryBySpecie[[ind_num]]$lengClas),length(fisheryBySpecie[[ind_num]]$year),2))
-                          #   for(y in 1:length(fisheryBySpecie[[ind_num]]$year)){
-                          #     subLFD <- fisheryBySpecie[[ind_num]]$rawLFD[which(years(fisheryBySpecie[[ind_num]]$rawLFD$Date)==fisheryBySpecie[[ind_num]]$year[y]),]
-                          #     poinOver <- as.numeric(sp::over(SpatialPoints(subLFD[,c("Lon","Lat")]), SpatialPolygons(sampMap$gridShp@polygons)))
-                          #     subLFD <- cbind(subLFD[,c("Class", "Female", "Male")], poinOver)
-                          #     colnames(subLFD) <- c("Class", "Female", "Male", "Cell")
-                          #     for(IDcell in 1:sampMap$nCells){
-                          #       if(length(which(subLFD[,"Cell"] == IDcell))>0){
-                          #         cell.data <- subLFD[which(subLFD[,"Cell"] == IDcell),]
-                          #         cell.LFD <- RecLFD(cell.data,
-                          #                            fisheryBySpecie[[ind_num]]$lengClas,
-                          #                            length(unique(cell.data[,1])))
-                          #         fisheryBySpecie[[ind_num]]$LFDPop[IDcell,,y,1] <<- cell.LFD[1,]
-                          #         fisheryBySpecie[[ind_num]]$LFDPop[IDcell,,y,2] <<- cell.LFD[2,]
-                          #       }else{
-                          #         fisheryBySpecie[[ind_num]]$LFDPop[IDcell,,y,1] <<- rep(0,length(fisheryBySpecie[[ind_num]]$lengClas))
-                          #         fisheryBySpecie[[ind_num]]$LFDPop[IDcell,,y,2] <<- rep(0,length(fisheryBySpecie[[ind_num]]$lengClas))
-                          #       }}}},
                           setCoh_A_Survey = function(){
                             if(length(specieInSurvey) == 1){
                               calcCoh_A_Survey(1)
