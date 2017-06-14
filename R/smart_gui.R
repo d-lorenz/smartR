@@ -1804,6 +1804,81 @@ smart_gui <- function(){
 
   addSpring(raw_g_top)
 
+  gbutton("View\nSpatial\nDistribution", container = raw_g_top, handler = function(h,...){
+
+    temp_dia <- gwindow(title="Spatial Distribution of Survey sampling", visible = FALSE,
+                        parent = main_win, width = 700, height = 500)
+
+    pop_g <- ggroup(horizontal = FALSE, container = temp_dia)
+
+    pop_g_top <- gframe(horizontal = TRUE, container = pop_g, spacing = 10)
+
+    addSpring(pop_g_top)
+    spec_b <- gframe("Specie", horizontal = FALSE, container = pop_g_top, expand = TRUE)
+
+    addSpring(spec_b)
+    spec_drop <- gcombobox(items = as.character(my_project$specieInSurvey), selected = 1,
+                           container = spec_b, editable = FALSE, handler = function(h,...){
+                             # my_project$plotGooSpe(whiSpe = svalue(spec_drop), whiSou = "Fishery")
+                             spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
+
+                             suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSurvey,
+                                                           my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
+                                                           my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatRelFreq"]],
+                                                           my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbbTbl"]],
+                                                           layout_matrix = rbind(c(NA,1,1),
+                                                                                 c(4,1,1),
+                                                                                 c(NA,2,3))
+                             ))
+                           })
+    addSpring(spec_b)
+    sex_b <- gframe("Sex", horizontal = FALSE, container = pop_g_top, expand = TRUE)
+    addSpring(pop_g_top)
+    addSpring(sex_b)
+    sex_drop <- gcombobox(items = c("Female", "Male"),
+                          selected = 1, container = sex_b, expand = TRUE,
+                          editable = FALSE, handler = function(h,...){
+                            spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
+
+                            suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSurvey,
+                                                          my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
+                                                          my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatRelFreq"]],
+                                                          my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbbTbl"]],
+                                                          layout_matrix = rbind(c(NA,1,1),
+                                                                                c(4,1,1),
+                                                                                c(NA,2,3))
+                            ))
+
+                          })
+    addSpring(sex_b)
+    addSpring(pop_g_top)
+
+    gbutton("Close", container = pop_g_top, handler = function(h,...){
+      dispose(temp_dia)
+    })
+    addSpring(pop_g_top)
+
+    addSpace(pop_g_top, 10)
+
+    pop_p <- ggraphics(container = pop_g, width = 650, height = 450, expand = TRUE)
+
+    visible(temp_dia) <- TRUE
+
+    spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
+
+    # my_project$plotGooSpe(whiSpe = "All", whiSou = "Fishery")
+    suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSurvey,
+                                  my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
+                                  my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatRelFreq"]],
+                                  my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbbTbl"]],
+                                  layout_matrix = rbind(c(NA,1,1),
+                                                        c(4,1,1),
+                                                        c(NA,2,3))
+    ))
+  })
+
+  addSpring(raw_g_top)
+
   gbutton("   Get\nMEDITS index", container = raw_g_top, handler = function(h,...){
 
     strataVect <- c(0, 10, 50, 100, 200, 500, 800, Inf)
