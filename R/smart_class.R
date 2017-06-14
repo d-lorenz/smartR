@@ -1151,6 +1151,22 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               popGen <<- TempArray
 
                             },
+                            setSpreDistSing = function(){
+                              for(sex in c("Female", "Male")){
+                                tmp_spre = rawLFD[!is.na(rawLFD$numFG),c("Year","Class", "numFG", sex)]
+
+                                num_sex <- sum(tmp_spre[,4])
+                                cat("\nFound", num_sex, sex, as.character(specie), "samples", sep = " ")
+
+                                spreDist <- data.frame(Year = rep(tmp_spre$Year, tmp_spre[,4]),
+                                                       Length = rep(tmp_spre$Class, tmp_spre[,4]) + runif(num_sex, -0.5, 0.5),
+                                                       NumFG = rep(tmp_spre$numFG, tmp_spre[,4]))
+
+                                spreDist[[sex]] <<- spreDist
+
+                                setSprePlot(sampSex = sex)
+                              }
+                            },
                             calcMix = function(nAdap = 100, nSamp = 2000){
 
                               mixPar <<- list('Female' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)),
