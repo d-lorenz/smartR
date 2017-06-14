@@ -220,15 +220,15 @@ SmartProject <- R6Class("smartProject",
                             }
                             cat("\nCompleted!", sep = "")
                           },
-                          setLFDPopSurvey = function(){
-                            if(length(specieInSurvey) == 1){
-                              calcLFDPopSurvey(1)
-                            }else{
-                              for(i in 1:length(specieInSurvey)){
-                                calcLFDPopSurvey(i)
-                              }}
-                            # speDisPlot("All")
-                          },
+                          # setLFDPopSurvey = function(){
+                          #   if(length(specieInSurvey) == 1){
+                          #     calcLFDPopSurvey(1)
+                          #   }else{
+                          #     for(i in 1:length(specieInSurvey)){
+                          #       calcLFDPopSurvey(i)
+                          #     }}
+                          #   # speDisPlot("All")
+                          # },
                           # setLFDPopFishery = function(){
                           #   if(length(specieInFishery) == 1){
                           #     calcLFDPopFishery(1)
