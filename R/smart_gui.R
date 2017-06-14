@@ -2298,8 +2298,13 @@ smart_gui <- function(){
                        handler = function(h,...){
                          dev.set(dev.list()[pre_dev+6])
 
-                         my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_mix))]]$ggplotMcmcOut(selCompo = svalue(view_radio),
-                                                                                                                                selSex = svalue(sex_drop_mix))
+                         if(svalue(sourceMix_r) == "Survey"){
+                           my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_mix))]]$ggplotMcmcOut(selCompo = svalue(view_radio),
+                                                                                                                                  selSex = svalue(sex_drop_mix))
+                         }else{
+                           my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_mix))]]$ggplotMcmcOut(selCompo = svalue(view_radio),
+                                                                                                                                  selSex = svalue(sex_drop_mix))
+                         }
                        })
 
   addSpring(cont_g)
