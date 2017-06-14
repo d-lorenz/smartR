@@ -2052,25 +2052,6 @@ smart_gui <- function(){
                                                                                 c(NA,2,3))
                             ))
 
-                            # if(svalue(sex_drop) == "Female"){
-                            #   suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSamp,
-                            #                                 my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
-                            #                                 my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatRelFreq"]],
-                            #                                 my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbbTbl"]],
-                            #                                 layout_matrix = rbind(c(NA,1,1),
-                            #                                                       c(4,1,1),
-                            #                                                       c(NA,2,3))
-                            #   ))
-                            # }else{
-                            #   suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSamp,
-                            #                                 my_project$fisheryBySpecie[[spe_ind]]$malePlot[["spatAbsFreq"]],
-                            #                                 my_project$fisheryBySpecie[[spe_ind]]$malePlot[["spatRelFreq"]],
-                            #                                 my_project$fisheryBySpecie[[spe_ind]]$malePlot[["spatAbbTbl"]],
-                            #                                 layout_matrix = rbind(c(NA,1,1),
-                            #                                                       c(4,1,1),
-                            #                                                       c(NA,2,3))
-                            #   ))
-                            # }
                           })
     addSpring(sex_b)
     addSpring(pop_g_top)
