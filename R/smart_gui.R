@@ -1728,6 +1728,11 @@ smart_gui <- function(){
       }
       svalue(stat_bar) <- ""
 
+      if(!is.null(my_project$sampMap$cutResShp)){
+        my_project$addFg2Survey()
+
+      }
+
       ### Update Sampling Status
       svalue(n_year_s) <- paste(length(my_project$yearInSurvey), " years", sep = "")
       svalue(mi_date_s) <- paste("From: ", min(as.numeric(as.character(my_project$yearInSurvey))), sep = "")
