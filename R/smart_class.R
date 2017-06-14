@@ -1135,6 +1135,19 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               sprePlot[[sampSex]] <<- list(histLfdTot = set_ggHistLfdTot(spreDist[[sampSex]][sample(1, nrow(spreDist[[sampSex]]), 100000),]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", "#63B8FF")),
                                                            histYearLfd = set_ggHistYearLfd(spreDist[[sampSex]][sample(1, nrow(spreDist[[sampSex]]), 100000),]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", "#63B8FF")))
                             },
+                            setSpatDistSing = function(){
+                              for(sex in c("Female", "Male")){
+                                tmp_fishSpat <- rawLFD[!is.na(rawLFD$numFG) & rawLFD[,sex] > 0,c("Lon","Lat", "numFG", sex)]
+
+                                barploFgAll <- data.frame(table(tmp_fishSpat$numFG))
+                                barploFgAll <- barploFgAll[order(as.numeric(as.character(barploFgAll[,1]))),]
+                                barploFgAll$FG <- factor(barploFgAll$Var1, levels = barploFgAll$Var1)
+                                barploFgAll$relFreq = round(100*barploFgAll$Freq/sum(barploFgAll$Freq),1)
+
+                                spreSpat[[sex]] <<- barploFgAll
+                                setSpatPlot(sampSex = sex)
+                              }
+                            },
                             calcMix = function(nAdap = 100, nSamp = 2000){
 
                               mixPar <<- list('Female' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)),
