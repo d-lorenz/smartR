@@ -1433,25 +1433,10 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                }
                              },
                              setSprePlot = function(sampSex){
-
                                sprePlot[[sampSex]] <<- list(histLfdTot = set_ggHistLfdTot(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", "#63B8FF")),
                                                             histUtcTot = set_ggHistUtcTot(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", "#63B8FF")),
                                                             dotUtcSplit = set_ggDotUtcSplit(spreDist[[sampSex]]) + scale_color_manual(values = ifelse(sampSex == "Female", "#FF6A6A", "#63B8FF")),
                                                             histUtcLfd = set_ggHistUtcLfd(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", "#63B8FF")))
-
-                               # if(sampSex == "Female"){
-                               #   femalePlot <<- list()
-                               #   femalePlot[["histLfdTot"]] <<- set_ggHistLfdTot(femaleSpre)
-                               #   femalePlot[["histUtcTot"]] <<- set_ggHistUtcTot(femaleSpre)
-                               #   femalePlot[["dotUtcSplit"]] <<- set_ggDotUtcSplit(femaleSpre)
-                               #   femalePlot[["histUtcLfd"]] <<- set_ggHistUtcLfd(femaleSpre)
-                               # }else{
-                               #   malePlot <<- list()
-                               #   malePlot[["histLfdTot"]] <<- set_ggHistLfdTot(maleSpre)
-                               #   malePlot[["histUtcTot"]] <<- set_ggHistUtcTot(maleSpre)
-                               #   malePlot[["dotUtcSplit"]] <<- set_ggDotUtcSplit(maleSpre)
-                               #   malePlot[["histUtcLfd"]] <<- set_ggHistUtcLfd(maleSpre)
-                               # }
                              },
                              setSpreDistSing = function(){
                                for(sex in c("Female", "Male")){
