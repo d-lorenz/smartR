@@ -1435,6 +1435,29 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                           sprePlot[[sexDrop]][["lineCatch"]] <<- set_ggCatchLine(df_birth = birth_melt)
                           ### MCMC Survivors * quarter
                           sprePlot[[sexDrop]][["lineSurv"]] <<- set_ggSurvLine(df_surv = surv_melt)
+                        },
+                        ggplotMcmcOut = function(selCompo = "MCMC", selSex = "Female"){
+                          switch(selCompo,
+                                 MCMC = suppressWarnings(grid.arrange(sprePlot[[selSex]][["traceChain"]],
+                                                                      sprePlot[[selSex]][["scatLK"]],
+                                                                      sprePlot[[selSex]][["cohoPreciGG"]],
+                                                                      sprePlot[[selSex]][["cohoVariGG"]],
+                                                                      layout_matrix = rbind(c(1,1,1,2),
+                                                                                            c(1,1,1,2),
+                                                                                            c(4,4,5,5)))),
+                                 Key = suppressWarnings(grid.arrange(sprePlot[[selSex]][["ageLength"]],
+                                                                     sprePlot[[selSex]][["ageLengthTbl"]],
+                                                                     sprePlot[[selSex]][["cohoStatTbl"]],
+                                                                     layout_matrix = rbind(c(1,1,2),
+                                                                                           c(1,1,2),
+                                                                                           c(1,1,3)))),
+                                 Birth = suppressWarnings(grid.arrange(sprePlot[[selSex]][["histBirth"]],
+                                                                       sprePlot[[selSex]][["lineCatch"]],
+                                                                       sprePlot[[selSex]][["lineSurv"]],
+                                                                       layout_matrix = rbind(c(1,1),
+                                                                                             c(1,1),
+                                                                                             c(2,3))))
+                          )
                         }
                             )
                           )
