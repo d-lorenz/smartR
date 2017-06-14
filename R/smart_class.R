@@ -2606,7 +2606,7 @@ SampleMap <- R6Class("sampleMap",
                        ggBetaFGbox = NULL,
                        ggProdFGmap = NULL,
                        ggProdFGbox = NULL,
-                       ggMapFgSamp = NULL,
+                       ggMapFgFishery = NULL,
                        gooMap = NULL,
                        gooMapPlot = NULL,
                        gooGrid = NULL,
@@ -2663,8 +2663,8 @@ SampleMap <- R6Class("sampleMap",
                          colnames(tmp_dbf) <- c("XCOORD", "YCOORD", "Name")
                          harbDbf <<- tmp_dbf
                        },
-                       set_ggMapFgSamp = function(rawSampCoo){
-                         ggMapFgSamp <<- suppressMessages(
+                       set_ggMapFgFishery = function(rawSampCoo){
+                         ggMapFgFishery <<- suppressMessages(
                            gooMapPlot +
                              geom_polygon(data = cutResShpFort,
                                           aes(x = long, y = lat, group = group),
