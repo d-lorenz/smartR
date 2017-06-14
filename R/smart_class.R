@@ -229,15 +229,15 @@ SmartProject <- R6Class("smartProject",
                               }}
                             # speDisPlot("All")
                           },
-                          setLFDPopFishery = function(){
-                            if(length(specieInFishery) == 1){
-                              calcLFDPopFishery(1)
-                            }else{
-                              for(i in 1:length(specieInFishery)){
-                                calcLFDPopFishery(i)
-                              }}
-                            # speDisPlot("All")
-                          },
+                          # setLFDPopFishery = function(){
+                          #   if(length(specieInFishery) == 1){
+                          #     calcLFDPopFishery(1)
+                          #   }else{
+                          #     for(i in 1:length(specieInFishery)){
+                          #       calcLFDPopFishery(i)
+                          #     }}
+                          #   # speDisPlot("All")
+                          # },
                           loadFleeEffoDbs = function(effort_path, met_nam, onBox = TRUE, perOnBox = 1){
                             cat("\n   ---   Extracting Effort data   ---", sep = "")
                             sort_files <- sort(effort_path)
