@@ -1902,7 +1902,7 @@ smart_gui <- function(){
       my_project$setSpreaFishery()
       my_project$setSpatFishery()
 
-      my_project$sampMap$set_ggMapFgSamp(my_project$rawDataFishery)
+      my_project$sampMap$set_ggMapFgFishery(my_project$rawDataFishery)
     }
 
     if(!is.null(my_project$rawDataFishery)){ #update_pop_gui()
@@ -2026,7 +2026,7 @@ smart_gui <- function(){
                              # my_project$plotGooSpe(whiSpe = svalue(spec_drop), whiSou = "Fishery")
                              spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
 
-                             suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSamp,
+                             suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgFishery,
                                                            my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
                                                            my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatRelFreq"]],
                                                            my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbbTbl"]],
@@ -2044,7 +2044,7 @@ smart_gui <- function(){
                           editable = FALSE, handler = function(h,...){
                             spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
 
-                            suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSamp,
+                            suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgFishery,
                                                           my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
                                                           my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatRelFreq"]],
                                                           my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbbTbl"]],
@@ -2071,7 +2071,7 @@ smart_gui <- function(){
     spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
 
     # my_project$plotGooSpe(whiSpe = "All", whiSou = "Fishery")
-    suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSamp,
+    suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgFishery,
                                   my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
                                   my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatRelFreq"]],
                                   my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbbTbl"]],
