@@ -332,10 +332,10 @@ smart_gui <- function(){
       svalue(stat_bar) <- "Splitting Survey Population..."
       my_project$setLFDPopSurvey()
     }
-    if(!is.null(my_project$rawDataFishery)){
-      svalue(stat_bar) <- "Splitting Fishery Population..."
-      my_project$setLFDPopFishery()
-    }
+    # if(!is.null(my_project$rawDataFishery)){
+    #   svalue(stat_bar) <- "Splitting Fishery Population..."
+    #   my_project$setLFDPopFishery()
+    # }
     enabled(gri_g_top) <- TRUE
 
     svalue(stat_bar) <- ""
