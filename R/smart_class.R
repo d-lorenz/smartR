@@ -1365,7 +1365,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                           sprePlot[[sexDrop]][["cohoVariGG"]] <<- set_ggSigmaBox(df_sigma = groPars[[sexDrop]]$sigma2s[,1:(max(groMixout[[sexDrop]]$Age)+1)], sigPalette = outPalette, numCoho = nCoho)
                           cat("Done!", sep = "")
 
-                          coho_AL <- ddply(mix_out, .(Age), summarise,
+                          coho_AL <- ddply(groMixout[[sexDrop]], .(Age), summarise,
                                            coh.mean = mean(Length), coh.var = var(Length), coh.num = length(Length))
 
                           cat("\n\tSetting Age-Length plots... ", sep = "")
