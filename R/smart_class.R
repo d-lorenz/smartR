@@ -1311,49 +1311,33 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                                                   Linf = dfLinf[,4],
                                                   Kappa = dfKapp[,4])
                         },
-                        getMCage = function(){
-                          ### age estimation
-                          means.f = matrix(0, nrow(curDistri), nCoho)
-                          zHat = numeric(nrow(curDistri))
-                          for(iObs in 1:nrow(curDistri)){
-
-                            if(curveSel == "von Bertalanffy"){
-                              temp <- LHat * (1 - exp(-kHat*(((1:nCoho)-1))))
-                            }else{
-                              temp <- LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho)-1))))
-                            }
-
-                            means.f[iObs,] = temp
-                            postProbs = dnorm(curDistri$Length[iObs], temp, sqrt(sigma2Hat))
-                            zHat[iObs] = as.numeric(names(which.max(table(sample(1:nCoho, size = 150, prob = postProbs, replace = TRUE)))))
-                          }
-
+                        getMCage = function(sexDrop = "Female"){
+                          zHat <- sapply(spreDist[[sexDrop]]$Length, FUN = function(x) length2age(numCoh = nCoho,
+                                                                                        Linf = groPars[[sexDrop]]$LHat,
+                                                                                        kappa = groPars[[sexDrop]]$kHat,
+                                                                                        tZero = groPars[[sexDrop]]$t0Hat,
+                                                                                        lengthIn = x,
+                                                                                        sqrtSigma = sqrt(groPars[[sexDrop]]$sigma2Hat))
+                          )
                           ages.f = zHat - 1
-                          AA = floor(ages.f)
+                          AA = round(ages.f)
 
-                          ### MCMC output
-                          FGlabels = as.numeric(as.character(curDistri$NumFG))
+                          FGlabels = as.numeric(as.character(spreDist[[sexDrop]]$NumFG))
                           FGnames = unique(FGlabels)
                           FG = numeric(length(FGlabels))
                           for(FGname in 1:length(FGnames)){
                             idx_FG = which(FGlabels == FGnames[FGname])
                             FG[idx_FG] = rep(FGname, length(idx_FG))
                           }
-                          # nFG = length(unique(FG))
 
-                          mix_out <- data.frame(Length = curDistri$Length,
-                                                Year = curDistri$Year,
-                                                # Day = tt,
+                          groMixout[[sexDrop]] <<- data.frame(Length = spreDist[[sexDrop]]$Length,
+                                                Year = as.numeric(as.character(spreDist[[sexDrop]]$Year)),
                                                 Age = AA,
                                                 AgeNF = ages.f,
-                                                FG = FGlabels)
-
-                          mix_out$Birth <- as.numeric(as.character(mix_out$Year)) - mix_out$Age
-
-                          mix_out$CatcDate <- factor(mix_out$Year,
-                                                     levels = min(mix_out$Year):max(mix_out$Year))
-
-                          groMixout[[sexDrop]] <<- mix_out
+                                                FG = FGlabels,
+                                                Birth = as.numeric(as.character(spreDist[[sexDrop]]$Year)) - AA,
+                                                CatcDate = factor(as.numeric(as.character(spreDist[[sexDrop]]$Year)),
+                                                                   levels = min(as.numeric(as.character(spreDist[[sexDrop]]$Year))):max(as.numeric(as.character(spreDist[[sexDrop]]$Year)))))
                         },
                         calcMixDate = function(nAdap = 100, nSamp = 2000, sexDrop = "Female", curveSel = "von Bertalanffy"){
 
