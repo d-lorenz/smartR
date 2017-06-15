@@ -1339,7 +1339,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
 
                           mix_out <- data.frame(Length = curDistri$Length,
                                                 Year = curDistri$Year,
-                                                Day = tt,
+                                                # Day = tt,
                                                 Age = AA,
                                                 AgeNF = ages.f,
                                                 FG = FGlabels)
