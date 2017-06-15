@@ -1296,21 +1296,6 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                           groPars[[sexDrop]]$sigma2s <<- 1/groPars[[sexDrop]]$taus
                           groPars[[sexDrop]]$sigma2Hat <<- apply(groPars[[sexDrop]]$sigma2s, 2, mean)
                         },
-                        getGGpar = function(sexDrop = "Female"){
-                          dfLinf <- data.frame(Parameter = "Linf",
-                                               Iter = 1:n.iter,
-                                               Chain = as.matrix(sampMcmc[[sexDrop]][,"Linf"], chains = TRUE)[,1],
-                                               Value = as.matrix(sampMcmc[[sexDrop]][,"Linf"], chains = TRUE)[,2])
-                          dfKapp <- data.frame(Parameter = "Kappa",
-                                               Iter = 1:n.iter,
-                                               Chain = as.matrix(sampMcmc[[sexDrop]][,"k"], chains = TRUE)[,1],
-                                               Value = as.matrix(sampMcmc[[sexDrop]][,"k"], chains = TRUE)[,2])
-
-                          ggdataSamps <- rbind(dfLinf, dfKapp)
-                          ggdataSampScat <- cbind(dfLinf[,2:3],
-                                                  Linf = dfLinf[,4],
-                                                  Kappa = dfKapp[,4])
-                        },
                         getMCage = function(sexDrop = "Female"){
                           zHat <- sapply(spreDist[[sexDrop]]$Length, FUN = function(x) length2age(numCoh = nCoho,
                                                                                         Linf = groPars[[sexDrop]]$LHat,
