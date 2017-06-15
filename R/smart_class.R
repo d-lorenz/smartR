@@ -1241,13 +1241,11 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                         #         }
                         #       }
                         #     }
-                        calcMixDate = function(nAdap = 100, nSamp = 2000, sexDrop = "Female", curveSel = "von Bertalanffy"){
-                          outPalette <- rainbow(nCoho)
+                        getMCsamps = function(numSamp = 2000, numAdap = 100, sexDrop = "Female", curveSel = "von Bertalanffy"){
 
                           curDistri <- spreDist[[sexDrop]]
-
-                          sub_idx <- sample(1:nrow(curDistri), size = nSamp)
-                          sub_data <- curDistri[sub_idx,]
+                          sub_idx <- sample(1:nrow(spreDist[[sexDrop]]), size = numSamp)
+                          sub_data <- spreDist[[sexDrop]][sub_idx,]
 
                           N <- length(sub_data$Length)
                           alpha = rep(1, nCoho)
@@ -1262,11 +1260,17 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                                            N = N,
                                            Nclust = nCoho)
 
-                          inits = list(list(Linf = max(sub_data$Length), k = 0.5, t0 = 0.0),
-                                       list(Linf = max(sub_data$Length), k = 0.5, t0 = 0.0),
+                          dataList <- list(y = sub_data$Length,
+                                           maxLeng = max(sub_data$Length),         ## !!!
+                                           alpha = alpha,
+                                           Z = Z,
+                                           N = N,
+                                           Nclust = nCoho)
+
+                          inits = list(list(Linf = min(sub_data$Length), k = 0.5, t0 = 0.0),
+                                       list(Linf = mean(sub_data$Length), k = 0.5, t0 = 0.0),
                                        list(Linf = max(sub_data$Length), k = 0.5, t0 = 0.0))
 
-                          ### MCMC model setup
                           modelGrow <- ifelse(curveSel == "von Bertalanffy",
                                               system.file("model/bertGrow.jags", package = "smartR"),
                                               system.file("model/gompGrow.jags", package = "smartR"))
@@ -1275,16 +1279,43 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                                                data = dataList,
                                                inits = inits,
                                                n.chains = 3,
-                                               n.adapt = nAdap)
-                          ###
+                                               n.adapt = numAdap)
 
                           ### MCMC chain sampling
                           n.iter <- 500
                           obsNode <- c('Linf', 'k', 't0', 'tau', 'p')
                           samps <- coda.samples(jags.m, obsNode, n.iter = n.iter)
-                          ###
 
                           sampMcmc[[sexDrop]] <<- samps
+                        },
+                        getGrowPar = function(){
+                          ### MCMC estimates
+                          dfLinf <- data.frame(Parameter = "Linf",
+                                               Iter = 1:n.iter,
+                                               Chain = as.matrix(samps[,"Linf"], chains = TRUE)[,1],
+                                               Value = as.matrix(samps[,"Linf"], chains = TRUE)[,2])
+                          dfKapp <- data.frame(Parameter = "Kappa",
+                                               Iter = 1:n.iter,
+                                               Chain = as.matrix(samps[,"k"], chains = TRUE)[,1],
+                                               Value = as.matrix(samps[,"k"], chains = TRUE)[,2])
+
+                          ggdataSamps <- rbind(dfLinf, dfKapp)
+                          ggdataSampScat <- cbind(dfLinf[,2:3],
+                                                  Linf = dfLinf[,4],
+                                                  Kappa = dfKapp[,4])
+
+                          LHat = mean(as.matrix(samps[,"Linf"]))
+                          kHat = mean(as.matrix(samps[,"k"]))
+                          t0Hat = mean(as.matrix(samps[,"t0"]))
+                          taus <- as.matrix(samps[,grep("tau" ,varnames(samps))])
+                          sigma2s = 1/taus
+                          sigma2Hat = apply(sigma2s, 2, mean)
+                        },
+                        calcMixDate = function(nAdap = 100, nSamp = 2000, sexDrop = "Female", curveSel = "von Bertalanffy"){
+
+                          getMCsamps(numSamp = nAdap, numAdap = nSamp)
+
+                          outPalette <- rainbow(nCoho)
 
                           ### MCMC estimates
                           dfLinf <- data.frame(Parameter = "Linf",
