@@ -1418,8 +1418,8 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
 
                           surv_melt <- melt(surv_tbl)
                           names(surv_melt) <- c("Catch", "Birth", "Qty")
-                          surv_melt$Catch <- factor(surv_melt$Catch, levels = paste(rep(levels(mix_out$Year), each = 4),
-                                                                                    rep(1:4, times = length(levels(mix_out$Year))), sep = "_"))
+                          surv_melt$Catch <- factor(surv_melt$Catch, levels = paste(rep(levels(groMixout[[sexDrop]]$Year), each = 4),
+                                                                                    rep(1:4, times = length(levels(groMixout[[sexDrop]]$Year))), sep = "_"))
                           surv_melt <- surv_melt[!duplicated(surv_melt[,2:3], fromLast = TRUE),]
                           surv_melt <- surv_melt[surv_melt$Qty != 0,]
                           surv_melt$Age <- as.numeric(strtrim(surv_melt$Catch, 4)) - surv_melt$Birth + as.numeric(substr(surv_melt$Catch, 6, 7))/4
