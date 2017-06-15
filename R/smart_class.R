@@ -1290,12 +1290,12 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                           sampMcmc[[sexDrop]] <<- samps
                         },
                         getGrowPar = function(sexDrop = "Female"){
-                          LHat = mean(as.matrix(sampMcmc[[sexDrop]][,"Linf"]))
-                          kHat = mean(as.matrix(sampMcmc[[sexDrop]][,"k"]))
-                          t0Hat = mean(as.matrix(sampMcmc[[sexDrop]][,"t0"]))
-                          taus <- as.matrix(sampMcmc[[sexDrop]][,grep("tau" ,varnames(sampMcmc[[sexDrop]]))])
-                          sigma2s = 1/taus
-                          sigma2Hat = apply(sigma2s, 2, mean)
+                          groPars[[sexDrop]]$LHat <<- mean(as.matrix(sampMcmc[[sexDrop]][,"Linf"]))
+                          groPars[[sexDrop]]$kHat <<- mean(as.matrix(sampMcmc[[sexDrop]][,"k"]))
+                          groPars[[sexDrop]]$t0Hat <<- mean(as.matrix(sampMcmc[[sexDrop]][,"t0"]))
+                          groPars[[sexDrop]]$taus <<- as.matrix(sampMcmc[[sexDrop]][,grep("tau" ,varnames(sampMcmc[[sexDrop]]))])
+                          groPars[[sexDrop]]$sigma2s <<- 1/groPars[[sexDrop]]$taus
+                          groPars[[sexDrop]]$sigma2Hat <<- apply(groPars[[sexDrop]]$sigma2s, 2, mean)
                         },
                         getGGpar = function(sexDrop = "Female"){
                           dfLinf <- data.frame(Parameter = "Linf",
