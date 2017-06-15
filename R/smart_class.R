@@ -1423,14 +1423,14 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                           sprePlot[[sexDrop]][["cohoVariGG"]] <<- set_ggSigmaBox(df_sigma = sigma2s[,1:(max(AA)+1)], sigPalette = outPalette, numCoho = nCoho)
 
                           ### MCMC Plot Age-Length
-                          sprePlot[[sexDrop]][["ageLength"]] <<- set_ggAgeLength(df_mix = mix_out, mixPalette = outPalette)
+                          sprePlot[[sexDrop]][["ageLength"]] <<- set_ggAgeLength(df_mix = mix_out[sample(1:nrow(mix_out), 100000),], mixPalette = outPalette)
                           ### MCMC Age-Length Key
                           sprePlot[[sexDrop]][["ageLengthTbl"]] <<- set_tblAgeLength(df_mix = mix_out)
                           ### MCMC output cohort stats
                           sprePlot[[sexDrop]][["cohoStatTbl"]] <<- set_tblCohoStat(df_coho = coho_AL)
 
                           ### MCMC quarter vertical hist
-                          sprePlot[[sexDrop]][["histBirth"]] <<- set_ggHistBirth(df_mix = mix_out, df_grow = growPath)
+                          sprePlot[[sexDrop]][["histBirth"]] <<- set_ggHistBirth(df_mix = mix_out[sample(1:nrow(mix_out), 100000),], df_grow = growPath)
                           ### MCMC Catch * Quarters
                           sprePlot[[sexDrop]][["lineCatch"]] <<- set_ggCatchLine(df_birth = birth_melt)
                           ### MCMC Survivors * quarter
