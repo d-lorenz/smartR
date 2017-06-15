@@ -1244,7 +1244,6 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                         #     }
                         getMCsamps = function(numSamp = 2000, numAdap = 100, sexDrop = "Female", curveSel = "von Bertalanffy"){
 
-                          curDistri <- spreDist[[sexDrop]]
                           sub_idx <- sample(1:nrow(spreDist[[sexDrop]]), size = numSamp)
                           sub_data <- spreDist[[sexDrop]][sub_idx,]
 
