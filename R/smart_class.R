@@ -1336,6 +1336,8 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                           getMCage(sexDrop = "Female")
                           cat("Done!", sep = "")
 
+                          n.iter <- 500
+
                           dfLinf <- data.frame(Parameter = "Linf",
                                                Iter = 1:n.iter,
                                                Chain = as.matrix(sampMcmc[[sexDrop]][,"Linf"], chains = TRUE)[,1],
