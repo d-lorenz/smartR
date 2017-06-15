@@ -1288,56 +1288,38 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
 
                           sampMcmc[[sexDrop]] <<- samps
                         },
-                        getGrowPar = function(){
-                          ### MCMC estimates
+                        getGrowPar = function(sexDrop = "Female"){
+                          LHat = mean(as.matrix(sampMcmc[[sexDrop]][,"Linf"]))
+                          kHat = mean(as.matrix(sampMcmc[[sexDrop]][,"k"]))
+                          t0Hat = mean(as.matrix(sampMcmc[[sexDrop]][,"t0"]))
+                          taus <- as.matrix(sampMcmc[[sexDrop]][,grep("tau" ,varnames(sampMcmc[[sexDrop]]))])
+                          sigma2s = 1/taus
+                          sigma2Hat = apply(sigma2s, 2, mean)
+                        },
+                        getGGpar = function(sexDrop = "Female"){
                           dfLinf <- data.frame(Parameter = "Linf",
                                                Iter = 1:n.iter,
-                                               Chain = as.matrix(samps[,"Linf"], chains = TRUE)[,1],
-                                               Value = as.matrix(samps[,"Linf"], chains = TRUE)[,2])
+                                               Chain = as.matrix(sampMcmc[[sexDrop]][,"Linf"], chains = TRUE)[,1],
+                                               Value = as.matrix(sampMcmc[[sexDrop]][,"Linf"], chains = TRUE)[,2])
                           dfKapp <- data.frame(Parameter = "Kappa",
                                                Iter = 1:n.iter,
-                                               Chain = as.matrix(samps[,"k"], chains = TRUE)[,1],
-                                               Value = as.matrix(samps[,"k"], chains = TRUE)[,2])
+                                               Chain = as.matrix(sampMcmc[[sexDrop]][,"k"], chains = TRUE)[,1],
+                                               Value = as.matrix(sampMcmc[[sexDrop]][,"k"], chains = TRUE)[,2])
 
                           ggdataSamps <- rbind(dfLinf, dfKapp)
                           ggdataSampScat <- cbind(dfLinf[,2:3],
                                                   Linf = dfLinf[,4],
                                                   Kappa = dfKapp[,4])
-
-                          LHat = mean(as.matrix(samps[,"Linf"]))
-                          kHat = mean(as.matrix(samps[,"k"]))
-                          t0Hat = mean(as.matrix(samps[,"t0"]))
-                          taus <- as.matrix(samps[,grep("tau" ,varnames(samps))])
-                          sigma2s = 1/taus
-                          sigma2Hat = apply(sigma2s, 2, mean)
                         },
                         calcMixDate = function(nAdap = 100, nSamp = 2000, sexDrop = "Female", curveSel = "von Bertalanffy"){
 
                           getMCsamps(numSamp = nAdap, numAdap = nSamp)
 
+                          getGrowPar(sexDrop = "Female")
+
+                          getGGpar(sexDrop = "Female")
+
                           outPalette <- rainbow(nCoho)
-
-                          ### MCMC estimates
-                          dfLinf <- data.frame(Parameter = "Linf",
-                                               Iter = 1:n.iter,
-                                               Chain = as.matrix(samps[,"Linf"], chains = TRUE)[,1],
-                                               Value = as.matrix(samps[,"Linf"], chains = TRUE)[,2])
-                          dfKapp <- data.frame(Parameter = "Kappa",
-                                               Iter = 1:n.iter,
-                                               Chain = as.matrix(samps[,"k"], chains = TRUE)[,1],
-                                               Value = as.matrix(samps[,"k"], chains = TRUE)[,2])
-
-                          ggdataSamps <- rbind(dfLinf, dfKapp)
-                          ggdataSampScat <- cbind(dfLinf[,2:3],
-                                                  Linf = dfLinf[,4],
-                                                  Kappa = dfKapp[,4])
-
-                          LHat = mean(as.matrix(samps[,"Linf"]))
-                          kHat = mean(as.matrix(samps[,"k"]))
-                          t0Hat = mean(as.matrix(samps[,"t0"]))
-                          taus <- as.matrix(samps[,grep("tau" ,varnames(samps))])
-                          sigma2s = 1/taus
-                          sigma2Hat = apply(sigma2s, 2, mean)
 
                           ### age estimation
                           means.f = matrix(0, nrow(curDistri), nCoho)
