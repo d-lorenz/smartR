@@ -1326,89 +1326,85 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                         },
                         calcMixDate = function(nAdap = 100, nSamp = 2000, sexDrop = "Female", curveSel = "von Bertalanffy"){
 
+                          cat("\n\tGetting mcmc samples... ", sep = "")
                           getMCsamps(numSamp = nAdap, numAdap = nSamp)
-
+                          cat("Done!", sep = "")
+                          cat("\n\tGetting growth parameters... ", sep = "")
                           getGrowPar(sexDrop = "Female")
+                          cat("Done!", sep = "")
+                          cat("\n\tGetting age estimates... ", sep = "")
+                          getMCage(sexDrop = "Female")
+                          cat("Done!", sep = "")
 
-                          getGGpar(sexDrop = "Female")
+                          dfLinf <- data.frame(Parameter = "Linf",
+                                               Iter = 1:n.iter,
+                                               Chain = as.matrix(sampMcmc[[sexDrop]][,"Linf"], chains = TRUE)[,1],
+                                               Value = as.matrix(sampMcmc[[sexDrop]][,"Linf"], chains = TRUE)[,2])
+                          dfKapp <- data.frame(Parameter = "Kappa",
+                                               Iter = 1:n.iter,
+                                               Chain = as.matrix(sampMcmc[[sexDrop]][,"k"], chains = TRUE)[,1],
+                                               Value = as.matrix(sampMcmc[[sexDrop]][,"k"], chains = TRUE)[,2])
+
+                          ggdataSamps <- rbind(dfLinf, dfKapp)
+                          ggdataSampScat <- cbind(dfLinf[,2:3],
+                                                  Linf = dfLinf[,4],
+                                                  Kappa = dfKapp[,4])
 
                           outPalette <- rainbow(nCoho)
 
-                          ### age estimation
-                          means.f = matrix(0, nrow(curDistri), nCoho)
-                          zHat = numeric(nrow(curDistri))
-                          for(iObs in 1:nrow(curDistri)){
+                          cat("\n\tSetting mcmc diagnostic plots... ", sep = "")
+                          ### MCMC chain Traceplot
+                          sprePlot[[sexDrop]][["traceChain"]] <<- set_ggChainTrace(ggdataSamps)
+                          ### MCMC chain scatterplot
+                          sprePlot[[sexDrop]][["scatLK"]] <<- set_ggChainScatter(gg_DFscat = ggdataSampScat, meanL = groPars[[sexDrop]]$LHat, meanK = groPars[[sexDrop]]$kHat)
+                          ### MCMC chain Boxplot Tau
+                          sprePlot[[sexDrop]][["cohoPreciGG"]] <<- set_ggTausBox(df_taus = groPars[[sexDrop]]$taus[,1:(max(groMixout[[sexDrop]]$Age)+1)], tauPalette = outPalette, numCoho = nCoho)
+                          ### MCMC Boxplot Sigma
+                          sprePlot[[sexDrop]][["cohoVariGG"]] <<- set_ggSigmaBox(df_sigma = groPars[[sexDrop]]$sigma2s[,1:(max(groMixout[[sexDrop]]$Age)+1)], sigPalette = outPalette, numCoho = nCoho)
+                          cat("Done!", sep = "")
 
-                            if(curveSel == "von Bertalanffy"){
-                              temp <- LHat * (1 - exp(-kHat*(((1:nCoho)-1))))
-                            }else{
-                              temp <- LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho)-1))))
-                            }
+                          coho_AL <- ddply(mix_out, .(Age), summarise,
+                                           coh.mean = mean(Length), coh.var = var(Length), coh.num = length(Length))
 
-                            means.f[iObs,] = temp
-                            postProbs = dnorm(curDistri$Length[iObs], temp, sqrt(sigma2Hat))
-                            zHat[iObs] = as.numeric(names(which.max(table(sample(1:nCoho, size = 150, prob = postProbs, replace = TRUE)))))
-                          }
+                          cat("\n\tSetting Age-Length plots... ", sep = "")
+                          ### MCMC Plot Age-Length
+                          sprePlot[[sexDrop]][["ageLength"]] <<- set_ggAgeLength(df_mix = groMixout[[sexDrop]][sample(1:nrow(groMixout[[sexDrop]]), 100000),], mixPalette = outPalette)
+                          ### MCMC Age-Length Key
+                          sprePlot[[sexDrop]][["ageLengthTbl"]] <<- set_tblAgeLength(df_mix = groMixout[[sexDrop]])
+                          ### MCMC output cohort stats
+                          sprePlot[[sexDrop]][["cohoStatTbl"]] <<- set_tblCohoStat(df_coho = coho_AL)
+                          cat("Done!", sep = "")
 
-                          ages.f = zHat - 1
-                          AA = floor(ages.f)
-
-                          ### MCMC output
-                          FGlabels = as.numeric(as.character(curDistri$NumFG))
-                          FGnames = unique(FGlabels)
-                          FG = numeric(length(FGlabels))
-                          for(FGname in 1:length(FGnames)){
-                            idx_FG = which(FGlabels == FGnames[FGname])
-                            FG[idx_FG] = rep(FGname, length(idx_FG))
-                          }
-                          # nFG = length(unique(FG))
-
-                          mix_out <- data.frame(Length = curDistri$Length,
-                                                Year = curDistri$Year,
-                                                # Day = tt,
-                                                Age = AA,
-                                                AgeNF = ages.f,
-                                                FG = FGlabels)
-
-                          mix_out$Birth <- as.numeric(as.character(mix_out$Year)) - mix_out$Age
-
-                          mix_out$CatcDate <- factor(mix_out$Year,
-                                                     levels = min(mix_out$Year):max(mix_out$Year))
-
-                          groMixout[[sexDrop]] <<- mix_out
-
-                          # mix_out$CorrBirth <- mix_out$Birth
-                          # mix_out$CorrBirth[which(mix_out$AgeNF %% 1 + 0.25 > 1)] <- mix_out$CorrBirth[which(mix_out$AgeNF %% 1 + 0.25 > 1)] + 1
-                          # mix_out$CorrBirth[which(mix_out$AgeNF - mix_out$Age > 0.81)] <- mix_out$CorrBirth[which(mix_out$AgeNF - mix_out$Age > 0.81)] - 1
-
-                          growPath <- data.frame(Birth = rep(min(mix_out$Birth):(min(mix_out$Birth)+11), each = length(levels(mix_out$CatcDate))),
-                                                 Date = rep(levels(mix_out$CatcDate), times = length(min(mix_out$Birth):(min(mix_out$Birth)+11))),
+                          growPath <- data.frame(Birth = rep(min(groMixout[[sexDrop]]$Birth):(min(groMixout[[sexDrop]]$Birth)+11), each = length(levels(groMixout[[sexDrop]]$CatcDate))),
+                                                 Date = rep(levels(groMixout[[sexDrop]]$CatcDate), times = length(min(groMixout[[sexDrop]]$Birth):(min(groMixout[[sexDrop]]$Birth)+11))),
                                                  Length = NA)
                           growPath$Age <- as.numeric(strtrim(growPath$Date, 4)) - growPath$Birth + as.numeric(substr(growPath$Date, 6,7))/12
 
                           if(curveSel == "von Bertalanffy"){
-                            growPath$Length <- calcVonBert(LHat, kHat, growPath$Age)
+                            growPath$Length <- calcVonBert(groPars[[sexDrop]]$LHat, groPars[[sexDrop]]$kHat, growPath$Age)
                           }else{
-                            growPath$Length <- calcGomp(LHat, kHat, growPath$Age)
+                            growPath$Length <- calcGomp(groPars[[sexDrop]]$LHat, groPars[[sexDrop]]$kHat, growPath$Age)
                           }
 
-                          growPath$Date <- factor(growPath$Date, levels = levels(mix_out$CatcDate))
-                          # growPath <- growPath[growPath$Age > 0,]
-                          growPath <- growPath[growPath$Length > floor(min(mix_out$Length)),]
+                          growPath$Date <- factor(growPath$Date, levels = levels(groMixout[[sexDrop]]$CatcDate))
+                          growPath <- growPath[growPath$Length > floor(min(groMixout[[sexDrop]]$Length)),]
 
-                          coho_AL <- ddply(mix_out, .(Age), summarise,
-                                           coh.mean = mean(Length), coh.var = var(Length), coh.num = length(Length))
-                          ###
+                          cat("\n\tSetting Population plots... ", sep = "")
+                          ### MCMC quarter vertical hist
+                          sprePlot[[sexDrop]][["histBirth"]] <<- set_ggHistBirth(df_mix = groMixout[[sexDrop]][sample(1:nrow(groMixout[[sexDrop]]), 100000),], df_grow = growPath)
 
                           ### MCMC calc birth
-                          out_birth <- table(mix_out$Year,  mix_out$Birth)
+                          out_birth <- table(groMixout[[sexDrop]]$Year,  groMixout[[sexDrop]]$Birth)
                           birth_melt <- melt(out_birth)
                           names(birth_melt) <- c("Catch", "Birth", "Qty")
-                          birth_melt$Catch <- factor(birth_melt$Catch, levels = paste(rep(levels(mix_out$Year), each = 4),
-                                                                                      rep(1:4, times = length(levels(mix_out$Year))), sep = "_"))
+                          birth_melt$Catch <- factor(birth_melt$Catch, levels = paste(rep(levels(groMixout[[sexDrop]]$Year), each = 4),
+                                                                                      rep(1:4, times = length(levels(groMixout[[sexDrop]]$Year))), sep = "_"))
                           birth_melt$Birth <- as.factor(birth_melt$Birth)
                           birth_melt <- birth_melt[birth_melt$Qty != 0,]
-                          ###
+
+                          ### MCMC Catch * Quarters
+                          sprePlot[[sexDrop]][["lineCatch"]] <<- set_ggCatchLine(df_birth = birth_melt)
+
 
                           ### MCMC Calc Survivors
                           tot_count <- apply(out_birth,2, sum)
@@ -1439,28 +1435,9 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                           # surv_melt$Zeta <- 0.2*(surv_melt$Zeta)/(1/surv_melt$Zeta)
                           ###
 
-                          ### MCMC chain Traceplot
-                          sprePlot[[sexDrop]][["traceChain"]] <<- set_ggChainTrace(ggdataSamps)
-                          ### MCMC chain scatterplot
-                          sprePlot[[sexDrop]][["scatLK"]] <<- set_ggChainScatter(gg_DFscat = ggdataSampScat, meanL = LHat, meanK = kHat)
-                          ### MCMC chain Boxplot Tau
-                          sprePlot[[sexDrop]][["cohoPreciGG"]] <<- set_ggTausBox(df_taus = taus[,1:(max(AA)+1)], tauPalette = outPalette, numCoho = nCoho)
-                          ### MCMC Boxplot Sigma
-                          sprePlot[[sexDrop]][["cohoVariGG"]] <<- set_ggSigmaBox(df_sigma = sigma2s[,1:(max(AA)+1)], sigPalette = outPalette, numCoho = nCoho)
-
-                          ### MCMC Plot Age-Length
-                          sprePlot[[sexDrop]][["ageLength"]] <<- set_ggAgeLength(df_mix = mix_out[sample(1:nrow(mix_out), 100000),], mixPalette = outPalette)
-                          ### MCMC Age-Length Key
-                          sprePlot[[sexDrop]][["ageLengthTbl"]] <<- set_tblAgeLength(df_mix = mix_out)
-                          ### MCMC output cohort stats
-                          sprePlot[[sexDrop]][["cohoStatTbl"]] <<- set_tblCohoStat(df_coho = coho_AL)
-
-                          ### MCMC quarter vertical hist
-                          sprePlot[[sexDrop]][["histBirth"]] <<- set_ggHistBirth(df_mix = mix_out[sample(1:nrow(mix_out), 100000),], df_grow = growPath)
-                          ### MCMC Catch * Quarters
-                          sprePlot[[sexDrop]][["lineCatch"]] <<- set_ggCatchLine(df_birth = birth_melt)
                           ### MCMC Survivors * quarter
                           sprePlot[[sexDrop]][["lineSurv"]] <<- set_ggSurvLine(df_surv = surv_melt)
+                          cat("Done!", sep = "")
                         },
                         ggplotMcmcOut = function(selCompo = "MCMC", selSex = "Female"){
                           switch(selCompo,
