@@ -1203,7 +1203,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               mix_out$CatcDate <- factor(paste(mix_out$Year,
                                                                zeroedMonth, sep = "-"),
                                                          levels = paste(rep(sort(unique(mix_out$Year)), each = 12),
-                                                                        sort(unique(zeroedMonth)), sep = "-"))
+                                                                        ifelse(nchar(1:12) == 2, 1:12, paste("0", 1:12, sep = "")), sep = "-"))
 
                               groMixout[[sexDrop]] <<- mix_out
                             },
