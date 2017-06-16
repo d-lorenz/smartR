@@ -1174,7 +1174,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                                                                                                       sqrtSigma = sqrt(groPars[[sexDrop]]$sigma2Hat))
                               )
 
-                              tt = as.POSIXlt(chron(curDistri$UTC))$yday / 366
+                              tt = as.POSIXlt(chron(spreDist[[sexDrop]]$UTC))$yday / 366
                               ages.f = zHat - 1 + tt
                               AA = round(ages.f)
 
