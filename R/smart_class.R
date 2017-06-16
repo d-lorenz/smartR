@@ -1212,7 +1212,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                             calcMixDate = function(nAdap = 100, nSamp = 2000, sexDrop = "Female", curveSel = "von Bertalanffy"){
 
                               cat("\n\tGetting mcmc samples... ", sep = "")
-                              getMCsamps(numSamp = nAdap, numAdap = nSamp)
+                              getMCsamps(numSamp = nAdap, numAdap = nSamp, sexDrop = sexDrop, curveSel = curveSel)
                               cat("Done!", sep = "")
                               cat("\n\tGetting growth parameters... ", sep = "")
                               getGrowPar(sexDrop = sexDrop)
