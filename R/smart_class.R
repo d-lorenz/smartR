@@ -648,13 +648,13 @@ SmartProject <- R6Class("smartProject",
                           addFg2Survey = function(){
                             cat("\n\nConnecting coordinates to fishing ground...", sep = "")
                             rawDataSurvey$numFG <<- names(sampMap$cutResShp)[over(SpatialPoints(data.frame(Lon = rawDataSurvey$Lon,
-                                                                                                            Lat = rawDataSurvey$Lat)),
-                                                                                   sampMap$cutResShp)]
+                                                                                                           Lat = rawDataSurvey$Lat)),
+                                                                                  sampMap$cutResShp)]
 
                             for(i in 1:length(surveyBySpecie)){
                               surveyBySpecie[[i]]$rawLFD$numFG <<- names(sampMap$cutResShp)[over(SpatialPoints(data.frame(Lon = surveyBySpecie[[i]]$rawLFD$Lon,
-                                                                                                                           Lat = surveyBySpecie[[i]]$rawLFD$Lat)),
-                                                                                                  sampMap$cutResShp)]
+                                                                                                                          Lat = surveyBySpecie[[i]]$rawLFD$Lat)),
+                                                                                                 sampMap$cutResShp)]
                             }
                             cat(" Done!", sep = "")
                           },
@@ -1821,8 +1821,8 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                ### MCMC Survivors * quarter
                                sprePlot[[sexDrop]][["lineSurv"]] <<- set_ggSurvLine(df_surv = surv_melt)
                              }
-                            )
                            )
+)
 
 
 
