@@ -37,7 +37,8 @@ smart_gui <- function(){
   # pathEffortAA <- "/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/smart_rawEffort_new.rData"
 
   # SURVEY DATA
-  pathSurvey <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Survey/survey_data_MEDITS.csv"
+  # pathSurvey <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Survey/survey_data_MEDITS.csv"
+  pathSurvey <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Survey/smartSurveyInput_MUT-SoS.csv"
 
   # FISHERY DATA
   # pathFishery <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Fishery/fishery_merge_CampBiol.csv"
