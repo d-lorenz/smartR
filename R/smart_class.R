@@ -1213,10 +1213,10 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               getMCsamps(numSamp = nAdap, numAdap = nSamp)
                               cat("Done!", sep = "")
                               cat("\n\tGetting growth parameters... ", sep = "")
-                              getGrowPar(sexDrop = "Female")
+                              getGrowPar(sexDrop = sexDrop)
                               cat("Done!", sep = "")
                               cat("\n\tGetting age estimates... ", sep = "")
-                              getMCage(sexDrop = "Female")
+                              getMCage(sexDrop = sexDrop)
                               cat("Done!", sep = "")
 
                               n.iter <- 500
