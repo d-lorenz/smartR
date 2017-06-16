@@ -1079,12 +1079,12 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                             setNCoho = function(num_coh){nCoho <<- num_coh},
                             setSpreDistSing = function(){
                               for(sex in c("Female", "Male")){
-                                tmp_spre = rawLFD[!is.na(rawLFD$numFG),c("Year","Class", "numFG", sex)]
+                                tmp_spre = rawLFD[!is.na(rawLFD$numFG),c("Date","Class", "numFG", sex)]
 
                                 num_sex <- sum(tmp_spre[,4])
                                 cat("\nFound", num_sex, sex, as.character(specie), "samples", sep = " ")
 
-                                spreDist <- data.frame(Year = rep(tmp_spre$Year, tmp_spre[,4]),
+                                spreDist <- data.frame(Date = rep(tmp_spre$Date, tmp_spre[,4]),
                                                        Length = rep(tmp_spre$Class, tmp_spre[,4]) + runif(num_sex, -0.5, 0.5),
                                                        NumFG = rep(tmp_spre$numFG, tmp_spre[,4]))
 
