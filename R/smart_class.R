@@ -1084,9 +1084,12 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                                 num_sex <- sum(tmp_spre[,4])
                                 cat("\nFound", num_sex, sex, as.character(specie), "samples", sep = " ")
 
-                                spreDist <- data.frame(Date = rep(tmp_spre$Date, tmp_spre[,4]),
+                                spreDist <- data.frame(UTC = rep(tmp_spre$Date, tmp_spre[,4]),
                                                        Length = rep(tmp_spre$Class, tmp_spre[,4]) + runif(num_sex, -0.5, 0.5),
                                                        NumFG = rep(tmp_spre$numFG, tmp_spre[,4]))
+
+                                spreDist$Year <- years(spreDist$UTC)
+                                spreDist$Month <- months(spreDist$UTC)
 
                                 spreDist[[sex]] <<- spreDist
 
