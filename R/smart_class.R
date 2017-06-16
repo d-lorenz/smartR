@@ -1097,8 +1097,8 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               }
                             },
                             setSprePlot = function(sampSex){
-                              sprePlot[[sampSex]] <<- list(histLfdTot = set_ggHistLfdTot(spreDist[[sampSex]][sample(1:nrow(spreDist[[sampSex]]), 100000),]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", "#63B8FF")),
-                                                           histYearLfd = set_ggHistYearLfd(spreDist[[sampSex]][sample(1:nrow(spreDist[[sampSex]]), 100000),]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", "#63B8FF")))
+                              sprePlot[[sampSex]] <<- list(histLfdTot = set_ggHistLfdTot(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", "#63B8FF")),
+                                                           histYearLfd = set_ggHistYearLfd(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", "#63B8FF")))
                             },
                             setSpatDistSing = function(){
                               for(sex in c("Female", "Male")){
@@ -1253,7 +1253,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
 
                               cat("\n\tSetting Age-Length plots... ", sep = "")
                               ### MCMC Plot Age-Length
-                              sprePlot[[sexDrop]][["ageLength"]] <<- set_ggAgeLength(df_mix = groMixout[[sexDrop]][sample(1:nrow(groMixout[[sexDrop]]), 100000),], mixPalette = outPalette)
+                              sprePlot[[sexDrop]][["ageLength"]] <<- set_ggAgeLength(df_mix = groMixout[[sexDrop]], mixPalette = outPalette)
                               ### MCMC Age-Length Key
                               sprePlot[[sexDrop]][["ageLengthTbl"]] <<- set_tblAgeLength(df_mix = groMixout[[sexDrop]])
                               ### MCMC output cohort stats
@@ -1276,7 +1276,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
 
                               cat("\n\tSetting Population plots... ", sep = "")
                               ### MCMC quarter vertical hist
-                              sprePlot[[sexDrop]][["histBirth"]] <<- set_ggHistBirth(df_mix = groMixout[[sexDrop]][sample(1:nrow(groMixout[[sexDrop]]), 100000),], df_grow = growPath)
+                              sprePlot[[sexDrop]][["histBirth"]] <<- set_ggHistBirth(df_mix = groMixout[[sexDrop]], df_grow = growPath)
 
                               ### MCMC calc birth
                               out_birth <- table(groMixout[[sexDrop]]$Year,  groMixout[[sexDrop]]$Birth)
