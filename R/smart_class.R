@@ -1186,8 +1186,8 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                                 FG[idx_FG] = rep(FGname, length(idx_FG))
                               }
 
-                              mix_out <- data.frame(Length = curDistri$Length,
-                                                    Date = curDistri$UTC,
+                              mix_out <- data.frame(Length = spreDist[[sexDrop]]$Length,
+                                                    Date = spreDist[[sexDrop]]$UTC,
                                                     Day = tt,
                                                     Age = AA,
                                                     AgeNF = ages.f,
@@ -1195,7 +1195,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
 
                               mix_out$Year <- years(mix_out$Date)
                               mix_out$Month <- as.numeric(months(mix_out$Date))
-                              mix_out$MonthChar <- curDistri$Month
+                              mix_out$MonthChar <- spreDist[[sexDrop]]$Month
                               mix_out$Quarter <- as.numeric(quarters(mix_out$Date))
                               mix_out$Birth <- as.numeric(as.character(mix_out$Year)) - mix_out$Age
 
