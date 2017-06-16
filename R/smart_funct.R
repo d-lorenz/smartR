@@ -1,9 +1,9 @@
 
-length2age <- function(curveSel = "von Bertalanffy", numCoh = 10, Linf = 10, kappa = 0.5, tZero = 0, lengthIn = 5, sqrtSigma = 1:8){
+length2age <- function(curveSel = "von Bertalanffy", numCoh = 10, Linf = 10, kappa = 0.5, tZero = 0, lengthIn = 5, timeIn = 0, sqrtSigma = 1:8){
   if(curveSel == "von Bertalanffy"){
-    temp <- Linf * (1 - exp(-kappa*(((1:numCoh)-1 - tZero))))
+    temp <- Linf * (1 - exp(-kappa*(((1:numCoh)-1 - tZero + timeIn))))
   }else{
-    temp <- Linf *  exp(-(1/kappa * exp(-kappa * ((1:numCoh)-1 - tZero))))
+    temp <- Linf *  exp(-(1/kappa * exp(-kappa * ((1:numCoh)-1 - tZero + timeIn))))
   }
   postProbs = dnorm(lengthIn, temp, sqrtSigma)
   return(as.numeric(names(which.max(table(sample(1:numCoh, size = 50, prob = postProbs, replace = TRUE))))))
