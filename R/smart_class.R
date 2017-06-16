@@ -1166,15 +1166,17 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               groPars[[sexDrop]]$sigma2Hat <<- apply(groPars[[sexDrop]]$sigma2s, 2, mean)
                             },
                             getMCage = function(sexDrop = "Female"){
-                              zHat <- sapply(spreDist[[sexDrop]]$Length, FUN = function(x) length2age(numCoh = nCoho,
-                                                                                                      Linf = groPars[[sexDrop]]$LHat,
-                                                                                                      kappa = groPars[[sexDrop]]$kHat,
-                                                                                                      tZero = groPars[[sexDrop]]$t0Hat,
-                                                                                                      lengthIn = x,
-                                                                                                      sqrtSigma = sqrt(groPars[[sexDrop]]$sigma2Hat))
+                              tt = as.POSIXlt(chron(spreDist[[sexDrop]]$UTC))$yday / 366
+
+                              zHat <- apply(cbind(spreDist[[sexDrop]]$Length, tt), 1, FUN = function(x) length2age(numCoh = nCoho,
+                                                                                                                   Linf = groPars[[sexDrop]]$LHat,
+                                                                                                                   kappa = groPars[[sexDrop]]$kHat,
+                                                                                                                   tZero = groPars[[sexDrop]]$t0Hat,
+                                                                                                                   lengthIn = x[1],
+                                                                                                                   timeIn = x[2],
+                                                                                                                   sqrtSigma = sqrt(groPars[[sexDrop]]$sigma2Hat))
                               )
 
-                              tt = as.POSIXlt(chron(spreDist[[sexDrop]]$UTC))$yday / 366
                               ages.f = zHat - 1 + tt
                               AA = round(ages.f)
 
