@@ -1077,48 +1077,6 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               abuAvg <<- tmp_all
                             },
                             setNCoho = function(num_coh){nCoho <<- num_coh},
-                            # setPrior = function(f_linf, f_k, f_t0, m_linf, m_k, m_t0){
-                            #   prior <<- list('Female' = list('Linf' = list('Mean' = f_linf[1], 'StD' = f_linf[2]),
-                            #                                  'K' = list('Mean' = f_k[1], 'StD' = f_k[2]),
-                            #                                  't0' = list('Mean' = f_t0[1], 'StD' = f_t0[2])),
-                            #                  'Male' = list('Linf' = list('Mean' = m_linf[1], 'StD' = m_linf[2]),
-                            #                                'K' = list('Mean' = m_k[1], 'StD' = m_k[2]),
-                            #                                't0' = list('Mean' = m_t0[1], 'StD' = m_t0[2])))
-                            #
-                            # },
-                            # setLWpar = function(aF, bF, aM, bM){
-                            #   LWpar <<- array(dim=c(2,2))
-                            #   LWpar[1,] <<- c(aF, bF)
-                            #   LWpar[2,] <<- c(aM, bM)
-                            # },
-                            # setBrefs = function(b_value){
-                            #   bRefs <<- b_value
-                            # },
-                            # setSelPar = function(L50, L75){
-                            #   tmp_sel <- c(L50, L75)
-                            #   names(tmp_sel) <- c("L50","L75")
-                            #   selPar <<- tmp_sel
-                            # },
-                            # genMedmo = function(){
-                            #
-                            #   LCspe <- lengClas + (lengClas[2]-lengClas[1])/2
-                            #
-                            #   # !!
-                            #   Areacell <- 9.091279*11.112
-                            #   RateArea <- Areacell/100
-                            #
-                            #   TempArray <- GenPop(Abbmat = Coh_A_Int, num_cla = length(lengClas),
-                            #                       LCspe = LCspe, RA = RateArea, qMM = qMedits,
-                            #                       num_ye = year, num_coh = nCoho, MixtureP = mixPar)
-                            #
-                            #   #Check
-                            #   cat(specie,"Biomassa", as.character(year[length(year)]), " =",
-                            #       sum(LFDtoBcell(LCspe = LCspe, abbF = TempArray[,,length(year),1], abbM = TempArray[,,length(year),2],
-                            #                      LWpar = LWpar))/1000000 ,"\n")
-                            #
-                            #   popGen <<- TempArray
-                            #
-                            # },
                             setSpreDistSing = function(){
                               for(sex in c("Female", "Male")){
                                 tmp_spre = rawLFD[!is.na(rawLFD$numFG),c("Year","Class", "numFG", sex)]
