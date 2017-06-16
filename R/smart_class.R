@@ -1281,7 +1281,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               sprePlot[[sexDrop]][["histBirth"]] <<- set_ggHistBirth(df_mix = groMixout[[sexDrop]], df_grow = growPath)
 
                               ### MCMC calc birth
-                              out_birth <- table(groMixout[[sexDrop]]$Year,  groMixout[[sexDrop]]$Birth)
+                              out_birth <- table(paste(groMixout[[sexDrop]]$Year, groMixout[[sexDrop]]$Quarter, sep = "_"),  groMixout[[sexDrop]]$Birth)
                               birth_melt <- melt(out_birth)
                               names(birth_melt) <- c("Catch", "Birth", "Qty")
                               birth_melt$Catch <- factor(birth_melt$Catch, levels = paste(rep(levels(groMixout[[sexDrop]]$Year), each = 4),
