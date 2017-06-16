@@ -122,7 +122,7 @@ SmartProject <- R6Class("smartProject",
 
                             cat("\nSetting Years... ", sep = "")
                             setYearSurvey()
-                            cat(" from ", min(levels(yearInSurvey)[as.numeric(yearInSurvey)]), " to ", max(levels(yearInSurvey)[as.numeric(yearInSurvey)]),"\nSetting Species... ", sep = "")
+                            cat(" from ", min(yearInSurvey), " to ", max(yearInSurvey),"\nSetting Species... ", sep = "")
                             setSpecieSurvey()
                             cat(" found: ", paste(specieInSurvey, collapse = " - "), "\nSplitting Species...", sep = "")
                             splitSpecieSurvey()
