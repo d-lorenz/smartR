@@ -141,7 +141,7 @@ SmartProject <- R6Class("smartProject",
                             splitSpecieFishery()
                             cat(" completed!", sep = "")
                           },
-                          setYearSurvey = function(){yearInSurvey <<- sort(unique(rawDataSurvey[,"Year"]), decreasing = FALSE)},
+                          setYearSurvey = function(){yearInSurvey <<- sort(unique(years(rawDataSurvey[,"Date"])), decreasing = FALSE)},
                           setYearFishery = function(){yearInFishery <<- sort(unique(years(rawDataFishery[,"Date"])), decreasing = FALSE)},
                           loadMap = function(map_path){sampMap <<- SampleMap$new(map_path)},
                           createFleet = function(){fleet <<- FishFleet$new()},
@@ -1053,7 +1053,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               setSpecie()
                               setLClass()
                             },
-                            setYears = function(){year <<- sort(unique(rawLFD[,"Year"]), decreasing = FALSE)},
+                            setYears = function(){year <<- sort(unique(rawLFD[,"Date"]), decreasing = FALSE)},
                             setSpecie = function(){specie <<- unique(rawLFD[,"Specie"])},
                             setLClass = function(){lengClas <<- seq(from = min(rawLFD[,"Class"]), to = max(rawLFD[,"Class"]), by = 1) },
                             setDepth = function(bathyMatrix){
