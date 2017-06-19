@@ -1064,14 +1064,17 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               rawLFD$Stratum <<- factor(tmp_mem, levels = 1:(length(vecStrata)-1), labels = paste(vecStrata[-length(vecStrata)], vecStrata[-1], sep = " - "))
                             },
                             setIndSpe = function(){
-                              meditsIndex <<- aggregate(weiFem ~ Class, data = abuAvg, sum)
-                              meditsIndex <<- merge(x= meditsIndex, y = aggregate(weiMal ~ Class, data = abuAvg, sum), all = TRUE)
-                              meditsIndex <<- merge(x= meditsIndex, y = aggregate(weiUns ~ Class, data = abuAvg, sum), all = TRUE)
+                              meditsIndex <<- aggregate(weiFem ~ Class + Year, data = abuAvg, sum)
+                              meditsIndex <<- merge(x= meditsIndex, y = aggregate(weiMal ~ Class + Year, data = abuAvg, sum), all = TRUE)
+                              meditsIndex <<- merge(x= meditsIndex, y = aggregate(weiUns ~ Class + Year, data = abuAvg, sum), all = TRUE)
                             },
                             setAbuAvg = function(){
-                              tmp_aggFem <- aggregate(Female ~ Class + Stratum, data = rawLFD, mean)
-                              tmp_aggMal <- aggregate(Male ~ Class + Stratum, data = rawLFD, mean)
-                              tmp_aggUns <- aggregate(Unsex ~ Class + Stratum, data = rawLFD, mean)
+                              tmp_lfd <- rawLFD
+                              tmp_lfd$Year <- years(tmp_lfd$Date)
+
+                              tmp_aggFem <- aggregate(Female ~ Class + Stratum + Year, data = tmp_lfd, mean)
+                              tmp_aggMal <- aggregate(Male ~ Class + Stratum + Year, data = tmp_lfd, mean)
+                              tmp_aggUns <- aggregate(Unsex ~ Class + Stratum + Year, data = tmp_lfd, mean)
                               tmp_all <- merge(x = tmp_aggFem, y = tmp_aggMal, all = TRUE)
                               tmp_all <- merge(x = tmp_all, y = tmp_aggUns, all = TRUE)
                               abuAvg <<- tmp_all
