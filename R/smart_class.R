@@ -1120,7 +1120,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                             },
                             getMCsamps = function(numSamp = 2000, numAdap = 100, sexDrop = "Female", curveSel = "von Bertalanffy"){
 
-                              sub_idx <- sample(1:nrow(spreDist[[sexDrop]]), size = numSamp, replace = ifelse(numSamp < spreDist[[sexDrop]], FALSE, TRUE))
+                              sub_idx <- sample(1:nrow(spreDist[[sexDrop]]), size = numSamp, replace = ifelse(numSamp < nrow(spreDist[[sexDrop]]), FALSE, TRUE))
                               sub_data <- spreDist[[sexDrop]][sub_idx,]
 
                               N <- length(sub_data$Length)
