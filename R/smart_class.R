@@ -1071,6 +1071,11 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                             setAbuAvg = function(){
                               tmp_lfd <- rawLFD
                               tmp_lfd$Year <- years(tmp_lfd$Date)
+                              if("Area" %in% colnames(tmp_lfd)){
+                                tmp_lfd$Female <- tmp_lfd$Female / tmp_lfd$Area
+                                tmp_lfd$Male <- tmp_lfd$Male / tmp_lfd$Area
+                                tmp_lfd$Unsex <- tmp_lfd$Unsex / tmp_lfd$Area
+                              }
 
                               tmp_aggFem <- aggregate(Female ~ Class + Stratum + Year, data = tmp_lfd, mean)
                               tmp_aggMal <- aggregate(Male ~ Class + Stratum + Year, data = tmp_lfd, mean)
