@@ -1120,7 +1120,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                             },
                             getMCsamps = function(numSamp = 2000, numAdap = 100, sexDrop = "Female", curveSel = "von Bertalanffy"){
 
-                              sub_idx <- sample(1:nrow(spreDist[[sexDrop]]), size = numSamp)
+                              sub_idx <- sample(1:nrow(spreDist[[sexDrop]]), size = numSamp, replace = ifelse(numSamp < spreDist[[sexDrop]], FALSE, TRUE))
                               sub_data <- spreDist[[sexDrop]][sub_idx,]
 
                               N <- length(sub_data$Length)
@@ -1212,7 +1212,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                             calcMixDate = function(nAdap = 100, nSamp = 2000, sexDrop = "Female", curveSel = "von Bertalanffy"){
 
                               cat("\n\tGetting mcmc samples... ", sep = "")
-                              getMCsamps(numAdap = nAdap, numSamp = max(nSamp, nrow(spreDist[[sexDrop]])), sexDrop = sexDrop, curveSel = curveSel)
+                              getMCsamps(numAdap = nAdap, numSamp = nSamp, sexDrop = sexDrop, curveSel = curveSel)
                               cat("Done!", sep = "")
                               cat("\n\tGetting growth parameters... ", sep = "")
                               getGrowPar(sexDrop = sexDrop)
