@@ -161,7 +161,7 @@ ggplot_productionRegression = function(df_productionIn, reg_productionOut){
 
 
 ## Production - Betas x FG Boxplot ----
-ggplot_betasBoxplot = function(df_YearFGprod){
+ggplot_betasBoxplot = function(df_YearFGprod, int_hline){
   return(
     suppressMessages(
       ggplot(df_YearFGprod,
@@ -175,6 +175,7 @@ ggplot_betasBoxplot = function(df_YearFGprod){
                          color = ~Year),
                     size = 2, shape = 19, alpha = 0.6,
                     height = 0) +
+        geom_hline(yintercept = int_hline, color = "firebrick", linetype = "dashed") +
         theme_tufte(base_size = 14, ticks=F) +
         xlab("Fishing Ground") +
         theme(legend.position='right')
