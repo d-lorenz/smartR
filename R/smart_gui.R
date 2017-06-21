@@ -1591,6 +1591,7 @@ smart_gui <- function(){
     maxb_spin <- gslider(from = 1, to = 5000,
                          by = 1, value = 0, container = maxb_fra, expand = TRUE,
                          handler = function(...){
+                           Sys.sleep(2)
                            print(ggplot_betasBoxplot(df_YearFGprod = my_project$fleet$betaMeltYear[[svalue(spe_drop)]], int_hline = svalue(maxb_spin)))
                          })
     addSpace(up_fra, 20)
