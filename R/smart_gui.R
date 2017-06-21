@@ -1640,9 +1640,11 @@ smart_gui <- function(){
   gbutton("Predict\nProduction", container = pro_g_top3, handler = function(h,...){
     enabled(pro_g_top) <- FALSE
     Sys.sleep(1)
-    my_project$fleet$setEffoMont()
-    my_project$fleet$setEffoAll()
-    my_project$fleet$setEffoAllLoa()
+    if(is.null(my_project$fleet$effoAllLoa)){
+      my_project$fleet$setEffoMont()
+      my_project$fleet$setEffoAll()
+      my_project$fleet$setEffoAllLoa()
+    }
     my_project$predictProduction(svalue(spe_drop))
     my_project$fleet$setProdMeltYear(svalue(spe_drop))
     enabled(pro_g_top) <- TRUE
