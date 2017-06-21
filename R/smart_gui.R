@@ -1588,7 +1588,7 @@ smart_gui <- function(){
     maxb_fra <- gframe(text = "Max Beta", container = up_fra, expand = TRUE, horizontal = TRUE)
 
     addSpace(maxb_fra, 20)
-    maxb_spin <- gslider(from = 1, to = 5000,
+    maxb_spin <- gslider(from = 1, to = ceiling(max(my_project$fleet$betaMeltYear[[svalue(spe_drop)]]$Productivity)),
                          by = 1, value = 0, container = maxb_fra, expand = TRUE,
                          handler = function(...){
                            Sys.sleep(2)
