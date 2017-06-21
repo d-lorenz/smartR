@@ -1639,6 +1639,7 @@ smart_gui <- function(){
 
   })
   addSpring(pro_g_topBeta)
+  addSpring(pro_g_top)
 
   pro_g_top3 <- ggroup(horizontal = FALSE, container = pro_g_top)
   addSpring(pro_g_top3)
