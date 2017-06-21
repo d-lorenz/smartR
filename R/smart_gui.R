@@ -1634,9 +1634,6 @@ smart_gui <- function(){
 
     print(ggplot_betasBoxplot(df_YearFGprod = my_project$fleet$betaMeltYear[[svalue(spe_drop)]], int_hline = max(my_project$fleet$betaMeltYear[[svalue(spe_drop)]]$Productivity)))
 
-
-
-
   })
   addSpring(pro_g_topBeta)
   addSpring(pro_g_top)
