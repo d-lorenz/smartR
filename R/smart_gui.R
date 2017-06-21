@@ -1589,18 +1589,23 @@ smart_gui <- function(){
 
     addSpace(maxb_fra, 20)
     maxb_spin <- gslider(from = 1, to = 5000,
-                         by = 0.1, value = 0, container = maxb_fra, expand = TRUE,
+                         by = 1, value = 0, container = maxb_fra, expand = TRUE,
                          handler = function(...){
-
+                           print(ggplot_betasBoxplot(df_YearFGprod = my_project$fleet$betaMeltYear[[svalue(spe_drop)]], int_hline = svalue(maxb_spin)))
                          })
     addSpace(up_fra, 20)
     addSpace(maxb_fra, 20)
 
     gbutton(text = "\n   Save   \n", container = up_fra, handler = function(...){
 
+      my_project$fleet$betaMeltYear[[svalue(spe_drop)]]$Productivity[my_project$fleet$betaMeltYear[[svalue(spe_drop)]]$Productivity > svalue(maxb_spin)] <- svalue(maxb_spin)
+
       svalue(set_lab) <- "Saved"
       delete(set_gru, set_gru$children[[length(set_gru$children)]])
       add(set_gru, logi_sta_n)
+
+      print(ggplot_betasBoxplot(df_YearFGprod = my_project$fleet$betaMeltYear[[svalue(spe_drop)]], int_hline = svalue(maxb_spin)))
+
     })
 
     addSpace(up_fra, 20)
@@ -1627,7 +1632,7 @@ smart_gui <- function(){
     logi_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
     add(set_gru, logi_sta)
 
-    print(ggplot_betasBoxplot(df_YearFGprod = my_project$fleet$betaMeltYear[[svalue(spe_drop)]]))
+    print(ggplot_betasBoxplot(df_YearFGprod = my_project$fleet$betaMeltYear[[svalue(spe_drop)]], int_hline = max(my_project$fleet$betaMeltYear[[svalue(spe_drop)]]$Productivity)))
 
 
 
