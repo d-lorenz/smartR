@@ -1126,7 +1126,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               sprePlot[[sampSex]][["spatAbsFreq"]] <<- set_spatAbsFreq(spreSpat[[sampSex]])
                               sprePlot[[sampSex]][["spatRelFreq"]] <<- set_spatRelFreq(spreSpat[[sampSex]])
                             },
-                            getMCsamps = function(numSamp = 2000, numAdap = 100, sexDrop = "Female", curveSel = "von Bertalanffy"){
+                            getMCsamps = function(numSamp = 2000, numAdap = 100, numIter = 500, sexDrop = "Female", curveSel = "von Bertalanffy"){
 
                               sub_idx <- sample(1:nrow(spreDist[[sexDrop]]), size = numSamp, replace = ifelse(numSamp < nrow(spreDist[[sexDrop]]), FALSE, TRUE))
                               sub_data <- spreDist[[sexDrop]][sub_idx,]
@@ -1159,9 +1159,9 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                                                    n.adapt = numAdap)
 
                               ### MCMC chain sampling
-                              n.iter <- 500
+                              # n.iter <- 500
                               obsNode <- c('Linf', 'k', 't0', 'tau', 'p')
-                              samps <- coda.samples(jags.m, obsNode, n.iter = n.iter)
+                              samps <- coda.samples(jags.m, obsNode, n.iter = numIter)
 
                               sampMcmc[[sexDrop]] <<- samps
                             },
@@ -1217,10 +1217,10 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
 
                               groMixout[[sexDrop]] <<- mix_out
                             },
-                            calcMixDate = function(nAdap = 100, nSamp = 2000, sexDrop = "Female", curveSel = "von Bertalanffy"){
+                            calcMixDate = function(nAdap = 100, nSamp = 2000, nIter = 500, sexDrop = "Female", curveSel = "von Bertalanffy"){
 
                               cat("\n\tGetting mcmc samples... ", sep = "")
-                              getMCsamps(numAdap = nAdap, numSamp = nSamp, sexDrop = sexDrop, curveSel = curveSel)
+                              getMCsamps(numAdap = nAdap, numSamp = nSamp, numIter = nIter, sexDrop = sexDrop, curveSel = curveSel)
                               cat("Done!", sep = "")
                               cat("\n\tGetting growth parameters... ", sep = "")
                               getGrowPar(sexDrop = sexDrop)
@@ -1229,14 +1229,14 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               getMCage(sexDrop = sexDrop)
                               cat("Done!", sep = "")
 
-                              n.iter <- 500
+                              # n.iter <- 500
 
                               dfLinf <- data.frame(Parameter = "Linf",
-                                                   Iter = 1:n.iter,
+                                                   Iter = 1:nIter,
                                                    Chain = as.matrix(sampMcmc[[sexDrop]][,"Linf"], chains = TRUE)[,1],
                                                    Value = as.matrix(sampMcmc[[sexDrop]][,"Linf"], chains = TRUE)[,2])
                               dfKapp <- data.frame(Parameter = "Kappa",
-                                                   Iter = 1:n.iter,
+                                                   Iter = 1:nIter,
                                                    Chain = as.matrix(sampMcmc[[sexDrop]][,"k"], chains = TRUE)[,1],
                                                    Value = as.matrix(sampMcmc[[sexDrop]][,"k"], chains = TRUE)[,2])
 
@@ -1611,7 +1611,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                              setWeight = function(sexVal = "Female"){
                                groMixout[[sexVal]]$Weight <<- LWpar[[sexVal]][["alpha"]] * groMixout[[sexVal]]$Length ^ LWpar[[sexVal]][["beta"]]
                              },
-                             calcMixDate = function(nAdap = 100, nSamp = 2000, sexDrop = "Female", curveSel = "von Bertalanffy"){
+                             calcMixDate = function(nAdap = 100, nSamp = 2000, nIter = 500, sexDrop = "Female", curveSel = "von Bertalanffy"){
                                # mixPar <<- list('Female' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)),
                                #                 'Male' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)))
                                # for(sex in c("Female", "Male")){ }
@@ -1665,20 +1665,20 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                ###
 
                                ### MCMC chain sampling
-                               n.iter <- 500
+                               # n.iter <- 500
                                obsNode <- c('Linf', 'k', 't0', 'tau', 'p')
-                               samps <- coda.samples(jags.m, obsNode, n.iter = n.iter)
+                               samps <- coda.samples(jags.m, obsNode, n.iter = nIter)
                                ###
 
                                sampMcmc[[sexDrop]] <<- samps
 
                                ### MCMC estimates
                                dfLinf <- data.frame(Parameter = "Linf",
-                                                    Iter = 1:n.iter,
+                                                    Iter = 1:nIter,
                                                     Chain = as.matrix(samps[,"Linf"], chains = TRUE)[,1],
                                                     Value = as.matrix(samps[,"Linf"], chains = TRUE)[,2])
                                dfKapp <- data.frame(Parameter = "Kappa",
-                                                    Iter = 1:n.iter,
+                                                    Iter = 1:nIter,
                                                     Chain = as.matrix(samps[,"k"], chains = TRUE)[,1],
                                                     Value = as.matrix(samps[,"k"], chains = TRUE)[,2])
 
