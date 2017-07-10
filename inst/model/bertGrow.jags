@@ -8,9 +8,9 @@ model{
           Z[i] ~ dcat(p[1:Nclust])
       }
       # Prior:
-      Linf ~ dnorm(0.0, 1E-6) I(maxLeng, )
-      k ~ dnorm(0.0, 1E-6) I(0, )
-      t0 ~ dnorm(0.0, 1E-6) I(0, )
+      Linf ~ dnorm(0.0, 1E-6) T(maxLeng, )
+      k ~ dnorm(0.0, 1E-6) T(0, )
+      t0 ~ dnorm(0.0, 1E-6) T(0, )
       p[1:Nclust] ~ ddirch(alpha)
       for(clustIdx in 1:Nclust){
           tau0[clustIdx] ~ dgamma(1.0E-4, 1.0E-4)
