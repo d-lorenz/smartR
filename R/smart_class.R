@@ -1186,7 +1186,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               )
 
                               ages.f = zHat - 1 + tt
-                              AA = round(ages.f)
+                              AA = floor(ages.f)
 
                               FGlabels = as.numeric(as.character(spreDist[[sexDrop]]$NumFG))
                               FGnames = unique(FGlabels)
