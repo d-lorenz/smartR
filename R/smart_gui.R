@@ -1957,7 +1957,7 @@ smart_gui <- function(){
     add(medInd_f, icoMedit_off)
 
     addSpring(comfra_g)
-
+    addSpring(med_g_top)
     plofra_g <- gframe("Show", horizontal = TRUE, container = med_g_top, expand = TRUE)
     addSpring(plofra_g)
     specie_drop <- gdroplist(items = my_project$specieInSurvey, selected = 1, editable = FALSE, container = plofra_g, expand = TRUE, handler = function(...){
