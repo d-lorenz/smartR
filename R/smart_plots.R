@@ -673,6 +673,17 @@ set_ggHistUtcLfd <- function(inLfd){
   )
 }
 
+## Medits Index DotChart ----
+ggplot_meditsIndex <- function(inMedits){
+  suppressMessages(
+    ggplot() +
+      geom_point(data = inMedits, mapping = aes_(x = ~Class, y = ~Stratum, size = ~Index)) +
+      theme_tufte(base_size = 14, ticks = F) +
+      facet_grid(Year~.)
+  )
+}
+
+
 ## Year LFD Histogram ----
 set_ggHistYearLfd <- function(inLfd){
   suppressMessages(
