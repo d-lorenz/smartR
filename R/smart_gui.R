@@ -1936,20 +1936,72 @@ smart_gui <- function(){
       my_project$setMeditsIndex()
       delete(medInd_f, medInd_f$children[[length(medInd_f$children)]])
       add(medInd_f, icoMedit_on)
+
+      specie_ind <- 1
+      sex_sel <- "Female"
+      tmp_abus <- data.frame(Class = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Class,
+                             Stratum = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Stratum,
+                             Year = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Year)
+      if(sex_sel == "Female"){
+        tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiFem
+      }else if(sex_sel == "Male"){
+        tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiMal
+      }else if(sex_sel == "Unsex"){
+        tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiUns
+      }else if(sex_sel == "All"){
+        tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiFem + my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiMal + my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiUns
+      }
+      print(ggplot_meditsIndex(inMedits = tmp_abus))
     })
     add(medInd_f, icoMedit_off)
 
     addSpring(comfra_g)
+
+    plofra_g <- gframe("Show", horizontal = TRUE, container = med_g_top, expand = TRUE)
+    addSpring(plofra_g)
+    specie_drop <- gdroplist(items = my_project$specieInSurvey, selected = 1, editable = FALSE, container = plofra_g, handler = function(...){
+      specie_ind <- which(my_project$specieInSurvey == svalue(specie_drop))
+      sex_sel <- svalue(sex_drop)
+      tmp_abus <- data.frame(Class = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Class,
+                             Stratum = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Stratum,
+                             Year = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Year)
+      if(sex_sel == "Female"){
+        tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiFem
+      }else if(sex_sel == "Male"){
+        tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiMal
+      }else if(sex_sel == "Unsex"){
+        tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiUns
+      }else if(sex_sel == "All"){
+        tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiFem + my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiMal + my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiUns
+      }
+      print(ggplot_meditsIndex(inMedits = tmp_abus))
+    })
+    addSpring(plofra_g)
+    sex_drop <- gdroplist(items = c("Female", "Male", "Unsex", "All"), selected = 1, editable = FALSE, container = plofra_g, handler = function(...){
+      specie_ind <- which(my_project$specieInSurvey == svalue(specie_drop))
+      sex_sel <- svalue(sex_drop)
+      tmp_abus <- data.frame(Class = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Class,
+                             Stratum = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Stratum,
+                             Year = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Year)
+      if(sex_sel == "Female"){
+        tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiFem
+      }else if(sex_sel == "Male"){
+        tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiMal
+      }else if(sex_sel == "Unsex"){
+        tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiUns
+      }else if(sex_sel == "All"){
+        tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiFem + my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiMal + my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiUns
+      }
+      print(ggplot_meditsIndex(inMedits = tmp_abus))
+    })
+    addSpring(plofra_g)
     addSpring(med_g_top)
     pop_p <- ggraphics(container = med_g, width = 550, height = 250, expand = TRUE)
-
     gbutton("Close", container = med_g_top, handler = function(h,...){
       dispose(temp_dia)
     })
     addSpace(med_g_top, 10)
-
     visible(temp_dia) <- TRUE
-
   })
 
   addSpring(raw_g_top)
