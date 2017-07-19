@@ -1951,6 +1951,7 @@ smart_gui <- function(){
       }else if(sex_sel == "All"){
         tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiFem + my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiMal + my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiUns
       }
+      tmp_abus$Zeros <- as.factor(tmp_abus$Index == 0)
       print(ggplot_meditsIndex(inMedits = tmp_abus))
     })
     add(medInd_f, icoMedit_off)
@@ -1974,6 +1975,7 @@ smart_gui <- function(){
       }else if(sex_sel == "All"){
         tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiFem + my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiMal + my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiUns
       }
+      tmp_abus$Zeros <- as.factor(tmp_abus$Index == 0)
       print(ggplot_meditsIndex(inMedits = tmp_abus))
     })
     addSpring(plofra_g)
@@ -1992,6 +1994,7 @@ smart_gui <- function(){
       }else if(sex_sel == "All"){
         tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiFem + my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiMal + my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiUns
       }
+      tmp_abus$Zeros <- as.factor(tmp_abus$Index == 0)
       print(ggplot_meditsIndex(inMedits = tmp_abus))
     })
     addSpring(plofra_g)
