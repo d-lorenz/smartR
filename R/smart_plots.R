@@ -677,9 +677,9 @@ set_ggHistUtcLfd <- function(inLfd){
 ggplot_meditsIndex <- function(inMedits){
   suppressMessages(
     ggplot() +
-      geom_point(data = tmp_abus, mapping = aes_(x = ~Class, y = ~Stratum, size = ~Index, colour = ~Zeros, shape = ~Zeros)) +
+      geom_point(data = inMedits, mapping = aes_(x = ~Class, y = ~Stratum, size = ~Index, colour = ~Zeros, shape = ~Zeros)) +
       theme_tufte(base_size = 14, ticks = F) +
-      scale_x_continuous(breaks = pretty(tmp_abus$Class, 10)) +
+      scale_x_continuous(breaks = pretty(inMedits$Class, 10)) +
       scale_color_wsj(guide = FALSE) +
       scale_shape_cleveland(guide = FALSE) +
       facet_grid(Year~.)
