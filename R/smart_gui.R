@@ -1977,7 +1977,7 @@ smart_gui <- function(){
       print(ggplot_meditsIndex(inMedits = tmp_abus))
     })
     addSpring(plofra_g)
-    sex_drop <- gdroplist(items = c("Female", "Male", "Unsex", "All"), selected = 1, editable = FALSE, container = plofra_g, handler = function(...){
+    sex_drop <- gdroplist(items = c("Female", "Male", "Unsex", "All"), selected = 1, editable = FALSE, container = plofra_g, expand = TRUE, handler = function(...){
       specie_ind <- which(my_project$specieInSurvey == svalue(specie_drop))
       sex_sel <- svalue(sex_drop)
       tmp_abus <- data.frame(Class = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Class,
