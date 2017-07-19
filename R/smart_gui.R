@@ -1896,7 +1896,7 @@ smart_gui <- function(){
 
     temp_dia <- gwindow(title="Medits index calculator", visible = FALSE,
                         parent = main_win,
-                        width = 550, height = 400)
+                        width = 900, height = 500)
 
     med_g <- ggroup(horizontal = FALSE, container = temp_dia)
     med_g_top <- gframe(horizontal = TRUE, container = med_g, spacing = 10)
