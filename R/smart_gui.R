@@ -1959,7 +1959,7 @@ smart_gui <- function(){
 
     plofra_g <- gframe("Show", horizontal = TRUE, container = med_g_top, expand = TRUE)
     addSpring(plofra_g)
-    specie_drop <- gdroplist(items = my_project$specieInSurvey, selected = 1, editable = FALSE, container = plofra_g, handler = function(...){
+    specie_drop <- gdroplist(items = my_project$specieInSurvey, selected = 1, editable = FALSE, container = plofra_g, expand = TRUE, handler = function(...){
       specie_ind <- which(my_project$specieInSurvey == svalue(specie_drop))
       sex_sel <- svalue(sex_drop)
       tmp_abus <- data.frame(Class = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Class,
