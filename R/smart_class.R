@@ -1085,6 +1085,12 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               abuAvg <<- tmp_all
                             },
                             setNCoho = function(num_coh){nCoho <<- num_coh},
+                            setLWpar = function(alphaVal, betaVal, sex){
+                              LWpar[[sex]] <<- list(alpha = as.numeric(alphaVal), beta = as.numeric(betaVal))
+                            },
+                            setWeight = function(sexVal = "Female"){
+                              groMixout[[sexVal]]$Weight <<- LWpar[[sexVal]][["alpha"]] * groMixout[[sexVal]]$Length ^ LWpar[[sexVal]][["beta"]]
+                            },
                             setSpreDistSing = function(){
                               for(sex in c("Female", "Male")){
                                 tmp_spre = rawLFD[!is.na(rawLFD$numFG),c("Date","Class", "numFG", sex)]
