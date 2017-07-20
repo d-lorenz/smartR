@@ -2317,9 +2317,9 @@ smart_gui <- function(){
                        # Compute mixture
                        # my_project$surveyBySpecie[[ind_spe]]$calcMix(nAdap = as.numeric(svalue(mc_niter)), nSamp = as.numeric(svalue(mc_nsamp)))
                        my_project$surveyBySpecie[[ind_spe]]$calcMixDate(nAdap = as.numeric(svalue(mc_niter)),
-                                                                         nSamp = as.numeric(svalue(mc_nsamp)),
-                                                                         sexDrop = svalue(sex_drop_mix),
-                                                                         curveSel = svalue(gcurv_r))
+                                                                        nSamp = as.numeric(svalue(mc_nsamp)),
+                                                                        sexDrop = svalue(sex_drop_mix),
+                                                                        curveSel = svalue(gcurv_r))
 
                        my_project$surveyBySpecie[[ind_spe]]$ggplotMcmcOut(selSex = svalue(sex_drop_mix))
                        # Transform length to cohorts
@@ -2365,7 +2365,7 @@ smart_gui <- function(){
 
                          if(svalue(sourceMix_r) == "Survey"){
                            my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_mix))]]$ggplotMcmcOut(selCompo = svalue(view_radio),
-                                                                                                                                  selSex = svalue(sex_drop_mix))
+                                                                                                                                selSex = svalue(sex_drop_mix))
                          }else{
                            my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_mix))]]$ggplotMcmcOut(selCompo = svalue(view_radio),
                                                                                                                                   selSex = svalue(sex_drop_mix))
