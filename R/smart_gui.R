@@ -2530,7 +2530,7 @@ smart_gui <- function(){
 
   ass_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Assess")
   ass_g_top <- gframe(horizontal = TRUE, container = ass_g, spacing = 10)
-  addSpring(ass_g_top)
+  addSpace(ass_g_top, 10)
 
   assfra_g <- gframe("Input setup", horizontal = TRUE, container = ass_g_top, expand = TRUE)
 
@@ -2683,7 +2683,7 @@ smart_gui <- function(){
   })
 
   addSpring(assfra_g)
-  addSpring(ass_g_top)
+  addSpace(ass_g_top, 10)
 
 
   ####   Simulation   ####
