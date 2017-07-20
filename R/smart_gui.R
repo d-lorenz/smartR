@@ -2048,6 +2048,10 @@ smart_gui <- function(){
       svalue(fis_l1) <- paste("Specie: ", paste(my_project$specieInFishery, collapse = " - "))
       svalue(fis_l3) <- paste("Years: from", min(as.numeric(as.character(my_project$yearInFishery))), " to ", max(as.numeric(as.character(my_project$yearInFishery))))
 
+      # Update LWrel specie selection
+      assSpe_drop[] <- my_project$specieInFishery
+      svalue(assSpe_drop) <- my_project$specieInFishery[1]
+
       svalue(stat_bar) <- ""
 
       # ### Update Sampling Status
