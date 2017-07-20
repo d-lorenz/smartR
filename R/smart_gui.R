@@ -2536,7 +2536,7 @@ smart_gui <- function(){
 
   assfra_g <- gframe("Input setup", horizontal = TRUE, container = ass_g_top, expand = TRUE)
 
-  addSpring(assfra_g)
+  addSpace(assfra_g, 10)
 
   assSou_g <- gframe("Source", horizontal = FALSE, container = assfra_g, expand = TRUE)
   addSpring(assSou_g)
@@ -2562,14 +2562,14 @@ smart_gui <- function(){
                      })
   addSpring(assSou_g)
 
-  addSpring(assfra_g)
+  addSpace(assfra_g, 10)
 
   assSpe_g <- gframe("Specie", horizontal = FALSE, container = assfra_g, expand = TRUE)
   addSpring(assSpe_g)
   assSpe_drop <- gcombobox(items = "Specie", selected = 1, container = assSpe_g, editable = FALSE)
   addSpring(assSpe_g)
 
-  addSpring(assfra_g)
+  addSpace(assfra_g, 10)
 
   gbutton("Set length weight\nrelationship", container = assfra_g, handler = function(h,...){
 
@@ -2684,7 +2684,7 @@ smart_gui <- function(){
     lwRel_p <- ggraphics(container = lwRel_g, width = 550, height = 250, expand = TRUE)
   })
 
-  addSpring(assfra_g)
+  addSpace(assfra_g, 10)
   addSpace(ass_g_top, 10)
 
 
