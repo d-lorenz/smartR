@@ -44,6 +44,9 @@ smart_gui <- function(){
   # pathFishery <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Fishery/fishery_merge_CampBiol.csv"
   pathFishery <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Fishery/fishery_data_CampBiol_noExpLand.csv"
 
+  # Length/Weight data
+  pathLWrel <- "/Users/Lomo/Documents/Uni/R/smart/data/Length_Weight/lwRel_input.csv"
+
   pathClusMat <- "/Users/Lomo/Documents/Uni/R/smart/data/out/FG_cut/fg_sos/clusMat_BedEffDep.rData"
   rawDataPath <- "/Users/Lomo/Documents/Uni/R/mixture/fisherySampling.rData"
 
@@ -2593,7 +2596,7 @@ smart_gui <- function(){
     addSpace(lwRel_f_esti, 10)
     gbutton("Load sample", container = lwRel_f_esti, handler = function(h,...){
 
-      lw_data <- read.csv("/Users/Lomo/Documents/Uni/R/smart/package/inputDataFormat/lwRel_input.csv")
+      lw_data <- read.csv(pathLWrel)
       lw_fit <- nls(Weight ~ I(alpha * Length ^ beta),
                     data = lw_data[,c("Length", "Weight")],
                     start = list(alpha = 1, beta = 1))
