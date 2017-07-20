@@ -1959,7 +1959,7 @@ smart_gui <- function(){
     addSpring(comfra_g)
     addSpring(med_g_top)
     plofra_g <- gframe("Show", horizontal = TRUE, container = med_g_top, expand = TRUE)
-    addSpring(plofra_g)
+    addSpace(plofra_g, 10)
     specie_drop <- gdroplist(items = my_project$specieInSurvey, selected = 1, editable = FALSE, container = plofra_g, expand = TRUE, handler = function(...){
       specie_ind <- which(my_project$specieInSurvey == svalue(specie_drop))
       sex_sel <- svalue(sex_drop)
@@ -1978,7 +1978,7 @@ smart_gui <- function(){
       tmp_abus$Zeros <- as.factor(tmp_abus$Index == 0)
       print(ggplot_meditsIndex(inMedits = tmp_abus))
     })
-    addSpring(plofra_g)
+    addSpace(plofra_g, 10)
     sex_drop <- gdroplist(items = c("Female", "Male", "Unsex", "All"), selected = 1, editable = FALSE, container = plofra_g, expand = TRUE, handler = function(...){
       specie_ind <- which(my_project$specieInSurvey == svalue(specie_drop))
       sex_sel <- svalue(sex_drop)
@@ -1997,7 +1997,7 @@ smart_gui <- function(){
       tmp_abus$Zeros <- as.factor(tmp_abus$Index == 0)
       print(ggplot_meditsIndex(inMedits = tmp_abus))
     })
-    addSpring(plofra_g)
+    addSpace(plofra_g, 10)
     addSpring(med_g_top)
     pop_p <- ggraphics(container = med_g, width = 550, height = 250, expand = TRUE)
     gbutton("Close", container = med_g_top, handler = function(h,...){
