@@ -2824,7 +2824,8 @@ smart_gui <- function(){
     gain_g_top <- gframe(horizontal = TRUE, container = gain_g, spacing = 20)
 
     addSpace(gain_g_top, 15)
-    sel_specie <- gcombobox(items = c(my_project$specieInFishery, my_project$specieInSurvey), selected = 1, container = gain_g_top, expand = TRUE)
+    sel_specie <- gcombobox(items = unique(c(my_project$specieInFishery, my_project$specieInSurvey)),
+                            selected = 1, container = gain_g_top, expand = TRUE)
     addSpace(gain_g_top, 15)
     add_class <- gbutton(text = "Add Size Class", container = gain_g_top, handler = function(...){
       new_row <- data.frame(Class = "New Class",
