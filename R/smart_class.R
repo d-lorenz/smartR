@@ -23,6 +23,7 @@ SmartProject <- R6Class("smartProject",
                           fisheryBySpecie = NULL,
                           sampMap = NULL,
                           fleet = NULL,
+                          # economy = NULL,
                           setCostInput = function(){
                             if(is.null(fleet$effortIndex)) stop("Missing Effort Index")
                             if(is.null(fleet$daysAtSea)) stop("Missing Days at Sea Index")
