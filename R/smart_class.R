@@ -132,7 +132,8 @@ SmartProject <- R6Class("smartProject",
                           },
                           loadFisheryLFD = function(csv_path) {
                             cat("\nLoading fishery data...", sep = "")
-                            rawDataFishery <<- read.table(file = csv_path, sep = ";", dec = ".", header = TRUE)
+                            rawDataFishery <<- read.table(file = csv_path, sep = ";", dec = ".",
+                                                          stringsAsFactors = FALSE, header = TRUE)
 
                             fisheryBySpecie <<- list()
                             cat("\nSetting Years... ", sep = "")
