@@ -2807,12 +2807,16 @@ smart_gui <- function(){
   addSpring(sim_g_top2)
   gbutton("Set Size Class", container = sim_g_top2, handler = function(h,...){
 
-    tmp_df <- data.frame(Class = c("Small", "Medium", "Large"),
-                         Units = factor(x = c("Weight", "Weight", "Weight"), levels = c("Length", "Weight")),
-                         LowerBound = c(1, 5, 10),
-                         UpperBound = c(5, 10, 20),
-                         Price = c(2, 5, 10),
-                         stringsAsFactors = FALSE, row.names = NULL)
+    if(is.null(my_project$fleet$ecoPrice)){
+      tmp_df <- data.frame(Class = c("Small", "Medium", "Large"),
+                           Units = factor(x = c("Weight", "Weight", "Weight"), levels = c("Length", "Weight")),
+                           LowerBound = c(1, 5, 10),
+                           UpperBound = c(5, 10, 20),
+                           Price = c(2, 5, 10),
+                           stringsAsFactors = FALSE, row.names = NULL)
+    }else{
+      tmp_df <- my_project$fleet$ecoPrice[[unique(c(my_project$specieInFishery, my_project$specieInSurvey))[1]]]
+    }
 
     # out_SizeClass <- list()
 
@@ -2825,7 +2829,13 @@ smart_gui <- function(){
 
     addSpace(gain_g_top, 15)
     sel_specie <- gcombobox(items = unique(c(my_project$specieInFishery, my_project$specieInSurvey)),
-                            selected = 1, container = gain_g_top, expand = TRUE)
+                            selected = 1, container = gain_g_top, expand = TRUE, handler = function(...){
+                              if(!is.null(my_project$fleet$ecoPrice[[svalue(sel_specie)]])){
+                                cost_df[] <- my_project$fleet$ecoPrice[[svalue(sel_specie)]]
+                              }else{
+                                cost_df[] <-tmp_df
+                              }
+                            })
     addSpace(gain_g_top, 15)
     add_class <- gbutton(text = "Add Size Class", container = gain_g_top, handler = function(...){
       new_row <- data.frame(Class = "New Class",
@@ -2838,7 +2848,7 @@ smart_gui <- function(){
     addSpring(gain_g_top)
     set_data <- gbutton(text = "Set Data", container = gain_g_top, handler = function(...){
       # out_SizeClass[[as.character(svalue(sel_specie))]] <<- cost_df[]
-      my_project$fleet$setEcoPrice(sel_specie = as.character(svalue(sel_specie)), price_df = cost_df[])
+      my_project$fleet$setEcoPrice(sel_specie = svalue(sel_specie), price_df = cost_df[])
     })
     addSpring(gain_g_top)
     ioButt_g <- ggroup(horizontal = FALSE, container = gain_g_top, expand = TRUE)
