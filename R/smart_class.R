@@ -1921,6 +1921,10 @@ FishFleet <- R6Class("fishFleet",
                          regHarbsUni <<- harb_cur_uni
                          cat("\n\t\tHarbours geocoding completed!", cat = "")
                        },
+                       setEcoPrice = function(sel_specie, price_df){
+                         if(is.null(ecoPrice)) ecoPrice <<- list()
+                         ecoPrice[[sel_specie]] <<- price_df
+                       },
                        saveFleetHarb = function(harb_path){
                          saveRDS(object = regHarbsUni, file = harb_path)
                        },
