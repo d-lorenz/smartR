@@ -2836,7 +2836,7 @@ smart_gui <- function(){
       cost_df[] <- rbind(cost_df[], new_row)
     })
     addSpring(gain_g_top)
-    add_class <- gbutton(text = "Set Data", container = gain_g_top, handler = function(...){
+    set_data <- gbutton(text = "Set Data", container = gain_g_top, handler = function(...){
       # out_SizeClass[[as.character(svalue(sel_specie))]] <<- cost_df[]
       my_project$fleet$setEcoPrice(sel_specie = as.character(svalue(sel_specie)), price_df = cost_df[])
     })
@@ -2845,7 +2845,8 @@ smart_gui <- function(){
     gimage(system.file("ico/document-save-2.ico", package="smartR"), container = ioButt_g)
     gimage(system.file("ico/folder-man.png", package="smartR"), container = ioButt_g)
     addSpring(gain_g_top)
-    add_class <- gbutton(text = "Close", container = gain_g_top, handler = function(...){
+    close_butt <- gbutton(text = "Close", container = gain_g_top, handler = function(...){
+      delete(dafra_g, cost_df)
       dispose(tempWind_Gain)
     })
     addSpring(gain_g_top)
