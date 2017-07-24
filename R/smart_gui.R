@@ -2805,6 +2805,61 @@ smart_gui <- function(){
   #
   # })
   addSpring(sim_g_top2)
+  gbutton("Set Size Class", container = sim_g_top2, handler = function(h,...){
+
+    tmp_df <- data.frame(Class = c("Small", "Medium", "Large"),
+                         Units = factor(x = c("Weight", "Weight", "Weight"), levels = c("Length", "Weight")),
+                         LowerBound = c(1, 5, 10),
+                         UpperBound = c(5, 10, 20),
+                         Price = c(2, 5, 10),
+                         stringsAsFactors = FALSE, row.names = NULL)
+
+    # out_SizeClass <- list()
+
+    tempWind_Gain <- gwindow(title = "Size Class", visible = FALSE,
+                             parent = main_win,
+                             width = 600, height = 400)
+
+    gain_g <- ggroup(horizontal = FALSE, container = tempWind_Gain, spacing = 15)
+    gain_g_top <- gframe(horizontal = TRUE, container = gain_g, spacing = 20)
+
+    addSpace(gain_g_top, 15)
+    sel_specie <- gcombobox(items = c(my_project$specieInFishery, my_project$specieInSurvey), selected = 1, container = gain_g_top, expand = TRUE)
+    addSpace(gain_g_top, 15)
+    add_class <- gbutton(text = "Add Size Class", container = gain_g_top, handler = function(...){
+      new_row <- data.frame(Class = "New Class",
+                            Units = "Length",
+                            LowerBound = 1,
+                            UpperBound = 5,
+                            Price = 2)
+      cost_df[] <- rbind(cost_df[], new_row)
+    })
+    addSpring(gain_g_top)
+    add_class <- gbutton(text = "Set Data", container = gain_g_top, handler = function(...){
+      # out_SizeClass[[as.character(svalue(sel_specie))]] <<- cost_df[]
+      setEcoPrice(sel_specie = as.character(svalue(sel_specie)), price_df = cost_df[])
+    })
+    addSpring(gain_g_top)
+    ioButt_g <- ggroup(horizontal = FALSE, container = gain_g_top, expand = TRUE)
+    gimage(system.file("ico/document-save-2.ico", package="smartR"), container = ioButt_g)
+    gimage(system.file("ico/folder-man.png", package="smartR"), container = ioButt_g)
+    addSpring(gain_g_top)
+    add_class <- gbutton(text = "Close", container = gain_g_top, handler = function(...){
+      dispose(tempWind_Gain)
+    })
+    addSpring(gain_g_top)
+
+    dafra_g <- ggroup(horizontal = TRUE, container = gain_g, expand = TRUE)
+    addSpace(dafra_g, 30)
+    cost_df <- gdf(items = tmp_df, container = dafra_g, expand = TRUE)
+    addSpace(dafra_g, 30)
+    addSpace(gain_g,30)
+
+    visible(tempWind_Gain) <- TRUE
+
+  })
+
+  addSpring(sim_g_top2)
 
   addSpring(sim_g_top)
 
