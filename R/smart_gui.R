@@ -1784,7 +1784,7 @@ smart_gui <- function(){
 
     addSpring(lfdfra_g)
     addSpring(sex_b)
-    sex_drop <- gcombobox(items = c("Female", "Male"),
+    sex_drop <- gcombobox(items = c("Female", "Male", "Unsex"),
                           selected = 1, container = sex_b, expand = TRUE,
                           editable = FALSE, handler = function(h,...){
                             spe_ind <- which(my_project$surveyBySpecie == svalue(spec_drop))
@@ -1841,7 +1841,7 @@ smart_gui <- function(){
     sex_b <- gframe("Sex", horizontal = FALSE, container = pop_g_top, expand = TRUE)
     addSpring(pop_g_top)
     addSpring(sex_b)
-    sex_drop <- gcombobox(items = c("Female", "Male"),
+    sex_drop <- gcombobox(items = c("Female", "Male", "Unsex"),
                           selected = 1, container = sex_b, expand = TRUE,
                           editable = FALSE, handler = function(h,...){
                             spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
@@ -2109,7 +2109,7 @@ smart_gui <- function(){
     sex_b <- gframe("Sex", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
     addSpring(lfdfra_g)
     addSpring(sex_b)
-    sex_drop <- gcombobox(items = c("Female", "Male"),
+    sex_drop <- gcombobox(items = c("Female", "Male", "Unsex"),
                           selected = 1, container = sex_b, expand = TRUE,
                           editable = FALSE, handler = function(h,...){
                             spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
@@ -2180,7 +2180,7 @@ smart_gui <- function(){
     sex_b <- gframe("Sex", horizontal = FALSE, container = pop_g_top, expand = TRUE)
     addSpring(pop_g_top)
     addSpring(sex_b)
-    sex_drop <- gcombobox(items = c("Female", "Male"),
+    sex_drop <- gcombobox(items = c("Female", "Male", "Unsex"),
                           selected = 1, container = sex_b, expand = TRUE,
                           editable = FALSE, handler = function(h,...){
                             spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
@@ -2238,7 +2238,8 @@ smart_gui <- function(){
                        Date = character(0),
                        Length = numeric(0),
                        Female = character(0),
-                       Male = character(0), stringsAsFactors=FALSE)
+                       Male = character(0),
+                       Unsex = character(0), stringsAsFactors=FALSE)
   fis_t <- gtable(blankDF, container = fis_g, expand = TRUE)
 
 
@@ -2272,7 +2273,7 @@ smart_gui <- function(){
   addSpring(spec_mix_f)
   spec_drop_mix <- gcombobox(items = "Specie", selected = 1, container = spec_mix_f, editable = FALSE, expand = TRUE)
   addSpring(spec_mix_f)
-  sex_drop_mix <- gcombobox(items = c("Female", "Male"), selected = 1, container = spec_mix_f, editable = FALSE, expand = TRUE)
+  sex_drop_mix <- gcombobox(items = c("Female", "Male", "Unsex"), selected = 1, container = spec_mix_f, editable = FALSE, expand = TRUE)
   addSpring(spec_mix_f)
   addSpring(cont_g)
   ncoh_f <- gframe("N. cohorts", horizontal = FALSE, container = cont_g)
@@ -2426,7 +2427,7 @@ smart_gui <- function(){
   cohSex_b <- gframe("Sex", horizontal = FALSE, container = cohofra_g, expand = TRUE)
   addSpring(cohofra_g)
   addSpring(cohSex_b)
-  sexRadio_coh <- gradio(items = c("Female", "Male"), selected = 1, container = cohSex_b, expand = TRUE, handler = function(h,...){
+  sexRadio_coh <- gradio(items = c("Female", "Male", "Unsex"), selected = 1, container = cohSex_b, expand = TRUE, handler = function(h,...){
     if(svalue(sourceCoh_r) == "Survey"){
       cohCoh_drop[] <- sort(unique(my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age))
     }else{
@@ -2584,7 +2585,7 @@ smart_gui <- function(){
 
     lwRel_f_sex <- gframe("Sex", horizontal = FALSE, container = lwRel_g_top, expand = TRUE)
     addSpace(lwRel_f_sex, 10)
-    lwRel_sex_drop <- gcombobox(items = c("Female", "Male"),
+    lwRel_sex_drop <- gcombobox(items = c("Female", "Male", "Unsex"),
                                 selected = 1, container = lwRel_f_sex, expand = TRUE,
                                 editable = FALSE, handler = function(...){
                                   svalue(sex_label) <- svalue(lwRel_sex_drop)
