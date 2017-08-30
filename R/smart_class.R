@@ -1095,7 +1095,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               groMixout[[sexVal]]$Weight <<- LWpar[[sexVal]][["alpha"]] * groMixout[[sexVal]]$Length ^ LWpar[[sexVal]][["beta"]]
                             },
                             setSpreDistSing = function(){
-                              for(sex in c("Female", "Male")){
+                              for(sex in c("Female", "Male", "Unsex")){
                                 tmp_spre = rawLFD[!is.na(rawLFD$numFG),c("Date","Class", "numFG", sex)]
 
                                 num_sex <- sum(tmp_spre[,4])
@@ -1114,11 +1114,11 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               }
                             },
                             setSprePlot = function(sampSex){
-                              sprePlot[[sampSex]] <<- list(histLfdTot = set_ggHistLfdTot(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", "#63B8FF")),
-                                                           histYearLfd = set_ggHistYearLfd(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", "#63B8FF")))
+                              sprePlot[[sampSex]] <<- list(histLfdTot = set_ggHistLfdTot(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", ifelse(sampSex == "Male", "#63B8FF", "#63FFAE"))),
+                                                           histYearLfd = set_ggHistYearLfd(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", ifelse(sampSex == "Male", "#63B8FF", "#63FFAE"))))
                             },
                             setSpatDistSing = function(){
-                              for(sex in c("Female", "Male")){
+                              for(sex in c("Female", "Male", "Unsex")){
                                 tmp_fishSpat <- rawLFD[!is.na(rawLFD$numFG) & rawLFD[,sex] > 0,c("Lon","Lat", "numFG", sex)]
 
                                 barploFgAll <- data.frame(table(tmp_fishSpat$numFG))
@@ -1549,13 +1549,13 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                              #    }
                              #  },
                              setSprePlot = function(sampSex){
-                               sprePlot[[sampSex]] <<- list(histLfdTot = set_ggHistLfdTot(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", "#63B8FF")),
-                                                            histUtcTot = set_ggHistUtcTot(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", "#63B8FF")),
-                                                            dotUtcSplit = set_ggDotUtcSplit(spreDist[[sampSex]]) + scale_color_manual(values = ifelse(sampSex == "Female", "#FF6A6A", "#63B8FF")),
-                                                            histUtcLfd = set_ggHistUtcLfd(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", "#63B8FF")))
+                               sprePlot[[sampSex]] <<- list(histLfdTot = set_ggHistLfdTot(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", ifelse(sampSex == "Male", "#63B8FF", "#63FFAE"))),
+                                                            histUtcTot = set_ggHistUtcTot(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", ifelse(sampSex == "Male", "#63B8FF", "#63FFAE"))),
+                                                            dotUtcSplit = set_ggDotUtcSplit(spreDist[[sampSex]]) + scale_color_manual(values = ifelse(sampSex == "Female", "#FF6A6A", ifelse(sampSex == "Male", "#63B8FF", "#63FFAE"))),
+                                                            histUtcLfd = set_ggHistUtcLfd(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", ifelse(sampSex == "Male", "#63B8FF", "#63FFAE"))))
                              },
                              setSpreDistSing = function(){
-                               for(sex in c("Female", "Male")){
+                               for(sex in c("Female", "Male", "Unsex")){
                                  tmp_spre = rawLFD[!is.na(rawLFD$numFG),c("Date","Class", "numFG", sex)]
 
                                  num_sex <- sum(tmp_spre[,4])
@@ -1573,7 +1573,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                }
                              },
                              setSpatDistSing = function(){
-                               for(sex in c("Female", "Male")){
+                               for(sex in c("Female", "Male", "Unsex")){
                                  tmp_fishSpat <- rawLFD[!is.na(rawLFD$numFG) & rawLFD[,sex] > 0,c("Lon","Lat", "numFG", sex)]
 
                                  barploFgAll <- data.frame(table(tmp_fishSpat$numFG))
