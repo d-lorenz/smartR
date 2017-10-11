@@ -2761,7 +2761,7 @@ SampleMap <- R6Class("sampleMap",
                          clipDept <- as.SpatialGridDataFrame(gridBathy)
                          tmp_grid <- gridShp
                          proj4string(tmp_grid) <- proj4string(clipDept)
-                         clipDept[which(is.na(over(clipDept, tmp_grid)))] <- NA
+                         clipDept[which(is.na(over(clipDept, tmp_grid))[,1])] <- NA
                          clipDept <- as.bathy(clipDept)
                          areaGrid <<- get.area(clipDept, level.inf = -Inf, level.sup = 0)[[1]]
                          cat("Completed!", sep = "")
@@ -2771,7 +2771,7 @@ SampleMap <- R6Class("sampleMap",
                          clipDept <- as.SpatialGridDataFrame(gridBathy)
                          tmp_grid <- gridShp
                          proj4string(tmp_grid) <- proj4string(clipDept)
-                         clipDept[which(is.na(over(clipDept, tmp_grid)))] <- NA
+                         clipDept[which(is.na(over(clipDept, tmp_grid))[,1])] <- NA
                          clipDept <- as.bathy(clipDept)
                          strataList <- list()
                          for(stratum in 1:(length(vectorStrata)-1)){
