@@ -2273,7 +2273,7 @@ FishFleet <- R6Class("fishFleet",
                          setLogitConf(selSpecie, test)
                        },
                        getMatSpeLand = function(specie){
-                         tmp_mat <- effoProdAllLoa[,c(1,3:(ncol(dayEffoMatr[[1]])),
+                         tmp_mat <- effoProdAllLoa[,c(3:(ncol(dayEffoMatr[[1]])),
                                                       which(colnames(effoProdAllLoa) == "Loa"),
                                                       which(colnames(effoProdAllLoa) == specie))]
                          tmp_mat$MonthNum <- as.factor(tmp_mat$MonthNum)
