@@ -57,5 +57,6 @@ Imports:
     vegan,
     rpart,
     ggrepel,
-    rgdal
+    rgdal,
+    RColorBrewer
 RoxygenNote: 5.0.1
