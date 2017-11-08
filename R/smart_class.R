@@ -1106,7 +1106,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                                                        NumFG = rep(tmp_spre$numFG, tmp_spre[,4]))
 
                                 spreDist$Year <- years(spreDist$UTC)
-                                spreDist$Month <- months(spreDist$UTC)
+                                spreDist$Month <- months(as.chron(spreDist$UTC))
 
                                 spreDist[[sex]] <<- spreDist
 
