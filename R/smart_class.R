@@ -796,7 +796,8 @@ SmartProject <- R6Class("smartProject",
                                 par_betas <- fillbetas(bmat[,-zero_chk])
                                 zero_beta <- matrix(0, nrow = nrow(data.frame(bmat[,zero_chk])),
                                                     ncol = ncol(data.frame(bmat[,zero_chk])))
-                                colnames(zero_beta) <- names(zero_chk)
+                                colnames(zero_beta) <- colnames(bmat)[zero_chk]
+                                colnames(par_betas) <- colnames(bmat)[-zero_chk]
                                 full_betas <- cbind(par_betas, zero_beta)
                                 bmat <- full_betas[,order(colnames(full_betas))]
                               }else{
