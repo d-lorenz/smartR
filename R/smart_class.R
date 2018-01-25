@@ -788,8 +788,8 @@ SmartProject <- R6Class("smartProject",
                             }
                             cat("\nNNLS: ", nSce, " actual scenarios - ", nfitted, " fitted", "(", floor(100*(nSce-nno)/nSce), "%)", sep = "")
                             blist <- vector(mode="list",length=4)
-                            colnames(bmat) <- paste("BE_", ifelse(nchar(1:ncol(bmat)) == 2, 1:ncol(bmat), paste("0", 1:ncol(bmat), sep = "")), sep = "")
-
+                            colnames(bmat) <- paste("BE_", formatC(1:ncol(bmat), width = nchar(ncol(bmat)), format = "d", flag = "0"), sep = "")
+                            
                             if(anyNA(bmat)){
                               zero_chk <- which(apply(bmat, 2, sum,na.rm=TRUE) == 0)
                               if(length(zero_chk) > 0){
