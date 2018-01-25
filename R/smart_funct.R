@@ -245,9 +245,26 @@ getNNLS <- function(subX, subY, zeroFG){
 
 fillbetas <- function(bmat){
   bdf <- as.data.frame(bmat)
-  ff <- paste(colnames(bdf),"+",sep="",collapse="")
-  ff <- as.formula(paste("~",substr(ff,1,nchar(ff)-1)))
-  fbmat <- as.matrix(mnimput(ff,bdf)$filled.dataset)
+  if(ncol(bmat) > 50){
+    fbmat <- matrix(NA, nrow = nrow(bmat), ncol = ncol(bmat))
+    numBlock <- seq(1, ncol(bdf), by = 50)
+    if(!(ncol(bdf) %in% numBlock)) numBlock <- c(numBlock, ncol(bdf))
+    for(iter in 1:(length(numBlock)-1)){
+      if(iter < (length(numBlock)-1)){
+        selVect <- numBlock[iter]:(numBlock[iter+1]-1)
+      }else{
+        selVect <- numBlock[iter]:numBlock[iter+1]
+      }
+      tmp_bdf <- bdf[,selVect]
+      ff <- paste(colnames(tmp_bdf),"+",sep="",collapse="")
+      ff <- as.formula(paste("~",substr(ff,1,nchar(ff)-1)))
+      fbmat[,numBlock[iter]:(numBlock[iter+1]-1)] <- as.matrix(mnimput(ff,tmp_bdf)$filled.dataset)
+    }
+  }else{
+    ff <- paste(colnames(bdf),"+",sep="",collapse="")
+    ff <- as.formula(paste("~",substr(ff,1,nchar(ff)-1)))
+    fbmat <- as.matrix(mnimput(ff,bdf)$filled.dataset)
+  }
   return(fbmat)
 }
 
