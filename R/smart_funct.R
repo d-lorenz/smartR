@@ -258,7 +258,7 @@ fillbetas <- function(bmat){
       tmp_bdf <- bdf[,selVect]
       ff <- paste(colnames(tmp_bdf),"+",sep="",collapse="")
       ff <- as.formula(paste("~",substr(ff,1,nchar(ff)-1)))
-      fbmat[,numBlock[iter]:(numBlock[iter+1]-1)] <- as.matrix(mnimput(ff,tmp_bdf)$filled.dataset)
+      fbmat[,selVect] <- as.matrix(mnimput(ff,tmp_bdf)$filled.dataset)
     }
   }else{
     ff <- paste(colnames(bdf),"+",sep="",collapse="")
