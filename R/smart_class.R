@@ -3124,7 +3124,7 @@ SampleMap <- R6Class("sampleMap",
                          suppressWarnings(print(gooGrid))
                        },
                        plotGooGridData = function(grid_data){
-
+                         
                          gooMapPlot + geom_polygon(aes(x = X, y = Y, group = PID),
                                                    fill = 'grey', size = 0.2,
                                                    color = 'gainsboro', data = grid_data, alpha = 0.5) +
@@ -3208,27 +3208,27 @@ SampleMap <- R6Class("sampleMap",
                          def.par <- par(no.readonly = TRUE)
                          par(mar=c(2.5,2.5,3,1))
                          layout(matrix(c(1,2), 1, 2, byrow = TRUE), widths = c(6,1))
-
+                         
                          vec_bio <- apply(bioDF, 1, function(x) which(x == 1))
                          color_clas <- rainbow(max(vec_bio))
                          plotSamMap(title = "Biocenosis", celCol = color_clas[vec_bio])
-
+                         
                          par(mar=c(5,1,1,1))
                          par(mar=c(1,0,1,0))
-
+                         
                          plot(NULL, xlim=c(0,1), ylim=c(0,1), bty="n", axes = FALSE, ann = FALSE)
                          legend(x = 0, y = 0.5, legend = colnames(bioDF), fill = color_clas, bty = "n")
                          par(def.par)
                        },
                        setGgBioDF = function(){
                          cell_bed <- apply(bioDF, 1, which.max)
-
+                         
                          zero_cell <- which(apply(bioDF, 1, sum) == 0)
-
+                         
                          tmp_dat <- colnames(bioDF)[cell_bed]
-
+                         
                          if(length(zero_cell) > 0) tmp_dat[zero_cell] <- "No Data"
-
+                         
                          color_clas <- rainbow(max(cell_bed))
                          names(tmp_dat) <- 1:length(tmp_dat)
                          all_cell <- merge(x = gridPolySet$PID,
@@ -3343,7 +3343,7 @@ SampleMap <- R6Class("sampleMap",
                              xlim = x_rang,
                              ylim = y_rang, add = TRUE)
                          map.scale(x = min(abs(x_rang))+(diff(x_rang)/10), y = min(abs(y_rang))+(diff(y_rang)/7), cex = 0.65, ratio = FALSE)
-
+                         
                        },
                        setClusInpu = function(whiData = rep(TRUE,3), howData = rep(1, 3)){
                          truIdx <- which(whiData == TRUE)
@@ -3396,14 +3396,14 @@ SampleMap <- R6Class("sampleMap",
                                         crit = minsize,
                                         method = skater_method)
                          clusMat[,1] <<- res1$groups
-
+                         
                          #Perform the first CC (without removing spurious clusters)
                          for(nCuts in 2:numCuts){
                            cat(".", sep = "")
                            ##  Spatial 'K'luster Analysis by Tree Edge Removal
                            #                            res1 <- skater(mst.bh[,1:2], cells_data, ncuts = nCuts, minsize,
                            #                                           method = skater_method)
-
+                           
                            if(nCuts > ceiling(nrow(clusInpu)/maxsize)){
                              res1 <- skater(res1, clusInpu, ncuts = 1,
                                             crit = c(minsize, maxsize),
@@ -3416,7 +3416,7 @@ SampleMap <- R6Class("sampleMap",
                            clusMat[,nCuts] <<- res1$groups
                          }
                          cat(" Done!", sep = "")
-
+                         
                          indSil <<- numeric(ncol(clusMat))
                          indCH <<- numeric(ncol(clusMat))
                          for(i in 1:ncol(clusMat)){
@@ -3452,10 +3452,10 @@ SampleMap <- R6Class("sampleMap",
                          cutResEffo <<- data.frame(Effort = apply(cutResult[, grep("Year", colnames(cutResult))],1, mean),
                                                    Cluster = cutResult[,ncol(cutResult)])
                          cutResShp <<- unionSpatialPolygons(gridShp, IDs = clusMat[,ind_clu])
-
+                         
                          # num_cell <- getinfo.shape(cutResShp)$entities
                          cutResShp@plotOrder <<- 1:ind_clu
-
+                         
                          # cutResShpCent <<- as.data.frame(coordinates(cutResShp))
                          # cutResShpCent <<- as.data.frame(getLabBuffer(cutResShp))
                          plot.new()
@@ -3463,10 +3463,10 @@ SampleMap <- R6Class("sampleMap",
                          # cutResShpCent$id <<- rownames(cutResShpCent)
                          cutResShpCent$id <<- names(cutResShp)
                          names(cutResShpCent) <<- c("Lon", "Lat", "FG")
-
+                         
                          cutResShpFort <<- fortify(cutResShp)
                          cutResShpFort$FG <<- as.factor(cutResShpFort$id)
-
+                         
                          setDepthFGbox()
                          setEffoFGbox()
                          setEffoFGmap()
