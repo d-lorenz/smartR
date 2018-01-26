@@ -1472,30 +1472,6 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                              # setPreMix = function(){
                              #   # preMix <<- weight2number(rawLFD[,c("DATE","Class","Unsex")])
                              # },
-                             ggplotMcmcOut = function(selCompo = "MCMC", selSex = "Female"){
-                               
-                               switch(selCompo,
-                                      MCMC = suppressWarnings(grid.arrange(sprePlot[[selSex]][["traceChain"]],
-                                                                           sprePlot[[selSex]][["scatLK"]],
-                                                                           sprePlot[[selSex]][["cohoPreciGG"]],
-                                                                           sprePlot[[selSex]][["cohoVariGG"]],
-                                                                           layout_matrix = rbind(c(1,1,1,2),
-                                                                                                 c(1,1,1,2),
-                                                                                                 c(4,4,5,5)))),
-                                      Key = suppressWarnings(grid.arrange(sprePlot[[selSex]][["ageLength"]],
-                                                                          sprePlot[[selSex]][["ageLengthTbl"]],
-                                                                          sprePlot[[selSex]][["cohoStatTbl"]],
-                                                                          layout_matrix = rbind(c(1,1,2),
-                                                                                                c(1,1,2),
-                                                                                                c(1,1,3)))),
-                                      Birth = suppressWarnings(grid.arrange(sprePlot[[selSex]][["histBirth"]],
-                                                                            sprePlot[[selSex]][["lineCatch"]],
-                                                                            sprePlot[[selSex]][["lineSurv"]],
-                                                                            layout_matrix = rbind(c(1,1),
-                                                                                                  c(1,1),
-                                                                                                  c(2,3))))
-                               )
-                             },
                              setWeight = function(sexVal = "Female"){
                                groMixout[[sexVal]]$Weight <<- LWpar[[sexVal]][["alpha"]] * groMixout[[sexVal]]$Length ^ LWpar[[sexVal]][["beta"]]
                              },
