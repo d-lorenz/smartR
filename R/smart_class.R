@@ -1853,7 +1853,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                                                                                   c(2,3))))
                                )
                              },
-                             calcMixDate = function(nAdap = 100, nSamp = 2000, nIter = 500, sexDrop = "Female", curveSel = "von Bertalanffy"){
+                             calcMixDateOLD = function(nAdap = 100, nSamp = 2000, nIter = 500, sexDrop = "Female", curveSel = "von Bertalanffy"){
                                # mixPar <<- list('Female' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)),
                                #                 'Male' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)))
                                # for(sex in c("Female", "Male")){ }
