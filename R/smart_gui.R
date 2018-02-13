@@ -2404,7 +2404,7 @@ smart_gui <- function(){
   addSpring(cohoP_g_top)
 
   cohofra_g <- gframe("Cohort data", horizontal = TRUE, container = cohoP_g_top, expand = TRUE)
-  addSpring(cohofra_g)
+  # addSpring(cohofra_g)
 
   sourceCoh_r <- gradio(items = c("Survey", "Fishery"), horizontal = FALSE, container = cohofra_g, expand = TRUE, handler = function(...){
     if(svalue(sourceCoh_r) == "Survey"){
@@ -2541,7 +2541,7 @@ smart_gui <- function(){
            #                        ifelse(svalue(cohYea_drop) == "All", "All", which(my_project$yearInSurvey == svalue(cohYea_drop))),
            #                        ifelse(svalue(cohInt_r) == "Yes", TRUE, FALSE))
          })
-  addSpring(cohofra_g)
+  # addSpring(cohofra_g)
   addSpring(cohoP_g_top)
   addSpace(cohoP_g_top, 2)
   cohPop_p <- ggraphics(container = cohoP_g, width = 550, height = 250, expand = TRUE)
