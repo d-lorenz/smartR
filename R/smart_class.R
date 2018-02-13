@@ -1116,7 +1116,9 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                             },
                             setSprePlot = function(sampSex){
                               sprePlot[[sampSex]] <<- list(histLfdTot = set_ggHistLfdTot(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", ifelse(sampSex == "Male", "#63B8FF", "#63FFAE"))),
-                                                           histYearLfd = set_ggHistYearLfd(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", ifelse(sampSex == "Male", "#63B8FF", "#63FFAE"))))
+                                                           histUtcTot = set_ggHistUtcTot(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", ifelse(sampSex == "Male", "#63B8FF", "#63FFAE"))),
+                                                           dotUtcSplit = set_ggDotUtcSplit(spreDist[[sampSex]]) + scale_color_manual(values = ifelse(sampSex == "Female", "#FF6A6A", ifelse(sampSex == "Male", "#63B8FF", "#63FFAE"))),
+                                                           histUtcLfd = set_ggHistUtcLfd(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", ifelse(sampSex == "Male", "#63B8FF", "#63FFAE"))))
                             },
                             setSpatDistSing = function(){
                               for(sex in c("Female", "Male", "Unsex")){
