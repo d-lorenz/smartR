@@ -2324,7 +2324,7 @@ smart_gui <- function(){
   go_b <- gbutton ("   GO   ", container = go_g,
                    handler = function(h,...){
                      dev.set(dev.list()[pre_dev+6])
-
+                     svalue(view_radio) <- 1
                      if(svalue(sourceMix_r) == "Survey"){
                        pre_mfrow <- par(c("mfrow", "mar"))
                        par(mfrow = c(2, 1))
