@@ -2401,7 +2401,8 @@ smart_gui <- function(){
 
   cohoP_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Cohorts")
   cohoP_g_top <- gframe(horizontal = TRUE, container = cohoP_g, spacing = 10)
-  addSpring(cohoP_g_top)
+  addSpace(cohoP_g_top, 2)
+  # addSpring(cohoP_g_top)
 
   cohofra_g <- gframe("Cohort data", horizontal = TRUE, container = cohoP_g_top, expand = TRUE)
   # addSpring(cohofra_g)
@@ -2542,7 +2543,7 @@ smart_gui <- function(){
            #                        ifelse(svalue(cohInt_r) == "Yes", TRUE, FALSE))
          })
   # addSpring(cohofra_g)
-  addSpring(cohoP_g_top)
+  # addSpring(cohoP_g_top)
   addSpace(cohoP_g_top, 2)
   cohPop_p <- ggraphics(container = cohoP_g, width = 550, height = 250, expand = TRUE)
 
