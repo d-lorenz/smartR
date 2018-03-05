@@ -2557,7 +2557,7 @@ FishFleet <- R6Class("fishFleet",
                            prodMatr[[i]] <<- tmp_matrix
                          }
                        },
-                       setDayEffoMatrGround = function(){
+                       setDayEffoMatrGround = function(maxFG = max(rawEffort[[1]]$FishGround[!is.na(rawEffort[[1]]$FishGround)]){
                          dayEffoMatr <<- list()
                          cat("\nCreating daily effort x Fishing Ground matrix\n", sep = "")
                          for(j in names(rawEffort)){
@@ -2570,7 +2570,7 @@ FishFleet <- R6Class("fishFleet",
                            tmp_matrix[,4:ncol(tmp_matrix)] <- tmp_matrix[,4:ncol(tmp_matrix)]/6
                            # miss_cols <- setdiff(as.character(unique(rawEffort[[j]]$FishGround[!is.na(rawEffort[[j]]$FishGround)])),
                            #                      names(tmp_matrix)[4:ncol(tmp_matrix)])
-                           miss_cols <- setdiff(1:max(rawEffort[[j]]$FishGround[!is.na(rawEffort[[j]]$FishGround)]),
+                           miss_cols <- setdiff(1:maxFG,
                                                 names(tmp_matrix)[4:ncol(tmp_matrix)])
                            if(length(miss_cols) > 0){
                              # tmp_matrix[,miss_cols] <- 0
