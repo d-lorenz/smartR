@@ -2557,7 +2557,7 @@ FishFleet <- R6Class("fishFleet",
                            prodMatr[[i]] <<- tmp_matrix
                          }
                        },
-                       setDayEffoMatrGround = function(maxFG = max(rawEffort[[1]]$FishGround[!is.na(rawEffort[[1]]$FishGround)]){
+                       setDayEffoMatrGround = function(maxFG = max(rawEffort[[1]]$FishGround[!is.na(rawEffort[[1]]$FishGround)])){
                          dayEffoMatr <<- list()
                          cat("\nCreating daily effort x Fishing Ground matrix\n", sep = "")
                          for(j in names(rawEffort)){
