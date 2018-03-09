@@ -731,9 +731,8 @@ SmartProject <- R6Class("smartProject",
                             nFG <- sampMap$cutFG + 1
                             thrB <- fleet$specSett[[specie]]$threshold
                             thr0 <- mean(data[,specie][data[,specie] < thrB & data[,specie] > 0])
-                            
-                            if(length(which(is.na(data)==TRUE,arr.ind=TRUE)[,1])>0)
-                              data <- data[-which(is.na(data)==TRUE,arr.ind=TRUE)[,1],]
+                            naFind <- which(is.na(data)==TRUE,arr.ind=TRUE)
+                            if(length(naFind) > 0) data <- data[-naFind[,1],]
                             norow <- which(data[,which(colnames(data)==specie)]<=thrB)
                             X0 <- data[-norow,which(colnames(data) %in% c("Year","MonthNum","Loa",as.character(seq(1:nFG))))]
                             Y0 <- data[-norow,which(colnames(data)==specie)]
@@ -2401,7 +2400,12 @@ FishFleet <- R6Class("fishFleet",
                          tmp_loa$CFR <- substr(tmp_loa$CFR, 4, nchar(tmp_loa$CFR[1]))
                          names(tmp_loa) <- c("I_NCEE", "Loa")
                          tmp_allLoa <- sqldf("select * from tmp_effoProd left join (select * from tmp_loa) using (I_NCEE)")
-                         effoProdAllLoa <<- tmp_allLoa[-which(is.na(tmp_allLoa), arr.ind = TRUE)[,1],]
+                         naFind <- which(is.na(tmp_allLoa), arr.ind = TRUE)
+                         if(length(naFind) > 0){
+                           effoProdAllLoa <<- tmp_allLoa[-naFind[,1],]
+                         }else{
+                           effoProdAllLoa <<- tmp_allLoa
+                         }
                        },
                        setEffoAllLoa = function(){
                          cat("\nSetting Effort LOA... ", sep = "")
@@ -2410,7 +2414,12 @@ FishFleet <- R6Class("fishFleet",
                          tmp_loa$CFR <- substr(tmp_loa$CFR, 4, nchar(tmp_loa$CFR[1]))
                          names(tmp_loa) <- c("I_NCEE", "Loa")
                          tmp_Loa <- sqldf("select * from tmp_effo left join (select * from tmp_loa) using (I_NCEE)")
-                         effoAllLoa <<- tmp_Loa[-which(is.na(tmp_Loa), arr.ind = TRUE)[,1],]
+                         naFind <- which(is.na(tmp_Loa), arr.ind = TRUE)
+                         if(length(naFind) > 0){
+                           effoAllLoa <<- tmp_Loa[-naFind[,1],]
+                         }else{
+                           effoAllLoa <<- tmp_Loa
+                         }
                          cat("Done!\n", sep = "")
                        },
                        setProdIds = function(){
@@ -2850,7 +2859,8 @@ SampleMap <- R6Class("sampleMap",
                          clipDept <- as.SpatialGridDataFrame(gridBathy)
                          tmp_grid <- gridShp
                          proj4string(tmp_grid) <- proj4string(clipDept)
-                         clipDept[which(is.na(over(clipDept, tmp_grid))[,1])] <- NA
+                         naFind <- which(is.na(over(clipDept, tmp_grid))[,1])
+                         if(length(naFind) > 0) clipDept[naFind] <- NA
                          clipDept <- as.bathy(clipDept)
                          areaGrid <<- get.area(clipDept, level.inf = -Inf, level.sup = 0)[[1]]
                          cat("Completed!", sep = "")
@@ -2860,7 +2870,8 @@ SampleMap <- R6Class("sampleMap",
                          clipDept <- as.SpatialGridDataFrame(gridBathy)
                          tmp_grid <- gridShp
                          proj4string(tmp_grid) <- proj4string(clipDept)
-                         clipDept[which(is.na(over(clipDept, tmp_grid))[,1])] <- NA
+                         naFind <- which(is.na(over(clipDept, tmp_grid))[,1])
+                         if(length(naFind) > 0) clipDept[naFind] <- NA
                          clipDept <- as.bathy(clipDept)
                          strataList <- list()
                          for(stratum in 1:(length(vectorStrata)-1)){
