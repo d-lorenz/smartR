@@ -348,15 +348,18 @@ SmartProject <- R6Class("smartProject",
                           },
                           setGooPlotCohoFish = function(specie = "", sex = "Female", speCol = ""){
                             
+                            cat("\n\nProcessing ", specie, " - ", sex, "... Cohort ", sep = "")
                             gooLstCoho[[specie]] <<- list()
                             gooLstCoho[[specie]][[sex]] <<- list()
 
-                            tmpMix <- fisheryBySpecie[[which(specieInFishery == specie)]]$groMixout[[sex]]
+                            tmpMix <- fisheryBySpecie[[which(specieInFishery == specie)]]$groMixout[[sex]][[1]]
                             ageFGtbl <- table(tmpMix$FG, tmpMix$Age)
                             cohAbuFG <- as.data.frame(cbind(FG = as.numeric(rownames(ageFGtbl)), ageFGtbl))
                             outPalette <- rainbow(ncol(cohAbuFG)-1)
                             
                             for(coh_i in 2:ncol(cohAbuFG)){
+                              cat(colnames(ageFGtbl)[coh_i-1], "... ", sep = "")
+                              
                               if(speCol == ""){
                                 cohFillPal <- outPalette[coh_i-1]
                               }else{
@@ -401,10 +404,11 @@ SmartProject <- R6Class("smartProject",
                                 geom_polygon(aes(x = long, y = lat, group = group, alpha = 0.1),
                                              colour = "black", size = 0.1, data = grid_data, alpha = 0.8, fill = NA)+
                                 geom_text(aes(label = cell_id, x = Lon, y = Lat),
-                                          data = tmp_coo, size = 2)
+                                          data = tmp_coo, size = 2))
                               
-                              gooLstCoho[[specie]][[sex]][[coh_i-1]] <<- mapCoho
+                              gooLstCoho[[specie]][[sex]][[colnames(ageFGtbl)[coh_i-1]]] <<- mapCoho
                             }
+                            cat("... Completed!", sep = "")
                           },
                           distrPlotCols = function(cols = NULL, vals = NULL, maxVal = 100,
                                                    plotTitle = "NoTitle", legendUnits = "NoUnits"){
