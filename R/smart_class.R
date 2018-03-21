@@ -386,7 +386,7 @@ SmartProject <- R6Class("smartProject",
                                      y = extendrange(sampMap$plotRange[3:4])) +
                                 theme(legend.position = c(0.1, 0.22),
                                       legend.text = element_text(size = 10, colour="grey19"),
-                                      legend.title = element_blank(),
+                                      # legend.title = element_blank(),
                                       legend.background = element_rect(fill = rgb(1,1,1,0.5)),
                                       axis.text.x = element_text(size = 10),
                                       axis.title.x = element_text(size = 12),
