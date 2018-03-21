@@ -352,7 +352,7 @@ SmartProject <- R6Class("smartProject",
                             gooLstCoho[[specie]] <<- list()
                             gooLstCoho[[specie]][[sex]] <<- list()
 
-                            tmpMix <- fisheryBySpecie[[which(specieInFishery == specie)]]$groMixout[[sex]][[1]]
+                            tmpMix <- fisheryBySpecie[[which(specieInFishery == specie)]]$groMixout[[sex]]
                             ageFGtbl <- table(tmpMix$FG, tmpMix$Age)
                             cohAbuFG <- as.data.frame(cbind(FG = as.numeric(rownames(ageFGtbl)), ageFGtbl))
                             outPalette <- rainbow(ncol(cohAbuFG)-1)
