@@ -346,6 +346,66 @@ SmartProject <- R6Class("smartProject",
                               sampMap$plotGooSpeFis(tmp_data)
                             }
                           },
+                          setGooPlotCohoFish = function(specie = "", sex = "Female", speCol = ""){
+                            
+                            gooLstCoho[[specie]] <<- list()
+                            gooLstCoho[[specie]][[sex]] <<- list()
+
+                            tmpMix <- fisheryBySpecie[[which(specieInFishery == specie)]]$groMixout[[sex]]
+                            ageFGtbl <- table(tmpMix$FG, tmpMix$Age)
+                            cohAbuFG <- as.data.frame(cbind(FG = as.numeric(rownames(ageFGtbl)), ageFGtbl))
+                            outPalette <- rainbow(ncol(cohAbuFG)-1)
+                            
+                            for(coh_i in 2:ncol(cohAbuFG)){
+                              if(speCol == ""){
+                                cohFillPal <- outPalette[coh_i-1]
+                              }else{
+                                cohFillPal <- speCol
+                              }
+                              all_cell <- merge(x = sampMap$cutResShpFort$id, data.frame(x = cohAbuFG$FG, y = round(100 * cohAbuFG[,coh_i]/max(cohAbuFG[,coh_i]))), all = TRUE)
+                              grid_data <- cbind(sampMap$cutResShpFort, NumInd = all_cell[,2])
+                              tmp_coo <- data.frame(coordinates(sampMap$gridShp), cell_id = sampMap$gridShp$IDs)
+                              colnames(tmp_coo)[1:2] <- c("Lon", "Lat")
+                              tmp_dens <- data.frame(lon = rep(grid_data[!is.na(grid_data$NumInd),]$long, grid_data[!is.na(grid_data$NumInd),]$NumInd),
+                                                     lat = rep(grid_data[!is.na(grid_data$NumInd),]$lat, grid_data[!is.na(grid_data$NumInd),]$NumInd))
+                              
+                              mapCoho <- sampMap$gooMapPlot + 
+                                geom_polygon(aes(x = long, y = lat, group = group, fill = NumInd),
+                                             colour = "black", size = 0.1, data = grid_data, alpha = 0.8) +
+                                scale_fill_gradient(low = "Grey85", high = cohFillPal, 
+                                                    # trans = "log10",
+                                                    breaks = pretty(1:100, 5), limits = c(1,100)) +
+                                ggtitle(paste0(specie, " Spatial Distribution - Cohort ", coh_i - 2)) +
+                                geom_text(aes(label = cell_id, x = Lon, y = Lat),
+                                          data = tmp_coo, size = 2) +
+                                lims(x = extendrange(sampMap$plotRange[1:2]),
+                                     y = extendrange(sampMap$plotRange[3:4])) +
+                                theme(legend.position = c(0.1, 0.22),
+                                      legend.text = element_text(size = 10, colour="grey19"),
+                                      legend.title = element_blank(),
+                                      legend.background = element_rect(fill = rgb(1,1,1,0.5)),
+                                      axis.text.x = element_text(size = 10),
+                                      axis.title.x = element_text(size = 12),
+                                      axis.text.y = element_text(size = 10),
+                                      legend.key.size = unit(0.75, "cm"),
+                                      axis.title.y = element_text(size = 12),
+                                      plot.title = element_text(size = 20)) + 
+                                stat_density_2d(data = tmp_dens, 
+                                                mapping = aes(x = lon, y = lat, alpha =..level..),
+                                                fill = cohFillPal,
+                                                geom = "polygon",
+                                                n = 500,
+                                                h = 0.5,
+                                                show.legend = FALSE) +
+                                scale_alpha_continuous(limits=c(0,0.4),breaks=seq(0,0.4,by=0.025)) +
+                                geom_polygon(aes(x = long, y = lat, group = group, alpha = 0.1),
+                                             colour = "black", size = 0.1, data = grid_data, alpha = 0.8, fill = NA)+
+                                geom_text(aes(label = cell_id, x = Lon, y = Lat),
+                                          data = tmp_coo, size = 2)
+                              
+                              gooLstCoho[[specie]][[sex]][[coh_i-1]] <<- mapCoho
+                            }
+                          },
                           distrPlotCols = function(cols = NULL, vals = NULL, maxVal = 100,
                                                    plotTitle = "NoTitle", legendUnits = "NoUnits"){
                             def.par <- par(no.readonly = TRUE)
