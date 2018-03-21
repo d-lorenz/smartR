@@ -409,7 +409,7 @@ SmartProject <- R6Class("smartProject",
                               
                               gooLstCoho[[specie]][[sex]][[colnames(ageFGtbl)[coh_i-1]]] <<- mapCoho
                             }
-                            cat("... Completed!", sep = "")
+                            cat(" Completed!", sep = "")
                           },
                           distrPlotCols = function(cols = NULL, vals = NULL, maxVal = 100,
                                                    plotTitle = "NoTitle", legendUnits = "NoUnits"){
