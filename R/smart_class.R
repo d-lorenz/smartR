@@ -372,13 +372,14 @@ SmartProject <- R6Class("smartProject",
                               tmp_dens <- data.frame(lon = rep(grid_data[!is.na(grid_data$NumInd),]$long, grid_data[!is.na(grid_data$NumInd),]$NumInd),
                                                      lat = rep(grid_data[!is.na(grid_data$NumInd),]$lat, grid_data[!is.na(grid_data$NumInd),]$NumInd))
                               
-                              mapCoho <- sampMap$gooMapPlot + 
+                              mapCoho <- suppressMessages(sampMap$gooMapPlot + 
                                 geom_polygon(aes(x = long, y = lat, group = group, fill = NumInd),
                                              colour = "black", size = 0.1, data = grid_data, alpha = 0.8) +
-                                scale_fill_gradient(low = "Grey85", high = cohFillPal, 
+                                scale_fill_gradient(paste0("Max abundance\n", max(cohAbuFG[,coh_i]), " specimens"),
+                                                    low = "Grey85", high = cohFillPal, 
                                                     # trans = "log10",
                                                     breaks = pretty(1:100, 5), limits = c(1,100)) +
-                                ggtitle(paste0(specie, " Spatial Distribution - Cohort ", coh_i - 2)) +
+                                ggtitle(paste0("Spatial Distribution of ", specie," - Cohort ", coh_i - 2)) +
                                 geom_text(aes(label = cell_id, x = Lon, y = Lat),
                                           data = tmp_coo, size = 2) +
                                 lims(x = extendrange(sampMap$plotRange[1:2]),
