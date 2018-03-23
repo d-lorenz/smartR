@@ -374,74 +374,87 @@ ggplot_FGProduction <- function(df_FGProd){
 
 ## MCMC Survivors * quarter ----
 set_ggSurvLine <- function(df_surv){
-  return(
-    suppressMessages(
-      ggplot(data = df_surv, aes_(x = ~Catch, y = ~Qty, group = ~Birth, color = ~Birth)) +
-        geom_line() +
-        scale_x_discrete(drop = FALSE) +
-        theme_tufte(base_size = 14, ticks=F) +
-        annotate("text", x = Inf, y = Inf, hjust = 1, vjust = 1,  family="serif", label = "Survivors") +
-        scale_color_brewer(palette = "Paired") +
-        theme(legend.position = "none",
-              axis.text.x = element_text(size = 5, angle = 90),
-              panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
-              axis.title.x = element_blank(),
-              axis.text.y = element_text(size = 5),
-              axis.title.y = element_blank(),
-              axis.ticks.y = element_blank())
-    )
+  tmpPlot <- suppressMessages(
+    ggplot(data = df_surv, aes_(x = ~Catch, y = ~Qty, group = ~Birth, color = ~Birth)) +
+      geom_line() +
+      scale_x_discrete(drop = FALSE) +
+      theme_tufte(base_size = 14, ticks=F) +
+      annotate("text", x = Inf, y = Inf, hjust = 1, vjust = 1,  family="serif", label = "Survivors") +
+      theme(legend.position = "none",
+            axis.text.x = element_text(size = 5, angle = 90),
+            panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+            axis.title.x = element_blank(),
+            axis.text.y = element_text(size = 5),
+            axis.title.y = element_blank(),
+            axis.ticks.y = element_blank())
   )
+  if(length(unique(df_surv$Birth)) <= 12){
+    tmpPlot <- tmpPlot + scale_color_brewer(palette = "Paired")
+  }else{
+    outPal <- rainbow(length(unique(df_surv$Birth)))
+    tmpPlot <- tmpPlot + scale_colour_manual(values = outPal)
+  }
+  return(tmpPlot)
 }
 
 ## MCMC Catch * Quarters ----
 set_ggCatchLine <- function(df_birth){
-  return(
-    suppressMessages(
-      ggplot() +
-        geom_line(data = df_birth, aes_(x = ~Catch, y = ~Qty, group = ~Birth, color = ~Birth)) +
-        scale_color_brewer(palette = "Paired") +
-        theme_tufte(base_size = 14, ticks = F) +
-        scale_x_discrete(drop = FALSE) +
-        annotate("text", x = Inf, y = Inf, hjust = 1, vjust = 1, family="serif", label = "Catches") +
-        theme(legend.position = "none",
-              legend.title = element_blank(),
-              legend.text = element_text(size = 10),
-              panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
-              axis.text.x = element_text(size = 5, angle = 45),
-              axis.title.x = element_blank(),
-              axis.text.y = element_text(size = 5),
-              axis.title.y = element_blank(),
-              axis.ticks.y = element_blank())
-    )
+  tmpPlot <- suppressMessages(
+    ggplot() +
+      geom_line(data = df_birth, aes_(x = ~Catch, y = ~Qty, group = ~Birth, color = ~Birth)) +
+      theme_tufte(base_size = 14, ticks = F) +
+      scale_x_discrete(drop = FALSE) +
+      annotate("text", x = Inf, y = Inf, hjust = 1, vjust = 1, family="serif", label = "Catches") +
+      theme(legend.position = "none",
+            legend.title = element_blank(),
+            legend.text = element_text(size = 10),
+            panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+            axis.text.x = element_text(size = 5, angle = 45),
+            axis.title.x = element_blank(),
+            axis.text.y = element_text(size = 5),
+            axis.title.y = element_blank(),
+            axis.ticks.y = element_blank())
   )
+  
+  if(length(unique(df_birth$Birth)) <= 12){
+    tmpPlot <- tmpPlot + scale_color_brewer(palette = "Paired")
+  }else{
+    outPal <- rainbow(length(unique(df_birth$Birth)))
+    tmpPlot <- tmpPlot + scale_colour_manual(values = outPal)
+  }
+  return(tmpPlot)
 }
 
 ## MCMC Quarters Histogram ----
 set_ggHistBirth <- function(df_mix, df_grow){
-  return(
-    suppressMessages(
-      ggplot(data = df_mix,
-             mapping = aes_(x = ~CatcDate, y = ~Length,
-                            color = ~factor(Birth))) +
-        scale_color_brewer(name = "Year of Birth", palette = "Paired") +
-        geom_jitter(size = 0.05, height = 0, width = 0.9, alpha = 0.4) +
-        scale_x_discrete(drop = FALSE) +
-        geom_line(data = df_grow,
-                  mapping = aes_(x = ~Date, y = ~Length, group = ~Birth),
-                  linetype = 2) +
-        guides(colour = guide_legend(override.aes = list(size = 2.5,
-                                                         alpha = 0.9,
-                                                         fill = NA))) +
-        theme_tufte(base_size = 14, ticks = FALSE) +
-        theme(legend.position = "bottom",
-              panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
-              axis.text.x = element_text(size = 8, angle = 90),
-              axis.title.x = element_blank(),
-              axis.text.y = element_text(size = 8),
-              axis.title.y = element_text(size = 8),
-              legend.key = element_blank())
-    )
+  tmpPlot <- suppressMessages(
+    ggplot(data = df_mix,
+           mapping = aes_(x = ~CatcDate, y = ~Length,
+                          color = ~factor(Birth))) +
+      geom_jitter(size = 0.05, height = 0, width = 0.9, alpha = 0.4) +
+      scale_x_discrete(drop = FALSE) +
+      geom_line(data = df_grow,
+                mapping = aes_(x = ~Date, y = ~Length, group = ~Birth),
+                linetype = 2) +
+      guides(colour = guide_legend(override.aes = list(size = 2.5,
+                                                       alpha = 0.9,
+                                                       fill = NA))) +
+      theme_tufte(base_size = 14, ticks = FALSE) +
+      theme(legend.position = "bottom",
+            panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+            axis.text.x = element_text(size = 8, angle = 90),
+            axis.title.x = element_blank(),
+            axis.text.y = element_text(size = 8),
+            axis.title.y = element_text(size = 8),
+            legend.key = element_blank())
   )
+  if(length(unique(df_mix$Birth)) <= 12){
+    tmpPlot <- tmpPlot + scale_color_brewer(name = "Year of Birth", palette = "Paired")
+  }else{
+    outPal <- rainbow(length(unique(df_mix$Birth)))
+    tmpPlot <- tmpPlot + scale_colour_manual(values = outPal)
+  }
+  return(tmpPlot)
 }
 
 ## MCMC Cohort Summary Table ----
