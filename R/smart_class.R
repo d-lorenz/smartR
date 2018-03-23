@@ -1295,6 +1295,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               groMixout[[sexDrop]] <<- mix_out
                             },
                             setMCplot = function(sexDrop = "Female"){
+                              nIter <- nrow(as.matrix(sampMcmc[[sexDrop]][[1]]))
                               dfLinf <- data.frame(Parameter = "Linf",
                                                    Iter = 1:nIter,
                                                    Chain = as.matrix(sampMcmc[[sexDrop]][,"Linf"], chains = TRUE)[,1],
@@ -1632,6 +1633,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                groMixout[[sexDrop]] <<- mix_out
                              },
                              setMCplot = function(sexDrop = "Female"){
+                               nIter <- nrow(as.matrix(sampMcmc[[sexDrop]][[1]]))
                                dfLinf <- data.frame(Parameter = "Linf",
                                                     Iter = 1:nIter,
                                                     Chain = as.matrix(sampMcmc[[sexDrop]][,"Linf"], chains = TRUE)[,1],
