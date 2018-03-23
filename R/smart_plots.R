@@ -515,7 +515,7 @@ set_ggTausBox <- function(df_taus, tauPalette, numCoho){
   names(cohoPreci) <- c("Iter", "Cohort", "Value")
   cohoPreci$Cohort <- factor(as.numeric(cohoPreci$Cohort), levels = 1:(numCoho))
   stsPreci <- boxplot.stats(cohoPreci$Value)$stats ## from: http://stackoverflow.com/questions/21533158/remove-outliers-fully-from-multiple-boxplots-made-with-ggplot2-in-r-and-display
-
+  
   cohoPreciGG <- suppressMessages(
     ggplot(cohoPreci, aes_(x = ~Cohort, y = ~Value, fill = ~Cohort)) +
       geom_boxplot(alpha = 0.6, outlier.color = "grey30", outlier.size = 0.35, notch = TRUE) +
@@ -532,7 +532,7 @@ set_ggTausBox <- function(df_taus, tauPalette, numCoho){
             axis.title.y = element_blank()) +
       coord_cartesian(ylim = c(stsPreci[2]/2,max(stsPreci)*1.25)) ## from: http://stackoverflow.com/questions/21533158/remove-outliers-fully-from-multiple-boxplots-made-with-ggplot2-in-r-and-display
   )
-
+  
   return(cohoPreciGG)
 }
 
@@ -712,12 +712,12 @@ set_spatAbbTbl <- function(inSpat){
   out_FgTbl <- data.frame(FG = inSpat$FG,
                           AbsFreq = inSpat$Freq,
                           RelFreq = inSpat$relFreq)
-
+  
   fgAbbTheme <- gridExtra::ttheme_default(
     core = list(fg_params=list(cex = 0.4)),
     colhead = list(fg_params=list(cex = 0.6)),
     rowhead = list(fg_params=list(cex = 0.4)))
-
+  
   return(tableGrob(out_FgTbl, theme = fgAbbTheme))
 }
 
