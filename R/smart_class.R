@@ -1294,20 +1294,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               
                               groMixout[[sexDrop]] <<- mix_out
                             },
-                            calcMixDate = function(nAdap = 100, nSamp = 2000, nIter = 500, sexDrop = "Female", curveSel = "von Bertalanffy"){
-                              
-                              cat("\n\tGetting mcmc samples... ", sep = "")
-                              getMCsamps(numAdap = nAdap, numSamp = nSamp, numIter = nIter, sexDrop = sexDrop, curveSel = curveSel)
-                              cat("Done!", sep = "")
-                              cat("\n\tGetting growth parameters... ", sep = "")
-                              getGrowPar(sexDrop = sexDrop)
-                              cat("Done!", sep = "")
-                              cat("\n\tGetting age estimates... ", sep = "")
-                              getMCage(sexDrop = sexDrop)
-                              cat("Done!", sep = "")
-                              
-                              # n.iter <- 500
-                              
+                            setMCplot = function(sexDrop = "Female"){
                               dfLinf <- data.frame(Parameter = "Linf",
                                                    Iter = 1:nIter,
                                                    Chain = as.matrix(sampMcmc[[sexDrop]][,"Linf"], chains = TRUE)[,1],
@@ -1377,7 +1364,6 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               ### MCMC Catch * Quarters
                               sprePlot[[sexDrop]][["lineCatch"]] <<- set_ggCatchLine(df_birth = birth_melt)
                               
-                              
                               ### MCMC Calc Survivors
                               tot_count <- apply(out_birth,2, sum)
                               surv_tbl <- out_birth
@@ -1405,11 +1391,23 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                                 # surv_melt$Zeta[surv_melt$Birth == i] <- c(-diff(tmp_surv_i$Qty)/tmp_surv_i$Qty[-nrow(tmp_surv_i)], 0)
                               }
                               # surv_melt$Zeta <- 0.2*(surv_melt$Zeta)/(1/surv_melt$Zeta)
-                              ###
                               
                               ### MCMC Survivors * quarter
                               sprePlot[[sexDrop]][["lineSurv"]] <<- set_ggSurvLine(df_surv = surv_melt)
                               cat("Done!", sep = "")
+                            },
+                            calcMixDate = function(nAdap = 100, nSamp = 2000, nIter = 500, sexDrop = "Female", curveSel = "von Bertalanffy"){
+                              
+                              cat("\n\tGetting mcmc samples... ", sep = "")
+                              getMCsamps(numAdap = nAdap, numSamp = nSamp, numIter = nIter, sexDrop = sexDrop, curveSel = curveSel)
+                              cat("Done!", sep = "")
+                              cat("\n\tGetting growth parameters... ", sep = "")
+                              getGrowPar(sexDrop = sexDrop)
+                              cat("Done!", sep = "")
+                              cat("\n\tGetting age estimates... ", sep = "")
+                              getMCage(sexDrop = sexDrop)
+                              cat("Done!", sep = "")
+                              setMCplot(sexDrop = sexDrop)
                             },
                             ggplotMcmcOut = function(selCompo = "MCMC", selSex = "Female"){
                               switch(selCompo,
@@ -1633,20 +1631,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                
                                groMixout[[sexDrop]] <<- mix_out
                              },
-                             calcMixDate = function(nAdap = 100, nSamp = 2000, nIter = 500, sexDrop = "Female", curveSel = "von Bertalanffy"){
-                               
-                               cat("\n\tGetting mcmc samples... ", sep = "")
-                               getMCsamps(numAdap = nAdap, numSamp = nSamp, numIter = nIter, sexDrop = sexDrop, curveSel = curveSel)
-                               cat("Done!", sep = "")
-                               cat("\n\tGetting growth parameters... ", sep = "")
-                               getGrowPar(sexDrop = sexDrop)
-                               cat("Done!", sep = "")
-                               cat("\n\tGetting age estimates... ", sep = "")
-                               getMCage(sexDrop = sexDrop)
-                               cat("Done!", sep = "")
-                               
-                               # n.iter <- 500
-                               
+                             setMCplot = function(sexDrop = "Female"){
                                dfLinf <- data.frame(Parameter = "Linf",
                                                     Iter = 1:nIter,
                                                     Chain = as.matrix(sampMcmc[[sexDrop]][,"Linf"], chains = TRUE)[,1],
@@ -1716,7 +1701,6 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                ### MCMC Catch * Quarters
                                sprePlot[[sexDrop]][["lineCatch"]] <<- set_ggCatchLine(df_birth = birth_melt)
                                
-                               
                                ### MCMC Calc Survivors
                                tot_count <- apply(out_birth,2, sum)
                                surv_tbl <- out_birth
@@ -1744,11 +1728,23 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                  # surv_melt$Zeta[surv_melt$Birth == i] <- c(-diff(tmp_surv_i$Qty)/tmp_surv_i$Qty[-nrow(tmp_surv_i)], 0)
                                }
                                # surv_melt$Zeta <- 0.2*(surv_melt$Zeta)/(1/surv_melt$Zeta)
-                               ###
                                
                                ### MCMC Survivors * quarter
                                sprePlot[[sexDrop]][["lineSurv"]] <<- set_ggSurvLine(df_surv = surv_melt)
                                cat("Done!", sep = "")
+                             },
+                             calcMixDate = function(nAdap = 100, nSamp = 2000, nIter = 500, sexDrop = "Female", curveSel = "von Bertalanffy"){
+                               
+                               cat("\n\tGetting mcmc samples... ", sep = "")
+                               getMCsamps(numAdap = nAdap, numSamp = nSamp, numIter = nIter, sexDrop = sexDrop, curveSel = curveSel)
+                               cat("Done!", sep = "")
+                               cat("\n\tGetting growth parameters... ", sep = "")
+                               getGrowPar(sexDrop = sexDrop)
+                               cat("Done!", sep = "")
+                               cat("\n\tGetting age estimates... ", sep = "")
+                               getMCage(sexDrop = sexDrop)
+                               cat("Done!", sep = "")
+                               setMCplot(sexDrop = sexDrop)
                              },
                              ggplotMcmcOut = function(selCompo = "MCMC", selSex = "Female"){
                                switch(selCompo,
