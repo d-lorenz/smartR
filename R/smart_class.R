@@ -1294,7 +1294,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               
                               groMixout[[sexDrop]] <<- mix_out
                             },
-                            setMCplot = function(sexDrop = "Female"){
+                            setMCplot = function(sexDrop = "Female", selCurve = "von Bertalanffy"){
                               nIter <- nrow(as.matrix(sampMcmc[[sexDrop]][[1]]))
                               dfLinf <- data.frame(Parameter = "Linf",
                                                    Iter = 1:nIter,
@@ -1340,7 +1340,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                                                      Length = NA)
                               growPath$Age <- as.numeric(strtrim(growPath$Date, 4)) - growPath$Birth + as.numeric(substr(growPath$Date, 6,7))/12
                               
-                              if(curveSel == "von Bertalanffy"){
+                              if(selCurve == "von Bertalanffy"){
                                 growPath$Length <- calcVonBert(groPars[[sexDrop]]$LHat, groPars[[sexDrop]]$kHat, growPath$Age)
                               }else{
                                 growPath$Length <- calcGomp(groPars[[sexDrop]]$LHat, groPars[[sexDrop]]$kHat, growPath$Age)
@@ -1408,7 +1408,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               cat("\n\tGetting age estimates... ", sep = "")
                               getMCage(sexDrop = sexDrop)
                               cat("Done!", sep = "")
-                              setMCplot(sexDrop = sexDrop)
+                              setMCplot(sexDrop = sexDrop, selCurve = curveSel)
                             },
                             ggplotMcmcOut = function(selCompo = "MCMC", selSex = "Female"){
                               switch(selCompo,
@@ -1632,7 +1632,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                
                                groMixout[[sexDrop]] <<- mix_out
                              },
-                             setMCplot = function(sexDrop = "Female"){
+                             setMCplot = function(sexDrop = "Female", selCurve = "von Bertalanffy"){
                                nIter <- nrow(as.matrix(sampMcmc[[sexDrop]][[1]]))
                                dfLinf <- data.frame(Parameter = "Linf",
                                                     Iter = 1:nIter,
@@ -1678,7 +1678,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                                       Length = NA)
                                growPath$Age <- as.numeric(strtrim(growPath$Date, 4)) - growPath$Birth + as.numeric(substr(growPath$Date, 6,7))/12
                                
-                               if(curveSel == "von Bertalanffy"){
+                               if(selCurve == "von Bertalanffy"){
                                  growPath$Length <- calcVonBert(groPars[[sexDrop]]$LHat, groPars[[sexDrop]]$kHat, growPath$Age)
                                }else{
                                  growPath$Length <- calcGomp(groPars[[sexDrop]]$LHat, groPars[[sexDrop]]$kHat, growPath$Age)
@@ -1746,7 +1746,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                cat("\n\tGetting age estimates... ", sep = "")
                                getMCage(sexDrop = sexDrop)
                                cat("Done!", sep = "")
-                               setMCplot(sexDrop = sexDrop)
+                               setMCplot(sexDrop = sexDrop, selCurve = curveSel)
                              },
                              ggplotMcmcOut = function(selCompo = "MCMC", selSex = "Female"){
                                switch(selCompo,
