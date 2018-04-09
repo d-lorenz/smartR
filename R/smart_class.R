@@ -346,7 +346,7 @@ SmartProject <- R6Class("smartProject",
                               sampMap$plotGooSpeFis(tmp_data)
                             }
                           },
-                          setGooPlotCohoFish = function(specie = "", sex = "Female", speCol = ""){
+                          setGooPlotCohoFish = function(specie = "", sex = "Female", speCol = "", smooPoi = 500, smooBin = 0.5){
                             
                             cat("\n\nProcessing ", specie, " - ", sex, "... Cohort ", sep = "")
                             gooLstCoho[[specie]] <<- list()
@@ -398,8 +398,8 @@ SmartProject <- R6Class("smartProject",
                                                 mapping = aes(x = lon, y = lat, alpha =..level..),
                                                 fill = cohFillPal,
                                                 geom = "polygon",
-                                                n = 500,
-                                                h = 0.5,
+                                                n = smooPoi,
+                                                h = smooBin,
                                                 show.legend = FALSE) +
                                 scale_alpha_continuous(limits=c(0,0.4),breaks=seq(0,0.4,by=0.025)) +
                                 geom_polygon(aes(x = long, y = lat, group = group, alpha = 0.1),
