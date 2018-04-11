@@ -559,6 +559,34 @@ SmartProject <- R6Class("smartProject",
                             colnames(Prod) <- paste("PR_", as.character(seq(1, ncol(Prod))), sep = "")
                             fleet$predProd[[specie]] <<- Prod
                           },
+                          simProduction = function(specie){
+                            Prod <- matrix(data = NA, nrow(simEffo), ncol = sampMap$cutFG + 1)
+                            lyears <- sort(as.numeric(as.character(unique(simEffo$Year))))
+                            thrZero <- mean(fleet$effoProdAllLoa[,specie][fleet$effoProdAllLoa[,specie] < fleet$specSett[[specie]]$threshold & fleet$effoProdAllLoa[,specie] > 0])
+                            fgClms <- which(colnames(simEffo) %in% as.character(seq(1, sampMap$cutFG + 1)))
+                            datalog <- simEffo
+                            datalog$MonthNum <- as.factor(datalog$MonthNum)
+                            datalog$Year <- as.factor(datalog$Year)
+                            if(fleet$specLogit[[specie]]$logit$Name == "GLM"){
+                              infish <- which(predict(fleet$specLogit[[specie]]$logit$Model, datalog, type = "response") > fleet$specLogit[[specie]]$logit$Cut)
+                            }else{
+                              infish <- which(predict(fleet$specLogit[[specie]]$logit$Model, datalog, type = "prob")[,2] > fleet$specLogit[[specie]]$logit$Cut)
+                            }
+                            for(i in 1:length(infish)){
+                              idata <- as.numeric(simEffo[infish[i], fgClms])
+                              iloa <- as.numeric(simEffo[infish[i], "Loa"])
+                              iy <- which(lyears == simEffo[infish[i], "Year"])
+                              im <- as.numeric(as.character(fleet$simEffo[infish[i], "MonthNum"]))
+                              ib <- fleet$resNNLS[[specie]]$bmat[which((fleet$resNNLS[[specie]]$SceMat$YEAR == iy) & (fleet$resNNLS[[specie]]$SceMat$MONTH == im)),]
+                              # Prod[infish[i]] <- sum(ib * idata * iloa) + mean(fleet$effoProdAllLoa[,specie][fleet$effoProdAllLoa[,specie] < fleet$specSett[[specie]]$threshold & fleet$effoProdAllLoa[,specie] > 0])
+                              if(sum(ib*idata)>0){
+                                Prod[infish[i],] <- (ib * idata * iloa) + ((ib*idata)/sum(ib*idata))*thrZero
+                              }
+                            }
+                            Prod[is.na(Prod)] <- 0
+                            colnames(Prod) <- paste("PR_", as.character(seq(1, ncol(Prod))), sep = "")
+                            simProd[[specie]] <<- Prod
+                          },
                           ggplotFishingPoints = function(year){
                             tmp_dat <- fleet$rawEffort[[year]][sample(1:nrow(fleet$rawEffort[[year]]), min(c(50000, nrow(fleet$rawEffort[[year]])))),c("LON","LAT","FishPoint")]
                             tmp_dat$Status <- factor(tmp_dat$FishPoint, levels = c("FALSE", "TRUE"), labels = c("Not fishing", "Fishing"))
