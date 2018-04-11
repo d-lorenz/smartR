@@ -609,11 +609,11 @@ SmartProject <- R6Class("smartProject",
                               if(length(which(is.na(fDen)))>0) fDen[which(is.na(fDen))] <- 1
                             }
                             
-                            simEffo[selRow, ] <<- switch(selMode,
-                                                         flat = {apply(simEffo[selRow, ], 1, function(x) genFlatEffo(effoPatt = x))},
-                                                         flatDen = {apply(simEffo[selRow, ], 1, function(x) genFlatEffoDen(effoPatt = x, targetDensity = fDen))},
-                                                         ban = {apply(simEffo[selRow, ], 1, function(x) genBanEffo(effoPatt, set0 = areaBan))},
-                                                         banDen = {apply(simEffo[selRow, ], 1, function(x) genBanEffoDen(effoPatt, set0 = areaBan, targetDensity = fDen))})
+                            simEffo[selRow, 4:(ncol(simEffo)-1)] <<- switch(selMode,
+                                                         flat = {apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genFlatEffo(effoPatt = x))},
+                                                         flatDen = {apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genFlatEffoDen(effoPatt = x, targetDensity = fDen))},
+                                                         ban = {apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genBanEffo(effoPatt, set0 = areaBan))},
+                                                         banDen = {apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genBanEffoDen(effoPatt, set0 = areaBan, targetDensity = fDen))})
                           },
                           ggplotFishingPoints = function(year){
                             tmp_dat <- fleet$rawEffort[[year]][sample(1:nrow(fleet$rawEffort[[year]]), min(c(50000, nrow(fleet$rawEffort[[year]])))),c("LON","LAT","FishPoint")]
