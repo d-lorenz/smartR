@@ -587,6 +587,32 @@ SmartProject <- R6Class("smartProject",
                             colnames(Prod) <- paste("PR_", as.character(seq(1, ncol(Prod))), sep = "")
                             simProd[[specie]] <<- Prod
                           },
+                          genSimEffo = function(method = "flat", selRow = numeric(0), overDen = 1.05){
+                            if(is.null(simEffo)){
+                              simEffo <<- fleet$effoAllLoa
+                            }
+                            methods <- c("flat", "flatDen", "ban", "banDen")
+                            selMode <- modes[pmatch(method, methods)]
+                            
+                            if (is.na(selMode)) 
+                              stop("invalid effort generation metod")
+                            
+                            if(length(selRow) == 0)
+                              selRow <- 1:nrow(simEffo)
+                            
+                            if(selMode %in% c("flatDen", "banDen")){
+                              simDen <- apply(simEffo, 2, sum)/as.numeric(table(FGm$FG))
+                              obsDen <- apply(fleet$effoAllLoa[,4:(ncol(fleet$effoAllLoa)-1)],2,sum)/as.numeric(table(sampMap$cutResult$FG))
+                              fDen = simDen/(overDen*obsDen)
+                              if(length(which(is.na(fDen)))>0) fDen[which(is.na(fDen))] <- 1
+                            }
+                            
+                            simEffo[selRow, ] <<- switch(selMode,
+                                                         flat = {apply(simEffo[selRow, ], 1, function(x) genFlatEffo(effoPatt = x))},
+                                                         flatDen = {apply(simEffo[selRow, ], 1, function(x) genFlatEffoDen(effoPatt = x, targetDensity = fDen))},
+                                                         ban = {   },
+                                                         banDen = {   })
+                          },
                           ggplotFishingPoints = function(year){
                             tmp_dat <- fleet$rawEffort[[year]][sample(1:nrow(fleet$rawEffort[[year]]), min(c(50000, nrow(fleet$rawEffort[[year]])))),c("LON","LAT","FishPoint")]
                             tmp_dat$Status <- factor(tmp_dat$FishPoint, levels = c("FALSE", "TRUE"), labels = c("Not fishing", "Fishing"))
