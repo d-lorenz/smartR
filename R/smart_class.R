@@ -578,7 +578,7 @@ SmartProject <- R6Class("smartProject",
                               idata <- as.numeric(simEffo[infish[i], fgClms])
                               iloa <- as.numeric(simEffo[infish[i], "Loa"])
                               iy <- which(lyears == simEffo[infish[i], "Year"])
-                              im <- as.numeric(as.character(fleet$simEffo[infish[i], "MonthNum"]))
+                              im <- as.numeric(as.character(simEffo[infish[i], "MonthNum"]))
                               ib <- fleet$resNNLS[[specie]]$bmat[which((fleet$resNNLS[[specie]]$SceMat$YEAR == iy) & (fleet$resNNLS[[specie]]$SceMat$MONTH == im)),]
                               # Prod[infish[i]] <- sum(ib * idata * iloa) + mean(fleet$effoProdAllLoa[,specie][fleet$effoProdAllLoa[,specie] < fleet$specSett[[specie]]$threshold & fleet$effoProdAllLoa[,specie] > 0])
                               if(sum(ib*idata)>0){
