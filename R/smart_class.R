@@ -594,7 +594,7 @@ SmartProject <- R6Class("smartProject",
                               simEffo <<- fleet$effoAllLoa
                             }
                             methods <- c("flat", "flatDen", "ban", "banDen")
-                            selMode <- modes[pmatch(method, methods)]
+                            selMode <- methods[pmatch(method, methods)]
                             
                             if (is.na(selMode)) 
                               stop("invalid effort generation metod")
