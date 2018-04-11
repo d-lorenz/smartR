@@ -587,7 +587,7 @@ SmartProject <- R6Class("smartProject",
                             colnames(Prod) <- paste("PR_", as.character(seq(1, ncol(Prod))), sep = "")
                             simProd[[specie]] <<- Prod
                           },
-                          genSimEffo = function(method = "flat", selRow = numeric(0), overDen = 1.05){
+                          genSimEffo = function(method = "flat", selRow = numeric(0), overDen = 1.05, areaBan = numeric(0)){
                             if(is.null(simEffo)){
                               simEffo <<- fleet$effoAllLoa
                             }
@@ -610,8 +610,8 @@ SmartProject <- R6Class("smartProject",
                             simEffo[selRow, ] <<- switch(selMode,
                                                          flat = {apply(simEffo[selRow, ], 1, function(x) genFlatEffo(effoPatt = x))},
                                                          flatDen = {apply(simEffo[selRow, ], 1, function(x) genFlatEffoDen(effoPatt = x, targetDensity = fDen))},
-                                                         ban = {   },
-                                                         banDen = {   })
+                                                         ban = {apply(simEffo[selRow, ], 1, function(x) genBanEffo(effoPatt, set0 = areaBan))},
+                                                         banDen = {apply(simEffo[selRow, ], 1, function(x) genBanEffoDen(effoPatt, set0 = areaBan, targetDensity = fDen))})
                           },
                           ggplotFishingPoints = function(year){
                             tmp_dat <- fleet$rawEffort[[year]][sample(1:nrow(fleet$rawEffort[[year]]), min(c(50000, nrow(fleet$rawEffort[[year]])))),c("LON","LAT","FishPoint")]
