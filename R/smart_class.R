@@ -622,46 +622,45 @@ SmartProject <- R6Class("smartProject",
                                                          ban = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genBanEffo(effoPatt, set0 = areaBan)))},
                                                          banDen = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genBanEffoDen(effoPatt, set0 = areaBan, targetDensity = fDen)))})
                           },
-                          simSpatialCost = function(){
+                          getSimSpatialCost = function(){
                             tmp_ei <- apply(data.frame(mapply(`*`, simEffo[, 4:ncol(simEffo)], sampMap$fgWeigDist)), 1, sum)
                             tmpIndex <- data.frame(simEffo[,c(1:3,ncol(simEffo))], EffInd = tmp_ei)
                             simSpatialIndex <- aggregate(EffInd ~ I_NCEE + Year + Loa, tmpIndex, sum)
-                            predSpatCost = predict(fleet$outSpatialReg, simSpatialIndex)
+                            predSpatCost <- predict(fleet$outSpatialReg, simSpatialIndex)
                             simSpatialCost <<- cbind(simSpatialIndex, predSpatCost)
                             },
-                          simEffortCost = function(){
+                          getSimEffortCost = function(){
                             effortIndex <- aggregate(Freq ~ I_NCEE + Year + Loa + Kw, fleet$daysAtSea, sum)
                             predEffoCost <- predict(fleet$outEffortReg, effortIndex)
                             simEffortCost <<- cbind(effortIndex, predEffoCost)
                           },
+                          getSimProdCost = function(){
+                            outProd <- numeric(nrow(simProd[[1]]))
+                            for(specie in names(simProd)){
+                              outProd <- outProd + apply(simProd[[specie]],1, sum)
+                            }
+                            tmp_Prod <- data.frame(Year = simEffo$Year,
+                                                   I_NCEE = simEffo$I_NCEE,
+                                                   MonthNum = simEffo$MonthNum,
+                                                   Production = outProd)
+                            agg_ProdInd <- aggregate(Production ~ I_NCEE + Year, tmp_Prod, sum)
+                            predProdCost <- predict(fleet$outProductionReg, agg_ProdInd)
+                            simProdCost <<- cbind(agg_ProdInd, predProdCost = predProdCost)
+                          },
+                          getSimTotalCost = function(){
+                            getSimSpatialCost()
+                            getSimEffortCost()
+                            getSimProdCost()
+                            
+                            tmp_out_costs <- merge(merge(simEffortCost, simSpatialCost), simProdCost)
+                            out_costs <- tmp_out_costs[, c("I_NCEE", "Year", "Loa", "predEffoCost", "predSpatCost", "predProdCost")]
+                            out_costs$totCost <- out_costs$predEffoCost + out_costs$predSpatCost + out_costs$predProdCost
+                            
+                            simTotalCost <<- out_costs
+                          },
                           simCostRevenue = function(){
-                            # out_prod <- getProduction(effoPatt = effort_pattern,
-                            #                           numFG = number_fg,
-                            #                           thrZero = threshold_zero,
-                            #                           logitMod = logit_model,
-                            #                           nnlsMod = nnls_model)
                             simProdAll()
-                            
-                            # # CALL: Get Spatial Index
-                            # out_spatInd <- getSpatialIndex(effortPattern = effort_pattern, fgWeight = fg_weights)
-                            # # CALL: Get Spatial Cost
-                            # out_spatial_cost <- getSpatialCost(spatialIndex = out_spatInd, spatialCostModel = spatial_cost_model)
-                            # out_pred_spatial <- cbind(out_spatInd, predSpatCost = out_spatial_cost)
-                            simSpatialCost()
-                            
-                            # # CALL: Get Effort Index
-                            # out_effoInd <- getEffortIndex(daysAtSea = day_at_sea)
-                            # # CALL: Get Effort cost
-                            # out_effort_cost <- getEffortCost(effortIndex = out_effoInd, effortCostModel = effort_cost_model)
-                            # out_pred_effort <- cbind(out_effoInd, predEffoCost = out_effort_cost)
-                            simEffortCost()
-                            
-                            # CALL: Get Production Index
-                            tmp_newProd <- cbind(effort_pattern, out_prod)
-                            out_prod_ind <- getProductionIndex(productionPattern = tmp_newProd, numFG = number_fg)
-                            # CALL: Get Production Cost
-                            out_prod_cost <- getProductionCost(productionIndex = out_prod_ind, productionCostModel = production_cost_model)
-                            out_pred_prod <- cbind(out_prod_ind, predProdCost = out_prod_cost)
+                            getSimTotalCost()
                             
                           },
                           simulateFishery = function(){
