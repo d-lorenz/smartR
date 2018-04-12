@@ -28,6 +28,8 @@ SmartProject <- R6Class("smartProject",
                           simEffo = NULL,
                           simSpatialCost = NULL,
                           simEffortCost = NULL,
+                          simProdCost = NULL,
+                          simTotalCost = NULL,
                           # economy = NULL,
                           setCostInput = function(){
                             if(is.null(fleet$effortIndex)) stop("Missing Effort Index")
