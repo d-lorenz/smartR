@@ -563,14 +563,16 @@ SmartProject <- R6Class("smartProject",
                             colnames(Prod) <- paste("PR_", as.character(seq(1, ncol(Prod))), sep = "")
                             fleet$predProd[[specie]] <<- Prod
                           },
-                          simProduction = function(specie){
+                          simProdAll = function(){
                             Prod <- matrix(data = NA, nrow(simEffo), ncol = sampMap$cutFG + 1)
                             lyears <- sort(as.numeric(as.character(unique(simEffo$Year))))
-                            thrZero <- mean(fleet$effoProdAllLoa[,specie][fleet$effoProdAllLoa[,specie] < fleet$specSett[[specie]]$threshold & fleet$effoProdAllLoa[,specie] > 0])
-                            fgClms <- which(colnames(simEffo) %in% as.character(seq(1, sampMap$cutFG + 1)))
                             datalog <- simEffo
                             datalog$MonthNum <- as.factor(datalog$MonthNum)
                             datalog$Year <- as.factor(datalog$Year)
+                            fgClms <- which(colnames(simEffo) %in% as.character(seq(1, sampMap$cutFG + 1)))
+                            
+                            for(specie in names(fleet$specLogit)){
+                            thrZero <- mean(fleet$effoProdAllLoa[,specie][fleet$effoProdAllLoa[,specie] < fleet$specSett[[specie]]$threshold & fleet$effoProdAllLoa[,specie] > 0])
                             if(fleet$specLogit[[specie]]$logit$Name == "GLM"){
                               infish <- which(predict(fleet$specLogit[[specie]]$logit$Model, datalog, type = "response") > fleet$specLogit[[specie]]$logit$Cut)
                             }else{
@@ -590,6 +592,7 @@ SmartProject <- R6Class("smartProject",
                             Prod[is.na(Prod)] <- 0
                             colnames(Prod) <- paste("PR_", as.character(seq(1, ncol(Prod))), sep = "")
                             simProd[[specie]] <<- Prod
+                            }
                           },
                           genSimEffo = function(method = "flat", selRow = numeric(0), overDen = 1.05, areaBan = numeric(0)){
                             if(is.null(simEffo)){
