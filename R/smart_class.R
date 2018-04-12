@@ -620,6 +620,51 @@ SmartProject <- R6Class("smartProject",
                                                          ban = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genBanEffo(effoPatt, set0 = areaBan)))},
                                                          banDen = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genBanEffoDen(effoPatt, set0 = areaBan, targetDensity = fDen)))})
                           },
+                          simSpatialCost = function(){
+                            tmp_ei <- apply(data.frame(mapply(`*`, simEffo[, 4:ncol(simEffo)], sampMap$fgWeigDist)), 1, sum)
+                            tmpIndex <- data.frame(simEffo[,c(1:3,ncol(simEffo))], EffInd = tmp_ei)
+                            simSpatialIndex <- aggregate(EffInd ~ I_NCEE + Year + Loa, tmpIndex, sum)
+                            predSpatCost = predict(fleet$outSpatialReg, simSpatialIndex)
+                            simSpatialCost <<- cbind(simSpatialIndex, predSpatCost)
+                            },
+                          simEffortCost = function(){
+                            effortIndex <- aggregate(Freq ~ I_NCEE + Year + Loa + Kw, fleet$daysAtSea, sum)
+                            predEffoCost <- predict(fleet$outEffortReg, effortIndex)
+                            simEffortCost <<- cbind(effortIndex, predEffoCost)
+                          },
+                          simCostRevenue = function(){
+                            # out_prod <- getProduction(effoPatt = effort_pattern,
+                            #                           numFG = number_fg,
+                            #                           thrZero = threshold_zero,
+                            #                           logitMod = logit_model,
+                            #                           nnlsMod = nnls_model)
+                            simProdAll()
+                            
+                            # # CALL: Get Spatial Index
+                            # out_spatInd <- getSpatialIndex(effortPattern = effort_pattern, fgWeight = fg_weights)
+                            # # CALL: Get Spatial Cost
+                            # out_spatial_cost <- getSpatialCost(spatialIndex = out_spatInd, spatialCostModel = spatial_cost_model)
+                            # out_pred_spatial <- cbind(out_spatInd, predSpatCost = out_spatial_cost)
+                            simSpatialCost()
+                            
+                            # # CALL: Get Effort Index
+                            # out_effoInd <- getEffortIndex(daysAtSea = day_at_sea)
+                            # # CALL: Get Effort cost
+                            # out_effort_cost <- getEffortCost(effortIndex = out_effoInd, effortCostModel = effort_cost_model)
+                            # out_pred_effort <- cbind(out_effoInd, predEffoCost = out_effort_cost)
+                            simEffortCost()
+                            
+                            # CALL: Get Production Index
+                            tmp_newProd <- cbind(effort_pattern, out_prod)
+                            out_prod_ind <- getProductionIndex(productionPattern = tmp_newProd, numFG = number_fg)
+                            # CALL: Get Production Cost
+                            out_prod_cost <- getProductionCost(productionIndex = out_prod_ind, productionCostModel = production_cost_model)
+                            out_pred_prod <- cbind(out_prod_ind, predProdCost = out_prod_cost)
+                            
+                          },
+                          simulateFishery = function(){
+                            
+                          },
                           ggplotFishingPoints = function(year){
                             tmp_dat <- fleet$rawEffort[[year]][sample(1:nrow(fleet$rawEffort[[year]]), min(c(50000, nrow(fleet$rawEffort[[year]])))),c("LON","LAT","FishPoint")]
                             tmp_dat$Status <- factor(tmp_dat$FishPoint, levels = c("FALSE", "TRUE"), labels = c("Not fishing", "Fishing"))
