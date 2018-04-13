@@ -689,12 +689,26 @@ SmartProject <- R6Class("smartProject",
                             
                           },
                           simulateFishery = function(){
+                            cat("\nGetting length-weight statistics...", sep = "")
                             getLWstat()
+                            cat("Done!", sep = "")
                             
+                            cat("\nGenerating simulated effort...", sep = "")
                             genSimEffo()
+                            cat("Done!", sep = "")
+                            
+                            cat("\nGetting simulated production...", sep = "")
                             simProdAll()
+                            cat("Done!", sep = "")
+                            
+                            cat("\nGetting simulated total costs...", sep = "")
                             getSimTotalCost()
+                            cat("Done!", sep = "")
+                            
+                            cat("\nGetting simulated revenues...", sep = "")
                             getSimCostRevenue()
+                            cat("Done!", sep = "")
+                            
                             
                           },
                           ggplotFishingPoints = function(year){
