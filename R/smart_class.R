@@ -683,7 +683,7 @@ SmartProject <- R6Class("smartProject",
                                   preRevenue[[i]] <- my_project$fisheryBySpecie[[specie]]$LWstat[my_project$fisheryBySpecie[[specie]]$LWstat$FG == substr(i, 4, nchar(i)),]
                                   preRevenue[[i]]$absAbb <- preRevenue[[i]]$relAbb/sum(preRevenue[[i]]$relAbb)
                                 }
-                                outWeiProp[[specie]] <<- preRevenue
+                                outWeiProp[[my_project$fisheryBySpecie[[specie]]$specie]] <<- preRevenue
                               }
                             }
                             
