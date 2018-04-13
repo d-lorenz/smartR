@@ -659,11 +659,22 @@ SmartProject <- R6Class("smartProject",
                             simTotalCost <<- out_costs
                           },
                           simCostRevenue = function(){
-                            simProdAll()
-                            getSimTotalCost()
+                            
                             
                           },
+                          getLWstat = function(){
+                            if(is.null(fisheryBySpecie)){
+                              stop("No mcmc output found")
+                            }else{
+                              for(specie in 1:length(fisheryBySpecie)){
+                                fisheryBySpecie[[specie]]$setLWstat()
+                              }
+                            }
+                          },
                           simulateFishery = function(){
+                            simProdAll()
+                            getSimTotalCost()
+                            getLWstat()
                             
                           },
                           ggplotFishingPoints = function(year){
@@ -1578,6 +1589,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                              Coh_A_Int = NULL,
                              # Fis_Gro = NULL,
                              LWpar = list(),
+                             LWstat = list(),
                              # scorVec = NULL,
                              # qMedits = NULL,
                              # bRefs = NULL,
