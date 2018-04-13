@@ -1660,6 +1660,18 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                              setWeight = function(sexVal = "Female"){
                                groMixout[[sexVal]]$Weight <<- LWpar[[sexVal]][["alpha"]] * groMixout[[sexVal]]$Length ^ LWpar[[sexVal]][["beta"]]
                              },
+                             setLWstat = function(){
+                               for(sex in names(groMixout)){
+                                 if("Weight" %in% colnames(groMixout[[sex]])){
+                                   tmp_lw <- ddply(groMixout[[sex]], .(round(Weight), FG), summarise,
+                                                   avgLen = mean(Length), sdLen = sd(Length), relAbb = length(Length))
+                                   tmp_lw <- tmp_lw[-which(is.na(tmp_lw), arr.ind = TRUE)[,1],]
+                                   LWstat[[sex]] <<- tmp_lw
+                                 }else{
+                                   stop("Set length-weight relationship first!")
+                                 }
+                               }
+                             },
                              getMCsamps = function(numSamp = 2000, numAdap = 100, numIter = 500, sexDrop = "Female", curveSel = "von Bertalanffy"){
                                
                                sub_idx <- sample(1:nrow(spreDist[[sexDrop]]), size = numSamp, replace = ifelse(numSamp < nrow(spreDist[[sexDrop]]), FALSE, TRUE))
