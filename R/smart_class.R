@@ -624,7 +624,7 @@ SmartProject <- R6Class("smartProject",
                                                                             banDen = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genBanEffoDen(effoPatt, set0 = areaBan, targetDensity = fDen)))})
                           },
                           getSimSpatialCost = function(){
-                            tmp_ei <- apply(data.frame(mapply(`*`, simEffo[, 4:ncol(simEffo)], sampMap$fgWeigDist)), 1, sum)
+                            tmp_ei <- apply(data.frame(mapply(`*`, simEffo[, 4:(ncol(simEffo)-1)], sampMap$fgWeigDist)), 1, sum)
                             tmpIndex <- data.frame(simEffo[,c(1:3,ncol(simEffo))], EffInd = tmp_ei)
                             simSpatialIndex <- aggregate(EffInd ~ I_NCEE + Year + Loa, tmpIndex, sum)
                             predSpatCost <- predict(fleet$outSpatialReg, simSpatialIndex)
