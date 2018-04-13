@@ -669,8 +669,20 @@ SmartProject <- R6Class("smartProject",
                             }else{
                               for(specie in 1:length(fisheryBySpecie)){
                                 fisheryBySpecie[[specie]]$setLWstat()
+                                outWeiProp[[specie]] <<- list()
+                                for(sex in names(my_project$fisheryBySpecie[[specie]]$LWstat)){
+                                  fgNames <- paste0("LW_", 1:(my_project$sampMap$cutFG+1))
+                                  preRevenue <- vector("list", length(fgNames))
+                                  names(preRevenue) <- fgNames
+                                  for(i in names(preRevenue)){
+                                    preRevenue[[i]] <- my_project$fisheryBySpecie[[specie]]$LWstat[[sex]][my_project$fisheryBySpecie[[specie]]$LWstat[[sex]]$FG == substr(i, 4, nchar(i)),]
+                                    preRevenue[[i]]$absAbb <- preRevenue[[i]]$relAbb/sum(preRevenue[[i]]$relAbb)
+                                  }
+                                  outWeiProp[[specie]][[sex]] <<- preRevenue
+                                }
                               }
                             }
+                            
                           },
                           simulateFishery = function(){
                             simProdAll()
