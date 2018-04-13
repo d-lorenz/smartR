@@ -357,7 +357,7 @@ SmartProject <- R6Class("smartProject",
                             cat("\n\nProcessing ", specie, " - ", sex, "... Cohort ", sep = "")
                             gooLstCoho[[specie]] <<- list()
                             gooLstCoho[[specie]][[sex]] <<- list()
-
+                            
                             tmpMix <- fisheryBySpecie[[which(specieInFishery == specie)]]$groMixout[[sex]]
                             ageFGtbl <- table(tmpMix$FG, tmpMix$Age)
                             cohAbuFG <- as.data.frame(cbind(FG = as.numeric(rownames(ageFGtbl)), ageFGtbl))
@@ -379,39 +379,39 @@ SmartProject <- R6Class("smartProject",
                                                      lat = rep(grid_data[!is.na(grid_data$NumInd),]$lat, grid_data[!is.na(grid_data$NumInd),]$NumInd))
                               
                               mapCoho <- suppressMessages(sampMap$gooMapPlot + 
-                                geom_polygon(aes(x = long, y = lat, group = group, fill = NumInd),
-                                             colour = "black", size = 0.1, data = grid_data, alpha = 0.8) +
-                                scale_fill_gradient(paste0("Max abundance\n", max(cohAbuFG[,coh_i]), " specimens"),
-                                                    low = "Grey85", high = cohFillPal, 
-                                                    # trans = "log10",
-                                                    breaks = pretty(1:100, 5), limits = c(1,100)) +
-                                ggtitle(paste0("Spatial Distribution of ", specie," - Cohort ", coh_i - 2)) +
-                                geom_text(aes(label = cell_id, x = Lon, y = Lat),
-                                          data = tmp_coo, size = 2) +
-                                lims(x = extendrange(sampMap$plotRange[1:2]),
-                                     y = extendrange(sampMap$plotRange[3:4])) +
-                                theme(legend.position = c(0.1, 0.22),
-                                      legend.text = element_text(size = 10, colour="grey19"),
-                                      # legend.title = element_blank(),
-                                      legend.background = element_rect(fill = rgb(1,1,1,0.5)),
-                                      axis.text.x = element_text(size = 10),
-                                      axis.title.x = element_text(size = 12),
-                                      axis.text.y = element_text(size = 10),
-                                      legend.key.size = unit(0.75, "cm"),
-                                      axis.title.y = element_text(size = 12),
-                                      plot.title = element_text(size = 20)) + 
-                                stat_density_2d(data = tmp_dens, 
-                                                mapping = aes(x = lon, y = lat, alpha =..level..),
-                                                fill = cohFillPal,
-                                                geom = "polygon",
-                                                n = smooPoi,
-                                                h = smooBin,
-                                                show.legend = FALSE) +
-                                scale_alpha_continuous(limits=c(0,0.4),breaks=seq(0,0.4,by=0.025)) +
-                                geom_polygon(aes(x = long, y = lat, group = group, alpha = 0.1),
-                                             colour = "black", size = 0.1, data = grid_data, alpha = 0.8, fill = NA)+
-                                geom_text(aes(label = cell_id, x = Lon, y = Lat),
-                                          data = tmp_coo, size = 2))
+                                                            geom_polygon(aes(x = long, y = lat, group = group, fill = NumInd),
+                                                                         colour = "black", size = 0.1, data = grid_data, alpha = 0.8) +
+                                                            scale_fill_gradient(paste0("Max abundance\n", max(cohAbuFG[,coh_i]), " specimens"),
+                                                                                low = "Grey85", high = cohFillPal, 
+                                                                                # trans = "log10",
+                                                                                breaks = pretty(1:100, 5), limits = c(1,100)) +
+                                                            ggtitle(paste0("Spatial Distribution of ", specie," - Cohort ", coh_i - 2)) +
+                                                            geom_text(aes(label = cell_id, x = Lon, y = Lat),
+                                                                      data = tmp_coo, size = 2) +
+                                                            lims(x = extendrange(sampMap$plotRange[1:2]),
+                                                                 y = extendrange(sampMap$plotRange[3:4])) +
+                                                            theme(legend.position = c(0.1, 0.22),
+                                                                  legend.text = element_text(size = 10, colour="grey19"),
+                                                                  # legend.title = element_blank(),
+                                                                  legend.background = element_rect(fill = rgb(1,1,1,0.5)),
+                                                                  axis.text.x = element_text(size = 10),
+                                                                  axis.title.x = element_text(size = 12),
+                                                                  axis.text.y = element_text(size = 10),
+                                                                  legend.key.size = unit(0.75, "cm"),
+                                                                  axis.title.y = element_text(size = 12),
+                                                                  plot.title = element_text(size = 20)) + 
+                                                            stat_density_2d(data = tmp_dens, 
+                                                                            mapping = aes(x = lon, y = lat, alpha =..level..),
+                                                                            fill = cohFillPal,
+                                                                            geom = "polygon",
+                                                                            n = smooPoi,
+                                                                            h = smooBin,
+                                                                            show.legend = FALSE) +
+                                                            scale_alpha_continuous(limits=c(0,0.4),breaks=seq(0,0.4,by=0.025)) +
+                                                            geom_polygon(aes(x = long, y = lat, group = group, alpha = 0.1),
+                                                                         colour = "black", size = 0.1, data = grid_data, alpha = 0.8, fill = NA)+
+                                                            geom_text(aes(label = cell_id, x = Lon, y = Lat),
+                                                                      data = tmp_coo, size = 2))
                               
                               gooLstCoho[[specie]][[sex]][[colnames(ageFGtbl)[coh_i-1]]] <<- mapCoho
                             }
@@ -574,26 +574,26 @@ SmartProject <- R6Class("smartProject",
                             fgClms <- which(colnames(simEffo) %in% as.character(seq(1, sampMap$cutFG + 1)))
                             
                             for(specie in names(fleet$specLogit)){
-                            thrZero <- mean(fleet$effoProdAllLoa[,specie][fleet$effoProdAllLoa[,specie] < fleet$specSett[[specie]]$threshold & fleet$effoProdAllLoa[,specie] > 0])
-                            if(fleet$specLogit[[specie]]$logit$Name == "GLM"){
-                              infish <- which(predict(fleet$specLogit[[specie]]$logit$Model, datalog, type = "response") > fleet$specLogit[[specie]]$logit$Cut)
-                            }else{
-                              infish <- which(predict(fleet$specLogit[[specie]]$logit$Model, datalog, type = "prob")[,2] > fleet$specLogit[[specie]]$logit$Cut)
-                            }
-                            for(i in 1:length(infish)){
-                              idata <- as.numeric(simEffo[infish[i], fgClms])
-                              iloa <- as.numeric(simEffo[infish[i], "Loa"])
-                              iy <- which(lyears == simEffo[infish[i], "Year"])
-                              im <- as.numeric(as.character(simEffo[infish[i], "MonthNum"]))
-                              ib <- fleet$resNNLS[[specie]]$bmat[which((fleet$resNNLS[[specie]]$SceMat$YEAR == iy) & (fleet$resNNLS[[specie]]$SceMat$MONTH == im)),]
-                              # Prod[infish[i]] <- sum(ib * idata * iloa) + mean(fleet$effoProdAllLoa[,specie][fleet$effoProdAllLoa[,specie] < fleet$specSett[[specie]]$threshold & fleet$effoProdAllLoa[,specie] > 0])
-                              if(sum(ib*idata)>0){
-                                Prod[infish[i],] <- (ib * idata * iloa) + ((ib*idata)/sum(ib*idata))*thrZero
+                              thrZero <- mean(fleet$effoProdAllLoa[,specie][fleet$effoProdAllLoa[,specie] < fleet$specSett[[specie]]$threshold & fleet$effoProdAllLoa[,specie] > 0])
+                              if(fleet$specLogit[[specie]]$logit$Name == "GLM"){
+                                infish <- which(predict(fleet$specLogit[[specie]]$logit$Model, datalog, type = "response") > fleet$specLogit[[specie]]$logit$Cut)
+                              }else{
+                                infish <- which(predict(fleet$specLogit[[specie]]$logit$Model, datalog, type = "prob")[,2] > fleet$specLogit[[specie]]$logit$Cut)
                               }
-                            }
-                            Prod[is.na(Prod)] <- 0
-                            colnames(Prod) <- paste("PR_", as.character(seq(1, ncol(Prod))), sep = "")
-                            simProd[[specie]] <<- Prod
+                              for(i in 1:length(infish)){
+                                idata <- as.numeric(simEffo[infish[i], fgClms])
+                                iloa <- as.numeric(simEffo[infish[i], "Loa"])
+                                iy <- which(lyears == simEffo[infish[i], "Year"])
+                                im <- as.numeric(as.character(simEffo[infish[i], "MonthNum"]))
+                                ib <- fleet$resNNLS[[specie]]$bmat[which((fleet$resNNLS[[specie]]$SceMat$YEAR == iy) & (fleet$resNNLS[[specie]]$SceMat$MONTH == im)),]
+                                # Prod[infish[i]] <- sum(ib * idata * iloa) + mean(fleet$effoProdAllLoa[,specie][fleet$effoProdAllLoa[,specie] < fleet$specSett[[specie]]$threshold & fleet$effoProdAllLoa[,specie] > 0])
+                                if(sum(ib*idata)>0){
+                                  Prod[infish[i],] <- (ib * idata * iloa) + ((ib*idata)/sum(ib*idata))*thrZero
+                                }
+                              }
+                              Prod[is.na(Prod)] <- 0
+                              colnames(Prod) <- paste("PR_", as.character(seq(1, ncol(Prod))), sep = "")
+                              simProd[[specie]] <<- Prod
                             }
                           },
                           genSimEffo = function(method = "flat", selRow = numeric(0), overDen = 1.05, areaBan = numeric(0)){
@@ -617,10 +617,10 @@ SmartProject <- R6Class("smartProject",
                             }
                             
                             simEffo[selRow, 4:(ncol(simEffo)-1)] <<- switch(selMode,
-                                                         flat = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genFlatEffo(effoPatt = x)))},
-                                                         flatDen = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genFlatEffoDen(effoPatt = x, targetDensity = fDen)))},
-                                                         ban = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genBanEffo(effoPatt, set0 = areaBan)))},
-                                                         banDen = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genBanEffoDen(effoPatt, set0 = areaBan, targetDensity = fDen)))})
+                                                                            flat = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genFlatEffo(effoPatt = x)))},
+                                                                            flatDen = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genFlatEffoDen(effoPatt = x, targetDensity = fDen)))},
+                                                                            ban = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genBanEffo(effoPatt, set0 = areaBan)))},
+                                                                            banDen = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genBanEffoDen(effoPatt, set0 = areaBan, targetDensity = fDen)))})
                           },
                           getSimSpatialCost = function(){
                             tmp_ei <- apply(data.frame(mapply(`*`, simEffo[, 4:ncol(simEffo)], sampMap$fgWeigDist)), 1, sum)
@@ -628,7 +628,7 @@ SmartProject <- R6Class("smartProject",
                             simSpatialIndex <- aggregate(EffInd ~ I_NCEE + Year + Loa, tmpIndex, sum)
                             predSpatCost <- predict(fleet$outSpatialReg, simSpatialIndex)
                             simSpatialCost <<- cbind(simSpatialIndex, predSpatCost)
-                            },
+                          },
                           getSimEffortCost = function(){
                             effortIndex <- aggregate(Freq ~ I_NCEE + Year + Loa + Kw, fleet$daysAtSea, sum)
                             predEffoCost <- predict(fleet$outEffortReg, effortIndex)
