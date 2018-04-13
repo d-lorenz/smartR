@@ -1609,7 +1609,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                              Coh_A_Int = NULL,
                              # Fis_Gro = NULL,
                              LWpar = list(),
-                             LWstat = list(),
+                             LWstat = NULL,
                              # scorVec = NULL,
                              # qMedits = NULL,
                              # bRefs = NULL,
@@ -1681,16 +1681,12 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                groMixout[[sexVal]]$Weight <<- LWpar[[sexVal]][["alpha"]] * groMixout[[sexVal]]$Length ^ LWpar[[sexVal]][["beta"]]
                              },
                              setLWstat = function(){
-                               for(sex in names(groMixout)){
-                                 if("Weight" %in% colnames(groMixout[[sex]])){
-                                   tmp_lw <- ddply(groMixout[[sex]], .(round(Weight), FG), summarise,
-                                                   avgLen = mean(Length), sdLen = sd(Length), relAbb = length(Length))
-                                   tmp_lw <- tmp_lw[-which(is.na(tmp_lw), arr.ind = TRUE)[,1],]
-                                   LWstat[[sex]] <<- tmp_lw
-                                 }else{
-                                   stop("Set length-weight relationship first!")
-                                 }
-                               }
+                               tmp_out <- do.call(rbind, groMixout)
+                               tmp_out$Weight <- ceiling(tmp_out$Weight)
+                               tmp_lw <- ddply(tmp_out, .(Weight, FG), summarise,
+                                               avgLen = mean(Length), sdLen = sd(Length), relAbb = length(Length))
+                               tmp_lw <- tmp_lw[-which(is.na(tmp_lw), arr.ind = TRUE)[,1],]
+                               LWstat <<- tmp_lw
                              },
                              getMCsamps = function(numSamp = 2000, numAdap = 100, numIter = 500, sexDrop = "Female", curveSel = "von Bertalanffy"){
                                
