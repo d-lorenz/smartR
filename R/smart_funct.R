@@ -349,3 +349,39 @@ genBanEffoDen = function(effoPatt, set0, targetDensity){
   Estar[Ename] = as.numeric(table(Ecell))
   return(Estar)
 }
+
+getPropWeig = function(tarWei, lwClass, nameFG, sizeClass, classPrice){
+  if(tarWei == 0){
+    outData <- data.frame(0)
+    names(outData) <- paste0("RV_", ifelse(nchar(nameFG) == 2, nameFG, paste0("0", nameFG)))
+  }else if(nrow(lwClass[[1]]) == 0){
+    outData <- data.frame(NA)
+    names(outData) <- paste0("RV_", ifelse(nchar(nameFG) == 2, nameFG, paste0("0", nameFG)))
+  }else{
+    tmp_Revenue <- data.frame(avgLen = lwClass[[1]]$avgLen, propWei = tarWei*lwClass[[1]]$absAbb)
+    tmp_Revenue$SizeClass <- findInterval(x = tmp_Revenue$avgLen, vec = sizeClass)
+    tmpWei <- aggregate(formula = propWei ~ SizeClass, data = tmp_Revenue, FUN = sum)
+    outData <- data.frame(sum(tmpWei$propWei*classPrice))
+    names(outData) <- paste0("RV_", ifelse(nchar(nameFG) == 2, nameFG, paste0("0", nameFG)))
+  }
+  return(outData)
+}
+
+getPropWeiRow = function(prodRow, inLWclas, inNames, vecClass, vecPrice){
+  tmp_out <- lapply(seq_along(prodRow), function(i, y) {getPropWeig(tarWei = prodRow[i],
+                                                                    lwClass = inLWclas[substr(names(inLWclas), 4, nchar(names(inLWclas))) == i],
+                                                                    nameFG = i,
+                                                                    sizeClass = vecClass,
+                                                                    classPrice = vecPrice)}, y = inNames)
+  do.call(cbind, tmp_out)
+}
+
+getFleetRevenue = function(predProd, lwStat, fgNames, classVec, priceVec){
+  outProp <- apply(predProd, 1, function(x) getPropWeiRow(prodRow = x,
+                                                          inLWclas = lwStat,
+                                                          inNames = fgNames,
+                                                          vecClass = classVec,
+                                                          vecPrice = priceVec))
+  outProp <- do.call(rbind, outProp)
+  return(outProp)
+}
