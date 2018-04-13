@@ -30,6 +30,7 @@ SmartProject <- R6Class("smartProject",
                           simEffortCost = NULL,
                           simProdCost = NULL,
                           simTotalCost = NULL,
+                          simCostRevenue = NULL,
                           outWeiProp = NULL,
                           # economy = NULL,
                           setCostInput = function(){
@@ -659,9 +660,15 @@ SmartProject <- R6Class("smartProject",
                             
                             simTotalCost <<- out_costs
                           },
-                          simCostRevenue = function(){
-                            
-                            
+                          getSimCostRevenue = function(){
+                            for(specie in names(simProd)){
+                              vecSize <- sort(unique(c(fleet$ecoPrice[[specie]]$LowerBound, fleet$ecoPrice[[specie]]$UpperBound)))
+                              simCostRevenue[[specie]] <<- getFleetRevenue(predProd = simProd[[specie]],
+                                                                           lwStat = outWeiProp[[specie]],
+                                                                           fgNames = substr(colnames(simProd[[specie]]), 4, nchar(colnames(simProd[[specie]]))),
+                                                                           classVec = vecSize,
+                                                                           priceVec = fleet$ecoPrice[[specie]]$Price)
+                            }
                           },
                           getLWstat = function(){
                             if(is.null(fisheryBySpecie)){
@@ -669,25 +676,25 @@ SmartProject <- R6Class("smartProject",
                             }else{
                               for(specie in 1:length(fisheryBySpecie)){
                                 fisheryBySpecie[[specie]]$setLWstat()
-                                outWeiProp[[specie]] <<- list()
-                                for(sex in names(my_project$fisheryBySpecie[[specie]]$LWstat)){
-                                  fgNames <- paste0("LW_", 1:(my_project$sampMap$cutFG+1))
-                                  preRevenue <- vector("list", length(fgNames))
-                                  names(preRevenue) <- fgNames
-                                  for(i in names(preRevenue)){
-                                    preRevenue[[i]] <- my_project$fisheryBySpecie[[specie]]$LWstat[[sex]][my_project$fisheryBySpecie[[specie]]$LWstat[[sex]]$FG == substr(i, 4, nchar(i)),]
-                                    preRevenue[[i]]$absAbb <- preRevenue[[i]]$relAbb/sum(preRevenue[[i]]$relAbb)
-                                  }
-                                  outWeiProp[[specie]][[sex]] <<- preRevenue
+                                fgNames <- paste0("LW_", 1:(my_project$sampMap$cutFG+1))
+                                preRevenue <- vector("list", length(fgNames))
+                                names(preRevenue) <- fgNames
+                                for(i in names(preRevenue)){
+                                  preRevenue[[i]] <- my_project$fisheryBySpecie[[specie]]$LWstat[my_project$fisheryBySpecie[[specie]]$LWstat$FG == substr(i, 4, nchar(i)),]
+                                  preRevenue[[i]]$absAbb <- preRevenue[[i]]$relAbb/sum(preRevenue[[i]]$relAbb)
                                 }
+                                outWeiProp[[specie]] <<- preRevenue
                               }
                             }
                             
                           },
                           simulateFishery = function(){
+                            getLWstat()
+                            
+                            genSimEffo()
                             simProdAll()
                             getSimTotalCost()
-                            getLWstat()
+                            getSimCostRevenue()
                             
                           },
                           ggplotFishingPoints = function(year){
