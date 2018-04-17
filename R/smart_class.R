@@ -662,7 +662,7 @@ SmartProject <- R6Class("smartProject",
                           },
                           getSimCostRevenue = function(){
                             for(specie in names(simProd)){
-                              vecSize <- sort(unique(c(fleet$ecoPrice[[specie]]$LowerBound, fleet$ecoPrice[[specie]]$UpperBound)))
+                              # vecSize <- sort(unique(c(fleet$ecoPrice[[specie]]$LowerBound, fleet$ecoPrice[[specie]]$UpperBound)))
                               simCostRevenue[[specie]] <<- getFleetRevenue(predProd = simProd[[specie]],
                                                                            lwStat = outWeiProp[[specie]],
                                                                            fgNames = substr(colnames(simProd[[specie]]), 4, nchar(colnames(simProd[[specie]]))),
@@ -671,22 +671,28 @@ SmartProject <- R6Class("smartProject",
                             }
                           },
                           getLWstat = function(){
-                            if(is.null(fisheryBySpecie)){
+                            if(is.null(fisheryBySpecie))
                               stop("No mcmc output found")
-                            }else{
-                              for(specie in 1:length(fisheryBySpecie)){
+                            
+                            for(specie in 1:length(fisheryBySpecie)){
+                              if(is.null(fleet$ecoPrice[[specie]]))
+                                stop(paste0("No size/price data found for specie ", specie))
+                              
+                              vecSize <- sort(unique(c(fleet$ecoPrice[[specie]]$LowerBound, fleet$ecoPrice[[specie]]$UpperBound)))
+                              
                                 fisheryBySpecie[[specie]]$setLWstat()
-                                fgNames <- paste0("LW_", 1:(my_project$sampMap$cutFG+1))
+                                fgNames <- paste0("LW_", 1:(sampMap$cutFG+1))
                                 preRevenue <- vector("list", length(fgNames))
                                 names(preRevenue) <- fgNames
                                 for(i in names(preRevenue)){
-                                  preRevenue[[i]] <- my_project$fisheryBySpecie[[specie]]$LWstat[my_project$fisheryBySpecie[[specie]]$LWstat$FG == substr(i, 4, nchar(i)),]
-                                  preRevenue[[i]]$absAbb <- preRevenue[[i]]$relAbb/sum(preRevenue[[i]]$relAbb)
+                                  tempRev <- fisheryBySpecie[[specie]]$LWstat[fisheryBySpecie[[specie]]$LWstat$FG == substr(i, 4, nchar(i)),]
+                                  tempRev$absAbb <- tempRev$relAbb/sum(tempRev$relAbb)
+                                  tempRev$SizeClass <- factor(findInterval(x = tempRev$avgLen, vec = vecSize), levels = 2:length(vecSize))
+                                  outClass <- merge(data.frame(SizeClass = levels(tempRev$SizeClass)), aggregate(formula = propWei ~ SizeClass, data = tempRev, FUN = sum), all.x = TRUE)
+                                  preRevenue[[i]] <- outClass
                                 }
-                                outWeiProp[[my_project$fisheryBySpecie[[specie]]$specie]] <<- preRevenue
-                              }
+                                outWeiProp[[fisheryBySpecie[[specie]]$specie]] <<- preRevenue
                             }
-                            
                           },
                           simulateFishery = function(){
                             cat("\nGetting length-weight statistics...", sep = "")
