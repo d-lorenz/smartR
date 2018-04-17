@@ -354,7 +354,7 @@ getPropWeig = function(tarWei, lwClass, nameFG, sizeClass, classPrice){
   if(tarWei == 0){
     outData <- data.frame(0)
     names(outData) <- paste0("RV_", ifelse(nchar(nameFG) == 2, nameFG, paste0("0", nameFG)))
-  }else if(nrow(lwClass[[1]]) == 0){
+  }else if(is.null(lwClass[[1]])){
     outData <- data.frame(NA)
     names(outData) <- paste0("RV_", ifelse(nchar(nameFG) == 2, nameFG, paste0("0", nameFG)))
   }else{
