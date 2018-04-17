@@ -686,7 +686,7 @@ SmartProject <- R6Class("smartProject",
                                 names(preRevenue) <- fgNames
                                 for(i in names(preRevenue)){
                                   tempRev <- fisheryBySpecie[[specie]]$LWstat[fisheryBySpecie[[specie]]$LWstat$FG == substr(i, 4, nchar(i)),]
-                                  tempRev$absAbb <- tempRev$relAbb/sum(tempRev$relAbb)
+                                  tempRev$propWei <- tempRev$relAbb/sum(tempRev$relAbb)
                                   tempRev$SizeClass <- factor(findInterval(x = tempRev$avgLen, vec = vecSize), levels = 2:length(vecSize))
                                   outClass <- merge(data.frame(SizeClass = levels(tempRev$SizeClass)), aggregate(formula = propWei ~ SizeClass, data = tempRev, FUN = sum), all.x = TRUE)
                                   preRevenue[[i]] <- outClass
