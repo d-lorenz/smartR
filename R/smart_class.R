@@ -30,7 +30,7 @@ SmartProject <- R6Class("smartProject",
                           simEffortCost = NULL,
                           simProdCost = NULL,
                           simTotalCost = NULL,
-                          simCostRevenue = NULL,
+                          simRevenue = NULL,
                           outWeiProp = NULL,
                           # economy = NULL,
                           setCostInput = function(){
@@ -660,10 +660,10 @@ SmartProject <- R6Class("smartProject",
                             
                             simTotalCost <<- out_costs
                           },
-                          getSimCostRevenue = function(){
+                          getSimRevenue = function(){
                             for(specie in names(simProd)){
                               # vecSize <- sort(unique(c(fleet$ecoPrice[[specie]]$LowerBound, fleet$ecoPrice[[specie]]$UpperBound)))
-                              simCostRevenue[[specie]] <<- getFleetRevenue(predProd = simProd[[specie]],
+                              simRevenue[[specie]] <<- getFleetRevenue(predProd = simProd[[specie]],
                                                                            lwStat = outWeiProp[[specie]],
                                                                            fgNames = substr(colnames(simProd[[specie]]), 4, nchar(colnames(simProd[[specie]]))),
                                                                            classVec = vecSize,
@@ -712,7 +712,7 @@ SmartProject <- R6Class("smartProject",
                             cat("Done!", sep = "")
                             
                             cat("\nGetting simulated revenues...", sep = "")
-                            getSimCostRevenue()
+                            getSimRevenue()
                             cat("Done!", sep = "")
                             
                             
