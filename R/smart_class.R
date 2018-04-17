@@ -680,18 +680,22 @@ SmartProject <- R6Class("smartProject",
                               
                               vecSize <- sort(unique(c(fleet$ecoPrice[[specie]]$LowerBound, fleet$ecoPrice[[specie]]$UpperBound)))
                               
-                                fisheryBySpecie[[specie]]$setLWstat()
-                                fgNames <- paste0("LW_", 1:(sampMap$cutFG+1))
-                                preRevenue <- vector("list", length(fgNames))
-                                names(preRevenue) <- fgNames
-                                for(i in names(preRevenue)){
-                                  tempRev <- fisheryBySpecie[[specie]]$LWstat[fisheryBySpecie[[specie]]$LWstat$FG == substr(i, 4, nchar(i)),]
+                              fisheryBySpecie[[specie]]$setLWstat()
+                              fgNames <- paste0("LW_", 1:(sampMap$cutFG+1))
+                              preRevenue <- vector("list", length(fgNames))
+                              names(preRevenue) <- fgNames
+                              for(i in names(preRevenue)){
+                                tempRev <- fisheryBySpecie[[specie]]$LWstat[fisheryBySpecie[[specie]]$LWstat$FG == substr(i, 4, nchar(i)),]
+                                if(nrow(tempRev) == 0){
+                                  preRevenue[[i]] <- NULL
+                                }else{
                                   tempRev$propWei <- tempRev$relAbb/sum(tempRev$relAbb)
                                   tempRev$SizeClass <- factor(findInterval(x = tempRev$avgLen, vec = vecSize), levels = 2:length(vecSize))
                                   outClass <- merge(data.frame(SizeClass = levels(tempRev$SizeClass)), aggregate(formula = propWei ~ SizeClass, data = tempRev, FUN = sum), all.x = TRUE)
                                   preRevenue[[i]] <- outClass
                                 }
-                                outWeiProp[[fisheryBySpecie[[specie]]$specie]] <<- preRevenue
+                              }
+                              outWeiProp[[fisheryBySpecie[[specie]]$specie]] <<- preRevenue
                             }
                           },
                           simulateFishery = function(){
