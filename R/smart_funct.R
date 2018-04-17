@@ -358,10 +358,10 @@ getPropWeig = function(tarWei, lwClass, nameFG, sizeClass, classPrice){
     outData <- data.frame(NA)
     names(outData) <- paste0("RV_", ifelse(nchar(nameFG) == 2, nameFG, paste0("0", nameFG)))
   }else{
-    tmp_Revenue <- data.frame(avgLen = lwClass[[1]]$avgLen, propWei = tarWei*lwClass[[1]]$absAbb)
-    tmp_Revenue$SizeClass <- factor(findInterval(x = tmp_Revenue$avgLen, vec = sizeClass), levels = 2:length(sizeClass))
-    tmpWei <- merge(data.frame(SizeClass = levels(tmp_Revenue$SizeClass)), aggregate(formula = propWei ~ SizeClass, data = tmp_Revenue, FUN = sum), all.x = TRUE)
-    outData <- data.frame(sum(tmpWei$propWei*classPrice, na.rm = TRUE))
+    # tmp_Revenue <- data.frame(avgLen = lwClass[[1]]$avgLen, propWei = tarWei*lwClass[[1]]$absAbb)
+    # tmp_Revenue$SizeClass <- factor(findInterval(x = tmp_Revenue$avgLen, vec = sizeClass), levels = 2:length(sizeClass))
+    # tmpWei <- merge(data.frame(SizeClass = levels(tmp_Revenue$SizeClass)), aggregate(formula = propWei ~ SizeClass, data = tmp_Revenue, FUN = sum), all.x = TRUE)
+    outData <- data.frame(sum(lwClass[[1]]$propWei*classPrice*tarWei, na.rm = TRUE))
     names(outData) <- paste0("RV_", ifelse(nchar(nameFG) == 2, nameFG, paste0("0", nameFG)))
   }
   return(outData)
