@@ -376,12 +376,8 @@ getPropWeiRow = function(prodRow, inLWclas, inNames, vecClass, vecPrice){
   do.call(cbind, tmp_out)
 }
 
-getFleetRevenue = function(predProd, lwStat, fgNames, classVec, priceVec){
-  outProp <- apply(predProd, 1, function(x) getPropWeiRow(prodRow = x,
-                                                          inLWclas = lwStat,
-                                                          inNames = fgNames,
-                                                          vecClass = classVec,
-                                                          vecPrice = priceVec))
+getFleetRevenue = function(predProd, lwStat, priceVec){
+  outProp <- apply(predProd, 1, function(x) apply(t(lwStat*t(x))*priceVec,2, sum))
   outProp <- do.call(rbind, outProp)
   return(outProp)
 }
