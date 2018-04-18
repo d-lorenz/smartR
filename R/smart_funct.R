@@ -350,32 +350,6 @@ genBanEffoDen = function(effoPatt, set0, targetDensity){
   return(Estar)
 }
 
-getPropWeig = function(tarWei, lwClass, nameFG, sizeClass, classPrice){
-  if(tarWei == 0){
-    outData <- data.frame(0)
-    names(outData) <- paste0("RV_", ifelse(nchar(nameFG) == 2, nameFG, paste0("0", nameFG)))
-  }else if(is.null(lwClass[[1]])){
-    outData <- data.frame(NA)
-    names(outData) <- paste0("RV_", ifelse(nchar(nameFG) == 2, nameFG, paste0("0", nameFG)))
-  }else{
-    # tmp_Revenue <- data.frame(avgLen = lwClass[[1]]$avgLen, propWei = tarWei*lwClass[[1]]$absAbb)
-    # tmp_Revenue$SizeClass <- factor(findInterval(x = tmp_Revenue$avgLen, vec = sizeClass), levels = 2:length(sizeClass))
-    # tmpWei <- merge(data.frame(SizeClass = levels(tmp_Revenue$SizeClass)), aggregate(formula = propWei ~ SizeClass, data = tmp_Revenue, FUN = sum), all.x = TRUE)
-    outData <- data.frame(sum(lwClass[[1]]$propWei*classPrice*tarWei, na.rm = TRUE))
-    names(outData) <- paste0("RV_", ifelse(nchar(nameFG) == 2, nameFG, paste0("0", nameFG)))
-  }
-  return(outData)
-}
-
-getPropWeiRow = function(prodRow, inLWclas, inNames, vecClass, vecPrice){
-  tmp_out <- lapply(seq_along(prodRow), function(i, y) {getPropWeig(tarWei = prodRow[i],
-                                                                    lwClass = inLWclas[substr(names(inLWclas), 4, nchar(names(inLWclas))) == i],
-                                                                    nameFG = i,
-                                                                    sizeClass = vecClass,
-                                                                    classPrice = vecPrice)}, y = inNames)
-  do.call(cbind, tmp_out)
-}
-
 getFleetRevenue = function(predProd, lwStat, priceVec){
   outProp <- apply(predProd, 1, function(x) apply(t(lwStat*t(x))*priceVec,2, sum))
   outProp <- t(outProp)
