@@ -680,15 +680,17 @@ SmartProject <- R6Class("smartProject",
                               
                               fisheryBySpecie[[specie]]$setLWstat()
                               fgNames <- paste0("LW_", 1:(sampMap$cutFG+1))
-                              preRevenue <- vector("list", length(fgNames))
-                              names(preRevenue) <- fgNames
-                              for(i in names(preRevenue)){
-                                tempRev <- fisheryBySpecie[[specie]]$LWstat[fisheryBySpecie[[specie]]$LWstat$FG == substr(i, 4, nchar(i)),]
+                              # preRevenue <- vector("list", length(fgNames))
+                              # names(preRevenue) <- fgNames
+                              preRevenue <- data.frame(FG = 1:length(fgNames))
+                              preRevenue <- cbind(preRevenue, setNames(lapply(2:length(vecSize), function(x) x = NA), 2:length(vecSize)))
+                              for(i in 1:nrow(preRevenue)){
+                                tempRev <- fisheryBySpecie[[specie]]$LWstat[fisheryBySpecie[[specie]]$LWstat$FG == i,]
                                 if(nrow(tempRev) > 0){
                                   tempRev$propWei <- tempRev$relAbb/sum(tempRev$relAbb)
                                   tempRev$SizeClass <- factor(findInterval(x = tempRev$avgLen, vec = vecSize), levels = 2:length(vecSize))
                                   outClass <- merge(data.frame(SizeClass = levels(tempRev$SizeClass)), aggregate(formula = propWei ~ SizeClass, data = tempRev, FUN = sum), all.x = TRUE)
-                                  preRevenue[[i]] <- outClass
+                                  preRevenue[i,2:length(vecSize)] <- outClass$propWei
                                 }
                               }
                               outWeiProp[[fisheryBySpecie[[specie]]$specie]] <<- preRevenue
