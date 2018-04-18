@@ -664,9 +664,7 @@ SmartProject <- R6Class("smartProject",
                             for(specie in names(simProd)){
                               # vecSize <- sort(unique(c(fleet$ecoPrice[[specie]]$LowerBound, fleet$ecoPrice[[specie]]$UpperBound)))
                               simRevenue[[specie]] <<- getFleetRevenue(predProd = simProd[[specie]],
-                                                                       lwStat = outWeiProp[[specie]],
-                                                                       fgNames = substr(colnames(simProd[[specie]]), 4, nchar(colnames(simProd[[specie]]))),
-                                                                       classVec = vecSize,
+                                                                       lwStat = outWeiProp[[specie]][,-1],
                                                                        priceVec = fleet$ecoPrice[[specie]]$Price)
                             }
                           },
