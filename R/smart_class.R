@@ -726,26 +726,91 @@ SmartProject <- R6Class("smartProject",
                             getLWstat()
                             cat("Done!", sep = "")
                             
-                            cat("\nGenerating simulated effort...", sep = "")
-                            genSimEffo()
-                            cat("Done!", sep = "")
+                            # cat("\nGenerating simulated effort...", sep = "")
+                            # genSimEffo()
+                            # cat("Done!", sep = "")
+                            # 
+                            # cat("\nGetting simulated production...", sep = "")
+                            # simProdAll()
+                            # cat("Done!", sep = "")
+                            # 
+                            # cat("\nGetting simulated total costs...", sep = "")
+                            # getSimTotalCost()
+                            # cat("Done!", sep = "")
+                            # 
+                            # cat("\nGetting simulated revenues...", sep = "")
+                            # getSimRevenue()
+                            # cat("Done!", sep = "")
+                            # 
+                            # cat("\nGetting cost-revenues...", sep = "")
+                            # getCostRevenue()
+                            # cat("Done!", sep = "")
+                            nFG <- sampMap$cutFG+1
+                            nVessels <- length(unique(simEffo$I_NCEE))
                             
-                            cat("\nGetting simulated production...", sep = "")
-                            simProdAll()
-                            cat("Done!", sep = "")
+                            Gmat <- Pmat <- matrix(0,nVessels,1)
                             
-                            cat("\nGetting simulated total costs...", sep = "")
                             getSimTotalCost()
-                            cat("Done!", sep = "")
-                            
-                            cat("\nGetting simulated revenues...", sep = "")
                             getSimRevenue()
-                            cat("Done!", sep = "")
-                            
-                            cat("\nGetting cost-revenues...", sep = "")
                             getCostRevenue()
-                            cat("Done!", sep = "")
+                            Gmat[,1] <- simCostRevenue$totRevenue - simCostRevenue$totCost
                             
+                            noV <- numeric(0) #The Vessels progressively excluded from the optimization
+                            nRec = nrow(simEffo) #The corresponding records (monthly patterns of the noV vessels)
+                            nVproc = nVessels
+                            nIter <- 0
+                            noRec <- numeric(0)
+                            Esim = Etemp = fleet$effoAllLoa[fleet$effoAllLoa$Year == max(as.numeric(as.character(unique(my_sampling$fleet$effoAllLoa$Year)))),] 
+                            
+                            while(length(noV) < nVessels){
+                              nIter <- nIter + 1 
+                              cat("\nIteration", nIter)
+                              
+                              cat("\n\tOptimising effort... ", sep = "")
+                              genSimEffo(method = "flat", selRow = noRec, overDen = 1.05, areaBan = numeric(0))
+                              cat("Done!", sep = "")
+                              
+                              cat("\n\tComputing production...", sep = "")
+                              simProdAll(selRow = noRec)
+                              cat("Done!", sep = "")
+                              
+                              cat("\n\tComputing cost-revenues...", sep = "")
+                              getSimTotalCost()
+                              getSimRevenue(selRow = noRec)
+                              getCostRevenue()
+                              cat("Done!", sep = "")
+                              
+                              EsimG <- simCostRevenue$totRevenue - simCostRevenue$totCost
+                              Gmat <- cbind(Gmat,EsimG)
+                              set_plus <- which(Gmat[,ncol(Gmat)] > Gmat[,ncol(Gmat)-1])
+                              set_minus <- setdiff(1:nrow(Gmat),set_plus)
+                              pvec = rep(1,nrow(Gmat))
+                              if(length(set_plus)>0) pvec[set_plus] <- 0
+                              Pmat <- cbind(Pmat,pvec)
+                              if(ncol(Pmat)>=thr0){
+                                noV <- unique(c(noV,which(apply(Pmat[,(ncol(Pmat)-thr0+1):ncol(Pmat)],1,sum,na.rm=T) >= thr0)))
+                                noRec <- which(simEffo$I_NCEE %in% simCostRevenue$I_NCEE[noV])
+                              }
+                              nVproc = c(nVproc,nVessels-length(noV))
+                              rec_minus <- which(simEffo$I_NCEE %in% noV)
+                              simEffo[rec_minus,] <<- Etemp[rec_minus,]
+                              Etemp = simEffo
+                              Gmat[set_minus,ncol(Gmat)] <- Gmat[set_minus,ncol(Gmat)-1]
+                              
+                              par(mfrow=c(1,2), bg="grey", font=2, las=2)
+                              plot(1:ncol(Gmat),apply(Gmat,2,sum,na.rm=TRUE)/1000000,type="l",
+                                   xlab="Iteration",ylab="Total (Millions of Euros)", lwd=3,col=2)
+                              title(main="Gains")
+                              plot(1:ncol(Gmat),nVproc,type="l",
+                                   xlab="Iteration",ylab="Num",lwd=3,col=4)
+                              title(main="Vessels to be optimized")
+                            }
+                            
+                            cat("\nSaving results...", sep = "")
+                            outGmat <<- Gmat
+                            outNVlst <<- nVproc
+                            outOptimEffo <<- Etemp
+                            cat("Done!", sep = "")
                           },
                           ggplotFishingPoints = function(year){
                             tmp_dat <- fleet$rawEffort[[year]][sample(1:nrow(fleet$rawEffort[[year]]), min(c(50000, nrow(fleet$rawEffort[[year]])))),c("LON","LAT","FishPoint")]
