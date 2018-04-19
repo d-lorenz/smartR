@@ -728,28 +728,12 @@ SmartProject <- R6Class("smartProject",
                             getLWstat()
                             cat("Done!", sep = "")
                             
-                            # cat("\nGenerating simulated effort...", sep = "")
-                            # genSimEffo()
-                            # cat("Done!", sep = "")
-                            # 
-                            # cat("\nGetting simulated production...", sep = "")
-                            # simProdAll()
-                            # cat("Done!", sep = "")
-                            # 
-                            # cat("\nGetting simulated total costs...", sep = "")
-                            # getSimTotalCost()
-                            # cat("Done!", sep = "")
-                            # 
-                            # cat("\nGetting simulated revenues...", sep = "")
-                            # getSimRevenue()
-                            # cat("Done!", sep = "")
-                            # 
-                            # cat("\nGetting cost-revenues...", sep = "")
-                            # getCostRevenue()
-                            # cat("Done!", sep = "")
-                            nFG <- sampMap$cutFG+1
-                            nVessels <- length(unique(simEffo$I_NCEE))
+                            genSimEffo()
                             
+                            nFG <- sampMap$cutFG+1
+                            
+                            Esim = Etemp = simEffo
+                            nVessels <- length(unique(simEffo$I_NCEE))
                             Gmat <- Pmat <- matrix(0,nVessels,1)
                             
                             getSimTotalCost()
@@ -758,11 +742,10 @@ SmartProject <- R6Class("smartProject",
                             Gmat[,1] <- simCostRevenue$totRevenue - simCostRevenue$totCost
                             
                             noV <- numeric(0) #The Vessels progressively excluded from the optimization
-                            nRec = nrow(simEffo) #The corresponding records (monthly patterns of the noV vessels)
+                            nRec = nrow(Esim) #The corresponding records (monthly patterns of the noV vessels)
                             nVproc = nVessels
                             nIter <- 0
                             noRec <- numeric(0)
-                            Esim = Etemp = fleet$effoAllLoa[fleet$effoAllLoa$Year == max(as.numeric(as.character(unique(my_sampling$fleet$effoAllLoa$Year)))),] 
                             
                             while(length(noV) < nVessels){
                               nIter <- nIter + 1 
