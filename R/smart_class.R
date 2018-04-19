@@ -708,6 +708,10 @@ SmartProject <- R6Class("smartProject",
                               outWeiProp[[fisheryBySpecie[[specie]]$specie]] <<- preRevenue
                             }
                           },
+                          getCostRevenue = function(){
+                            simCostRevenue <<- merge(simTotalCost[,c("I_NCEE", "Year", "totCost")],
+                                                     simTotalRevenue[,c("I_NCEE", "Year", "totRevenue")])
+                          },
                           simulateFishery = function(){
                             cat("\nGetting length-weight statistics...", sep = "")
                             getLWstat()
@@ -729,6 +733,9 @@ SmartProject <- R6Class("smartProject",
                             getSimRevenue()
                             cat("Done!", sep = "")
                             
+                            cat("\nGetting cost-revenues...", sep = "")
+                            getCostRevenue()
+                            cat("Done!", sep = "")
                             
                           },
                           ggplotFishingPoints = function(year){
