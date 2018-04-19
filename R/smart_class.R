@@ -732,7 +732,7 @@ SmartProject <- R6Class("smartProject",
                             simCostRevenue <<- merge(simTotalCost[,c("I_NCEE", "Year", "totCost")],
                                                      simTotalRevenue[,c("I_NCEE", "Year", "totRevenue")])
                           },
-                          simulateFishery = function(){
+                          simulateFishery = function(thr0 = 100){
                             cat("\nGetting length-weight statistics...", sep = "")
                             getLWstat()
                             cat("Done!", sep = "")
