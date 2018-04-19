@@ -791,13 +791,13 @@ SmartProject <- R6Class("smartProject",
                               Etemp = simEffo
                               Gmat[set_minus,ncol(Gmat)] <- Gmat[set_minus,ncol(Gmat)-1]
                               
-                              par(mfrow=c(1,2), bg="grey", font=2, las=2)
+                              par(mfrow=c(1,2), font=0.5, las=2)
                               plot(1:ncol(Gmat),apply(Gmat,2,sum,na.rm=TRUE)/1000000,type="l",
-                                   xlab="Iteration",ylab="Total (Millions of Euros)", lwd=3,col=2)
+                                   xlab="Iteration",ylab="10^6 Euros", lwd=3,col=2)
                               title(main="Gains")
                               plot(1:ncol(Gmat),nVproc,type="l",
-                                   xlab="Iteration",ylab="Num",lwd=3,col=4)
-                              title(main="Vessels to be optimized")
+                                   xlab="Iteration",ylab="",lwd=3,col=4)
+                              title(main="Vessels to optimize")
                             }
                             
                             cat("\nSaving results...", sep = "")
