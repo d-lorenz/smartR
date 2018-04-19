@@ -576,7 +576,7 @@ SmartProject <- R6Class("smartProject",
                             if(length(selRow) == 0)
                               selRow <- 1:nrow(simEffo)
                             
-                            Prod <- matrix(data = NA, selRow, ncol = sampMap$cutFG + 1)
+                            Prod <- matrix(data = NA, max(selRow), ncol = sampMap$cutFG + 1)
                             lyears <- sort(as.numeric(as.character(unique(simEffo$Year[selRow]))))
                             datalog <- simEffo[selRow,]
                             datalog$MonthNum <- as.factor(datalog$MonthNum)
