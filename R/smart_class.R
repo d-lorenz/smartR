@@ -602,7 +602,7 @@ SmartProject <- R6Class("smartProject",
                           },
                           genSimEffo = function(method = "flat", selRow = numeric(0), overDen = 1.05, areaBan = numeric(0)){
                             if(is.null(simEffo)){
-                              simEffo <<- fleet$effoAllLoa
+                              simEffo <<- fleet$effoAllLoa[fleet$effoAllLoa$Year == max(as.numeric(as.character(unique(my_sampling$fleet$effoAllLoa$Year)))),]
                             }
                             methods <- c("flat", "flatDen", "ban", "banDen")
                             selMode <- methods[pmatch(method, methods)]
