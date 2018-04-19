@@ -738,26 +738,20 @@ SmartProject <- R6Class("smartProject",
                             cat("Done!", sep = "")
                             
                             cat("\nSetup initial parameters...", sep = "")
-                            my_sampling$genSimEffo()
-                            my_sampling$simProdAll()
-                            my_sampling$getSimTotalCost()
-                            my_sampling$getSimRevenue()
-                            my_sampling$getCostRevenue()
-                            cat("Done!\n", sep = "")
-                            
-                            nFG <- sampMap$cutFG+1
-                            
-                            Esim = Etemp = simEffo
-                            nVessels <- length(unique(simEffo$I_NCEE))
-                            Gmat <- Pmat <- matrix(0,nVessels,1)
-                            
+                            genSimEffo()
+                            simProdAll()
                             getSimTotalCost()
                             getSimRevenue()
                             getCostRevenue()
-                            Gmat[,1] <- simCostRevenue$totRevenue - simCostRevenue$totCost
+                            cat("Done!\n", sep = "")
                             
-                            noV <- numeric(0) #The Vessels progressively excluded from the optimization
-                            nRec = nrow(Esim) #The corresponding records (monthly patterns of the noV vessels)
+                            nFG <- sampMap$cutFG+1
+                            Esim = Etemp = simEffo
+                            nVessels <- length(unique(simEffo$I_NCEE))
+                            Gmat <- Pmat <- matrix(0,nVessels,1)
+                            Gmat[,1] <- simCostRevenue$totRevenue - simCostRevenue$totCost
+                            noV <- numeric(0)
+                            nRec = nrow(Esim)
                             nVproc = nVessels
                             nIter <- 0
                             noRec <- numeric(0)
