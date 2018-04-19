@@ -572,10 +572,13 @@ SmartProject <- R6Class("smartProject",
                             colnames(Prod) <- paste("PR_", as.character(seq(1, ncol(Prod))), sep = "")
                             fleet$predProd[[specie]] <<- Prod
                           },
-                          simProdAll = function(){
-                            Prod <- matrix(data = NA, nrow(simEffo), ncol = sampMap$cutFG + 1)
-                            lyears <- sort(as.numeric(as.character(unique(simEffo$Year))))
-                            datalog <- simEffo
+                          simProdAll = function(selRow = numeric(0)){
+                            if(length(selRow) == 0)
+                              selRow <- 1:nrow(simEffo)
+                            
+                            Prod <- matrix(data = NA, selRow, ncol = sampMap$cutFG + 1)
+                            lyears <- sort(as.numeric(as.character(unique(simEffo$Year[selRow]))))
+                            datalog <- simEffo[selRow,]
                             datalog$MonthNum <- as.factor(datalog$MonthNum)
                             datalog$Year <- as.factor(datalog$Year)
                             fgClms <- which(colnames(simEffo) %in% as.character(seq(1, sampMap$cutFG + 1)))
