@@ -680,7 +680,7 @@ SmartProject <- R6Class("smartProject",
                             
                             # simTotalRevenue <- data.frame(matrix(NA, nrow = nrow(simEffo), ncol = length(names(simProd))))
                             speNam <- names(simProd)
-                            tmp_Revenue <- cbind(simEffo[selRow,1:3], (matrix(NA, nrow = nrow(simEffo[selRow,]), ncol = length(speNam))))
+                            tmp_Revenue <- cbind(simEffo[,1:3], (matrix(NA, nrow = nrow(simEffo[,]), ncol = length(speNam))))
                             names(tmp_Revenue)[4:(4+length(speNam)-1)] <- speNam
                             for(specie in speNam){
                               tmpRev <- getFleetRevenue(predProd = simProd[[specie]][selRow,],
@@ -691,7 +691,7 @@ SmartProject <- R6Class("smartProject",
                               }else{
                                 simRevenue[[specie]][selRow,] <<- tmpRev
                               }
-                              tmp_Revenue[,specie] <- apply(simRevenue[[specie]], 1, sum, na.rm = TRUE)
+                              tmp_Revenue[selRow, specie] <- apply(simRevenue[[specie]], 1, sum, na.rm = TRUE)
                             }
                             if(ncol(tmp_Revenue) == 4){
                               tmp_Revenue$totRevenue <- tmp_Revenue[,4]
