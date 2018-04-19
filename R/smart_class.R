@@ -31,6 +31,8 @@ SmartProject <- R6Class("smartProject",
                           simProdCost = NULL,
                           simTotalCost = NULL,
                           simRevenue = NULL,
+                          simTotalRevenue = NULL,
+                          simCostRevenue = NULL,
                           outWeiProp = NULL,
                           # economy = NULL,
                           setCostInput = function(){
