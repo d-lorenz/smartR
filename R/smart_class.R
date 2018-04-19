@@ -728,7 +728,13 @@ SmartProject <- R6Class("smartProject",
                             getLWstat()
                             cat("Done!", sep = "")
                             
-                            genSimEffo()
+                            cat("\nSetup initial parameters...", sep = "")
+                            my_sampling$genSimEffo()
+                            my_sampling$simProdAll()
+                            my_sampling$getSimTotalCost()
+                            my_sampling$getSimRevenue()
+                            my_sampling$getCostRevenue()
+                            cat("Done!\n", sep = "")
                             
                             nFG <- sampMap$cutFG+1
                             
