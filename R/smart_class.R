@@ -591,10 +591,10 @@ SmartProject <- R6Class("smartProject",
                                 infish <- which(predict(fleet$specLogit[[specie]]$logit$Model, datalog, type = "prob")[,2] > fleet$specLogit[[specie]]$logit$Cut)
                               }
                               for(i in 1:length(infish)){
-                                idata <- as.numeric(simEffo[infish[i], fgClms])
-                                iloa <- as.numeric(simEffo[infish[i], "Loa"])
-                                iy <- which(lyears == simEffo[infish[i], "Year"])
-                                im <- as.numeric(as.character(simEffo[infish[i], "MonthNum"]))
+                                idata <- as.numeric(simEffo[selRow,][infish[i], fgClms])
+                                iloa <- as.numeric(simEffo[selRow,][infish[i], "Loa"])
+                                iy <- which(lyears == simEffo[selRow,][infish[i], "Year"])
+                                im <- as.numeric(as.character(simEffo[selRow,][infish[i], "MonthNum"]))
                                 ib <- fleet$resNNLS[[specie]]$bmat[which((fleet$resNNLS[[specie]]$SceMat$YEAR == iy) & (fleet$resNNLS[[specie]]$SceMat$MONTH == im)),]
                                 # Prod[infish[i]] <- sum(ib * idata * iloa) + mean(fleet$effoProdAllLoa[,specie][fleet$effoProdAllLoa[,specie] < fleet$specSett[[specie]]$threshold & fleet$effoProdAllLoa[,specie] > 0])
                                 if(sum(ib*idata)>0){
@@ -603,13 +603,13 @@ SmartProject <- R6Class("smartProject",
                               }
                               Prod[is.na(Prod)] <- 0
                               colnames(Prod) <- paste("PR_", as.character(seq(1, ncol(Prod))), sep = "")
-                              simProd[[specie]] <<- Prod
+                              simProd[[specie]][selRow,] <<- Prod
                             }
                           },
                           genSimEffo = function(method = "flat", selRow = numeric(0), overDen = 1.05, areaBan = numeric(0)){
                             if(is.null(simEffo)){
-                              simEffo <<- fleet$effoAllLoa[fleet$effoAllLoa$Year == max(as.numeric(as.character(unique(my_sampling$fleet$effoAllLoa$Year)))),]
-                            }
+                              simEffo <<- fleet$effoAllLoa[fleet$effoAllLoa$Year == max(as.numeric(as.character(unique(fleet$effoAllLoa$Year)))),]
+                            }else{
                             methods <- c("flat", "flatDen", "ban", "banDen")
                             selMode <- methods[pmatch(method, methods)]
                             
