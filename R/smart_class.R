@@ -663,12 +663,22 @@ SmartProject <- R6Class("smartProject",
                             simTotalCost <<- out_costs
                           },
                           getSimRevenue = function(){
-                            for(specie in names(simProd)){
-                              # vecSize <- sort(unique(c(fleet$ecoPrice[[specie]]$LowerBound, fleet$ecoPrice[[specie]]$UpperBound)))
+                            # simTotalRevenue <- data.frame(matrix(NA, nrow = nrow(simEffo), ncol = length(names(simProd))))
+                            speNam <- names(simProd)
+                            tmp_Revenue <- cbind(simEffo[,1:3], (matrix(NA, nrow = nrow(simEffo), ncol = length(speNam))))
+                            names(tmp_Revenue)[4:(4+length(speNam)-1)] <- speNam
+                            for(specie in speNam){
                               simRevenue[[specie]] <<- getFleetRevenue(predProd = simProd[[specie]],
                                                                        lwStat = outWeiProp[[specie]][,-1],
                                                                        priceVec = fleet$ecoPrice[[specie]]$Price)
+                              tmp_Revenue[,specie] <- apply(simRevenue[[specie]], 1, sum, na.rm = TRUE)
                             }
+                            if(ncol(tmp_Revenue) == 4){
+                              tmp_Revenue$totRevenue <- tmp_Revenue[,4]
+                            }else{
+                              tmp_Revenue$totRevenue <- apply(tmp_Revenue[,4:(4+length(speNam)-1)],1,sum)
+                            }
+                            simTotalRevenue <<- aggregate(totRevenue ~ I_NCEE + Year, tmp_Revenue, sum)
                           },
                           getLWstat = function(){
                             if(is.null(fisheryBySpecie))
