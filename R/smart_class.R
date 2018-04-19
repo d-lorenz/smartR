@@ -691,7 +691,7 @@ SmartProject <- R6Class("smartProject",
                               }else{
                                 simRevenue[[specie]][selRow,] <<- tmpRev
                               }
-                              tmp_Revenue[selRow, specie] <- apply(simRevenue[[specie]], 1, sum, na.rm = TRUE)
+                              tmp_Revenue[, specie] <- apply(simRevenue[[specie]], 1, sum, na.rm = TRUE)
                             }
                             if(ncol(tmp_Revenue) == 4){
                               tmp_Revenue$totRevenue <- tmp_Revenue[,4]
