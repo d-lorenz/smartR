@@ -683,9 +683,14 @@ SmartProject <- R6Class("smartProject",
                             tmp_Revenue <- cbind(simEffo[selRow,1:3], (matrix(NA, nrow = nrow(simEffo[selRow,]), ncol = length(speNam))))
                             names(tmp_Revenue)[4:(4+length(speNam)-1)] <- speNam
                             for(specie in speNam){
-                              simRevenue[[specie]][selRow,] <<- getFleetRevenue(predProd = simProd[[specie]][selRow,],
-                                                                                lwStat = outWeiProp[[specie]][,-1],
-                                                                                priceVec = fleet$ecoPrice[[specie]]$Price)
+                              tmpRev <- getFleetRevenue(predProd = simProd[[specie]][selRow,],
+                                                        lwStat = outWeiProp[[specie]][,-1],
+                                                        priceVec = fleet$ecoPrice[[specie]]$Price)
+                              if(length(selRow) == nrow(simEffo)){
+                                simRevenue[[specie]] <<- tmpRev
+                              }else{
+                                simRevenue[[specie]][selRow,] <<- tmpRev
+                              }
                               tmp_Revenue[,specie] <- apply(simRevenue[[specie]], 1, sum, na.rm = TRUE)
                             }
                             if(ncol(tmp_Revenue) == 4){
