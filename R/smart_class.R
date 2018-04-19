@@ -610,37 +610,39 @@ SmartProject <- R6Class("smartProject",
                             if(is.null(simEffo)){
                               simEffo <<- fleet$effoAllLoa[fleet$effoAllLoa$Year == max(as.numeric(as.character(unique(fleet$effoAllLoa$Year)))),]
                             }else{
-                            methods <- c("flat", "flatDen", "ban", "banDen")
-                            selMode <- methods[pmatch(method, methods)]
-                            
-                            if (is.na(selMode)) 
-                              stop("invalid effort generation metod")
-                            
-                            if(length(selRow) == 0)
-                              selRow <- 1:nrow(simEffo)
-                            
-                            if(selMode %in% c("flatDen", "banDen")){
-                              simDen <- apply(simEffo, 2, sum)/as.numeric(table(FGm$FG))
-                              obsDen <- apply(fleet$effoAllLoa[,4:(ncol(fleet$effoAllLoa)-1)],2,sum)/as.numeric(table(sampMap$cutResult$FG))
-                              fDen = simDen/(overDen*obsDen)
-                              if(length(which(is.na(fDen)))>0) fDen[which(is.na(fDen))] <- 1
+                              methods <- c("flat", "flatDen", "ban", "banDen")
+                              selMode <- methods[pmatch(method, methods)]
+                              
+                              if (is.na(selMode)) 
+                                stop("invalid effort generation metod")
+                              
+                              if(length(selRow) == 0)
+                                selRow <- 1:nrow(simEffo)
+                              
+                              if(selMode %in% c("flatDen", "banDen")){
+                                simDen <- apply(simEffo, 2, sum)/as.numeric(table(FGm$FG))
+                                obsDen <- apply(fleet$effoAllLoa[,4:(ncol(fleet$effoAllLoa)-1)],2,sum)/as.numeric(table(sampMap$cutResult$FG))
+                                fDen = simDen/(overDen*obsDen)
+                                if(length(which(is.na(fDen)))>0) fDen[which(is.na(fDen))] <- 1
+                              }
+                              
+                              simEffo[selRow, 4:(ncol(simEffo)-1)] <<- switch(selMode,
+                                                                              flat = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genFlatEffo(effoPatt = x)))},
+                                                                              flatDen = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genFlatEffoDen(effoPatt = x, targetDensity = fDen)))},
+                                                                              ban = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genBanEffo(effoPatt, set0 = areaBan)))},
+                                                                              banDen = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genBanEffoDen(effoPatt, set0 = areaBan, targetDensity = fDen)))})
+                              
                             }
-                            
-                            simEffo[selRow, 4:(ncol(simEffo)-1)] <<- switch(selMode,
-                                                                            flat = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genFlatEffo(effoPatt = x)))},
-                                                                            flatDen = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genFlatEffoDen(effoPatt = x, targetDensity = fDen)))},
-                                                                            ban = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genBanEffo(effoPatt, set0 = areaBan)))},
-                                                                            banDen = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genBanEffoDen(effoPatt, set0 = areaBan, targetDensity = fDen)))})
                           },
                           getSimSpatialCost = function(){
                             tmp_ei <- apply(data.frame(mapply(`*`, simEffo[, 4:(ncol(simEffo)-1)], sampMap$fgWeigDist)), 1, sum)
-                            tmpIndex <- data.frame(simEffo[,c(1:3,ncol(simEffo))], EffInd = tmp_ei)
+                            tmpIndex <- data.frame(simEffo[, c(1:3,ncol(simEffo))], EffInd = tmp_ei)
                             simSpatialIndex <- aggregate(EffInd ~ I_NCEE + Year + Loa, tmpIndex, sum)
                             predSpatCost <- predict(fleet$outSpatialReg, simSpatialIndex)
-                            simSpatialCost <<- cbind(simSpatialIndex, predSpatCost)
+                            simSpatialCost[, ] <<- cbind(simSpatialIndex, predSpatCost)
                           },
                           getSimEffortCost = function(){
-                            effortIndex <- aggregate(Freq ~ I_NCEE + Year + Loa + Kw, fleet$daysAtSea, sum)
+                            effortIndex <- aggregate(Freq ~ I_NCEE + Year + Loa + Kw, fleet$daysAtSea[fleet$daysAtSea$Year == max(as.numeric(as.character(fleet$daysAtSea$Year))),], sum)
                             predEffoCost <- predict(fleet$outEffortReg, effortIndex)
                             simEffortCost <<- cbind(effortIndex, predEffoCost)
                           },
@@ -678,8 +680,8 @@ SmartProject <- R6Class("smartProject",
                             names(tmp_Revenue)[4:(4+length(speNam)-1)] <- speNam
                             for(specie in speNam){
                               simRevenue[[specie]][selRow,] <<- getFleetRevenue(predProd = simProd[[specie]][selRow,],
-                                                                       lwStat = outWeiProp[[specie]][,-1],
-                                                                       priceVec = fleet$ecoPrice[[specie]]$Price)
+                                                                                lwStat = outWeiProp[[specie]][,-1],
+                                                                                priceVec = fleet$ecoPrice[[specie]]$Price)
                               tmp_Revenue[,specie] <- apply(simRevenue[[specie]], 1, sum, na.rm = TRUE)
                             }
                             if(ncol(tmp_Revenue) == 4){
