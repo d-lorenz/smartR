@@ -643,7 +643,7 @@ SmartProject <- R6Class("smartProject",
                             tmpIndex <- data.frame(simEffo[, c(1:3,ncol(simEffo))], EffInd = tmp_ei)
                             simSpatialIndex <- aggregate(EffInd ~ I_NCEE + Year + Loa, tmpIndex, sum)
                             predSpatCost <- predict(fleet$outSpatialReg, simSpatialIndex)
-                            simSpatialCost[, ] <<- cbind(simSpatialIndex, predSpatCost)
+                            simSpatialCost <<- cbind(simSpatialIndex, predSpatCost)
                           },
                           getSimEffortCost = function(){
                             effortIndex <- aggregate(Freq ~ I_NCEE + Year + Loa + Kw, fleet$daysAtSea[fleet$daysAtSea$Year == max(as.numeric(as.character(fleet$daysAtSea$Year))),], sum)
