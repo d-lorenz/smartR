@@ -3648,10 +3648,6 @@ SampleMap <- R6Class("sampleMap",
                                                    Cluster = cutResult[,ncol(cutResult)])
                          cutResShp <<- unionSpatialPolygons(gridShp, IDs = clusMat[,ind_clu])
                          
-                         if(length(unique(cutResEffo$Cluster)) == length(gridShp$IDs)){
-                           cutResShp <<- spChFIDs(cutResShp, as.character(gridShp$IDs))
-                         }
-                         
                          # num_cell <- getinfo.shape(cutResShp)$entities
                          cutResShp@plotOrder <<- 1:ind_clu
                          
