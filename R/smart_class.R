@@ -3645,7 +3645,7 @@ SampleMap <- R6Class("sampleMap",
                          # cutResult <<- data.frame(clusInpu, FG = as.factor(clusMat[,ind_clu]))
                          cutResult <<- data.frame(do.call(cbind, rawInpu), FG = as.factor(clusMat[,ind_clu]))
                          cutResEffo <<- data.frame(Effort = apply(cutResult[, grep("Year", colnames(cutResult))],1, mean),
-                                                   Cluster = gridShp$IDs)
+                                                   Cluster = cutResult[,ncol(cutResult)])
                          cutResShp <<- unionSpatialPolygons(gridShp, IDs = clusMat[,ind_clu])
                          
                          # num_cell <- getinfo.shape(cutResShp)$entities
