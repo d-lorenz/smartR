@@ -380,8 +380,8 @@ SmartProject <- R6Class("smartProject",
                               }
                               all_cell <- merge(x = sampMap$cutResShpFort$id, data.frame(x = cohAbuFG$FG, y = round(100 * cohAbuFG[,coh_i]/max(cohAbuFG[,coh_i]))), all = TRUE)
                               grid_data <- cbind(sampMap$cutResShpFort, NumInd = all_cell[,2])
-                              tmp_coo <- data.frame(coordinates(sampMap$gridShp), cell_id = sampMap$gridShp$IDs)
-                              colnames(tmp_coo)[1:2] <- c("Lon", "Lat")
+                              # tmp_coo <- data.frame(coordinates(sampMap$gridShp), cell_id = sampMap$gridShp$IDs)
+                              # colnames(tmp_coo)[1:2] <- c("Lon", "Lat")
                               tmp_dens <- data.frame(lon = rep(grid_data[!is.na(grid_data$NumInd),]$long, grid_data[!is.na(grid_data$NumInd),]$NumInd),
                                                      lat = rep(grid_data[!is.na(grid_data$NumInd),]$lat, grid_data[!is.na(grid_data$NumInd),]$NumInd))
                               
@@ -393,8 +393,8 @@ SmartProject <- R6Class("smartProject",
                                                                                 # trans = "log10",
                                                                                 breaks = pretty(1:100, 5), limits = c(1,100)) +
                                                             ggtitle(paste0("Spatial Distribution of ", specie," - Cohort ", coh_i - 2)) +
-                                                            geom_text(aes(label = cell_id, x = Lon, y = Lat),
-                                                                      data = tmp_coo, size = 2) +
+                                                            geom_text(aes(label = FG, x = Lon, y = Lat),
+                                                                      data = sampMap$cutResShpCent, size = 2) +
                                                             lims(x = extendrange(sampMap$plotRange[1:2]),
                                                                  y = extendrange(sampMap$plotRange[3:4])) +
                                                             theme(legend.position = c(0.1, 0.22),
@@ -417,8 +417,8 @@ SmartProject <- R6Class("smartProject",
                                                             scale_alpha_continuous(limits=c(0,0.4),breaks=seq(0,0.4,by=0.025)) +
                                                             geom_polygon(aes(x = long, y = lat, group = group, alpha = 0.1),
                                                                          colour = "black", size = 0.1, data = grid_data, alpha = 0.8, fill = NA)+
-                                                            geom_text(aes(label = cell_id, x = Lon, y = Lat),
-                                                                      data = tmp_coo, size = 2))
+                                                            geom_text(aes(label = FG, x = Lon, y = Lat),
+                                                                      data = sampMap$cutResShpCent, size = 2))
                               
                               gooLstCoho[[specie]][[sex]][[colnames(ageFGtbl)[coh_i-1]]] <<- mapCoho
                             }
@@ -3646,8 +3646,11 @@ SampleMap <- R6Class("sampleMap",
                          cutResult <<- data.frame(do.call(cbind, rawInpu), FG = as.factor(clusMat[,ind_clu]))
                          cutResEffo <<- data.frame(Effort = apply(cutResult[, grep("Year", colnames(cutResult))],1, mean),
                                                    Cluster = cutResult[,ncol(cutResult)])
-                         cutResShp <<- unionSpatialPolygons(gridShp, IDs = clusMat[,ind_clu])
-                         
+                         if(length(unique(cutResEffo$Cluster)) == length(gridShp$IDs)){
+                           cutResShp <<- unionSpatialPolygons(gridShp, IDs = gridShp$IDs)
+                         }else{
+                           cutResShp <<- unionSpatialPolygons(gridShp, IDs = clusMat[,ind_clu])
+                         }
                          # num_cell <- getinfo.shape(cutResShp)$entities
                          cutResShp@plotOrder <<- 1:ind_clu
                          
