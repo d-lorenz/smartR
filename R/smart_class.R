@@ -3667,8 +3667,8 @@ SampleMap <- R6Class("sampleMap",
                          setEffoFGmap()
                          setBioFGmat()
                          setCutFGmap()
-                         setIchFGlin()
-                         setSilFGlin()
+                         setIchFGlin(numCut = ind_clu)
+                         setSilFGlin(numCut = ind_clu)
                        },
                        setDepthFGbox = function(){
                          ggDepthFGbox <<- suppressMessages(ggplot(cutResult, aes(x = FG, y = Depth, group = FG)) +
@@ -3750,19 +3750,19 @@ SampleMap <- R6Class("sampleMap",
                                                                 y = extendrange(plotRange[3:4])) +
                                                            theme(legend.position='none'))
                        },
-                       setIchFGlin = function(){
+                       setIchFGlin = function(numCut){
                          ch_df <- data.frame(cut = 1:length(indCH),
                                              CH_index = indCH)
                          ggIchFGlin <<- suppressMessages(ggplot(ch_df, aes(x = cut, y = CH_index)) +
                                                            geom_line() +
-                                                           geom_vline(aes(xintercept = tmpCut), linetype="dashed", size = 0.5, colour = "red"))
+                                                           geom_vline(aes(xintercept = numCut), linetype="dashed", size = 0.5, colour = "red"))
                        },
-                       setSilFGlin = function(){
+                       setSilFGlin = function(numCut){
                          sil_df <- data.frame(cut = 1:length(indSil),
                                               Sil_index = indSil)
                          ggSilFGlin <<- suppressMessages(ggplot(sil_df, aes(x = cut, y = Sil_index)) +
                                                            geom_line() +
-                                                           geom_vline(aes(xintercept = tmpCut), linetype="dashed", size = 0.5, colour = "red"))
+                                                           geom_vline(aes(xintercept = numCut), linetype="dashed", size = 0.5, colour = "red"))
                        }
                      ))
 
