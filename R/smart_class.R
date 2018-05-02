@@ -761,7 +761,7 @@ SmartProject <- R6Class("smartProject",
                               cat("\nIteration", nIter)
                               
                               cat("\n\tOptimising effort... ", sep = "")
-                              genSimEffo(method = "flat", selRow = noRec, overDen = 1.05, areaBan = numeric(0))
+                              genSimEffo(method = effoMode, selRow = noRec, overDen = effoDen, areaBan = effoBan)
                               cat("Done!", sep = "")
                               
                               cat("\n\tComputing production...", sep = "")
