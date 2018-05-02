@@ -3750,11 +3750,11 @@ SampleMap <- R6Class("sampleMap",
                          all_cell[is.na(all_cell)] <- 0
                          grid_data <- cbind(cutResShpFort, Hours = all_cell[,2])
                          
-                         if(length(unique(grid_data$FG)) == (sampMap$cutFG + 1)){
-                           tmp_coo <- data.frame(coordinates(sampMap$gridShp), cell_id = sampMap$gridShp$IDs)
+                         if(length(unique(grid_data$FG)) == (cutFG + 1)){
+                           tmp_coo <- data.frame(coordinates(gridShp), cell_id = gridShp$IDs)
                            colnames(tmp_coo) <- c("Lon", "Lat", "FG")
                          }else{
-                           tmp_coo <- sampMap$cutResShpCent
+                           tmp_coo <- cutResShpCent
                          }
                          
                          ggEffoFGmap <<- suppressMessages(gooMapPlot + geom_polygon(aes(x = long, y = lat, group = group, fill = Hours),
@@ -3793,11 +3793,11 @@ SampleMap <- R6Class("sampleMap",
                        },
                        setCutFGmap = function(){
                          
-                         if(length(unique(grid_data$FG)) == (sampMap$cutFG + 1)){
-                           tmp_coo <- data.frame(coordinates(sampMap$gridShp), cell_id = sampMap$gridShp$IDs)
+                         if(length(unique(cutResShpFort$FG)) == (cutFG + 1)){
+                           tmp_coo <- data.frame(coordinates(gridShp), cell_id = gridShp$IDs)
                            colnames(tmp_coo) <- c("Lon", "Lat", "FG")
                          }else{
-                           tmp_coo <- sampMap$cutResShpCent
+                           tmp_coo <- cutResShpCent
                          }
                          
                          ggCutFGmap <<- suppressMessages(gooMapPlot +
