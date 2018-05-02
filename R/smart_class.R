@@ -3646,11 +3646,8 @@ SampleMap <- R6Class("sampleMap",
                          cutResult <<- data.frame(do.call(cbind, rawInpu), FG = as.factor(clusMat[,ind_clu]))
                          cutResEffo <<- data.frame(Effort = apply(cutResult[, grep("Year", colnames(cutResult))],1, mean),
                                                    Cluster = cutResult[,ncol(cutResult)])
-                         if(length(unique(cutResEffo$Cluster)) == length(gridShp$IDs)){
-                           cutResShp <<- unionSpatialPolygons(gridShp, IDs = gridShp$IDs)
-                         }else{
-                           cutResShp <<- unionSpatialPolygons(gridShp, IDs = clusMat[,ind_clu])
-                         }
+                         cutResShp <<- unionSpatialPolygons(gridShp, IDs = clusMat[,ind_clu])
+                         
                          # num_cell <- getinfo.shape(cutResShp)$entities
                          cutResShp@plotOrder <<- 1:ind_clu
                          
