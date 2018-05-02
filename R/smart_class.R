@@ -380,8 +380,14 @@ SmartProject <- R6Class("smartProject",
                               }
                               all_cell <- merge(x = sampMap$cutResShpFort$id, data.frame(x = cohAbuFG$FG, y = round(100 * cohAbuFG[,coh_i]/max(cohAbuFG[,coh_i]))), all = TRUE)
                               grid_data <- cbind(sampMap$cutResShpFort, NumInd = all_cell[,2])
-                              # tmp_coo <- data.frame(coordinates(sampMap$gridShp), cell_id = sampMap$gridShp$IDs)
-                              # colnames(tmp_coo)[1:2] <- c("Lon", "Lat")
+                              
+                              if(length(unique(grid_data$FG)) == (sampMap$cutFG + 1)){
+                                tmp_coo <- data.frame(coordinates(sampMap$gridShp), cell_id = sampMap$gridShp$IDs)
+                                colnames(tmp_coo) <- c("Lon", "Lat", "FG")
+                              }else{
+                                tmp_coo <- sampMap$cutResShpCent
+                              }
+                              
                               tmp_dens <- data.frame(lon = rep(grid_data[!is.na(grid_data$NumInd),]$long, grid_data[!is.na(grid_data$NumInd),]$NumInd),
                                                      lat = rep(grid_data[!is.na(grid_data$NumInd),]$lat, grid_data[!is.na(grid_data$NumInd),]$NumInd))
                               
@@ -394,7 +400,7 @@ SmartProject <- R6Class("smartProject",
                                                                                 breaks = pretty(1:100, 5), limits = c(1,100)) +
                                                             ggtitle(paste0("Spatial Distribution of ", specie," - Cohort ", coh_i - 2)) +
                                                             geom_text(aes(label = FG, x = Lon, y = Lat),
-                                                                      data = sampMap$cutResShpCent, size = 2) +
+                                                                      data = tmp_coo, size = 2) +
                                                             lims(x = extendrange(sampMap$plotRange[1:2]),
                                                                  y = extendrange(sampMap$plotRange[3:4])) +
                                                             theme(legend.position = c(0.1, 0.22),
@@ -418,7 +424,7 @@ SmartProject <- R6Class("smartProject",
                                                             geom_polygon(aes(x = long, y = lat, group = group, alpha = 0.1),
                                                                          colour = "black", size = 0.1, data = grid_data, alpha = 0.8, fill = NA)+
                                                             geom_text(aes(label = FG, x = Lon, y = Lat),
-                                                                      data = sampMap$cutResShpCent, size = 2))
+                                                                      data = tmp_coo, size = 2))
                               
                               gooLstCoho[[specie]][[sex]][[colnames(ageFGtbl)[coh_i-1]]] <<- mapCoho
                             }
@@ -476,6 +482,12 @@ SmartProject <- R6Class("smartProject",
                             all_cell[is.na(all_cell)] <- 0
                             grid_data <- cbind(sampMap$cutResShpFort, DistAvg = all_cell[,2])
                             
+                            if(length(unique(grid_data$FG)) == (sampMap$cutFG + 1)){
+                              tmp_coo <- data.frame(coordinates(sampMap$gridShp), cell_id = sampMap$gridShp$IDs)
+                              colnames(tmp_coo) <- c("Lon", "Lat", "FG")
+                            }else{
+                              tmp_coo <- sampMap$cutResShpCent
+                            }
                             
                             suppressWarnings(
                               print(
@@ -487,7 +499,7 @@ SmartProject <- R6Class("smartProject",
                                                  data = grid_data, alpha = 0.8) +
                                     scale_fill_gradient("Weighted\nDistance", low = "snow1", high = "orange1") +
                                     geom_text(aes(label = FG, x = Lon, y = Lat),
-                                              data = sampMap$cutResShpCent, size = 2) +
+                                              data = tmp_coo, size = 2) +
                                     ggtitle("Average Distance x Fishing Ground") +
                                     xlab("Longitude") + ylab("Latitude") +
                                     lims(x = extendrange(sampMap$plotRange[1:2]),
@@ -835,12 +847,20 @@ SmartProject <- R6Class("smartProject",
                                                          y = tmp_melt_sub$Productivity), all = TRUE)
                             all_cell[is.na(all_cell)] <- 0
                             grid_data <- cbind(sampMap$cutResShpFort, Beta = all_cell[,2])
+                            
+                            if(length(unique(grid_data$FG)) == (sampMap$cutFG + 1)){
+                              tmp_coo <- data.frame(coordinates(sampMap$gridShp), cell_id = sampMap$gridShp$IDs)
+                              colnames(tmp_coo) <- c("Lon", "Lat", "FG")
+                            }else{
+                              tmp_coo <- sampMap$cutResShpCent
+                            }
+                            
                             sampMap$ggBetaFGmap <<- suppressMessages(sampMap$gooMapPlot + geom_polygon(aes(x = long, y = lat, group = group, fill = Beta),
                                                                                                        colour = "black", size = 0.1,
                                                                                                        data = grid_data, alpha = 0.8) +
                                                                        scale_fill_gradient("Beta\nValues", low = "lightyellow", high = "mediumseagreen") +
                                                                        geom_text(aes(label = FG, x = Lon, y = Lat),
-                                                                                 data = sampMap$cutResShpCent, size = 2) +
+                                                                                 data = tmp_coo, size = 2) +
                                                                        # theme(legend.position='none') +
                                                                        ggtitle(paste("Betas x Fishing Ground - ", year, sep = "")) +
                                                                        xlab("Longitude") + ylab("Latitude") +
@@ -871,6 +891,14 @@ SmartProject <- R6Class("smartProject",
                                                          y = tmp_melt_sub$Production), all = TRUE)
                             all_cell[is.na(all_cell)] <- 0
                             grid_data <- cbind(sampMap$cutResShpFort, Hours = all_cell[,2])
+                            
+                            if(length(unique(grid_data$FG)) == (sampMap$cutFG + 1)){
+                              tmp_coo <- data.frame(coordinates(sampMap$gridShp), cell_id = sampMap$gridShp$IDs)
+                              colnames(tmp_coo) <- c("Lon", "Lat", "FG")
+                            }else{
+                              tmp_coo <- sampMap$cutResShpCent
+                            }
+                            
                             sampMap$ggProdFGmap <- suppressMessages(sampMap$gooMapPlot +
                                                                       geom_polygon(aes(x = long, y = lat, group = group, fill = Hours),
                                                                                    colour = "black", size = 0.1,
@@ -878,7 +906,7 @@ SmartProject <- R6Class("smartProject",
                                                                       scale_fill_gradient("Production\nValues",
                                                                                           low = "lightyellow", high = "slateblue1") +
                                                                       geom_text(aes(label = FG, x = Lon, y = Lat),
-                                                                                data = sampMap$cutResShpCent, size = 2) +
+                                                                                data = tmp_coo, size = 2) +
                                                                       # theme(legend.position='none') +
                                                                       ggtitle(paste("Production x Fishing Ground - ", year, sep = "")) +
                                                                       xlab("Longitude") + ylab("Latitude") +
@@ -3217,6 +3245,14 @@ SampleMap <- R6Class("sampleMap",
                          harbDbf <<- tmp_dbf
                        },
                        set_ggMapFgSurvey = function(rawSampCoo){
+                         
+                         if(length(unique(grid_data$FG)) == (sampMap$cutFG + 1)){
+                           tmp_coo <- data.frame(coordinates(sampMap$gridShp), cell_id = sampMap$gridShp$IDs)
+                           colnames(tmp_coo) <- c("Lon", "Lat", "FG")
+                         }else{
+                           tmp_coo <- sampMap$cutResShpCent
+                         }
+                         
                          ggMapFgSurvey <<- suppressMessages(
                            gooMapPlot +
                              geom_polygon(data = cutResShpFort,
@@ -3238,12 +3274,20 @@ SampleMap <- R6Class("sampleMap",
                              geom_point(data = unique(rawSampCoo[,c("Lon","Lat")]),
                                         aes(x = Lon, y = Lat),
                                         color = "darkolivegreen1", shape = 4, size = 0.5, alpha = 0.6) +
-                             geom_text(data = cutResShpCent,
+                             geom_text(data = tmp_coo,
                                        aes(label = FG, x = Lon, y = Lat),
                                        size = 2, color = "grey72")
                          )
                        },
                        set_ggMapFgFishery = function(rawSampCoo){
+                         
+                         if(length(unique(grid_data$FG)) == (sampMap$cutFG + 1)){
+                           tmp_coo <- data.frame(coordinates(sampMap$gridShp), cell_id = sampMap$gridShp$IDs)
+                           colnames(tmp_coo) <- c("Lon", "Lat", "FG")
+                         }else{
+                           tmp_coo <- sampMap$cutResShpCent
+                         }
+                         
                          ggMapFgFishery <<- suppressMessages(
                            gooMapPlot +
                              geom_polygon(data = cutResShpFort,
@@ -3265,7 +3309,7 @@ SampleMap <- R6Class("sampleMap",
                              geom_point(data = unique(rawSampCoo[,c("Lon","Lat")]),
                                         aes(x = Lon, y = Lat),
                                         color = "darkolivegreen1", shape = 4, size = 0.5, alpha = 0.6) +
-                             geom_text(data = cutResShpCent,
+                             geom_text(data = tmp_coo,
                                        aes(label = FG, x = Lon, y = Lat),
                                        size = 2, color = "grey72")
                          )
@@ -3705,12 +3749,20 @@ SampleMap <- R6Class("sampleMap",
                                            data.frame(x = agg_eff$Cluster, y = agg_eff$Effort), all = TRUE)
                          all_cell[is.na(all_cell)] <- 0
                          grid_data <- cbind(cutResShpFort, Hours = all_cell[,2])
+                         
+                         if(length(unique(grid_data$FG)) == (sampMap$cutFG + 1)){
+                           tmp_coo <- data.frame(coordinates(sampMap$gridShp), cell_id = sampMap$gridShp$IDs)
+                           colnames(tmp_coo) <- c("Lon", "Lat", "FG")
+                         }else{
+                           tmp_coo <- sampMap$cutResShpCent
+                         }
+                         
                          ggEffoFGmap <<- suppressMessages(gooMapPlot + geom_polygon(aes(x = long, y = lat, group = group, fill = Hours),
                                                                                     colour = "black", size = 0.1,
                                                                                     data = grid_data, alpha = 0.8) +
                                                             scale_fill_gradient(low = "Yellow", high = "coral", trans = "sqrt") +
                                                             geom_text(aes(label = FG, x = Lon, y = Lat),
-                                                                      data = cutResShpCent, size = 2) +
+                                                                      data = tmp_coo, size = 2) +
                                                             lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4])) +
                                                             theme(legend.position='none'))
                        },
@@ -3740,12 +3792,20 @@ SampleMap <- R6Class("sampleMap",
                          # }
                        },
                        setCutFGmap = function(){
+                         
+                         if(length(unique(grid_data$FG)) == (sampMap$cutFG + 1)){
+                           tmp_coo <- data.frame(coordinates(sampMap$gridShp), cell_id = sampMap$gridShp$IDs)
+                           colnames(tmp_coo) <- c("Lon", "Lat", "FG")
+                         }else{
+                           tmp_coo <- sampMap$cutResShpCent
+                         }
+                         
                          ggCutFGmap <<- suppressMessages(gooMapPlot +
                                                            geom_polygon(aes(x = long, y = lat, group = group, fill = FG),
                                                                         colour = "black", size = 0.1,
                                                                         data = cutResShpFort, alpha = 0.8) +
                                                            geom_text(aes(label = FG, x = Lon, y = Lat),
-                                                                     data = cutResShpCent, size = 2) +
+                                                                     data = tmp_coo, size = 2) +
                                                            lims(x = extendrange(plotRange[1:2]),
                                                                 y = extendrange(plotRange[3:4])) +
                                                            theme(legend.position='none'))
