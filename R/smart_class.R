@@ -3641,12 +3641,16 @@ SampleMap <- R6Class("sampleMap",
                        #   names(cutResShpCent) <<- c("Lon", "Lat", "FG")
                        # },
                        setCutResult = function(ind_clu){
-                         tmpCut <<- ind_clu
+                         # tmpCut <<- ind_clu
                          # cutResult <<- data.frame(clusInpu, FG = as.factor(clusMat[,ind_clu]))
                          cutResult <<- data.frame(do.call(cbind, rawInpu), FG = as.factor(clusMat[,ind_clu]))
                          cutResEffo <<- data.frame(Effort = apply(cutResult[, grep("Year", colnames(cutResult))],1, mean),
                                                    Cluster = cutResult[,ncol(cutResult)])
                          cutResShp <<- unionSpatialPolygons(gridShp, IDs = clusMat[,ind_clu])
+                         
+                         if(length(unique(cutResEffo$Cluster)) == length(gridShp$IDs)){
+                           cutResShp <<- spChFIDs(cutResShp, as.character(gridShp$IDs))
+                         }
                          
                          # num_cell <- getinfo.shape(cutResShp)$entities
                          cutResShp@plotOrder <<- 1:ind_clu
