@@ -381,7 +381,7 @@ SmartProject <- R6Class("smartProject",
                               all_cell <- merge(x = sampMap$cutResShpFort$id, data.frame(x = cohAbuFG$FG, y = round(100 * cohAbuFG[,coh_i]/max(cohAbuFG[,coh_i]))), all = TRUE)
                               grid_data <- cbind(sampMap$cutResShpFort, NumInd = all_cell[,2])
                               
-                              if(length(unique(grid_data$FG)) == (sampMap$cutFG + 1)){
+                              if(length(sampMap$gridShp@polygons) == (sampMap$cutFG + 1)){
                                 tmp_coo <- data.frame(coordinates(sampMap$gridShp), cell_id = sampMap$gridShp$IDs)
                                 colnames(tmp_coo) <- c("Lon", "Lat", "FG")
                               }else{
@@ -482,7 +482,7 @@ SmartProject <- R6Class("smartProject",
                             all_cell[is.na(all_cell)] <- 0
                             grid_data <- cbind(sampMap$cutResShpFort, DistAvg = all_cell[,2])
                             
-                            if(length(unique(grid_data$FG)) == (sampMap$cutFG + 1)){
+                            if(length(sampMap$gridShp@polygons) == (sampMap$cutFG + 1)){
                               tmp_coo <- data.frame(coordinates(sampMap$gridShp), cell_id = sampMap$gridShp$IDs)
                               colnames(tmp_coo) <- c("Lon", "Lat", "FG")
                             }else{
@@ -848,7 +848,7 @@ SmartProject <- R6Class("smartProject",
                             all_cell[is.na(all_cell)] <- 0
                             grid_data <- cbind(sampMap$cutResShpFort, Beta = all_cell[,2])
                             
-                            if(length(unique(grid_data$FG)) == (sampMap$cutFG + 1)){
+                            if(length(sampMap$gridShp@polygons) == (sampMap$cutFG + 1)){
                               tmp_coo <- data.frame(coordinates(sampMap$gridShp), cell_id = sampMap$gridShp$IDs)
                               colnames(tmp_coo) <- c("Lon", "Lat", "FG")
                             }else{
@@ -892,7 +892,7 @@ SmartProject <- R6Class("smartProject",
                             all_cell[is.na(all_cell)] <- 0
                             grid_data <- cbind(sampMap$cutResShpFort, Hours = all_cell[,2])
                             
-                            if(length(unique(grid_data$FG)) == (sampMap$cutFG + 1)){
+                            if(length(sampMap$gridShp@polygons) == (sampMap$cutFG + 1)){
                               tmp_coo <- data.frame(coordinates(sampMap$gridShp), cell_id = sampMap$gridShp$IDs)
                               colnames(tmp_coo) <- c("Lon", "Lat", "FG")
                             }else{
@@ -3246,7 +3246,7 @@ SampleMap <- R6Class("sampleMap",
                        },
                        set_ggMapFgSurvey = function(rawSampCoo){
                          
-                         if(length(unique(grid_data$FG)) == (sampMap$cutFG + 1)){
+                         if(length(sampMap$gridShp@polygons) == (sampMap$cutFG + 1)){
                            tmp_coo <- data.frame(coordinates(sampMap$gridShp), cell_id = sampMap$gridShp$IDs)
                            colnames(tmp_coo) <- c("Lon", "Lat", "FG")
                          }else{
@@ -3281,7 +3281,7 @@ SampleMap <- R6Class("sampleMap",
                        },
                        set_ggMapFgFishery = function(rawSampCoo){
                          
-                         if(length(unique(grid_data$FG)) == (sampMap$cutFG + 1)){
+                         if(length(sampMap$gridShp@polygons) == (sampMap$cutFG + 1)){
                            tmp_coo <- data.frame(coordinates(sampMap$gridShp), cell_id = sampMap$gridShp$IDs)
                            colnames(tmp_coo) <- c("Lon", "Lat", "FG")
                          }else{
@@ -3750,7 +3750,7 @@ SampleMap <- R6Class("sampleMap",
                          all_cell[is.na(all_cell)] <- 0
                          grid_data <- cbind(cutResShpFort, Hours = all_cell[,2])
                          
-                         if(length(unique(grid_data$FG)) == (cutFG + 1)){
+                         if(length(gridShp@polygons) == (cutFG + 1)){
                            tmp_coo <- data.frame(coordinates(gridShp), cell_id = gridShp$IDs)
                            colnames(tmp_coo) <- c("Lon", "Lat", "FG")
                          }else{
