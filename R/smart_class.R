@@ -721,20 +721,28 @@ SmartProject <- R6Class("smartProject",
                                 stop(paste0("No size/price data found for specie ", specie))
                               
                               vecSize <- sort(unique(c(fleet$ecoPrice[[specie]]$LowerBound, fleet$ecoPrice[[specie]]$UpperBound)))
+                              curUnit <- unique(fleet$ecoPrice[[specie]]$Units)[1]
                               
-                              fisheryBySpecie[[specie]]$setLWstat()
+                              fisheryBySpecie[[specie]]$setLWstat(lwUnit = curUnit)
                               fgNames <- paste0("LW_", 1:(sampMap$cutFG+1))
                               # preRevenue <- vector("list", length(fgNames))
                               # names(preRevenue) <- fgNames
                               preRevenue <- data.frame(FG = 1:length(fgNames))
-                              preRevenue <- cbind(preRevenue, setNames(lapply(2:length(vecSize), function(x) x = NA), 2:length(vecSize)))
+                              preRevenue <- cbind(preRevenue, setNames(lapply(1:length(vecSize), function(x) x = NA), 1:length(vecSize)))
                               for(i in 1:nrow(preRevenue)){
                                 tempRev <- fisheryBySpecie[[specie]]$LWstat[fisheryBySpecie[[specie]]$LWstat$FG == i,]
                                 if(nrow(tempRev) > 0){
-                                  tempRev$propWei <- tempRev$relAbb/sum(tempRev$relAbb)
-                                  tempRev$SizeClass <- factor(findInterval(x = tempRev$avgLen, vec = vecSize), levels = 2:length(vecSize))
-                                  outClass <- merge(data.frame(SizeClass = levels(tempRev$SizeClass)), aggregate(formula = propWei ~ SizeClass, data = tempRev, FUN = sum), all.x = TRUE)
-                                  preRevenue[i,2:length(vecSize)] <- outClass$propWei
+                                  if(curUnit == "Length"){
+                                    tempRev$propWei <- tempRev$relAbb/sum(tempRev$relAbb)
+                                    tempRev$SizeClass <- factor(findInterval(x = tempRev$avgLen, vec = vecSize), levels = 1:length(vecSize))
+                                    outClass <- merge(data.frame(SizeClass = levels(tempRev$SizeClass)), aggregate(formula = propWei ~ SizeClass, data = tempRev, FUN = sum), all.x = TRUE)
+                                    preRevenue[i,2:(length(vecSize)+1)] <- outClass$propWei
+                                  }else{
+                                    tempRev$propWei <- tempRev$Freq/sum(tempRev$Freq)
+                                    tempRev$SizeClass <- factor(findInterval(x = tempRev$Weight, vec = vecSize), levels = 1:length(vecSize))
+                                    outClass <- merge(data.frame(SizeClass = levels(tempRev$SizeClass)), aggregate(formula = propWei ~ SizeClass, data = tempRev, FUN = sum), all.x = TRUE)
+                                    preRevenue[i,2:(length(vecSize)+1)] <- outClass$propWei
+                                  }
                                 }
                               }
                               outWeiProp[[fisheryBySpecie[[specie]]$specie]] <<- preRevenue
@@ -1817,12 +1825,23 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                              setWeight = function(sexVal = "Female"){
                                groMixout[[sexVal]]$Weight <<- LWpar[[sexVal]][["alpha"]] * groMixout[[sexVal]]$Length ^ LWpar[[sexVal]][["beta"]]
                              },
-                             setLWstat = function(){
-                               tmp_out <- do.call(rbind, groMixout)
+                             setLWstat = function(lwUnit = "Length"){
+                               if(length(groMixout) > 1){
+                                 tmp_out <- do.call(rbind, groMixout)
+                               }else{
+                                 tmp_out <- groMixout[[1]]
+                               }
                                tmp_out$Weight <- ceiling(tmp_out$Weight)
-                               tmp_lw <- ddply(tmp_out, .(Weight, FG), summarise,
-                                               avgLen = mean(Length), sdLen = sd(Length), relAbb = length(Length))
-                               tmp_lw <- tmp_lw[-which(is.na(tmp_lw), arr.ind = TRUE)[,1],]
+                               
+                               if(lwUnit == "Length"){
+                                 tmp_lw <- ddply(tmp_out, .(Weight, FG), summarise,
+                                                 avgLen = mean(Length), sdLen = sd(Length), relAbb = length(Length))
+                                 tmp_lw <- tmp_lw[-which(is.na(tmp_lw), arr.ind = TRUE)[,1],]
+                               }else{
+                                 tmp_lw <- as.data.frame(table(Weight = tmp_out$Weight, FG = tmp_out$FG), stringsAsFactors = FALSE)
+                                 tmp_lw$Weight <- as.numeric(tmp_lw$Weight)
+                                 tmp_lw <- tmp_lw[tmp_lw$Freq > 0,]
+                               }
                                LWstat <<- tmp_lw
                              },
                              getMCsamps = function(numSamp = 2000, numAdap = 100, numIter = 500, sexDrop = "Female", curveSel = "von Bertalanffy"){
