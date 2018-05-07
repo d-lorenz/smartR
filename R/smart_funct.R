@@ -351,7 +351,7 @@ genBanEffoDen = function(effoPatt, set0, targetDensity){
 }
 
 getFleetRevenue = function(predProd, lwStat, priceVec){
-  outProp <- apply(predProd, 1, function(x) apply(t(lwStat*t(x))*priceVec,2, sum))
+  outProp <- apply(predProd, 1, function(x) apply(t(lwStat*t(x))*priceVec,2, sum, na.rm = TRUE))
   outProp <- t(outProp)
   return(outProp)
 }
