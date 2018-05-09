@@ -313,6 +313,7 @@ genFlatEffo = function(effoPatt){
 genFlatEffoDen = function(effoPatt, targetDensity){
   npp_star = sum(effoPatt)
   pj = (effoPatt/npp_star)*(1/targetDensity)
+  pj[pj == Inf] <- 0
   pj = pj/sum(pj, na.rm = TRUE)
   if(length(which(is.na(pj)))>0) pj[which(is.na(pj))] <- 0
   EFG = sample(1:length(effoPatt), ceiling(npp_star), prob= pj, replace = TRUE)
@@ -343,6 +344,7 @@ genBanEffoDen = function(effoPatt, set0, targetDensity){
   if(sum(REstar) == 0) 
     REstar[setdiff(1:length(effoPatt),set0)] <- sum(effoPatt)/length(setdiff(1:length(effoPatt),set0))
   pj = REstar/sum(REstar)*(1/targetDensity)
+  pj[pj == Inf] <- 0
   pj = pj/sum(pj, na.rm = TRUE)
   if(length(which(is.na(pj)))>0) pj[which(is.na(pj))] <- 0
   Ecell = sample(1:length(effoPatt), ceiling(npp_star), prob = pj, replace = TRUE)
