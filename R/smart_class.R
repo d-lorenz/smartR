@@ -636,7 +636,7 @@ SmartProject <- R6Class("smartProject",
                                 selRow <- 1:nrow(simEffo)
                               
                               if(selMode %in% c("flatDen", "banDen")){
-                                simDen <- apply(simEffo, 2, sum)/as.numeric(table(FGm$FG))
+                                simDen <- apply(simEffo[,4:(ncol(simEffo)-1)], 2, sum)/as.numeric(table(sampMap$cutResult$FG))
                                 obsDen <- apply(fleet$effoAllLoa[,4:(ncol(fleet$effoAllLoa)-1)],2,sum)/as.numeric(table(sampMap$cutResult$FG))
                                 fDen = simDen/(overDen*obsDen)
                                 if(length(which(is.na(fDen)))>0) fDen[which(is.na(fDen))] <- 1
