@@ -240,9 +240,9 @@ SmartProject <- R6Class("smartProject",
                             cat("\n\nComputing weighted Number of individuals x Size x Stratum: ", sep = "")
                             for(i in 1:length(surveyBySpecie)){
                               cat("\n\t", surveyBySpecie[[i]]$specie, "... ", sep = "")
-                              surveyBySpecie[[i]]$abuAvg$weiFem <- surveyBySpecie[[i]]$abuAvg$Female*sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
-                              surveyBySpecie[[i]]$abuAvg$weiMal <- surveyBySpecie[[i]]$abuAvg$Male*sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
-                              surveyBySpecie[[i]]$abuAvg$weiUns <- surveyBySpecie[[i]]$abuAvg$Unsex*sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
+                              surveyBySpecie[[i]]$abuAvg$weiFem <<- surveyBySpecie[[i]]$abuAvg$Female*sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
+                              surveyBySpecie[[i]]$abuAvg$weiMal <<- surveyBySpecie[[i]]$abuAvg$Male*sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
+                              surveyBySpecie[[i]]$abuAvg$weiUns <<- surveyBySpecie[[i]]$abuAvg$Unsex*sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
                               cat("Done!", sep = "")
                             }
                             cat("\nCompleted!", sep = "")
