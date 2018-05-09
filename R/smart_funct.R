@@ -302,6 +302,7 @@ fillbetas <- function(bmat){
 genFlatEffo = function(effoPatt){
   npp_star = sum(effoPatt)
   pj = (effoPatt/npp_star)
+  if(length(which(is.na(pj)))>0) pj[which(is.na(pj))] <- 0
   EFG = sample(1:length(effoPatt), ceiling(npp_star), prob = pj, replace = TRUE)
   Ename = as.numeric(names(table(EFG)))
   Estar = numeric(length(effoPatt))
@@ -312,7 +313,7 @@ genFlatEffo = function(effoPatt){
 genFlatEffoDen = function(effoPatt, targetDensity){
   npp_star = sum(effoPatt)
   pj = (effoPatt/npp_star)*(1/targetDensity)
-  pj = pj/sum(pj,na.rm=T)
+  pj = pj/sum(pj, na.rm = TRUE)
   if(length(which(is.na(pj)))>0) pj[which(is.na(pj))] <- 0
   EFG = sample(1:length(effoPatt), ceiling(npp_star), prob= pj, replace = TRUE)
   Ename = as.numeric(names(table(EFG)))
@@ -326,7 +327,8 @@ genBanEffo = function(effoPatt, set0){
   REstar <- effoPatt
   REstar[set0] <- 0
   if(sum(REstar) == 0) REstar[setdiff(1:length(effoPatt),set0)] <- sum(effoPatt)/length(setdiff(1:length(effoPatt),set0))
-  pj = REstar/sum(REstar)
+  pj = REstar/sum(REstar, na.rm = TRUE)
+  if(length(which(is.na(pj)))>0) pj[which(is.na(pj))] <- 0
   Ecell = sample(1:length(effoPatt), ceiling(npp_star), prob = pj, replace = TRUE)
   Ename = as.numeric(names(table(Ecell)))
   Estar = numeric(length(effoPatt))
@@ -340,9 +342,9 @@ genBanEffoDen = function(effoPatt, set0, targetDensity){
   REstar[set0] <- 0
   if(sum(REstar) == 0) 
     REstar[setdiff(1:length(effoPatt),set0)] <- sum(effoPatt)/length(setdiff(1:length(effoPatt),set0))
-  
   pj = REstar/sum(REstar)*(1/targetDensity)
-  pj = pj/sum(pj)
+  pj = pj/sum(pj, na.rm = TRUE)
+  if(length(which(is.na(pj)))>0) pj[which(is.na(pj))] <- 0
   Ecell = sample(1:length(effoPatt), ceiling(npp_star), prob = pj, replace = TRUE)
   Ename = as.numeric(names(table(Ecell)))
   Estar = numeric(length(effoPatt))
