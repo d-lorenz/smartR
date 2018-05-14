@@ -774,23 +774,23 @@ SmartProject <- R6Class("smartProject",
                             nRec = nrow(Esim)
                             nVproc = nVessels
                             nIter <- 0
-                            noRec <- numeric(0)
+                            toOpt <- numeric(0)
                             
                             while(length(noV) < nVessels){
                               nIter <- nIter + 1 
                               cat("\nIteration", nIter)
                               
                               cat("\n\tOptimising effort... ", sep = "")
-                              genSimEffo(method = effoMode, selRow = noRec, overDen = effoDen, areaBan = effoBan)
+                              genSimEffo(method = effoMode, selRow = toOpt, overDen = effoDen, areaBan = effoBan)
                               cat("Done!", sep = "")
                               
                               cat("\n\tComputing production...", sep = "")
-                              simProdAll(selRow = noRec)
+                              simProdAll(selRow = toOpt)
                               cat("Done!", sep = "")
                               
                               cat("\n\tComputing cost-revenues...", sep = "")
                               getSimTotalCost()
-                              getSimRevenue(selRow = noRec)
+                              getSimRevenue(selRow = toOpt)
                               getCostRevenue()
                               cat("Done!", sep = "")
                               
@@ -803,13 +803,13 @@ SmartProject <- R6Class("smartProject",
                               Pmat <- cbind(Pmat,pvec)
                               if(ncol(Pmat)>=thr0){
                                 noV <- unique(c(noV,which(apply(Pmat[,(ncol(Pmat)-thr0+1):ncol(Pmat)],1,sum,na.rm=T) >= thr0)))
-                                noRec <- which(simEffo$I_NCEE %in% simCostRevenue$I_NCEE[noV])
+                                toOpt <- which(!(simEffo$I_NCEE %in% simCostRevenue$I_NCEE[noV]))
                               }
                               nVproc = c(nVproc,nVessels-length(noV))
                               rec_minus <- which(simEffo$I_NCEE %in% noV)
                               simEffo[rec_minus,] <<- Etemp[rec_minus,]
                               Etemp = simEffo
-                              Gmat[set_minus,ncol(Gmat)] <- Gmat[set_minus,ncol(Gmat)-1]
+                              Gmat[set_minus, ncol(Gmat)] <- Gmat[set_minus, ncol(Gmat)-1]
                               
                               par(mfrow=c(1,2), las=2)
                               plot(1:ncol(Gmat),apply(Gmat,2,sum,na.rm=TRUE)/1000000,type="l",
