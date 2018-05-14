@@ -596,6 +596,7 @@ SmartProject <- R6Class("smartProject",
                             fgClms <- which(colnames(simEffo) %in% as.character(seq(1, sampMap$cutFG + 1)))
                             
                             for(specie in names(fleet$specLogit)){
+                              gc()
                               thrZero <- mean(fleet$effoProdAllLoa[,specie][fleet$effoProdAllLoa[,specie] < fleet$specSett[[specie]]$threshold & fleet$effoProdAllLoa[,specie] > 0])
                               if(fleet$specLogit[[specie]]$logit$Name == "GLM"){
                                 infish <- which(predict(fleet$specLogit[[specie]]$logit$Model, datalog, type = "response") > fleet$specLogit[[specie]]$logit$Cut)
@@ -603,6 +604,7 @@ SmartProject <- R6Class("smartProject",
                                 infish <- which(predict(fleet$specLogit[[specie]]$logit$Model, datalog, type = "prob")[,2] > fleet$specLogit[[specie]]$logit$Cut)
                               }
                               for(i in 1:length(infish)){
+                                gc()
                                 idata <- as.numeric(simEffo[selRow,][infish[i], fgClms])
                                 iloa <- as.numeric(simEffo[selRow,][infish[i], "Loa"])
                                 iy <- which(lyears == simEffo[selRow,][infish[i], "Year"])
@@ -612,6 +614,7 @@ SmartProject <- R6Class("smartProject",
                                 if(sum(ib*idata)>0){
                                   Prod[infish[i],] <- (ib * idata * iloa) + ((ib*idata)/sum(ib*idata))*thrZero
                                 }
+                                rm(idata, iloa, iy, im, ib)
                               }
                               Prod[is.na(Prod)] <- 0
                               colnames(Prod) <- paste("PR_", as.character(seq(1, ncol(Prod))), sep = "")
@@ -620,6 +623,7 @@ SmartProject <- R6Class("smartProject",
                               }else{
                                 simProd[[specie]][selRow,] <<- Prod
                               }
+                              rm(Prod, thrZero, infish)
                             }
                           },
                           genSimEffo = function(method = "flat", selRow = numeric(0), overDen = 1.05, areaBan = numeric(0)){
