@@ -588,7 +588,7 @@ SmartProject <- R6Class("smartProject",
                             if(length(selRow) == 0)
                               selRow <- 1:nrow(simEffo)
                             
-                            lyears <- sort(as.numeric(as.character(unique(simEffo$Year[selRow]))))
+                            lyears <- sort(as.numeric(as.character(unique(fleet$effoAllLoa$Year))))
                             datalog <- simEffo[selRow,]
                             datalog$MonthNum <- as.factor(datalog$MonthNum)
                             datalog$Year <- as.factor(datalog$Year)
