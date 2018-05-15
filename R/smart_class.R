@@ -805,7 +805,7 @@ SmartProject <- R6Class("smartProject",
                                 toOpt <- which(!(simEffo$I_NCEE %in% simCostRevenue$I_NCEE[noV]))
                               }
                               nVproc = c(nVproc,nVessels-length(noV))
-                              rec_minus <- which(simEffo$I_NCEE %in% simCostRevenue$I_NCEE[noV])
+                              rec_minus <- which(simEffo$I_NCEE %in% simCostRevenue$I_NCEE[set_minus])
                               simEffo[rec_minus,] <<- Etemp[rec_minus,]
                               Etemp = simEffo
                               Gmat[set_minus, ncol(Gmat)] <- Gmat[set_minus, ncol(Gmat)-1]
