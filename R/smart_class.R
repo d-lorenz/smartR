@@ -821,7 +821,7 @@ SmartProject <- R6Class("smartProject",
                             
                             cat("\nSaving results...", sep = "")
                             outGmat <<- Gmat
-                            outNVlst <<- nVproc
+                            # outNVlst <<- nVproc
                             outOptimEffo <<- Etemp
                             cat("Done!", sep = "")
                           },
