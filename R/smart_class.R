@@ -588,7 +588,7 @@ SmartProject <- R6Class("smartProject",
                             if(length(selRow) == 0)
                               selRow <- 1:nrow(simEffo)
                             
-                            lyears <- sort(as.numeric(as.character(unique(simEffo$Year[selRow]))))
+                            lyears <- sort(as.numeric(as.character(unique(fleet$effoAllLoa$Year))))
                             datalog <- simEffo[selRow,]
                             datalog$MonthNum <- as.factor(datalog$MonthNum)
                             datalog$Year <- as.factor(datalog$Year)
@@ -805,7 +805,7 @@ SmartProject <- R6Class("smartProject",
                                 toOpt <- which(!(simEffo$I_NCEE %in% simCostRevenue$I_NCEE[noV]))
                               }
                               nVproc = c(nVproc,nVessels-length(noV))
-                              rec_minus <- which(simEffo$I_NCEE %in% noV)
+                              rec_minus <- which(simEffo$I_NCEE %in% simCostRevenue$I_NCEE[set_minus])
                               simEffo[rec_minus,] <<- Etemp[rec_minus,]
                               Etemp = simEffo
                               Gmat[set_minus, ncol(Gmat)] <- Gmat[set_minus, ncol(Gmat)-1]
