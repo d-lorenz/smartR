@@ -34,7 +34,7 @@ SmartProject <- R6Class("smartProject",
                           simTotalRevenue = NULL,
                           simCostRevenue = NULL,
                           outGmat = NULL,
-                          outNVlst = NULL,
+                          # outNVlst = NULL,
                           outOptimEffo = NULL,
                           outWeiProp = NULL,
                           # economy = NULL,
@@ -821,7 +821,7 @@ SmartProject <- R6Class("smartProject",
                             
                             cat("\nSaving results...", sep = "")
                             outGmat <<- Gmat
-                            outNVlst <<- nVproc
+                            # outNVlst <<- nVproc
                             outOptimEffo <<- Etemp
                             cat("Done!", sep = "")
                           },
