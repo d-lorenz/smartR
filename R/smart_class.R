@@ -382,7 +382,7 @@ SmartProject <- R6Class("smartProject",
                               grid_data <- cbind(sampMap$cutResShpFort, NumInd = all_cell[,2])
                               
                               if(length(sampMap$gridShp@polygons) == (sampMap$cutFG + 1)){
-                                tmp_coo <- data.frame(coordinates(sampMap$gridShp), cell_id = 1:length(gridShp))
+                                tmp_coo <- data.frame(coordinates(sampMap$gridShp), cell_id = 1:length(sampMap$gridShp))
                                 colnames(tmp_coo) <- c("Lon", "Lat", "FG")
                               }else{
                                 tmp_coo <- sampMap$cutResShpCent
