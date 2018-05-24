@@ -992,7 +992,7 @@ DoFit <- function(Pars,TheFunk,FullMin=F,DoVarCo=F,...)
   Outputs$SSBSD <- rep(0,Nyear)
   
   # print results to a file
-  print.out(Dirn,"Test.out",Outputs)
+  # print.out(Dirn,"Test.out",Outputs)
   
   # Now do a full minimization
   if (FullMin==T)
@@ -1018,8 +1018,8 @@ DoFit <- function(Pars,TheFunk,FullMin=F,DoVarCo=F,...)
     print(Res$par)
     Outputs$VarCo <- matrix(0,ncol=Npar,nrow=Npar)
     Outputs$SSBSD <- rep(0,Nyear)
-    print("Now printing")
-    print.out(Dirn,"Test2.out",Outputs)
+    # print("Now printing")
+    # print.out(Dirn,"Test2.out",Outputs)
     
     Res <- optim(Res$par,TheFunk,method = "BFGS",hessian=T,DoEst=T,...)
     Outputs <- TheFunk2(Res$par,DoEst=F,...)
@@ -1027,8 +1027,8 @@ DoFit <- function(Pars,TheFunk,FullMin=F,DoVarCo=F,...)
     print(Res$par)
     Outputs$VarCo <- matrix(0,ncol=Npar,nrow=Npar)
     Outputs$SSBSD <- rep(0,Nyear)
-    print("Now printing")
-    print.out(Dirn,"Test3.out",Outputs)
+    # print("Now printing")
+    # print.out(Dirn,"Test3.out",Outputs)
     cat("Final Obj Function",Res$value,"\n")
     
     # This section computes the variance covariance matrix and hence the standard errors for SSB
