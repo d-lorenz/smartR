@@ -2926,7 +2926,7 @@ smart_gui <- function(){
     dev.set(dev.list()[pre_dev+8])
     
   })
-  addSpace(sim_g_top, 20)
+  addSpace(sim_g_top, 10)
   
   sim_p <- ggraphics(container = sim_g, width = 550, height = 250, expand = TRUE)
 
