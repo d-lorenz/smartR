@@ -1733,8 +1733,8 @@ smart_gui <- function(){
       # svalue(cohYea_drop) <- "All"
 
       # Update LWrel specie selection
-      assSpe_drop[] <- my_project$specieInSurvey
-      svalue(assSpe_drop) <- my_project$specieInSurvey[1]
+      # assSpe_drop[] <- my_project$specieInSurvey
+      # svalue(assSpe_drop) <- my_project$specieInSurvey[1]
 
       if(!is.null(my_project$sampMap$cutResShp)){
         my_project$addFg2Survey()
@@ -2069,8 +2069,8 @@ smart_gui <- function(){
       svalue(fis_l3) <- paste("Years: from", min(as.numeric(as.character(my_project$yearInFishery))), " to ", max(as.numeric(as.character(my_project$yearInFishery))))
 
       # Update LWrel specie selection
-      assSpe_drop[] <- my_project$specieInFishery
-      svalue(assSpe_drop) <- my_project$specieInFishery[1]
+      # assSpe_drop[] <- my_project$specieInFishery
+      # svalue(assSpe_drop) <- my_project$specieInFishery[1]
 
       svalue(stat_bar) <- ""
 
@@ -2732,84 +2732,58 @@ smart_gui <- function(){
     visible(tempWind_Gain) <- TRUE
 
   })
-
   addSpring(sim_g_top2)
-
-  addSpring(sim_g_top)
-
-  sim_p <- ggraphics(container = sim_g, width = 550, height = 250, expand = TRUE)
-
-  
-  
-  ####   Assess   ####
-  
-  ass_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Assess")
-  ass_g_top <- gframe(horizontal = TRUE, container = ass_g, spacing = 10)
-  addSpace(ass_g_top, 10)
-  
-  assfra_g <- gframe("Input setup", horizontal = TRUE, container = ass_g_top, expand = TRUE)
-  
-  addSpace(assfra_g, 10)
-  
-  assSou_g <- gframe("Source", horizontal = FALSE, container = assfra_g, expand = TRUE)
-  addSpring(assSou_g)
-  assSou_r <- gradio(c("Survey", "Fishery"), selected = 1, horizontal = FALSE, container = assSou_g,
-                     handler = function(...){
-                       if(svalue(assSou_r) == "Survey"){
-                         if(is.null(my_project$specieInSurvey)){
-                           assSpe_drop[] <- "No data"
-                           svalue(assSpe_drop) <- "No data"
-                         }else{
-                           assSpe_drop[] <- my_project$specieInSurvey
-                           svalue(assSpe_drop) <- my_project$specieInSurvey[1]
-                         }
-                       }else{
-                         if(is.null(my_project$specieInFishery)){
-                           assSpe_drop[] <- "No data"
-                           svalue(assSpe_drop) <- "No data"
-                         }else{
-                           assSpe_drop[] <- my_project$specieInFishery
-                           svalue(assSpe_drop) <- my_project$specieInFishery[1]
-                         }
-                       }
-                     })
-  addSpring(assSou_g)
-  
-  addSpace(assfra_g, 10)
-  
-  assSpe_g <- gframe("Specie", horizontal = FALSE, container = assfra_g, expand = TRUE)
-  addSpring(assSpe_g)
-  assSpe_drop <- gcombobox(items = "Specie", selected = 1, container = assSpe_g, editable = FALSE)
-  addSpring(assSpe_g)
-  
-  addSpace(assfra_g, 10)
-  
-  gbutton("Set length weight\nrelationship", container = assfra_g, handler = function(h,...){
+  gbutton("Set length weight\nrelationship", container = sim_g_top2, handler = function(h,...){
     
-    tempWind_LWrel <- gwindow(title="Length-Weight Relationship", visible = FALSE,
+    tempWind_LWrel <- gwindow(title="Length-Weight Relationship",
+                              visible = FALSE,
                               parent = main_win,
-                              width = 800, height = 500)
+                              width = 900, height = 600)
     
-    lwRel_g <- ggroup(horizontal = FALSE, container = tempWind_LWrel, label = "LW relationship", spacing = 15)
-    lwRel_g_top <- gframe(horizontal = TRUE, container = lwRel_g, spacing = 10)
+    lwRel_g <- ggroup(horizontal = TRUE, container = tempWind_LWrel, label = "LW relationship")
+    addSpace(lwRel_g, 10)
     
-    addSpace(lwRel_g_top,15)
+    lwRel_g_top <- ggroup(horizontal = FALSE, container = lwRel_g)
+    addSpace(lwRel_g_top, 10)
     
-    lwRel_f_sex <- gframe("Sex", horizontal = FALSE, container = lwRel_g_top, expand = TRUE)
-    addSpace(lwRel_f_sex, 10)
+    assfra_g <- gframe("Input setup", horizontal = FALSE, container = lwRel_g_top)
+    assfra_g$set_size(value = c(width = 200, height = 231))
+    addSpace(assfra_g, 5)
+    
+    assSou_g <- gframe("Source", horizontal = FALSE, container = assfra_g)
+    assSou_r <- gradio(c("Survey", "Fishery"), selected = 1, horizontal = FALSE, container = assSou_g,
+                       handler = function(...){
+                         if(svalue(assSou_r) == "Survey"){
+                           if(is.null(my_project$specieInSurvey)){
+                             assSpe_drop[] <- "No data"
+                             svalue(assSpe_drop) <- "No data"
+                           }else{
+                             assSpe_drop[] <- my_project$specieInSurvey
+                             svalue(assSpe_drop) <- my_project$specieInSurvey[1]
+                           }
+                         }else{
+                           if(is.null(my_project$specieInFishery)){
+                             assSpe_drop[] <- "No data"
+                             svalue(assSpe_drop) <- "No data"
+                           }else{
+                             assSpe_drop[] <- my_project$specieInFishery
+                             svalue(assSpe_drop) <- my_project$specieInFishery[1]
+                           }
+                         }
+                       })
+    addSpace(assfra_g, 10)
+    
+    assSpe_g <- gframe("Specie", horizontal = FALSE, container = assfra_g)
+    assSpe_drop <- gcombobox(items = "Specie", selected = 1, container = assSpe_g, editable = FALSE)
+    addSpace(assfra_g, 10)
+    
+    lwRel_f_sex <- gframe("Sex", horizontal = FALSE, container = assfra_g)
     lwRel_sex_drop <- gcombobox(items = c("Female", "Male", "Unsex"),
                                 selected = 1, container = lwRel_f_sex, expand = TRUE,
-                                editable = FALSE, handler = function(...){
-                                  svalue(sex_label) <- svalue(lwRel_sex_drop)
-                                })
-    addSpace(lwRel_f_sex, 10)
+                                editable = FALSE)
+    addSpace(assfra_g, 10)
     
-    addSpace(lwRel_g_top,15)
-    
-    ## Estimate from sample and then compute
-    lwRel_f_esti <- gframe(text = "Estimate", horizontal = TRUE, container = lwRel_g_top, spacing = 10)
-    addSpace(lwRel_f_esti, 10)
-    gbutton("Load sample", container = lwRel_f_esti, handler = function(h,...){
+    gbutton("\t  Load\nWeighted Sample", container = assfra_g, handler = function(h,...){
       
       lw_data <- read.csv(pathLWrel)
       lw_fit <- nls(Weight ~ I(alpha * Length ^ beta),
@@ -2857,9 +2831,9 @@ smart_gui <- function(){
       )
       
     })
-    addSpace(lwRel_f_esti, 10)
     
-    addSpace(lwRel_g_top,15)
+    addSpace(lwRel_g_top, 10)
+    
     lwRel_f_valu <- gframe(text = "Values", horizontal = TRUE, container = lwRel_g_top, spacing = 10)
     addSpace(lwRel_f_valu, 10)
     valu_lyt <- glayout(container = lwRel_f_valu)
@@ -2869,35 +2843,44 @@ smart_gui <- function(){
     valu_lyt[2,2] <- gedit(text = "3.00", width = 10, container = valu_lyt)
     addSpace(lwRel_f_valu, 10)
     
-    addSpace(lwRel_g_top,15)
-    ## Compute from values
-    lwRel_f_comp <- gframe(text = "Compute", horizontal = TRUE, container = lwRel_g_top, spacing = 10)
-    addSpace(lwRel_f_comp, 10)
-    gbutton("Set Weight", container = lwRel_f_comp, handler = function(h,...){
-      
+    addSpace(lwRel_g_top, 10)
+    
+    gbutton("\nSet Weight\n", container = lwRel_g_top, handler = function(h,...){
       if(svalue(assSou_r) == "Fishery"){
         my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(assSpe_drop))]]$setWeight(sexVal = svalue(lwRel_sex_drop))
       }else{
         my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(assSpe_drop))]]$setWeight(sexVal = svalue(lwRel_sex_drop))
       }
-      
     })
-    addSpace(lwRel_f_comp, 10)
-    sex_label <- glabel(text = "Female", container = lwRel_f_comp)
-    addSpace(lwRel_f_comp, 10)
     
     addSpring(lwRel_g_top)
     gbutton("Close", container = lwRel_g_top, handler = function(h,...){
       dispose(tempWind_LWrel)
     })
+    addSpace(lwRel_g_top, 10)
     
-    addSpace(lwRel_g_top,15)
     visible(tempWind_LWrel) <- TRUE
     
-    lwRel_p <- ggraphics(container = lwRel_g, width = 550, height = 250, expand = TRUE)
+    addSpace(lwRel_g, 10)
+    lwRel_p <- ggraphics(container = lwRel_g, width = 550, height = 550, expand = TRUE)
+    addSpace(lwRel_g, 10)
+    
   })
+  addSpring(sim_g_top2)
   
-  addSpace(assfra_g, 10)
+
+  addSpring(sim_g_top)
+
+  sim_p <- ggraphics(container = sim_g, width = 550, height = 250, expand = TRUE)
+
+  
+  
+  ####   Assess   ####
+  
+  ass_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Assess")
+  ass_g_top <- gframe(horizontal = TRUE, container = ass_g, spacing = 10)
+  addSpace(ass_g_top, 10)
+  
   addSpace(ass_g_top, 10)
   
   
