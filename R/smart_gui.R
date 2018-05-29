@@ -2289,7 +2289,7 @@ smart_gui <- function(){
       }
     }
   })
-  spec_mix_f <- gframe(" Specie ", horizontal = FALSE, container = cont_g, expand = TRUE)
+  spec_mix_f <- gframe("Specie and Sex", horizontal = FALSE, container = cont_g, expand = TRUE)
   addSpring(spec_mix_f)
   spec_drop_mix <- gcombobox(items = "Specie", selected = 1, container = spec_mix_f, editable = FALSE, expand = TRUE)
   addSpring(spec_mix_f)
