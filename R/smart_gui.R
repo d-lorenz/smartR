@@ -2662,11 +2662,6 @@ smart_gui <- function(){
 
   })
   addSpring(sim_g_top2)
-
-  # gbutton("Set Size Class", container = sim_g_top3, handler = function(h,...){
-  #
-  # })
-  addSpring(sim_g_top2)
   gbutton("Set Size Class", container = sim_g_top2, handler = function(h,...){
 
     if(is.null(my_project$fleet$ecoPrice)){
@@ -2870,7 +2865,63 @@ smart_gui <- function(){
   
 
   addSpring(sim_g_top)
-
+  
+  sim_g_Sim <- gframe(text = "Scenario", horizontal = TRUE, container = sim_g_top)
+  addSpace(sim_g_Sim, 10)
+  sim_g_SimPar <- ggroup(horizontal = TRUE, container = sim_g_Sim)
+  addSpring(sim_g_SimPar)
+  sim_g_SimPar2 <- ggroup(horizontal = FALSE, container = sim_g_SimPar)
+  addSpring(sim_g_SimPar2)
+  sim_f_Thr <- gframe(text = "Threshold", horizontal = TRUE, container = sim_g_SimPar2)
+  sim_Thr <- gslider(from = 0, to = 100, by = 1, value = 10, container = sim_f_Thr)
+  addSpring(sim_g_SimPar2)
+  sim_f_Mode <- gframe(text = "Mode", horizontal = TRUE, container = sim_g_SimPar2)
+  sim_Mode <- gcombobox(items = c("flat", "flatDen", "ban", "banDen"),
+                        selected = 1, container = sim_f_Mode, handler = function(h,...){
+                          if(svalue(sim_Mode) %in% c("flatDen", "banDen")){
+                            enabled(sim_f_Den) <- TRUE
+                          }else{
+                            enabled(sim_f_Den) <- FALSE
+                          }
+                          if(svalue(sim_Mode) %in% c("ban", "banDen")){
+                            enabled(sim_f_Ban) <- TRUE
+                          }else{
+                            enabled(sim_f_Ban) <- FALSE
+                          }
+                        })
+  addSpring(sim_g_SimPar2)
+  addSpring(sim_g_SimPar)
+  sim_g_SimPar3 <- ggroup(horizontal = FALSE, container = sim_g_SimPar)
+  addSpring(sim_g_SimPar3)
+  sim_f_Den <- gframe(text = "Density", horizontal = TRUE, container = sim_g_SimPar3)
+  sim_Den <- gspinbutton(from = 0.5, to = 5, by = 0.1, value = 1.1, container = sim_f_Den)
+  addSpring(sim_g_SimPar3)
+  sim_f_Ban <- gframe(text = "Closed Area", horizontal = TRUE, container = sim_g_SimPar3)
+  sim_Ban <- gbutton("Set", container = sim_f_Ban, handler = function(h,...){
+    
+  })
+  addSpring(sim_g_SimPar3)
+  addSpring(sim_g_SimPar)
+  addSpring(sim_g_Sim)
+  gbutton(" Start\nSimulation", container = sim_g_Sim, handler = function(h,...){
+    
+    cat("\n\nSimulating ", sep = "")
+    my_sampling$simEffo <- NULL
+    gc()
+    my_sampling$genSimEffo()
+    my_sampling$genSimEffo(method = svalue(sim_Mode), overDen = svalue(sim_Den), areaBan = svalue(sim_Ban))
+    my_sampling$simulateFishery(thr0 = svalue(sim_Thr), effoMode = svalue(sim_Mode), effoBan = svalue(sim_Ban), effoDen = svalue(sim_Den))
+    my_sampling$simProdAll()
+    my_sampling$getSimTotalCost()
+    my_sampling$getSimRevenue()
+    my_sampling$getCostRevenue()
+    cat(" Done!")
+    
+  })
+  addSpace(sim_g_Sim, 10)
+  
+  addSpring(sim_g_top)
+  
   sim_p <- ggraphics(container = sim_g, width = 550, height = 250, expand = TRUE)
 
   
