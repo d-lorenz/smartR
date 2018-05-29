@@ -2906,8 +2906,8 @@ smart_gui <- function(){
   addSpring(sim_g_SimPar3)
   addSpring(sim_g_SimPar)
   addSpring(sim_g_Sim)
-  gbutton(" Start\nSimulation", container = sim_g_Sim, handler = function(h,...){
-    
+  gbutton("   Start\nSimulation", container = sim_g_Sim, handler = function(h,...){
+    dev.set(dev.list()[pre_dev+8])
     cat("\n\nSimulating ", sep = "")
     my_project$simEffo <- NULL
     gc()
@@ -2918,12 +2918,14 @@ smart_gui <- function(){
     my_project$getSimTotalCost()
     my_project$getSimRevenue()
     my_project$getCostRevenue()
-    cat(" Done!")
-    
   })
   addSpring(sim_g_Sim)
-  addSpace(sim_g_Sim, 10)
-  
+
+  addSpace(sim_g_top, 10)
+  gbutton(" View\nResult", container = sim_g_top, handler = function(h,...){
+    dev.set(dev.list()[pre_dev+8])
+    
+  })
   addSpace(sim_g_top, 20)
   
   sim_p <- ggraphics(container = sim_g, width = 550, height = 250, expand = TRUE)
