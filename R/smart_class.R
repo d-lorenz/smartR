@@ -3768,9 +3768,13 @@ SampleMap <- R6Class("sampleMap",
                          all_cell[is.na(all_cell)] <- 0
                          grid_data <- cbind(cutResShpFort, Hours = all_cell[,2])
                          
-                         if(length(gridShp@polygons) == (cutFG + 1)){
-                           tmp_coo <- data.frame(coordinates(gridShp), cell_id = 1:length(gridShp))
-                           colnames(tmp_coo) <- c("Lon", "Lat", "FG")
+                         if(length(cutFG) > 0){
+                           if(length(gridShp@polygons) == (cutFG + 1)){
+                             tmp_coo <- data.frame(coordinates(gridShp), cell_id = 1:length(gridShp))
+                             colnames(tmp_coo) <- c("Lon", "Lat", "FG")
+                           }else{
+                             tmp_coo <- cutResShpCent
+                           }
                          }else{
                            tmp_coo <- cutResShpCent
                          }
@@ -3811,9 +3815,13 @@ SampleMap <- R6Class("sampleMap",
                        },
                        setCutFGmap = function(){
                          
-                         if(length(gridShp@polygons) == (cutFG + 1)){
-                           tmp_coo <- data.frame(coordinates(gridShp), cell_id = 1:length(gridShp))
-                           colnames(tmp_coo) <- c("Lon", "Lat", "FG")
+                         if(length(cutFG) > 0){
+                           if(length(gridShp@polygons) == (cutFG + 1)){
+                             tmp_coo <- data.frame(coordinates(gridShp), cell_id = 1:length(gridShp))
+                             colnames(tmp_coo) <- c("Lon", "Lat", "FG")
+                           }else{
+                             tmp_coo <- cutResShpCent
+                           }
                          }else{
                            tmp_coo <- cutResShpCent
                          }
