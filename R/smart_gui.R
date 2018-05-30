@@ -2901,8 +2901,7 @@ smart_gui <- function(){
   addSpring(sim_f_Den)
   addSpring(sim_g_SimPar3)
   sim_Ban <- gbutton("Set Closed Area", container = sim_g_SimPar3, handler = function(h,...){
-    if(is.null(my_project$simBanFG)) my_project$simBanFG <- rep("0", nrow(my_project$sampMap$cutResShpCent))
-    
+
     tempWind_Area <- gwindow(title = "Set Closed Area",
                              # visible = FALSE,
                              parent = main_win,
@@ -2920,7 +2919,6 @@ smart_gui <- function(){
       }else{
         try({
           while(svalue(setArea) == "Add"){
-            
             banned <- gglocator(n = 1)
             ban_lst <- unlist(over(SpatialPointsDataFrame(banned, banned),
                                    my_project$sampMap$cutResShp, returnList = TRUE))
@@ -2958,8 +2956,8 @@ smart_gui <- function(){
     
     lwRel_p <- ggraphics(container = bigGroup, width = 550, height = 350, expand = TRUE)
     
-    grid_data <- data.frame(my_project$sampMap$cutResShpFort,
-                            Banned = my_project$simBanFG, stringsAsFactors = FALSE)
+    grid_data <- merge(x = my_project$sampMap$cutResShpFort,
+                       y = Banned = my_project$simBanFG$FG, all.x = TRUE)
     tmp_coo <- my_project$sampMap$cutResShpCent
     my_project$sampMap$gooMapPlot +
       geom_polygon(aes(x = long, y = lat, group = group, fill = Banned),
