@@ -2981,8 +2981,8 @@ smart_gui <- function(){
     my_project$simEffo <- NULL
     gc()
     my_project$genSimEffo()
-    my_project$genSimEffo(method = svalue(sim_Mode), overDen = svalue(sim_Den), areaBan = svalue(sim_Ban))
-    my_project$simulateFishery(thr0 = svalue(sim_Thr), effoMode = svalue(sim_Mode), effoBan = svalue(sim_Ban), effoDen = svalue(sim_Den))
+    my_project$genSimEffo(method = svalue(sim_Mode), overDen = svalue(sim_Den), areaBan = as.numeric(my_project$simBanFG$FG[my_project$simBanFG$Banned == "Banned"]))
+    my_project$simulateFishery(thr0 = svalue(sim_Thr), effoMode = svalue(sim_Mode), effoBan = as.numeric(my_project$simBanFG$FG[my_project$simBanFG$Banned == "Banned"]), effoDen = svalue(sim_Den))
     my_project$simProdAll()
     my_project$getSimTotalCost()
     my_project$getSimRevenue()
