@@ -2959,7 +2959,7 @@ smart_gui <- function(){
     grid_data <- merge(x = my_project$sampMap$cutResShpFort,
                        y = my_project$simBanFG$FG, all.x = TRUE)
     tmp_coo <- my_project$sampMap$cutResShpCent
-    my_project$sampMap$gooMapPlot +
+    print(my_project$sampMap$gooMapPlot +
       geom_polygon(aes(x = long, y = lat, group = group, fill = Banned),
                    colour = "black", size = 0.1,
                    data = grid_data, alpha = 0.8) +
@@ -2970,8 +2970,7 @@ smart_gui <- function(){
       theme(legend.position='none') +
       xlab("Longitude") + ylab("Latitude") +
       scale_x_continuous(expand=c(0,0)) + 
-      scale_y_continuous(expand=c(0,0))
-    
+      scale_y_continuous(expand=c(0,0)))
   })
   addSpring(sim_g_SimPar3)
   addSpring(sim_g_SimPar)
