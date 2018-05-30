@@ -2875,7 +2875,7 @@ smart_gui <- function(){
   sim_f_Thr <- gframe(text = "Threshold", horizontal = TRUE, container = sim_g_SimPar2)
   sim_Thr <- gslider(from = 0, to = 100, by = 1, value = 10, container = sim_f_Thr)
   addSpring(sim_g_SimPar2)
-  sim_f_Mode <- gframe(text = "Effort Pattern", horizontal = TRUE, container = sim_g_SimPar2)
+  sim_f_Mode <- gframe(text = "Effort Pattern Mode", horizontal = TRUE, container = sim_g_SimPar2)
   addSpring(sim_f_Mode)
   sim_Mode <- gcombobox(items = c("flat", "flatDen", "ban", "banDen"),
                         selected = 1, container = sim_f_Mode, handler = function(h,...){
@@ -2885,9 +2885,9 @@ smart_gui <- function(){
                             enabled(sim_f_Den) <- FALSE
                           }
                           if(svalue(sim_Mode) %in% c("ban", "banDen")){
-                            enabled(sim_f_Ban) <- TRUE
+                            enabled(sim_Ban) <- TRUE
                           }else{
-                            enabled(sim_f_Ban) <- FALSE
+                            enabled(sim_Ban) <- FALSE
                           }
                         })
   addSpring(sim_f_Mode)
