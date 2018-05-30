@@ -2925,8 +2925,8 @@ smart_gui <- function(){
             if(length(ban_lst) > 0){
               my_project$simBanFG$Banned[ban_lst] <- ifelse(my_project$simBanFG$Banned[ban_lst] == "Banned", "0", "Banned")
               
-              grid_data$Banned[grid_data$FG == my_project$sampMap$cutResShp@polygons[[ban_lst[1]]]@ID] <- ifelse(grid_data$Banned[grid_data$FG == cutResShp@polygons[[ban_lst[1]]]@ID] == "Banned",
-                                                                                               "0", "Banned")
+              grid_data <- merge(x = my_project$sampMap$cutResShpFort,
+                                 y = my_project$simBanFG, all.x = TRUE)
               
               print(my_project$sampMap$gooMapPlot +
                       geom_polygon(aes(x = long, y = lat, group = group, fill = Banned),
