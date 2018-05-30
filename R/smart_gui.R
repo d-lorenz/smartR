@@ -2957,7 +2957,7 @@ smart_gui <- function(){
     lwRel_p <- ggraphics(container = bigGroup, width = 550, height = 350, expand = TRUE)
     
     grid_data <- merge(x = my_project$sampMap$cutResShpFort,
-                       y = Banned = my_project$simBanFG$FG, all.x = TRUE)
+                       y = my_project$simBanFG$FG, all.x = TRUE)
     tmp_coo <- my_project$sampMap$cutResShpCent
     my_project$sampMap$gooMapPlot +
       geom_polygon(aes(x = long, y = lat, group = group, fill = Banned),
