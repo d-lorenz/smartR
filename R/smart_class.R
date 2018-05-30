@@ -989,6 +989,7 @@ SmartProject <- R6Class("smartProject",
                           setFishGround = function(numCut){
                             sampMap$cutFG <<- numCut
                             sampMap$setCutResult(ind_clu = numCut)
+                            simBanFG <<- data.frame(FG = sampMap$cutResShpCent, Banned = "0", stringsAsFactors = FALSE)
                             tmp_clust <- cbind(Cell = 1:sampMap$nCells,
                                                FishGround = sampMap$clusMat[,numCut])
                             cat("\n\nSetting Fishing Ground year\n", sep = "")
