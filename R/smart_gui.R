@@ -2923,7 +2923,7 @@ smart_gui <- function(){
             ban_lst <- unlist(over(SpatialPointsDataFrame(banned, banned),
                                    my_project$sampMap$cutResShp, returnList = TRUE))
             if(length(ban_lst) > 0){
-              my_project$simBanFG[ban_lst] <- ifelse(my_project$simBanFG[ban_lst] == "Banned", "0", "Banned")
+              my_project$simBanFG$Banned[ban_lst] <- ifelse(my_project$simBanFG$Banned[ban_lst] == "Banned", "0", "Banned")
               
               grid_data$Banned[grid_data$FG == my_project$sampMap$cutResShp@polygons[[ban_lst[1]]]@ID] <- ifelse(grid_data$Banned[grid_data$FG == cutResShp@polygons[[ban_lst[1]]]@ID] == "Banned",
                                                                                                "0", "Banned")
