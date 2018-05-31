@@ -361,6 +361,7 @@ getFleetRevenue = function(predProd, lwStat, priceVec){
 }
 
 getFleetRevSeason = function(predProd, monthVec, lwStat, priceVec){
+  outProp <- matrix(data = 0, nrow = nrow(predProd), ncol = ncol(predProd))
   tmpSeason <- data.frame(Month = 1:12,
                           Season = c("winter", "winter", "spring",
                                      "spring", "spring", "summer",
@@ -368,12 +369,7 @@ getFleetRevSeason = function(predProd, monthVec, lwStat, priceVec){
                                      "fall", "fall", "winter"))
   for(season in c("winter", "spring", "summer", "fall")){
     tmpOutProp <- apply(predProd[monthVec %in% tmpSeason$Month[tmpSeason$Season == season],], 1, function(x) apply(t(lwStat[[season]]*t(x))*priceVec,2, sum, na.rm = TRUE))
-    
-    if(season == 1){
-      outProp <- t(tmpOutProp)
-    }else{
-      outProp <- rbind(outProp, t(tmpOutProp))
-    }
+    outProp[monthVec %in% tmpSeason$Month[tmpSeason$Season == season],] <- t(tmpOutProp)
   }
   return(outProp)
 }
