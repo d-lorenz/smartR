@@ -2958,23 +2958,24 @@ smart_gui <- function(){
                        y = my_project$simBanFG, all.x = TRUE)
     tmp_coo <- my_project$sampMap$cutResShpCent
     print(my_project$sampMap$gooMapPlot +
-      geom_polygon(aes(x = long, y = lat, group = group, fill = Banned),
-                   colour = "black", size = 0.1,
-                   data = grid_data, alpha = 0.8) +
-      scale_fill_manual("Banned Areas",
-                        values = c("Banned" = "red", "0" = "blue")) +
-      geom_text(aes(label = FG, x = Lon, y = Lat),
-                data = tmp_coo, size = 2) +
-      theme(legend.position='none') +
-      xlab("Longitude") + ylab("Latitude") +
-      scale_x_continuous(expand=c(0,0)) + 
-      scale_y_continuous(expand=c(0,0)))
+            geom_polygon(aes(x = long, y = lat, group = group, fill = Banned),
+                         colour = "black", size = 0.1,
+                         data = grid_data, alpha = 0.8) +
+            scale_fill_manual("Banned Areas",
+                              values = c("Banned" = "red", "0" = "blue")) +
+            geom_text(aes(label = FG, x = Lon, y = Lat),
+                      data = tmp_coo, size = 2) +
+            theme(legend.position='none') +
+            xlab("Longitude") + ylab("Latitude") +
+            scale_x_continuous(expand=c(0,0)) + 
+            scale_y_continuous(expand=c(0,0)))
   })
   addSpring(sim_g_SimPar3)
   addSpring(sim_g_SimPar)
   addSpring(sim_g_Sim)
   gbutton("   Start\nSimulation", container = sim_g_Sim, handler = function(h,...){
     dev.set(dev.list()[pre_dev+8])
+    svalue(sim_Res_radio) <- 1
     cat("\n\nSimulating ", sep = "")
     my_project$simEffo <- NULL
     gc()
@@ -2985,18 +2986,33 @@ smart_gui <- function(){
     my_project$getSimTotalCost()
     my_project$getSimRevenue()
     my_project$getCostRevenue()
+    my_project$setSimResults()
   })
   addSpring(sim_g_Sim)
-
+  
   addSpace(sim_g_top, 10)
-  gbutton(" View\nResult", container = sim_g_top, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+8])
-    
-  })
+  sim_Res <- gframe("View", horizontal = TRUE, container = sim_g_top, expand = TRUE)
+  sim_Res_radio <- gradio(c("Summary", "Pattern", "Change"), selected = 1,
+                          horizontal = FALSE, container = sim_Res,
+                          handler = function(h,...){
+                            dev.set(dev.list()[pre_dev+8])
+                            
+                            switch(svalue(sim_Res_radio),
+                                   Summary = {},
+                                   Pattern = {suppressWarnings(print(grid.arrange(simResPlot[["obsEffort"]], simResPlot[["optEffort"]],
+                                                                                  layout_matrix = rbind(c(1,1,2,2),
+                                                                                                        c(1,1,2,2)))))},
+                                   Change = {suppressWarnings(print(grid.arrange(simResPlot[["absChange"]], simResPlot[["relChange"]],
+                                                                                 layout_matrix = rbind(c(1,1,2,2),
+                                                                                                       c(1,1,2,2)))))}
+                            )
+                            
+                          })
+  
   addSpace(sim_g_top, 10)
   
   sim_p <- ggraphics(container = sim_g, width = 550, height = 250, expand = TRUE)
-
+  
   
   
   ####   Assess   ####
