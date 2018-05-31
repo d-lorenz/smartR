@@ -368,7 +368,7 @@ getFleetRevSeason = function(predProd, monthVec, lwStat, priceVec){
                                      "summer", "summer", "fall",
                                      "fall", "fall", "winter"))
   for(season in c("winter", "spring", "summer", "fall")){
-    tmpOutProp <- apply(predProd[monthVec %in% tmpSeason$Month[tmpSeason$Season == season],], 1, function(x) apply(t(lwStat[[season]]*t(x))*priceVec,2, sum, na.rm = TRUE))
+    tmpOutProp <- apply(predProd[monthVec %in% tmpSeason$Month[tmpSeason$Season == season],], 1, function(x) apply(t(lwStat[[season]][,-1]*t(x))*priceVec,2, sum, na.rm = TRUE))
     outProp[monthVec %in% tmpSeason$Month[tmpSeason$Season == season],] <- t(tmpOutProp)
   }
   return(outProp)
