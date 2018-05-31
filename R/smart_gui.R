@@ -1691,7 +1691,7 @@ smart_gui <- function(){
   })
   addSpring(pro_g_top2_ver)
   addSpring(pro_g_top2_view)
-  gbutton("   Total\nProduction", container = pro_g_top2_view, handler = function(h,...){
+  gbutton("     Total\nProduction", container = pro_g_top2_view, handler = function(h,...){
     my_project$fleet$plotTotProd(specie = svalue(spe_drop))
   })
   addSpring(pro_g_top2_ver)
