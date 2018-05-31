@@ -1646,7 +1646,7 @@ smart_gui <- function(){
   
   pro_g_top3 <- ggroup(horizontal = FALSE, container = pro_g_top)
   addSpring(pro_g_top3)
-  gbutton("   Predict\nProduction", container = pro_g_top3, handler = function(h,...){
+  gbutton("  Predict\nProduction", container = pro_g_top3, handler = function(h,...){
     enabled(pro_g_top) <- FALSE
     Sys.sleep(1)
     my_project$fleet$setEffoMont()
@@ -1691,7 +1691,7 @@ smart_gui <- function(){
   })
   addSpring(pro_g_top2_ver)
   addSpring(pro_g_top2_view)
-  gbutton("     Total\nProduction", container = pro_g_top2_view, handler = function(h,...){
+  gbutton("    Total\nProduction", container = pro_g_top2_view, handler = function(h,...){
     my_project$fleet$plotTotProd(specie = svalue(spe_drop))
   })
   addSpring(pro_g_top2_ver)
