@@ -11,60 +11,60 @@
 #'
 
 smart_gui <- function(){
-
+  
   my_project <<- SmartProject$new()
   # assign("my_project", SmartProject$new(),.GlobalEnv)
-
+  
   ### File input
   # GRID
   # pathGridShp <- "/Users/Lomo/Documents/Uni/R/smart/data/Grid/grid_sos_3NM/seabed_SoS_grid3NM.shp"
   pathGridShp <- "/Users/Lomo/Documents/Uni/PhD/TESI/Grid/GFCM_Grid_6min_GSA16.shp"
-
+  
   # SEABED
   # pathSeabed <- "/Users/Lomo/Documents/Uni/R/smart/data/SeaBed/SoSBiocMat.rData"
   pathSeabed <- "/Users/Lomo/Documents/Uni/PhD/TESI/BioM.rData"
-
+  
   # BATHYMETRY
   # pathBathymetry <- "/Users/Lomo/Documents/Uni/R/smart/data/seabedSos_Bathy.rData"
   pathBathymetry <- "/Users/Lomo/Documents/Uni/R/smart/data/Grid/bathy_test.rData"
-
+  
   # RAW VMS
   # pathRawVMS <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
   pathRawVMS <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/smart_rawEffort_new.rData"
-
+  
   # GRID EFFORT AA
   pathEffortAA <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
   # pathEffortAA <- "/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/smart_rawEffort_new.rData"
-
+  
   # SURVEY DATA
   # pathSurvey <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Survey/survey_data_MEDITS.csv"
   pathSurvey <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Survey/smartSurveyInput_MUT-SoS.csv"
-
+  
   # FISHERY DATA
   # pathFishery <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Fishery/fishery_merge_CampBiol.csv"
   pathFishery <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Fishery/fishery_data_CampBiol_noExpLand.csv"
-
+  
   # Length/Weight data
   pathLWrel <- "/Users/Lomo/Documents/Uni/R/smart/data/Length_Weight/lwRel_input.csv"
-
+  
   pathClusMat <- "/Users/Lomo/Documents/Uni/R/smart/data/out/FG_cut/fg_sos/clusMat_BedEffDep.rData"
   rawDataPath <- "/Users/Lomo/Documents/Uni/R/mixture/fisherySampling.rData"
-
+  
   # LANDINGS DATA
   pathLanding <- "/Users/Lomo/Documents/Uni/R/smart/data/Landings/LandAll.rData"
-
+  
   # Economic Data
   pathCosts <- "/Users/Lomo/Documents/Uni/Lab/Data/Economics/sos_adri_cleanCosts.csv"
-
+  
   my_project$createFleet()
-
+  
   pre_dev <- length(dev.list())
-
+  
   main_win <- gwindow(paste("SMART - Version ", "1.1", sep = ""),width = 1200, height= 600, visible = TRUE)
   big_g <- ggroup(horizontal = TRUE, container = main_win)
-
+  
   ####   Left panel   ####
-
+  
   lef_g <- ggroup(horizontal = FALSE, container = big_g)
   # addSpring(lef_g)
   # gimage("/Users/Lomo/Documents/Uni/Lab/Proj/smart\ gui/SMART_GUI/SMART_Logo.2.jpg", container = lef_g)
@@ -74,25 +74,25 @@ smart_gui <- function(){
     svalue(uti_gn) <- 1})
   gbutton(text = "Load", container = pro_eg, handler = function(h,...){
     svalue(uti_gn) <- 1})
-
+  
   env_eg <- gexpandgroup("Environment", horizontal = FALSE, container = lef_g)
   gbutton(text = "Grid", container = env_eg, handler = function(h,...){
     svalue(uti_gn) <- 2})
-
+  
   eff_eg <- gexpandgroup("Effort", horizontal = FALSE, container = lef_g)
   gbutton(text = "Load VMS Data", container = eff_eg, handler = function(h,...){
     svalue(uti_gn) <- 3})       #    svalue(uti_gn) <- 7})
-
+  
   gbutton(text = "Fishing Grounds", container = eff_eg, handler = function(h,...){
     svalue(uti_gn) <- 4})       #    svalue(uti_gn) <- 8})
-
+  
   gbutton(text = "Fleet Register", container = eff_eg, handler = function(h,...){
     svalue(uti_gn) <- 5})       #    svalue(uti_gn) <- 9})
-
+  
   gbutton(text = "Production", container = eff_eg, handler = function(h,...){
     svalue(uti_gn) <- 6})       #    svalue(uti_gn) <- 10})
-
-
+  
+  
   raw_eg <- gexpandgroup("Resources", horizontal = FALSE, container = lef_g)
   gbutton(text = "Survey", container = raw_eg, handler = function(h,...){
     svalue(uti_gn) <- 7})
@@ -102,7 +102,7 @@ smart_gui <- function(){
     svalue(uti_gn) <- 9})
   gbutton(text = "Cohorts", container = raw_eg, handler = function(h,...){
     svalue(uti_gn) <- 10})
-
+  
   sim_eg <- gexpandgroup("Simulation", horizontal = FALSE, container = lef_g)
   gbutton(text = "Simulate", container = sim_eg, handler = function(h,...){
     svalue(uti_gn) <- 11})
@@ -113,12 +113,12 @@ smart_gui <- function(){
   
   addSpring(lef_g)
   stat_bar <- gstatusbar("", container = lef_g, visible = TRUE)
-
+  
   ####   Right panel   ####
-
+  
   rig_g <- ggroup(horizontal = FALSE, container = big_g, expand = TRUE)
   uti_gn <- gnotebook(tab.pos = 3, container = rig_g, expand = TRUE)
-
+  
   ####   Project   ####
   pro_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Project")
   pro_g_top <- gframe(horizontal = TRUE, container = pro_g)
@@ -129,11 +129,11 @@ smart_gui <- function(){
   gbutton("Load", container = pro_g_top, handler = function(h,...){
     load_path <- gfile(text = "Select Smart_Project file", type = "open", filter = list("R files" = list(patterns = c("*.rData"))))
     my_project <- readRDS(load_path)
-
+    
     ### Update Sampling Status
-
+    
     if(!is.null(my_project$rawDataSurvey)){ #update_pop_gui()
-
+      
       raw_t[] <- my_project$rawDataSurvey[sample(1:nrow(my_project$rawDataSurvey), 100, replace = FALSE),]
       svalue(raw_l1) <- paste("Specie: ", paste(my_project$specieInSurvey, collapse = " - "))
       #   svalue(raw_l2) <- paste("Length Classes: from ",  min(my_project$LClass), " to ", max(my_project$LClass))
@@ -150,7 +150,7 @@ smart_gui <- function(){
       cohYea_drop[] <- c("All", as.character(my_project$yearInSurvey))
       svalue(year_drop) <- my_project$yearInSurvey[1]
       svalue(cohYea_drop) <- "All"
-
+      
       svalue(n_year_s) <- paste(length(my_project$yearInSurvey), " years", sep = "")
       svalue(mi_date_s) <- paste("From: ", min(as.numeric(as.character(my_project$yearInSurvey))), sep = "")
       svalue(ma_date_s) <- paste("To: ", max(as.numeric(as.character(my_project$yearInSurvey))), sep = "")
@@ -160,9 +160,9 @@ smart_gui <- function(){
       delete(samp_g, samp_g$children[[length(samp_g$children)]])
       add(samp_g, samp_sta_n)
     }
-
+    
     ### Update grid Status
-
+    
     if(!is.null(my_project$sampMap)){
       svalue(gri_l1) <- paste("Polyset: Loaded")
       svalue(gri_l2) <- paste("N. Cells: ", my_project$sampMap$nCells)
@@ -171,9 +171,9 @@ smart_gui <- function(){
       delete(grid_g, grid_g$children[[length(grid_g$children)]])
       add(grid_g, grid_sta_n)
     }
-
+    
     ### Update Effort Status
-
+    
     if(!is.null(my_project$fleet$rawEffort)){
       effvie_drop[] <- c("All", colnames(my_project$fleet$rawEffort))
       svalue(effvie_drop) <- "All"
@@ -181,9 +181,9 @@ smart_gui <- function(){
       delete(effo_g, effo_g$children[[length(effo_g$children)]])
       add(effo_g, effo_sta_n)
     }
-
+    
     ### Update Fishing Grounds Status
-
+    
     if(!is.null(my_project$sampMap$clusMat)){
       fg_plotCut[] <- 1:ncol(my_project$sampMap$clusMat)
       svalue(fg_plotCut) <- which.max(my_project$sampMap$indSil)
@@ -191,14 +191,14 @@ smart_gui <- function(){
       delete(figr_g, figr_g$children[[length(figr_g$children)]])
       add(figr_g, figr_sta_n)
     }
-
+    
     ### Update Register Status
-
+    
     if(!is.null(my_project$fleet$rawRegister)){
       delete(regi_g, regi_g$children[[length(regi_g$children)]])
       add(regi_g, regi_sta_n)
     }
-
+    
   })
   addSpring(pro_g_top)
   gbutton("Save", container = pro_g_top, handler = function(h,...){
@@ -211,10 +211,10 @@ smart_gui <- function(){
   })
   addSpring(pro_g_top)
   addSpace(pro_g_top, 2)
-
+  
   pro_g_mid <- gframe(text = "Data", horizontal = TRUE, container = pro_g)
   addSpace(pro_g_mid, 2)
-
+  
   addSpring(pro_g_mid)
   # gbutton("Grid", container = pro_g_mid)
   grid_g <- gframe(text = "Environment", horizontal = FALSE, container = pro_g_mid)
@@ -227,7 +227,7 @@ smart_gui <- function(){
   grid_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
   add(grid_g, grid_sta)
   #   enabled(grid_b) <- FALSE
-
+  
   addSpring(pro_g_mid)
   # gbutton("Sampling", container = pro_g_mid)
   samp_g <- gframe(text = "Survey", horizontal = FALSE, container = pro_g_mid)
@@ -243,7 +243,7 @@ smart_gui <- function(){
   samp_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
   add(samp_g, samp_sta)
   #   enabled(samp_b) <- FALSE
-
+  
   addSpring(pro_g_mid)
   # gbutton("Effort", container = pro_g_mid)
   effo_g <- gframe(text = "Effort", horizontal = FALSE, container = pro_g_mid)
@@ -256,7 +256,7 @@ smart_gui <- function(){
   effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
   add(effo_g, effo_sta)
   #   enabled(effo_b) <- FALSE
-
+  
   addSpring(pro_g_mid)
   # gbutton("Fishing Ground", container = pro_g_mid)
   figr_g <- gframe(text = "Fishing Ground", horizontal = FALSE, container = pro_g_mid)
@@ -269,7 +269,7 @@ smart_gui <- function(){
   figr_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
   add(figr_g, figr_sta)
   #   enabled(effo_b) <- FALSE
-
+  
   addSpring(pro_g_mid)
   # gbutton("Register", container = pro_g_mid)
   regi_g <- gframe(text = "Register", horizontal = FALSE, container = pro_g_mid)
@@ -282,7 +282,7 @@ smart_gui <- function(){
   regi_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
   add(regi_g, regi_sta)
   #   enabled(regi_b) <- FALSE
-
+  
   addSpring(pro_g_mid)
   # gbutton("Production", container = pro_g_mid)
   prod_g <- gframe(text = "Production", horizontal = FALSE, container = pro_g_mid)
@@ -294,13 +294,13 @@ smart_gui <- function(){
   prod_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   add(prod_g, prod_sta)
   #   enabled(prod_b) <- FALSE
-
+  
   addSpring(pro_g_mid)
   addSpace(pro_g_mid, 2)
-
-
+  
+  
   ####   Environment   ####
-
+  
   gri_g <- gvbox(container = uti_gn, label = "Grid", expand = TRUE)
   # addSpace(gri_g, 2, horizontal = TRUE)
   gri_g_top <- gframe(horizontal = TRUE, container = gri_g)
@@ -316,15 +316,15 @@ smart_gui <- function(){
     enabled(gri_g_top) <- FALSE
     Sys.sleep(1)
     dev.set(dev.list()[pre_dev+1])
-
+    
     my_project$loadMap(pathGridShp)
-
+    
     ### automatic download of google map
     my_project$sampMap$getGooMap()       ### FIX add a check if sampMap is loaded
     svalue(stat_bar) <- "Downloading Google map..."
     my_project$sampMap$setGooGrid()
     my_project$sampMap$setGooBbox()
-
+    
     svalue(gri_l1) <- paste("Polyset: Loaded")
     svalue(gri_l2) <- paste("N. Cells: ", my_project$sampMap$nCells)
     svalue(gri_l3) <- paste("GCenter: Loaded")
@@ -343,41 +343,41 @@ smart_gui <- function(){
     #   my_project$setLFDPopFishery()
     # }
     enabled(gri_g_top) <- TRUE
-
+    
     svalue(stat_bar) <- ""
-
+    
     ### Update Grid Status
     svalue(n_cell_g) <- paste("N. Cells: ", my_project$sampMap$nCells)
     delete(grid_g, grid_g$children[[length(grid_g$children)]])
     add(grid_g, grid_sta_n)
   })
   # addSpring(gri_g_top1_gri)
-
+  
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_gri,
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+1])
            svalue(stat_bar) <- "Plotting grid..."
            enabled(gri_g_top) <- FALSE
-
+           
            if(!is.null(my_project$sampMap$gooMap)){
              my_project$sampMap$plotGooGrid()
            }else{
              my_project$sampMap$plotSamMap(title = my_project$sampMap$gridName)
            }
            enabled(gri_g_top) <- TRUE
-
+           
          })
   addSpring(gri_g_top1_gri)
-
+  
   addSpring(gri_g_top1)
-
+  
   gri_g_top1_dep <- ggroup(horizontal = TRUE, container = gri_g_top1)
   #   addSpring(gri_g_top1_dep)
   gbutton("Download Depth", container = gri_g_top1_dep, handler = function(h,...){
     dev.set(dev.list()[pre_dev+1])
     svalue(stat_bar) <- "Downloading depth..."
     enabled(gri_g_top) <- FALSE
-
+    
     Sys.sleep(1)
     my_project$sampMap$getGridBath()
     svalue(stat_bar) <- "Plotting Bathymetry..."
@@ -400,9 +400,9 @@ smart_gui <- function(){
     ## Get path to bathymetry rData
     svalue(stat_bar) <- "Loading depth..."
     enabled(gri_g_top) <- FALSE
-
+    
     Sys.sleep(1)
-
+    
     my_project$sampMap$loadGridBath(pathBathymetry)
     # my_project$sampMap$getCentDept()
     svalue(stat_bar) <- "Plotting Bathymetry..."
@@ -410,7 +410,7 @@ smart_gui <- function(){
     my_project$sampMap$ggplotGridBathy()
     svalue(stat_bar) <- ""
     enabled(gri_g_top) <- TRUE
-
+    
   })
   # addSpring(gri_g_top1_dep)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_dep,
@@ -419,20 +419,20 @@ smart_gui <- function(){
            my_project$sampMap$ggplotGridBathy()
          })
   addSpring(gri_g_top1_dep)
-
+  
   addSpring(gri_g_top1)
-
+  
   gri_g_top1_bio <- ggroup(horizontal = TRUE, container = gri_g_top1)
   # addSpring(gri_g_top1_bio)
   gbutton("Load Biocenosis", container = gri_g_top1_bio, handler = function(h,...){
     enabled(gri_g_top) <- FALSE
-
+    
     Sys.sleep(1)
     dev.set(dev.list()[pre_dev+1])
     svalue(stat_bar) <- "Loading biocenosis data.frame..."
-
+    
     my_project$sampMap$loadBioDF(pathSeabed)
-
+    
     if(!is.null(my_project$sampMap$gooMap)){
       my_project$sampMap$ggplotBioDF()
     }else{
@@ -440,7 +440,7 @@ smart_gui <- function(){
     }
     svalue(stat_bar) <- ""
     enabled(gri_g_top) <- TRUE
-
+    
   })
   # addSpring(gri_g_top1_bio)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_bio,
@@ -452,12 +452,12 @@ smart_gui <- function(){
              my_project$sampMap$plotBioDF()
            }         })
   addSpring(gri_g_top1_bio)
-
+  
   gri_g_top1_goo <- ggroup(horizontal = TRUE, container = gri_g_top1)
   # addSpring(gri_g_top1_goo)
   gbutton("Load Google map", container = gri_g_top1_goo, handler = function(h,...){
     enabled(gri_g_top) <- FALSE
-
+    
     Sys.sleep(1)
     dev.set(dev.list()[pre_dev+1])
     svalue(stat_bar) <- "Loading Google map..."
@@ -467,7 +467,7 @@ smart_gui <- function(){
     svalue(stat_bar) <- ""
     my_project$sampMap$plotGooGrid()
     enabled(gri_g_top) <- TRUE
-
+    
   })
   # addSpring(gri_g_top1_goo)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_goo,
@@ -476,25 +476,25 @@ smart_gui <- function(){
            my_project$sampMap$plotGooGrid()
          })
   addSpring(gri_g_top1_goo)
-
+  
   addSpring(gri_g_top1)
-
+  
   addSpring(gri_g_top)
-
+  
   gri_g_top2 <- ggroup(horizontal = FALSE, container = gri_g_top)
   addSpring(gri_g_top2)
   gri_l1 <- glabel("Polyset: ", container = gri_g_top2)
   gri_l2 <- glabel("N. Cells: ", container = gri_g_top2)
   gri_l3 <- glabel("GCenter: ", container = gri_g_top2)
   addSpring(gri_g_top2)
-
+  
   addSpring(gri_g_top)
-
+  
   gri_p <- ggraphics(container = gri_g, width = 550, height = 250, expand = TRUE)
-
-
+  
+  
   ####   Effort   ####
-
+  
   eff_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Effort")
   eff_g_top <- gframe(horizontal = TRUE, container = eff_g)
   addSpace(eff_g_top, 2)
@@ -510,30 +510,30 @@ smart_gui <- function(){
     #
     #     my_project$loadFleeEffoDbs(tmp_files)
     #     my_project$fleet$rawEffort <- readRDS(tmp_files)
-
+    
     enabled(eff_g_top) <- FALSE
-
+    
     cat("\nLoading effort from rData...", sep = "")
     svalue(stat_bar) <- "Loading effort from rData..."
     Sys.sleep(1)
-
+    
     my_project$fleet$rawEffort <- readRDS(pathRawVMS)
     my_project$fleet$setEffortIds()
     # cat("   Done!", sep = "")
     svalue(stat_bar) <- ""
-
+    
     effvie_drop[] <- names(my_project$fleet$rawEffort)
     svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
     dev.set(dev.list()[pre_dev+2])
-
+    
     svalue(stat_bar) <- "Plotting raw points..."
     my_project$ggplotRawPoints(svalue(effvie_drop))
     svalue(stat_bar) <- ""
-
+    
     # my_project$effPlot("All")
-
+    
     enabled(eff_g_top) <- TRUE
-
+    
     ### Update Effort Status
     effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
     delete(effo_g, effo_g$children[[length(effo_g$children)]])
@@ -541,19 +541,19 @@ smart_gui <- function(){
   })
   addSpring(eff_g_top1)
   gbutton("Extract from VMSBASE", container = eff_g_top1, handler = function(h,...){
-
+    
     enabled(eff_g_top) <- FALSE
-
+    
     #### SKIPPED LOADING rData
     #     tmp_files <- gfile(text = "Select Effort DBs", type = "open",
     #                        initial.filename = NULL, initial.dir = getwd(), filter = list(),
     #                        multi = TRUE)
     #
     #     my_project$loadFleeEffoDbs(tmp_files)
-
+    
     tmp_file <- "/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/smart_rawEffort_new.rData"
     # tmp_file <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
-
+    
     cat("\nLoading effort from vmsbase db...", sep = "")
     svalue(stat_bar) <- "Loading effort from vmsbase db..."
     Sys.sleep(1)
@@ -561,18 +561,18 @@ smart_gui <- function(){
     my_project$fleet$setEffortIds()
     cat("   Done!", sep = "")
     svalue(stat_bar) <- ""
-
+    
     effvie_drop[] <- names(my_project$fleet$rawEffort)
     svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
     dev.set(dev.list()[pre_dev+2])
-
+    
     svalue(stat_bar) <- "Plotting Count of disinct vessels..."
     Sys.sleep(1)
     my_project$fleet$plotCountIDsEffo()
     svalue(stat_bar) <- ""
-
+    
     enabled(eff_g_top) <- TRUE
-
+    
     ### Update Effort Status
     effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
     delete(effo_g, effo_g$children[[length(effo_g$children)]])
@@ -581,31 +581,31 @@ smart_gui <- function(){
   addSpring(eff_g_top1)
   gbutton("View Stats", container = eff_g_top1, handler = function(h,...){
     dev.set(dev.list()[pre_dev+2])
-
+    
     enabled(eff_g_top) <- FALSE
-
+    
     svalue(stat_bar) <- "Plotting Count of disinct vessels..."
     Sys.sleep(1)
     my_project$fleet$plotCountIDsEffo()
     svalue(stat_bar) <- ""
-
+    
     enabled(eff_g_top) <- TRUE
-
+    
   })
   addSpring(eff_g_top1)
-
+  
   addSpring(eff_g_top)
-
+  
   eff_g_top1b <- ggroup(horizontal = FALSE, container = eff_g_top)
   addSpring(eff_g_top1b)
   gbutton("Set Fishing Points", container = eff_g_top1b, handler = function(h,...){
     svalue(stat_bar) <- "Setting parameters..."
-
+    
     enabled(eff_g_top) <- FALSE
-
+    
     temp_dia <- gwindow(title="Set Fishing Points", visible = FALSE,
                         width = 650, height = 450, parent = main_win)
-
+    
     up_g <- ggroup(horizontal = FALSE, container = temp_dia)
     up_fra <- gframe(container = up_g, horizontal = TRUE)
     addSpring(up_fra)
@@ -654,20 +654,20 @@ smart_gui <- function(){
     addSpring(up_fra)
     gbutton(text = "\n   Set!   \n", container = up_fra, handler = function(...){
       enabled(up_fra) <- FALSE
-
+      
       plot(NULL, xlim = c(0,5), ylim = c(0,1), axes = FALSE, xlab = "", ylab = "")
-
+      
       my_project$fleet$setFishPoinPara(speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
                                        depth_range = sort(unlist(lapply(dep_lay[1:2,2], svalue)), decreasing = TRUE))
-
+      
       svalue(stat_bar) <- "Setting fishing points..."
       points(1,0, pch = 19, col = "grey20")
       text(1,0, labels = "Parameters", pos = 3, col = "grey20", srt = 45, offset = 1.5)
       svalue(int_progBar) <- 10
       Sys.sleep(1)
-
+      
       my_project$fleet$setFishPoin()
-
+      
       points(2,0, pch = 19, col = "grey20")
       text(2,0, labels = "Fishing Points", pos = 3, col = "grey20", srt = 45, offset = 1.5)
       svalue(stat_bar) <- ""
@@ -675,17 +675,17 @@ smart_gui <- function(){
       Sys.sleep(1)
       svalue(stat_bar) <- "Setting fishing point cells..."
       Sys.sleep(1)
-
+      
       my_project$setCellPoin()
-
+      
       points(3,0, pch = 19, col = "grey20")
       text(3,0, labels = "Cell Assign", pos = 3, col = "grey20", srt = 45, offset = 1.5)
       svalue(stat_bar) <- "Adding week and month number to dataset..."
       svalue(int_progBar) <- 60
       Sys.sleep(1)
-
+      
       my_project$fleet$setWeekMonthNum()
-
+      
       points(4,0, pch = 19, col = "grey20")
       text(4,0, labels = "Week/Month\nAppend", pos = 3, col = "grey20", srt = 45, offset = 1.5)
       svalue(stat_bar) <- ""
@@ -695,194 +695,194 @@ smart_gui <- function(){
       svalue(int_progBar) <- 100
       Sys.sleep(1)
       if(gconfirm("Fishing point selection completed!\nClose window?", title = "Confirm", icon = "question", parent = temp_dia)){
-
+        
         enabled(eff_g_top) <- TRUE
-
+        
         dispose(temp_dia)
       }else{
         enabled(up_fra) <- TRUE
-
+        
         enabled(eff_g_top) <- TRUE
       }
     })
     addSpring(up_fra)
     fipo_gra <- ggraphics(width = 600, height = 400, container = up_g, expand = TRUE)
-
+    
     bot_progStat <- ggroup(container = up_g, horizontal = TRUE)
-
+    
     addSpring(bot_progStat)
     int_progBar <- gprogressbar(value = 0, container = bot_progStat)
     addSpring(bot_progStat)
-
+    
     visible(temp_dia) <- TRUE
-
+    
     my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
                                     speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
                                     depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
   })
-
+  
   addSpring(eff_g_top1b)
-
+  
   gbutton("View Stats", container = eff_g_top1b, handler = function(h,...){
     dev.set(dev.list()[pre_dev+2])
     svalue(stat_bar) <- "Plotting fishing points data summary..."
-
+    
     enabled(eff_g_top) <- FALSE
-
+    
     Sys.sleep(1)
     my_project$fleet$plotFishPoinStat()
     svalue(stat_bar) <- ""
-
+    
     enabled(eff_g_top) <- TRUE
-
+    
   })
   # addSpring(eff_g_top1b)
   addSpring(eff_g_top1b)
-
+  
   addSpring(eff_g_top)
-
+  
   eff_g_top_IO <- ggroup(horizontal = FALSE, container = eff_g_top)
   addSpring(eff_g_top_IO)
   gbutton("Load AA data", container = eff_g_top_IO, handler = function(h,...){
     svalue(stat_bar) <- "Loading AA data..."
-
+    
     enabled(eff_g_top) <- FALSE
-
+    
     Sys.sleep(1)
-
+    
     #### SKIPPED LOADING rData
     #     tmp_files <- gfile(text = "Select AA effort data", type = "open",
     #                        initial.filename = NULL, initial.dir = getwd(), filter = list(),
     #                        multi = TRUE)
     #
-
+    
     cat("\nLoading effort from AA data...", sep = "")
     svalue(stat_bar) <- "Loading effort from AA data..."
     Sys.sleep(1)
-
+    
     my_project$fleet$rawEffort <- readRDS(pathEffortAA)
     my_project$fleet$setEffortIds()
-
+    
     effvie_drop[] <- names(my_project$fleet$rawEffort)
     svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
     dev.set(dev.list()[pre_dev+2])
-
+    
     my_project$ggplotGridEffort(names(my_project$fleet$rawEffort)[1])
-
+    
     svalue(stat_bar) <- ""
-
+    
     enabled(eff_g_top) <- TRUE
-
+    
   })
   addSpring(eff_g_top_IO)
   gbutton("Save AA data", container = eff_g_top_IO, handler = function(h,...){
     svalue(stat_bar) <- "Saving AA data..."
     Sys.sleep(1)
-
+    
     enabled(eff_g_top) <- FALSE
-
+    
     #### SKIPPED SAVING rData
     #     tmp_files <- gfile(text = "Select AA effort data", type = "save",
     #                        initial.filename = NULL, initial.dir = getwd(), filter = list(),
     #                        multi = TRUE)
     #
-
+    
     # tmp_file <- "/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/smart_rawEffort_new.rData"
     tmp_file <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
-
+    
     cat("\nSaving AA effort to rData...", sep = "")
     svalue(stat_bar) <- "Saving AA effort to rData..."
     Sys.sleep(1)
-
+    
     saveRDS(my_project$fleet$rawEffort, tmp_file)
-
+    
     svalue(stat_bar) <- ""
-
+    
     enabled(eff_g_top) <- TRUE
-
+    
   })
   addSpring(eff_g_top_IO)
-
+  
   addSpring(eff_g_top)
-
+  
   eff_g_top2 <- gframe(text = "View", horizontal = TRUE, container = eff_g_top, expand = TRUE)
   addSpring(eff_g_top2)
   effvie_drop <- gcombobox(items = "Year", selected = 1, container = eff_g_top2, expand = TRUE, editable = FALSE)
   addSpring(eff_g_top2)
-
+  
   eff_g_top2_ver <- ggroup(horizontal = FALSE, container = eff_g_top2)
   addSpring(eff_g_top2_ver)
   gbutton("Raw Points", container = eff_g_top2_ver, handler = function(h,...){
     dev.set(dev.list()[pre_dev+2])
     svalue(stat_bar) <- "Plotting raw points..."
-
+    
     enabled(eff_g_top) <- FALSE
-
+    
     Sys.sleep(1)
     my_project$ggplotRawPoints(svalue(effvie_drop))
     svalue(stat_bar) <- ""
-
+    
     enabled(eff_g_top) <- TRUE
-
+    
   })
   addSpring(eff_g_top2_ver)
   gbutton("Fishing Points", container = eff_g_top2_ver, handler = function(h,...){
     dev.set(dev.list()[pre_dev+2])
     svalue(stat_bar) <- "Plotting fishing points..."
-
+    
     enabled(eff_g_top) <- FALSE
-
+    
     Sys.sleep(1)
     my_project$ggplotFishingPoints(svalue(effvie_drop))
     svalue(stat_bar) <- ""
-
+    
     enabled(eff_g_top) <- TRUE
-
+    
   })
   addSpring(eff_g_top2_ver)
   gbutton("Gridded Points", container = eff_g_top2_ver, handler = function(h,...){
     dev.set(dev.list()[pre_dev+2])
     svalue(stat_bar) <- "Plotting gridded points..."
-
+    
     enabled(eff_g_top) <- FALSE
-
+    
     Sys.sleep(1)
     my_project$ggplotGridEffort(svalue(effvie_drop))
     svalue(stat_bar) <- ""
-
+    
     enabled(eff_g_top) <- TRUE
-
+    
   })
   addSpring(eff_g_top2_ver)
   addSpring(eff_g_top2)
   # addSpring(eff_g_top1c)
   addSpring(eff_g_top)
   eff_p <- ggraphics(container = eff_g, width = 550, height = 250, expand = TRUE)
-
-
+  
+  
   ####   Fishing Grounds   ####
-
+  
   fig_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Fishing Grounds")
   fig_g_top <- gframe(horizontal = TRUE, container = fig_g)
-
+  
   addSpring(fig_g_top)
   fig_g_top_vars <- gframe(text = "Variables and Weights", horizontal = FALSE, container = fig_g_top, expand = TRUE)
   addSpring(fig_g_top_vars)
   gbutton("\nSelect\n", container = fig_g_top_vars, handler = function(h,...){
-
+    
     temp_dia <- gwindow(title="Select variables and weights", visible = FALSE,
                         parent = main_win,
                         width = 350, height = 200)
-
+    
     up_g_top <- ggroup(horizontal = FALSE, container = temp_dia)
     addSpring(up_g_top)
     up_g <- ggroup(horizontal = TRUE, container = up_g_top)
-
+    
     addSpring(up_g)
-
+    
     # speVars_gru <- ggroup(horizontal = TRUE, container = up_g)
     lyt <- glayout(container = up_g)
-
+    
     lyt[1,2] <- "Variables"
     lyt[1,3] <- "      Weights      "
     # lyt[2,2] <- gcheckbox(c("Sampling Distribution"), checked = TRUE, container = lyt)
@@ -893,25 +893,25 @@ smart_gui <- function(){
     lyt[3,3] <- gcombobox(items = c("0.5X","1","2X"), selected = 2, container = lyt)
     lyt[4,2] <- gcheckbox(c("Bathymetry"), checked = FALSE, container = lyt)
     lyt[4,3] <- gcombobox(items = c("0.5X","1","2X"), selected = 2, container = lyt)
-
+    
     addSpring(up_g)
     addSpring(up_g_top)
     bot_g <- ggroup(horizontal = TRUE, container = up_g_top)
     addSpring(bot_g)
-
+    
     gbutton("\nAccept\n", container = bot_g,
             handler = function(h,...){
-
+              
               cat("\nInput for Fishing Grounds Clustering:\n")
               my_project$sampMap$setClusInpu(whiData = unlist(lapply(lyt[2:4,2], svalue)),
                                              howData = unlist(lapply(lyt[2:4,3], svalue)))
-
+              
               dispose(temp_dia)
             })
     addSpring(bot_g)
-
+    
     my_project$setAvailData()
-
+    
     ifelse("Seabed" %in% my_project$sampMap$availData,
            lapply(lyt[2,], function(x) enabled(x) <- TRUE),
            lapply(lyt[2,], function(x) enabled(x) <- FALSE))
@@ -921,53 +921,53 @@ smart_gui <- function(){
     ifelse("Depth" %in% my_project$sampMap$availData,
            lapply(lyt[4,], function(x) enabled(x) <- TRUE),
            lapply(lyt[4,], function(x) enabled(x) <- FALSE))
-
+    
     visible(temp_dia) <- TRUE
   })
-
+  
   addSpring(fig_g_top_vars)
   addSpring(fig_g_top)
-
+  
   fig_g_top_dist <- gframe(text = "Distance Metric", horizontal = FALSE, container = fig_g_top, expand = TRUE)
   addSpring(fig_g_top_dist)
   fg_metr <- gcombobox(c("euclidean", "manhattan", "maximum",
                          "binary", "canberra", "minkowski"), selected = 1, editable = FALSE,
                        container = fig_g_top_dist, expand = TRUE)
-
+  
   addSpring(fig_g_top_dist)
   addSpring(fig_g_top)
-
+  
   fig_g_top_clus <- gframe(text = "Clustering", horizontal = TRUE, container = fig_g_top, expand = TRUE)
   addSpring(fig_g_top_clus)
   fg_maxCut <- gslider(from = 1, to = 50, horizontal = TRUE, by = 1,
                        container = fig_g_top_clus)
   addSpring(fig_g_top_clus)
   addSpring(fig_g_top)
-
+  
   gbutton("\n   Run   \n", container = fig_g_top, handler = function(h,...){
     my_project$sampMap$calcFishGrou(numCuts = svalue(fg_maxCut), #max 50
                                     minsize = 10,
                                     modeska = "S",
                                     skater_method = svalue(fg_metr))
     dev.set(dev.list()[pre_dev+3])
-
+    
     fg_plotCut[] <- 1:svalue(fg_maxCut)
     svalue(fg_plotCut) <- which.max(my_project$sampMap$indSil)
-
+    
     ### Update Fishing Grounds Status
     delete(figr_g, figr_g$children[[length(figr_g$children)]])
     add(figr_g, figr_sta_n)
   })
-
+  
   addSpring(fig_g_top)
-
+  
   fig_g_top_plot <- gframe(text = "Plot", horizontal = TRUE, container = fig_g_top, expand = TRUE)
   addSpring(fig_g_top_plot)
   fg_plotCut <- gcombobox(items = 2:50,
                           container = fig_g_top_plot, handler = function(h,...){
                             dev.set(dev.list()[pre_dev+3])
                             my_project$sampMap$setCutResult(ind_clu = svalue(fg_plotCut))
-
+                            
                             suppressWarnings(grid.arrange(my_project$sampMap$ggIchFGlin,
                                                           my_project$sampMap$ggSilFGlin,
                                                           my_project$sampMap$ggCutFGmap,
@@ -976,17 +976,17 @@ smart_gui <- function(){
                                                           my_project$sampMap$ggEffoFGbox,
                                                           my_project$sampMap$ggBioFGmat,
                                                           layout_matrix = rbind(c(1,3,3,5,6,7),c(2,4,4,5,6,7))))
-
+                            
                           })
-
+  
   addSpring(fig_g_top_plot)
-
+  
   addSpring(fig_g_top)
-
+  
   gbutton("    Select\n      this\nPartitioning", container = fig_g_top, handler = function(h,...){
     my_project$setFishGround(numCut = svalue(fg_plotCut))
     my_project$sampMap$setCutResult(ind_clu = svalue(fg_plotCut))
-
+    
     suppressWarnings(grid.arrange(my_project$sampMap$ggIchFGlin,
                                   my_project$sampMap$ggSilFGlin,
                                   my_project$sampMap$ggCutFGmap,
@@ -997,13 +997,13 @@ smart_gui <- function(){
                                   layout_matrix = rbind(c(1,3,3,5,6,7),c(2,4,4,5,6,7))))
   })
   addSpring(fig_g_top)
-
+  
   addSpace(fig_g_top, 2)
   fisGro_p <- ggraphics(container = fig_g, width = 550, height = 250, expand = TRUE)
-
-
+  
+  
   ####   Register   ####
-
+  
   reg_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Register")
   reg_g_top <- gframe(horizontal = TRUE, container = reg_g)
   addSpace(reg_g_top, 2)
@@ -1018,7 +1018,7 @@ smart_gui <- function(){
     dev.set(dev.list()[pre_dev+4])
     # my_project$fleet$plotRegSum()
     ggplot_registerDispatch(curRegister = my_project$fleet$rawRegister, selPlot = "Summary")
-
+    
     ### Update Register Status
     if(!is.null(my_project$fleet$rawRegister)){
       delete(regi_g, regi_g$children[[length(regi_g$children)]])
@@ -1067,38 +1067,38 @@ smart_gui <- function(){
     my_project$fleet$setRegHarbs()
   })
   addSpace(reg_g_top_harbs, 10)
-
+  
   reg_g_harb_ico <- ggroup(horizontal = FALSE, container = reg_g_top_harbs)
   addSpring(reg_g_harb_ico)
   gimage(system.file("ico/folder-man.png", package="smartR"), container = reg_g_harb_ico,
          handler = function(h,...){
-
+           
            load_path <- gfile(text = "Select Harbour List file", type = "open", filter = list("R files" = list(patterns = c("*.rData"))))
-
+           
            if(length(load_path) == 0) stop("Missing File to Load!")
-
+           
            cat("\nLoading Harbour List from ", load_path, sep = "")
-
+           
            my_project$fleet$loadFleetHarb(harb_path = load_path)
-
+           
          })
   addSpring(reg_g_harb_ico)
   gimage(system.file("ico/document-save-2.ico", package="smartR"), container = reg_g_harb_ico,
          handler = function(h,...){
            if(is.null(my_project$fleet$regHarbsUni)) stop("Missing Harbour Data List")
-
+           
            save_dest <- gfile(text = "Select file name and destination directory", type = "save",
                               initial.filename = "Smart_Harbour_List.rData", initial.dir = my_project$sampMap$gridPath)
            if(rev(unlist(strsplit(save_dest, "[.]")))[1] != "rData"){
              save_dest <- paste(save_dest, ".rData", sep = "")
            }
-
+           
            my_project$fleet$saveFleetHarb(harb_path = save_dest)
-
+           
            cat("\nHarbour List saved in: ", save_dest, sep = "")
          })
   addSpring(reg_g_harb_ico)
-
+  
   addSpring(reg_g_top_harbs)
   gbutton("Set Weighted\nDistance", container = reg_g_top_harbs, handler = function(h,...){
     dev.set(dev.list()[pre_dev+4])
@@ -1114,10 +1114,10 @@ smart_gui <- function(){
   addSpace(reg_g_top_harbs, 10)
   addSpring(reg_g_top)
   regGro_p <- ggraphics(container = reg_g, width = 550, height = 250, expand = TRUE)
-
-
+  
+  
   ####   Production   ####
-
+  
   pro_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Production")
   pro_g_top <- gframe(horizontal = TRUE, container = pro_g)
   addSpace(pro_g_top, 2)
@@ -1137,38 +1137,38 @@ smart_gui <- function(){
     enabled(pro_g_top) <- FALSE
     svalue(stat_bar) <- "Loading landings..."
     Sys.sleep(1)
-
+    
     dev.set(dev.list()[pre_dev+5])
     my_project$fleet$rawProduction <- readRDS(pathLanding)
-
+    
     svalue(stat_bar) <- "Setting Ids..."
     Sys.sleep(1)
     my_project$fleet$setProdIds()
-
+    
     # my_project$fleet$plotCountIDsProd()
-
+    
     my_project$fleet$setIdsEffoProd()
-
+    
     svalue(stat_bar) <- "Plotting Ids..."
     Sys.sleep(1)
     my_project$fleet$plotCountIDsEffoProd()
-
+    
     svalue(stat_bar) <- "Setting Production Matrix..."
     Sys.sleep(1)
     my_project$fleet$setProdMatr()
     my_project$fleet$setDayEffoMatrGround()
     my_project$fleet$setEffoProdMatr()
     my_project$fleet$setEffoProdMont()
-
+    
     svalue(stat_bar) <- "Setting Species..."
     Sys.sleep(1)
     my_project$fleet$setProdSpec()
     my_project$fleet$setEffoProdAll()
-
+    
     svalue(stat_bar) <- "Getting Loa..."
     Sys.sleep(1)
     my_project$fleet$setEffoProdAllLoa()
-
+    
     svalue(stat_bar) <- ""
     Sys.sleep(1)
     # my_project$fleet$setSpecSett()
@@ -1177,32 +1177,32 @@ smart_gui <- function(){
     svalue(spe_drop, index = TRUE) <- 1
     svalue(provie_drop, index = TRUE) <- 1
     enabled(spe_drop) <- TRUE
-
+    
     enabled(pro_g_top) <- TRUE
-
+    
   })
   addSpring(pro_g_top1)
-
+  
   spe_fra <- gframe(text = "Specie", container = pro_g_top1, horizontal = TRUE, expand = TRUE)
   # addSpace(spe_fra, 20)
   spe_drop <- gcombobox("Specie list", selected = 1,
                         editable = FALSE, container = spe_fra, expand = TRUE)
   addSpring(pro_g_top1)
-
+  
   # addSpace(spe_fra, 20)
   addSpace(pro_g_top, 40)
   # addSpring(pro_g_top)
   enabled(spe_drop) <- FALSE
-
+  
   pro_g_top2 <- ggroup(horizontal = FALSE, container = pro_g_top)
   addSpring(pro_g_top2)
-
+  
   gbutton("Set Threshold", container = pro_g_top2, handler = function(h,...){
-
+    
     temp_dia <- gwindow(title="Set Landings Threshold", visible = FALSE,
                         parent = main_win,
                         width = 900, height = 500)
-
+    
     up_g <- ggroup(horizontal = FALSE, container = temp_dia)
     up_fra <- gframe(container = up_g, horizontal = TRUE, expand = TRUE)
     # addSpring(up_fra)
@@ -1228,7 +1228,7 @@ smart_gui <- function(){
                             handler = function(...){
                               tmp_spe <- my_project$fleet$effoProdAll[,which(colnames(my_project$fleet$effoProdAll) == svalue(spe_drop))]
                               tmp_spe <- tmp_spe[tmp_spe != 0]
-
+                              
                               hist(tmp_spe[tmp_spe <= svalue(max_x_spin)],
                                    breaks = svalue(num_bre_spin),
                                    main = bquote(italic(.(svalue(spe_drop)))), xlab = "")
@@ -1236,7 +1236,7 @@ smart_gui <- function(){
                             })
     addSpace(up_fra, 20)
     addSpace(thr_fra, 20)
-
+    
     bou_fra <- gframe(text = "Limits and Breaks", container = up_fra, horizontal = FALSE)
     addSpace(bou_fra, 20)
     bou_gru <- ggroup(horizontal = TRUE, container = bou_fra)
@@ -1247,7 +1247,7 @@ smart_gui <- function(){
                               handler = function(...){
                                 tmp_spe <- my_project$fleet$effoProdAll[,which(colnames(my_project$fleet$effoProdAll) == svalue(spe_drop))]
                                 tmp_spe <- tmp_spe[tmp_spe != 0]
-
+                                
                                 hist(tmp_spe[tmp_spe <= svalue(max_x_spin)],
                                      breaks = svalue(num_bre_spin),
                                      main = bquote(italic(.(svalue(spe_drop)))), xlab = "")
@@ -1261,38 +1261,38 @@ smart_gui <- function(){
                                 handler = function(...){
                                   tmp_spe <- my_project$fleet$effoProdAll[,which(colnames(my_project$fleet$effoProdAll) == svalue(spe_drop))]
                                   tmp_spe <- tmp_spe[tmp_spe != 0]
-
+                                  
                                   hist(tmp_spe[tmp_spe <= svalue(max_x_spin)],
                                        breaks = svalue(num_bre_spin),
                                        main = bquote(italic(.(svalue(spe_drop)))), xlab = "")
                                   abline(v = svalue(thr_spin), col = 2, lwd = 3, lty = 2)
                                 })
-
+    
     addSpace(bou_fra, 20)
     addSpring(up_fra)
-
+    
     set_gru_up <- ggroup(container = up_fra, horizontal = FALSE)
     addSpring(set_gru_up)
     set_gru <- ggroup(container = set_gru_up, horizontal = TRUE)
     set_lab <- glabel(text = "Not set", container = set_gru)
     addSpring(set_gru_up)
-
+    
     addSpace(up_fra, 20)
-
+    
     gbutton(text = "\n   Set!   \n", container = up_fra, handler = function(...){
-
+      
       my_project$fleet$setSpecSettItm(specie = svalue(spe_drop),
                                       thresh = svalue(thr_spin),
                                       brea = svalue(num_bre_spin),
                                       max_xlim = svalue(max_x_spin))
-
+      
       svalue(set_lab) <- "Set"
       delete(set_gru, set_gru$children[[length(set_gru$children)]])
       add(set_gru, land_sta_n)
-
+      
     })
     addSpring(up_fra)
-
+    
     gbutton(text = " Close\nWindow", container = up_fra, handler = function(...){
       dispose(temp_dia)
     })
@@ -1300,14 +1300,14 @@ smart_gui <- function(){
     addSpring(up_g)
     land_gra <- ggraphics(width = 600, height = 400, container = up_g, expand = TRUE)
     visible(temp_dia) <- TRUE
-
+    
     land_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
     land_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
     add(set_gru, land_sta)
-
+    
     tmp_spe <- my_project$fleet$effoProdAll[,which(colnames(my_project$fleet$effoProdAll) == svalue(spe_drop))]
     tmp_spe <- tmp_spe[tmp_spe != 0]
-
+    
     if(is.null(my_project$fleet$specSett[[svalue(spe_drop)]])){
       max_x_spin[] <- seq(0, max(tmp_spe), by = 10)
       svalue(max_x_spin) <- quantile(tmp_spe, 0.95)
@@ -1326,30 +1326,30 @@ smart_gui <- function(){
       add(set_gru, land_sta_n)
       svalue(set_lab) <- "Set"
     }
-
+    
     hist(tmp_spe[tmp_spe <= svalue(max_x_spin)],
          breaks = svalue(num_bre_spin),
          main = bquote(italic(.(svalue(spe_drop)))), xlab = "")
     abline(v = svalue(thr_spin), col = 2, lwd = 3, lty = 2)
-
+    
   })
   addSpring(pro_g_top)
   addSpring(pro_g_top2)
   gbutton("Get Logit", container = pro_g_top2, handler = function(h,...){
-
+    
     temp_dia <- gwindow(title="Get Logit", visible = FALSE,
                         parent = main_win,
                         width = 900, height = 500)
-
+    
     up_g <- ggroup(horizontal = FALSE, container = temp_dia)
     up_fra <- gframe(container = up_g, horizontal = TRUE, expand = TRUE)
     addSpace(up_fra, 20)
-
+    
     spe_fra <- gframe(text = "Specie", container = up_fra, horizontal = TRUE, expand = TRUE)
     addSpace(spe_fra, 10)
     glabel(text = svalue(spe_drop), container = spe_fra)
     addSpace(spe_fra, 10)
-
+    
     addSpace(up_fra, 20)
     mod_fra <- gframe(text = "Model", container = up_fra, horizontal = TRUE, expand = TRUE)
     addSpace(mod_fra, 20)
@@ -1371,11 +1371,11 @@ smart_gui <- function(){
                            )
                          })
     addSpace(mod_fra, 20)
-
+    
     addSpace(up_fra, 20)
     par_fra <- gframe(text = "Parameters", container = up_fra, horizontal = TRUE, expand = TRUE)
     addSpace(par_fra, 20)
-
+    
     par_modSel <- glayout(container = par_fra)
     par_modSel[1,1:2] <- "None"
     par_modSel[2,1] <- "cp"
@@ -1384,27 +1384,27 @@ smart_gui <- function(){
     par_modSel[3,2] <- gspinbutton(from = 2, to = 10, by = 1, value = 5, container = par_modSel)
     par_modSel[4,1] <- "Iter"
     par_modSel[4,2] <- gspinbutton(from = 100, to = 1000, by = 100, value = 100, container = par_modSel)
-
+    
     addSpace(par_fra, 20)
-
+    
     lapply(par_modSel[2:4,2], function(x) enabled(x) <- FALSE)
-
+    
     addSpring(up_fra)
-
+    
     gbutton(text = "Get\nLogit", container = up_fra, handler = function(...){
       my_project$fleet$setSpecLogit(selSpecie = svalue(spe_drop),
                                     selModel = svalue(mod_radSel),
                                     cp = svalue(par_modSel[2,2]),
                                     cv = svalue(par_modSel[3,2]))
-
+      
       my_project$fleet$plotLogitROC(selSpecie = svalue(spe_drop))
-
+      
       svalue(thr_spin) <- round(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Cut, 2)
       svalue(tmp_txt) <- capture.output({cat("\n")
         print(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Confusion)})
     })
     addSpace(up_fra, 20)
-
+    
     thr_fra <- gframe(text = "Tune Cutoff", container = up_fra, expand = TRUE, horizontal = TRUE)
     addSpace(thr_fra, 20)
     thr_spin <- gslider(from = 0.01, to = 0.99,
@@ -1418,7 +1418,7 @@ smart_gui <- function(){
                         })
     addSpace(up_fra, 20)
     addSpace(thr_fra, 20)
-
+    
     set_gru_up <- ggroup(container = up_fra, horizontal = FALSE)
     addSpring(set_gru_up)
     gbutton(text = "\n   Save   \n", container = set_gru_up, handler = function(...){
@@ -1430,13 +1430,13 @@ smart_gui <- function(){
     set_gru <- ggroup(container = set_gru_up, horizontal = TRUE)
     addSpring(set_gru_up)
     addSpace(up_fra, 20)
-
+    
     # addSpring(up_fra)
     gbutton(text = " Close\nWindow", container = up_fra, handler = function(...){
       dispose(temp_dia)
     })
     addSpace(up_fra, 20)
-
+    
     bot_g <- ggroup(horizontal = TRUE, container = up_g)
     addSpace(bot_g, 10)
     bot_lef_g <- ggroup(horizontal = FALSE, container = bot_g)
@@ -1447,28 +1447,28 @@ smart_gui <- function(){
     logi_gra <- ggraphics(width = 300, height = 400, container = bot_g, expand = TRUE)
     visible(temp_dia) <- TRUE
     addSpace(bot_g, 10)
-
+    
     logi_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
     logi_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
     add(set_gru, logi_sta)
-
+    
     if(!is.null(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Roc)){
       my_project$fleet$plotLogitROC(svalue(spe_drop))
       svalue(tmp_txt) <- capture.output({cat("\n")
         print(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Confusion)})
     }
-
+    
   })
   addSpring(pro_g_top2)
-
+  
   gbutton("Get NNLS", container = pro_g_top2, handler = function(h,...){
-
-
-
+    
+    
+    
     temp_dia <- gwindow(title="Get NNLS", visible = FALSE,
                         parent = main_win,
                         width = 950, height = 500)
-
+    
     up_g <- ggroup(horizontal = FALSE, container = temp_dia, expand = TRUE)
     up_fra <- gframe(container = up_g, horizontal = TRUE, expand = TRUE)
     # addSpring(up_fra)
@@ -1483,13 +1483,13 @@ smart_gui <- function(){
     #                       })
     addSpring(spe_fra)
     addSpace(up_fra, 20)
-
+    
     gbutton(text = " Get\nNNLS", container = up_fra, handler = function(...){
-
+      
       if(is.null(my_project$fleet$effoProdAllLoa)) my_project$fleet$setEffoProdAllLoa()
-
+      
       my_project$getNnlsModel(specie = svalue(spe_drop), minobs = svalue(obs_spin), thr_r2 = svalue(thr_spin))
-
+      
       svalue(tmp_txt) <- paste("\n\nRaw Scenarios:\n\n\t",
                                nrow(my_project$fleet$resNNLS[[svalue(spe_drop)]]$bmat),
                                "\n\nWith at least ", svalue(obs_spin), " observations:\n\n\t",
@@ -1510,27 +1510,27 @@ smart_gui <- function(){
     obs_spin <- gspinbutton(from = 1, to = 100,
                             by = 1, value = 10, container = obs_fra, expand = TRUE,
                             handler = function(...){
-
+                              
                             })
     addSpace(up_fra, 20)
     addSpace(obs_fra, 20)
-
+    
     thr_fra <- gframe(text = "R2 Threshold", container = up_fra, expand = TRUE, horizontal = TRUE)
     addSpace(thr_fra, 20)
     thr_spin <- gslider(from = 0, to = 1,
                         by = 0.01, value = 0, container = thr_fra, expand = TRUE,
                         handler = function(...){
-
+                          
                         })
     addSpace(up_fra, 20)
     addSpace(thr_fra, 20)
-
+    
     gbutton(text = "\n   Save   \n", container = up_fra, handler = function(...){
       svalue(set_lab) <- "Saved"
       delete(set_gru, set_gru$children[[length(set_gru$children)]])
       add(set_gru, logi_sta_n)
     })
-
+    
     addSpace(up_fra, 20)
     set_gru_up <- ggroup(container = up_fra, horizontal = FALSE)
     addSpring(set_gru_up)
@@ -1538,7 +1538,7 @@ smart_gui <- function(){
     set_gru <- ggroup(container = set_gru_up, horizontal = TRUE)
     addSpring(set_gru_up)
     addSpace(up_fra, 20)
-
+    
     # addSpring(up_fra)
     gbutton(text = " Close\nWindow", container = up_fra, handler = function(...){
       dispose(temp_dia)
@@ -1555,25 +1555,25 @@ smart_gui <- function(){
     nnls_gra <- ggraphics(width = 300, height = 400, container = bot_g, expand = TRUE)
     visible(temp_dia) <- TRUE
     addSpace(bot_g, 10)
-
+    
     logi_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
     logi_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
     add(set_gru, logi_sta)
-
+    
   })
   addSpring(pro_g_top2)
   addSpring(pro_g_top)
-
+  
   pro_g_topBeta <- ggroup(horizontal = FALSE, container = pro_g_top)
   addSpring(pro_g_topBeta)
   gbutton("Tune\nBetas", container = pro_g_topBeta, handler = function(h,...){
-
-
-
+    
+    
+    
     temp_dia <- gwindow(title="Set Max Beta", visible = FALSE,
                         parent = main_win,
                         width = 950, height = 500)
-
+    
     up_g <- ggroup(horizontal = FALSE, container = temp_dia, expand = TRUE)
     up_fra <- gframe(container = up_g, horizontal = TRUE, expand = TRUE)
     # addSpring(up_fra)
@@ -1586,12 +1586,12 @@ smart_gui <- function(){
     #                       handler = function(...){
     #
     #                       })
-
+    
     addSpring(spe_fra)
     addSpace(up_fra, 20)
-
+    
     maxb_fra <- gframe(text = "Max Beta", container = up_fra, expand = TRUE, horizontal = TRUE)
-
+    
     addSpace(maxb_fra, 20)
     maxb_spin <- gslider(from = 1, to = ceiling(max(my_project$fleet$betaMeltYear[[svalue(spe_drop)]]$Productivity)),
                          by = 1, value = 0, container = maxb_fra, expand = TRUE,
@@ -1601,19 +1601,19 @@ smart_gui <- function(){
                          })
     addSpace(up_fra, 20)
     addSpace(maxb_fra, 20)
-
+    
     gbutton(text = "\n   Save   \n", container = up_fra, handler = function(...){
-
+      
       my_project$fleet$betaMeltYear[[svalue(spe_drop)]]$Productivity[my_project$fleet$betaMeltYear[[svalue(spe_drop)]]$Productivity > svalue(maxb_spin)] <- svalue(maxb_spin)
-
+      
       svalue(set_lab) <- "Saved"
       delete(set_gru, set_gru$children[[length(set_gru$children)]])
       add(set_gru, logi_sta_n)
-
+      
       print(ggplot_betasBoxplot(df_YearFGprod = my_project$fleet$betaMeltYear[[svalue(spe_drop)]], int_hline = svalue(maxb_spin)))
-
+      
     })
-
+    
     addSpace(up_fra, 20)
     set_gru_up <- ggroup(container = up_fra, horizontal = FALSE)
     addSpring(set_gru_up)
@@ -1621,7 +1621,7 @@ smart_gui <- function(){
     set_gru <- ggroup(container = set_gru_up, horizontal = TRUE)
     addSpring(set_gru_up)
     addSpace(up_fra, 20)
-
+    
     # addSpring(up_fra)
     gbutton(text = " Close\nWindow", container = up_fra, handler = function(...){
       dispose(temp_dia)
@@ -1629,21 +1629,21 @@ smart_gui <- function(){
     addSpace(up_fra, 20)
     # addSpace(up_g, 20)
     bot_g <- ggroup(horizontal = TRUE, container = up_g)
-
+    
     nnls_gra <- ggraphics(width = 300, height = 400, container = bot_g, expand = TRUE)
     visible(temp_dia) <- TRUE
     addSpace(bot_g, 10)
-
+    
     logi_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
     logi_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
     add(set_gru, logi_sta)
-
+    
     print(ggplot_betasBoxplot(df_YearFGprod = my_project$fleet$betaMeltYear[[svalue(spe_drop)]], int_hline = max(my_project$fleet$betaMeltYear[[svalue(spe_drop)]]$Productivity)))
-
+    
   })
   addSpring(pro_g_topBeta)
   addSpring(pro_g_top)
-
+  
   pro_g_top3 <- ggroup(horizontal = FALSE, container = pro_g_top)
   addSpring(pro_g_top3)
   gbutton("Predict\nProduction", container = pro_g_top3, handler = function(h,...){
@@ -1657,7 +1657,7 @@ smart_gui <- function(){
     enabled(pro_g_top) <- TRUE
   })
   addSpring(pro_g_top3)
-
+  
   addSpring(pro_g_top)
   pro_g_top2_view_g <- ggroup(horizontal = FALSE, container = pro_g_top, expand = TRUE)
   pro_g_top2_view <- gframe(text = "View", horizontal = TRUE, container = pro_g_top2_view_g, expand = TRUE)
@@ -1686,7 +1686,7 @@ smart_gui <- function(){
     suppressWarnings(grid.arrange(my_project$sampMap$ggProdFGmap,
                                   my_project$sampMap$ggProdFGbox,
                                   layout_matrix = rbind(c(1,1,1,2),c(1,1,1,2))))
-
+    
     svalue(stat_bar) <- ""
   })
   addSpring(pro_g_top2_ver)
@@ -1698,10 +1698,10 @@ smart_gui <- function(){
   addSpace(pro_g_top2_view_g, 7)
   addSpring(pro_g_top)
   proGro_p <- ggraphics(container = pro_g, width = 550, height = 250, expand = TRUE)
-
-
+  
+  
   ####     Survey     ####
-
+  
   raw_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Survey")
   raw_g_top <- gframe(horizontal = TRUE, container = raw_g)
   addSpace(raw_g_top, 2)
@@ -1712,9 +1712,9 @@ smart_gui <- function(){
     svalue(stat_bar) <- "Loading Data..."
     Sys.sleep(1)
     my_project$loadSurveyLFD(csv_path = pathSurvey)
-
+    
     if(!is.null(my_project$rawDataSurvey)){ #update_pop_gui()
-
+      
       raw_t[] <- my_project$rawDataSurvey[sample(1:nrow(my_project$rawDataSurvey), 100, replace = FALSE),]
       svalue(raw_l1) <- paste("Specie: ", paste(my_project$specieInSurvey, collapse = " - "))
       #   svalue(raw_l2) <- paste("Length Classes: from ",  min(my_project$LClass), " to ", max(my_project$LClass))
@@ -1731,33 +1731,33 @@ smart_gui <- function(){
       # cohYea_drop[] <- c("All", as.character(my_project$yearInSurvey))
       # svalue(year_drop) <- my_project$yearInSurvey[1]
       # svalue(cohYea_drop) <- "All"
-
+      
       # Update LWrel specie selection
       # assSpe_drop[] <- my_project$specieInSurvey
       # svalue(assSpe_drop) <- my_project$specieInSurvey[1]
-
+      
       if(!is.null(my_project$sampMap$cutResShp)){
         my_project$addFg2Survey()
         my_project$setSpreaSurvey()
         my_project$setSpatSurvey()
-
+        
         my_project$sampMap$set_ggMapFgSurvey(my_project$rawDataSurvey)
       }
-
+      
       ### Update Sampling Status
       svalue(n_year_s) <- paste(length(my_project$yearInSurvey), " years", sep = "")
       svalue(mi_date_s) <- paste("From: ", min(as.numeric(as.character(my_project$yearInSurvey))), sep = "")
       svalue(ma_date_s) <- paste("To: ", max(as.numeric(as.character(my_project$yearInSurvey))), sep = "")
       svalue(n_spec_s) <- paste(length(my_project$specieInSurvey),
                                 ifelse(length(my_project$specieInSurvey) == 1, " specie", " species"), sep = "")
-
+      
       delete(samp_g, samp_g$children[[length(samp_g$children)]])
       add(samp_g, samp_sta_n)
     }
   })
   addSpring(raw_g_top1)
   addSpring(raw_g_top)
-
+  
   gbutton("Open\nLFD\nViewer", container = raw_g_top, handler = function(h,...){
     
     temp_dia <- gwindow(title="Survey Length Frequency Distribution Viewer", visible = FALSE,
@@ -1827,27 +1827,27 @@ smart_gui <- function(){
                                                         c(2,2,2,4),
                                                         c(2,2,2,4))))
   })
-
+  
   addSpring(raw_g_top)
-
+  
   gbutton("View\nSpatial\nDistribution", container = raw_g_top, handler = function(h,...){
-
+    
     temp_dia <- gwindow(title="Spatial Distribution of Survey sampling", visible = FALSE,
                         parent = main_win, width = 700, height = 500)
-
+    
     pop_g <- ggroup(horizontal = FALSE, container = temp_dia)
-
+    
     pop_g_top <- gframe(horizontal = TRUE, container = pop_g, spacing = 10)
-
+    
     addSpring(pop_g_top)
     spec_b <- gframe("Specie", horizontal = FALSE, container = pop_g_top, expand = TRUE)
-
+    
     addSpring(spec_b)
     spec_drop <- gcombobox(items = as.character(my_project$specieInSurvey), selected = 1,
                            container = spec_b, editable = FALSE, handler = function(h,...){
                              # my_project$plotGooSpe(whiSpe = svalue(spec_drop), whiSou = "Fishery")
                              spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
-
+                             
                              suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSurvey,
                                                            my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
                                                            my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatRelFreq"]],
@@ -1865,7 +1865,7 @@ smart_gui <- function(){
                           selected = 1, container = sex_b, expand = TRUE,
                           editable = FALSE, handler = function(h,...){
                             spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
-
+                            
                             suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSurvey,
                                                           my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
                                                           my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatRelFreq"]],
@@ -1874,24 +1874,24 @@ smart_gui <- function(){
                                                                                 c(4,1,1),
                                                                                 c(NA,2,3))
                             ))
-
+                            
                           })
     addSpring(sex_b)
     addSpring(pop_g_top)
-
+    
     gbutton("Close", container = pop_g_top, handler = function(h,...){
       dispose(temp_dia)
     })
     addSpring(pop_g_top)
-
+    
     addSpace(pop_g_top, 10)
-
+    
     pop_p <- ggraphics(container = pop_g, width = 650, height = 450, expand = TRUE)
-
+    
     visible(temp_dia) <- TRUE
-
+    
     spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
-
+    
     # my_project$plotGooSpe(whiSpe = "All", whiSou = "Fishery")
     suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSurvey,
                                   my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
@@ -1902,11 +1902,11 @@ smart_gui <- function(){
                                                         c(NA,2,3))
     ))
   })
-
+  
   addSpring(raw_g_top)
-
+  
   gbutton("   Get\nMEDITS index", container = raw_g_top, handler = function(h,...){
-
+    
     strataVect <- c(0, 10, 50, 100, 200, 500, 800, Inf)
     icoStrata_off <- gimage(system.file("ico/user-invisible.png", package="smartR"))
     icoStrata_on <- gimage(system.file("ico/user-available.png", package="smartR"))
@@ -1914,19 +1914,19 @@ smart_gui <- function(){
     icoArea_on <- gimage(system.file("ico/user-available.png", package="smartR"))
     icoMedit_off <- gimage(system.file("ico/user-invisible.png", package="smartR"))
     icoMedit_on <- gimage(system.file("ico/user-available.png", package="smartR"))
-
+    
     temp_dia <- gwindow(title="Medits index calculator", visible = FALSE,
                         parent = main_win,
                         width = 900, height = 500)
-
+    
     med_g <- ggroup(horizontal = FALSE, container = temp_dia)
     med_g_top <- gframe(horizontal = TRUE, container = med_g, spacing = 10)
-
+    
     addSpace(med_g_top, 10)
-
+    
     comfra_g <- gframe("Compute", horizontal = TRUE, container = med_g_top, expand = TRUE)
     addSpring(comfra_g)
-
+    
     strata_f <- gframe("Strata", horizontal = FALSE, container = comfra_g, expand = TRUE)
     depth_b <- gbutton(text = "Set", container = strata_f, handler = function(h,...){
       my_project$setDepthSurvey()
@@ -1935,9 +1935,9 @@ smart_gui <- function(){
       add(strata_f, icoStrata_on)
     })
     add(strata_f, icoStrata_off)
-
+    
     addSpring(comfra_g)
-
+    
     areas_f <- gframe("Areas", horizontal = FALSE, container = comfra_g, expand = TRUE)
     area_b <- gbutton(text = "Set", container = areas_f, handler = function(h,...){
       my_project$sampMap$setAreaGrid()
@@ -1947,9 +1947,9 @@ smart_gui <- function(){
       add(areas_f, icoArea_on)
     })
     add(areas_f, icoArea_off)
-
+    
     addSpring(comfra_g)
-
+    
     medInd_f <- gframe("MEDITS Index", horizontal = FALSE, container = comfra_g, expand = TRUE)
     medInd_b <- gbutton(text = "Set", container = medInd_f, handler = function(h,...){
       my_project$setAbuAvgAll()
@@ -1957,7 +1957,7 @@ smart_gui <- function(){
       my_project$setMeditsIndex()
       delete(medInd_f, medInd_f$children[[length(medInd_f$children)]])
       add(medInd_f, icoMedit_on)
-
+      
       specie_ind <- 1
       sex_sel <- "Female"
       tmp_abus <- data.frame(Class = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Class,
@@ -1976,7 +1976,7 @@ smart_gui <- function(){
       print(ggplot_meditsIndex(inMedits = tmp_abus))
     })
     add(medInd_f, icoMedit_off)
-
+    
     addSpring(comfra_g)
     addSpring(med_g_top)
     plofra_g <- gframe("Show", horizontal = TRUE, container = med_g_top, expand = TRUE)
@@ -2027,22 +2027,22 @@ smart_gui <- function(){
     addSpace(med_g_top, 10)
     visible(temp_dia) <- TRUE
   })
-
+  
   addSpring(raw_g_top)
-
+  
   raw_g_top2 <- ggroup(horizontal = FALSE, container = raw_g_top)
   raw_l1 <- glabel("Specie: ", container = raw_g_top2)
   raw_l3 <- glabel("Years: ", container = raw_g_top2)
   addSpring(raw_g_top)
   addSpace(raw_g_top, 2)
   addSpace(raw_g_top2, 2)
-
+  
   blankDF = data.frame(Specie = character(0), Lat = numeric(0), Lon = numeric(0), Year = character(0), Class = numeric(0), Female = character(0), Male = character(0), Unsex = character(0), stringsAsFactors=FALSE)
   raw_t <- gtable(blankDF, container = raw_g, expand = TRUE)
-
-
+  
+  
   ####     Fishery     ####
-
+  
   fis_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Fishery")
   fis_g_top <- gframe(horizontal = TRUE, container = fis_g)
   addSpace(fis_g_top, 2)
@@ -2053,27 +2053,27 @@ smart_gui <- function(){
     svalue(stat_bar) <- "Loading Data..."
     Sys.sleep(1)
     my_project$loadFisheryLFD(csv_path = pathFishery)
-
+    
     if(!is.null(my_project$sampMap$cutResShp)){
       my_project$addFg2Fishery()
       my_project$setSpreaFishery()
       my_project$setSpatFishery()
-
+      
       my_project$sampMap$set_ggMapFgFishery(my_project$rawDataFishery)
     }
-
+    
     if(!is.null(my_project$rawDataFishery)){ #update_pop_gui()
-
+      
       fis_t[] <- my_project$rawDataFishery[sample(1:nrow(my_project$rawDataFishery), 100, replace = FALSE),]
       svalue(fis_l1) <- paste("Specie: ", paste(my_project$specieInFishery, collapse = " - "))
       svalue(fis_l3) <- paste("Years: from", min(as.numeric(as.character(my_project$yearInFishery))), " to ", max(as.numeric(as.character(my_project$yearInFishery))))
-
+      
       # Update LWrel specie selection
       # assSpe_drop[] <- my_project$specieInFishery
       # svalue(assSpe_drop) <- my_project$specieInFishery[1]
-
+      
       svalue(stat_bar) <- ""
-
+      
       # ### Update Sampling Status
       # svalue(n_year_s) <- paste(length(my_project$yearInFishery), " years", sep = "")
       # svalue(mi_date_s) <- paste("From: ", min(as.numeric(as.character(my_project$yearInFishery))), sep = "")
@@ -2086,7 +2086,7 @@ smart_gui <- function(){
     }
   })
   addSpring(fis_g_top1)
-
+  
   addSpring(fis_g_top)
   fis_g_top2 <- ggroup(horizontal = FALSE, container = fis_g_top)
   addSpring(fis_g_top2)
@@ -2096,25 +2096,25 @@ smart_gui <- function(){
   addSpring(fis_g_top2)
   addSpring(fis_g_top)
   addSpace(fis_g_top, 2)
-
+  
   gbutton("Open\nLFD\nViewer", container = fis_g_top, handler = function(h,...){
-
+    
     temp_dia <- gwindow(title="Fishery Length Frequency Distribution Viewer", visible = FALSE,
                         parent = main_win, width = 800, height = 500)
-
+    
     pop_g <- ggroup(horizontal = FALSE, container = temp_dia, label = "Population")
     pop_g_top <- gframe(horizontal = TRUE, container = pop_g, spacing = 10)
     # addSpring(pop_g_top)
     lfdfra_g <- gframe("LFD data", horizontal = TRUE, container = pop_g_top, expand = TRUE)
     addSpring(lfdfra_g)
-
+    
     spec_b <- gframe("Specie", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
     addSpring(lfdfra_g)
     addSpring(spec_b)
     spec_drop <- gcombobox(items = my_project$specieInFishery,
                            selected = 1, container = spec_b, expand = TRUE,
                            editable = FALSE, handler = function(h,...){
-
+                             
                              spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
                              svalue(sex_drop) <- "Female"
                              suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histLfdTot"]],
@@ -2133,7 +2133,7 @@ smart_gui <- function(){
                           selected = 1, container = sex_b, expand = TRUE,
                           editable = FALSE, handler = function(h,...){
                             spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
-
+                            
                             suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histLfdTot"]],
                                                           my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histUtcLfd"]],
                                                           my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histUtcTot"]],
@@ -2143,21 +2143,21 @@ smart_gui <- function(){
                                                                                 c(2,2,2,4))))
                           })
     addSpring(sex_b)
-
+    
     addSpring(lfdfra_g)
     addSpace(pop_g_top, 2)
     pop_p <- ggraphics(container = pop_g, width = 750, height = 450, expand = TRUE)
     addSpring(pop_g_top)
-
+    
     gbutton("Close", container = pop_g_top, handler = function(h,...){
       dispose(temp_dia)
     })
-
+    
     addSpring(pop_g_top)
-
+    
     visible(temp_dia) <- TRUE
     spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
-
+    
     suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histLfdTot"]],
                                   my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histUtcLfd"]],
                                   my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histUtcTot"]],
@@ -2166,27 +2166,27 @@ smart_gui <- function(){
                                                         c(2,2,2,4),
                                                         c(2,2,2,4))))
   })
-
+  
   addSpring(fis_g_top)
-
+  
   gbutton("View\nSpatial\nDistribution", container = fis_g_top, handler = function(h,...){
-
+    
     temp_dia <- gwindow(title="Spatial Distribution of Fishery sampling", visible = FALSE,
                         parent = main_win, width = 700, height = 500)
-
+    
     pop_g <- ggroup(horizontal = FALSE, container = temp_dia)
-
+    
     pop_g_top <- gframe(horizontal = TRUE, container = pop_g, spacing = 10)
-
+    
     addSpring(pop_g_top)
     spec_b <- gframe("Specie", horizontal = FALSE, container = pop_g_top, expand = TRUE)
-
+    
     addSpring(spec_b)
     spec_drop <- gcombobox(items = as.character(my_project$specieInFishery), selected = 1,
                            container = spec_b, editable = FALSE, handler = function(h,...){
                              # my_project$plotGooSpe(whiSpe = svalue(spec_drop), whiSou = "Fishery")
                              spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
-
+                             
                              suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgFishery,
                                                            my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
                                                            my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatRelFreq"]],
@@ -2204,7 +2204,7 @@ smart_gui <- function(){
                           selected = 1, container = sex_b, expand = TRUE,
                           editable = FALSE, handler = function(h,...){
                             spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
-
+                            
                             suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgFishery,
                                                           my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
                                                           my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatRelFreq"]],
@@ -2213,24 +2213,24 @@ smart_gui <- function(){
                                                                                 c(4,1,1),
                                                                                 c(NA,2,3))
                             ))
-
+                            
                           })
     addSpring(sex_b)
     addSpring(pop_g_top)
-
+    
     gbutton("Close", container = pop_g_top, handler = function(h,...){
       dispose(temp_dia)
     })
     addSpring(pop_g_top)
-
+    
     addSpace(pop_g_top, 10)
-
+    
     pop_p <- ggraphics(container = pop_g, width = 650, height = 450, expand = TRUE)
-
+    
     visible(temp_dia) <- TRUE
-
+    
     spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
-
+    
     # my_project$plotGooSpe(whiSpe = "All", whiSou = "Fishery")
     suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgFishery,
                                   my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
@@ -2241,9 +2241,9 @@ smart_gui <- function(){
                                                         c(NA,2,3))
     ))
   })
-
+  
   addSpring(fis_g_top)
-
+  
   gbutton("Assign FG", container = fis_g_top, handler = function(h,...){
     if(!is.null(my_project$sampMap$cutResShp)){
       my_project$addFg2Fishery()
@@ -2251,7 +2251,7 @@ smart_gui <- function(){
     fis_t[] <- my_project$rawDataFishery[sample(1:nrow(my_project$rawDataFishery), 100, replace = FALSE),]
   })
   addSpring(fis_g_top)
-
+  
   blankDF = data.frame(Specie = character(0),
                        Lat = numeric(0),
                        Lon = numeric(0),
@@ -2261,10 +2261,10 @@ smart_gui <- function(){
                        Male = character(0),
                        Unsex = character(0), stringsAsFactors=FALSE)
   fis_t <- gtable(blankDF, container = fis_g, expand = TRUE)
-
-
+  
+  
   ####   Mixture   ####
-
+  
   mix_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Mixture")
   mix_g_top <- gframe(horizontal = TRUE, container = mix_g) #if expand bad
   addSpace(mix_g_top, 20)
@@ -2300,16 +2300,16 @@ smart_gui <- function(){
   addSpring(ncoh_f)
   ncih_sb <- gspinbutton (from = 1, to = 100, by = 1, value = 3, digits = 0, container = ncoh_f)
   addSpring(ncoh_f)
-
+  
   addSpring(cont_g)
-
+  
   gcurv_f <- gframe("Growth Curve", horizontal = FALSE, container = cont_g)
   addSpring(gcurv_f)
   gcurv_r <- gradio(items = c("von Bertalanffy", "Gompertz"), horizontal = FALSE, container = gcurv_f, expand = TRUE)
   addSpring(gcurv_f)
-
+  
   addSpring(cont_g)
-
+  
   go_g <- gframe("MCMC sim", horizontal = TRUE, container = cont_g, expand = TRUE)
   addSpring(go_g)
   go_g_ada <- ggroup(horizontal = FALSE, container = go_g, expand = TRUE)
@@ -2331,7 +2331,7 @@ smart_gui <- function(){
                        pre_mfrow <- par(c("mfrow", "mar"))
                        par(mfrow = c(2, 1))
                        par(mar = c(2,2,1.5,0.5))
-
+                       
                        ind_spe <- which(my_project$specieInSurvey == svalue(spec_drop_mix))
                        # Set number of cohorts
                        my_project$surveyBySpecie[[ind_spe]]$setNCoho(as.numeric(svalue(ncih_sb)))
@@ -2341,19 +2341,19 @@ smart_gui <- function(){
                                                                         nSamp = as.numeric(svalue(mc_nsamp)),
                                                                         sexDrop = svalue(sex_drop_mix),
                                                                         curveSel = svalue(gcurv_r))
-
+                       
                        my_project$surveyBySpecie[[ind_spe]]$ggplotMcmcOut(selSex = svalue(sex_drop_mix))
                        # Transform length to cohorts
                        # my_project$calcCoh_A_Survey(ind_spe)
                        # Interpolate cohorts
                        # my_project$intrpCoh_A_Survey(ind_spe)
                        cohCoh_drop[] <- c("All", seq(1, my_project$surveyBySpecie[[ind_spe]]$nCoho, by = 1))
-
+                       
                      }else{
                        pre_mfrow <- par(c("mfrow", "mar"))
                        par(mfrow = c(2, 4))
                        par(mar = c(2,2,1.5,0.5))
-
+                       
                        ind_spe <- which(my_project$specieInFishery == svalue(spec_drop_mix))
                        # Set number of cohorts
                        my_project$fisheryBySpecie[[ind_spe]]$setNCoho(as.numeric(svalue(ncih_sb)))
@@ -2362,15 +2362,15 @@ smart_gui <- function(){
                                                                          nSamp = as.numeric(svalue(mc_nsamp)),
                                                                          sexDrop = svalue(sex_drop_mix),
                                                                          curveSel = svalue(gcurv_r))
-
+                       
                        my_project$fisheryBySpecie[[ind_spe]]$ggplotMcmcOut(selSex = svalue(sex_drop_mix))
-
+                       
                        # Transform length to cohorts
                        # my_project$calcCoh_A_Fishery(ind_spe)
                        # Interpolate cohorts
                        # my_project$intrpCoh_A_Fishery(ind_spe)
                        # cohCoh_drop[] <- c("All", seq(1, my_project$fisheryBySpecie[[ind_spe]]$nCoho, by = 1))
-
+                       
                      }
                      # svalue(cohCoh_drop) <- "All"
                      par(pre_mfrow)
@@ -2383,7 +2383,7 @@ smart_gui <- function(){
                        horizontal = FALSE, container = view_g,
                        handler = function(h,...){
                          dev.set(dev.list()[pre_dev+6])
-
+                         
                          if(svalue(sourceMix_r) == "Survey"){
                            my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_mix))]]$ggplotMcmcOut(selCompo = svalue(view_radio),
                                                                                                                                 selSex = svalue(sex_drop_mix))
@@ -2392,23 +2392,23 @@ smart_gui <- function(){
                                                                                                                                   selSex = svalue(sex_drop_mix))
                          }
                        })
-
+  
   addSpring(cont_g)
   addSpace(mix_g_top, 20)
-
+  
   mix_p <- ggraphics(container = mix_g, width = 550, height = 250, expand = TRUE)
-
-
+  
+  
   ####   Cohorts   ####
-
+  
   cohoP_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Cohorts")
   cohoP_g_top <- gframe(horizontal = TRUE, container = cohoP_g, spacing = 10)
   addSpace(cohoP_g_top, 2)
   # addSpring(cohoP_g_top)
-
+  
   cohofra_g <- gframe("Cohort data", horizontal = TRUE, container = cohoP_g_top, expand = TRUE)
   # addSpring(cohofra_g)
-
+  
   sourceCoh_r <- gradio(items = c("Survey", "Fishery"), horizontal = FALSE, container = cohofra_g, expand = TRUE, handler = function(...){
     if(svalue(sourceCoh_r) == "Survey"){
       if(is.null(my_project$specieInSurvey)){
@@ -2428,7 +2428,7 @@ smart_gui <- function(){
       }
     }
   })
-
+  
   cohSpe_b <- gframe("Specie", horizontal = FALSE, container = cohofra_g, expand = TRUE)
   addSpring(cohofra_g)
   addSpring(cohSpe_b)
@@ -2444,7 +2444,7 @@ smart_gui <- function(){
     svalue(cohCoh_drop, index = TRUE) <- 1
   })
   addSpring(cohSpe_b)
-
+  
   cohSex_b <- gframe("Sex", horizontal = FALSE, container = cohofra_g, expand = TRUE)
   addSpring(cohofra_g)
   addSpring(cohSex_b)
@@ -2456,7 +2456,7 @@ smart_gui <- function(){
     }
   })
   addSpring(cohSex_b)
-
+  
   cohGru_b <- gframe("Group", horizontal = FALSE, container = cohofra_g, expand = TRUE)
   addSpring(cohofra_g)
   addSpring(cohGru_b)
@@ -2476,7 +2476,7 @@ smart_gui <- function(){
     }
   })
   addSpring(cohGru_b)
-
+  
   cohCoh_b <- gframe("Cohort", horizontal = FALSE, container = cohofra_g, expand = TRUE)
   addSpring(cohofra_g)
   addSpring(cohCoh_b)
@@ -2487,13 +2487,13 @@ smart_gui <- function(){
     # svalue(gruRadio_coh)   # group = "Age"
     # svalue(cohTyp_drop)    #  type = "LFD"
     dev.set(dev.list()[pre_dev+7])
-
+    
     if(svalue(sourceCoh_r) == "Survey"){
       cohSpe_ind <- which(my_project$specieInSurvey == svalue(spec_drop_coh))
       if(svalue(cohTyp_drop) == "LFD"){
-
+        
       }else{
-
+        
       }
     }else{
       cohSpe_ind <- which(my_project$specieInFishery == svalue(spec_drop_coh))
@@ -2513,7 +2513,7 @@ smart_gui <- function(){
           tmpLFD <- my_project$fisheryBySpecie[[cohSpe_ind]]$groMixout[[svalue(sexRadio_coh)]][my_project$fisheryBySpecie[[cohSpe_ind]]$groMixout[[svalue(sexRadio_coh)]]$Birth == svalue(cohCoh_drop),]
           tmpLFD$UTC <- tmpLFD$Date
           tmpLFD$Month <- factor(tmpLFD$MonthChar, levels = month.abb)
-
+          
           tmp_palette <- brewer.pal(12, "Paired")
           suppressWarnings(grid.arrange(set_ggHistLfdTot(inLfd = tmpLFD) + scale_fill_manual(values = tmp_palette[svalue(cohCoh_drop)-min(cohCoh_drop[])]),
                                         set_ggHistUtcLfd(inLfd = tmpLFD) + scale_fill_manual(values = tmp_palette[svalue(cohCoh_drop)-min(cohCoh_drop[])]),
@@ -2524,18 +2524,18 @@ smart_gui <- function(){
                                                               c(2,2,2,4))))
         }
       }else{
-
+        
       }
     }
   })
   addSpring(cohCoh_b)
-
+  
   cohTyp_b <- gframe("Type", horizontal = FALSE, container = cohofra_g, expand = TRUE)
   addSpring(cohofra_g)
   addSpring(cohTyp_b)
   cohTyp_drop <- gcombobox(items = c("LFD", "Spatial"), selected = 1, container = cohTyp_b, editable = FALSE)
   addSpring(cohTyp_b)
-
+  
   gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = cohofra_g,
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+7])
@@ -2548,27 +2548,27 @@ smart_gui <- function(){
   # addSpring(cohoP_g_top)
   addSpace(cohoP_g_top, 2)
   cohPop_p <- ggraphics(container = cohoP_g, width = 550, height = 250, expand = TRUE)
-
-
+  
+  
   ####   Simulation   ####
-
+  
   icoEffIndex_off <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   icoEffIndex_on <- gimage(system.file("ico/user-available.png", package="smartR"))
   icoSeaIndex_off <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   icoSeaIndex_on <- gimage(system.file("ico/user-available.png", package="smartR"))
   icoProdIndex_off <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   icoProdIndex_on <- gimage(system.file("ico/user-available.png", package="smartR"))
-
+  
   sim_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Simulation")
   sim_g_top <- gframe(horizontal = TRUE, container = sim_g, spacing = 10)
   addSpace(sim_g_top, 20)
-
+  
   sim_g_Effo <- gframe(text = "Effort Index", horizontal = FALSE, container = sim_g_top)
   gbutton("Get", container = sim_g_Effo, handler = function(h,...){
     my_project$setEffortIndex()
     dev.set(dev.list()[pre_dev+8])
     print(ggplot_effoIndBoxplot(df_EffoInde = my_project$fleet$effortIndex))
-
+    
     if(!is.null(my_project$fleet$effortIndex)){
       delete(sim_g_Effo, sim_g_Effo$children[[length(sim_g_Effo$children)]])
       add(sim_g_Effo, icoEffIndex_on)
@@ -2576,13 +2576,13 @@ smart_gui <- function(){
   })
   add(sim_g_Effo, icoEffIndex_off)
   addSpace(sim_g_top, 10)
-
+  
   sim_g_SeaDays <- gframe(text = "Days At Sea", horizontal = FALSE, container = sim_g_top)
   gbutton("Get", container = sim_g_SeaDays, handler = function(h,...){
     my_project$setDaysAtSea()
     dev.set(dev.list()[pre_dev+8])
     print(ggplot_seaDaysBoxplot(df_seaDays = my_project$fleet$daysAtSea))
-
+    
     if(!is.null(my_project$fleet$daysAtSea)){
       delete(sim_g_SeaDays, sim_g_SeaDays$children[[length(sim_g_SeaDays$children)]])
       add(sim_g_SeaDays, icoSeaIndex_on)
@@ -2590,33 +2590,33 @@ smart_gui <- function(){
   })
   add(sim_g_SeaDays, icoSeaIndex_off)
   addSpace(sim_g_top, 10)
-
+  
   sim_g_Prod <- gframe(text = "Production Index", horizontal = FALSE, container = sim_g_top)
   gbutton("Get", container = sim_g_Prod, handler = function(h,...){
     my_project$setProductionIndex()
     dev.set(dev.list()[pre_dev+8])
     print(ggplot_prodIndBoxplot(df_ProdInde = my_project$fleet$prodIndex))
-
+    
     if(!is.null(my_project$fleet$prodIndex)){
       delete(sim_g_Prod, sim_g_Prod$children[[length(sim_g_Prod$children)]])
       add(sim_g_Prod, icoProdIndex_on)
     }
   })
   add(sim_g_Prod, icoProdIndex_off)
-
+  
   addSpace(sim_g_top, 20)
   
   sim_g_top2 <- ggroup(horizontal = FALSE, container = sim_g_top)
   addSpring(sim_g_top2)
   gbutton("Set Cost Data", container = sim_g_top2, handler = function(h,...){
-
+    
     tempWind_Cost <- gwindow(title = "Fishing Cost Data", visible = FALSE,
                              parent = main_win,
                              width = 800, height = 500)
-
+    
     cost_g <- ggroup(horizontal = FALSE, container = tempWind_Cost, spacing = 15)
     cost_g_top <- gframe(horizontal = TRUE, container = cost_g, spacing = 20)
-
+    
     addSpring(cost_g_top)
     gbutton("   Load\nCost Data", container = cost_g_top, handler = function(h,...){
       my_project$fleet$loadRawEconomy(economic_path = pathCosts)
@@ -2651,19 +2651,19 @@ smart_gui <- function(){
     addSpace(cost_g_top, 10)
     gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = cost_g_top,
            handler = function(h,...){
-
+             
            })
     addSpring(cost_g_top)
-
+    
     visible(tempWind_Cost) <- TRUE
-
+    
     cost_p <- ggraphics(container = cost_g, width = 550, height = 250, expand = TRUE)
-
-
+    
+    
   })
   addSpring(sim_g_top2)
   gbutton("Set Size Class", container = sim_g_top2, handler = function(h,...){
-
+    
     if(is.null(my_project$fleet$ecoPrice)){
       tmp_df <- data.frame(Class = c("Small", "Medium", "Large"),
                            Units = factor(x = c("Weight", "Weight", "Weight"), levels = c("Length", "Weight")),
@@ -2674,16 +2674,16 @@ smart_gui <- function(){
     }else{
       tmp_df <- my_project$fleet$ecoPrice[[unique(c(my_project$specieInFishery, my_project$specieInSurvey))[1]]]
     }
-
+    
     # out_SizeClass <- list()
-
+    
     tempWind_Gain <- gwindow(title = "Size Class", visible = FALSE,
                              parent = main_win,
                              width = 600, height = 400)
-
+    
     gain_g <- ggroup(horizontal = FALSE, container = tempWind_Gain, spacing = 15)
     gain_g_top <- gframe(horizontal = TRUE, container = gain_g, spacing = 20)
-
+    
     addSpace(gain_g_top, 15)
     sel_specie <- gcombobox(items = unique(c(my_project$specieInFishery, my_project$specieInSurvey)),
                             selected = 1, container = gain_g_top, expand = TRUE, handler = function(...){
@@ -2717,15 +2717,15 @@ smart_gui <- function(){
       dispose(tempWind_Gain)
     })
     addSpring(gain_g_top)
-
+    
     dafra_g <- ggroup(horizontal = TRUE, container = gain_g, expand = TRUE)
     addSpace(dafra_g, 30)
     cost_df <- gdf(items = tmp_df, container = dafra_g, expand = TRUE)
     addSpace(dafra_g, 30)
     addSpace(gain_g,30)
-
+    
     visible(tempWind_Gain) <- TRUE
-
+    
   })
   addSpring(sim_g_top2)
   gbutton("Set length weight\nrelationship", container = sim_g_top2, handler = function(h,...){
@@ -2863,7 +2863,7 @@ smart_gui <- function(){
   })
   addSpring(sim_g_top2)
   
-
+  
   addSpace(sim_g_top, 20)
   
   sim_g_Sim <- gframe(text = "Scenario", horizontal = TRUE, container = sim_g_top, expand = TRUE)
@@ -2899,7 +2899,7 @@ smart_gui <- function(){
   addSpring(sim_f_Den)
   addSpring(sim_g_SimPar3)
   sim_Ban <- gbutton("Set Closed Area", container = sim_g_SimPar3, handler = function(h,...){
-
+    
     tempWind_Area <- gwindow(title = "Set Closed Area",
                              # visible = FALSE,
                              parent = main_win,
@@ -3008,14 +3008,14 @@ smart_gui <- function(){
   addSpace(ass_g_top, 10)
   
   
-
+  
   visible(pro_eg) <- TRUE
   visible(raw_eg) <- TRUE
   visible(eff_eg) <- TRUE
   visible(ass_eg) <- TRUE
   visible(sim_eg) <- TRUE
   # visible(main_win) <- TRUE
-
+  
   svalue(uti_gn) <- 2
   svalue(uti_gn) <- 3
   svalue(uti_gn) <- 4
@@ -3027,7 +3027,7 @@ smart_gui <- function(){
   svalue(uti_gn) <- 10
   svalue(uti_gn) <- 11
   svalue(uti_gn) <- 12
-
+  
   svalue(uti_gn) <- 1
   # visible(main_win) <- TRUE
 }
