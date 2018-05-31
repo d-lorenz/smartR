@@ -2975,7 +2975,7 @@ smart_gui <- function(){
   addSpring(sim_g_Sim)
   gbutton("   Start\nSimulation", container = sim_g_Sim, handler = function(h,...){
     dev.set(dev.list()[pre_dev+8])
-    svalue(sim_Res_radio) <- 1
+    svalue(sim_Res_radio) <- "Summary"
     cat("\n\nSimulating ", sep = "")
     my_project$simEffo <- NULL
     gc()
