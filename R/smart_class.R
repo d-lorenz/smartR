@@ -747,12 +747,12 @@ SmartProject <- R6Class("smartProject",
                                     tempRev$propWei <- tempRev$relAbb/sum(tempRev$relAbb)
                                     tempRev$SizeClass <- factor(findInterval(x = tempRev$avgLen, vec = vecSize, all.inside = TRUE), levels = 1:(length(vecSize)-1))
                                     outClass <- merge(data.frame(SizeClass = levels(tempRev$SizeClass)), aggregate(formula = propWei ~ SizeClass, data = tempRev, FUN = sum), all.x = TRUE)
-                                    preRevenue[i,2:(length(vecSize)+1)] <- outClass$propWei
+                                    preRevenue[i,2:length(vecSize)] <- outClass$propWei
                                   }else{
                                     tempRev$propWei <- tempRev$Freq/sum(tempRev$Freq)
                                     tempRev$SizeClass <- factor(findInterval(x = tempRev$Weight, vec = vecSize), levels = 1:length(vecSize))
                                     outClass <- merge(data.frame(SizeClass = levels(tempRev$SizeClass)), aggregate(formula = propWei ~ SizeClass, data = tempRev, FUN = sum), all.x = TRUE)
-                                    preRevenue[i,2:(length(vecSize)+1)] <- outClass$propWei
+                                    preRevenue[i,2:length(vecSize)] <- outClass$propWei
                                   }
                                 }
                               }
@@ -771,12 +771,12 @@ SmartProject <- R6Class("smartProject",
                                       tempRev$propWei <- tempRev$relAbb/sum(tempRev$relAbb)
                                       tempRev$SizeClass <- factor(findInterval(x = tempRev$avgLen, vec = vecSize, all.inside = TRUE), levels = 1:(length(vecSize)-1))
                                       outClass <- merge(data.frame(SizeClass = levels(tempRev$SizeClass)), aggregate(formula = propWei ~ SizeClass, data = tempRev, FUN = sum), all.x = TRUE)
-                                      preReveSea[i,2:(length(vecSize)+1)] <- outClass$propWei
+                                      preReveSea[i,2:length(vecSize)] <- outClass$propWei
                                     }else{
                                       tempRev$propWei <- tempRev$Freq/sum(tempRev$Freq)
                                       tempRev$SizeClass <- factor(findInterval(x = tempRev$Weight, vec = vecSize), levels = 1:length(vecSize))
                                       outClass <- merge(data.frame(SizeClass = levels(tempRev$SizeClass)), aggregate(formula = propWei ~ SizeClass, data = tempRev, FUN = sum), all.x = TRUE)
-                                      preReveSea[i,2:(length(vecSize)+1)] <- outClass$propWei
+                                      preReveSea[i,2:length(vecSize)] <- outClass$propWei
                                     }
                                   }
                                 }
