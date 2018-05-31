@@ -2666,11 +2666,11 @@ smart_gui <- function(){
   gbutton("Set Size Class", container = sim_g_top2, handler = function(h,...){
     
     if(is.null(my_project$fleet$ecoPrice)){
-      tmp_df <- data.frame(Class = c("Small", "Medium", "Large"),
-                           Units = factor(x = c("Weight", "Weight", "Weight"), levels = c("Length", "Weight")),
-                           LowerBound = c(1, 5, 10),
-                           UpperBound = c(5, 10, 20),
-                           Price = c(2, 5, 10),
+      tmp_df <- data.frame(Class = c("Small", "Large"),
+                           Units = factor(x = c("Length", "Length"), levels = c("Length", "Weight")),
+                           LowerBound = c(1, 16),
+                           UpperBound = c(16, Inf),
+                           Price = c(7, 20),
                            stringsAsFactors = FALSE, row.names = NULL)
     }else{
       tmp_df <- my_project$fleet$ecoPrice[[unique(c(my_project$specieInFishery, my_project$specieInSurvey))[1]]]
