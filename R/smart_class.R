@@ -1862,6 +1862,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                              # Fis_Gro = NULL,
                              LWpar = list(),
                              LWstat = NULL,
+                             LWstatQ = NULL,
                              # scorVec = NULL,
                              # qMedits = NULL,
                              # bRefs = NULL,
@@ -1939,6 +1940,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                  tmp_out <- groMixout[[1]]
                                }
                                tmp_out$Weight <- ceiling(tmp_out$Weight)
+                               tmp_out$Season <- factor(quarters(tmp_out$Date+30), levels = c("1Q", "2Q", "3Q", "4Q"), labels = c("winter", "spring", "summer", "fall"))
                                
                                if(lwUnit == "Length"){
                                  tmp_lw <- ddply(tmp_out, .(Weight, FG), summarise,
@@ -1950,6 +1952,15 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                  tmp_lw <- tmp_lw[tmp_lw$Freq > 0,]
                                }
                                LWstat <<- tmp_lw
+                               if(lwUnit == "Length"){
+                                 tmp_lwq <- ddply(tmp_out, .(Weight, FG, Season), summarise,
+                                                  avgLen = mean(Length), sdLen = sd(Length), relAbb = length(Length))
+                                 tmp_lwq <- tmp_lw[-which(is.na(tmp_lw), arr.ind = TRUE)[,1],]
+                               }else{
+                                 tmp_lwq <- ddply(tmp_out, .(Weight, FG, Season), summarise, Freq = length(Weight))
+                                 tmp_lwq <- tmp_lw[tmp_lw$Freq > 0,]
+                               }
+                               LWstatQ <<- tmp_lwq
                              },
                              getMCsamps = function(numSamp = 2000, numAdap = 100, numIter = 500, sexDrop = "Female", curveSel = "von Bertalanffy"){
                                
