@@ -1955,10 +1955,10 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                if(lwUnit == "Length"){
                                  tmp_lwq <- ddply(tmp_out, .(Weight, FG, Season), summarise,
                                                   avgLen = mean(Length), sdLen = sd(Length), relAbb = length(Length))
-                                 tmp_lwq <- tmp_lw[-which(is.na(tmp_lw), arr.ind = TRUE)[,1],]
+                                 tmp_lwq <- tmp_lwq[-which(is.na(tmp_lwq), arr.ind = TRUE)[,1],]
                                }else{
                                  tmp_lwq <- ddply(tmp_out, .(Weight, FG, Season), summarise, Freq = length(Weight))
-                                 tmp_lwq <- tmp_lw[tmp_lw$Freq > 0,]
+                                 tmp_lwq <- tmp_lwq[tmp_lwq$Freq > 0,]
                                }
                                LWstatQ <<- tmp_lwq
                              },
