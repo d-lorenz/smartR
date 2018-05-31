@@ -900,54 +900,54 @@ SmartProject <- R6Class("smartProject",
                             grid_data$delta[grid_data$delta == 0] <- NA
                             
                             simResPlot[["obsEffort"]] <<- suppressMessages(sampMap$gooMapPlot + 
-                              geom_polygon(aes(x = long, y = lat, group = group, fill = obs), 
-                                           colour = "grey20", size = 0.1, data = grid_data, alpha = 0.8) + 
-                              scale_fill_gradient("Observed\nlog10(Hours)", low = "snow1", 
-                                                  high = "#fc8d59", trans = "log10") + 
-                              geom_text(aes(label = FG, x = Lon, y = Lat),
-                                        data = tmp_coo, size = 2) +
-                              ggtitle("Map of observed effort pattern") + 
-                              xlab("Longitude") + ylab("Latitude") + 
-                              theme(legend.position = "left") +
-                              lims(x = extendrange(sampMap$plotRange[1:2]),
-                                   y = extendrange(sampMap$plotRange[3:4])))
+                                                                             geom_polygon(aes(x = long, y = lat, group = group, fill = obs), 
+                                                                                          colour = "grey20", size = 0.1, data = grid_data, alpha = 0.8) + 
+                                                                             scale_fill_gradient("Observed\nlog10(Hours)", low = "snow1", 
+                                                                                                 high = "#fc8d59", trans = "log10") + 
+                                                                             geom_text(aes(label = FG, x = Lon, y = Lat),
+                                                                                       data = tmp_coo, size = 2) +
+                                                                             ggtitle("Map of observed effort pattern") + 
+                                                                             xlab("Longitude") + ylab("Latitude") + 
+                                                                             theme(legend.position = "left") +
+                                                                             lims(x = extendrange(sampMap$plotRange[1:2]),
+                                                                                  y = extendrange(sampMap$plotRange[3:4])))
                             
                             simResPlot[["optEffort"]] <<- suppressMessages(sampMap$gooMapPlot + 
-                              geom_polygon(aes(x = long, y = lat, group = group, fill = opt), 
-                                           colour = "grey20", size = 0.1, data = grid_data, alpha = 0.8) + 
-                              scale_fill_gradient("Optimized\nlog10(Hours)", low = "snow1", 
-                                                  high = "#fc8d59", trans = "log10") + 
-                              geom_text(aes(label = FG, x = Lon, y = Lat),
-                                        data = tmp_coo, size = 2) +
-                              ggtitle("Map of optimized effort pattern") + 
-                              xlab("Longitude") + ylab("Latitude") + 
-                              lims(x = extendrange(sampMap$plotRange[1:2]),
-                                   y = extendrange(sampMap$plotRange[3:4])))
+                                                                             geom_polygon(aes(x = long, y = lat, group = group, fill = opt), 
+                                                                                          colour = "grey20", size = 0.1, data = grid_data, alpha = 0.8) + 
+                                                                             scale_fill_gradient("Optimized\nlog10(Hours)", low = "snow1", 
+                                                                                                 high = "#fc8d59", trans = "log10") + 
+                                                                             geom_text(aes(label = FG, x = Lon, y = Lat),
+                                                                                       data = tmp_coo, size = 2) +
+                                                                             ggtitle("Map of optimized effort pattern") + 
+                                                                             xlab("Longitude") + ylab("Latitude") + 
+                                                                             lims(x = extendrange(sampMap$plotRange[1:2]),
+                                                                                  y = extendrange(sampMap$plotRange[3:4])))
                             
                             simResPlot[["absChange"]] <<- suppressMessages(sampMap$gooMapPlot + 
-                              geom_polygon(aes(x = long, y = lat, group = group, fill = delta), 
-                                           colour = "black", size = 0.1, data = grid_data, alpha = 1) + 
-                              scale_fill_gradient2("Effort Delta\n(Hours)", low = "#91bfdb", 
-                                                   high = "#fc8d59", mid = "#ffffbf", na.value = "grey20") + 
-                              geom_text(aes(label = FG, x = Lon, y = Lat),
-                                        data = tmp_coo, size = 2) +
-                              ggtitle("Map of Absolute Change") + 
-                              xlab("Longitude") + ylab("Latitude") + 
-                              theme(legend.position = "left") +
-                              lims(x = extendrange(sampMap$plotRange[1:2]),
-                                   y = extendrange(sampMap$plotRange[3:4])))
+                                                                             geom_polygon(aes(x = long, y = lat, group = group, fill = delta), 
+                                                                                          colour = "black", size = 0.1, data = grid_data, alpha = 1) + 
+                                                                             scale_fill_gradient2("Effort Delta\n(Hours)", low = "#91bfdb", 
+                                                                                                  high = "#fc8d59", mid = "#ffffbf", na.value = "grey20") + 
+                                                                             geom_text(aes(label = FG, x = Lon, y = Lat),
+                                                                                       data = tmp_coo, size = 2) +
+                                                                             ggtitle("Map of Absolute Change") + 
+                                                                             xlab("Longitude") + ylab("Latitude") + 
+                                                                             theme(legend.position = "left") +
+                                                                             lims(x = extendrange(sampMap$plotRange[1:2]),
+                                                                                  y = extendrange(sampMap$plotRange[3:4])))
                             
                             simResPlot[["relChange"]] <<- suppressMessages(sampMap$gooMapPlot + 
-                              geom_polygon(aes(x = long, y = lat, group = group, fill = deltaPerc), 
-                                           colour = "black", size = 0.1, data = grid_data, alpha = 1) + 
-                              scale_fill_gradient2("Effort Delta\n(%)", low = "#91bfdb", 
-                                                   high = "#fc8d59", mid = "#ffffbf", na.value = "grey20") + 
-                              geom_text(aes(label = FG, x = Lon, y = Lat),
-                                        data = tmp_coo, size = 2) +
-                              ggtitle("Map of Relative Change") + 
-                              xlab("Longitude") + ylab("Latitude") + 
-                              lims(x = extendrange(sampMap$plotRange[1:2]),
-                                   y = extendrange(sampMap$plotRange[3:4])))
+                                                                             geom_polygon(aes(x = long, y = lat, group = group, fill = deltaPerc), 
+                                                                                          colour = "black", size = 0.1, data = grid_data, alpha = 1) + 
+                                                                             scale_fill_gradient2("Effort Delta\n(%)", low = "#91bfdb", 
+                                                                                                  high = "#fc8d59", mid = "#ffffbf", na.value = "grey20") + 
+                                                                             geom_text(aes(label = FG, x = Lon, y = Lat),
+                                                                                       data = tmp_coo, size = 2) +
+                                                                             ggtitle("Map of Relative Change") + 
+                                                                             xlab("Longitude") + ylab("Latitude") + 
+                                                                             lims(x = extendrange(sampMap$plotRange[1:2]),
+                                                                                  y = extendrange(sampMap$plotRange[3:4])))
                             
                           },
                           ggplotFishingPoints = function(year){
