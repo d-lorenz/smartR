@@ -697,7 +697,7 @@ SmartProject <- R6Class("smartProject",
                             
                             simTotalCost <<- out_costs
                           },
-                          getSimRevenue = function(selRow = numeric(0)){
+                          getSimRevenue = function(selRow = numeric(0), timeScale = "Year"){
                             if(length(selRow) == 0)
                               selRow <- 1:nrow(simEffo)
                             
@@ -706,9 +706,16 @@ SmartProject <- R6Class("smartProject",
                             tmp_Revenue <- cbind(simEffo[,1:3], (matrix(NA, nrow = nrow(simEffo[,]), ncol = length(speNam))))
                             names(tmp_Revenue)[4:(4+length(speNam)-1)] <- speNam
                             for(specie in speNam){
-                              tmpRev <- getFleetRevenue(predProd = simProd[[specie]][selRow,],
-                                                        lwStat = outWeiProp[[specie]][,-1],
-                                                        priceVec = fleet$ecoPrice[[specie]]$Price)
+                              if(timeScale == "Year"){
+                                tmpRev <- getFleetRevenue(predProd = simProd[[specie]][selRow,],
+                                                          lwStat = outWeiProp[[specie]][,-1],
+                                                          priceVec = fleet$ecoPrice[[specie]]$Price)
+                              }else{
+                                tmpRev <- getFleetRevSeason(predProd = simProd[[specie]][selRow,],
+                                                            monthVec = tmp_Revenue$MonthNum,
+                                                            lwStat = outWeiPropQ[[specie]][,-1],
+                                                            priceVec = fleet$ecoPrice[[specie]]$Price)
+                              }
                               if(length(selRow) == nrow(simEffo)){
                                 simRevenue[[specie]] <<- tmpRev
                               }else{
@@ -788,7 +795,7 @@ SmartProject <- R6Class("smartProject",
                             simCostRevenue <<- merge(simTotalCost[,c("I_NCEE", "Year", "totCost")],
                                                      simTotalRevenue[,c("I_NCEE", "Year", "totRevenue")])
                           },
-                          simulateFishery = function(thr0 = 100, effoMode = "flat", effoDen = 1.05, effoBan = numeric(0)){
+                          simulateFishery = function(thr0 = 100, effoMode = "flat", effoDen = 1.05, effoBan = numeric(0), timeStep = "Year"){
                             cat("\nGetting length-weight statistics...", sep = "")
                             getLWstat()
                             cat("Done!", sep = "")
@@ -797,7 +804,7 @@ SmartProject <- R6Class("smartProject",
                             genSimEffo()
                             simProdAll()
                             getSimTotalCost()
-                            getSimRevenue()
+                            getSimRevenue(timeScale = timeStep)
                             getCostRevenue()
                             cat("Done!\n", sep = "")
                             
@@ -826,7 +833,7 @@ SmartProject <- R6Class("smartProject",
                               
                               cat("\n\tComputing cost-revenues...", sep = "")
                               getSimTotalCost()
-                              getSimRevenue(selRow = toOpt)
+                              getSimRevenue(selRow = toOpt, timeScale = timeStep)
                               getCostRevenue()
                               cat("Done!", sep = "")
                               
