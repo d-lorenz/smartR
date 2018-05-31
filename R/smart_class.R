@@ -34,6 +34,7 @@ SmartProject <- R6Class("smartProject",
                           simRevenue = list(),
                           simTotalRevenue = NULL,
                           simCostRevenue = NULL,
+                          simResPlot = NULL,
                           outGmat = NULL,
                           # outNVlst = NULL,
                           outOptimEffo = NULL,
@@ -834,6 +835,94 @@ SmartProject <- R6Class("smartProject",
                             # outNVlst <<- nVproc
                             outOptimEffo <<- Etemp
                             cat("Done!", sep = "")
+                          },
+                          setSimResults = function(){
+                            simResPlot <<- list()
+                            
+                            outObsEffo <- fleet$effoAllLoa[fleet$effoAllLoa$Year == max(as.numeric(as.character(unique(fleet$effoAllLoa$Year)))),]
+                            cumObsEffo <- data.frame(FG = colnames(outObsEffo[,4:(ncol(outObsEffo)-1)]),
+                                                     Hours = apply(outObsEffo[,4:(ncol(outObsEffo)-1)], 2, sum))
+                            rm(outObsEffo)
+                            cumOptEffo <- data.frame(FG = colnames(simEffo[,4:(ncol(simEffo)-1)]),
+                                                     Hours = apply(simEffo[,4:(ncol(simEffo)-1)], 2, sum))
+                            
+                            deltaObsOpt <- data.frame(x = as.numeric(colnames(simEffo[,4:(ncol(simEffo)-1)])), 
+                                                      obs = cumObsEffo$Hours,
+                                                      opt = cumOptEffo$Hours,
+                                                      delta = cumOptEffo$Hours - cumObsEffo$Hours,
+                                                      deltaPerc = 100*(cumOptEffo$Hours - cumObsEffo$Hours)/cumObsEffo$Hours)
+                            
+                            all_cell <- merge(x = sampMap$cutResShpFort$id, deltaObsOpt, all = TRUE)
+                            all_cell[is.na(all_cell)] <- 0
+                            
+                            grid_data <- cbind(sampMap$cutResShpFort, all_cell[,2:5])
+                            
+                            if(length(sampMap$cutFG) > 0){
+                              if(length(sampMap$gridShp@polygons) == (sampMap$cutFG + 1)){
+                                tmp_coo <- data.frame(coordinates(sampMap$gridShp), cell_id = 1:length(sampMap$gridShp))
+                                colnames(tmp_coo) <- c("Lon", "Lat", "FG")
+                              }else{
+                                tmp_coo <- sampMap$cutResShpCent
+                              }
+                            }else{
+                              tmp_coo <- sampMap$cutResShpCent
+                            }
+                            
+                            grid_data$deltaPerc[grid_data$deltaPerc > 100] <- 101
+                            grid_data$deltaPerc[grid_data$deltaPerc < -100] <- -101
+                            grid_data$deltaPerc[grid_data$deltaPerc == 0] <- NA
+                            grid_data$delta[grid_data$delta == 0] <- NA
+                            
+                            simResPlot[["obsEffort"]] <<- suppressMessages(sampMap$gooMapPlot + 
+                              geom_polygon(aes(x = long, y = lat, group = group, fill = obs), 
+                                           colour = "grey20", size = 0.1, data = grid_data, alpha = 0.8) + 
+                              scale_fill_gradient("Observed\nlog10(Hours)", low = "snow1", 
+                                                  high = "#fc8d59", trans = "log10") + 
+                              geom_text(aes(label = FG, x = Lon, y = Lat),
+                                        data = tmp_coo, size = 2) +
+                              ggtitle("Map of observed effort pattern") + 
+                              xlab("Longitude") + ylab("Latitude") + 
+                              theme(legend.position = "left") +
+                              lims(x = extendrange(sampMap$plotRange[1:2]),
+                                   y = extendrange(sampMap$plotRange[3:4])))
+                            
+                            simResPlot[["optEffort"]] <<- suppressMessages(sampMap$gooMapPlot + 
+                              geom_polygon(aes(x = long, y = lat, group = group, fill = opt), 
+                                           colour = "grey20", size = 0.1, data = grid_data, alpha = 0.8) + 
+                              scale_fill_gradient("Optimized\nlog10(Hours)", low = "snow1", 
+                                                  high = "#fc8d59", trans = "log10") + 
+                              geom_text(aes(label = FG, x = Lon, y = Lat),
+                                        data = tmp_coo, size = 2) +
+                              ggtitle("Map of optimized effort pattern") + 
+                              xlab("Longitude") + ylab("Latitude") + 
+                              lims(x = extendrange(sampMap$plotRange[1:2]),
+                                   y = extendrange(sampMap$plotRange[3:4])))
+                            
+                            simResPlot[["absChange"]] <<- suppressMessages(sampMap$gooMapPlot + 
+                              geom_polygon(aes(x = long, y = lat, group = group, fill = delta), 
+                                           colour = "black", size = 0.1, data = grid_data, alpha = 1) + 
+                              scale_fill_gradient2("Effort Delta\n(Hours)", low = "#91bfdb", 
+                                                   high = "#fc8d59", mid = "#ffffbf", na.value = "grey20") + 
+                              geom_text(aes(label = FG, x = Lon, y = Lat),
+                                        data = tmp_coo, size = 2) +
+                              ggtitle("Map of Absolute Change") + 
+                              xlab("Longitude") + ylab("Latitude") + 
+                              theme(legend.position = "left") +
+                              lims(x = extendrange(sampMap$plotRange[1:2]),
+                                   y = extendrange(sampMap$plotRange[3:4])))
+                            
+                            simResPlot[["relChange"]] <<- suppressMessages(sampMap$gooMapPlot + 
+                              geom_polygon(aes(x = long, y = lat, group = group, fill = deltaPerc), 
+                                           colour = "black", size = 0.1, data = grid_data, alpha = 1) + 
+                              scale_fill_gradient2("Effort Delta\n(%)", low = "#91bfdb", 
+                                                   high = "#fc8d59", mid = "#ffffbf", na.value = "grey20") + 
+                              geom_text(aes(label = FG, x = Lon, y = Lat),
+                                        data = tmp_coo, size = 2) +
+                              ggtitle("Map of Relative Change") + 
+                              xlab("Longitude") + ylab("Latitude") + 
+                              lims(x = extendrange(sampMap$plotRange[1:2]),
+                                   y = extendrange(sampMap$plotRange[3:4])))
+                            
                           },
                           ggplotFishingPoints = function(year){
                             tmp_dat <- fleet$rawEffort[[year]][sample(1:nrow(fleet$rawEffort[[year]]), min(c(50000, nrow(fleet$rawEffort[[year]])))),c("LON","LAT","FishPoint")]
