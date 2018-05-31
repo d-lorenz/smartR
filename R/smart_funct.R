@@ -360,6 +360,23 @@ getFleetRevenue = function(predProd, lwStat, priceVec){
   return(outProp)
 }
 
+getFleetRevSeason = function(predProd, monthVec, lwStat, priceVec){
+  tmpSeason <- data.frame(Month = 1:12,
+                          Season = c("winter", "winter", "spring",
+                                     "spring", "spring", "summer",
+                                     "summer", "summer", "fall",
+                                     "fall", "fall", "winter"))
+  for(season in c("winter", "spring", "summer", "fall")){
+    tmpOutProp <- apply(predProd[monthVec %in% tmpSeason$Month[tmpSeason$Season == season],], 1, function(x) apply(t(lwStat[[season]]*t(x))*priceVec,2, sum, na.rm = TRUE))
+    
+    if(season == 1){
+      outProp <- t(tmpOutProp)
+    }else{
+      outProp <- rbind(outProp, t(tmpOutProp))
+    }
+  }
+  return(outProp)
+}
 
 TheFunk2 <- function(Pars,DoEst=T,SpeciesData,Nspecies,ParInit,Phases,PredationPars){
   
