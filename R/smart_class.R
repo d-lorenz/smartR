@@ -39,6 +39,7 @@ SmartProject <- R6Class("smartProject",
                           # outNVlst = NULL,
                           outOptimEffo = NULL,
                           outWeiProp = NULL,
+                          outWeiPropQ = NULL,
                           # economy = NULL,
                           setCostInput = function(){
                             if(is.null(fleet$effortIndex)) stop("Missing Effort Index")
@@ -735,8 +736,8 @@ SmartProject <- R6Class("smartProject",
                               
                               fisheryBySpecie[[specie]]$setLWstat(lwUnit = curUnit)
                               fgNames <- paste0("LW_", 1:(sampMap$cutFG+1))
-                              # preRevenue <- vector("list", length(fgNames))
-                              # names(preRevenue) <- fgNames
+                              
+                              ## yearly
                               preRevenue <- data.frame(FG = 1:length(fgNames))
                               preRevenue <- cbind(preRevenue, setNames(lapply(1:length(vecSize), function(x) x = NA), 1:length(vecSize)))
                               for(i in 1:nrow(preRevenue)){
@@ -744,7 +745,7 @@ SmartProject <- R6Class("smartProject",
                                 if(nrow(tempRev) > 0){
                                   if(curUnit == "Length"){
                                     tempRev$propWei <- tempRev$relAbb/sum(tempRev$relAbb)
-                                    tempRev$SizeClass <- factor(findInterval(x = tempRev$avgLen, vec = vecSize), levels = 1:length(vecSize))
+                                    tempRev$SizeClass <- factor(findInterval(x = tempRev$avgLen, vec = vecSize, all.inside = TRUE), levels = 1:(length(vecSize)-1))
                                     outClass <- merge(data.frame(SizeClass = levels(tempRev$SizeClass)), aggregate(formula = propWei ~ SizeClass, data = tempRev, FUN = sum), all.x = TRUE)
                                     preRevenue[i,2:(length(vecSize)+1)] <- outClass$propWei
                                   }else{
