@@ -713,7 +713,7 @@ SmartProject <- R6Class("smartProject",
                               }else{
                                 tmpRev <- getFleetRevSeason(predProd = simProd[[specie]][selRow,],
                                                             monthVec = tmp_Revenue$MonthNum,
-                                                            lwStat = outWeiPropQ[[specie]][,-1],
+                                                            lwStat = outWeiPropQ[[specie]],
                                                             priceVec = fleet$ecoPrice[[specie]]$Price)
                               }
                               if(length(selRow) == nrow(simEffo)){
