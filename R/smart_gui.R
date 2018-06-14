@@ -17,44 +17,40 @@ smart_gui <- function(){
   
   ### File input
   # GRID
-  # pathGridShp <- "/Users/Lomo/Documents/Uni/R/smart/data/Grid/grid_sos_3NM/seabed_SoS_grid3NM.shp"
-  pathGridShp <- "/Users/Lomo/Documents/Uni/PhD/TESI/Grid/GFCM_Grid_6min_GSA16.shp"
+  pathGridShp <- "/Users/Lomo/Documents/Uni/R/project/smartR_data/Environment/Grid/GFCM_Grid_6min_GSA16.shp"
   
   # SEABED
-  # pathSeabed <- "/Users/Lomo/Documents/Uni/R/smart/data/SeaBed/SoSBiocMat.rData"
-  pathSeabed <- "/Users/Lomo/Documents/Uni/PhD/TESI/BioM.rData"
+  pathSeabed <- "/Users/Lomo/Documents/Uni/R/project/smartR_data/Environment/Seabed/seabedMatrix.rData"
   
   # BATHYMETRY
-  # pathBathymetry <- "/Users/Lomo/Documents/Uni/R/smart/data/seabedSos_Bathy.rData"
-  pathBathymetry <- "/Users/Lomo/Documents/Uni/R/smart/data/Grid/bathy_test.rData"
+  pathBathymetry <- "/Users/Lomo/Documents/Uni/R/project/smartR_data/Environment/Bathymetry/bathyMatrix.rData"
   
   # RAW VMS
-  # pathRawVMS <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
-  pathRawVMS <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/smart_rawEffort_new.rData"
+  # pathRawVMS <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/smart_rawEffort_new.rData"
   
   # GRID EFFORT AA
-  pathEffortAA <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
-  # pathEffortAA <- "/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/smart_rawEffort_new.rData"
+  pathEffortAA <- "/Users/Lomo/Documents/Uni/R/project/smartR_data/Fleet/Effort/effortEnha.rData"
+
+  # FLEET REGISTER DATA
+  pathRegister <- "/Users/Lomo/Documents/Uni/R/project/smartR_data/Fleet/Register/fleetRegister.csv"
   
   # SURVEY DATA
-  # pathSurvey <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Survey/survey_data_MEDITS.csv"
-  pathSurvey <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Survey/smartSurveyInput_MUT-SoS.csv"
+  pathSurvey <- "/Users/Lomo/Documents/Uni/R/project/smartR_data/Resource/Survey/surveyLFD.csv"
   
   # FISHERY DATA
-  # pathFishery <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Fishery/fishery_merge_CampBiol.csv"
-  pathFishery <- "/Users/Lomo/Documents/Uni/R/smart/data/Resource\ -\ Fishery/fishery_data_CampBiol_noExpLand.csv"
+  pathFishery <- "/Users/Lomo/Documents/Uni/R/project/smartR_data/Resource/Fishery/fisheryLFD.csv"
   
   # Length/Weight data
-  pathLWrel <- "/Users/Lomo/Documents/Uni/R/smart/data/Length_Weight/lwRel_input.csv"
+  pathLWrel <- "/Users/Lomo/Documents/Uni/R/project/smartR_data/Resource/lenweiRel.csv"
   
-  pathClusMat <- "/Users/Lomo/Documents/Uni/R/smart/data/out/FG_cut/fg_sos/clusMat_BedEffDep.rData"
-  rawDataPath <- "/Users/Lomo/Documents/Uni/R/mixture/fisherySampling.rData"
+  # pathClusMat <- "/Users/Lomo/Documents/Uni/R/smart/data/out/FG_cut/fg_sos/clusMat_BedEffDep.rData"
+  # rawDataPath <- "/Users/Lomo/Documents/Uni/R/mixture/fisherySampling.rData"
   
   # LANDINGS DATA
-  pathLanding <- "/Users/Lomo/Documents/Uni/R/smart/data/Landings/LandAll.rData"
+  pathLanding <- "/Users/Lomo/Documents/Uni/R/project/smartR_data/Fleet/Landings/obsLands.rData"
   
   # Economic Data
-  pathCosts <- "/Users/Lomo/Documents/Uni/Lab/Data/Economics/sos_adri_cleanCosts.csv"
+  pathCosts <- "/Users/Lomo/Documents/Uni/R/project/smartR_data/Fleet/Economics/econCost.csv"
   
   my_project$createFleet()
   
