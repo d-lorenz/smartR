@@ -90,8 +90,6 @@ IntInvDis <- function(xdata, RefCell, IntCell,
 #   return(coords)
 # }
 
-###############
-
 # GenS <- function(Abbmat, num_cla, qqM, LCspe, yea, num_coh, MixtureP){
 #   new_dim <- dim(Abbmat)
 #   new_dim[2] <- num_cla
