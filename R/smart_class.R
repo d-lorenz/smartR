@@ -134,9 +134,7 @@ SmartProject <- R6Class("smartProject",
                           },
                           loadSurveyLFD = function(csv_path) {
                             cat("\nLoading survey data...", sep = "")
-                            rawDataSurvey <<- read.table(file = csv_path, sep = ";", dec = ".",
-                                                         stringsAsFactors = FALSE, header = TRUE)
-                            
+                            rawDataSurvey <<- read.csv(file = csv_path, stringsAsFactors = FALSE, header = TRUE)
                             surveyBySpecie <<- list()
                             
                             cat("\nSetting Years... ", sep = "")
