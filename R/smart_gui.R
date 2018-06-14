@@ -1906,7 +1906,7 @@ smart_gui <- function(){
   
   addSpring(raw_g_top)
   
-  gbutton("   Get\nMEDITS index", container = raw_g_top, handler = function(h,...){
+  gbutton("      Get\nMEDITS index", container = raw_g_top, handler = function(h,...){
     
     strataVect <- c(0, 10, 50, 100, 200, 500, 800, Inf)
     icoStrata_off <- gimage(system.file("ico/user-invisible.png", package="smartR"))
