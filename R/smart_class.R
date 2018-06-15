@@ -1,12 +1,118 @@
 ####SmartProject#############################################
-#' SmartProject
+#' SmartProject Class
 #'
 #' The \code{SmartProject} class implements the main class of
-#'  SMART.
+#' \pkg{smartR} package.
 #'
-#' @return This function returns the 'smartProject' object.
-#'
-#'
+#' @docType class
+#' 
+#' @export
+#' @keywords data
+#' @return Object of \code{\link{R6Class}} with attributes and methods to fullfill
+#' a complete analisys with the SMART approach.
+#' 
+#' @format \code{\link{R6Class}} object.
+#' 
+#' @field rawDataSurvey Stores address of your lightning server.
+#' @field yearInSurvey Stores id of your current session on the server.
+#' @field specieInSurvey Stores url of the last visualization created by this object.
+#' @field surveyBySpecie Checks if the server is automatically opening the visualizations.
+
+#' @field rawDataFishery Checks if the server is in the jupyter notebook mode.
+#' @field yearInFishery Stores address of your lightning server.
+#' @field specieInFishery Stores id of your current session on the server.
+#' @field fisheryBySpecie Stores url of the last visualization created by this object.
+#' @field gooLstCoho Checks if the server is automatically opening the visualizations.
+
+#' @field sampMap Checks if the server is in the jupyter notebook mode.
+#' @field fleet Checks if the server is in the jupyter notebook mode.
+
+#' @field simProd Checks if the server is in the jupyter notebook mode.
+#' @field simEffo Checks if the server is in the jupyter notebook mode.
+#' @field simBanFG Checks if the server is in the jupyter notebook mode.
+#' @field simSpatialCost Checks if the server is in the jupyter notebook mode.
+#' @field simEffortCost Checks if the server is in the jupyter notebook mode.
+#' @field simProdCost Checks if the server is in the jupyter notebook mode.
+#' @field simTotalCost Checks if the server is in the jupyter notebook mode.
+#' @field simRevenue Checks if the server is in the jupyter notebook mode.
+#' @field simTotalRevenue Checks if the server is in the jupyter notebook mode.
+#' @field simCostRevenue Checks if the server is in the jupyter notebook mode.
+#' @field simResPlot Checks if the server is in the jupyter notebook mode.
+
+#' @field outGmat Checks if the server is in the jupyter notebook mode.
+#' @field outOptimEffo Checks if the server is in the jupyter notebook mode.
+#' @field outWeiProp Checks if the server is in the jupyter notebook mode.
+#' @field outWeiPropQ Checks if the server is in the jupyter notebook mode.
+#' #' @section Methods:
+#' \describe{
+#'   \item{Documentation}{For full documentation of each method go to https://github.com/lightning-viz/lightining-r/}
+#'   \item{\code{setCostInput()}}{This method is used }
+#'   \item{\code{setInProduction()}}{This method is used }
+#'   \item{\code{setDaysAtSea()}}{This method is used }
+#'   \item{\code{setEffortIndex()}}{This method is used }
+#'   \item{\code{setProductionIndex()}}{This method is used }
+#'   \item{\code{getHarbFgDist()}}{This method is used }
+#'   \item{\code{setFgWeigDist()}}{This method is used }
+#'   \item{\code{setRegHarbBox()}}{This method is used }
+#'   \item{\code{loadSurveyLFD(csv_path)}}{This method is used }
+#'   \item{\code{loadFisheryLFD(csv_path)}}{This method is used }
+#'   \item{\code{setYearSurvey()}}{This method is used }
+#'   \item{\code{setYearFishery()}}{This method is used }
+#'   \item{\code{loadMap(map_path)}}{This method is used }
+#'   \item{\code{createFleet()}}{This method is used }
+#'   \item{\code{setSpecieSurvey()}}{This method is used }
+#'   \item{\code{setSpecieFishery()}}{This method is used }
+#'   \item{\code{splitSpecieSurvey()}}{This method is used }
+#'   \item{\code{splitSpecieFishery()}}{This method is used }
+#'   \item{\code{addSpecieSurvey(sing_spe)}}{This method is used }
+#'   \item{\code{addSpecieFishery(sing_spe)}}{This method is used }
+#'   \item{\code{setSpreaFishery()}}{This method is used }
+#'   \item{\code{setSpatFishery()}}{This method is used }
+#'   \item{\code{setSpreaSurvey()}}{This method is used }
+#'   \item{\code{setSpatSurvey()}}{This method is used }
+#'   \item{\code{setDepthSurvey()}}{This method is used }
+#'   \item{\code{setStratumSurvey()}}{This method is used }
+#'   \item{\code{setAbuAvgAll()}}{This method is used }
+#'   \item{\code{setMeditsIndex()}}{This method is used }
+#'   \item{\code{setStrataAbu()}}{This method is used }
+#'   \item{\code{loadFleeEffoDbs(effort_path, met_nam, onBox = TRUE, perOnBox = 1)}}{This method is used }
+#'   \item{\code{effPlot(whichYear)}}{This method is used }
+#'   \item{\code{speDisPlot(whoPlo)}}{This method is used }
+#'   \item{\code{plotGooSpe(whiSpe, whiSou)}}{This method is used }
+#'   \item{\code{setGooPlotCohoFish(specie = "", sex = "Female", speCol = "", smooPoi = 500, smooBin = 0.5)}}{This method is used }
+#'   \item{\code{distrPlotCols(cols = NULL, vals = NULL, maxVal = 100, plotTitle = "NoTitle", legendUnits = "NoUnits")}}{This method is used }
+#'   \item{\code{ggplotRawPoints(year)}}{This method is used }
+#'   \item{\code{ggplotFgWeigDists()}}{This method is used }
+#'   \item{\code{setAvailData()}}{This method is used }
+#'   \item{\code{predictProduction(specie)}}{This method is used }
+#'   \item{\code{simProdAll(selRow = numeric(0))}}{This method is used }
+#'   \item{\code{genSimEffo(method = "flat", selRow = numeric(0), overDen = 1.05, areaBan = numeric(0))}}{This method is used }
+#'   \item{\code{getSimSpatialCost()}}{This method is used }
+#'   \item{\code{getSimEffortCost()}}{This method is used }
+#'   \item{\code{getSimProdCost()}}{This method is used }
+#'   \item{\code{getSimTotalCost()}}{This method is used }
+#'   \item{\code{getSimRevenue(selRow = numeric(0), timeScale = "Year")}}{This method is used }
+#'   \item{\code{getLWstat()}}{This method is used }
+#'   \item{\code{simulateFishery(thr0 = 100, effoMode = "flat", effoDen = 1.05, effoBan = numeric(0), timeStep = "Year")}}{This method is used }
+#'   \item{\code{setSimResults()}}{This method is used }
+#'   \item{\code{ggplotFishingPoints(year)}}{This method is used }
+#'   \item{\code{setPlotBetaMeltYear(specie, year)}}{This method is used }
+#'   \item{\code{setPlotProdMeltYear(specie, year)}}{This method is used }
+#'   \item{\code{setCellPoin()}}{This method is used }
+#'   \item{\code{setTrackHarb()}}{This method is used }
+#'   \item{\code{setFishGround(numCut)}}{This method is used }
+#'   \item{\code{addFg2Fishery()}}{This method is used }
+#'   \item{\code{addFg2Survey()}}{This method is used }
+#'   \item{\code{setWeekEffoMatrCell()}}{This method is used }
+#'   \item{\code{setWeekEffoMatrGround()}}{This method is used }
+#'   \item{\code{ggplotGridEffort(year)}}{This method is used }
+#'   \item{\code{getNnlsModel(specie, minobs, thr_r2)}}{This method is used }
+#'   \item{\code{cohoDisPlot(whoSpe, whoCoh, whiYea, interp)}}{This method is used }
+#'   \item{\code{calcCoh_A_Survey(ind_num)}}{This method is used }
+#'   \item{\code{calcCoh_A_Fishery(ind_num)}}{This method is used }
+#'   \item{\code{intrpCoh_A_Survey(ind_num)}}{This method is used }
+#'   \item{\code{intrpCoh_A_Fishery(ind_num)}}{This method is used }
+
 
 
 SmartProject <- R6Class("smartProject",
