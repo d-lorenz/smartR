@@ -115,7 +115,6 @@
 #'   }
 
 
-
 SmartProject <- R6Class("smartProject",
                         portable = FALSE,
                         class = TRUE,
@@ -1606,8 +1605,59 @@ SmartProject <- R6Class("smartProject",
 #' The \code{SurveyBySpecie} class implements the class of SMART to
 #'  handle species samplings.
 #'
-#' @return This function returns the 'SurveyBySpecie' object.
-#'
+#' @docType class
+#' 
+#' @keywords data
+#' @return Object of \code{\link{R6Class}} with attributes and methods for the survey data.
+#' 
+#' @format \code{\link{R6Class}} object.
+#' 
+#' @field specie Missing description.
+#' @field year Missing description.
+#' @field rawLFD Missing description.
+#' @field abuAvg Missing description.
+#' @field meditsIndex Missing description.
+#' @field lengClas Missing description.
+#' @field LFDPop Missing description.
+#' @field mixPar Missing description.
+#' @field nCoho Missing description.
+#' @field spreDist Missing description.
+#' @field sprePlot Missing description.
+#' @field spreSpat Missing description.
+#' @field sampMcmc Missing description.
+#' @field groMixout Missing description.
+#' @field groPars Missing description.
+#' @field Coh_A Missing description.
+#' @field Coh_A_Int Missing description.
+#' @field LWpar Missing description.
+#' 
+#' @section Methods:
+#' \describe{
+#'   \item{Documentation}{For full documentation of each method go to https://github.com/smartR_blablabla/}
+#'   \item{\code{initialize(sing_spe)}}{This method is used }
+#'   \item{\code{setRawData(raw_data)}}{This method is used }
+#'   \item{\code{plotLFD()}}{This method is used }
+#'   \item{\code{setYears()}}{This method is used }
+#'   \item{\code{setSpecie()}}{This method is used }
+#'   \item{\code{setLClass()}}{This method is used }
+#'   \item{\code{setDepth(bathyMatrix)}}{This method is used }
+#'   \item{\code{setStratum(vecStrata)}}{This method is used }
+#'   \item{\code{setIndSpe()}}{This method is used }
+#'   \item{\code{setAbuAvg()}}{This method is used }
+#'   \item{\code{setNCoho(num_coh)}}{This method is used }
+#'   \item{\code{setLWpar(alphaVal, betaVal, sex)}}{This method is used }
+#'   \item{\code{setWeight(sexVal = "Female")}}{This method is used }
+#'   \item{\code{setSpreDistSing()}}{This method is used }
+#'   \item{\code{setSprePlot(sampSex)}}{This method is used }
+#'   \item{\code{setSpatDistSing()}}{This method is used }
+#'   \item{\code{setSpatPlot(sampSex)}}{This method is used }
+#'   \item{\code{getMCsamps(numSamp, numAdap, numIter, sexDrop, curveSel)}}{This method is used }
+#'   \item{\code{getGrowPar(sexDrop)}}{This method is used }
+#'   \item{\code{getMCage(sexDrop)}}{This method is used }
+#'   \item{\code{setMCplot(sexDrop, selCurve)}}{This method is used }
+#'   \item{\code{calcMixDate(nAdap, nSamp, nIter, sexDrop, curveSel)}}{This method is used }
+#'   \item{\code{ggplotMcmcOut(selCompo, selSex)}}{This method is used }
+#'   }
 
 
 SurveyBySpecie <- R6Class("SurveyBySpecie",
@@ -1619,9 +1669,9 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                             rawLFD = NULL,
                             abuAvg = NULL,
                             meditsIndex = NULL,
-                            lengClas = NULL, #LClass
+                            lengClas = NULL,
                             LFDPop = NULL,
-                            mixPar = NULL, # MixtureP e ncohorts
+                            mixPar = NULL,
                             nCoho = NULL,
                             spreDist = list(),
                             sprePlot = list(),
@@ -1629,25 +1679,18 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                             sampMcmc = list(),
                             groMixout = list(),
                             groPars = list(),
-                            # prior = NULL,
                             Coh_A = NULL,
                             Coh_A_Int = NULL,
-                            # Fis_Gro = NULL,
                             LWpar = NULL,
-                            # scorVec = NULL,
-                            # qMedits = NULL,
-                            # bRefs = NULL,
-                            # popGen = NULL,
-                            # selPar = NULL,
-                            setRawData = function(raw_data){rawLFD <<- raw_data},
-                            plotLFD = function(){
-                              plotSpeAllYea(rawLFD)
-                            },
                             initialize = function(sing_spe){
                               setRawData(sing_spe)
                               setYears()
                               setSpecie()
                               setLClass()
+                            },
+                            setRawData = function(raw_data){rawLFD <<- raw_data},
+                            plotLFD = function(){
+                              plotSpeAllYea(rawLFD)
                             },
                             setYears = function(){year <<- sort(unique(rawLFD[,"Date"]), decreasing = FALSE)},
                             setSpecie = function(){specie <<- unique(rawLFD[,"Specie"])},
@@ -1971,9 +2014,56 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
 #' The \code{FisheryBySpecie} class implements the class of SMART to
 #'  handle species samplings.
 #'
-#' @return This function returns the 'FisheryBySpecie' object.
-#'
-
+#' @docType class
+#' 
+#' @keywords data
+#' @return Object of \code{\link{R6Class}} with attributes and methods for the fishery data.
+#' 
+#' @format \code{\link{R6Class}} object.
+#' 
+#' @field specie Missing description.
+#' @field year Missing description.
+#' @field rawLFD Missing description.
+#' @field lengClas Missing description.
+#' @field LFDPop Missing description.
+#' @field mixPar Missing description.
+#' @field nCoho Missing description.
+#' @field spreDist Missing description.
+#' @field sprePlot Missing description.
+#' @field spreSpat Missing description.
+#' @field sampMcmc Missing description.
+#' @field groMixout Missing description.
+#' @field groPars Missing description.
+#' @field Coh_A Missing description.
+#' @field Coh_A_Int Missing description.
+#' @field LWpar Missing description.
+#' @field LWparQ Missing description.
+#' @field selPar Missing description.
+#' 
+#' @section Methods:
+#' \describe{
+#'   \item{Documentation}{For full documentation of each method go to https://github.com/smartR_blablabla/}
+#'   \item{\code{initialize(sing_spe)}}{This method is used }
+#'   \item{\code{setRawData(raw_data)}}{This method is used }
+#'   \item{\code{plotLFD()}}{This method is used }
+#'   \item{\code{setYears()}}{This method is used }
+#'   \item{\code{setSpecie()}}{This method is used }
+#'   \item{\code{setLClass()}}{This method is used }
+#'   \item{\code{setNCoho(num_coh)}}{This method is used }
+#'   \item{\code{setLWpar(alphaVal, betaVal, sex)}}{This method is used }
+#'   \item{\code{setWeight(sexVal = "Female")}}{This method is used }
+#'   \item{\code{setSpreDistSing()}}{This method is used }
+#'   \item{\code{setSprePlot(sampSex)}}{This method is used }
+#'   \item{\code{setSpatDistSing()}}{This method is used }
+#'   \item{\code{setSpatPlot(sampSex)}}{This method is used }
+#'   \item{\code{setLWstat(lwUnit)}}{This method is used }
+#'   \item{\code{getMCsamps(numSamp, numAdap, numIter, sexDrop, curveSel)}}{This method is used }
+#'   \item{\code{getGrowPar(sexDrop)}}{This method is used }
+#'   \item{\code{getMCage(sexDrop)}}{This method is used }
+#'   \item{\code{setMCplot(sexDrop, selCurve)}}{This method is used }
+#'   \item{\code{calcMixDate(nAdap, nSamp, nIter, sexDrop, curveSel)}}{This method is used }
+#'   \item{\code{ggplotMcmcOut(selCompo, selSex)}}{This method is used }
+#'   }
 
 FisheryBySpecie <- R6Class("FisheryBySpecie",
                            portable = FALSE,
@@ -1982,12 +2072,10 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                              specie = NULL,
                              year = NULL,
                              rawLFD = NULL,
-                             lengClas = NULL, #LClass
+                             lengClas = NULL,
                              LFDPop = NULL,
-                             mixPar = NULL, # MixtureP e ncohorts
+                             mixPar = NULL,
                              nCoho = NULL,
-                             # prior = NULL,
-                             # preMix = NULL,
                              spreDist = list(),
                              spreSpat = list(),
                              sprePlot = list(),
@@ -1996,24 +2084,19 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                              groPars = list(),
                              Coh_A = NULL,
                              Coh_A_Int = NULL,
-                             # Fis_Gro = NULL,
                              LWpar = list(),
                              LWstat = NULL,
                              LWstatQ = NULL,
-                             # scorVec = NULL,
-                             # qMedits = NULL,
-                             # bRefs = NULL,
-                             # popGen = NULL,
                              selPar = NULL,
-                             setRawData = function(raw_data){rawLFD <<- raw_data},
-                             plotLFD = function(){
-                               plotSpeAllYea(rawLFD)
-                             },
                              initialize = function(sing_spe){
                                setRawData(sing_spe)
                                setYears()
                                setSpecie()
                                setLClass()
+                             },
+                             setRawData = function(raw_data){rawLFD <<- raw_data},
+                             plotLFD = function(){
+                               plotSpeAllYea(rawLFD)
                              },
                              setYears = function(){year <<- sort(unique(years(rawLFD[,"Date"])), decreasing = FALSE)},
                              setSpecie = function(){specie <<- unique(rawLFD[,"Specie"])},
@@ -2329,234 +2412,6 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                                                                                   c(2,3))))
                                )
                              }
-                             # ,
-                             # calcMixDateOLD = function(nAdap = 100, nSamp = 2000, nIter = 500, sexDrop = "Female", curveSel = "von Bertalanffy"){
-                             #   # mixPar <<- list('Female' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)),
-                             #   #                 'Male' = list('Means' = matrix(NA, length(year), nCoho), 'Sigmas' = matrix(NA, length(year), nCoho)))
-                             #   # for(sex in c("Female", "Male")){ }
-                             #   
-                             #   outPalette <- rainbow(nCoho)
-                             #   
-                             #   # ### FishBase data
-                             #   # mut_popgrowth <- popgrowth("Mullus barbatus barbatus")
-                             #   # ###
-                             #   
-                             #   curDistri <- spreDist[[sexDrop]]
-                             #   
-                             #   # if(sexDrop == "Female"){
-                             #   #   curDistri <- femaleSpre
-                             #   # }else{
-                             #   #   curDistri <- maleSpre
-                             #   # }
-                             #   
-                             #   sub_idx <- sample(1:nrow(curDistri), size = nSamp)
-                             #   sub_data <- curDistri[sub_idx,]
-                             #   
-                             #   N <- length(sub_data$Length)
-                             #   alpha = rep(1, nCoho)
-                             #   Z = rep(NA, N)
-                             #   Z[which.min(sub_data$Length)] = 1
-                             #   Z[which.max(sub_data$Length)] = nCoho
-                             #   
-                             #   dataList <- list(y = sub_data$Length,
-                             #                    maxLeng = max(sub_data$Length),         ## !!!
-                             #                    alpha = alpha,
-                             #                    Z = Z,
-                             #                    N = N,
-                             #                    Nclust = nCoho)
-                             #   
-                             #   inits = list(list(Linf = max(sub_data$Length), k = 0.5, t0 = 0.0),
-                             #                list(Linf = max(sub_data$Length), k = 0.5, t0 = 0.0),
-                             #                list(Linf = max(sub_data$Length), k = 0.5, t0 = 0.0))
-                             #   
-                             #   tt = as.POSIXlt(chron(curDistri$UTC))$yday / 366
-                             #   
-                             #   ### MCMC model setup
-                             #   modelGrow <- ifelse(curveSel == "von Bertalanffy",
-                             #                       system.file("model/bertGrow.jags", package = "smartR"),
-                             #                       system.file("model/gompGrow.jags", package = "smartR"))
-                             #   
-                             #   jags.m <- jags.model(modelGrow,
-                             #                        data = dataList,
-                             #                        inits = inits,
-                             #                        n.chains = 3,
-                             #                        n.adapt = nAdap)
-                             #   ###
-                             #   
-                             #   ### MCMC chain sampling
-                             #   # n.iter <- 500
-                             #   obsNode <- c('Linf', 'k', 't0', 'tau', 'p')
-                             #   samps <- coda.samples(jags.m, obsNode, n.iter = nIter)
-                             #   ###
-                             #   
-                             #   sampMcmc[[sexDrop]] <<- samps
-                             #   
-                             #   ### MCMC estimates
-                             #   dfLinf <- data.frame(Parameter = "Linf",
-                             #                        Iter = 1:nIter,
-                             #                        Chain = as.matrix(samps[,"Linf"], chains = TRUE)[,1],
-                             #                        Value = as.matrix(samps[,"Linf"], chains = TRUE)[,2])
-                             #   dfKapp <- data.frame(Parameter = "Kappa",
-                             #                        Iter = 1:nIter,
-                             #                        Chain = as.matrix(samps[,"k"], chains = TRUE)[,1],
-                             #                        Value = as.matrix(samps[,"k"], chains = TRUE)[,2])
-                             #   
-                             #   ggdataSamps <- rbind(dfLinf, dfKapp)
-                             #   ggdataSampScat <- cbind(dfLinf[,2:3],
-                             #                           Linf = dfLinf[,4],
-                             #                           Kappa = dfKapp[,4])
-                             #   
-                             #   LHat = mean(as.matrix(samps[,"Linf"]))
-                             #   kHat = mean(as.matrix(samps[,"k"]))
-                             #   t0Hat = mean(as.matrix(samps[,"t0"]))
-                             #   taus <- as.matrix(samps[,grep("tau" ,varnames(samps))])
-                             #   sigma2s = 1/taus
-                             #   sigma2Hat = apply(sigma2s, 2, mean)
-                             #   
-                             #   ### age estimation
-                             #   means.f = matrix(0, nrow(curDistri), nCoho)
-                             #   zHat = numeric(nrow(curDistri))
-                             #   for(iObs in 1:nrow(curDistri)){
-                             #     
-                             #     if(curveSel == "von Bertalanffy"){
-                             #       temp <- LHat * (1 - exp(-kHat*(((1:nCoho)-1+tt[iObs]))))
-                             #     }else{
-                             #       temp <- LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho)-1+tt[iObs]))))
-                             #     }
-                             #     
-                             #     ## GGF
-                             #     ##  temp = LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho) - 1 - t0Hat))))
-                             #     # temp = LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho)-1+tt[iObs]))))  ##BEST
-                             #     ##  temp = LHat *  exp(-(1/kHat * exp(-kHat * ((1:nCoho)-1+tt[iObs] - t0Hat))))
-                             #     
-                             #     # VBGF
-                             #     # temp = LHat * (1 - exp(-kHat*(((1:nCoho)-1+tt[iObs]) - t0Hat)))
-                             #     
-                             #     means.f[iObs,] = temp
-                             #     postProbs = dnorm(curDistri$Length[iObs], temp, sqrt(sigma2Hat))
-                             #     zHat[iObs] = as.numeric(names(which.max(table(sample(1:nCoho, size = 150, prob = postProbs, replace = TRUE)))))
-                             #   }
-                             #   
-                             #   ages.f = zHat -1 + tt #- t0Hat
-                             #   AA = floor(ages.f)
-                             #   
-                             #   ### MCMC output
-                             #   FGlabels = as.numeric(as.character(curDistri$NumFG))
-                             #   FGnames = unique(FGlabels)
-                             #   FG = numeric(length(FGlabels))
-                             #   for(FGname in 1:length(FGnames)){
-                             #     idx_FG = which(FGlabels == FGnames[FGname])
-                             #     FG[idx_FG] = rep(FGname, length(idx_FG))
-                             #   }
-                             #   # nFG = length(unique(FG))
-                             #   
-                             #   mix_out <- data.frame(Length = curDistri$Length,
-                             #                         Date = curDistri$UTC,
-                             #                         Day = tt,
-                             #                         Age = AA,
-                             #                         AgeNF = ages.f,
-                             #                         FG = FGlabels)
-                             #   
-                             #   mix_out$Year <- years(mix_out$Date)
-                             #   mix_out$Month <- as.numeric(months(as.chron(mix_out$Date)))
-                             #   mix_out$MonthChar <- curDistri$Month
-                             #   mix_out$Quarter <- as.numeric(quarters(mix_out$Date))
-                             #   mix_out$Birth <- as.numeric(as.character(mix_out$Year)) - mix_out$Age
-                             #   
-                             #   zeroedMonth <- ifelse(nchar(mix_out$Month) == 2, mix_out$Month, paste("0", mix_out$Month, sep = ""))
-                             #   mix_out$CatcDate <- factor(paste(mix_out$Year,
-                             #                                    zeroedMonth, sep = "-"),
-                             #                              levels = paste(rep(sort(unique(mix_out$Year)), each = 12),
-                             #                                             sort(unique(zeroedMonth)), sep = "-"))
-                             #   
-                             #   
-                             #   groMixout[[sexDrop]] <<- mix_out
-                             #   
-                             #   # mix_out$CorrBirth <- mix_out$Birth
-                             #   # mix_out$CorrBirth[which(mix_out$AgeNF %% 1 + 0.25 > 1)] <- mix_out$CorrBirth[which(mix_out$AgeNF %% 1 + 0.25 > 1)] + 1
-                             #   # mix_out$CorrBirth[which(mix_out$AgeNF - mix_out$Age > 0.81)] <- mix_out$CorrBirth[which(mix_out$AgeNF - mix_out$Age > 0.81)] - 1
-                             #   
-                             #   growPath <- data.frame(Birth = rep(min(mix_out$Birth):(min(mix_out$Birth)+11), each = length(levels(mix_out$CatcDate))),
-                             #                          Date = rep(levels(mix_out$CatcDate), times = length(min(mix_out$Birth):(min(mix_out$Birth)+11))),
-                             #                          Length = NA)
-                             #   growPath$Age <- as.numeric(strtrim(growPath$Date, 4)) - growPath$Birth + as.numeric(substr(growPath$Date, 6,7))/12
-                             #   
-                             #   if(curveSel == "von Bertalanffy"){
-                             #     growPath$Length <- calcVonBert(LHat, kHat, growPath$Age)
-                             #   }else{
-                             #     growPath$Length <- calcGomp(LHat, kHat, growPath$Age)
-                             #   }
-                             #   
-                             #   growPath$Date <- factor(growPath$Date, levels = levels(mix_out$CatcDate))
-                             #   # growPath <- growPath[growPath$Age > 0,]
-                             #   growPath <- growPath[growPath$Length > floor(min(mix_out$Length)),]
-                             #   
-                             #   coho_AL <- ddply(mix_out, .(Age), summarise,
-                             #                    coh.mean = mean(Length), coh.var = var(Length), coh.num = length(Length))
-                             #   ###
-                             #   
-                             #   ### MCMC calc birth
-                             #   out_birth <- table(paste(mix_out$Year, mix_out$Quarter, sep = "_"),  mix_out$Birth)
-                             #   birth_melt <- melt(out_birth)
-                             #   names(birth_melt) <- c("Catch", "Birth", "Qty")
-                             #   birth_melt$Catch <- factor(birth_melt$Catch, levels = paste(rep(levels(mix_out$Year), each = 4),
-                             #                                                               rep(1:4, times = length(levels(mix_out$Year))), sep = "_"))
-                             #   birth_melt$Birth <- as.factor(birth_melt$Birth)
-                             #   birth_melt <- birth_melt[birth_melt$Qty != 0,]
-                             #   ###
-                             #   
-                             #   ### MCMC Calc Survivors
-                             #   tot_count <- apply(out_birth,2, sum)
-                             #   surv_tbl <- out_birth
-                             #   for(i in 1:nrow(out_birth)){
-                             #     surv_tbl[i,] <- tot_count
-                             #     tot_count <- tot_count - out_birth[i,]
-                             #   }
-                             #   
-                             #   surv_melt <- melt(surv_tbl)
-                             #   names(surv_melt) <- c("Catch", "Birth", "Qty")
-                             #   surv_melt$Catch <- factor(surv_melt$Catch, levels = paste(rep(levels(mix_out$Year), each = 4),
-                             #                                                             rep(1:4, times = length(levels(mix_out$Year))), sep = "_"))
-                             #   surv_melt <- surv_melt[!duplicated(surv_melt[,2:3], fromLast = TRUE),]
-                             #   surv_melt <- surv_melt[surv_melt$Qty != 0,]
-                             #   surv_melt$Age <- as.numeric(strtrim(surv_melt$Catch, 4)) - surv_melt$Birth + as.numeric(substr(surv_melt$Catch, 6, 7))/4
-                             #   surv_melt$Birth <- as.factor(surv_melt$Birth)
-                             #   surv_melt$QtyNorm <- 100*round(as.numeric(surv_melt$Qty/apply(surv_tbl,2,max)[surv_melt$Birth]), 2)
-                             #   # surv_melt$QtyNorm <- 100*round(as.numeric(surv_melt$Qty/max(surv_tbl)), 1)
-                             #   
-                             #   surv_melt$Zeta <- 0
-                             #   for(i in unique(surv_melt$Birth)){
-                             #     tmp_surv_i <- surv_melt[surv_melt$Birth == i,]
-                             #     surv_melt$Zeta[surv_melt$Birth == i] <- c(0,-diff(tmp_surv_i$Qty)/diff(tmp_surv_i$Age)/tmp_surv_i$Qty[1])
-                             #     # surv_melt$Zeta[surv_melt$Birth == i] <- c(0,1/diff(tmp_surv_i$Age)*log(tmp_surv_i$Qty[-nrow(tmp_surv_i)]/tmp_surv_i$Qty[-1]))
-                             #     # surv_melt$Zeta[surv_melt$Birth == i] <- c(-diff(tmp_surv_i$Qty)/tmp_surv_i$Qty[-nrow(tmp_surv_i)], 0)
-                             #   }
-                             #   # surv_melt$Zeta <- 0.2*(surv_melt$Zeta)/(1/surv_melt$Zeta)
-                             #   ###
-                             #   
-                             #   ### MCMC chain Traceplot
-                             #   sprePlot[[sexDrop]][["traceChain"]] <<- set_ggChainTrace(ggdataSamps)
-                             #   ### MCMC chain scatterplot
-                             #   sprePlot[[sexDrop]][["scatLK"]] <<- set_ggChainScatter(gg_DFscat = ggdataSampScat, meanL = LHat, meanK = kHat)
-                             #   ### MCMC chain Boxplot Tau
-                             #   sprePlot[[sexDrop]][["cohoPreciGG"]] <<- set_ggTausBox(df_taus = taus[,1:(max(AA)+1)], tauPalette = outPalette, numCoho = nCoho)
-                             #   ### MCMC Boxplot Sigma
-                             #   sprePlot[[sexDrop]][["cohoVariGG"]] <<- set_ggSigmaBox(df_sigma = sigma2s[,1:(max(AA)+1)], sigPalette = outPalette, numCoho = nCoho)
-                             #   
-                             #   ### MCMC Plot Age-Length
-                             #   sprePlot[[sexDrop]][["ageLength"]] <<- set_ggAgeLength(df_mix = mix_out, mixPalette = outPalette)
-                             #   ### MCMC Age-Length Key
-                             #   sprePlot[[sexDrop]][["ageLengthTbl"]] <<- set_tblAgeLength(df_mix = mix_out)
-                             #   ### MCMC output cohort stats
-                             #   sprePlot[[sexDrop]][["cohoStatTbl"]] <<- set_tblCohoStat(df_coho = coho_AL)
-                             #   
-                             #   ### MCMC quarter vertical hist
-                             #   sprePlot[[sexDrop]][["histBirth"]] <<- set_ggHistBirth(df_mix = mix_out, df_grow = growPath)
-                             #   ### MCMC Catch * Quarters
-                             #   sprePlot[[sexDrop]][["lineCatch"]] <<- set_ggCatchLine(df_birth = birth_melt)
-                             #   ### MCMC Survivors * quarter
-                             #   sprePlot[[sexDrop]][["lineSurv"]] <<- set_ggSurvLine(df_surv = surv_melt)
-                             # }
                            )
 )
 
@@ -2568,9 +2423,130 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 #' The \code{FishFleet} class implements the class of SMART
 #' to manage fleet data.
 #'
-#' @return This function returns the 'fishFleet' object.
-#'
-
+#' @docType class
+#' 
+#' @keywords data
+#' @return Object of \code{\link{R6Class}} with attributes and methods for the fishery data.
+#' 
+#' @format \code{\link{R6Class}} object.
+#' 
+#' @field rawRegister Missing description.
+#' @field vmsRegister Missing description.
+#' @field rawEffort Missing description.
+#' @field weekEffoMatr Missing description.
+#' @field dayEffoMatr Missing description.
+#' @field prodMatr Missing description.
+#' @field effoProd Missing description.
+#' @field effoProdMont Missing description.
+#' @field effoMont Missing description.
+#' @field effoProdAll Missing description.
+#' @field effoAll Missing description.
+#' @field trackHarbs Missing description.
+#' @field regHarbsUni Missing description.
+#' @field regHarbsBox Missing description.
+#' @field rawSelectivity Missing description.
+#' @field rawProduction Missing description.
+#' @field rawEconomy Missing description.
+#' @field registerIds Missing description.
+#' @field predProd Missing description.
+#' @field productionIds Missing description.
+#' @field prodIdsLoa Missing description.
+#' @field prodSpec Missing description.
+#' @field specSett Missing description.
+#' @field specLogit Missing description.
+#' @field effortIds Missing description.
+#' @field idsEffoProd Missing description.
+#' @field effoProdAllLoa Missing description.
+#' @field effoAllLoa Missing description.
+#' @field effortIndex Missing description.
+#' @field daysAtSea Missing description.
+#' @field prodIndex Missing description.
+#' @field resNNLS Missing description.
+#' @field betaAvg Missing description.
+#' @field effortAvg Missing description.
+#' @field betaMeltYear Missing description.
+#' @field prodMeltYear Missing description.
+#' @field fishPoinPara Missing description.
+#' @field ecoPrice Missing description.
+#' @field inSpatialReg Missing description.
+#' @field inEffortReg Missing description.
+#' @field inProductionReg Missing description.
+#' @field outSpatialReg Missing description.
+#' @field outEffortReg Missing description.
+#' @field outProductionReg Missing description.
+#' @field plotSpatialReg Missing description.
+#' @field plotEffortReg Missing description.
+#' @field plotProductionReg Missing description.
+#' 
+#' @section Methods:
+#' \describe{
+#'   \item{Documentation}{For full documentation of each method go to https://github.com/smartR_blablabla/}
+#'   \item{\code{setVmsRegister()}}{This method is used }
+#'   \item{\code{setRegHarbs()}}{This method is used }
+#'   \item{\code{setEcoPrice(sel_specie, price_df)}}{This method is used }
+#'   \item{\code{saveFleetHarb(harb_path)}}{This method is used }
+#'   \item{\code{loadFleetHarb(harb_path)}}{This method is used }
+#'   \item{\code{setBetaAvg(sel_specie)}}{This method is used }
+#'   \item{\code{setEffortAvg()}}{This method is used }
+#'   \item{\code{loadFleetRegis(register_path)}}{This method is used }
+#'   \item{\code{loadMatEffort(effort_path)}}{This method is used }
+#'   \item{\code{loadRawEconomy(economic_path)}}{This method is used }
+#'   \item{\code{setYearEconomy()}}{This method is used }
+#'   \item{\code{setInSpatial()}}{This method is used }
+#'   \item{\code{setInEffort()}}{This method is used }
+#'   \item{\code{getRegSpatial()}}{This method is used }
+#'   \item{\code{getRegEffort()}}{This method is used }
+#'   \item{\code{getRegProduction()}}{This method is used }
+#'   \item{\code{getCostOutput()}}{This method is used }
+#'   \item{\code{setCostPlot()}}{This method is used }
+#'   \item{\code{loadProduction(production_path)}}{This method is used }
+#'   \item{\code{setFishPoinPara(speed_range, depth_range)}}{This method is used }
+#'   \item{\code{setWeekMonthNum()}}{This method is used }
+#'   \item{\code{setFishPoin()}}{This method is used }
+#'   \item{\code{plotFishPoinStat()}}{This method is used }
+#'   \item{\code{plotSpeedDepth(which_year, speed_range, depth_range)}}{This method is used }
+#'   \item{\code{setEffortIds()}}{This method is used }
+#'   \item{\code{setProdSpec()}}{This method is used }
+#'   \item{\code{setSpecSett()}}{This method is used }
+#'   \item{\code{setNNLS()}}{This method is used }
+#'   \item{\code{setBetaMeltYear(specie)}}{This method is used }
+#'   \item{\code{setProdMeltYear(specie)}}{This method is used }
+#'   \item{\code{plotTotProd(specie)}}{This method is used }
+#'   \item{\code{plotNNLS(specie, thresR2)}}{This method is used }
+#'   \item{\code{setSpecSettItm(specie, thresh, brea, max_xlim)}}{This method is used }
+#'   \item{\code{plotLogitROC(selSpecie)}}{This method is used }
+#'   \item{\code{setSpecLogitConf(selSpecie, cutoff)}}{This method is used }
+#'   \item{\code{setLogitTrain(selSpecie, train, cp_val, cv_val)}}{This method is used }
+#'   \item{\code{setLogitTest(selSpecie, test)}}{This method is used }
+#'   \item{\code{setLogitPred(selSpecie, test)}}{This method is used }
+#'   \item{\code{setLogitCut(selSpecie)}}{This method is used }
+#'   \item{\code{setLogitRoc(selSpecie)}}{This method is used }
+#'   \item{\code{setLogitConf(selSpecie, test)}}{This method is used }
+#'   \item{\code{setSpecLogit(selSpecie, selModel, cp, cv)}}{This method is used }
+#'   \item{\code{getMatSpeLand(specie)}}{This method is used }
+#'   \item{\code{setEffoProdAll()}}{This method is used }
+#'   \item{\code{setEffoAll()}}{This method is used }
+#'   \item{\code{setEffoProdAllLoa()}}{This method is used }
+#'   \item{\code{setEffoAllLoa()}}{This method is used }
+#'   \item{\code{setProdIds()}}{This method is used }
+#'   \item{\code{setIdsEffoProd()}}{This method is used }
+#'   \item{\code{plotCountIDsEffoProd()}}{This method is used }
+#'   \item{\code{plotCountIDsEffo()}}{This method is used }
+#'   \item{\code{plotCountIDsProd()}}{This method is used }
+#'   \item{\code{setEffoProdMatr()}}{This method is used }
+#'   \item{\code{setEffoProdMont()}}{This method is used }
+#'   \item{\code{setEffoMont()}}{This method is used }
+#'   \item{\code{setProdMatr()}}{This method is used }
+#'   \item{\code{setDayEffoMatrGround(maxFG)}}{This method is used }
+#'   \item{\code{getLoa4Prod()}}{This method is used }
+#'   \item{\code{plotLoaProd()}}{This method is used }
+#'   \item{\code{readRegisterEU(reg_path)}}{This method is used }
+#'   \item{\code{cleanRegister()}}{This method is used }
+#'   \item{\code{plotRegSum()}}{This method is used }
+#'   \item{\code{plotBarReg(regVar, p_las, title)}}{This method is used }
+#'   \item{\code{plotBoxReg(regVar, title)}}{This method is used }
+#'   \item{\code{setRegIds()}}{This method is used }
+#'   }
 
 FishFleet <- R6Class("fishFleet",
                      portable = FALSE,
@@ -2879,26 +2855,12 @@ FishFleet <- R6Class("fishFleet",
                                                            breaks = brea,
                                                            max_x = max_xlim)
                        },
-                       # setSpecLogitROCR = function(specie){
-                       #   ROCRpred <- prediction(specLogit[[specie]]$logit$Predict, 1*(specLogit[[specie]]$landings > specSett[[specie]]$threshold))
-                       #   specLogit[[specie]]$ROCRperf <<- performance(ROCRpred, "tpr", "fpr")
-                       # },
-                       # setSpecLogitOptCut = function(specie){
-                       #   analysis <- pROC::roc(response = specLogit[[specie]]$landings, predictor = specLogit[[specie]]$logit$Predict)
-                       #   tuning <- cbind(analysis$thresholds,analysis$sensitivities+analysis$specificities)
-                       #   specLogit[[specie]]$optCut <<- tuning[which.max(tuning[,2]),1]
-                       # },
                        plotLogitROC = function(selSpecie){
                          plot(specLogit[[selSpecie]]$logit$Roc, print.cutoffs.at = seq(0,1,0.1),
                               text.adj = c(-0.2, 1.7), main = "Logit ROC results")
                        },
                        setSpecLogitConf = function(selSpecie, cutoff = specLogit[[selSpecie]]$logit$Cut){
                          predict <- factor(as.numeric(specLogit[[selSpecie]]$logit$Predict > cutoff))
-                         # if(specLogit[[selSpecie]]$logit$Name == "GLM"){
-                         #   predict <- factor(as.numeric(specLogit[[selSpecie]]$logit$Predict > cutoff))
-                         # }else{
-                         #   predict <- factor(as.numeric(specLogit[[selSpecie]]$logit$Predict[,2] > cutoff))
-                         # }
                          truth <- factor(1*(specLogit[[selSpecie]]$Landings[-specLogit[[selSpecie]]$logit$Split] > specSett[[selSpecie]]$threshold))
                          tmp_Tbl <- table(predict, truth)
                          specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(tmp_Tbl)
@@ -2926,13 +2888,6 @@ FishFleet <- R6Class("fishFleet",
                        },
                        setLogitPred = function(selSpecie, test){
                          specLogit[[selSpecie]]$logit$Prediction <<- ROCR::prediction(specLogit[[selSpecie]]$logit$Predict, test$Target)
-                         # if(specLogit[[selSpecie]]$logit$Name == "GLM"){
-                         #   specLogit[[selSpecie]]$logit$Prediction <<- ROCR::prediction(specLogit[[selSpecie]]$logit$Predict,
-                         #                                                                test$Target)
-                         # }else{
-                         #   specLogit[[selSpecie]]$logit$Prediction <<- ROCR::prediction(specLogit[[selSpecie]]$logit$Predict[,2],
-                         #                                                                test$Target)
-                         # }
                        },
                        setLogitCut = function(selSpecie){
                          perf <- ROCR::performance(specLogit[[selSpecie]]$logit$Prediction, "acc")
@@ -2944,13 +2899,6 @@ FishFleet <- R6Class("fishFleet",
                        setLogitConf = function(selSpecie, test){
                          specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(as.factor(specLogit[[selSpecie]]$logit$Predict > specLogit[[selSpecie]]$logit$Cut),
                                                                                            test$Target)
-                         # if(specLogit[[selSpecie]]$logit$Name == "GLM"){
-                         #   specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(as.factor(specLogit[[selSpecie]]$logit$Predict > specLogit[[selSpecie]]$logit$Cut),
-                         #                          test$Target)
-                         # }else{
-                         #   specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(as.factor(specLogit[[selSpecie]]$logit$Predict[,2] > specLogit[[selSpecie]]$logit$Cut),
-                         #                          test$Target)
-                         #   }
                        },
                        setSpecLogit = function(selSpecie, selModel = c("GLM", "CART", "RF", "NN")[1],
                                                cp = 0.01, cv = 2){
@@ -3234,17 +3182,6 @@ FishFleet <- R6Class("fishFleet",
                            ggtitle("Count of Distinct Vessels") +
                            ylab("N. of IDs")
                        },
-                       #                        plotRawProduction = function(){
-                       #                          for(i in 1:length(rawProduction)){
-                       #                            if(i == 1){
-                       #                            tmp_data <- cbind(tmp_lst[[i]], years(tmp_lst[[i]]$UTC_S))
-                       #                            }else{
-                       #                              tmp_data <- rbind(tmp_data,
-                       #                                                cbind(tmp_lst[[i]], years(tmp_lst[[i]]$UTC_S)))
-                       #                            }
-                       #                          }
-                       #
-                       #                        },
                        readRegisterEU = function(reg_path){
                          cat("\n\tChecking EU Fleet Register format...", sep = "")
                          two_rows <- readLines(con = reg_path, n = 2)
@@ -3300,96 +3237,8 @@ FishFleet <- R6Class("fishFleet",
                        },
                        setRegIds = function(){
                          registerIds <<- rawRegister$CFR
-                       },
-                       by_ship = NULL,
-                       splitFleet = function(){
-                         cat("Splitting Fleet into ships...\n", sep = "")
-                         by_ship <<- apply(rawRegister, 1, buildShip)
-                       },
-                       buildShip = function(cur_ship){
-                         tmp_ship <- FishShip$new()
-                         tmp_ship$setShip(ship_id = cur_ship["CFR"],
-                                          ship_loa = cur_ship["Loa"],
-                                          ship_pow = cur_ship["Power.Main"],
-                                          ship_act = NA,
-                                          ship_met = NA,
-                                          ship_m_gea = cur_ship["Gear.Main.Code"],
-                                          ship_s_gea = cur_ship["Gear.Sec.Code"],
-                                          ship_eff = NA,
-                                          ship_sel = NA,
-                                          ship_pro = NA)
-                         return(tmp_ship)
                        }
                      )
-)
-
-
-FishShip <- R6Class("fishShip",
-                    portable = FALSE,
-                    class = TRUE,
-                    public = list(
-                      shipId = NULL,    # from VMS, Fleet Register or Survey
-                      shipLoa = NULL,   # from Fleet Register
-                      shipPow = NULL,   # from Fleet Register or Model
-                      shipAct = NULL,   # from Fleet Register
-                      shipMet = NULL,   # from Fleet Register
-                      shipMaiGea = NULL,   # from Fleet Register
-                      shipSecGea = NULL,   # from Fleet Register
-                      shipEff = NULL,   # from VMS
-                      shipSel = NULL,   # from Survey
-                      shipPro = NULL,   # from Survey
-                      setShip = function(ship_id = NA,
-                                         ship_loa = NA,
-                                         ship_pow = NA,
-                                         ship_act = NA,
-                                         ship_met = NA,
-                                         ship_m_gea = NA,
-                                         ship_s_gea = NA,
-                                         ship_eff = NA,
-                                         ship_sel = NA,
-                                         ship_pro = NA){
-                        setShipId(ship_id)
-                        setShipLoa(ship_loa)
-                        setShipPow(ship_pow)
-                        setShipAct(ship_act)
-                        setShipMet(ship_met)
-                        setShipMaiGea(ship_m_gea)
-                        setShipSecGea(ship_s_gea)
-                        setShipEff(ship_eff)
-                        setShipSel(ship_sel)
-                        setShipPro(ship_pro)
-                      },
-                      setShipId = function(id){
-                        shipId <<- id
-                      },
-                      setShipLoa = function(loa){
-                        shipLoa <<- loa
-                      },
-                      setShipPow = function(pow){
-                        shipPow <<- pow
-                      },
-                      setShipAct = function(act){
-                        shipAct <<- act
-                      },
-                      setShipMet = function(met){
-                        shipMet <<- met
-                      },
-                      setShipMaiGea = function(m_gea){
-                        shipMaiGea <<- m_gea
-                      },
-                      setShipSecGea = function(s_gea){
-                        shipSecGea <<- s_gea
-                      },
-                      setShipEff = function(eff){
-                        shipEff <<- eff
-                      },
-                      setShipSel = function(sel){
-                        shipSel <<- sel
-                      },
-                      setShipPro = function(pro){
-                        shipPro <<- pro
-                      }
-                    )
 )
 
 
@@ -3400,9 +3249,127 @@ FishShip <- R6Class("fishShip",
 #' The \code{SampleMap} class implements the class of SMART
 #' to control geographical data.
 #'
-#' @return This function returns the 'sampleMap' object.
-#'
-
+#' @docType class
+#' 
+#' @keywords data
+#' @return Object of \code{\link{R6Class}} with attributes and methods for the Environmental data.
+#' 
+#' @format \code{\link{R6Class}} object.
+#' 
+#' @field gridPath Missing description.
+#' @field gridName Missing description.
+#' @field gridShp Missing description.
+#' @field gridBbox Missing description.
+#' @field gridBboxExt Missing description.
+#' @field gridBboxSP Missing description.
+#' @field areaGrid Missing description.
+#' @field areaStrata Missing description.
+#' @field weightStrata Missing description.
+#' @field harbDbf Missing description.
+#' @field bioPath Missing description.
+#' @field bioName Missing description.
+#' @field bioShp Missing description.
+#' @field bioDF Missing description.
+#' @field gridPolySet Missing description.
+#' @field gridFortify Missing description.
+#' @field nCells Missing description.
+#' @field sCells Missing description.
+#' @field griCent Missing description.
+#' @field gridBathy Missing description.
+#' @field centDept Missing description.
+#' @field clusInpu Missing description.
+#' @field clusMat Missing description.
+#' @field indSil Missing description.
+#' @field indCH Missing description.
+#' @field cutFG Missing description.
+#' @field tmpCut Missing description.
+#' @field availData Missing description.
+#' @field rawInpu Missing description.
+#' @field cutResult Missing description.
+#' @field cutResEffo Missing description.
+#' @field cutResShp Missing description.
+#' @field cutResShpCent Missing description.
+#' @field cutResShpFort Missing description.
+#' @field fgWeigDist Missing description.
+#' @field ggBioDF Missing description.
+#' @field ggDepth Missing description.
+#' @field ggDepthFGbox Missing description.
+#' @field ggEffoFGbox Missing description.
+#' @field ggEffoFGmap Missing description.
+#' @field ggBioFGmat Missing description.
+#' @field ggCutFGmap Missing description.
+#' @field ggIchFGlin Missing description.
+#' @field ggSilFGlin Missing description.
+#' @field ggBetaFGmap Missing description.
+#' @field ggBetaFGbox Missing description.
+#' @field ggProdFGmap Missing description.
+#' @field ggProdFGbox Missing description.
+#' @field ggMapFgFishery Missing description.
+#' @field ggMapFgSurvey Missing description.
+#' @field gooMap Missing description.
+#' @field gooMapPlot Missing description.
+#' @field gooGrid Missing description.
+#' @field gooBbox Missing description.
+#' @field sampColScale Missing description.
+#' @field plotRange Missing description.
+#' 
+#' @section Methods:
+#' \describe{
+#'   \item{Documentation}{For full documentation of each method go to https://github.com/smartR_blablabla/}
+#'   \item{\code{initialize(grid_path)}}{This method is used }
+#'   \item{\code{setAreaGrid()}}{This method is used }
+#'   \item{\code{setAreaStrata(vectorStrata)}}{This method is used }
+#'   \item{\code{setWeightStrata()}}{This method is used }
+#'   \item{\code{loadHarbDbf(dbf_path)}}{This method is used }
+#'   \item{\code{set_ggMapFgSurvey(rawSampCoo)}}{This method is used }
+#'   \item{\code{set_ggMapFgFishery(rawSampCoo)}}{This method is used }
+#'   \item{\code{createGridBbox()}}{This method is used }
+#'   \item{\code{getGooMap()}}{This method is used }
+#'   \item{\code{setGooPlot()}}{This method is used }
+#'   \item{\code{setPlotRange()}}{This method is used }
+#'   \item{\code{setGooGrid()}}{This method is used }
+#'   \item{\code{plotGooGrid()}}{This method is used }
+#'   \item{\code{plotGooGridData(grid_data)}}{This method is used }
+#'   \item{\code{setSampColScale(fac_col)}}{This method is used }
+#'   \item{\code{plotGooSpeSur(poi_data)}}{This method is used }
+#'   \item{\code{plotGooSpeFis(poi_data)}}{This method is used }
+#'   \item{\code{setGooBbox()}}{This method is used }
+#'   \item{\code{plotGooBbox()}}{This method is used }
+#'   \item{\code{setGridPath(path2grid)}}{This method is used }
+#'   \item{\code{setGridName()}}{This method is used }
+#'   \item{\code{loadGridShp()}}{This method is used }
+#'   \item{\code{setBioPath()}}{This method is used }
+#'   \item{\code{setBioName()}}{This method is used }
+#'   \item{\code{loadBioShp()}}{This method is used }
+#'   \item{\code{addBioShp(bio_path)}}{This method is used }
+#'   \item{\code{loadBioDF(bio_path)}}{This method is used }
+#'   \item{\code{plotBioDF()}}{This method is used }
+#'   \item{\code{setGgBioDF()}}{This method is used }
+#'   \item{\code{ggplotBioDF()}}{This method is used }
+#'   \item{\code{createPolySet()}}{This method is used }
+#'   \item{\code{fortifyGridShp()}}{This method is used }
+#'   \item{\code{setNumCell()}}{This method is used }
+#'   \item{\code{setGridCenter()}}{This method is used }
+#'   \item{\code{getGridBath()}}{This method is used }
+#'   \item{\code{saveGridBath(bathy_path)}}{This method is used }
+#'   \item{\code{loadGridBath(bathy_path)}}{This method is used }
+#'   \item{\code{getCentDept()}}{This method is used }
+#'   \item{\code{setGgDepth(isoLine)}}{This method is used }
+#'   \item{\code{ggplotGridBathy()}}{This method is used }
+#'   \item{\code{plotSamMap(title, celCol)}}{This method is used }
+#'   \item{\code{plotCoho(abbs)}}{This method is used }
+#'   \item{\code{setClusInpu(whiData, howData)}}{This method is used }
+#'   \item{\code{calcFishGrou(numCuts, minsize, maxsize, modeska, skater_method, nei_queen)}}{This method is used }
+#'   \item{\code{plotFishGrou(ind_clu)}}{This method is used }
+#'   \item{\code{setCutResult(ind_clu)}}{This method is used }
+#'   \item{\code{setDepthFGbox()}}{This method is used }
+#'   \item{\code{setEffoFGbox()}}{This method is used }
+#'   \item{\code{setEffoFGmap()}}{This method is used }
+#'   \item{\code{setBioFGmat()}}{This method is used }
+#'   \item{\code{setCutFGmap()}}{This method is used }
+#'   \item{\code{setIchFGlin(numCut)}}{This method is used }
+#'   \item{\code{setSilFGlin(numCut)}}{This method is used }
+#'   }
 
 SampleMap <- R6Class("sampleMap",
                      portable = FALSE,
