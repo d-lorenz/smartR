@@ -7,7 +7,7 @@
 #' @return This function returns the 'smartProject' object.
 #'
 #'
-#############################################################
+
 
 SmartProject <- R6Class("smartProject",
                         portable = FALSE,
@@ -1501,7 +1501,7 @@ SmartProject <- R6Class("smartProject",
 #'
 #' @return This function returns the 'SurveyBySpecie' object.
 #'
-#############################################################
+
 
 SurveyBySpecie <- R6Class("SurveyBySpecie",
                           portable = FALSE,
@@ -1866,7 +1866,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
 #'
 #' @return This function returns the 'FisheryBySpecie' object.
 #'
-#############################################################
+
 
 FisheryBySpecie <- R6Class("FisheryBySpecie",
                            portable = FALSE,
@@ -2463,7 +2463,6 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 #'
 #' @return This function returns the 'fishFleet' object.
 #'
-#############################################################
 
 
 FishFleet <- R6Class("fishFleet",
@@ -3296,7 +3295,6 @@ FishShip <- R6Class("fishShip",
 #'
 #' @return This function returns the 'sampleMap' object.
 #'
-#############################################################
 
 
 SampleMap <- R6Class("sampleMap",
