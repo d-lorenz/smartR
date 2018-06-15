@@ -6,46 +6,46 @@
 #'
 #' @docType class
 #' 
-#' @export
 #' @keywords data
 #' @return Object of \code{\link{R6Class}} with attributes and methods to fullfill
 #' a complete analisys with the SMART approach.
 #' 
 #' @format \code{\link{R6Class}} object.
 #' 
-#' @field rawDataSurvey Stores address of your lightning server.
-#' @field yearInSurvey Stores id of your current session on the server.
-#' @field specieInSurvey Stores url of the last visualization created by this object.
-#' @field surveyBySpecie Checks if the server is automatically opening the visualizations.
+#' @field rawDataSurvey Stores the raw survey data as is in the provided csv file. The attribute is populated by \code{loadSurveyLFD()} method.
+#' @field yearInSurvey Stores the distinct years in the \code{rawDataSurvey} time-serie.
+#' @field specieInSurvey Stores the distinct species in the \code{rawDataSurvey} time-serie.
+#' @field surveyBySpecie Stores a list of \code{SurveyBySpecie} objects, one for each species in the time-series.
 
-#' @field rawDataFishery Checks if the server is in the jupyter notebook mode.
-#' @field yearInFishery Stores address of your lightning server.
-#' @field specieInFishery Stores id of your current session on the server.
-#' @field fisheryBySpecie Stores url of the last visualization created by this object.
-#' @field gooLstCoho Checks if the server is automatically opening the visualizations.
+#' @field rawDataFishery Stores the raw fishery data as is in the provided csv file. The attribute is populated by \code{loadFisheryLFD()} method.
+#' @field yearInFishery Stores the distinct years in the \code{rawDataFishery} time-serie.
+#' @field specieInFishery Stores the distinct species in the \code{rawDataFishery} time-serie.
+#' @field fisheryBySpecie Stores a list of \code{FisheryBySpecie} objects, one for each species in the time-series.
+#' 
+#' @field gooLstCoho Missing description.
+#' 
+#' @field sampMap Missing description.
+#' @field fleet Missing description.
+#' 
+#' @field simProd Missing description.
+#' @field simEffo Missing description.
+#' @field simBanFG Missing description.
+#' @field simSpatialCost Missing description.
+#' @field simEffortCost Missing description.
+#' @field simProdCost Missing description.
+#' @field simTotalCost Missing description.
+#' @field simRevenue Missing description.
+#' @field simTotalRevenue Missing description.
+#' @field simCostRevenue Missing description.
+#' @field simResPlot Missing description.
 
-#' @field sampMap Checks if the server is in the jupyter notebook mode.
-#' @field fleet Checks if the server is in the jupyter notebook mode.
-
-#' @field simProd Checks if the server is in the jupyter notebook mode.
-#' @field simEffo Checks if the server is in the jupyter notebook mode.
-#' @field simBanFG Checks if the server is in the jupyter notebook mode.
-#' @field simSpatialCost Checks if the server is in the jupyter notebook mode.
-#' @field simEffortCost Checks if the server is in the jupyter notebook mode.
-#' @field simProdCost Checks if the server is in the jupyter notebook mode.
-#' @field simTotalCost Checks if the server is in the jupyter notebook mode.
-#' @field simRevenue Checks if the server is in the jupyter notebook mode.
-#' @field simTotalRevenue Checks if the server is in the jupyter notebook mode.
-#' @field simCostRevenue Checks if the server is in the jupyter notebook mode.
-#' @field simResPlot Checks if the server is in the jupyter notebook mode.
-
-#' @field outGmat Checks if the server is in the jupyter notebook mode.
-#' @field outOptimEffo Checks if the server is in the jupyter notebook mode.
-#' @field outWeiProp Checks if the server is in the jupyter notebook mode.
-#' @field outWeiPropQ Checks if the server is in the jupyter notebook mode.
-#' #' @section Methods:
+#' @field outGmat Missing description.
+#' @field outOptimEffo Missing description.
+#' @field outWeiProp Missing description.
+#' @field outWeiPropQ Missing description.
+#' @section Methods:
 #' \describe{
-#'   \item{Documentation}{For full documentation of each method go to https://github.com/lightning-viz/lightining-r/}
+#'   \item{Documentation}{For full documentation of each method go to https://github.com/smartR_blablabla/}
 #'   \item{\code{setCostInput()}}{This method is used }
 #'   \item{\code{setInProduction()}}{This method is used }
 #'   \item{\code{setDaysAtSea()}}{This method is used }
@@ -112,6 +112,7 @@
 #'   \item{\code{calcCoh_A_Fishery(ind_num)}}{This method is used }
 #'   \item{\code{intrpCoh_A_Survey(ind_num)}}{This method is used }
 #'   \item{\code{intrpCoh_A_Fishery(ind_num)}}{This method is used }
+#'   }
 
 
 
