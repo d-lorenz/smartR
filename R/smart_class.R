@@ -22,96 +22,85 @@
 #' @field specieInFishery Stores the distinct species in the \code{rawDataFishery} time-serie.
 #' @field fisheryBySpecie Stores a list of \code{FisheryBySpecie} objects, one for each species in the time-series.
 #' 
-#' @field gooLstCoho Missing description.
+#' @field gooLstCoho Stores a list of plots of species cohorts spatial distribution .
 #' 
-#' @field sampMap Missing description.
-#' @field fleet Missing description.
+#' @field sampMap Stores the \code{environment} object.
+#' @field fleet Stores the \code{fleet} object.
 #' 
-#' @field simProd Missing description.
-#' @field simEffo Missing description.
-#' @field simBanFG Missing description.
-#' @field simSpatialCost Missing description.
-#' @field simEffortCost Missing description.
-#' @field simProdCost Missing description.
-#' @field simTotalCost Missing description.
-#' @field simRevenue Missing description.
-#' @field simTotalRevenue Missing description.
-#' @field simCostRevenue Missing description.
-#' @field simResPlot Missing description.
+#' @field simProd Stores the simulated pattern of production.
+#' @field simEffo Stores the simulated pattern of effort.
+#' @field simBanFG Stores a vector of fishable/banned fishing grounds.
+#' @field simSpatialCost Stores the simulated pattern of spatial costs.
+#' @field simEffortCost Stores the simulated pattern of effort costs.
+#' @field simProdCost Stores the simulated pattern of production costs.
+#' @field simTotalCost Stores the simulated pattern of total costs.
+#' @field simRevenue Stores the simulated pattern of revenue by species and fishing ground.
+#' @field simTotalRevenue Stores the simulated pattern of total revenues.
+#' @field simCostRevenue Stores the simulated pattern of costs and revenues.
+#' @field simResPlot Stores the plots with the simulation' results.
 
-#' @field outGmat Missing description.
-#' @field outOptimEffo Missing description.
-#' @field outWeiProp Missing description.
-#' @field outWeiPropQ Missing description.
+#' @field outGmat Stores the evolution of gains during the simulation.
+#' @field outOptimEffo Stores the resulting pattern of effort.
+#' @field outWeiProp Stores the annual proportion of fish by cohort and fishing ground.
+#' @field outWeiPropQ Stores the seasonal proportion of fish by cohort and fishing ground.
 #' @section Methods:
 #' \describe{
 #'   \item{Documentation}{For full documentation of each method go to https://github.com/smartR_blablabla/}
-#'   \item{\code{setCostInput()}}{This method is used }
-#'   \item{\code{setInProduction()}}{This method is used }
-#'   \item{\code{setDaysAtSea()}}{This method is used }
-#'   \item{\code{setEffortIndex()}}{This method is used }
-#'   \item{\code{setProductionIndex()}}{This method is used }
-#'   \item{\code{getHarbFgDist()}}{This method is used }
-#'   \item{\code{setFgWeigDist()}}{This method is used }
-#'   \item{\code{setRegHarbBox()}}{This method is used }
-#'   \item{\code{loadSurveyLFD(csv_path)}}{This method is used }
-#'   \item{\code{loadFisheryLFD(csv_path)}}{This method is used }
-#'   \item{\code{setYearSurvey()}}{This method is used }
-#'   \item{\code{setYearFishery()}}{This method is used }
-#'   \item{\code{loadMap(map_path)}}{This method is used }
-#'   \item{\code{createFleet()}}{This method is used }
-#'   \item{\code{setSpecieSurvey()}}{This method is used }
-#'   \item{\code{setSpecieFishery()}}{This method is used }
-#'   \item{\code{splitSpecieSurvey()}}{This method is used }
-#'   \item{\code{splitSpecieFishery()}}{This method is used }
-#'   \item{\code{addSpecieSurvey(sing_spe)}}{This method is used }
-#'   \item{\code{addSpecieFishery(sing_spe)}}{This method is used }
-#'   \item{\code{setSpreaFishery()}}{This method is used }
-#'   \item{\code{setSpatFishery()}}{This method is used }
-#'   \item{\code{setSpreaSurvey()}}{This method is used }
-#'   \item{\code{setSpatSurvey()}}{This method is used }
-#'   \item{\code{setDepthSurvey()}}{This method is used }
-#'   \item{\code{setStratumSurvey()}}{This method is used }
-#'   \item{\code{setAbuAvgAll()}}{This method is used }
-#'   \item{\code{setMeditsIndex()}}{This method is used }
-#'   \item{\code{setStrataAbu()}}{This method is used }
-#'   \item{\code{loadFleeEffoDbs(effort_path, met_nam, onBox = TRUE, perOnBox = 1)}}{This method is used }
-#'   \item{\code{effPlot(whichYear)}}{This method is used }
-#'   \item{\code{speDisPlot(whoPlo)}}{This method is used }
-#'   \item{\code{plotGooSpe(whiSpe, whiSou)}}{This method is used }
-#'   \item{\code{setGooPlotCohoFish(specie = "", sex = "Female", speCol = "", smooPoi = 500, smooBin = 0.5)}}{This method is used }
-#'   \item{\code{distrPlotCols(cols = NULL, vals = NULL, maxVal = 100, plotTitle = "NoTitle", legendUnits = "NoUnits")}}{This method is used }
-#'   \item{\code{ggplotRawPoints(year)}}{This method is used }
-#'   \item{\code{ggplotFgWeigDists()}}{This method is used }
-#'   \item{\code{setAvailData()}}{This method is used }
-#'   \item{\code{predictProduction(specie)}}{This method is used }
-#'   \item{\code{simProdAll(selRow = numeric(0))}}{This method is used }
-#'   \item{\code{genSimEffo(method = "flat", selRow = numeric(0), overDen = 1.05, areaBan = numeric(0))}}{This method is used }
-#'   \item{\code{getSimSpatialCost()}}{This method is used }
-#'   \item{\code{getSimEffortCost()}}{This method is used }
-#'   \item{\code{getSimProdCost()}}{This method is used }
-#'   \item{\code{getSimTotalCost()}}{This method is used }
-#'   \item{\code{getSimRevenue(selRow = numeric(0), timeScale = "Year")}}{This method is used }
-#'   \item{\code{getLWstat()}}{This method is used }
-#'   \item{\code{simulateFishery(thr0 = 100, effoMode = "flat", effoDen = 1.05, effoBan = numeric(0), timeStep = "Year")}}{This method is used }
-#'   \item{\code{setSimResults()}}{This method is used }
-#'   \item{\code{ggplotFishingPoints(year)}}{This method is used }
-#'   \item{\code{setPlotBetaMeltYear(specie, year)}}{This method is used }
-#'   \item{\code{setPlotProdMeltYear(specie, year)}}{This method is used }
-#'   \item{\code{setCellPoin()}}{This method is used }
-#'   \item{\code{setTrackHarb()}}{This method is used }
-#'   \item{\code{setFishGround(numCut)}}{This method is used }
-#'   \item{\code{addFg2Fishery()}}{This method is used }
-#'   \item{\code{addFg2Survey()}}{This method is used }
-#'   \item{\code{setWeekEffoMatrCell()}}{This method is used }
-#'   \item{\code{setWeekEffoMatrGround()}}{This method is used }
-#'   \item{\code{ggplotGridEffort(year)}}{This method is used }
-#'   \item{\code{getNnlsModel(specie, minobs, thr_r2)}}{This method is used }
-#'   \item{\code{cohoDisPlot(whoSpe, whoCoh, whiYea, interp)}}{This method is used }
-#'   \item{\code{calcCoh_A_Survey(ind_num)}}{This method is used }
-#'   \item{\code{calcCoh_A_Fishery(ind_num)}}{This method is used }
-#'   \item{\code{intrpCoh_A_Survey(ind_num)}}{This method is used }
-#'   \item{\code{intrpCoh_A_Fishery(ind_num)}}{This method is used }
+#'   \item{\code{setCostInput()}}{This method is used to setup the required data for costs computation}
+#'   \item{\code{setInProduction()}}{This method is used to setup the required data for production costs computation}
+#'   \item{\code{setDaysAtSea()}}{This method is used to compute the number of Days at Sea of each vessel}
+#'   \item{\code{setEffortIndex()}}{This method is used to compute the value of the Effort Index}
+#'   \item{\code{setProductionIndex()}}{This method is used to compute the value of the Production Index}
+#'   \item{\code{getHarbFgDist()}}{This method is used to compute the weighted average distance of every fishing ground to each harbour}
+#'   \item{\code{setFgWeigDist()}}{This method is used as helper function to get the weighted average distance between fishing ground and harbours}
+#'   \item{\code{setRegHarbBox()}}{This method is used to compute the distance of each harbour to every fishing ground centroid}
+#'   \item{\code{loadSurveyLFD(csv_path)}}{This method is used to load the raw survey LFD data from a  csv file}
+#'   \item{\code{loadFisheryLFD(csv_path)}}{This method is used to load the raw fishery LFD data from a  csv file}
+#'   \item{\code{setYearSurvey()}}{This method is used to store the distinct year in the survey time-series}
+#'   \item{\code{setYearFishery()}}{TThis method is used to store the distinct year in the fishery time-series}
+#'   \item{\code{loadMap(map_path)}}{This method is used to load the Environmental Grid and initialize the Environment object}
+#'   \item{\code{createFleet()}}{This method is used to initialize the Fleet object}
+#'   \item{\code{setSpecieSurvey()}}{This method is used to store the distinct species in the survey dataset}
+#'   \item{\code{setSpecieFishery()}}{This method is used to store the distinct species in the fishery dataset}
+#'   \item{\code{splitSpecieSurvey()}}{This method is used to split the survey dataset by species}
+#'   \item{\code{splitSpecieFishery()}}{This method is used to split the fishery dataset by species}
+#'   \item{\code{addSpecieSurvey(sing_spe)}}{This method is used to initialize a new \code{surveyBySpecie} object}
+#'   \item{\code{addSpecieFishery(sing_spe)}}{This method is used to initialize a new \code{fisheryBySpecie} object}
+#'   \item{\code{setSpreaFishery()}}{This method is used to prepare the fishery LFD data for MCMC analysis}
+#'   \item{\code{setSpatFishery()}}{This method is used to setup the plot with the spatial distribution of the fishery dataset}
+#'   \item{\code{setSpreaSurvey()}}{This method is used to prepare the survey LFD data for MCMC analysis}
+#'   \item{\code{setSpatSurvey()}}{This method is used to setup the plot with the spatial distribution of the survey dataset}
+#'   \item{\code{setDepthSurvey()}}{This method is used to assign the depth of each survey tow}
+#'   \item{\code{setStratumSurvey()}}{This method is used to assign a depth stratum to each survey tow}
+#'   \item{\code{setAbuAvgAll()}}{This method is used to compute the spiecies abundances at each survey stratum}
+#'   \item{\code{setMeditsIndex()}}{This method is used to compute the MEDITS index}
+#'   \item{\code{setStrataAbu()}}{This method is used to compute the weighted number of individuals of each size in every stratum}
+#'   \item{\code{loadFleeEffoDbs(effort_path, met_nam, onBox = TRUE, perOnBox = 1)}}{This method is used to extract the vms data from one or more vmsbase DB}
+#'   \item{\code{ggplotRawPoints(year)}}{This method is used to plot the raw vms points}
+#'   \item{\code{ggplotFgWeigDists()}}{This method is used to plot the weighted average distance between harbours and fishing grounds}
+#'   \item{\code{setAvailData()}}{This method is used to gather the required data for the spatial clustering}
+#'   \item{\code{predictProduction(specie)}}{This method is used to compute the estimated production}
+#'   \item{\code{simProdAll(selRow = numeric(0))}}{This method is used to compute the simulated production}
+#'   \item{\code{genSimEffo(method = "flat", selRow = numeric(0), overDen = 1.05, areaBan = numeric(0))}}{This method is used to create a simulated pattern of effort}
+#'   \item{\code{getSimSpatialCost()}}{This method is used to compute the simulated spatial costs}
+#'   \item{\code{getSimEffortCost()}}{This method is used to compute the simulated effort costs}
+#'   \item{\code{getSimProdCost()}}{This method is used to compute the simulated production costs}
+#'   \item{\code{getSimTotalCost()}}{This method is used to collect all the simulated costs}
+#'   \item{\code{getSimRevenue(selRow = numeric(0), timeScale = "Year")}}{This method is used to compute the simulated revenues}
+#'   \item{\code{getLWstat()}}{This method is used to compute the length/weight statistics for each fishing ground}
+#'   \item{\code{simulateFishery(thr0 = 100, effoMode = "flat", effoDen = 1.05, effoBan = numeric(0), timeStep = "Year")}}{This method is used to simulate one year of fishing}
+#'   \item{\code{setSimResults()}}{This method is used to store the results of a simulation run}
+#'   \item{\code{ggplotFishingPoints(year)}}{This method is used to plot the fishing points}
+#'   \item{\code{setCellPoin()}}{This method is used assign a cell to each vms point}
+#'   \item{\code{setTrackHarb()}}{This method is used to assign the harbour to each fishing trip}
+#'   \item{\code{setFishGround(numCut)}}{This method is used to setup the fishing ground configuration}
+#'   \item{\code{addFg2Fishery()}}{This method is used to add the fishing ground information to each fishery data point}
+#'   \item{\code{addFg2Survey()}}{This method is used to add the fishing ground information to each survey data point}
+#'   \item{\code{setWeekEffoMatrCell()}}{This method is used to combine the raw effort points in weekly aggregated effort by cell}
+#'   \item{\code{setWeekEffoMatrGround()}}{This method is used to combine the raw effort points in weekly aggregated effort by fishing ground}
+#'   \item{\code{ggplotGridEffort(year)}}{This method is used to plot the gridded fishing effort}
+#'   \item{\code{getNnlsModel(specie, minobs, thr_r2)}}{This method is used to compute the coefficients of the NNLS model}
+#'   \item{\code{cohoDisPlot(whoSpe, whoCoh, whiYea, interp)}}{This method is used to store the spatial distribution of the species by cohort}
 #'   }
 
 
@@ -410,29 +399,29 @@ SmartProject <- R6Class("smartProject",
                               }
                             }
                           },
-                          effPlot = function(whichYear){
-                            if(whichYear == "All"){
-                              all_sum <- apply(fleet$rawEffort, 1, sum)
-                              round_perc <- 1+round(100*all_sum/max(all_sum))
-                              # col_palette <- rev(heat.colors(100))
-                              # cell_colors <- col_palette[round_perc]
-                              distrPlotCols(cols = rev(heat.colors(101)), vals = round_perc,
-                                            maxVal = ceiling(max(all_sum)),
-                                            plotTitle = "Effort all years",
-                                            legendUnits = "Hours")
-                              
-                            }else{
-                              num_col <- which(colnames(fleet$rawEffort) == whichYear)
-                              
-                              yea_eff <- round(fleet$rawEffort[,num_col])
-                              round_yea <- 1+100*yea_eff/max(yea_eff)
-                              
-                              distrPlotCols(cols = rev(heat.colors(101)), vals = round_yea,
-                                            maxVal = ceiling(max(yea_eff)),
-                                            plotTitle = paste("Effort ", whichYear, sep = ""),
-                                            legendUnits = "Hours")
-                            }
-                          },
+                          # effPlot = function(whichYear){
+                          #   if(whichYear == "All"){
+                          #     all_sum <- apply(fleet$rawEffort, 1, sum)
+                          #     round_perc <- 1+round(100*all_sum/max(all_sum))
+                          #     # col_palette <- rev(heat.colors(100))
+                          #     # cell_colors <- col_palette[round_perc]
+                          #     distrPlotCols(cols = rev(heat.colors(101)), vals = round_perc,
+                          #                   maxVal = ceiling(max(all_sum)),
+                          #                   plotTitle = "Effort all years",
+                          #                   legendUnits = "Hours")
+                          #     
+                          #   }else{
+                          #     num_col <- which(colnames(fleet$rawEffort) == whichYear)
+                          #     
+                          #     yea_eff <- round(fleet$rawEffort[,num_col])
+                          #     round_yea <- 1+100*yea_eff/max(yea_eff)
+                          #     
+                          #     distrPlotCols(cols = rev(heat.colors(101)), vals = round_yea,
+                          #                   maxVal = ceiling(max(yea_eff)),
+                          #                   plotTitle = paste("Effort ", whichYear, sep = ""),
+                          #                   legendUnits = "Hours")
+                          #   }
+                          # },
                           speDisPlot = function(whoPlo){
                             if(whoPlo == "All"){
                               sampMap$plotSamMap("All species")
