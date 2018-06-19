@@ -6,6 +6,8 @@
 #'
 #' @docType class
 #' 
+#' @usage NULL
+#' 
 #' @keywords data
 #' @return Object of \code{\link{R6Class}} with attributes and methods to fullfill
 #' a complete analisys with the SMART approach.
@@ -43,6 +45,8 @@
 #' @field outOptimEffo Stores the resulting pattern of effort.
 #' @field outWeiProp Stores the annual proportion of fish by cohort and fishing ground.
 #' @field outWeiPropQ Stores the seasonal proportion of fish by cohort and fishing ground.
+#' 
+#' 
 #' @section Methods:
 #' \describe{
 #'   \item{Documentation}{For full documentation of each method go to https://github.com/smartR_blablabla/}
@@ -102,6 +106,7 @@
 #'   \item{\code{getNnlsModel(specie, minobs, thr_r2)}}{This method is used to compute the coefficients of the NNLS model}
 #'   \item{\code{cohoDisPlot(whoSpe, whoCoh, whiYea, interp)}}{This method is used to store the spatial distribution of the species by cohort}
 #'   }
+#'   
 
 
 SmartProject <- R6Class("smartProject",
@@ -1595,7 +1600,7 @@ SmartProject <- R6Class("smartProject",
 #'  handle species samplings.
 #'
 #' @docType class
-#' 
+#' @usage NULL
 #' @keywords data
 #' @return Object of \code{\link{R6Class}} with attributes and methods for the survey data.
 #' 
@@ -2004,7 +2009,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
 #'  handle species samplings.
 #'
 #' @docType class
-#' 
+#' @usage NULL
 #' @keywords data
 #' @return Object of \code{\link{R6Class}} with attributes and methods for the fishery data.
 #' 
@@ -2413,7 +2418,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 #' to manage fleet data.
 #'
 #' @docType class
-#' 
+#' @usage NULL
 #' @keywords data
 #' @return Object of \code{\link{R6Class}} with attributes and methods for the fishery data.
 #' 
@@ -3239,125 +3244,123 @@ FishFleet <- R6Class("fishFleet",
 #' to control geographical data.
 #'
 #' @docType class
-#' 
+#' @usage NULL
 #' @keywords data
 #' @return Object of \code{\link{R6Class}} with attributes and methods for the Environmental data.
 #' 
 #' @format \code{\link{R6Class}} object.
 #' 
-#' @field gridPath Missing description.
-#' @field gridName Missing description.
-#' @field gridShp Missing description.
-#' @field gridBbox Missing description.
-#' @field gridBboxExt Missing description.
-#' @field gridBboxSP Missing description.
-#' @field areaGrid Missing description.
-#' @field areaStrata Missing description.
-#' @field weightStrata Missing description.
-#' @field harbDbf Missing description.
-#' @field bioPath Missing description.
-#' @field bioName Missing description.
-#' @field bioShp Missing description.
-#' @field bioDF Missing description.
-#' @field gridPolySet Missing description.
-#' @field gridFortify Missing description.
-#' @field nCells Missing description.
-#' @field sCells Missing description.
-#' @field griCent Missing description.
-#' @field gridBathy Missing description.
-#' @field centDept Missing description.
-#' @field clusInpu Missing description.
-#' @field clusMat Missing description.
-#' @field indSil Missing description.
-#' @field indCH Missing description.
-#' @field cutFG Missing description.
-#' @field tmpCut Missing description.
-#' @field availData Missing description.
-#' @field rawInpu Missing description.
-#' @field cutResult Missing description.
-#' @field cutResEffo Missing description.
-#' @field cutResShp Missing description.
-#' @field cutResShpCent Missing description.
-#' @field cutResShpFort Missing description.
-#' @field fgWeigDist Missing description.
-#' @field ggBioDF Missing description.
-#' @field ggDepth Missing description.
-#' @field ggDepthFGbox Missing description.
-#' @field ggEffoFGbox Missing description.
-#' @field ggEffoFGmap Missing description.
-#' @field ggBioFGmat Missing description.
-#' @field ggCutFGmap Missing description.
-#' @field ggIchFGlin Missing description.
-#' @field ggSilFGlin Missing description.
-#' @field ggBetaFGmap Missing description.
-#' @field ggBetaFGbox Missing description.
-#' @field ggProdFGmap Missing description.
-#' @field ggProdFGbox Missing description.
-#' @field ggMapFgFishery Missing description.
-#' @field ggMapFgSurvey Missing description.
-#' @field gooMap Missing description.
-#' @field gooMapPlot Missing description.
-#' @field gooGrid Missing description.
-#' @field gooBbox Missing description.
-#' @field sampColScale Missing description.
-#' @field plotRange Missing description.
+#' @field gridPath Stores the file path f the Environment grid.
+#' @field gridName Stores the file name of the Environment grid.
+#' @field gridShp Stores the SpatialPoligon object of the Environment grid.
+#' @field gridBbox Stores the bounding box coordinates of the Environment grid.
+#' @field gridBboxExt Stores the extended bounding box coordinates of the Environment grid.
+#' @field gridBboxSP Stores the bounding box of the Environment grid as a SpatialPoligon.
+#' @field areaGrid Stores the total area covered by the Environment grid.
+#' @field areaStrata Stores the area covered by depth strata.
+#' @field weightStrata Stores the area covered by depth strata relative to the total area.
+#' @field harbDbf Stores coordinates and names of the harbours.
+#' @field bioPath Stores the file path of the Substrate map.
+#' @field bioName Stores the file name of the Substrate map.
+#' @field bioShp Stores the SpatialPoligon object of the Substrate map.
+#' @field bioDF Stores the data.frame representation of the Substrate map.
+#' @field gridPolySet Stores the PolySet object of the Environment grid.
+#' @field gridFortify Stores the fortified SpatialPoligon object of the Environment grid.
+#' @field nCells Stores the number of cells in the Environment grid.
+#' @field griCent Stores the coordinates of the cells' centroids.
+#' @field gridBathy Stores the bathymetric matrix.
+#' @field centDept Stores the depth of the cells' centroids.
+#' @field clusInpu Stores the input data for the spatial clustering.
+#' @field clusMat Stores the results of the spatial clustering.
+#' @field indSil Stores the silhouette index of the spatial clustering result.
+#' @field indCH Stores the Calinski-Harabasz index of the spatial clustering result.
+#' @field cutFG Stores the number of cuts for the spatial clustering.
+#' @field availData Stores the names of the variables for the spatial clustering.
+#' @field rawInpu Stores the raw input for the spatial clustering.
+#' @field cutResult Stores the summary data of the spatial clustering result.
+#' @field cutResEffo Stores the average effort data from the spatial clustering result.
+#' @field cutResShp Stores the SpatialPoligon object of the spatial clustering result.
+#' @field cutResShpCent Stores the coordinates of the clusters' centroids.
+#' @field cutResShpFort Stores the fortified SpatialPoligon object of the spatial clustering result.
+#' @field fgWeigDist Stores the weighted distance between harbours and fishing grounds.
+#' @field ggBioDF Stores the plot of the Substrate map.
+#' @field ggDepth Stores the plot of the Bathymetric map.
+#' @field ggDepthFGbox Stores the boxplot of the depth values of each fishing ground.
+#' @field ggEffoFGbox Stores the boxplot of the effort values of each fishing ground.
+#' @field ggEffoFGmap Stores the plot of the Effort map.
+#' @field ggBioFGmat Stores the tilemap of the substrate values of each fishing ground.
+#' @field ggCutFGmap Stores the plot of the Fishing ground configuration.
+#' @field ggIchFGlin Stores the plot of the Calinski-Harabasz index.
+#' @field ggSilFGlin Stores the plot of the silhouette index.
+#' @field ggBetaFGmap Stores the plot of the Productivity map.
+#' @field ggBetaFGbox Stores the boxplot of the Productivity values of each fishing ground.
+#' @field ggProdFGmap Stores the plot of the Production map.
+#' @field ggProdFGbox Stores the boxplot of the Production values of each fishing ground.
+#' @field ggMapFgFishery Stores the plot of the Fishery data coordinates.
+#' @field ggMapFgSurvey Stores the plot of the Survey data coordinates.
+#' @field gooMap Stores the satellite view of the area of study.
+#' @field gooMapPlot Stores the satellite plot of the area of study.
+#' @field gooGrid Stores the plot of the Environment Grid.
+#' @field gooBbox Stores the plot of the Bounding Box of the Environment Grid.
+#' @field sampColScale Stores the color scale for the species plots.
+#' @field plotRange Stores the plot ranges for the Environmental Grid.
 #' 
 #' @section Methods:
 #' \describe{
 #'   \item{Documentation}{For full documentation of each method go to https://github.com/smartR_blablabla/}
-#'   \item{\code{initialize(grid_path)}}{This method is used }
-#'   \item{\code{setAreaGrid()}}{This method is used }
-#'   \item{\code{setAreaStrata(vectorStrata)}}{This method is used }
-#'   \item{\code{setWeightStrata()}}{This method is used }
-#'   \item{\code{loadHarbDbf(dbf_path)}}{This method is used }
-#'   \item{\code{set_ggMapFgSurvey(rawSampCoo)}}{This method is used }
-#'   \item{\code{set_ggMapFgFishery(rawSampCoo)}}{This method is used }
-#'   \item{\code{createGridBbox()}}{This method is used }
-#'   \item{\code{getGooMap()}}{This method is used }
-#'   \item{\code{setGooPlot()}}{This method is used }
-#'   \item{\code{setPlotRange()}}{This method is used }
-#'   \item{\code{setGooGrid()}}{This method is used }
-#'   \item{\code{plotGooGrid()}}{This method is used }
-#'   \item{\code{plotGooGridData(grid_data)}}{This method is used }
-#'   \item{\code{setSampColScale(fac_col)}}{This method is used }
-#'   \item{\code{plotGooSpeSur(poi_data)}}{This method is used }
-#'   \item{\code{plotGooSpeFis(poi_data)}}{This method is used }
-#'   \item{\code{setGooBbox()}}{This method is used }
-#'   \item{\code{plotGooBbox()}}{This method is used }
-#'   \item{\code{setGridPath(path2grid)}}{This method is used }
-#'   \item{\code{setGridName()}}{This method is used }
-#'   \item{\code{loadGridShp()}}{This method is used }
-#'   \item{\code{setBioPath()}}{This method is used }
-#'   \item{\code{setBioName()}}{This method is used }
-#'   \item{\code{loadBioShp()}}{This method is used }
-#'   \item{\code{addBioShp(bio_path)}}{This method is used }
-#'   \item{\code{loadBioDF(bio_path)}}{This method is used }
-#'   \item{\code{plotBioDF()}}{This method is used }
-#'   \item{\code{setGgBioDF()}}{This method is used }
-#'   \item{\code{ggplotBioDF()}}{This method is used }
-#'   \item{\code{createPolySet()}}{This method is used }
-#'   \item{\code{fortifyGridShp()}}{This method is used }
-#'   \item{\code{setNumCell()}}{This method is used }
-#'   \item{\code{setGridCenter()}}{This method is used }
-#'   \item{\code{getGridBath()}}{This method is used }
-#'   \item{\code{saveGridBath(bathy_path)}}{This method is used }
-#'   \item{\code{loadGridBath(bathy_path)}}{This method is used }
-#'   \item{\code{getCentDept()}}{This method is used }
-#'   \item{\code{setGgDepth(isoLine)}}{This method is used }
-#'   \item{\code{ggplotGridBathy()}}{This method is used }
-#'   \item{\code{plotSamMap(title, celCol)}}{This method is used }
-#'   \item{\code{plotCoho(abbs)}}{This method is used }
-#'   \item{\code{setClusInpu(whiData, howData)}}{This method is used }
-#'   \item{\code{calcFishGrou(numCuts, minsize, maxsize, modeska, skater_method, nei_queen)}}{This method is used }
-#'   \item{\code{plotFishGrou(ind_clu)}}{This method is used }
-#'   \item{\code{setCutResult(ind_clu)}}{This method is used }
-#'   \item{\code{setDepthFGbox()}}{This method is used }
-#'   \item{\code{setEffoFGbox()}}{This method is used }
-#'   \item{\code{setEffoFGmap()}}{This method is used }
-#'   \item{\code{setBioFGmat()}}{This method is used }
-#'   \item{\code{setCutFGmap()}}{This method is used }
-#'   \item{\code{setIchFGlin(numCut)}}{This method is used }
-#'   \item{\code{setSilFGlin(numCut)}}{This method is used }
+#'   \item{\code{initialize(grid_path)}}{This method is used to initialize the spatial information of the area of study.}
+#'   \item{\code{setAreaGrid()}}{This method is used to compute the total area covered by the environmental grid.}
+#'   \item{\code{setAreaStrata(vectorStrata)}}{This method is used to compute the area covered by each depth strata.}
+#'   \item{\code{setWeightStrata()}}{This method is used to compute the area covered by each depth strata relative to the total area of the grid.}
+#'   \item{\code{loadHarbDbf(dbf_path)}}{This method is used to load a dbf file of coordinates and harbours names.}
+#'   \item{\code{set_ggMapFgSurvey(rawSampCoo)}}{This method is used to setup the plot of the spatial distribution of survey data.}
+#'   \item{\code{set_ggMapFgFishery(rawSampCoo)}}{This method is used to setup the plot of the spatial distribution of fishery data.}
+#'   \item{\code{createGridBbox()}}{This method is used to setup the bounding box of the environment grid.}
+#'   \item{\code{getGooMap()}}{This method is used to retrieve the satellite view of the area of study.}
+#'   \item{\code{setGooPlot()}}{This method is used to setup the base plot of the area of study.}
+#'   \item{\code{setPlotRange()}}{This method is used to setup the ranges of the base plot.}
+#'   \item{\code{setGooGrid()}}{This method is used to setup the plot of the environment grid.}
+#'   \item{\code{plotGooGrid()}}{This method is used to plot the environment grid.}
+#'   \item{\code{plotGooGridData(grid_data)}}{This method is used to plot the environment grid.}
+#'   \item{\code{setSampColScale(fac_col)}}{This method is used to setup the color scale for the species' plots.}
+#'   \item{\code{plotGooSpeSur(poi_data)}}{This method is used to plot the spatial distribution of the survey data}
+#'   \item{\code{plotGooSpeFis(poi_data)}}{This method is used to plot the spatial distribution of the fishery data}
+#'   \item{\code{setGooBbox()}}{This method is used to setup the bounding box of the environment grid.}
+#'   \item{\code{plotGooBbox()}}{This method is used to plot the bounding box of the environment grid.}
+#'   \item{\code{setGridPath(path2grid)}}{This method is used to store the path to the grid file.}
+#'   \item{\code{setGridName()}}{This method is used to store the name of the grid file.}
+#'   \item{\code{loadGridShp()}}{This method is used to load the grid file.}
+#'   \item{\code{setBioPath()}}{This method is used to store the path of the seabed substrates file.}
+#'   \item{\code{setBioName()}}{This method is used to store the name of the seabed substrates file.}
+#'   \item{\code{loadBioShp()}}{This method is used to load the seabed substrates file.}
+#'   \item{\code{addBioShp(bio_path)}}{This method is used store the path and name of the seabed file and then load the SpatialPoligon object.}
+#'   \item{\code{loadBioDF(bio_path)}}{This method is used to load a Data.Frame of seabed substrates.}
+#'   \item{\code{plotBioDF()}}{This method is used to plot the map of substrates.}
+#'   \item{\code{setGgBioDF()}}{This method is used to setup the plot of substrates.}
+#'   \item{\code{ggplotBioDF()}}{This method is used to plot the map of substrates.}
+#'   \item{\code{createPolySet()}}{This method is used to store the PolySet object of the Environment grid.}
+#'   \item{\code{fortifyGridShp()}}{This method is used to fortify the SpatialPolygon od the Environment grid.}
+#'   \item{\code{setNumCell()}}{This method is used to setup the number of cells in the grid.}
+#'   \item{\code{setGridCenter()}}{This method is used to store the coordinates of cells centroids.}
+#'   \item{\code{getGridBath()}}{This method is used to retrieve the bathymetric matrix.}
+#'   \item{\code{saveGridBath(bathy_path)}}{This method is used to save the bathymetric matrix to file.}
+#'   \item{\code{loadGridBath(bathy_path)}}{This method is used to load the bathymetric matrix from file.}
+#'   \item{\code{getCentDept()}}{This method is used to assign the depth to each cell centroids.}
+#'   \item{\code{setGgDepth(isoLine)}}{This method is used to setup the bathymetric plot.}
+#'   \item{\code{ggplotGridBathy()}}{This method is used to plot the bathymetric map.}
+#'   \item{\code{plotSamMap(title, celCol)}}{This method is used to plot the Environment map.}
+#'   \item{\code{plotCoho(abbs)}}{This method is used to plot the spatial distribution of the species.}
+#'   \item{\code{setClusInpu(whiData, howData)}}{This method is used to setup the input for the spatial clustering}
+#'   \item{\code{calcFishGrou(numCuts, minsize, maxsize, modeska, skater_method, nei_queen)}}{This method is used to run the spatial clustering routine}
+#'   \item{\code{plotFishGrou(ind_clu)}}{This method is used to plot the fishing ground configuration}
+#'   \item{\code{setCutResult(ind_clu)}}{This method is used to choose a fishing ground configuration}
+#'   \item{\code{setDepthFGbox()}}{This method is used to setup the boxplot of depth by fishing ground}
+#'   \item{\code{setEffoFGbox()}}{This method is used to setup the boxplot of effort by fishing ground}
+#'   \item{\code{setEffoFGmap()}}{This method is used to setup the map of effort by fishing ground}
+#'   \item{\code{setBioFGmat()}}{This method is used to setup the tileplot of substrate by fishing ground}
+#'   \item{\code{setCutFGmap()}}{This method is used to plot the fishing ground map}
+#'   \item{\code{setIchFGlin(numCut)}}{This method is used to setup the plot of the Calinski-Harabasz index}
+#'   \item{\code{setSilFGlin(numCut)}}{This method is used to setup the plot of the Silhouette index}
 #'   }
 
 SampleMap <- R6Class("sampleMap",
@@ -3381,7 +3384,6 @@ SampleMap <- R6Class("sampleMap",
                        gridPolySet = NULL,
                        gridFortify = NULL,
                        nCells = NULL,
-                       sCells = NULL, # cMedits
                        griCent = NULL, # gCenter
                        gridBathy = NULL,
                        centDept = NULL,
@@ -3390,7 +3392,6 @@ SampleMap <- R6Class("sampleMap",
                        indSil = NULL, # vect clusters silhouette output calcfish
                        indCH = NULL, # vect index CH output calcfish
                        cutFG = NULL,
-                       tmpCut = NULL,
                        availData = NULL,
                        rawInpu = NULL,
                        cutResult = NULL,
@@ -3921,7 +3922,6 @@ SampleMap <- R6Class("sampleMap",
                        #   names(cutResShpCent) <<- c("Lon", "Lat", "FG")
                        # },
                        setCutResult = function(ind_clu){
-                         # tmpCut <<- ind_clu
                          # cutResult <<- data.frame(clusInpu, FG = as.factor(clusMat[,ind_clu]))
                          cutResult <<- data.frame(do.call(cbind, rawInpu), FG = as.factor(clusMat[,ind_clu]))
                          cutResEffo <<- data.frame(Effort = apply(cutResult[, grep("Year", colnames(cutResult))],1, mean),
