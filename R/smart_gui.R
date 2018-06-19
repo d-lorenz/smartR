@@ -7,7 +7,7 @@
 #'
 #' @usage smart_gui()
 #'
-#' @export smart_gui
+#'
 #'
 
 smart_gui <- function(){

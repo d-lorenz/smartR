@@ -5,9 +5,6 @@
 \alias{SmartProject}
 \title{SmartProject Class}
 \format{\code{\link{R6Class}} object.}
-\usage{
-SmartProject
-}
 \value{
 Object of \code{\link{R6Class}} with attributes and methods to fullfill
 a complete analisys with the SMART approach.
