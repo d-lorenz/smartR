@@ -26,7 +26,7 @@ smart_gui <- function(){
   pathBathymetry <- "/Users/Lomo/Documents/Uni/R/project/smartR_data/Environment/Bathymetry/bathyMatrix.rData"
   
   # RAW VMS
-  # pathRawVMS <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/smart_rawEffort_new.rData"
+  pathRawVMS <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/smart_rawEffort_new.rData"
   
   # GRID EFFORT AA
   pathEffortAA <- "/Users/Lomo/Documents/Uni/R/project/smartR_data/Fleet/Effort/effortEnha.rData"
@@ -2929,12 +2929,12 @@ smart_gui <- function(){
                                  y = my_project$simBanFG, all.x = TRUE)
               
               print(my_project$sampMap$gooMapPlot +
-                      geom_polygon(aes(x = long, y = lat, group = group, fill = Banned),
+                      geom_polygon(aes_(x = ~long, y = ~lat, group = ~group, fill = ~Banned),
                                    colour = "black", size = 0.1,
                                    data = grid_data, alpha = 0.8) +
                       scale_fill_manual("Banned Areas",
                                         values = c("Banned" = "red", "0" = "blue")) +
-                      geom_text(aes(label = FG, x = Lon, y = Lat),
+                      geom_text(aes_(label = ~FG, x = ~Lon, y = ~Lat),
                                 data = tmp_coo, size = 2) +
                       theme(legend.position='none') +
                       xlab("Longitude") + ylab("Latitude") +
@@ -2960,12 +2960,12 @@ smart_gui <- function(){
                        y = my_project$simBanFG, all.x = TRUE)
     tmp_coo <- my_project$sampMap$cutResShpCent
     print(my_project$sampMap$gooMapPlot +
-            geom_polygon(aes(x = long, y = lat, group = group, fill = Banned),
+            geom_polygon(aes_(x = ~long, y = ~lat, group = ~group, fill = ~Banned),
                          colour = "black", size = 0.1,
                          data = grid_data, alpha = 0.8) +
             scale_fill_manual("Banned Areas",
                               values = c("Banned" = "red", "0" = "blue")) +
-            geom_text(aes(label = FG, x = Lon, y = Lat),
+            geom_text(aes_(label = ~FG, x = ~Lon, y = ~Lat),
                       data = tmp_coo, size = 2) +
             theme(legend.position='none') +
             xlab("Longitude") + ylab("Latitude") +
