@@ -136,11 +136,181 @@ SmartProject <- R6Class("smartProject",
                           simCostRevenue = NULL,
                           simResPlot = NULL,
                           outGmat = NULL,
-                          # outNVlst = NULL,
                           outOptimEffo = NULL,
                           outWeiProp = NULL,
                           outWeiPropQ = NULL,
-                          # economy = NULL,
+                          assessData = list(),
+                          setAssessData = function(specie){
+                            assessData[[specie]] <<- list()
+                            indSpeFis <- which(specieInFishery == specie)
+                            indSpeSur <- which(specieInSurvey == specie)
+                            
+                            assessData[[specie]]$Amax <<- fisheryBySpecie[[indSpeFis]]$nCoho
+                            assessData[[specie]]$Yr1 <<- as.numeric(as.character(min(years(fisheryBySpecie[[indSpeFis]]$rawLFD$Date))))
+                            assessData[[specie]]$Yr2 <<- as.numeric(as.character(max(years(fisheryBySpecie[[indSpeFis]]$rawLFD$Date))))
+                            assessData[[specie]]$Nyear <<- assessData[[specie]]$Yr2 - assessData[[specie]]$Yr1 + 1
+                            assessData[[specie]]$Nlen <<- 2 
+                            assessData[[specie]]$NCAL <<- 0
+                            assessData[[specie]]$Nsurvey <<- 1
+                            assessData[[specie]]$NSAA <<- assessData[[specie]]$Nyear
+                            assessData[[specie]]$NSAL <<- 0
+                            ## Catch
+                            tmpDF <- aggregate(Production ~ Year, data.frame(Year = as.character(fleet$effoAllLoa$Year),
+                                                                             Production = apply(fleet$predProd[[specie]], 1, sum),
+                                                                             stringsAsFactors = FALSE),
+                                               sum)
+                            assessData[[specie]]$Catch <- tmpDF$Production
+                            ## Catch at Age
+                            for(sex in 1:length(names(fisheryBySpecie[[indSpeFis]]$groMixout))){
+                              if(sex == 1){
+                                tmpGro <- fisheryBySpecie[[indSpeFis]]$groMixout[[sex]][,c("FG", "Age", "Date")]
+                              }else{
+                                tmpGro <- cbind(tmpGro, fisheryBySpecie[[indSpeFis]]$groMixout[[sex]][,c("FG", "Age", "Date")])
+                              }
+                            }
+                            tmpGro$Season <- factor(quarters(tmpGro$Date+30), levels = c("1Q", "2Q", "3Q", "4Q"), labels = c("winter", "spring", "summer", "fall"))
+                            tmpAstat <- ddply(tmpGro, .(FG, Age, Season), summarise, Freq = length(Age))
+                            tmpAstat <- tmpAstat[tmpAstat$Freq > 0,]
+                            outWeiQ <- list()
+                            for(season in c("winter", "spring", "summer", "fall")){
+                              preCAA <- data.frame(FG = 1:(sampMap$cutFG+1))
+                              preCAA <- cbind(preCAA, setNames(lapply(0:(fisheryBySpecie[[indSpeFis]]$nCoho-1), function(x) x = NA), 0:(fisheryBySpecie[[indSpeFis]]$nCoho-1)))
+                              for(i in 1:nrow(preCAA)){
+                                tempRev <- tmpAstat[tmpAstat$FG == i & tmpAstat$Season == season,]
+                                if(nrow(tempRev) > 0){
+                                  tempRev$propAge <- tempRev$Freq/sum(tempRev$Freq)
+                                  outClass <- merge(data.frame(Age = 0:(fisheryBySpecie[[indSpeFis]]$nCoho-1)), aggregate(formula = propAge ~ Age, data = tempRev, FUN = sum), all.x = TRUE)
+                                  preCAA[i,2:(fisheryBySpecie[[indSpeFis]]$nCoho+1)] <- outClass$propAge
+                                }
+                              }
+                              outWeiQ[[season]] <- preCAA
+                            }
+                            outProp <- matrix(data = 0,
+                                              nrow = nrow(fleet$predProd[[specie]]),
+                                              ncol = fisheryBySpecie[[indSpeFis]]$nCoho)
+                            tmpSeason <- data.frame(Month = 1:12,
+                                                    Season = c("winter", "winter", "spring",
+                                                               "spring", "spring", "summer",
+                                                               "summer", "summer", "fall",
+                                                               "fall", "fall", "winter"))
+                            for(season in c("winter", "spring", "summer", "fall")){
+                              tmpOutProp <- apply(fleet$predProd[[species]][fleet$effoAllLoa$MonthNum %in% tmpSeason$Month[tmpSeason$Season == season],], 1, function(x) apply(outWeiQ[[season]][,-1]*t(x),2, sum, na.rm = TRUE))
+                              outProp[fleet$effoAllLoa$MonthNum %in% tmpSeason$Month[tmpSeason$Season == season],] <- t(tmpOutProp)
+                            }
+                            outCAA <- aggregate(. ~ Year, data.frame(Year = fleet$effoAllLoa$Year, outProp), sum)
+                            
+                            assessData[[specie]]$YCAA <<- as.numeric(as.character(outCAA[,1]))
+                            assessData[[specie]]$CAA <<- outCAA[,-1]/apply(outCAA[,-1], 1, sum)
+                            assessData[[specie]]$NCAA <<- nrow(assessData[[specie]]$CAA)
+                            assessData[[specie]]$YCAL <<- 0 
+                            assessData[[specie]]$CAL <<- matrix(0, ncol = assessData[[specie]]$Nlen, nrow = assessData[[specie]]$NCAL)
+                            
+                            ## Survey at Age
+                            for(sex in 1:length(names(surveyBySpecie[[indSpeSur]]$groMixout))){
+                              if(sex == 1){
+                                tmpAL <- table(round(surveyBySpecie[[indSpeSur]]$groMixout[[sex]]$Length),
+                                               surveyBySpecie[[indSpeSur]]$groMixout[[sex]]$Age)
+                                tmpAL <- round(tmpAL/apply(tmpAL, 1, sum), 2)
+                                tmpAlDf <- as.data.frame.matrix(tmpAL) 
+                                tmpAlDf$Class <- rownames(tmpAL)
+                                tmpAbu <- aggregate(. ~ Class + Year, surveyBySpecie[[indSpeSur]]$abuAvg[,c("Class", "Year", names(surveyBySpecie[[indSpeSur]]$groMixout)[sex])], sum)
+                                tmpMem <- merge(tmpAbu, tmpAlDf)
+                                for(numCoh in 1:ncol(tmpAL)){
+                                  tmpMem[,3+numCoh] <- tmpMem[,3+numCoh]*tmpMem[,3]
+                                }
+                                outMem <- tmpMem
+                                }else{
+                                  tmpAL <- table(round(surveyBySpecie[[indSpeSur]]$groMixout[[sex]]$Length),
+                                                 surveyBySpecie[[indSpeSur]]$groMixout[[sex]]$Age)
+                                  tmpAL <- round(tmpAL/apply(tmpAL, 1, sum), 2)
+                                  tmpAlDf <- as.data.frame.matrix(tmpAL) 
+                                  tmpAlDf$Class <- rownames(tmpAL)
+                                  tmpAbu <- aggregate(. ~ Class + Year, surveyBySpecie[[indSpeSur]]$abuAvg[,c("Class", "Year", names(surveyBySpecie[[indSpeSur]]$groMixout)[sex])], sum)
+                                  tmpMem <- merge(tmpAbu, tmpAlDf)
+                                  for(numCoh in 1:ncol(tmpAL)){
+                                    tmpMem[,3+numCoh] <- tmpMem[,3+numCoh]*tmpMem[,3]
+                                  }
+                                  outMem <- cbind(outMem, tmpMem)
+                                  }
+                            }
+                            outSAA <- aggregate(. ~ Year, outMem[,c(2, 4:(4+(surveyBySpecie[[indSpeSur]]$nCoho-1)))], sum)
+                            
+                            assessData[[specie]]$SAA <<- outSAA[,-1]
+                            # assessData[[specie]]$SAA <- assessData[[specie]]$SAA[-7,]
+                            # assessData[[specie]]$YSAA <- as.numeric(as.character(outSAA[,1]))[-7]
+                            assessData[[specie]]$YSAA <<- as.numeric(as.character(outSAA[,1]))
+                            assessData[[specie]]$SSAA <<- rep(1, nrow(assessData[[specie]]$SAA))
+                            assessData[[specie]]$SAL <<- matrix(0, ncol = assessData[[specie]]$Nlen, nrow = assessData[[specie]]$NSAL)
+                            assessData[[specie]]$YSAL <<- 0
+                            assessData[[specie]]$SSAL <<- 0
+                            assessData[[specie]]$SelsurvType <<- 1
+                            assessData[[specie]]$SelexType <<- 1
+                            
+                            ### Mean Weight
+                            for(sex in 1:length(names(fisheryBySpecie[[indSpeFis]]$groMixout))){
+                              if(sex == 1){
+                                tmpWei <- fisheryBySpecie[[indSpeFis]]$groMixout[[sex]][,c("Age", "Weight")]
+                              }else{
+                                tmpWei <- cbind(tmpWei, fisheryBySpecie[[indSpeFis]]$groMixout[[sex]][,c("Age", "Weight")])
+                              }
+                            }
+                            assessData[[specie]]$WeightS <<- (ddply(tmpWei, .(Age), summarise, coh.mean = mean(Weight))/1000)[,2]
+                            assessData[[specie]]$WeightH <<- assessData[[specie]]$WeightS
+                            
+                            assessData[[specie]]$Qinit <<- 0
+                            assessData[[specie]]$InitN <<- rep(0, fisheryBySpecie[[indSpeFis]]$nCoho)
+                            assessData[[specie]]$InitR0 <<- 20
+                            
+                            ### Growth
+                            for(sex in 1:length(names(fisheryBySpecie[[indSpeFis]]$groPars))){
+                              if(sex == 1){
+                                tmpLHat <- fisheryBySpecie[[indSpeFis]]$groPars[[sex]]$LHat
+                                tmpkHat <- fisheryBySpecie[[indSpeFis]]$groPars[[sex]]$kHat
+                                tmpt0Hat <- fisheryBySpecie[[indSpeFis]]$groPars[[sex]]$t0Hat
+                              }else{
+                                tmpLHat <- cbind(tmpLHat, fisheryBySpecie[[indSpeFis]]$groPars[[sex]]$LHat)
+                                tmpkHat <- cbind(tmpkHat, fisheryBySpecie[[indSpeFis]]$groPars[[sex]]$kHat)
+                                tmpt0Hat <- cbind(tmpt0Hat, fisheryBySpecie[[indSpeFis]]$groPars[[sex]]$t0Hat)
+                              }
+                            }
+                            GrowthAL <- c(mean(tmpLHat),
+                                          mean(tmpkHat),
+                                          -mean(tmpt0Hat),
+                                          0.15,
+                                          0.1)
+                            
+                            for(sex in 1:length(names(fisheryBySpecie[[indSpeFis]]$LWpar))){
+                              if(sex == 1){
+                                tmpAlpha <- fisheryBySpecie[[indSpeFis]]$LWpar[[sex]]$alpha
+                                tmpBeta <- fisheryBySpecie[[indSpeFis]]$LWpar[[sex]]$beta
+                              }else{
+                                tmpAlpha <- cbind(tmpAlpha, fisheryBySpecie[[indSpeFis]]$LWpar[[sex]]$alpha)
+                                tmpBeta <- cbind(tmpBeta, fisheryBySpecie[[indSpeFis]]$LWpar[[sex]]$beta)
+                              }
+                            }
+                            GrowthLW <- c(mean(tmpAlpha),
+                                          mean(tmpBeta))
+                            LenClassMax <- seq(from = assessData[[specie]]$Nlen, by = assessData[[specie]]$Nlen, length = assessData[[specie]]$Nlen)
+                            GetALK<-GetALKMW(GrowthAL[1],GrowthAL[2],GrowthAL[3],GrowthAL[4],GrowthAL[5],GrowthLW[1],GrowthLW[2],assessData[[specie]]$Amax,LenClassMax,0.0)
+                            ALK1 <- GetALK$ALK
+                            GetALK<-GetALKMW(GrowthAL[1],GrowthAL[2],GrowthAL[3],GrowthAL[4],GrowthAL[5],GrowthLW[1],GrowthLW[2],assessData[[specie]]$Amax,LenClassMax,0.5)
+                            ALK2 <- GetALK$ALK
+                            WeightLen <- GrowthLW[1]*GetALK$Lengths^GrowthLW[2]/1000
+                            assessData[[specie]]$ALK1 <<- ALK1
+                            assessData[[specie]]$ALK2 <<- ALK2
+                            assessData[[specie]]$WeightLen <<- WeightLen
+                            SurvBio <- matrix(0,nrow=10,ncol=assessData[[specie]]$Nyear)
+                            SurvBio[1,] <- apply(t(assessData[[specie]]$SAA)*assessData[[specie]]$WeightH, 2, sum)
+                            assessData[[specie]]$SurvBio <<- SurvBio
+                            
+                            # from GUI
+                            assessData[[specie]]$M <<- c(2.3, 1.1, 0.8, 0.7)
+                            assessData[[specie]]$Mat <<- c(0.5, 1, 1, 1)
+                            assessData[[specie]]$Selex <<- c(0.1, 0.2, 0.6, 1)
+                            assessData[[specie]]$SelexSurv <<- matrix(0,nrow=10,ncol=assessData[[specie]]$Amax)
+                            assessData[[specie]]$SelexSurv[1,] <<- c(0.2, 0.5, 1, 1)
+                            assessData[[specie]]$PropZBeforeMat <<- 0.5
+                          },
                           setCostInput = function(){
                             if(is.null(fleet$effortIndex)) stop("Missing Effort Index")
                             if(is.null(fleet$daysAtSea)) stop("Missing Days at Sea Index")
