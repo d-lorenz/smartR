@@ -219,19 +219,19 @@ SmartProject <- R6Class("smartProject",
                                   tmpMem[,3+numCoh] <- tmpMem[,3+numCoh]*tmpMem[,3]
                                 }
                                 outMem <- tmpMem
-                                }else{
-                                  tmpAL <- table(round(surveyBySpecie[[indSpeSur]]$groMixout[[sex]]$Length),
-                                                 surveyBySpecie[[indSpeSur]]$groMixout[[sex]]$Age)
-                                  tmpAL <- round(tmpAL/apply(tmpAL, 1, sum), 2)
-                                  tmpAlDf <- as.data.frame.matrix(tmpAL) 
-                                  tmpAlDf$Class <- rownames(tmpAL)
-                                  tmpAbu <- aggregate(. ~ Class + Year, surveyBySpecie[[indSpeSur]]$abuAvg[,c("Class", "Year", names(surveyBySpecie[[indSpeSur]]$groMixout)[sex])], sum)
-                                  tmpMem <- merge(tmpAbu, tmpAlDf)
-                                  for(numCoh in 1:ncol(tmpAL)){
-                                    tmpMem[,3+numCoh] <- tmpMem[,3+numCoh]*tmpMem[,3]
-                                  }
-                                  outMem <- cbind(outMem, tmpMem)
-                                  }
+                              }else{
+                                tmpAL <- table(round(surveyBySpecie[[indSpeSur]]$groMixout[[sex]]$Length),
+                                               surveyBySpecie[[indSpeSur]]$groMixout[[sex]]$Age)
+                                tmpAL <- round(tmpAL/apply(tmpAL, 1, sum), 2)
+                                tmpAlDf <- as.data.frame.matrix(tmpAL) 
+                                tmpAlDf$Class <- rownames(tmpAL)
+                                tmpAbu <- aggregate(. ~ Class + Year, surveyBySpecie[[indSpeSur]]$abuAvg[,c("Class", "Year", names(surveyBySpecie[[indSpeSur]]$groMixout)[sex])], sum)
+                                tmpMem <- merge(tmpAbu, tmpAlDf)
+                                for(numCoh in 1:ncol(tmpAL)){
+                                  tmpMem[,3+numCoh] <- tmpMem[,3+numCoh]*tmpMem[,3]
+                                }
+                                outMem <- cbind(outMem, tmpMem)
+                              }
                             }
                             outSAA <- aggregate(. ~ Year, outMem[,c(2, 4:(4+(surveyBySpecie[[indSpeSur]]$nCoho-1)))], sum)
                             
