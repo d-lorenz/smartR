@@ -194,7 +194,7 @@ SmartProject <- R6Class("smartProject",
                                                                "summer", "summer", "fall",
                                                                "fall", "fall", "winter"))
                             for(season in c("winter", "spring", "summer", "fall")){
-                              tmpOutProp <- apply(fleet$predProd[[species]][fleet$effoAllLoa$MonthNum %in% tmpSeason$Month[tmpSeason$Season == season],], 1, function(x) apply(outWeiQ[[season]][,-1]*t(x),2, sum, na.rm = TRUE))
+                              tmpOutProp <- apply(fleet$predProd[[specie]][fleet$effoAllLoa$MonthNum %in% tmpSeason$Month[tmpSeason$Season == season],], 1, function(x) apply(outWeiQ[[season]][,-1]*t(x),2, sum, na.rm = TRUE))
                               outProp[fleet$effoAllLoa$MonthNum %in% tmpSeason$Month[tmpSeason$Season == season],] <- t(tmpOutProp)
                             }
                             outCAA <- aggregate(. ~ Year, data.frame(Year = fleet$effoAllLoa$Year, outProp), sum)
