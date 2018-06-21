@@ -159,7 +159,7 @@ SmartProject <- R6Class("smartProject",
                                                                              Production = apply(fleet$predProd[[specie]], 1, sum),
                                                                              stringsAsFactors = FALSE),
                                                sum)
-                            assessData[[specie]]$Catch <- tmpDF$Production
+                            assessData[[specie]]$Catch <<- tmpDF$Production
                             ## Catch at Age
                             for(sex in 1:length(names(fisheryBySpecie[[indSpeFis]]$groMixout))){
                               if(sex == 1){
