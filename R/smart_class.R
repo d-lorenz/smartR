@@ -230,6 +230,7 @@ SmartProject <- R6Class("smartProject",
                                 for(numCoh in 1:ncol(tmpAL)){
                                   tmpMem[,3+numCoh] <- tmpMem[,3+numCoh]*tmpMem[,3]
                                 }
+                                colnames(tmpMem)[3] <- "Num"
                                 outMem <- rbind(outMem, tmpMem)
                               }
                             }
