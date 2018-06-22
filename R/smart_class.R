@@ -165,7 +165,7 @@ SmartProject <- R6Class("smartProject",
                               if(sex == 1){
                                 tmpGro <- fisheryBySpecie[[indSpeFis]]$groMixout[[sex]][,c("FG", "Age", "Date")]
                               }else{
-                                tmpGro <- cbind(tmpGro, fisheryBySpecie[[indSpeFis]]$groMixout[[sex]][,c("FG", "Age", "Date")])
+                                tmpGro <- rbind(tmpGro, fisheryBySpecie[[indSpeFis]]$groMixout[[sex]][,c("FG", "Age", "Date")])
                               }
                             }
                             tmpGro$Season <- factor(quarters(tmpGro$Date+30), levels = c("1Q", "2Q", "3Q", "4Q"), labels = c("winter", "spring", "summer", "fall"))
@@ -230,7 +230,7 @@ SmartProject <- R6Class("smartProject",
                                 for(numCoh in 1:ncol(tmpAL)){
                                   tmpMem[,3+numCoh] <- tmpMem[,3+numCoh]*tmpMem[,3]
                                 }
-                                outMem <- cbind(outMem, tmpMem)
+                                outMem <- rbind(outMem, tmpMem)
                               }
                             }
                             outSAA <- aggregate(. ~ Year, outMem[,c(2, 4:(4+(surveyBySpecie[[indSpeSur]]$nCoho-1)))], sum)
@@ -251,7 +251,7 @@ SmartProject <- R6Class("smartProject",
                               if(sex == 1){
                                 tmpWei <- fisheryBySpecie[[indSpeFis]]$groMixout[[sex]][,c("Age", "Weight")]
                               }else{
-                                tmpWei <- cbind(tmpWei, fisheryBySpecie[[indSpeFis]]$groMixout[[sex]][,c("Age", "Weight")])
+                                tmpWei <- rbind(tmpWei, fisheryBySpecie[[indSpeFis]]$groMixout[[sex]][,c("Age", "Weight")])
                               }
                             }
                             assessData[[specie]]$WeightS <<- (ddply(tmpWei, .(Age), summarise, coh.mean = mean(Weight))/1000)[,2]
