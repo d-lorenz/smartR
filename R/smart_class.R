@@ -3592,15 +3592,17 @@ SampleMap <- R6Class("sampleMap",
                        gooBbox = NULL,
                        sampColScale = NULL,
                        plotRange = NULL,
-                       initialize = function(grid_path){
-                         setGridPath(grid_path)
-                         setGridName()
-                         loadGridShp()
-                         setNumCell()
-                         createPolySet()
-                         fortifyGridShp()
-                         setGridCenter()
-                         createGridBbox()
+                       initialize = function(grid_path = ""){
+                         if(grid_path != ""){
+                           setGridPath(grid_path)
+                           setGridName()
+                           loadGridShp()
+                           setNumCell()
+                           createPolySet()
+                           fortifyGridShp()
+                           setGridCenter()
+                           createGridBbox()
+                         }
                        },
                        setAreaGrid = function(){
                          cat("\n\nComputing Total Area... ", sep = "")
