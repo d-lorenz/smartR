@@ -417,7 +417,7 @@ fit1specie <- function(Pars, optFun, FullMin = FALSE, DoVarCo = FALSE, ...){
   #Res <- optim(Res$par, optFun, method = "BFGS", hessian = FALSE, DoEst = TRUE, ...)
   #print(Res$value)
   Npar <- length(Res$par)
-  cat("number of parameters  = ", Npar, "\n")
+  # cat("number of parameters  = ", Npar, "\n")
   print(Res)
   SSBEst <- fun1opt(Res$par, DoEst = FALSE, ...)$SSB
   Nyear <- length(SSBEst)
@@ -432,44 +432,42 @@ fit1specie <- function(Pars, optFun, FullMin = FALSE, DoVarCo = FALSE, ...){
   
   # Now do a full minimization
   if(FullMin == TRUE){
-    print("Doing full minimization")
+    cat("\nFull minimization")
     Res <- optim(Res$par, optFun, method = "BFGS", hessian = FALSE, DoEst = TRUE, ...)
-    print(Res$value)
+    cat("\n", Res$value)
     Best <- 10000
     while(abs(Res$value-Best)>0.01){
       Best <- Res$value  
       Res <- optim(Res$par, optFun, hessian = FALSE, method = "BFGS", DoEst = TRUE, ...)
-      cat(Res$value, "BFGS", "\n")
+      cat("\n", Res$value, "BFGS")
       Best <- Res$value  
       Res <- optim(Res$par, optFun, hessian = FALSE, method = "CG", DoEst = TRUE, ...)
-      cat(Res$value, "CG", "\n")
+      cat("\n", Res$value, "CG")
     }  
     
-    # print results to a test file
-    print("Done convergence")
     Outputs <- fun1opt(Res$par, DoEst = FALSE, ...)
     Outputs$par <- Res$par
-    print(Res$par)
+    # print(Res$par)
     Outputs$VarCo <- matrix(0, ncol = Npar, nrow = Npar)
     Outputs$SSBSD <- rep(0, Nyear)
     
     Res <- optim(Res$par, optFun, method = "BFGS", hessian = TRUE, DoEst = TRUE, ...)
     Outputs <- fun1opt(Res$par, DoEst = FALSE, ...)
     Outputs$par <- Res$par
-    print(Res$par)
+    # print(Res$par)
     Outputs$VarCo <- matrix(0, ncol = Npar, nrow = Npar)
     Outputs$SSBSD <- rep(0, Nyear)
-    cat("Final Obj Function", Res$value, "\n")
+    cat("\nFinal Obj Function", Res$value)
     
     # This section computes the variance covariance matrix and hence the standard errors for SSB
     if(DoVarCo == TRUE){  
-      print("Attempting to solve for the variance-covariance matrix")
+      cat("\nSolving variance-covariance matrix")
       VarCo <- solve(Res$hessian)
       Res$VarCo <- VarCo
       
       SSBEst <- fun1opt(Res$par, DoEst = FALSE, ...)$SSB
       Nyear <- length(SSBEst)
-      print(SSBEst)
+      # print(SSBEst)
       
       # Set up the derivative matrix
       ParStore <- Res$par
@@ -501,7 +499,7 @@ fit1specie <- function(Pars, optFun, FullMin = FALSE, DoVarCo = FALSE, ...){
       Res$VarCo <- matrix(0, ncol = Npar, nrow = Npar)
     }
   }
-  print("Completed minimization")
+  cat("\nMinimization complete")
   return(Res)
 }  
 
