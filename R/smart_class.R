@@ -140,6 +140,8 @@ SmartProject <- R6Class("smartProject",
                           outWeiProp = NULL,
                           outWeiPropQ = NULL,
                           assessData = list(),
+                          assSingleRes = list(),
+                          assSinglePlot = list(),
                           setAssessData = function(specie){
                             assessData[[specie]] <<- list()
                             indSpeFis <- which(specieInFishery == specie)
@@ -312,6 +314,99 @@ SmartProject <- R6Class("smartProject",
                             assessData[[specie]]$SelexSurv <<- matrix(0,nrow=10,ncol=assessData[[specie]]$Amax)
                             assessData[[specie]]$SelexSurv[1,] <<- c(0.2, 0.5, 1, 1)
                             assessData[[specie]]$PropZBeforeMat <<- 0.5
+                          },
+                          assSingle = function(specie = ""){
+                            if(is.null(assessData[[specie]])){
+                              stop("Missing Data! Run setAssesData() first.")
+                            }
+                            cat("\n\nAssessing ", specie, sep = "")
+                            assSingleRes[[specie]] <<- list()
+                            Nyear <- assessData[[specie]]$Nyear
+                            Amax <- assessData[[specie]]$Amax
+                            Nsurvey <- assessData[[specie]]$Nsurvey
+                            LogR0 <- assessData[[specie]]$InitR0
+                            RecDev <- rep(0,assessData[[specie]]$Nyear)
+                            Qinit <- rep(assessData[[specie]]$Qinit,Nsurvey)
+                            VecS <- NULL
+                            VecC <- NULL
+                            if(assessData[[specie]]$SelsurvType==1){    
+                              VecS <- rep(0,Nsurvey*(Amax-2))
+                              for(Isurv in 1:Nsurvey){  
+                                Offset <- (Amax-2)*(Isurv-1)
+                                for(Iage in 1:(Amax-2)){
+                                  VecS[Offset+Iage] = log((1-assessData[[specie]]$SelexSurv[Isurv,Iage])/assessData[[specie]]$SelexSurv[Isurv,Iage])
+                                }
+                              }  
+                            }
+                            if(assessData[[specie]]$SelexType==1){  
+                              VecC <- rep(0,Amax-2)
+                              for(Iage in 1:(Amax-2)){
+                                VecC[Iage] = log((1-assessData[[specie]]$Selex[Iage])/assessData[[specie]]$Selex[Iage])
+                              }
+                            }
+                            Fvals <- rep(0,Nyear)
+                            InitF <- log(1)
+                            Pars <- c(assessData[[specie]]$InitN, RecDev, LogR0, VecS, VecC, Fvals, InitF)
+                            Npar <- length(Pars)
+                            Res <- fit1specie(Pars,
+                                              fun1opt,
+                                              FullMin = TRUE,
+                                              DoVarCo = TRUE,
+                                              SpeciesData = assessData[[specie]])
+                            assSingleRes[[specie]] <<- fun1opt(Res$par,
+                                                               DoEst = FALSE,
+                                                               SpeciesData = assessData[[specie]])
+                            assSingleRes[[specie]]$par <<- Res$par
+                            assSingleRes[[specie]]$VarCo <<- Res$VarCo
+                            assSingleRes[[specie]]$SSBSD <<- Res$SSBSD
+                            cat("\n", specie," Assessment Complete!", sep = "")
+                          },
+                          setPlotSingle = function(specie = ""){
+                            if(is.null(assSingleRes[[specie]])){
+                              stop("\n\nMissing Results! Run Assessment First.")
+                            }
+                            assSinglePlot[[specie]] <<- list()
+                            
+                            ssbData <- data.frame(Year = 1:assessData[[specie]]$Nyear+assessData[[specie]]$Yr1-1,
+                                                  SSB = assSingleRes[[specie]]$SSB,
+                                                  Lower = assSingleRes[[specie]]$SSB-1.96*assSingleRes[[specie]]$SSBSD,
+                                                  Upper = assSingleRes[[specie]]$SSB+1.96*assSingleRes[[specie]]$SSBSD)
+                            
+                            assSinglePlot[[specie]]$SSB <<- ggplot_SSBsingle(choSpecie = specie, assData = ssbData)
+                            
+                            
+                            survData <- list()
+                            tmpObs <- assSingleRes[[specie]]$ObsSAA
+                            tmpObs$Year <- assSingleRes[[specie]]$YSAA
+                            survData$obsSAA <- melt(tmpObs, id.vars = "Year",
+                                                    variable.name = "Age", value.name = "Index")
+                            survData$obsSAA$Lower <- survData$obsSAA$Index*exp(-1.96*assSingleRes[[specie]]$CvIndex) 
+                            survData$obsSAA$Upper <- survData$obsSAA$Index*exp(+1.96*assSingleRes[[specie]]$CvIndex)
+                            levels(survData$obsSAA$Age) <- paste("Age", levels(survData$obsSAA$Age))
+                            
+                            tmpPred <- as.data.frame(assSingleRes[[specie]]$PredSAA)
+                            colnames(tmpPred) <- colnames(assSingleRes[[specie]]$ObsSAA)
+                            tmpPred$Year <- assSingleRes[[specie]]$YSAA
+                            survData$predSAA <- melt(tmpPred, id.vars = "Year",
+                                                     variable.name = "Age", value.name = "Index")
+                            levels(survData$predSAA$Age) <- paste("Age", levels(survData$predSAA$Age))
+                            
+                            assSinglePlot[[specie]]$ObsPredSurv <<- ggplot_OPSsingle(choSpecie = specie, assData = survData)
+                            
+                            
+                            caaData <- data.frame(Age = 0:(assSingleRes[[specie]]$Amax-1),
+                                                  obsCAA = apply(assSingleRes[[specie]]$ObsCAA, 2, sum),
+                                                  predCAA = apply(assSingleRes[[specie]]$PredCAA, 2, sum))
+                            
+                            assSinglePlot[[specie]]$ObsPredCAA <<- ggplot_OPCsingle(choSpecie = specie, assData = caaData)
+                            
+                            catcData <- data.frame(Year = 1:assessData[[specie]]$Nyear+assessData[[specie]]$Yr1-1,
+                                                   Catch = assSingleRes[[specie]]$ObsCatch,
+                                                   Lower = assSingleRes[[specie]]$ObsCatch*exp(-1.96*assSingleRes[[specie]]$CvCatch),
+                                                   Upper = assSingleRes[[specie]]$ObsCatch*exp(+1.96*assSingleRes[[specie]]$CvCatch))
+                            
+                            assSinglePlot[[specie]]$totCatc <<- ggplot_TCsingle(choSpecie = specie, assData = catcData)
+                            
                           },
                           setCostInput = function(){
                             if(is.null(fleet$effortIndex)) stop("Missing Effort Index")
@@ -2131,7 +2226,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                               
                               ### MCMC Survivors * quarter
                               sprePlot[[sexDrop]][["lineSurv"]] <<- set_ggSurvLine(df_surv = surv_melt)
-                              cat("Done!", sep = "")
+                              cat("Done!\n", sep = "")
                             },
                             calcMixDate = function(nAdap = 100, nSamp = 2000, nIter = 500, sexDrop = "Female", curveSel = "von Bertalanffy"){
                               
