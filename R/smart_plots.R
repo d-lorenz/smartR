@@ -809,7 +809,7 @@ ggplot_OPSsingle = function(choSpecie, assData){
       geom_point(size = 1) +
       geom_line(data = assData$predSAA, aes(x = Year, y = Index, colour = Age, group = Age)) +
       facet_wrap(~Age, nrow = 2, scales = "free_y") +
-      ggtitle(paste(specie, "- Survey Index - Observed VS Predicted")) +
+      ggtitle(paste(choSpecie, "- Survey Index - Observed VS Predicted")) +
       theme_tufte(base_size = 14, ticks=F) +
       ylab("Survey Index") +
       theme(legend.position = "none",
@@ -827,7 +827,7 @@ ggplot_OPCsingle = function(choSpecie, assData){
     ggplot(data = assData) +
       geom_point(mapping = aes(x = Age, y = obsCAA, color = factor(Age)), size = 3)+
       geom_line(mapping = aes(x = Age, y = predCAA)) +
-      ggtitle(paste(specie, "- Catch At Age - Observed VS Predicted")) +
+      ggtitle(paste(choSpecie, "- Catch At Age - Observed VS Predicted")) +
       theme_tufte(base_size = 14, ticks=F) +
       ylab("Frequency") +
       theme(legend.position = "none",
@@ -847,7 +847,7 @@ ggplot_TCsingle = function(choSpecie, assData){
       geom_errorbar(aes(ymin = Lower, ymax = Upper), colour = "black", width = 0.1) +
       geom_point() +
       geom_line() +
-      ggtitle(paste(specie, "- Total Catch")) +
+      ggtitle(paste(choSpecie, "- Total Catch")) +
       theme_tufte(base_size = 14, ticks=F) +
       ylab("Catch (t)") +
       theme(legend.position = "none",
