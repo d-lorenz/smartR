@@ -462,7 +462,7 @@ fit1specie <- function(Pars, optFun, FullMin = FALSE, DoVarCo = FALSE, ...){
     cat("Final Obj Function", Res$value, "\n")
     
     # This section computes the variance covariance matrix and hence the standard errors for SSB
-    if (DoVarCo == TRUE){  
+    if(DoVarCo == TRUE){  
       print("Attempting to solve for the variance-covariance matrix")
       VarCo <- solve(Res$hessian)
       Res$VarCo <- VarCo
@@ -474,7 +474,7 @@ fit1specie <- function(Pars, optFun, FullMin = FALSE, DoVarCo = FALSE, ...){
       # Set up the derivative matrix
       ParStore <- Res$par
       Deriv <- matrix(0, ncol = Nyear, nrow = Npar)
-      for (II in 1:Npar){
+      for(II in 1:Npar){
         # Numerical differentiation
         Res$par <- ParStore
         Res$par[II] <- ParStore[II]+0.001
@@ -487,9 +487,9 @@ fit1specie <- function(Pars, optFun, FullMin = FALSE, DoVarCo = FALSE, ...){
       
       # Use the delta method to get the variances for SSB    
       SSBSD <- rep(0, Nyear)
-      for (Iyear in 1:Nyear){
-        for (II in 1:Npar){      
-          for (JJ in 1:Npar){  
+      for(Iyear in 1:Nyear){
+        for(II in 1:Npar){      
+          for(JJ in 1:Npar){  
             SSBSD[Iyear] <- SSBSD[Iyear] + Deriv[II, Iyear]*Deriv[JJ, Iyear]*VarCo[II, JJ]
           }
         }
