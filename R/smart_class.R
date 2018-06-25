@@ -2635,7 +2635,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                
                                ### MCMC Survivors * quarter
                                sprePlot[[sexDrop]][["lineSurv"]] <<- set_ggSurvLine(df_surv = surv_melt)
-                               cat("Done!", sep = "")
+                               cat("Done!\n", sep = "")
                              },
                              calcMixDate = function(nAdap = 100, nSamp = 2000, nIter = 500, sexDrop = "Female", curveSel = "von Bertalanffy"){
                                
