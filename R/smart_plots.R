@@ -777,3 +777,86 @@ set_spatRelFreq <- function(inSpat){
             axis.title.y = element_blank())
   )
 }
+
+
+### Single Specie Assessment ####
+
+ggplot_SSBsingle = function(choSpecie, assData){
+  suppressMessages(
+    ggplot(data = assData, aes(x = Year, y = SSB)) +
+      geom_point() +
+      geom_line() +
+      geom_ribbon(aes(ymin = assData$Lower, ymax = assData$Upper),
+                  linetype=2, alpha=0.1) +
+      ggtitle(paste(choSpecie, "- Stock SSB")) +
+      theme_tufte(base_size = 14, ticks=F) +
+      ylab("SSB (t)") +
+      theme(legend.position = "none",
+            plot.title = element_text(size = 18),
+            axis.text.x = element_text(size = 10),
+            axis.title.x = element_text(size = 12),
+            panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+            axis.text.y = element_text(size = 12),
+            axis.ticks.y = element_blank())
+  )
+}
+
+ggplot_OPSsingle = function(choSpecie, assData){
+  suppressMessages(
+    ggplot(assData$obsSAA, aes(x = Year, y = Index, colour = Age, group = Age)) + 
+      geom_errorbar(aes(ymin = Lower, ymax = Upper),
+                    colour = "black", width = .1) +
+      geom_point(size = 1) +
+      geom_line(data = assData$predSAA, aes(x = Year, y = Index, colour = Age, group = Age)) +
+      facet_wrap(~Age, nrow = 2, scales = "free_y") +
+      ggtitle(paste(specie, "- Survey Index - Observed VS Predicted")) +
+      theme_tufte(base_size = 14, ticks=F) +
+      ylab("Survey Index") +
+      theme(legend.position = "none",
+            plot.title = element_text(size = 16),
+            axis.text.x = element_text(size = 10),
+            axis.title.x = element_text(size = 12),
+            panel.grid = element_line(size = 0.25, linetype = 2, colour = "grey20"),
+            axis.text.y = element_text(size = 10),
+            axis.ticks.y = element_blank())
+  )
+}
+
+ggplot_OPCsingle = function(choSpecie, assData){
+  suppressMessages(
+    ggplot(data = assData) +
+      geom_point(mapping = aes(x = Age, y = obsCAA, color = factor(Age)), size = 3)+
+      geom_line(mapping = aes(x = Age, y = predCAA)) +
+      ggtitle(paste(specie, "- Catch At Age - Observed VS Predicted")) +
+      theme_tufte(base_size = 14, ticks=F) +
+      ylab("Frequency") +
+      theme(legend.position = "none",
+            plot.title = element_text(size = 16),
+            axis.text.x = element_text(size = 10),
+            axis.title.x = element_text(size = 12),
+            panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+            axis.text.y = element_text(size = 10),
+            axis.ticks.y = element_blank())
+  )
+}
+
+
+ggplot_TCsingle = function(choSpecie, assData){
+  suppressMessages(
+    ggplot(data = assData, aes(x = Year, y = Catch)) +
+      geom_errorbar(aes(ymin = Lower, ymax = Upper), colour = "black", width = 0.1) +
+      geom_point() +
+      geom_line() +
+      ggtitle(paste(specie, "- Total Catch")) +
+      theme_tufte(base_size = 14, ticks=F) +
+      ylab("Catch (t)") +
+      theme(legend.position = "none",
+            plot.title = element_text(size = 18),
+            axis.text.x = element_text(size = 10),
+            axis.title.x = element_text(size = 12),
+            panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+            axis.text.y = element_text(size = 12),
+            axis.ticks.y = element_blank())
+  )
+}
+
