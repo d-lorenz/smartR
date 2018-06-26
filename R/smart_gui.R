@@ -1731,7 +1731,7 @@ smart_gui <- function(){
         assSpe_drop[] <- my_project$specieInSurvey
         svalue(assSpe_drop) <- my_project$specieInSurvey[1]
       }else{
-        assSpe_drop[] <- instersect(my_project$specieInSurvey, my_project$specieInFishery)
+        assSpe_drop[] <- intersect(my_project$specieInSurvey, my_project$specieInFishery)
         svalue(assSpe_drop) <- my_project$specieInSurvey[1]
       }
       # year_drop[] <- c("All", as.character(my_project$yearInSurvey))
@@ -2082,7 +2082,7 @@ smart_gui <- function(){
         assSpe_drop[] <- my_project$specieInFishery
         svalue(assSpe_drop) <- my_project$specieInFishery[1]
       }else{
-        assSpe_drop[] <- instersect(my_project$specieInSurvey, my_project$specieInFishery)
+        assSpe_drop[] <- intersect(my_project$specieInSurvey, my_project$specieInFishery)
         svalue(assSpe_drop) <- my_project$specieInSurvey[1]
       }
       
