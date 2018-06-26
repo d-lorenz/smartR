@@ -3073,8 +3073,8 @@ smart_gui <- function(){
     if(svalue(assSM_rad) == "Single"){
       my_project$assSingle(specie = svalue(assSpe_drop))
       my_project$setPlotSingle(specie = svalue(assSpe_drop))
-      assRes_drop[] <- names(assessData)
-      svalue(assRes_drop) <- names(assessData)[1]
+      assRes_drop[] <- names(my_project$assessData)
+      svalue(assRes_drop) <- names(my_project$assessData)[1]
       dev.set(dev.list()[pre_dev+9])
       suppressWarnings(print(my_project$assSinglePlot[[svalue(assSpe_drop)]]$SSB))
     }else{
