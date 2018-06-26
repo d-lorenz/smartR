@@ -226,7 +226,7 @@ SmartProject <- R6Class("smartProject",
                                 tmpAL <- table(round(surveyBySpecie[[indSpeSur]]$groMixout[[sex]]$Length),
                                                factor(surveyBySpecie[[indSpeSur]]$groMixout[[sex]]$Age, levels = 0:surveyBySpecie[[1]]$nCoho))
                                 tmpAL <- round(tmpAL/apply(tmpAL, 1, sum), 2)
-                                tmpAlDf <- as.data.frame.matrix(tmpAL) 
+                                tmpAlDf <- as.data.frame.matrix(tmpAL)
                                 tmpAlDf$Class <- rownames(tmpAL)
                                 tmpAbu <- aggregate(. ~ Class + Year, surveyBySpecie[[indSpeSur]]$abuAvg[,c("Class", "Year", names(surveyBySpecie[[indSpeSur]]$groMixout)[sex])], sum)
                                 tmpMem <- merge(tmpAbu, tmpAlDf)
@@ -319,7 +319,7 @@ SmartProject <- R6Class("smartProject",
                             if(is.null(assessData[[specie]])){
                               stop("Missing Data! Run setAssesData() first.")
                             }
-                            cat("\n\nAssessing ", specie, sep = "")
+                            cat("\n\nAssessing ", specie, "\n", sep = "")
                             assSingleRes[[specie]] <<- list()
                             Nyear <- assessData[[specie]]$Nyear
                             Amax <- assessData[[specie]]$Amax
@@ -574,37 +574,37 @@ SmartProject <- R6Class("smartProject",
                               surveyBySpecie[[i]]$setDepth(bathyMatrix = sampMap$gridBathy)
                               cat("Done!", sep = "")
                             }
-                            cat("\nCompleted!", sep = "")
+                            cat("\nCompleted!\n", sep = "")
                           },
                           setStratumSurvey = function(vectorStrata = c(0, 10, 100, 1000, Inf)){
-                            cat("\n\nSetting stratum of survey data:", sep = "")
+                            cat("\nSetting stratum of survey data:", sep = "")
                             for(i in 1:length(surveyBySpecie)){
                               cat("\n\t", surveyBySpecie[[i]]$specie, "... ", sep = "")
                               surveyBySpecie[[i]]$setStratum(vecStrata = vectorStrata)
                               cat("Done!", sep = "")
                             }
-                            cat("\nCompleted!", sep = "")
+                            cat("\nCompleted!\n", sep = "")
                           },
                           setAbuAvgAll = function(){
-                            cat("\n\nComputing average Number of individuals x Size x Stratum: ", sep = "")
+                            cat("\nComputing average Number of individuals x Size x Stratum: ", sep = "")
                             for(i in 1:length(surveyBySpecie)){
                               cat("\n\t", surveyBySpecie[[i]]$specie, "... ", sep = "")
                               surveyBySpecie[[i]]$setAbuAvg()
                               cat("Done!", sep = "")
                             }
-                            cat("\nCompleted!", sep = "")
+                            cat("\nCompleted!\n", sep = "")
                           },
                           setMeditsIndex = function(){
-                            cat("\n\nComputing MEDITS index: ", sep = "")
+                            cat("\nComputing MEDITS index: ", sep = "")
                             for(i in 1:length(surveyBySpecie)){
                               cat("\n\t", surveyBySpecie[[i]]$specie, "... ", sep = "")
                               surveyBySpecie[[i]]$setIndSpe()
                               cat("Done!", sep = "")
                             }
-                            cat("\nCompleted!", sep = "")
+                            cat("\nCompleted!\n", sep = "")
                           },
                           setStrataAbu = function(){
-                            cat("\n\nComputing weighted Number of individuals x Size x Stratum: ", sep = "")
+                            cat("\nComputing weighted Number of individuals x Size x Stratum: ", sep = "")
                             for(i in 1:length(surveyBySpecie)){
                               cat("\n\t", surveyBySpecie[[i]]$specie, "... ", sep = "")
                               surveyBySpecie[[i]]$abuAvg$weiFem <<- surveyBySpecie[[i]]$abuAvg$Female*sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
@@ -612,7 +612,7 @@ SmartProject <- R6Class("smartProject",
                               surveyBySpecie[[i]]$abuAvg$weiUns <<- surveyBySpecie[[i]]$abuAvg$Unsex*sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
                               cat("Done!", sep = "")
                             }
-                            cat("\nCompleted!", sep = "")
+                            cat("\nCompleted!\n", sep = "")
                           },
                           # setLFDPopSurvey = function(){
                           #   if(length(specieInSurvey) == 1){
@@ -1499,7 +1499,7 @@ SmartProject <- R6Class("smartProject",
                                                                                                   sampMap$cutResShp)]
                             }
                             
-                            cat(" Done!", sep = "")
+                            cat(" Done!\n", sep = "")
                           },
                           addFg2Survey = function(){
                             cat("\n\nConnecting coordinates to fishing ground...", sep = "")
@@ -1512,7 +1512,7 @@ SmartProject <- R6Class("smartProject",
                                                                                                                           Lat = surveyBySpecie[[i]]$rawLFD$Lat)),
                                                                                                  sampMap$cutResShp)]
                             }
-                            cat(" Done!", sep = "")
+                            cat(" Done!\n", sep = "")
                           },
                           setWeekEffoMatrCell = function(){
                             fleet$weekEffoMatr <<- list()
@@ -1996,7 +1996,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                                 tmp_spre = rawLFD[!is.na(rawLFD$numFG),c("Date","Class", "numFG", sex)]
                                 
                                 num_sex <- sum(tmp_spre[,4])
-                                cat("\nFound", num_sex, sex, as.character(specie), "samples", sep = " ")
+                                cat("Found", num_sex, sex, as.character(specie), "samples\n", sep = " ")
                                 
                                 spreDist <- data.frame(UTC = rep(tmp_spre$Date, tmp_spre[,4]),
                                                        Length = rep(tmp_spre$Class, tmp_spre[,4]) + runif(num_sex, -0.5, 0.5),
@@ -2377,7 +2377,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                                  tmp_spre = rawLFD[!is.na(rawLFD$numFG),c("Date","Class", "numFG", sex)]
                                  
                                  num_sex <- sum(tmp_spre[,4])
-                                 cat("\nFound", num_sex, sex, as.character(specie), "samples", sep = " ")
+                                 cat("Found", num_sex, sex, as.character(specie), "samples\n", sep = " ")
                                  
                                  spreDist <- data.frame(UTC = rep(tmp_spre$Date, tmp_spre[,4]),
                                                         Length = rep(tmp_spre$Class, tmp_spre[,4]) + runif(num_sex, -0.5, 0.5),
