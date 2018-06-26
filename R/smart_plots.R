@@ -783,7 +783,7 @@ set_spatRelFreq <- function(inSpat){
 
 ggplot_SSBsingle = function(choSpecie, assData){
   suppressMessages(
-    ggplot(data = assData, aes(x = Year, y = SSB)) +
+    ggplot(data = assData, aes_(x = ~Year, y = ~SSB)) +
       geom_point() +
       geom_line() +
       geom_ribbon(aes(ymin = assData$Lower, ymax = assData$Upper),
@@ -803,11 +803,11 @@ ggplot_SSBsingle = function(choSpecie, assData){
 
 ggplot_OPSsingle = function(choSpecie, assData){
   suppressMessages(
-    ggplot(assData$obsSAA, aes(x = Year, y = Index, colour = Age, group = Age)) + 
-      geom_errorbar(aes(ymin = Lower, ymax = Upper),
+    ggplot(assData$obsSAA, aes_(x = ~Year, y = ~Index, colour = ~Age, group = ~Age)) + 
+      geom_errorbar(aes_(ymin = ~Lower, ymax = ~Upper),
                     colour = "black", width = .1) +
       geom_point(size = 1) +
-      geom_line(data = assData$predSAA, aes(x = Year, y = Index, colour = Age, group = Age)) +
+      geom_line(data = assData$predSAA, aes_(x = ~Year, y = ~Index, colour = ~Age, group = ~Age)) +
       facet_wrap(~Age, nrow = 2, scales = "free_y") +
       ggtitle(paste(choSpecie, "- Survey Index - Observed VS Predicted")) +
       theme_tufte(base_size = 14, ticks=F) +
@@ -825,8 +825,8 @@ ggplot_OPSsingle = function(choSpecie, assData){
 ggplot_OPCsingle = function(choSpecie, assData){
   suppressMessages(
     ggplot(data = assData) +
-      geom_point(mapping = aes(x = Age, y = obsCAA, color = factor(Age)), size = 3)+
-      geom_line(mapping = aes(x = Age, y = predCAA)) +
+      geom_point(mapping = aes_(x = ~Age, y = ~obsCAA, color = factor(~Age)), size = 3)+
+      geom_line(mapping = aes_(x = ~Age, y = ~predCAA)) +
       ggtitle(paste(choSpecie, "- Catch At Age - Observed VS Predicted")) +
       theme_tufte(base_size = 14, ticks=F) +
       ylab("Frequency") +
@@ -843,8 +843,8 @@ ggplot_OPCsingle = function(choSpecie, assData){
 
 ggplot_TCsingle = function(choSpecie, assData){
   suppressMessages(
-    ggplot(data = assData, aes(x = Year, y = Catch)) +
-      geom_errorbar(aes(ymin = Lower, ymax = Upper), colour = "black", width = 0.1) +
+    ggplot(data = assData, aes_(x = ~Year, y = ~Catch)) +
+      geom_errorbar(aes_(ymin = ~Lower, ymax = ~Upper), colour = "black", width = 0.1) +
       geom_point() +
       geom_line() +
       ggtitle(paste(choSpecie, "- Total Catch")) +
