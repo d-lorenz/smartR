@@ -394,7 +394,7 @@ SmartProject <- R6Class("smartProject",
                             assSinglePlot[[specie]]$ObsPredSurv <<- ggplot_OPSsingle(choSpecie = specie, assData = survData)
                             
                             
-                            caaData <- data.frame(Age = 0:(assSingleRes[[specie]]$Amax-1),
+                            caaData <- data.frame(Age = factor(0:(assSingleRes[[specie]]$Amax-1)),
                                                   obsCAA = apply(assSingleRes[[specie]]$ObsCAA, 2, sum),
                                                   predCAA = apply(assSingleRes[[specie]]$PredCAA, 2, sum))
                             
