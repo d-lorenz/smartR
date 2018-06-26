@@ -2701,7 +2701,6 @@ smart_gui <- function(){
     })
     addSpring(gain_g_top)
     set_data <- gbutton(text = "Set Data", container = gain_g_top, handler = function(...){
-      # out_SizeClass[[as.character(svalue(sel_specie))]] <<- cost_df[]
       my_project$fleet$setEcoPrice(sel_specie = svalue(sel_specie), price_df = cost_df[])
     })
     addSpring(gain_g_top)
