@@ -413,12 +413,12 @@ GetALKMW <- function(Linf, Kappa, T0, CV0, CVLinf, aa, bb, Amax, LenClassMax, Of
 fit1specie <- function(Pars, optFun, FullMin = FALSE, DoVarCo = FALSE, ...){
   # First call - always do this
   Res <- optim(Pars, optFun, hessian = FALSE, control = list(maxit = 10), DoEst = TRUE, ...)
-  print(Res$value)
+  # print(Res$value)
   #Res <- optim(Res$par, optFun, method = "BFGS", hessian = FALSE, DoEst = TRUE, ...)
   #print(Res$value)
   Npar <- length(Res$par)
   # cat("number of parameters  = ", Npar, "\n")
-  print(Res)
+  # print(Res)
   SSBEst <- fun1opt(Res$par, DoEst = FALSE, ...)$SSB
   Nyear <- length(SSBEst)
   Res$VarCo <- matrix(0, ncol = Npar, nrow = Npar)
@@ -432,9 +432,9 @@ fit1specie <- function(Pars, optFun, FullMin = FALSE, DoVarCo = FALSE, ...){
   
   # Now do a full minimization
   if(FullMin == TRUE){
-    cat("\nFull minimization")
+    cat("\nFull minimization:")
     Res <- optim(Res$par, optFun, method = "BFGS", hessian = FALSE, DoEst = TRUE, ...)
-    cat("\n", Res$value)
+    cat("\n", Res$value, "BFGS")
     Best <- 10000
     while(abs(Res$value-Best)>0.01){
       Best <- Res$value  
@@ -457,11 +457,11 @@ fit1specie <- function(Pars, optFun, FullMin = FALSE, DoVarCo = FALSE, ...){
     # print(Res$par)
     Outputs$VarCo <- matrix(0, ncol = Npar, nrow = Npar)
     Outputs$SSBSD <- rep(0, Nyear)
-    cat("\nFinal Obj Function", Res$value)
+    cat("\nFinal:", Res$value)
     
     # This section computes the variance covariance matrix and hence the standard errors for SSB
     if(DoVarCo == TRUE){  
-      cat("\nSolving variance-covariance matrix")
+      cat("\nSolving variance-covariance matrix... ")
       VarCo <- solve(Res$hessian)
       Res$VarCo <- VarCo
       
@@ -498,8 +498,8 @@ fit1specie <- function(Pars, optFun, FullMin = FALSE, DoVarCo = FALSE, ...){
       # Dummy matrix
       Res$VarCo <- matrix(0, ncol = Npar, nrow = Npar)
     }
+    cat("Done!")
   }
-  cat("\nMinimization complete")
   return(Res)
 }  
 
