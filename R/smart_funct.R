@@ -537,14 +537,23 @@ pop1specie <- function(SpeciesData, InitN, RecDev, LogR0, Fvals, Selex, InitF){
   # set up the N matrix
   R0 <- exp(LogR0)
   N[1, 1] <- R0
-  for (Iage in 2:Amax) N[1, Iage] <- N[1, Iage-1]*exp(-M[Iage-1])*exp(-InitF)
-  for (Iage in 1:Amax) N[1, Iage] <- N[1, Iage]*exp(InitN[Iage])
+  for(Iage in 2:Amax){
+    N[1, Iage] <- N[1, Iage-1]*exp(-M[Iage-1])*exp(-InitF)
+  }
+  for(Iage in 1:Amax){
+    N[1, Iage] <- N[1, Iage]*exp(InitN[Iage])
+  }
   
   # Project forward 
-  for (Iyear in 1:Nyear){
+  for(Iyear in 1:Nyear){
     # Compute F, Z and catch-at-age 
-    for (Iage in 1:Amax) {FAA[Iyear, Iage] <- Selex[Iage]*Fvals[Iyear]; Z[Iage] <- M[Iage]+FAA[Iyear, Iage] }
-    for (Iage in 1:Amax) CAA[Iyear, Iage] <- FAA[Iyear, Iage]/Z[Iage]*N[Iyear, Iage]*(1.0-exp(-Z[Iage]))
+    for(Iage in 1:Amax){
+      FAA[Iyear, Iage] <- Selex[Iage]*Fvals[Iyear]
+      Z[Iage] <- M[Iage]+FAA[Iyear, Iage]
+    }
+    for(Iage in 1:Amax){
+      CAA[Iyear, Iage] <- FAA[Iyear, Iage]/Z[Iage]*N[Iyear, Iage]*(1.0-exp(-Z[Iage]))
+    }
     PredCW[Iyear] <- sum(WeightH*CAA[Iyear, ])
     
     # Predict SSB during the year and remove Z
@@ -553,7 +562,9 @@ pop1specie <- function(SpeciesData, InitN, RecDev, LogR0, Fvals, Selex, InitF){
     
     # Update dynamics and add recruitment     
     N[Iyear+1, Amax] <- Ntemp[Amax]+Ntemp[Amax-1]
-    for (Iage in 2:(Amax-1)) N[Iyear+1, Iage] <- Ntemp[Iage-1]
+    for(Iage in 2:(Amax-1)){
+      N[Iyear+1, Iage] <- Ntemp[Iage-1]
+    }
     N[Iyear+1, 1] <- R0*exp(RecDev[Iyear])
   }  
   #print(N)
@@ -695,27 +706,33 @@ fun1opt <- function(Pars, DoEst = TRUE, SpeciesData){
   #print(Pars)
   
   # Extract the parameters from "Pars"
-  InitN <- c(Pars[1:Amax]); Ipar <- Amax
-  RecDev <- Pars[(Ipar+1):(Nyear+Ipar)]; Ipar <- Ipar + Nyear
-  LogR0 <- Pars[Ipar+1]; Ipar <- Ipar + 1
+  InitN <- c(Pars[1:Amax])
+  Ipar <- Amax
+  RecDev <- Pars[(Ipar+1):(Nyear+Ipar)]
+  Ipar <- Ipar + Nyear
+  LogR0 <- Pars[Ipar+1]
+  Ipar <- Ipar + 1
   SurvSel <- matrix(0, nrow = Nsurvey, ncol = Amax)
   Selex <- rep(0, Amax)
   
   Prior <- 0
   if(SpeciesData$SelsurvType == 1){  
-    SVec <- Pars[(Ipar+1):(Ipar+Nsurvey*(Amax-2))]; Ipar <- Ipar + Nsurvey*(Amax-2)
+    SVec <- Pars[(Ipar+1):(Ipar+Nsurvey*(Amax-2))]
+    Ipar <- Ipar + Nsurvey*(Amax-2)
     for (Isurv in 1:Nsurvey){ 
-      Offset1 <- (Isurv-1)*(Amax-2)+1; Offset2 <- Isurv*(Amax-2)
+      Offset1 <- (Isurv-1)*(Amax-2)+1
+      Offset2 <- Isurv*(Amax-2)
       SurvSel[Isurv, ] <- c(1/(1+exp(SVec[Offset1:Offset2])), 1, 1)
     } 
   } 
   if(SpeciesData$SelsurvType == 2){  
-    SVec <- Pars[(Ipar+1):(Ipar+Nsurvey*3)]; Ipar <- Ipar + Nsurvey*3
+    SVec <- Pars[(Ipar+1):(Ipar+Nsurvey*3)]
+    Ipar <- Ipar + Nsurvey*3
     for(Isurv in 1:Nsurvey){ 
       Offset <- (Isurv-1)*3
-      ModalAge <- exp(SVec[Offset+1]);
-      Sig1 <-exp(SVec[Offset+2]);                      
-      Sig2 <-exp(SVec[Offset+3]);                      
+      ModalAge <- exp(SVec[Offset+1])
+      Sig1 <-exp(SVec[Offset+2])                  
+      Sig2 <-exp(SVec[Offset+3])               
       Prior <- Prior + 0.001*Sig1*Sig1 + 0.001*Sig2*Sig2
       for(Iage in 0:(Amax-1)){ 
         if(Iage < ModalAge){
@@ -728,14 +745,16 @@ fun1opt <- function(Pars, DoEst = TRUE, SpeciesData){
     } 
   } 
   if(SpeciesData$SelexType == 1){  
-    SVec <- Pars[(Ipar+1):(Ipar+Amax-2)]; Ipar <- Ipar + Amax-2
+    SVec <- Pars[(Ipar+1):(Ipar+Amax-2)]
+    Ipar <- Ipar + Amax-2
     Selex <- c(1/(1+exp(SVec)), 1, 1)
   } 
   if(SpeciesData$SelexType == 2){  
-    SVec <- Pars[(Ipar+1):(Ipar+3)]; Ipar <- Ipar +3
-    ModalAge <- exp(SVec[1]);
-    Sig1 <-exp(SVec[2]);                      
-    Sig2 <-exp(SVec[3]);                      
+    SVec <- Pars[(Ipar+1):(Ipar+3)]
+    Ipar <- Ipar +3
+    ModalAge <- exp(SVec[1])
+    Sig1 <-exp(SVec[2])
+    Sig2 <-exp(SVec[3])
     Prior <- Prior + 0.001*Sig1*Sig1 + 0.001*Sig2*Sig2
     for(Iage in 0:(Amax-1)){ 
       if(Iage < ModalAge){
@@ -747,10 +766,11 @@ fun1opt <- function(Pars, DoEst = TRUE, SpeciesData){
     Selex <- Selex / max(Selex)
   } 
   if(SpeciesData$SelexType == 3){  
-    SVec <- Pars[(Ipar+1):(Ipar+3)]; Ipar <- Ipar +3
-    ModalAge <- exp(SVec[1]);
-    Sig1 <-exp(SVec[2]);                      
-    Sig2 <-exp(SVec[3]);                      
+    SVec <- Pars[(Ipar+1):(Ipar+3)]
+    Ipar <- Ipar +3
+    ModalAge <- exp(SVec[1])
+    Sig1 <-exp(SVec[2])
+    Sig2 <-exp(SVec[3])
     Prior <- Prior + 0.001*Sig1*Sig1 + 0.001*Sig2*Sig2
     SelexL <- rep(0, Nlen)
     for(Iage in 1:Nlen){ 
@@ -765,8 +785,10 @@ fun1opt <- function(Pars, DoEst = TRUE, SpeciesData){
     }
     Selex <- Selex / max(Selex)
   } 
-  Fvals <- exp(Pars[(Ipar+1):(Ipar+Nyear)]); Ipar <- Ipar + Nyear
-  InitF <- exp(Pars[Ipar+1]); Ipar <- Ipar + 1
+  Fvals <- exp(Pars[(Ipar+1):(Ipar+Nyear)])
+  Ipar <- Ipar + Nyear
+  InitF <- exp(Pars[Ipar+1])
+  Ipar <- Ipar + 1
   
   # Projection the population model and compute the negative log-likelihood
   Outs <- pop1specie(SpeciesData, InitN, RecDev, LogR0, Fvals, Selex, InitF)
@@ -774,7 +796,7 @@ fun1opt <- function(Pars, DoEst = TRUE, SpeciesData){
   
   # Trick to get things passes
   if(DoEst == TRUE){
-    return(OutLikelihood$TotalLike+0.01*Prior)  
+    return(OutLikelihood$TotalLike+0.01*Prior)
   }else{
     Out2 <- NULL
     
