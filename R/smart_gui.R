@@ -30,7 +30,7 @@ smart_gui <- function(){
   
   # GRID EFFORT AA
   pathEffortAA <- "/Users/Lomo/Documents/Uni/R/project/smartR_data/Fleet/Effort/effortEnha.rData"
-
+  
   # FLEET REGISTER DATA
   pathRegister <- "/Users/Lomo/Documents/Uni/R/project/smartR_data/Fleet/Register/fleetRegister.csv"
   
