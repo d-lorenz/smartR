@@ -3069,6 +3069,8 @@ smart_gui <- function(){
     if(svalue(assSM_rad) == "Single"){
       my_project$assSingle(specie = svalue(assSpe_drop))
       my_project$setPlotSingle(specie = svalue(assSpe_drop))
+      assRes_drop[] <- names(assessData)
+      svalue(assRes_drop) <- names(assessData)[1]
       dev.set(dev.list()[pre_dev+9])
       suppressWarnings(print(my_project$assSinglePlot[[svalue(assSpe_drop)]]$SSB))
     }else{
@@ -3076,7 +3078,7 @@ smart_gui <- function(){
     }
   })
   addSpring(ass_g_top)
-  ass_Res <- gframe("View", horizontal = FALSE, container = ass_g_top, expand = TRUE)
+  ass_Res <- gframe("View", horizontal = TRUE, container = ass_g_top, expand = TRUE)
   assRes_drop <- gcombobox(items = "Specie", selected = 1, editable = FALSE, container = ass_Res,
                            handler = NULL)
   ass_Res_radio <- gradio(c("SSB", "OPSurvey", "OPCatch", "TotalCatch"), selected = 1,
@@ -3085,10 +3087,10 @@ smart_gui <- function(){
                             dev.set(dev.list()[pre_dev+9])
                             if(svalue(assSM_rad) == "Single"){
                               switch(svalue(ass_Res_radio),
-                                     SSB = {suppressWarnings(print(my_project$assSinglePlot[[svalue(assSpe_drop)]]$SSB))},
-                                     OPSurvey = {suppressWarnings(print(my_project$assSinglePlot[[svalue(assSpe_drop)]]$ObsPredSurv))},
-                                     OPCatch = {suppressWarnings(print(my_project$assSinglePlot[[svalue(assSpe_drop)]]$ObsPredCAA))},
-                                     TotalCatch = {suppressWarnings(print(my_project$assSinglePlot[[svalue(assSpe_drop)]]$totCatc))})
+                                     SSB = {suppressWarnings(print(my_project$assSinglePlot[[svalue(assRes_drop)]]$SSB))},
+                                     OPSurvey = {suppressWarnings(print(my_project$assSinglePlot[[svalue(assRes_drop)]]$ObsPredSurv))},
+                                     OPCatch = {suppressWarnings(print(my_project$assSinglePlot[[svalue(assRes_drop)]]$ObsPredCAA))},
+                                     TotalCatch = {suppressWarnings(print(my_project$assSinglePlot[[svalue(assRes_drop)]]$totCatc))})
                             }else{
                               
                             }
