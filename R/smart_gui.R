@@ -1660,6 +1660,8 @@ smart_gui <- function(){
   addSpring(pro_g_top2_view)
   provie_drop <- gcombobox(items = "Year   ", selected = 1, container = pro_g_top2_view,
                            expand = TRUE, editable = FALSE)
+  provie_drop$set_size(value = c(width = 80))
+  
   addSpring(pro_g_top2_view)
   pro_g_top2_ver <- ggroup(horizontal = FALSE, container = pro_g_top2_view)
   addSpring(pro_g_top2_ver)
@@ -3051,12 +3053,14 @@ smart_gui <- function(){
   addSpring(ass_g_spePred)
   assSpe_drop <- gcombobox(items = "Specie", selected = 1, editable = FALSE, container = ass_g_spePred,
                            handler = NULL)
+  assSpe_drop$set_size(value = c(width = 150))
+  
   addSpring(ass_g_spePred)
   assPre_but <- gbutton(text = "Set Predation", container = ass_g_spePred, handler = function(h,...){
     
   })
   addSpring(ass_g_spePred)
-  addSpace(ass_g_top, 10)
+  addSpring(ass_g_top)
   assParS_but <- gbutton(text = "Set Input", container = ass_g_top, handler = function(h,...){
     if(svalue(assSM_rad) == "Single"){
       my_project$setAssessData(specie = svalue(assSpe_drop))
@@ -3065,7 +3069,7 @@ smart_gui <- function(){
     }
   })
   addSpring(ass_g_top)
-  gbutton(text = "Begin", container = ass_g_top, handler = function(h,...){
+  ass_Str_but <- gbutton(text = "Start", container = ass_g_top, handler = function(h,...){
     if(svalue(assSM_rad) == "Single"){
       my_project$assSingle(specie = svalue(assSpe_drop))
       my_project$setPlotSingle(specie = svalue(assSpe_drop))
@@ -3077,10 +3081,15 @@ smart_gui <- function(){
       
     }
   })
+  ass_Str_but$set_size(value = c(width = 80))
+  
   addSpring(ass_g_top)
   ass_Res <- gframe("View", horizontal = TRUE, container = ass_g_top, expand = TRUE)
-  assRes_drop <- gcombobox(items = "Specie", selected = 1, editable = FALSE, container = ass_Res,
+  addSpace(ass_Res, 10)
+  assRes_drop <- gcombobox(items = "    Specie", selected = 1, editable = FALSE, container = ass_Res,
                            handler = NULL)
+  assRes_drop$set_size(value = c(width = 150))
+  addSpace(ass_Res, 10)
   ass_Res_radio <- gradio(c("SSB", "OPSurvey", "OPCatch", "TotalCatch"), selected = 1,
                           horizontal = FALSE, container = ass_Res,
                           handler = function(h,...){
@@ -3095,6 +3104,7 @@ smart_gui <- function(){
                               
                             }
                           })
+  addSpace(ass_Res, 10)
   addSpace(ass_g_top, 10)
   
   ass_p <- ggraphics(container = ass_g, width = 550, height = 250, expand = TRUE)
