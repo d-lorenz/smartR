@@ -3065,7 +3065,7 @@ smart_gui <- function(){
     }
   })
   addSpring(ass_g_top)
-  gbutton(text = "Begin", container = ass_g_spePred, handler = function(h,...){
+  gbutton(text = "Begin", container = ass_g_top, handler = function(h,...){
     if(svalue(assSM_rad) == "Single"){
       my_project$assSingle(specie = svalue(assSpe_drop))
       my_project$setPlotSingle(specie = svalue(assSpe_drop))
@@ -3076,8 +3076,8 @@ smart_gui <- function(){
     }
   })
   addSpring(ass_g_top)
-  ass_Res <- gframe("View", horizontal = FALSE, container = ass_g_spePred, expand = TRUE)
-  assRes_drop <- gcombobox(items = "Specie", selected = 1, editable = FALSE, container = ass_g_spePred,
+  ass_Res <- gframe("View", horizontal = FALSE, container = ass_g_top, expand = TRUE)
+  assRes_drop <- gcombobox(items = "Specie", selected = 1, editable = FALSE, container = ass_Res,
                            handler = NULL)
   ass_Res_radio <- gradio(c("SSB", "OPSurvey", "OPCatch", "TotalCatch"), selected = 1,
                           horizontal = FALSE, container = ass_Res,
