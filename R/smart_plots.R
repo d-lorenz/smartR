@@ -825,7 +825,7 @@ ggplot_OPSsingle = function(choSpecie, assData){
 ggplot_OPCsingle = function(choSpecie, assData){
   suppressMessages(
     ggplot(data = assData) +
-      geom_point(mapping = aes_(x = ~Age, y = ~obsCAA, color = factor(~Age)), size = 3)+
+      geom_point(mapping = aes_(x = ~Age, y = ~obsCAA, color = ~Age), size = 3)+
       geom_line(mapping = aes_(x = ~Age, y = ~predCAA)) +
       ggtitle(paste(choSpecie, "- Catch At Age - Observed VS Predicted")) +
       theme_tufte(base_size = 14, ticks=F) +
