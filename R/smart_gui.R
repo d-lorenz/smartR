@@ -1726,8 +1726,8 @@ smart_gui <- function(){
       svalue(spec_drop_mix) <- my_project$specieInSurvey[1]
       
       if(is.null(my_project$specieInFishery)){
-      assSpe_drop[] <- my_project$specieInSurvey
-      svalue(assSpe_drop) <- my_project$specieInSurvey[1]
+        assSpe_drop[] <- my_project$specieInSurvey
+        svalue(assSpe_drop) <- my_project$specieInSurvey[1]
       }else{
         assSpe_drop[] <- instersect(my_project$specieInSurvey, my_project$specieInFishery)
         svalue(assSpe_drop) <- my_project$specieInSurvey[1]
@@ -3060,7 +3060,7 @@ smart_gui <- function(){
   assParS_but <- gbutton(text = "Set Input", container = ass_g_top, handler = function(h,...){
     if(svalue(assSM_rad) == "Single"){
       my_project$setAssessData(specie = svalue(assSpe_drop))
-        }else{
+    }else{
       
     }
   })
@@ -3071,10 +3071,10 @@ smart_gui <- function(){
       my_project$setPlotSingle(specie = svalue(assSpe_drop))
       dev.set(dev.list()[pre_dev+9])
       suppressWarnings(print(my_project$assSinglePlot[[svalue(assSpe_drop)]]$SSB))
-      }else{
+    }else{
       
     }
-    })
+  })
   addSpring(ass_g_top)
   ass_Res <- gframe("View", horizontal = FALSE, container = ass_g_spePred, expand = TRUE)
   assRes_drop <- gcombobox(items = "Specie", selected = 1, editable = FALSE, container = ass_g_spePred,
@@ -3087,9 +3087,9 @@ smart_gui <- function(){
                               switch(svalue(ass_Res_radio),
                                      SSB = {suppressWarnings(print(my_project$assSinglePlot[[svalue(assSpe_drop)]]$SSB))},
                                      OPSurvey = {suppressWarnings(print(my_project$assSinglePlot[[svalue(assSpe_drop)]]$ObsPredSurv))},
-                                     OPCatch = {suppressWarnings(print(my_project$assSinglePlot[[svalue(assSpe_drop)]]$ObsPredCAA))}
+                                     OPCatch = {suppressWarnings(print(my_project$assSinglePlot[[svalue(assSpe_drop)]]$ObsPredCAA))},
                                      TotalCatch = {suppressWarnings(print(my_project$assSinglePlot[[svalue(assSpe_drop)]]$totCatc))})
-                                     }else{
+                            }else{
                               
                             }
                           })
