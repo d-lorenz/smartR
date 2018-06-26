@@ -1724,6 +1724,14 @@ smart_gui <- function(){
       # svalue(cohSpe_drop) <- my_project$specieInSurvey[1]
       # svalue(spevie_drop) <- "All"
       svalue(spec_drop_mix) <- my_project$specieInSurvey[1]
+      
+      if(is.null(my_project$specieInFishery)){
+      assSpe_drop[] <- my_project$specieInSurvey
+      svalue(assSpe_drop) <- my_project$specieInSurvey[1]
+      }else{
+        assSpe_drop[] <- instersect(my_project$specieInSurvey, my_project$specieInFishery)
+        svalue(assSpe_drop) <- my_project$specieInSurvey[1]
+      }
       # year_drop[] <- c("All", as.character(my_project$yearInSurvey))
       # cohYea_drop[] <- c("All", as.character(my_project$yearInSurvey))
       # svalue(year_drop) <- my_project$yearInSurvey[1]
@@ -2068,6 +2076,13 @@ smart_gui <- function(){
       # Update LWrel specie selection
       # assSpe_drop[] <- my_project$specieInFishery
       # svalue(assSpe_drop) <- my_project$specieInFishery[1]
+      if(is.null(my_project$specieInSurvey)){
+        assSpe_drop[] <- my_project$specieInFishery
+        svalue(assSpe_drop) <- my_project$specieInFishery[1]
+      }else{
+        assSpe_drop[] <- instersect(my_project$specieInSurvey, my_project$specieInFishery)
+        svalue(assSpe_drop) <- my_project$specieInSurvey[1]
+      }
       
       svalue(stat_bar) <- ""
       
@@ -3021,8 +3036,66 @@ smart_gui <- function(){
   ass_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Assess")
   ass_g_top <- gframe(horizontal = TRUE, container = ass_g, spacing = 10)
   addSpace(ass_g_top, 10)
-  
+  assSM_rad <-  gradio(items = c("Single", "Multi"), selected = 1, horizontal = FALSE,
+                       container = ass_g_top, handler = function(h,...){
+                         if(svalue(assSM_rad) == "Single"){
+                           enabled(assSpe_drop) <- TRUE
+                           enabled(assPre_but) <- FALSE
+                         }else{
+                           enabled(assSpe_drop) <- FALSE
+                           enabled(assPre_but) <- TRUE
+                         }
+                       })
   addSpace(ass_g_top, 10)
+  ass_g_spePred <- ggroup(horizontal = FALSE, container = ass_g_top)
+  addSpring(ass_g_spePred)
+  assSpe_drop <- gcombobox(items = "Specie", selected = 1, editable = FALSE, container = ass_g_spePred,
+                           handler = NULL)
+  addSpring(ass_g_spePred)
+  assPre_but <- gbutton(text = "Set Predation", container = ass_g_spePred, handler = function(h,...){
+    
+  })
+  addSpring(ass_g_spePred)
+  addSpace(ass_g_top, 10)
+  assParS_but <- gbutton(text = "Set Input", container = ass_g_top, handler = function(h,...){
+    if(svalue(assSM_rad) == "Single"){
+      my_project$setAssessData(specie = svalue(assSpe_drop))
+        }else{
+      
+    }
+  })
+  addSpring(ass_g_top)
+  gbutton(text = "Begin", container = ass_g_spePred, handler = function(h,...){
+    if(svalue(assSM_rad) == "Single"){
+      my_project$assSingle(specie = svalue(assSpe_drop))
+      my_project$setPlotSingle(specie = svalue(assSpe_drop))
+      dev.set(dev.list()[pre_dev+9])
+      suppressWarnings(print(my_project$assSinglePlot[[svalue(assSpe_drop)]]$SSB))
+      }else{
+      
+    }
+    })
+  addSpring(ass_g_top)
+  ass_Res <- gframe("View", horizontal = FALSE, container = ass_g_spePred, expand = TRUE)
+  assRes_drop <- gcombobox(items = "Specie", selected = 1, editable = FALSE, container = ass_g_spePred,
+                           handler = NULL)
+  ass_Res_radio <- gradio(c("SSB", "OPSurvey", "OPCatch", "TotalCatch"), selected = 1,
+                          horizontal = FALSE, container = ass_Res,
+                          handler = function(h,...){
+                            dev.set(dev.list()[pre_dev+9])
+                            if(svalue(assSM_rad) == "Single"){
+                              switch(svalue(ass_Res_radio),
+                                     SSB = {suppressWarnings(print(my_project$assSinglePlot[[svalue(assSpe_drop)]]$SSB))},
+                                     OPSurvey = {suppressWarnings(print(my_project$assSinglePlot[[svalue(assSpe_drop)]]$ObsPredSurv))},
+                                     OPCatch = {suppressWarnings(print(my_project$assSinglePlot[[svalue(assSpe_drop)]]$ObsPredCAA))}
+                                     TotalCatch = {suppressWarnings(print(my_project$assSinglePlot[[svalue(assSpe_drop)]]$totCatc))})
+                                     }else{
+                              
+                            }
+                          })
+  addSpace(ass_g_top, 10)
+  
+  ass_p <- ggraphics(container = ass_g, width = 550, height = 250, expand = TRUE)
   
   
   
