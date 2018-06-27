@@ -154,8 +154,7 @@ SmartProject <- R6Class("smartProject",
                             if(forecast)  assessData[[specie]]$Yr2 <<-  assessData[[specie]]$Yr2+1
                             
                             assessData[[specie]]$Nyear <<- assessData[[specie]]$Yr2 - assessData[[specie]]$Yr1 + 1
-                            if(forecast)  assessData[[specie]]$Nyear <<-  assessData[[specie]]$Nyear+1
-                            
+
                             assessData[[specie]]$Nlen <<- 2 
                             assessData[[specie]]$NCAL <<- 0
                             assessData[[specie]]$Nsurvey <<- 1
