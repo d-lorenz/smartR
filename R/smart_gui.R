@@ -3069,7 +3069,7 @@ smart_gui <- function(){
   addSpace(ass_g_top, 10)
   assParS_but <- gbutton(text = "Set Input", container = ass_g_top, handler = function(h,...){
     if(svalue(assSM_rad) == "Single"){
-      my_project$setAssessData(specie = svalue(assSpe_drop), forecast = ifelse(svalue(ass_Fore_radio == "No", FALSE, TRUE)))
+      my_project$setAssessData(specie = svalue(assSpe_drop), forecast = ifelse(svalue(ass_Fore_radio) == "No", FALSE, TRUE))
     }else{
       
     }
