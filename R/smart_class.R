@@ -142,15 +142,20 @@ SmartProject <- R6Class("smartProject",
                           assessData = list(),
                           assSingleRes = list(),
                           assSinglePlot = list(),
-                          setAssessData = function(specie){
+                          setAssessData = function(specie, forecast = FALSE){
                             assessData[[specie]] <<- list()
                             indSpeFis <- which(specieInFishery == specie)
                             indSpeSur <- which(specieInSurvey == specie)
                             
                             assessData[[specie]]$Amax <<- fisheryBySpecie[[indSpeFis]]$nCoho
                             assessData[[specie]]$Yr1 <<- as.numeric(as.character(min(years(fisheryBySpecie[[indSpeFis]]$rawLFD$Date))))
+                            
                             assessData[[specie]]$Yr2 <<- as.numeric(as.character(max(years(fisheryBySpecie[[indSpeFis]]$rawLFD$Date))))
+                            if(forecast)  assessData[[specie]]$Yr2 <<-  assessData[[specie]]$Yr2+1
+                            
                             assessData[[specie]]$Nyear <<- assessData[[specie]]$Yr2 - assessData[[specie]]$Yr1 + 1
+                            if(forecast)  assessData[[specie]]$Nyear <<-  assessData[[specie]]$Nyear+1
+                            
                             assessData[[specie]]$Nlen <<- 2 
                             assessData[[specie]]$NCAL <<- 0
                             assessData[[specie]]$Nsurvey <<- 1
@@ -162,6 +167,11 @@ SmartProject <- R6Class("smartProject",
                                                                              stringsAsFactors = FALSE),
                                                sum)
                             assessData[[specie]]$Catch <<- tmpDF$Production
+                            if(forecast){
+                              if(is.null(simProd[[specie]])) stop("\nMissing Simulated Production!\n")
+                              assessData[[specie]]$Catch <<-  c(assessData[[specie]]$Catch, sum(simProd[[specie]]))
+                            }
+
                             ## Catch at Age
                             for(sex in 1:length(names(fisheryBySpecie[[indSpeFis]]$groMixout))){
                               if(sex == 1){
@@ -202,7 +212,23 @@ SmartProject <- R6Class("smartProject",
                             outCAA <- aggregate(. ~ Year, data.frame(Year = fleet$effoAllLoa$Year, outProp), sum)
                             
                             assessData[[specie]]$YCAA <<- as.numeric(as.character(outCAA[,1]))
+                            if(forecast)  assessData[[specie]]$YCAA <<-  c(assessData[[specie]]$YCAA, assessData[[specie]]$Yr2+1)
+                            
                             assessData[[specie]]$CAA <<- outCAA[,-1]/apply(outCAA[,-1], 1, sum)
+                            if(forecast){
+                              if(is.null(simProd[[specie]])) stop("\nMissing Simulated Production!\n")
+                              if(is.null(simEffo)) stop("\nMissing Simulated Effort!\n")
+                              simProp <- matrix(data = 0,
+                                                nrow = nrow(simProd[[specie]]),
+                                                ncol = fisheryBySpecie[[indSpeFis]]$nCoho)
+                              for(season in c("winter", "spring", "summer", "fall")){
+                                tmpOutProp <- apply(simProd[[specie]][simEffo$MonthNum %in% tmpSeason$Month[tmpSeason$Season == season],], 1, function(x) apply(outWeiQ[[season]][,-1]*t(x),2, sum, na.rm = TRUE))
+                                simProp[simEffo$MonthNum %in% tmpSeason$Month[tmpSeason$Season == season],] <- t(tmpOutProp)
+                              }
+                              simCAA <- aggregate(. ~ Year, data.frame(Year = simEffo$Year, simProp), sum)
+                              assessData[[specie]]$CAA <<-  rbind(assessData[[specie]]$CAA, simCAA[,-1]/apply(simCAA[,-1], 1, sum))
+                            }
+                            
                             assessData[[specie]]$NCAA <<- nrow(assessData[[specie]]$CAA)
                             assessData[[specie]]$YCAL <<- 0 
                             assessData[[specie]]$CAL <<- matrix(0, ncol = assessData[[specie]]$Nlen, nrow = assessData[[specie]]$NCAL)
@@ -240,9 +266,11 @@ SmartProject <- R6Class("smartProject",
                             outSAA <- aggregate(. ~ Year, outMem[,c(2, 4:(4+(surveyBySpecie[[indSpeSur]]$nCoho-1)))], sum)
                             
                             assessData[[specie]]$SAA <<- outSAA[,-1]
-                            # assessData[[specie]]$SAA <- assessData[[specie]]$SAA[-7,]
-                            # assessData[[specie]]$YSAA <- as.numeric(as.character(outSAA[,1]))[-7]
+                            if(forecast)  assessData[[specie]]$SAA <<-  rbind(assessData[[specie]]$SAA, assessData[[specie]]$SAA[nrow(assessData[[specie]]$SAA)])
+                            
                             assessData[[specie]]$YSAA <<- as.numeric(as.character(outSAA[,1]))
+                            if(forecast)  assessData[[specie]]$YSAA <<-  c(assessData[[specie]]$YSAA, assessData[[specie]]$Yr2+1)
+                            
                             assessData[[specie]]$SSAA <<- rep(1, nrow(assessData[[specie]]$SAA))
                             assessData[[specie]]$SAL <<- matrix(0, ncol = assessData[[specie]]$Nlen, nrow = assessData[[specie]]$NSAL)
                             assessData[[specie]]$YSAL <<- 0
