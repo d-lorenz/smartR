@@ -266,7 +266,7 @@ SmartProject <- R6Class("smartProject",
                             outSAA <- aggregate(. ~ Year, outMem[,c(2, 4:(4+(surveyBySpecie[[indSpeSur]]$nCoho-1)))], sum)
                             
                             assessData[[specie]]$SAA <<- outSAA[,-1]
-                            if(forecast)  assessData[[specie]]$SAA <<-  rbind(assessData[[specie]]$SAA, assessData[[specie]]$SAA[nrow(assessData[[specie]]$SAA)])
+                            if(forecast)  assessData[[specie]]$SAA <<-  rbind(assessData[[specie]]$SAA, assessData[[specie]]$SAA[nrow(assessData[[specie]]$SAA),])
                             
                             assessData[[specie]]$YSAA <<- as.numeric(as.character(outSAA[,1]))
                             if(forecast)  assessData[[specie]]$YSAA <<-  c(assessData[[specie]]$YSAA, assessData[[specie]]$Yr2+1)
