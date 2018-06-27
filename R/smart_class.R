@@ -269,7 +269,7 @@ SmartProject <- R6Class("smartProject",
                             if(forecast)  assessData[[specie]]$SAA <<-  rbind(assessData[[specie]]$SAA, assessData[[specie]]$SAA[nrow(assessData[[specie]]$SAA),])
                             
                             assessData[[specie]]$YSAA <<- as.numeric(as.character(outSAA[,1]))
-                            if(forecast)  assessData[[specie]]$YSAA <<-  c(assessData[[specie]]$YSAA, assessData[[specie]]$Yr2+1)
+                            if(forecast)  assessData[[specie]]$YSAA <<-  c(assessData[[specie]]$YSAA, assessData[[specie]]$Yr2)
                             
                             assessData[[specie]]$SSAA <<- rep(1, nrow(assessData[[specie]]$SAA))
                             assessData[[specie]]$SAL <<- matrix(0, ncol = assessData[[specie]]$Nlen, nrow = assessData[[specie]]$NSAL)
