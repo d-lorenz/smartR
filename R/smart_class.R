@@ -143,10 +143,12 @@ SmartProject <- R6Class("smartProject",
                           assSingleRes = list(),
                           assSinglePlot = list(),
                           setAssessData = function(specie, forecast = FALSE){
+                            cat("\nSetup Single-Species Assessment Data...")
                             assessData[[specie]] <<- list()
                             indSpeFis <- which(specieInFishery == specie)
                             indSpeSur <- which(specieInSurvey == specie)
                             
+                            cat("\n\tLoading time-scales...")
                             assessData[[specie]]$Amax <<- fisheryBySpecie[[indSpeFis]]$nCoho
                             assessData[[specie]]$Yr1 <<- as.numeric(as.character(min(years(fisheryBySpecie[[indSpeFis]]$rawLFD$Date))))
                             
@@ -160,7 +162,10 @@ SmartProject <- R6Class("smartProject",
                             assessData[[specie]]$Nsurvey <<- 1
                             assessData[[specie]]$NSAA <<- assessData[[specie]]$Nyear
                             assessData[[specie]]$NSAL <<- 0
+                            cat("Done!")
+                            
                             ## Catch
+                            cat("\n\tLoading Catch Data...")
                             tmpDF <- aggregate(Production ~ Year, data.frame(Year = as.character(fleet$effoAllLoa$Year),
                                                                              Production = apply(fleet$predProd[[specie]], 1, sum),
                                                                              stringsAsFactors = FALSE),
@@ -231,8 +236,10 @@ SmartProject <- R6Class("smartProject",
                             assessData[[specie]]$NCAA <<- nrow(assessData[[specie]]$CAA)
                             assessData[[specie]]$YCAL <<- 0 
                             assessData[[specie]]$CAL <<- matrix(0, ncol = assessData[[specie]]$Nlen, nrow = assessData[[specie]]$NCAL)
+                            cat("Done!")
                             
                             ## Survey at Age
+                            cat("\n\tLoading Survey Data...")
                             for(sex in 1:length(names(surveyBySpecie[[indSpeSur]]$groMixout))){
                               if(sex == 1){
                                 tmpAL <- table(round(surveyBySpecie[[indSpeSur]]$groMixout[[sex]]$Length),
@@ -277,8 +284,10 @@ SmartProject <- R6Class("smartProject",
                             assessData[[specie]]$SSAL <<- 0
                             assessData[[specie]]$SelsurvType <<- 1
                             assessData[[specie]]$SelexType <<- 1
+                            cat("Done!")
                             
                             ### Mean Weight
+                            cat("\n\tLoading Weight and Growth Data...")
                             for(sex in 1:length(names(fisheryBySpecie[[indSpeFis]]$groMixout))){
                               if(sex == 1){
                                 tmpWei <- fisheryBySpecie[[indSpeFis]]$groMixout[[sex]][,c("Age", "Weight")]
@@ -334,14 +343,17 @@ SmartProject <- R6Class("smartProject",
                             SurvBio <- matrix(0,nrow=10,ncol=assessData[[specie]]$Nyear)
                             SurvBio[1,] <- apply(t(assessData[[specie]]$SAA)*assessData[[specie]]$WeightH, 2, sum)
                             assessData[[specie]]$SurvBio <<- SurvBio
+                            cat("Done!")
                             
                             # from GUI
+                            cat("\n\tLoading User Parameters...")
                             assessData[[specie]]$M <<- c(2.3, 1.1, 0.8, 0.7)
                             assessData[[specie]]$Mat <<- c(0.5, 1, 1, 1)
                             assessData[[specie]]$Selex <<- c(0.1, 0.2, 0.6, 1)
                             assessData[[specie]]$SelexSurv <<- matrix(0,nrow=10,ncol=assessData[[specie]]$Amax)
                             assessData[[specie]]$SelexSurv[1,] <<- c(0.2, 0.5, 1, 1)
                             assessData[[specie]]$PropZBeforeMat <<- 0.5
+                            cat("Done!\n\nSetup Single-Species Assessment Data Completed!\n")
                           },
                           assSingle = function(specie = ""){
                             if(is.null(assessData[[specie]])){
@@ -387,7 +399,7 @@ SmartProject <- R6Class("smartProject",
                             assSingleRes[[specie]]$par <<- Res$par
                             assSingleRes[[specie]]$VarCo <<- Res$VarCo
                             assSingleRes[[specie]]$SSBSD <<- Res$SSBSD
-                            cat("\n", specie," Assessment Complete!\n", sep = "")
+                            cat("\n\n", specie," Assessment Complete!\n", sep = "")
                           },
                           setPlotSingle = function(specie = ""){
                             if(is.null(assSingleRes[[specie]])){
