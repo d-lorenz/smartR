@@ -240,7 +240,8 @@ SmartProject <- R6Class("smartProject",
                                 tmpAL <- round(tmpAL/apply(tmpAL, 1, sum), 2)
                                 tmpAlDf <- as.data.frame.matrix(tmpAL) 
                                 tmpAlDf$Class <- rownames(tmpAL)
-                                tmpAbu <- aggregate(. ~ Class + Year, surveyBySpecie[[indSpeSur]]$abuAvg[,c("Class", "Year", names(surveyBySpecie[[indSpeSur]]$groMixout)[sex])], sum)
+                                tmpAbu <- aggregate(. ~ Class + Year, surveyBySpecie[[indSpeSur]]$abuAvg[,c("Class", "Year", paste0("wei", substr(names(surveyBySpecie[[indSpeSur]]$groMixout)[sex], 1, 3)))], sum)
+                                # tmpAbu <- aggregate(. ~ Class + Year, surveyBySpecie[[indSpeSur]]$abuAvg[,c("Class", "Year", names(surveyBySpecie[[indSpeSur]]$groMixout)[sex])], sum)
                                 tmpMem <- merge(tmpAbu, tmpAlDf)
                                 for(numCoh in 1:ncol(tmpAL)){
                                   tmpMem[,3+numCoh] <- tmpMem[,3+numCoh]*tmpMem[,3]
