@@ -1259,7 +1259,7 @@ SmartProject <- R6Class("smartProject",
                             outGmat <<- Gmat
                             # outNVlst <<- nVproc
                             outOptimEffo <<- Etemp
-                            cat("Done!", sep = "")
+                            cat("Done!\n", sep = "")
                           },
                           setSimResults = function(){
                             simResPlot <<- list()
