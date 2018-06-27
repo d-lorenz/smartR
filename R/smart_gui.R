@@ -3062,18 +3062,18 @@ smart_gui <- function(){
   enabled(assPre_but) <- FALSE
   addSpring(ass_g_spePred)
   addSpring(ass_g_top)
-  assParS_but <- gbutton(text = "Set Input", container = ass_g_top, handler = function(h,...){
-    if(svalue(assSM_rad) == "Single"){
-      my_project$setAssessData(specie = svalue(assSpe_drop))
-    }else{
-      
-    }
-  })
-  addSpace(ass_g_top, 10)
   ass_Fore <- gframe("Forecast\nNext Year", horizontal = FALSE, container = ass_g_top, expand = TRUE)
   addSpring(ass_Fore)
   ass_Fore_radio <- gradio(c("No", "Yes"), selected = 1, horizontal = TRUE, container = ass_Fore)
   addSpring(ass_Fore)
+  addSpace(ass_g_top, 10)
+  assParS_but <- gbutton(text = "Set Input", container = ass_g_top, handler = function(h,...){
+    if(svalue(assSM_rad) == "Single"){
+      my_project$setAssessData(specie = svalue(assSpe_drop), forecast = svalue(ass_Fore_radio))
+    }else{
+      
+    }
+  })
   addSpace(ass_g_top, 10)
   ass_Str_but <- gbutton(text = "Start", container = ass_g_top, handler = function(h,...){
     if(svalue(assSM_rad) == "Single"){
