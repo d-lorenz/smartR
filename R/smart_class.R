@@ -387,7 +387,7 @@ SmartProject <- R6Class("smartProject",
                             assSingleRes[[specie]]$par <<- Res$par
                             assSingleRes[[specie]]$VarCo <<- Res$VarCo
                             assSingleRes[[specie]]$SSBSD <<- Res$SSBSD
-                            cat("\n", specie," Assessment Complete!", sep = "")
+                            cat("\n", specie," Assessment Complete!\n", sep = "")
                           },
                           setPlotSingle = function(specie = ""){
                             if(is.null(assSingleRes[[specie]])){
