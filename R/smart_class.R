@@ -211,7 +211,7 @@ SmartProject <- R6Class("smartProject",
                             outCAA <- aggregate(. ~ Year, data.frame(Year = fleet$effoAllLoa$Year, outProp), sum)
                             
                             assessData[[specie]]$YCAA <<- as.numeric(as.character(outCAA[,1]))
-                            if(forecast)  assessData[[specie]]$YCAA <<-  c(assessData[[specie]]$YCAA, assessData[[specie]]$Yr2+1)
+                            if(forecast)  assessData[[specie]]$YCAA <<-  c(assessData[[specie]]$YCAA, assessData[[specie]]$Yr2)
                             
                             assessData[[specie]]$CAA <<- outCAA[,-1]/apply(outCAA[,-1], 1, sum)
                             if(forecast){
