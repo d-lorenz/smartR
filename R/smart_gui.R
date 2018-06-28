@@ -54,61 +54,63 @@ smart_gui <- function(){
   
   my_project$createFleet()
   
+  logoPNG <- readJPEG(source = system.file("SMART_Logo.2.jpg", package="smartR"))
   pre_dev <- length(dev.list())
   
-  main_win <- gwindow(paste("SMART - Version ", "1.1", sep = ""),width = 1200, height= 600, visible = TRUE)
+  main_win <- gwindow(paste("SMART - Version ", "1.1", sep = ""), width = 1200, height= 600, visible = TRUE)
   big_g <- ggroup(horizontal = TRUE, container = main_win)
+  addSpace(big_g, 10)
   
-  ####   Left panel   ####
-  
-  lef_g <- ggroup(horizontal = FALSE, container = big_g)
+  # ####   Left panel   ####
+  # 
+  # lef_g <- ggroup(horizontal = FALSE, container = big_g)
+  # # addSpring(lef_g)
+  # # gimage("/Users/Lomo/Documents/Uni/Lab/Proj/smart\ gui/SMART_GUI/SMART_Logo.2.jpg", container = lef_g)
+  # gimage(system.file("SMART_Logo.2.jpg", package="smartR"), container = lef_g)
+  # pro_eg <- gexpandgroup("Project", horizontal = FALSE, container = lef_g)
+  # gbutton(text = "New", container = pro_eg, handler = function(h,...){
+  #   svalue(uti_gn) <- 1})
+  # gbutton(text = "Load", container = pro_eg, handler = function(h,...){
+  #   svalue(uti_gn) <- 1})
+  # 
+  # env_eg <- gexpandgroup("Environment", horizontal = FALSE, container = lef_g)
+  # gbutton(text = "Grid", container = env_eg, handler = function(h,...){
+  #   svalue(uti_gn) <- 2})
+  # 
+  # eff_eg <- gexpandgroup("Effort", horizontal = FALSE, container = lef_g)
+  # gbutton(text = "Load VMS Data", container = eff_eg, handler = function(h,...){
+  #   svalue(uti_gn) <- 3})       #    svalue(uti_gn) <- 7})
+  # 
+  # gbutton(text = "Fishing Grounds", container = eff_eg, handler = function(h,...){
+  #   svalue(uti_gn) <- 4})       #    svalue(uti_gn) <- 8})
+  # 
+  # gbutton(text = "Fleet Register", container = eff_eg, handler = function(h,...){
+  #   svalue(uti_gn) <- 5})       #    svalue(uti_gn) <- 9})
+  # 
+  # gbutton(text = "Production", container = eff_eg, handler = function(h,...){
+  #   svalue(uti_gn) <- 6})       #    svalue(uti_gn) <- 10})
+  # 
+  # 
+  # raw_eg <- gexpandgroup("Resources", horizontal = FALSE, container = lef_g)
+  # gbutton(text = "Survey", container = raw_eg, handler = function(h,...){
+  #   svalue(uti_gn) <- 7})
+  # gbutton(text = "Fishery", container = raw_eg, handler = function(h,...){
+  #   svalue(uti_gn) <- 8})
+  # gbutton(text = "Mixture", container = raw_eg, handler = function(h,...){
+  #   svalue(uti_gn) <- 9})
+  # gbutton(text = "Cohorts", container = raw_eg, handler = function(h,...){
+  #   svalue(uti_gn) <- 10})
+  # 
+  # sim_eg <- gexpandgroup("Simulation", horizontal = FALSE, container = lef_g)
+  # gbutton(text = "Simulate", container = sim_eg, handler = function(h,...){
+  #   svalue(uti_gn) <- 11})
+  # 
+  # ass_eg <- gexpandgroup("Assessment", horizontal = FALSE, container = lef_g)
+  # gbutton(text = "Assess", container = ass_eg, handler = function(h,...){
+  #   svalue(uti_gn) <- 12})
+  # 
   # addSpring(lef_g)
-  # gimage("/Users/Lomo/Documents/Uni/Lab/Proj/smart\ gui/SMART_GUI/SMART_Logo.2.jpg", container = lef_g)
-  gimage(system.file("SMART_Logo.2.jpg", package="smartR"), container = lef_g)
-  pro_eg <- gexpandgroup("Project", horizontal = FALSE, container = lef_g)
-  gbutton(text = "New", container = pro_eg, handler = function(h,...){
-    svalue(uti_gn) <- 1})
-  gbutton(text = "Load", container = pro_eg, handler = function(h,...){
-    svalue(uti_gn) <- 1})
-  
-  env_eg <- gexpandgroup("Environment", horizontal = FALSE, container = lef_g)
-  gbutton(text = "Grid", container = env_eg, handler = function(h,...){
-    svalue(uti_gn) <- 2})
-  
-  eff_eg <- gexpandgroup("Effort", horizontal = FALSE, container = lef_g)
-  gbutton(text = "Load VMS Data", container = eff_eg, handler = function(h,...){
-    svalue(uti_gn) <- 3})       #    svalue(uti_gn) <- 7})
-  
-  gbutton(text = "Fishing Grounds", container = eff_eg, handler = function(h,...){
-    svalue(uti_gn) <- 4})       #    svalue(uti_gn) <- 8})
-  
-  gbutton(text = "Fleet Register", container = eff_eg, handler = function(h,...){
-    svalue(uti_gn) <- 5})       #    svalue(uti_gn) <- 9})
-  
-  gbutton(text = "Production", container = eff_eg, handler = function(h,...){
-    svalue(uti_gn) <- 6})       #    svalue(uti_gn) <- 10})
-  
-  
-  raw_eg <- gexpandgroup("Resources", horizontal = FALSE, container = lef_g)
-  gbutton(text = "Survey", container = raw_eg, handler = function(h,...){
-    svalue(uti_gn) <- 7})
-  gbutton(text = "Fishery", container = raw_eg, handler = function(h,...){
-    svalue(uti_gn) <- 8})
-  gbutton(text = "Mixture", container = raw_eg, handler = function(h,...){
-    svalue(uti_gn) <- 9})
-  gbutton(text = "Cohorts", container = raw_eg, handler = function(h,...){
-    svalue(uti_gn) <- 10})
-  
-  sim_eg <- gexpandgroup("Simulation", horizontal = FALSE, container = lef_g)
-  gbutton(text = "Simulate", container = sim_eg, handler = function(h,...){
-    svalue(uti_gn) <- 11})
-  
-  ass_eg <- gexpandgroup("Assessment", horizontal = FALSE, container = lef_g)
-  gbutton(text = "Assess", container = ass_eg, handler = function(h,...){
-    svalue(uti_gn) <- 12})
-  
-  addSpring(lef_g)
-  stat_bar <- gstatusbar("", container = lef_g, visible = TRUE)
+  # stat_bar <- gstatusbar("", container = lef_g, visible = TRUE)
   
   ####   Right panel   ####
   
@@ -295,7 +297,6 @@ smart_gui <- function(){
   addSpace(pro_g_mid, 2)
   
   pro_p <- ggraphics(container = pro_g, width = 550, height = 250, expand = TRUE)
-  
   
   ####   Environment   ####
   
@@ -3117,13 +3118,16 @@ smart_gui <- function(){
   
   ass_p <- ggraphics(container = ass_g, width = 550, height = 250, expand = TRUE)
   
+  addSpace(big_g, 10)
+  
+  stat_bar <- gstatusbar("", container = rig_g, visible = TRUE)
   
   
-  visible(pro_eg) <- TRUE
-  visible(raw_eg) <- TRUE
-  visible(eff_eg) <- TRUE
-  visible(ass_eg) <- TRUE
-  visible(sim_eg) <- TRUE
+  # visible(pro_eg) <- TRUE
+  # visible(raw_eg) <- TRUE
+  # visible(eff_eg) <- TRUE
+  # visible(ass_eg) <- TRUE
+  # visible(sim_eg) <- TRUE
   # visible(main_win) <- TRUE
   
   svalue(uti_gn) <- 2
@@ -3140,4 +3144,10 @@ smart_gui <- function(){
   
   svalue(uti_gn) <- 1
   # visible(main_win) <- TRUE
+  dev.set(dev.list()[pre_dev+1])
+  suppressWarnings(suppressMessages(ggplot() +
+                                      geom_blank() +
+                                      annotation_custom(rasterGrob(logoPNG),
+                                                        xmin = 0.3, xmax = 0.7,
+                                                        ymin = 0.3, ymax = 0.7)))
 }
