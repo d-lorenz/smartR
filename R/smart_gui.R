@@ -294,6 +294,8 @@ smart_gui <- function(){
   addSpring(pro_g_mid)
   addSpace(pro_g_mid, 2)
   
+  pro_p <- ggraphics(container = pro_g, width = 550, height = 250, expand = TRUE)
+  
   
   ####   Environment   ####
   
@@ -311,7 +313,7 @@ smart_gui <- function(){
     svalue(stat_bar) <- "Loading Grid..."
     enabled(gri_g_top) <- FALSE
     Sys.sleep(1)
-    dev.set(dev.list()[pre_dev+1])
+    dev.set(dev.list()[pre_dev+2])
     
     my_project$loadMap(pathGridShp)
     
@@ -351,7 +353,7 @@ smart_gui <- function(){
   
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_gri,
          handler = function(h,...){
-           dev.set(dev.list()[pre_dev+1])
+           dev.set(dev.list()[pre_dev+2])
            svalue(stat_bar) <- "Plotting grid..."
            enabled(gri_g_top) <- FALSE
            
@@ -370,7 +372,7 @@ smart_gui <- function(){
   gri_g_top1_dep <- ggroup(horizontal = TRUE, container = gri_g_top1)
   #   addSpring(gri_g_top1_dep)
   gbutton("Download Depth", container = gri_g_top1_dep, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+1])
+    dev.set(dev.list()[pre_dev+2])
     svalue(stat_bar) <- "Downloading depth..."
     enabled(gri_g_top) <- FALSE
     
@@ -392,7 +394,7 @@ smart_gui <- function(){
          })
   addSpring(gri_g_top1_dep)
   gbutton("Load Depth", container = gri_g_top1_dep, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+1])
+    dev.set(dev.list()[pre_dev+2])
     ## Get path to bathymetry rData
     svalue(stat_bar) <- "Loading depth..."
     enabled(gri_g_top) <- FALSE
@@ -411,7 +413,7 @@ smart_gui <- function(){
   # addSpring(gri_g_top1_dep)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_dep,
          handler = function(h,...){
-           dev.set(dev.list()[pre_dev+1])
+           dev.set(dev.list()[pre_dev+2])
            my_project$sampMap$ggplotGridBathy()
          })
   addSpring(gri_g_top1_dep)
@@ -424,7 +426,7 @@ smart_gui <- function(){
     enabled(gri_g_top) <- FALSE
     
     Sys.sleep(1)
-    dev.set(dev.list()[pre_dev+1])
+    dev.set(dev.list()[pre_dev+2])
     svalue(stat_bar) <- "Loading biocenosis data.frame..."
     
     my_project$sampMap$loadBioDF(pathSeabed)
@@ -441,7 +443,7 @@ smart_gui <- function(){
   # addSpring(gri_g_top1_bio)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_bio,
          handler = function(h,...){
-           dev.set(dev.list()[pre_dev+1])
+           dev.set(dev.list()[pre_dev+2])
            if(!is.null(my_project$sampMap$gooMap)){
              my_project$sampMap$ggplotBioDF()
            }else{
@@ -455,7 +457,7 @@ smart_gui <- function(){
     enabled(gri_g_top) <- FALSE
     
     Sys.sleep(1)
-    dev.set(dev.list()[pre_dev+1])
+    dev.set(dev.list()[pre_dev+2])
     svalue(stat_bar) <- "Loading Google map..."
     my_project$sampMap$getGooMap()
     my_project$sampMap$setGooGrid()
@@ -468,7 +470,7 @@ smart_gui <- function(){
   # addSpring(gri_g_top1_goo)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_goo,
          handler = function(h,...){
-           dev.set(dev.list()[pre_dev+1])
+           dev.set(dev.list()[pre_dev+2])
            my_project$sampMap$plotGooGrid()
          })
   addSpring(gri_g_top1_goo)
@@ -520,7 +522,7 @@ smart_gui <- function(){
     
     effvie_drop[] <- names(my_project$fleet$rawEffort)
     svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
-    dev.set(dev.list()[pre_dev+2])
+    dev.set(dev.list()[pre_dev+3])
     
     svalue(stat_bar) <- "Plotting raw points..."
     my_project$ggplotRawPoints(svalue(effvie_drop))
@@ -560,7 +562,7 @@ smart_gui <- function(){
     
     effvie_drop[] <- names(my_project$fleet$rawEffort)
     svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
-    dev.set(dev.list()[pre_dev+2])
+    dev.set(dev.list()[pre_dev+3])
     
     svalue(stat_bar) <- "Plotting Count of disinct vessels..."
     Sys.sleep(1)
@@ -576,7 +578,7 @@ smart_gui <- function(){
   })
   addSpring(eff_g_top1)
   gbutton("View Stats", container = eff_g_top1, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+2])
+    dev.set(dev.list()[pre_dev+3])
     
     enabled(eff_g_top) <- FALSE
     
@@ -720,7 +722,7 @@ smart_gui <- function(){
   addSpring(eff_g_top1b)
   
   gbutton("View Stats", container = eff_g_top1b, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+2])
+    dev.set(dev.list()[pre_dev+3])
     svalue(stat_bar) <- "Plotting fishing points data summary..."
     
     enabled(eff_g_top) <- FALSE
@@ -761,7 +763,7 @@ smart_gui <- function(){
     
     effvie_drop[] <- names(my_project$fleet$rawEffort)
     svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
-    dev.set(dev.list()[pre_dev+2])
+    dev.set(dev.list()[pre_dev+3])
     
     my_project$ggplotGridEffort(names(my_project$fleet$rawEffort)[1])
     
@@ -809,7 +811,7 @@ smart_gui <- function(){
   eff_g_top2_ver <- ggroup(horizontal = FALSE, container = eff_g_top2)
   addSpring(eff_g_top2_ver)
   gbutton("Raw Points", container = eff_g_top2_ver, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+2])
+    dev.set(dev.list()[pre_dev+3])
     svalue(stat_bar) <- "Plotting raw points..."
     
     enabled(eff_g_top) <- FALSE
@@ -823,7 +825,7 @@ smart_gui <- function(){
   })
   addSpring(eff_g_top2_ver)
   gbutton("Fishing Points", container = eff_g_top2_ver, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+2])
+    dev.set(dev.list()[pre_dev+3])
     svalue(stat_bar) <- "Plotting fishing points..."
     
     enabled(eff_g_top) <- FALSE
@@ -837,7 +839,7 @@ smart_gui <- function(){
   })
   addSpring(eff_g_top2_ver)
   gbutton("Gridded Points", container = eff_g_top2_ver, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+2])
+    dev.set(dev.list()[pre_dev+3])
     svalue(stat_bar) <- "Plotting gridded points..."
     
     enabled(eff_g_top) <- FALSE
@@ -945,7 +947,7 @@ smart_gui <- function(){
                                     minsize = 10,
                                     modeska = "S",
                                     skater_method = svalue(fg_metr))
-    dev.set(dev.list()[pre_dev+3])
+    dev.set(dev.list()[pre_dev+4])
     
     fg_plotCut[] <- 1:svalue(fg_maxCut)
     svalue(fg_plotCut) <- which.max(my_project$sampMap$indSil)
@@ -961,7 +963,7 @@ smart_gui <- function(){
   addSpring(fig_g_top_plot)
   fg_plotCut <- gcombobox(items = 2:50,
                           container = fig_g_top_plot, handler = function(h,...){
-                            dev.set(dev.list()[pre_dev+3])
+                            dev.set(dev.list()[pre_dev+4])
                             my_project$sampMap$setCutResult(ind_clu = svalue(fg_plotCut))
                             
                             suppressWarnings(grid.arrange(my_project$sampMap$ggIchFGlin,
@@ -1011,7 +1013,7 @@ smart_gui <- function(){
     my_project$fleet$cleanRegister()
     my_project$fleet$setVmsRegister()
     # my_project$fleet$splitFleet()
-    dev.set(dev.list()[pre_dev+4])
+    dev.set(dev.list()[pre_dev+5])
     # my_project$fleet$plotRegSum()
     ggplot_registerDispatch(curRegister = my_project$fleet$rawRegister, selPlot = "Summary")
     
@@ -1036,7 +1038,7 @@ smart_gui <- function(){
   addSpace(reg_g_top_view, 10)
   sel_regSet <- gradio(c("All", "Vms"), selected = 1, horizontal = FALSE,
                        container = reg_g_top_view, handler = function(h,...){
-                         dev.set(dev.list()[pre_dev+4])
+                         dev.set(dev.list()[pre_dev+5])
                          if(svalue(sel_regSet) == "All"){
                            ggplot_registerDispatch(curRegister = my_project$fleet$rawRegister, selPlot = svalue(sel_regPlot))
                          }else{
@@ -1048,7 +1050,7 @@ smart_gui <- function(){
                              "Construction Year", "Length Over All", "Main Power"),
                            selected = 1, editable = FALSE, expand = TRUE, container = reg_g_top_view,
                            handler = function(h,...){
-                             dev.set(dev.list()[pre_dev+4])
+                             dev.set(dev.list()[pre_dev+5])
                              if(svalue(sel_regSet) == "All"){
                                ggplot_registerDispatch(curRegister = my_project$fleet$rawRegister, selPlot = svalue(sel_regPlot))
                              }else{
@@ -1097,14 +1099,14 @@ smart_gui <- function(){
   
   addSpring(reg_g_top_harbs)
   gbutton("Set Weighted\nDistance", container = reg_g_top_harbs, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+4])
+    dev.set(dev.list()[pre_dev+5])
     my_project$getHarbFgDist()
     my_project$ggplotFgWeigDists()
   })
   addSpace(reg_g_top_harbs, 10)
   gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = reg_g_top_harbs,
          handler = function(h,...){
-           dev.set(dev.list()[pre_dev+4])
+           dev.set(dev.list()[pre_dev+5])
            my_project$ggplotFgWeigDists()
          })
   addSpace(reg_g_top_harbs, 10)
@@ -1134,7 +1136,7 @@ smart_gui <- function(){
     svalue(stat_bar) <- "Loading landings..."
     Sys.sleep(1)
     
-    dev.set(dev.list()[pre_dev+5])
+    dev.set(dev.list()[pre_dev+6])
     my_project$fleet$rawProduction <- readRDS(pathLanding)
     
     svalue(stat_bar) <- "Setting Ids..."
@@ -1666,7 +1668,7 @@ smart_gui <- function(){
   pro_g_top2_ver <- ggroup(horizontal = FALSE, container = pro_g_top2_view)
   addSpring(pro_g_top2_ver)
   gbutton("Betas", container = pro_g_top2_ver, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+5])
+    dev.set(dev.list()[pre_dev+6])
     svalue(stat_bar) <- "Plotting Betas..."
     Sys.sleep(1)
     my_project$setPlotBetaMeltYear(specie = svalue(spe_drop), year = svalue(provie_drop))
@@ -1677,7 +1679,7 @@ smart_gui <- function(){
   })
   addSpring(pro_g_top2_ver)
   gbutton("Production", container = pro_g_top2_ver, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+5])
+    dev.set(dev.list()[pre_dev+6])
     svalue(stat_bar) <- "Plotting production..."
     Sys.sleep(1)
     my_project$setPlotProdMeltYear(specie = svalue(spe_drop), year = svalue(provie_drop))
@@ -2339,7 +2341,7 @@ smart_gui <- function(){
   addSpring(go_g)
   go_b <- gbutton ("   GO   ", container = go_g,
                    handler = function(h,...){
-                     dev.set(dev.list()[pre_dev+6])
+                     dev.set(dev.list()[pre_dev+7])
                      svalue(view_radio) <- "MCMC"
                      if(svalue(sourceMix_r) == "Survey"){
                        pre_mfrow <- par(c("mfrow", "mar"))
@@ -2396,7 +2398,7 @@ smart_gui <- function(){
   view_radio <- gradio(c("MCMC", "Key", "Birth"), selected = 1,
                        horizontal = FALSE, container = view_g,
                        handler = function(h,...){
-                         dev.set(dev.list()[pre_dev+6])
+                         dev.set(dev.list()[pre_dev+7])
                          
                          if(svalue(sourceMix_r) == "Survey"){
                            my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_mix))]]$ggplotMcmcOut(selCompo = svalue(view_radio),
@@ -2500,7 +2502,7 @@ smart_gui <- function(){
     # svalue(sexRadio_coh)     # sex = "Female"
     # svalue(gruRadio_coh)   # group = "Age"
     # svalue(cohTyp_drop)    #  type = "LFD"
-    dev.set(dev.list()[pre_dev+7])
+    dev.set(dev.list()[pre_dev+8])
     
     if(svalue(sourceCoh_r) == "Survey"){
       cohSpe_ind <- which(my_project$specieInSurvey == svalue(spec_drop_coh))
@@ -2552,7 +2554,7 @@ smart_gui <- function(){
   
   gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = cohofra_g,
          handler = function(h,...){
-           dev.set(dev.list()[pre_dev+7])
+           dev.set(dev.list()[pre_dev+8])
            # my_project$cohoDisPlot(which(my_project$specieInSurvey == svalue(cohSpe_drop)),
            #                        ifelse(svalue(cohCoh_drop) == "All", "All", as.numeric(svalue(cohCoh_drop))),
            #                        ifelse(svalue(cohYea_drop) == "All", "All", which(my_project$yearInSurvey == svalue(cohYea_drop))),
@@ -2580,7 +2582,7 @@ smart_gui <- function(){
   sim_g_Effo <- gframe(text = "Effort Index", horizontal = FALSE, container = sim_g_top)
   gbutton("Get", container = sim_g_Effo, handler = function(h,...){
     my_project$setEffortIndex()
-    dev.set(dev.list()[pre_dev+8])
+    dev.set(dev.list()[pre_dev+9])
     print(ggplot_effoIndBoxplot(df_EffoInde = my_project$fleet$effortIndex))
     
     if(!is.null(my_project$fleet$effortIndex)){
@@ -2594,7 +2596,7 @@ smart_gui <- function(){
   sim_g_SeaDays <- gframe(text = "Days At Sea", horizontal = FALSE, container = sim_g_top)
   gbutton("Get", container = sim_g_SeaDays, handler = function(h,...){
     my_project$setDaysAtSea()
-    dev.set(dev.list()[pre_dev+8])
+    dev.set(dev.list()[pre_dev+9])
     print(ggplot_seaDaysBoxplot(df_seaDays = my_project$fleet$daysAtSea))
     
     if(!is.null(my_project$fleet$daysAtSea)){
@@ -2608,7 +2610,7 @@ smart_gui <- function(){
   sim_g_Prod <- gframe(text = "Production Index", horizontal = FALSE, container = sim_g_top)
   gbutton("Get", container = sim_g_Prod, handler = function(h,...){
     my_project$setProductionIndex()
-    dev.set(dev.list()[pre_dev+8])
+    dev.set(dev.list()[pre_dev+9])
     print(ggplot_prodIndBoxplot(df_ProdInde = my_project$fleet$prodIndex))
     
     if(!is.null(my_project$fleet$prodIndex)){
@@ -2992,7 +2994,7 @@ smart_gui <- function(){
   addSpring(sim_g_SimPar)
   addSpring(sim_g_Sim)
   gbutton("   Start\nSimulation", container = sim_g_Sim, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+8])
+    dev.set(dev.list()[pre_dev+9])
     svalue(sim_Res_radio) <- "Summary"
     cat("\n\nSimulating ", sep = "")
     my_project$simEffo <- NULL
@@ -3013,7 +3015,7 @@ smart_gui <- function(){
   sim_Res_radio <- gradio(c("Summary", "Pattern", "Change"), selected = 1,
                           horizontal = FALSE, container = sim_Res,
                           handler = function(h,...){
-                            dev.set(dev.list()[pre_dev+8])
+                            dev.set(dev.list()[pre_dev+9])
                             
                             switch(svalue(sim_Res_radio),
                                    Summary = {},
@@ -3081,7 +3083,7 @@ smart_gui <- function(){
       my_project$setPlotSingle(specie = svalue(assSpe_drop))
       assRes_drop[] <- names(my_project$assessData)
       svalue(assRes_drop) <- names(my_project$assessData)[1]
-      dev.set(dev.list()[pre_dev+9])
+      dev.set(dev.list()[pre_dev+10])
       suppressWarnings(print(my_project$assSinglePlot[[svalue(assSpe_drop)]]$SSB))
     }else{
       
@@ -3099,7 +3101,7 @@ smart_gui <- function(){
   ass_Res_radio <- gradio(c("SSB", "OPSurvey", "OPCatch", "TotalCatch"), selected = 1,
                           horizontal = FALSE, container = ass_Res,
                           handler = function(h,...){
-                            dev.set(dev.list()[pre_dev+9])
+                            dev.set(dev.list()[pre_dev+10])
                             if(svalue(assSM_rad) == "Single"){
                               switch(svalue(ass_Res_radio),
                                      SSB = {suppressWarnings(print(my_project$assSinglePlot[[svalue(assRes_drop)]]$SSB))},
