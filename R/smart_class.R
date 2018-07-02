@@ -143,12 +143,12 @@ SmartProject <- R6Class("smartProject",
                           assSingleRes = list(),
                           assSinglePlot = list(),
                           setAssessData = function(specie, forecast = FALSE){
-                            cat("\nSetup Single-Species Assessment Data...")
+                            cat("\nSetup Single-Species Assessment Data...\n")
                             assessData[[specie]] <<- list()
                             indSpeFis <- which(specieInFishery == specie)
                             indSpeSur <- which(specieInSurvey == specie)
                             
-                            cat("\n\tLoading time-scales...")
+                            cat("\n\tLoading time-scales... ")
                             assessData[[specie]]$Amax <<- fisheryBySpecie[[indSpeFis]]$nCoho
                             assessData[[specie]]$Yr1 <<- as.numeric(as.character(min(years(fisheryBySpecie[[indSpeFis]]$rawLFD$Date))))
                             
@@ -165,7 +165,7 @@ SmartProject <- R6Class("smartProject",
                             cat("Done!")
                             
                             ## Catch
-                            cat("\n\tLoading Catch Data...")
+                            cat("\n\tLoading Catch Data... ")
                             tmpDF <- aggregate(Production ~ Year, data.frame(Year = as.character(fleet$effoAllLoa$Year),
                                                                              Production = apply(fleet$predProd[[specie]], 1, sum),
                                                                              stringsAsFactors = FALSE),
@@ -239,7 +239,7 @@ SmartProject <- R6Class("smartProject",
                             cat("Done!")
                             
                             ## Survey at Age
-                            cat("\n\tLoading Survey Data...")
+                            cat("\n\tLoading Survey Data... ")
                             for(sex in 1:length(names(surveyBySpecie[[indSpeSur]]$groMixout))){
                               if(sex == 1){
                                 tmpAL <- table(round(surveyBySpecie[[indSpeSur]]$groMixout[[sex]]$Length),
@@ -287,7 +287,7 @@ SmartProject <- R6Class("smartProject",
                             cat("Done!")
                             
                             ### Mean Weight
-                            cat("\n\tLoading Weight and Growth Data...")
+                            cat("\n\tLoading Weight and Growth Data... ")
                             for(sex in 1:length(names(fisheryBySpecie[[indSpeFis]]$groMixout))){
                               if(sex == 1){
                                 tmpWei <- fisheryBySpecie[[indSpeFis]]$groMixout[[sex]][,c("Age", "Weight")]
