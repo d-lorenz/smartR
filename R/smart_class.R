@@ -348,15 +348,24 @@ SmartProject <- R6Class("smartProject",
                             # from GUI
                             cat("\n\tLoading User Parameters... ")
                             # assessData[[specie]]$M <<- c(2.3, 1.1, 0.8, 0.7)
+                            if(is.null(assessData[[specie]]$M)){
                             assessData[[specie]]$M <<- numeric(assessData[[specie]]$Amax)
+                            }
                             # assessData[[specie]]$Mat <<- c(0.5, 1, 1, 1)
-                            assessData[[specie]]$Mat <<- numeric(assessData[[specie]]$Amax)
+                            if(is.null(assessData[[specie]]$Mat)){
+                              assessData[[specie]]$Mat <<- numeric(assessData[[specie]]$Amax)
+                            }
                             # assessData[[specie]]$Selex <<- c(0.1, 0.2, 0.6, 1)
-                            assessData[[specie]]$Selex <<- numeric(assessData[[specie]]$Amax)
-                            assessData[[specie]]$SelexSurv <<- matrix(0,nrow=10,ncol=assessData[[specie]]$Amax)
+                            if(is.null(assessData[[specie]]$Selex)){
+                              assessData[[specie]]$Selex <<- numeric(assessData[[specie]]$Amax)
+                            }
+                            if(is.null(assessData[[specie]]$SelexSurv)){
+                              assessData[[specie]]$SelexSurv <<- matrix(0,nrow=10,ncol=assessData[[specie]]$Amax)
+                            }
                             # assessData[[specie]]$SelexSurv[1,] <<- c(0.2, 0.5, 1, 1)
-                            assessData[[specie]]$SelexSurv[1,] <<- numeric(assessData[[specie]]$Amax)
-                            assessData[[specie]]$PropZBeforeMat <<- 0.5
+                            if(is.null(assessData[[specie]]$PropZBeforeMat)){
+                              assessData[[specie]]$PropZBeforeMat <<- 0.0
+                            }
                             cat("Done!\n\nSetup Single-Species Assessment Data Completed!\n")
                           },
                           assSingle = function(specie = ""){
