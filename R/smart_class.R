@@ -144,7 +144,9 @@ SmartProject <- R6Class("smartProject",
                           assSinglePlot = list(),
                           setAssessData = function(specie, forecast = FALSE){
                             cat("\nSetup Single-Species Assessment Data...\n")
-                            assessData[[specie]] <<- list()
+                            if(is.null(assessData[[specie]])){
+                              assessData[[specie]] <<- list()
+                            }
                             indSpeFis <- which(specieInFishery == specie)
                             indSpeSur <- which(specieInSurvey == specie)
                             
@@ -156,7 +158,7 @@ SmartProject <- R6Class("smartProject",
                             if(forecast)  assessData[[specie]]$Yr2 <<-  assessData[[specie]]$Yr2+1
                             
                             assessData[[specie]]$Nyear <<- assessData[[specie]]$Yr2 - assessData[[specie]]$Yr1 + 1
-
+                            
                             assessData[[specie]]$Nlen <<- 2 
                             assessData[[specie]]$NCAL <<- 0
                             assessData[[specie]]$Nsurvey <<- 1
@@ -175,7 +177,7 @@ SmartProject <- R6Class("smartProject",
                               if(is.null(simProd[[specie]])) stop("\nMissing Simulated Production!\n")
                               assessData[[specie]]$Catch <<-  c(assessData[[specie]]$Catch, sum(simProd[[specie]]))
                             }
-
+                            
                             ## Catch at Age
                             for(sex in 1:length(names(fisheryBySpecie[[indSpeFis]]$groMixout))){
                               if(sex == 1){
@@ -349,7 +351,7 @@ SmartProject <- R6Class("smartProject",
                             cat("\n\tLoading User Parameters... ")
                             # assessData[[specie]]$M <<- c(2.3, 1.1, 0.8, 0.7)
                             if(is.null(assessData[[specie]]$M)){
-                            assessData[[specie]]$M <<- numeric(assessData[[specie]]$Amax)
+                              assessData[[specie]]$M <<- numeric(assessData[[specie]]$Amax)
                             }
                             # assessData[[specie]]$Mat <<- c(0.5, 1, 1, 1)
                             if(is.null(assessData[[specie]]$Mat)){
