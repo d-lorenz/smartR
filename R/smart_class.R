@@ -346,12 +346,16 @@ SmartProject <- R6Class("smartProject",
                             cat("Done!")
                             
                             # from GUI
-                            cat("\n\tLoading User Parameters...")
-                            assessData[[specie]]$M <<- c(2.3, 1.1, 0.8, 0.7)
-                            assessData[[specie]]$Mat <<- c(0.5, 1, 1, 1)
-                            assessData[[specie]]$Selex <<- c(0.1, 0.2, 0.6, 1)
+                            cat("\n\tLoading User Parameters... ")
+                            # assessData[[specie]]$M <<- c(2.3, 1.1, 0.8, 0.7)
+                            assessData[[specie]]$M <<- numeric(assessData[[specie]]$Amax)
+                            # assessData[[specie]]$Mat <<- c(0.5, 1, 1, 1)
+                            assessData[[specie]]$Mat <<- numeric(assessData[[specie]]$Amax)
+                            # assessData[[specie]]$Selex <<- c(0.1, 0.2, 0.6, 1)
+                            assessData[[specie]]$Selex <<- numeric(assessData[[specie]]$Amax)
                             assessData[[specie]]$SelexSurv <<- matrix(0,nrow=10,ncol=assessData[[specie]]$Amax)
-                            assessData[[specie]]$SelexSurv[1,] <<- c(0.2, 0.5, 1, 1)
+                            # assessData[[specie]]$SelexSurv[1,] <<- c(0.2, 0.5, 1, 1)
+                            assessData[[specie]]$SelexSurv[1,] <<- numeric(assessData[[specie]]$Amax)
                             assessData[[specie]]$PropZBeforeMat <<- 0.5
                             cat("Done!\n\nSetup Single-Species Assessment Data Completed!\n")
                           },
