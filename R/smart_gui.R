@@ -3142,6 +3142,24 @@ smart_gui <- function(){
     }
   })
   addSpace(ass_g_top, 10)
+  assParR_but <- gbutton(text = "Inspect Input", container = ass_g_top, handler = function(h,...){
+    tempWind_AssData <- gwindow(title = "Review Assessment Data",
+                                parent = main_win,
+                                width = 800, height = 600)
+    bigGroup <- ggroup(horizontal = FALSE, container = tempWind_AssData)
+    ass_gn <- gnotebook(tab.pos = 3, container = bigGroup, expand = TRUE)
+    for(s in 1:length(names(my_project$assessData))){
+      assign(paste0("Tab", s), ggroup(horizontal = FALSE, container = ass_gn, label = names(my_project$assessData)[s]))
+      assign(paste0("Txt", s), gtext(text = paste(capture.output(print(my_project$assessData[[names(my_project$assessData)[s]]])), collapse = "\n"), width = 300, height = 550, container = get(paste0("Tab", s))))
+    }
+    smaGroup <- ggroup(horizontal = TRUE, container = bigGroup)
+    addSpring(smaGroup)
+    endArea <- gbutton(text = "\nClose\n", container = smaGroup, handler = function(h,...){
+      dispose(tempWind_AssData)
+    })
+    addSpring(smaGroup)
+  })
+  addSpace(ass_g_top, 10)
   ass_Str_but <- gbutton(text = "Start", container = ass_g_top, handler = function(h,...){
     if(svalue(assSM_rad) == "Single"){
       my_project$assSingle(specie = svalue(assSpe_drop))
