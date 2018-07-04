@@ -3059,7 +3059,7 @@ smart_gui <- function(){
   assSpe_drop$set_size(value = c(width = 150))
   
   addSpring(ass_g_spePred)
-  assPre_but <- gbutton(text = "Set Predation", container = ass_g_spePred, handler = function(h,...){
+  assPre_but <- gbutton(text = "Set Interaction", container = ass_g_spePred, handler = function(h,...){
     
   })
   enabled(assPre_but) <- FALSE
