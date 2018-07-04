@@ -3092,7 +3092,7 @@ smart_gui <- function(){
         parIn_df[4,] <- my_project$assessData[[tmpSpe]]$SelexSurv[1,]
       }
       if(my_project$assessData[[tmpSpe]]$PropZBeforeMat != 0){
-        parZbef_df <- my_project$assessData[[tmpSpe]]$PropZBeforeMat
+        parZbef_df <- as.character(my_project$assessData[[tmpSpe]]$PropZBeforeMat)
       }else{
         parZbef_df <- 0
       }
