@@ -143,7 +143,7 @@ SmartProject <- R6Class("smartProject",
                           assSingleRes = list(),
                           assSinglePlot = list(),
                           setAssessData = function(specie, forecast = FALSE){
-                            cat("\nSetup Single-Species Assessment Data...\n")
+                            cat("\nSetup Assessment Data for", specie,"...\n")
                             if(is.null(assessData[[specie]])){
                               assessData[[specie]] <<- list()
                             }
@@ -368,7 +368,7 @@ SmartProject <- R6Class("smartProject",
                             if(is.null(assessData[[specie]]$PropZBeforeMat)){
                               assessData[[specie]]$PropZBeforeMat <<- 0.0
                             }
-                            cat("Done!\n\nSetup Single-Species Assessment Data Completed!\n")
+                            cat("Done!\n\nSetup Assessment Data for", specie,"Completed!\n")
                           },
                           assSingle = function(specie = ""){
                             if(is.null(assessData[[specie]])){
