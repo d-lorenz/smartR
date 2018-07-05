@@ -3138,7 +3138,71 @@ smart_gui <- function(){
       visible(tempAssData) <- TRUE
       
     }else{
-      
+      for(oneSpe in intersect(my_project$specieInFishery, my_project$specieInSurvey)){
+        my_project$setAssessData(specie = oneSpe, forecast = ifelse(svalue(ass_Fore_radio) == "No", FALSE, TRUE))
+        
+        parIn_df <- data.frame(matrix(0, ncol = 4, nrow = 4))
+        colnames(parIn_df) <- paste0("Age ", (1:ncol(parIn_df))-1)
+        rownames(parIn_df) <- c("M", "Mat", "F-Sel", "S-Sel")
+        
+        if(sum(my_project$assessData[[oneSpe]]$M) != 0){
+          parIn_df[1,] <- my_project$assessData[[oneSpe]]$M
+        }
+        if(sum(my_project$assessData[[oneSpe]]$Mat) != 0){
+          parIn_df[2,] <- my_project$assessData[[oneSpe]]$Mat
+        }
+        if(sum(my_project$assessData[[oneSpe]]$Selex) != 0){
+          parIn_df[3,] <- my_project$assessData[[oneSpe]]$Selex
+        }
+        if(sum(my_project$assessData[[oneSpe]]$SelexSurv[1,]) != 0){
+          parIn_df[4,] <- my_project$assessData[[oneSpe]]$SelexSurv[1,]
+        }
+        if(my_project$assessData[[oneSpe]]$PropZBeforeMat != 0){
+          parZbef_df <- as.character(my_project$assessData[[oneSpe]]$PropZBeforeMat)
+        }else{
+          parZbef_df <- 0
+        }
+        
+        tempAssData <- gwindow(title="Custom Parameters",
+                               visible = FALSE,
+                               parent = main_win,
+                               width = 500, height = 280)
+        
+        toptopAss_g <- ggroup(horizontal = TRUE, container = tempAssData)
+        addSpace(toptopAss_g, 10)
+        topAss_g <- ggroup(horizontal = FALSE, container = toptopAss_g, expand = TRUE)
+        addSpace(topAss_g, 10)
+        
+        parIn_f <- gframe(text = "", horizontal = TRUE, container = topAss_g)
+        addSpace(parIn_f, 25)
+        parIn_gdf <- gdf(items = parIn_df, container = parIn_f)
+        parIn_gdf$set_size(value = c(height = 125))
+        addSpace(parIn_f, 25)
+        addSpace(topAss_g, 10)
+        
+        parZbef_f <- gframe(text = "Z before Maturity", horizontal = TRUE, container = topAss_g)
+        addSpace(parZbef_f, 25)
+        parZbef_ge <- gedit(text = "0", width = 15, container = parZbef_f)
+        addSpace(parZbef_f, 25)
+        addSpace(topAss_g, 10)
+        
+        but_g <- ggroup(horizontal = TRUE, container = topAss_g)
+        addSpring(but_g)
+        gbutton("Accept", container = but_g, handler = function(h,...){
+          my_project$assessData[[oneSpe]]$M <- as.numeric(unlist(parIn_gdf[1,]))
+          my_project$assessData[[oneSpe]]$Mat <- as.numeric(unlist(parIn_gdf[2,]))
+          my_project$assessData[[oneSpe]]$Selex <- as.numeric(unlist(parIn_gdf[3,]))
+          my_project$assessData[[oneSpe]]$SelexSurv[1,] <- as.numeric(unlist(parIn_gdf[4,]))
+          my_project$assessData[[oneSpe]]$PropZBeforeMat <- as.numeric(svalue(parZbef_ge))
+          delete(parIn_f, parIn_gdf)
+          dispose(tempAssData)
+        })
+        addSpring(but_g)
+        
+        addSpace(topAss_g, 10)
+        addSpace(toptopAss_g, 10)
+        visible(tempAssData) <- TRUE
+      }
     }
   })
   addSpace(ass_g_top, 10)
