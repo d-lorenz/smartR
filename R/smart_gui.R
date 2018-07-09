@@ -26,7 +26,7 @@ smart_gui <- function(){
   pathBathymetry <- "/Users/Lomo/Documents/Uni/R/project/smartR_data/Environment/Bathymetry/bathyMatrix.rData"
   
   # RAW VMS
-  pathRawVMS <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/smart_rawEffort_new.rData"
+  pathRawVMS <- "/Users/Lomo/Documents/Uni/R/project/smartR_data/Fleet/Effort/effortRaw.rData"
   
   # GRID EFFORT AA
   pathEffortAA <- "/Users/Lomo/Documents/Uni/R/project/smartR_data/Fleet/Effort/effortEnha.rData"
