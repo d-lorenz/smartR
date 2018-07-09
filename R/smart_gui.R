@@ -3106,7 +3106,6 @@ smart_gui <- function(){
                                        
                                        vertColo <- as.character(vertColDF[match(iteTyp, vertColDF[,1]),2])
                                        firWhi <- which(iteIte != "None", arr.ind = TRUE)
-                                       which(firWhi[,1] == firWhi[,2])
                                        edgeLty <- rep(1, nrow(firWhi))
                                        edgeLty[which(firWhi[,1] == firWhi[,2])] <- 2
                                        
@@ -3114,7 +3113,7 @@ smart_gui <- function(){
                                          set_vertex_attr(name = "label", value = speLst) %>%
                                          add_edges(as.vector(t(firWhi)), color = "firebrick", lty = edgeLty) %>%
                                          add_vertices(nv = 1, label = "Fishing\nFleet") %>%
-                                         add_edges(c(rbind(4, 1:length(speLst))), color = "Black", lty = 1)
+                                         add_edges(c(rbind(length(speLst)+1, 1:length(speLst))), color = "Black", lty = 1)
                                        plot(speGra, main = "Interaction Graph",
                                             edge.arrow.size = 0.5, edge.width = 2,
                                             vertex.color = c(vertColo, "White"),
@@ -3147,7 +3146,6 @@ smart_gui <- function(){
                                                             
                                                             vertColo <- as.character(vertColDF[match(iteTyp, vertColDF[,1]),2])
                                                             firWhi <- which(iteIte != "None", arr.ind = TRUE)
-                                                            which(firWhi[,1] == firWhi[,2])
                                                             edgeLty <- rep(1, nrow(firWhi))
                                                             edgeLty[which(firWhi[,1] == firWhi[,2])] <- 2
                                                             
@@ -3155,7 +3153,7 @@ smart_gui <- function(){
                                                               set_vertex_attr(name = "label", value = speLst) %>%
                                                               add_edges(as.vector(t(firWhi)), color = "firebrick", lty = edgeLty) %>%
                                                               add_vertices(nv = 1, label = "Fishing\nFleet") %>%
-                                                              add_edges(c(rbind(4, 1:length(speLst))), color = "Black", lty = 1)
+                                                              add_edges(c(rbind(length(speLst)+1, 1:length(speLst))), color = "Black", lty = 1)
                                                             plot(speGra, main = "Interaction Graph",
                                                                  edge.arrow.size = 0.5, edge.width = 2,
                                                                  vertex.color = c(vertColo, "White"),
@@ -3233,7 +3231,6 @@ smart_gui <- function(){
     
     vertColo <- as.character(vertColDF[match(iteTyp, vertColDF[,1]),2])
     firWhi <- which(iteIte != "None", arr.ind = TRUE)
-    which(firWhi[,1] == firWhi[,2])
     edgeLty <- rep(1, nrow(firWhi))
     edgeLty[which(firWhi[,1] == firWhi[,2])] <- 2
     
@@ -3241,7 +3238,7 @@ smart_gui <- function(){
       set_vertex_attr(name = "label", value = speLst) %>%
       add_edges(as.vector(t(firWhi)), color = "firebrick", lty = edgeLty) %>%
       add_vertices(nv = 1, label = "Fishing\nFleet") %>%
-      add_edges(c(rbind(4, 1:length(speLst))), color = "Black", lty = 1)
+      add_edges(c(rbind(length(speLst)+1, 1:length(speLst))), color = "Black", lty = 1)
     nodeLay <- layout_with_fr(speGra)
     
     plot(speGra, main = "Interaction Graph",
