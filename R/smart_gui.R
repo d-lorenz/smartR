@@ -3061,6 +3061,196 @@ smart_gui <- function(){
   addSpring(ass_g_spePred)
   assPre_but <- gbutton(text = "Set Interaction", container = ass_g_spePred, handler = function(h,...){
     
+    speLst <- intersect(my_project$specieInFishery, my_project$specieInSurvey)
+    # speLst <- c("HKE", "MUT", "DPS")
+    vertColDF <- data.frame(Type = c("Predator", "Prey", "None"),
+                            Color = c("firebrick", "cornflowerblue", "grey73"))
+    iteTyp <- rep("None", length(speLst))
+    iteChi <- rep("None", length(speLst))
+    iteOm <- rep("None", length(speLst))
+    itePer <- rep("None", length(speLst))
+    iteIte <- matrix(data = "None", nrow = length(speLst), ncol = length(speLst), byrow = TRUE)
+    iteItePar <- matrix(data = 0, nrow = length(speLst), ncol = length(speLst), byrow = TRUE)
+    
+    tempAssInte <- gwindow(title="Setup Interaction",
+                           visible = FALSE,
+                           parent = main_win,
+                           width = 500, height = 280)
+    
+    toptopAss_g <- ggroup(horizontal = TRUE, container = tempAssInte)
+    addSpace(toptopAss_g, 10)
+    topAss_g <- ggroup(horizontal = FALSE, container = toptopAss_g, expand = TRUE)
+    addSpace(topAss_g, 10)
+    
+    speWid <- list()
+    for(oneSpe in 1:length(speLst)){
+      speWid[[oneSpe]] <- list()
+      speWid[[oneSpe]]$fra <- gframe(text = speLst[oneSpe], horizontal = FALSE, container = topAss_g)
+      addSpace(speWid[[oneSpe]]$fra, 10)
+      speWid[[oneSpe]]$gruA <- ggroup(horizontal = TRUE, container = speWid[[oneSpe]]$fra)
+      addSpring(speWid[[oneSpe]]$gruA)
+      glabel(text = "Type:", container = speWid[[oneSpe]]$gruA)
+      speWid[[oneSpe]]$rad <- gradio(items = c("None", "Predator", "Prey"), horizontal = TRUE,
+                                     container = speWid[[oneSpe]]$gruA, handler = function(h,...){
+                                       
+                                       for(i in 1:length(speLst)){
+                                         iteTyp[i] <- svalue(speWid[[i]]$rad)
+                                         iteChi[i] <- svalue(speWid[[i]]$gruCeChi)
+                                         iteOm[i] <- svalue(speWid[[i]]$gruCeOm)
+                                         itePer[i] <- svalue(speWid[[i]]$gruCePer)
+                                         for(s in 1:length(speLst)){
+                                           iteIte[i, s] <- as.character(svalue(speWid[[i]]$diet[[s]]$fraBrad))
+                                           iteItePar[i, s] <- svalue(speWid[[i]]$diet[[s]]$fraBage)
+                                         }
+                                       }
+                                       
+                                       vertColo <- as.character(vertColDF[match(iteTyp, vertColDF[,1]),2])
+                                       firWhi <- which(iteIte != "None", arr.ind = TRUE)
+                                       which(firWhi[,1] == firWhi[,2])
+                                       edgeLty <- rep(1, nrow(firWhi))
+                                       edgeLty[which(firWhi[,1] == firWhi[,2])] <- 2
+                                       
+                                       speGra <- make_empty_graph(n = length(speLst)) %>%
+                                         set_vertex_attr(name = "label", value = speLst) %>%
+                                         add_edges(as.vector(t(firWhi)), color = "firebrick", lty = edgeLty) %>%
+                                         add_vertices(nv = 1, label = "Fishing\nFleet") %>%
+                                         add_edges(c(rbind(4, 1:length(speLst))), color = "Black", lty = 1)
+                                       plot(speGra, main = "Interaction Graph",
+                                            edge.arrow.size = 0.5, edge.width = 2,
+                                            vertex.color = c(vertColo, "White"),
+                                            vertex.size = c(rep(60, length(vertColo)), 90), layout = nodeLay,
+                                            vertex.frame.color = "gray", vertex.label.color = "black",
+                                            vertex.label.cex = 1.2, edge.curved = 0.1)
+                                     })
+      addSpring(speWid[[oneSpe]]$gruA)
+      speWid[[oneSpe]]$fraB <- gframe(text = "Diet", horizontal = FALSE, container = speWid[[oneSpe]]$fra)
+      addSpring(speWid[[oneSpe]]$fraB)
+      speWid[[oneSpe]]$diet <- list()
+      for(eatSpe in 1:length(speLst)){
+        speWid[[oneSpe]]$diet[[eatSpe]] <- list()
+        speWid[[oneSpe]]$diet[[eatSpe]]$fraBgru <- ggroup(horizontal = TRUE, container = speWid[[oneSpe]]$fraB)
+        addSpace(speWid[[oneSpe]]$diet[[eatSpe]]$fraBgru, 10)
+        glabel(text = speLst[eatSpe], container = speWid[[oneSpe]]$diet[[eatSpe]]$fraBgru)
+        speWid[[oneSpe]]$diet[[eatSpe]]$fraBrad <- gradio(items = c("None", "All", "Greater than", "Smaller than"), horizontal = TRUE,
+                                                          container = speWid[[oneSpe]]$diet[[eatSpe]]$fraBgru, handler = function(h,...){
+                                                            
+                                                            for(i in 1:length(speLst)){
+                                                              iteTyp[i] <- svalue(speWid[[i]]$rad)
+                                                              iteChi[i] <- svalue(speWid[[i]]$gruCeChi)
+                                                              iteOm[i] <- svalue(speWid[[i]]$gruCeOm)
+                                                              itePer[i] <- svalue(speWid[[i]]$gruCePer)
+                                                              for(s in 1:length(speLst)){
+                                                                iteIte[i, s] <- as.character(svalue(speWid[[i]]$diet[[s]]$fraBrad))
+                                                                iteItePar[i, s] <- svalue(speWid[[i]]$diet[[s]]$fraBage)
+                                                              }
+                                                            }
+                                                            
+                                                            vertColo <- as.character(vertColDF[match(iteTyp, vertColDF[,1]),2])
+                                                            firWhi <- which(iteIte != "None", arr.ind = TRUE)
+                                                            which(firWhi[,1] == firWhi[,2])
+                                                            edgeLty <- rep(1, nrow(firWhi))
+                                                            edgeLty[which(firWhi[,1] == firWhi[,2])] <- 2
+                                                            
+                                                            speGra <- make_empty_graph(n = length(speLst)) %>%
+                                                              set_vertex_attr(name = "label", value = speLst) %>%
+                                                              add_edges(as.vector(t(firWhi)), color = "firebrick", lty = edgeLty) %>%
+                                                              add_vertices(nv = 1, label = "Fishing\nFleet") %>%
+                                                              add_edges(c(rbind(4, 1:length(speLst))), color = "Black", lty = 1)
+                                                            plot(speGra, main = "Interaction Graph",
+                                                                 edge.arrow.size = 0.5, edge.width = 2,
+                                                                 vertex.color = c(vertColo, "White"),
+                                                                 vertex.size = c(rep(60, length(vertColo)), 90), layout = nodeLay,
+                                                                 vertex.frame.color = "gray", vertex.label.color = "black",
+                                                                 vertex.label.cex = 1.2, edge.curved = 0.1)
+                                                          })
+        glabel(text = "Age: ", container = speWid[[oneSpe]]$diet[[eatSpe]]$fraBgru)
+        speWid[[oneSpe]]$diet[[eatSpe]]$fraBage <- gspinbutton(from = 0,
+                                                               to = my_project$fisheryBySpecie[[oneSpe]]$nCoho-1,
+                                                               by = 1,
+                                                               container = speWid[[oneSpe]]$diet[[eatSpe]]$fraBgru)
+        addSpace(speWid[[oneSpe]]$diet[[eatSpe]]$fraBgru, 10)
+      }
+      addSpring(speWid[[oneSpe]]$fraB)
+      
+      speWid[[oneSpe]]$gruC <- ggroup(horizontal = TRUE, container = speWid[[oneSpe]]$fra)
+      addSpring(speWid[[oneSpe]]$gruC)
+      glabel(text = "Chi:", container = speWid[[oneSpe]]$gruC)
+      speWid[[oneSpe]]$gruCeChi <- gedit(text = "0.0", horizontal = TRUE, width = 5,
+                                         container = speWid[[oneSpe]]$gruC)
+      
+      glabel(text = "Omega:", container = speWid[[oneSpe]]$gruC)
+      speWid[[oneSpe]]$gruCeOm <- gedit(text = "0.0", horizontal = TRUE, width = 5,
+                                        container = speWid[[oneSpe]]$gruC)
+      
+      glabel(text = "Perc:", container = speWid[[oneSpe]]$gruC)
+      speWid[[oneSpe]]$gruCePer <- gedit(text = "0.0", horizontal = TRUE, width = 5,
+                                         container = speWid[[oneSpe]]$gruC)
+      addSpring(speWid[[oneSpe]]$gruC)
+      addSpace(speWid[[oneSpe]]$fra, 10)
+    }
+    
+    but_g <- ggroup(horizontal = TRUE, container = topAss_g)
+    addSpring(but_g)
+    gbutton("Accept", container = but_g, handler = function(h,...){
+      
+      for(i in 1:length(speLst)){
+        iteTyp[i] <- svalue(speWid[[i]]$rad)
+        iteChi[i] <- svalue(speWid[[i]]$gruCeChi)
+        iteOm[i] <- svalue(speWid[[i]]$gruCeOm)
+        itePer[i] <- svalue(speWid[[i]]$gruCePer)
+        for(s in 1:length(speLst)){
+          iteIte[i, s] <- as.character(svalue(speWid[[i]]$diet[[s]]$fraBrad))
+          iteItePar[i, s] <- svalue(speWid[[i]]$diet[[s]]$fraBage)
+        }
+      }
+      
+      my_project$setAssessInteract(intType = iteTyp,
+                                   intWho = iteIte,
+                                   intQty = iteItePar,
+                                   intChi = as.numeric(iteChi),
+                                   intOm = as.numeric(iteOm),
+                                   intPer = as.numeric(itePer))
+    })
+    addSpring(but_g)
+    
+    addSpace(topAss_g, 10)
+    addSpace(toptopAss_g, 10)
+    int_p <- ggraphics(container = toptopAss_g, width = 350, height = 250, expand = TRUE)
+    addSpace(toptopAss_g, 10)
+    
+    visible(tempAssInte) <- TRUE
+    
+    for(i in 1:length(speLst)){
+      iteTyp[i] <- svalue(speWid[[i]]$rad)
+      iteChi[i] <- svalue(speWid[[i]]$gruCeChi)
+      iteOm[i] <- svalue(speWid[[i]]$gruCeOm)
+      itePer[i] <- svalue(speWid[[i]]$gruCePer)
+      for(s in 1:length(speLst)){
+        iteIte[i, s] <- as.character(svalue(speWid[[i]]$diet[[s]]$fraBrad))
+        iteItePar[i, s] <- svalue(speWid[[i]]$diet[[s]]$fraBage)
+      }
+    }
+    
+    vertColo <- as.character(vertColDF[match(iteTyp, vertColDF[,1]),2])
+    firWhi <- which(iteIte != "None", arr.ind = TRUE)
+    which(firWhi[,1] == firWhi[,2])
+    edgeLty <- rep(1, nrow(firWhi))
+    edgeLty[which(firWhi[,1] == firWhi[,2])] <- 2
+    
+    speGra <- make_empty_graph(n = length(speLst)) %>%
+      set_vertex_attr(name = "label", value = speLst) %>%
+      add_edges(as.vector(t(firWhi)), color = "firebrick", lty = edgeLty) %>%
+      add_vertices(nv = 1, label = "Fishing\nFleet") %>%
+      add_edges(c(rbind(4, 1:length(speLst))), color = "Black", lty = 1)
+    nodeLay <- layout_with_fr(speGra)
+    
+    plot(speGra, main = "Interaction Graph",
+         edge.arrow.size = 0.5, edge.width = 2,
+         vertex.color = c(vertColo, "White"),
+         vertex.size = c(rep(60, length(vertColo)), 90), layout = nodeLay,
+         vertex.frame.color = "gray", vertex.label.color = "black",
+         vertex.label.cex = 1.2, edge.curved = 0.1)
+    
   })
   enabled(assPre_but) <- FALSE
   addSpring(ass_g_spePred)
