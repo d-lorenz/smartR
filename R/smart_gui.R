@@ -3208,6 +3208,7 @@ smart_gui <- function(){
                                    intChi = as.numeric(iteChi),
                                    intOm = as.numeric(iteOm),
                                    intPer = as.numeric(itePer))
+      dispose(tempAssInte)
     })
     addSpring(but_g)
     
