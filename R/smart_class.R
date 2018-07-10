@@ -255,7 +255,7 @@ SmartProject <- R6Class("smartProject",
                             for(sex in 1:length(names(surveyBySpecie[[indSpeSur]]$groMixout))){
                               if(sex == 1){
                                 tmpAL <- table(round(surveyBySpecie[[indSpeSur]]$groMixout[[sex]]$Length),
-                                               factor(surveyBySpecie[[indSpeSur]]$groMixout[[sex]]$Age, levels = 0:surveyBySpecie[[1]]$nCoho))
+                                               factor(surveyBySpecie[[indSpeSur]]$groMixout[[sex]]$Age, levels = 0:surveyBySpecie[[indSpeSur]]$nCoho))
                                 tmpAL <- round(tmpAL/apply(tmpAL, 1, sum), 2)
                                 tmpAlDf <- as.data.frame.matrix(tmpAL) 
                                 tmpAlDf$Class <- rownames(tmpAL)
@@ -269,7 +269,7 @@ SmartProject <- R6Class("smartProject",
                                 outMem <- tmpMem
                               }else{
                                 tmpAL <- table(round(surveyBySpecie[[indSpeSur]]$groMixout[[sex]]$Length),
-                                               factor(surveyBySpecie[[indSpeSur]]$groMixout[[sex]]$Age, levels = 0:surveyBySpecie[[1]]$nCoho))
+                                               factor(surveyBySpecie[[indSpeSur]]$groMixout[[sex]]$Age, levels = 0:surveyBySpecie[[indSpeSur]]$nCoho))
                                 tmpAL <- round(tmpAL/apply(tmpAL, 1, sum), 2)
                                 tmpAlDf <- as.data.frame.matrix(tmpAL)
                                 tmpAlDf$Class <- rownames(tmpAL)
