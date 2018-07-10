@@ -2800,15 +2800,13 @@ smart_gui <- function(){
       lw_fit <- nls(Weight ~ I(alpha * Length ^ beta),
                     data = lw_data[,c("Length", "Weight")],
                     start = list(alpha = 1, beta = 1))
-      tmp_alpha <- valu_lyt[1,2]
-      svalue(tmp_alpha) <- round(summary(lw_fit)$coefficients[1,1], 5)
-      tmp_beta <- valu_lyt[2,2]
-      svalue(tmp_beta) <- round(summary(lw_fit)$coefficients[2,1], 5)
+      svalue(valu_lyt[1,2]) <- round(summary(lw_fit)$coefficients[1,1], 5)
+      svalue(valu_lyt[2,2]) <- round(summary(lw_fit)$coefficients[2,1], 5)
       
       if(svalue(assSou_r) == "Survey"){
-        my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(assSpe_drop))]]$setLWpar(alphaVal = svalue(tmp_alpha), betaVal = svalue(tmp_beta), sex = svalue(lwRel_sex_drop))
+        my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(assSpe_drop))]]$setLWpar(alphaVal = svalue(valu_lyt[1,2]), betaVal = svalue(valu_lyt[2,2]), sex = svalue(lwRel_sex_drop))
       }else{
-        my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(assSpe_drop))]]$setLWpar(alphaVal = svalue(tmp_alpha), betaVal = svalue(tmp_beta), sex = svalue(lwRel_sex_drop))
+        my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(assSpe_drop))]]$setLWpar(alphaVal = svalue(valu_lyt[1,2]), betaVal = svalue(valu_lyt[2,2]), sex = svalue(lwRel_sex_drop))
       }
       
       print(
@@ -2858,9 +2856,9 @@ smart_gui <- function(){
     
     gbutton("\nSet Weight\n", container = lwRel_g_top, handler = function(h,...){
       if(svalue(assSou_r) == "Survey"){
-        my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(assSpe_drop))]]$setLWpar(alphaVal = svalue(tmp_alpha), betaVal = svalue(tmp_beta), sex = svalue(lwRel_sex_drop))
+        my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(assSpe_drop))]]$setLWpar(alphaVal = svalue(valu_lyt[1,2]), betaVal = svalue(valu_lyt[2,2]), sex = svalue(lwRel_sex_drop))
       }else{
-        my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(assSpe_drop))]]$setLWpar(alphaVal = svalue(tmp_alpha), betaVal = svalue(tmp_beta), sex = svalue(lwRel_sex_drop))
+        my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(assSpe_drop))]]$setLWpar(alphaVal = svalue(valu_lyt[1,2]), betaVal = svalue(valu_lyt[2,2]), sex = svalue(lwRel_sex_drop))
       }
       if(svalue(assSou_r) == "Fishery"){
         my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(assSpe_drop))]]$setWeight(sexVal = svalue(lwRel_sex_drop))
