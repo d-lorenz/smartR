@@ -3266,7 +3266,7 @@ smart_gui <- function(){
       tmpSpe <- svalue(assSpe_drop)
       my_project$setAssessData(specie = tmpSpe, forecast = ifelse(svalue(ass_Fore_radio) == "No", FALSE, TRUE))
       
-      parIn_df <- data.frame(matrix(0, ncol = 4, nrow = 4))
+      parIn_df <- data.frame(matrix(0, ncol = my_project$assessData[[tmpSpe]]$Amax, nrow = 4))
       colnames(parIn_df) <- paste0("Age ", (1:ncol(parIn_df))-1)
       rownames(parIn_df) <- c("M", "Mat", "F-Sel", "S-Sel")
       
