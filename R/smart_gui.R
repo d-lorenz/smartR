@@ -3336,23 +3336,12 @@ smart_gui <- function(){
         colnames(parIn_df) <- paste0("Age ", (1:ncol(parIn_df))-1)
         rownames(parIn_df) <- c("M", "Mat", "F-Sel", "S-Sel")
         
-        if(sum(my_project$assessData[[oneSpe]]$M) != 0){
-          parIn_df[1,] <- my_project$assessData[[oneSpe]]$M
-        }
-        if(sum(my_project$assessData[[oneSpe]]$Mat) != 0){
-          parIn_df[2,] <- my_project$assessData[[oneSpe]]$Mat
-        }
-        if(sum(my_project$assessData[[oneSpe]]$Selex) != 0){
-          parIn_df[3,] <- my_project$assessData[[oneSpe]]$Selex
-        }
-        if(sum(my_project$assessData[[oneSpe]]$SelexSurv[1,]) != 0){
-          parIn_df[4,] <- my_project$assessData[[oneSpe]]$SelexSurv[1,]
-        }
-        if(my_project$assessData[[oneSpe]]$PropZBeforeMat != 0){
-          parZbef_df <- as.character(my_project$assessData[[oneSpe]]$PropZBeforeMat)
-        }else{
-          parZbef_df <- 0
-        }
+        parIn_df[1,] <- my_project$assessData[[oneSpe]]$M
+        parIn_df[2,] <- my_project$assessData[[oneSpe]]$Mat
+        parIn_df[3,] <- my_project$assessData[[oneSpe]]$Selex
+        parIn_df[4,] <- my_project$assessData[[oneSpe]]$SelexSurv[1,]
+        
+        parZbef_df <- as.character(my_project$assessData[[oneSpe]]$PropZBeforeMat)
         
         tempAssData <- gwindow(title="Custom Parameters",
                                visible = FALSE,
