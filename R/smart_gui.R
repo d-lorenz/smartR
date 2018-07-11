@@ -3266,27 +3266,16 @@ smart_gui <- function(){
       tmpSpe <- svalue(assSpe_drop)
       my_project$setAssessData(specie = tmpSpe, forecast = ifelse(svalue(ass_Fore_radio) == "No", FALSE, TRUE))
       
-      parIn_df <- data.frame(matrix(0, ncol = my_project$assessData[[tmpSpe]]$Amax, nrow = 4))
+      parIn_df <- data.frame(matrix(0, ncol = 4, nrow = 4))
       colnames(parIn_df) <- paste0("Age ", (1:ncol(parIn_df))-1)
       rownames(parIn_df) <- c("M", "Mat", "F-Sel", "S-Sel")
       
-      if(sum(my_project$assessData[[tmpSpe]]$M) != 0){
-        parIn_df[1,] <- my_project$assessData[[tmpSpe]]$M
-      }
-      if(sum(my_project$assessData[[tmpSpe]]$Mat) != 0){
-        parIn_df[2,] <- my_project$assessData[[tmpSpe]]$Mat
-      }
-      if(sum(my_project$assessData[[tmpSpe]]$Selex) != 0){
-        parIn_df[3,] <- my_project$assessData[[tmpSpe]]$Selex
-      }
-      if(sum(my_project$assessData[[tmpSpe]]$SelexSurv[1,]) != 0){
-        parIn_df[4,] <- my_project$assessData[[tmpSpe]]$SelexSurv[1,]
-      }
-      if(my_project$assessData[[tmpSpe]]$PropZBeforeMat != 0){
-        parZbef_df <- as.character(my_project$assessData[[tmpSpe]]$PropZBeforeMat)
-      }else{
-        parZbef_df <- 0
-      }
+      parIn_df[1,] <- my_project$assessData[[tmpSpe]]$M
+      parIn_df[2,] <- my_project$assessData[[tmpSpe]]$Mat
+      parIn_df[3,] <- my_project$assessData[[tmpSpe]]$Selex
+      parIn_df[4,] <- my_project$assessData[[tmpSpe]]$SelexSurv[1,]
+      
+      parZbef_df <- as.character(my_project$assessData[[tmpSpe]]$PropZBeforeMat)
       
       tempAssData <- gwindow(title="Custom Parameters",
                              visible = FALSE,
