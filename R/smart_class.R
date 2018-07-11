@@ -310,6 +310,21 @@ SmartProject <- R6Class("smartProject",
                             tmpWei$Age <- factor(tmpWei$Age, levels = 0:(assessData[[specie]]$Amax-1))
                             
                             assessData[[specie]]$WeightS <<- (ddply(tmpWei, .(Age), summarise, coh.mean = mean(Weight)/1000, .drop = FALSE))[,2]
+                            weightNaN <- which(is.nan(assessData[[specie]]$WeightS))
+                            if(length(weightNaN) > 0){
+                              for(i in 1:length(weightNaN)){
+                                if(weightNaN[i] == 1){
+                                  assessData[[specie]]$WeightS[1] <<- mean(c(0, assessData[[specie]]$WeightS[2]))
+                                  next
+                                }
+                                if(weightNaN[i] == length(assessData[[specie]]$WeightS)){
+                                  assessData[[specie]]$WeightS[weightNaN[i]] <<- assessData[[specie]]$WeightS[weightNaN[i]-1]
+                                  next
+                                }
+                                assessData[[specie]]$WeightS[i] <<- mean(c(assessData[[specie]]$WeightS[i-1], assessData[[specie]]$WeightS[i+1]))
+                              }
+                            }
+                            
                             assessData[[specie]]$WeightH <<- assessData[[specie]]$WeightS
                             
                             assessData[[specie]]$Qinit <<- 0
