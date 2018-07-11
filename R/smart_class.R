@@ -363,22 +363,23 @@ SmartProject <- R6Class("smartProject",
                             cat("\n\tLoading User Parameters... ")
                             # assessData[[specie]]$M <<- c(2.3, 1.1, 0.8, 0.7)
                             if(is.null(assessData[[specie]]$M)){
-                              assessData[[specie]]$M <<- numeric(assessData[[specie]]$Amax)
+                              assessData[[specie]]$M <<- round(seq(from = 0.7, to = 0.3, length.out = assessData[[specie]]$Amax), 2)
                             }
                             # assessData[[specie]]$Mat <<- c(0.5, 1, 1, 1)
                             if(is.null(assessData[[specie]]$Mat)){
-                              assessData[[specie]]$Mat <<- numeric(assessData[[specie]]$Amax)
+                              assessData[[specie]]$Mat <<- round(seq(from = 0.2, to = 0.9, length.out = assessData[[specie]]$Amax), 2)
                             }
                             # assessData[[specie]]$Selex <<- c(0.1, 0.2, 0.6, 1)
                             if(is.null(assessData[[specie]]$Selex)){
-                              assessData[[specie]]$Selex <<- numeric(assessData[[specie]]$Amax)
+                              assessData[[specie]]$Selex <<- round(seq(from = 0.2, to = 0.9, length.out = assessData[[specie]]$Amax), 2)
                             }
                             if(is.null(assessData[[specie]]$SelexSurv)){
                               assessData[[specie]]$SelexSurv <<- matrix(0,nrow=10,ncol=assessData[[specie]]$Amax)
                             }
+                            assessData[[specie]]$SelexSurv[1,] <<- round(seq(from = 0.5, to = 0.9, length.out = assessData[[specie]]$Amax), 2)
                             # assessData[[specie]]$SelexSurv[1,] <<- c(0.2, 0.5, 1, 1)
                             if(is.null(assessData[[specie]]$PropZBeforeMat)){
-                              assessData[[specie]]$PropZBeforeMat <<- 0.0
+                              assessData[[specie]]$PropZBeforeMat <<- 0.3
                             }
                             cat("Done!\n\nSetup Assessment Data for", specie,"Completed!\n")
                           },
