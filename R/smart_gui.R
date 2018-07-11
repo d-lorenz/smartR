@@ -3266,7 +3266,7 @@ smart_gui <- function(){
       tmpSpe <- svalue(assSpe_drop)
       my_project$setAssessData(specie = tmpSpe, forecast = ifelse(svalue(ass_Fore_radio) == "No", FALSE, TRUE))
       
-      parIn_df <- data.frame(matrix(0, ncol = 4, nrow = 4))
+      parIn_df <- data.frame(matrix(0, ncol = my_project$assessData[[tmpSpe]]$Amax, nrow = 4))
       colnames(parIn_df) <- paste0("Age ", (1:ncol(parIn_df))-1)
       rownames(parIn_df) <- c("M", "Mat", "F-Sel", "S-Sel")
       
@@ -3296,7 +3296,7 @@ smart_gui <- function(){
       
       parZbef_f <- gframe(text = "Z before Maturity", horizontal = TRUE, container = topAss_g)
       addSpace(parZbef_f, 25)
-      parZbef_ge <- gedit(text = "0", width = 15, container = parZbef_f)
+      parZbef_ge <- gedit(text = parZbef_df, width = 15, container = parZbef_f)
       addSpace(parZbef_f, 25)
       addSpace(topAss_g, 10)
       
@@ -3321,7 +3321,7 @@ smart_gui <- function(){
       for(oneSpe in intersect(my_project$specieInFishery, my_project$specieInSurvey)){
         my_project$setAssessData(specie = oneSpe, forecast = ifelse(svalue(ass_Fore_radio) == "No", FALSE, TRUE))
         
-        parIn_df <- data.frame(matrix(0, ncol = 4, nrow = 4))
+        parIn_df <- data.frame(matrix(0, ncol = my_project$assessData[[oneSpe]]$Amax, nrow = 4))
         colnames(parIn_df) <- paste0("Age ", (1:ncol(parIn_df))-1)
         rownames(parIn_df) <- c("M", "Mat", "F-Sel", "S-Sel")
         
