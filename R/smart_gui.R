@@ -3373,7 +3373,7 @@ smart_gui <- function(){
         
         parZbef_f <- gframe(text = "Z before Maturity", horizontal = TRUE, container = topAss_g)
         addSpace(parZbef_f, 25)
-        parZbef_ge <- gedit(text = "0", width = 15, container = parZbef_f)
+        parZbef_ge <- gedit(text = parZbef_df, width = 15, container = parZbef_f)
         addSpace(parZbef_f, 25)
         addSpace(topAss_g, 10)
         
