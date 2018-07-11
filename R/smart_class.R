@@ -370,7 +370,7 @@ SmartProject <- R6Class("smartProject",
                               assessData[[specie]]$Mat <<- round(seq(from = 0.2, to = 0.9, length.out = assessData[[specie]]$Amax), 2)
                             }
                             # assessData[[specie]]$Selex <<- c(0.1, 0.2, 0.6, 1)
-                            if(is.null(assessData[[specie]]$Selex)){
+                            if(is.null(assessData[[specie]][["Selex"]])){
                               assessData[[specie]]$Selex <<- round(seq(from = 0.2, to = 0.9, length.out = assessData[[specie]]$Amax), 2)
                             }
                             if(is.null(assessData[[specie]]$SelexSurv)){
