@@ -307,7 +307,9 @@ SmartProject <- R6Class("smartProject",
                                 tmpWei <- rbind(tmpWei, fisheryBySpecie[[indSpeFis]]$groMixout[[sex]][,c("Age", "Weight")])
                               }
                             }
-                            assessData[[specie]]$WeightS <<- (ddply(tmpWei, .(Age), summarise, coh.mean = mean(Weight))/1000)[,2]
+                            tmpWei$Age <- factor(tmpWei$Age, levels = 0:(assessData[[specie]]$Amax-1))
+                            
+                            assessData[[specie]]$WeightS <<- (ddply(tmpWei, .(Age), summarise, coh.mean = mean(Weight)/1000, .drop = FALSE))[,2]
                             assessData[[specie]]$WeightH <<- assessData[[specie]]$WeightS
                             
                             assessData[[specie]]$Qinit <<- 0
