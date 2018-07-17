@@ -1057,18 +1057,18 @@ popNspecie <- function(Nspecies, SpeciesData, InitN, RecDev, LogR0, Fvals, Selex
           idAss <- which(names(SpeciesData) == PredationPars$name[idPre])
           if(PredationPars$who[idSpe,idPre] == "All"){
             tmpPredB[idAss] <- PredB[idAss, Iyear]
-            tmpPredB0[idAss] <- PredB0[idAss, Iyear]
+            tmpPredB0[idAss] <- PredB0[idAss]
           }else{
             if(PredationPars$who[idSpe,idPre] == "Smaller than"){
               predAge <- which(1:Amax[idAss] <= PredationPars$qty[idSpe,idPre])
               propAge <- N[idAss, Iyear, predAge]/sum(N[idAss, Iyear,])
               tmpPredB[idAss] <- PredB[idAss, Iyear]*propAge
-              tmpPredB0[idAss] <- PredB0[idAss, Iyear]*propAge
+              tmpPredB0[idAss] <- PredB0[idAss]*propAge
             }else{
               predAge <- which(1:Amax[idAss] >= PredationPars$qty[idSpe,idPre])
               propAge <- N[idAss, Iyear, predAge]/sum(N[idAss, Iyear,])
               tmpPredB[idAss] <- PredB[idAss, Iyear]*propAge
-              tmpPredB0[idAss] <- PredB0[idAss, Iyear]*propAge
+              tmpPredB0[idAss] <- PredB0[idAss]*propAge
             }
           }
           numPred <- length(which(PredationPars$who[,indPrey]) != "None")
@@ -1088,7 +1088,7 @@ popNspecie <- function(Nspecies, SpeciesData, InitN, RecDev, LogR0, Fvals, Selex
       deplI <- PredB[Ispec, Iyear]/PredB0[Ispec]
       for(iPreda in 1:length(deplPreda)){
         idAss <- which(names(SpeciesData) == PredationPars$name[indPreda[iPreda]])
-        deplPreda[iPreda] <- PredB[idAss, Iyear]/PredB0[idAss, Iyear]
+        deplPreda[iPreda] <- PredB[idAss, Iyear]/PredB0[idAss]
       }
       propM <- parAlp[Ispec]*mean(deplPreda)/(parBet[Ispec]+deplI)
         for(Iage in 1:Amax[1]){
