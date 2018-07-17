@@ -1447,7 +1447,7 @@ funNopt <- function(Pars, DoEst = TRUE, SpeciesData, Nspecies, PredationPars){
 
 setNin <- function(Pars, SpeciesData, Nspecies, Nproj = 0){
   AmaxP <- rep(0, Nspecies)
-  
+  Nyear <- SpeciesData[[1]]$Nyear
   InitN <- matrix(NA, nrow = Nspecies, ncol = 100)
   RecDev <- matrix(0, nrow = Nspecies, ncol = Nyear + Nproj)
   LogR0 <- rep(0, Nspecies)
