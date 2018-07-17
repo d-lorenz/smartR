@@ -142,9 +142,12 @@ SmartProject <- R6Class("smartProject",
                           assessData = list(),
                           assSingleRes = list(),
                           assSinglePlot = list(),
+                          assMultiRes = list(),
+                          assMultiPlot = list(),
                           assessInteract = list(),
-                          setAssessInteract = function(intType, intWho, intQty, intChi, intOm, intPer){
+                          setAssessInteract = function(intName, intType, intWho, intQty, intChi, intOm, intPer){
                             assessInteract <<- list()
+                            assessInteract$name <<- intName
                             assessInteract$type <<- intType
                             assessInteract$who <<- intWho
                             assessInteract$qty <<- intQty
@@ -431,7 +434,7 @@ SmartProject <- R6Class("smartProject",
                             InitF <- log(1)
                             Pars <- c(assessData[[specie]]$InitN, RecDev, LogR0, VecS, VecC, Fvals, InitF)
                             Npar <- length(Pars)
-                            Res <- fit1specie(Pars,
+                            Res <- fit1Pars(Pars,
                                               fun1opt,
                                               FullMin = TRUE,
                                               DoVarCo = TRUE,
@@ -443,6 +446,54 @@ SmartProject <- R6Class("smartProject",
                             assSingleRes[[specie]]$VarCo <<- Res$VarCo
                             assSingleRes[[specie]]$SSBSD <<- Res$SSBSD
                             cat("\n\n", specie," Assessment Complete!\n", sep = "")
+                          },
+                          assMulti = function(){
+                            if(is.null(assessData)){
+                              stop("Missing Data! Run setAssesData() first.")
+                            }
+                            cat("\n\nMultiple Species Assessment\n", sep = "")
+                            assMultiResRes <<- list()
+                            Nspecies <- length(assessData)
+                            Pars <- NULL
+                            for(Ispec in 1:Nspecies){
+                              Qinit <- rep(assessData[[Ispec]]$Qinit,assessData[[Ispec]]$Nsurvey)
+                              Amax <- assessData[[Ispec]]$Amax
+                              Nsurvey <- assessData[[Ispec]]$Nsurvey
+                              Nyear <- assessData[[Ispec]]$Nyear
+                              InitN <- assessData[[Ispec]]$InitN
+                              RecDev <- rep(0,assessData[[Ispec]]$Nyear)
+                              LogR0 <- assessData[[Ispec]]$InitR0
+                              
+                              VecS <- NULL
+                              VecC <- NULL
+                              if(assessData[[Ispec]]$SelsurvType == 1){
+                                VecS <- rep(0,Nsurvey*(Amax-2))
+                                for(Isurv in 1:Nsurvey){  
+                                  Offset <- (Amax-2)*(Isurv-1)
+                                  for (Iage in 1:(Amax-2)) VecS[Offset+Iage] = log((1-assessData[[Ispec]]$SelexSurv[Isurv,Iage])/assessData[[Ispec]]$SelexSurv[Isurv,Iage])
+                                }
+                              }
+                              if(assessData[[Ispec]]$SelexType==1){
+                                VecC <- rep(0,Amax-2)
+                                for(Iage in 1:(Amax-2)){
+                                  VecC[Iage] = log((1-assessData[[Ispec]]$Selex[Iage])/assessData[[Ispec]]$Selex[Iage])
+                                }
+                              }
+                              Fvals <- rep(0,Nyear)
+                              InitF <- log(1)
+                              Pars <- c(Pars, InitN, RecDev, LogR0, VecS, VecC, Fvals, InitF)
+                            }  
+                            Npar <- length(Pars)
+                              Res <- fitNPars(Pars, TheFunk2, FullMin = TRUE, DoVarCo = TRUE,
+                                             SpeciesData = assessData, Nspecies = Nspecies,
+                                             PredationPars = assessInteract)
+                              
+                              assMultiRes[[specie]] <<- funNopt(Res$par, DoEst = FALSE, SpeciesData = assessData,
+                                                                Nspecies = Nspecies, PredationPars = assessInteract)
+                              assMultiRes[[specie]]$par <<- Res$par
+                              assMultiRes[[specie]]$VarCo <<- Res$VarCo
+                              assMultiRes[[specie]]$SSBSD <<- Res$SSBSD
+                              cat("\n\n", specie," Assessment Complete!\n", sep = "")
                           },
                           setPlotSingle = function(specie = ""){
                             if(is.null(assSingleRes[[specie]])){
