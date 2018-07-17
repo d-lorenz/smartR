@@ -1006,25 +1006,6 @@ popNspecie <- function(Nspecies, SpeciesData, InitN, RecDev, LogR0, Fvals, Selex
     parAlp[Ispec] <- parBet[Ispec] + 1
   }
   
-  # # This is hake-Chi
-  # HakeChi <- PredationPars$HakeSurv
-  # # This is anchovy and sardine omega
-  # OmegaMAnch <- PredationPars$PropMAnch
-  # OmegaMSard <- PredationPars$PropMSard
-  # # This is anchovy and sardine chi
-  # ChiAnch <- PredationPars$MdropAnch
-  # ChiSard <- PredationPars$MdropSard
-  
-  # # transform the predation parameters
-  # HakeBeta <- (1-HakeChi)/(2*HakeChi-1)
-  # HakeAlpha <- HakeBeta+1
-  # AnchBeta <- (2*ChiAnch-1.0)/(1-ChiAnch)
-  # AnchAlpha <- AnchBeta+1
-  # SardBeta <- (2*ChiSard-1.0)/(1-ChiSard)
-  # SardAlpha <- SardBeta+1
-  # cat(HakeAlpha, HakeBeta, AnchAlpha, AnchBeta, SardAlpha, SardBeta,"\n")
-  
-  # set up the N matrix
   for(Ispec in 1:Nspecies){  
     N[Ispec, 1, 1] <- R0[Ispec]
     for(Iage in 2:Amax[Ispec]){
@@ -1035,8 +1016,6 @@ popNspecie <- function(Nspecies, SpeciesData, InitN, RecDev, LogR0, Fvals, Selex
     }
   }  
   
-  # Project forward 
-  WithPred <- T
   for(Iyear in 1:(Nyear+Nproj)){
     # Compute pred biomass
     for(Ispec in 1:Nspecies){
@@ -1071,7 +1050,7 @@ popNspecie <- function(Nspecies, SpeciesData, InitN, RecDev, LogR0, Fvals, Selex
               tmpPredB0[idAss] <- PredB0[idAss]*propAge
             }
           }
-          numPred <- length(which(PredationPars$who[,indPrey]) != "None")
+          numPred <- length(which(PredationPars$who[,idPre]) != "None")
           if(numPred > 0){
             tmpPredB[idAss] <- tmpPredB[idAss]/numPred
             tmpPredB0[idAss] <- tmpPredB0[idAss]/numPred
