@@ -410,7 +410,7 @@ GetALKMW <- function(Linf, Kappa, T0, CV0, CVLinf, aa, bb, Amax, LenClassMax, Of
   return(Outs)
 }
 
-fit1specie <- function(Pars, optFun, FullMin = FALSE, DoVarCo = FALSE, ...){
+fit1Pars <- function(Pars, optFun, FullMin = FALSE, DoVarCo = FALSE, ...){
   # First call - always do this
   Res <- optim(Pars, optFun, hessian = FALSE, control = list(maxit = 10), DoEst = TRUE, ...)
   # print(Res$value)
@@ -842,6 +842,99 @@ fun1opt <- function(Pars, DoEst = TRUE, SpeciesData){
   } 
 }  
 
+fitNPars <- function(Pars, optFun, FullMin = FALSE, DoVarCo = FALSE, ...){
+  # First call - always do this
+  Res <- optim(Pars, optFun, hessian = FALSE, control = list(maxit = 10), DoEst = TRUE, ...)
+  # print(Res$value)
+  #Res <- optim(Res$par, optFun, method = "BFGS", hessian = FALSE, DoEst = TRUE, ...)
+  #print(Res$value)
+  Npar <- length(Res$par)
+  # cat("number of parameters  = ", Npar, "\n")
+  # print(Res)
+  SSBEst <- funNopt(Res$par, DoEst = FALSE, ...)$SSB
+  Nyear <- length(SSBEst)
+  Res$VarCo <- matrix(0, ncol = Npar, nrow = Npar)
+  Res$SSBSD <- rep(0, Nyear)
+  
+  # Hints: Set FullMin = TRUE to apply the full estimates; DoVarCo = TRUE to estimate the variances of the parameters and SSB
+  Outputs <- funNopt(Res$par, DoEst = FALSE, ...)
+  Outputs$par <- Res$par
+  Outputs$VarCo <- Res$VarCo
+  Outputs$SSBSD <- rep(0, Nyear)
+  
+  # Now do a full minimization
+  if(FullMin == TRUE){
+    cat("\nFull minimization:")
+    Res <- optim(Res$par, optFun, method = "BFGS", hessian = FALSE, DoEst = TRUE, ...)
+    cat("\n", Res$value, "BFGS")
+    Best <- 10000
+    while(abs(Res$value-Best)>0.01){
+      Best <- Res$value  
+      Res <- optim(Res$par, optFun, hessian = FALSE, method = "BFGS", DoEst = TRUE, ...)
+      cat("\n", Res$value, "BFGS")
+      Best <- Res$value  
+      Res <- optim(Res$par, optFun, hessian = FALSE, method = "CG", DoEst = TRUE, ...)
+      cat("\n", Res$value, "CG")
+    }  
+    
+    Outputs <- funNopt(Res$par, DoEst = FALSE, ...)
+    Outputs$par <- Res$par
+    # print(Res$par)
+    Outputs$VarCo <- matrix(0, ncol = Npar, nrow = Npar)
+    Outputs$SSBSD <- rep(0, Nyear)
+    
+    Res <- optim(Res$par, optFun, method = "BFGS", hessian = TRUE, DoEst = TRUE, ...)
+    Outputs <- fun1opt(Res$par, DoEst = FALSE, ...)
+    Outputs$par <- Res$par
+    # print(Res$par)
+    Outputs$VarCo <- matrix(0, ncol = Npar, nrow = Npar)
+    Outputs$SSBSD <- rep(0, Nyear)
+    cat("\nFinal:", Res$value)
+    
+    # This section computes the variance covariance matrix and hence the standard errors for SSB
+    if(DoVarCo == TRUE){  
+      cat("\nSolving variance-covariance matrix... ")
+      VarCo <- solve(Res$hessian)
+      Res$VarCo <- VarCo
+      
+      SSBEst <- funNopt(Res$par, DoEst = FALSE, ...)$SSB
+      Nyear <- length(SSBEst)
+      # print(SSBEst)
+      
+      # Set up the derivative matrix
+      ParStore <- Res$par
+      Deriv <- matrix(0, ncol = Nyear, nrow = Npar)
+      for(II in 1:Npar){
+        # Numerical differentiation
+        Res$par <- ParStore
+        Res$par[II] <- ParStore[II]+0.001
+        SSB1 <- fun1opt(Res$par, DoEst = FALSE, ...)$SSB
+        Res$par <- ParStore
+        Res$par[II] <- ParStore[II]-0.001
+        SSB2 <- fun1opt(Res$par, DoEst = FALSE, ...)$SSB
+        Deriv[II, ] <- (SSB1-SSB2)/0.002
+      }  
+      
+      # Use the delta method to get the variances for SSB    
+      SSBSD <- rep(0, Nyear)
+      for(Iyear in 1:Nyear){
+        for(II in 1:Npar){      
+          for(JJ in 1:Npar){  
+            SSBSD[Iyear] <- SSBSD[Iyear] + Deriv[II, Iyear]*Deriv[JJ, Iyear]*VarCo[II, JJ]
+          }
+        }
+        SSBSD[Iyear] <- sqrt(SSBSD[Iyear])
+      }
+      Res$SSBSD <- SSBSD
+    }else{
+      # Dummy matrix
+      Res$VarCo <- matrix(0, ncol = Npar, nrow = Npar)
+    }
+    cat("Done!")
+  }
+  return(Res)
+}  
+
 
 popNspecie <- function(Nspecies, SpeciesData, InitN, RecDev, LogR0, Fvals, Selex, InitF, PredationPars, Nproj){
   Nyear <- SpeciesData[[1]]$Nyear
@@ -895,23 +988,41 @@ popNspecie <- function(Nspecies, SpeciesData, InitN, RecDev, LogR0, Fvals, Selex
   }  
   
   # Predation parameters
-  # This is hake-Chi
-  HakeChi <- PredationPars$HakeSurv
-  # This is anchovy and sardine omega
-  OmegaMAnch <- PredationPars$PropMAnch
-  OmegaMSard <- PredationPars$PropMSard
-  # This is anchovy and sardine chi
-  ChiAnch <- PredationPars$MdropAnch
-  ChiSard <- PredationPars$MdropSard
+  parChi <- numeric(Nspecies)
+  parOme <- numeric(Nspecies)
+  parAlp <- numeric(Nspecies)
+  parBet <- numeric(Nspecies)
   
-  # transform the predation parameters
-  HakeBeta <- (1-HakeChi)/(2*HakeChi-1)
-  HakeAlpha <- HakeBeta+1
-  AnchBeta <- (2*ChiAnch-1.0)/(1-ChiAnch)
-  AnchAlpha <- AnchBeta+1
-  SardBeta <- (2*ChiSard-1.0)/(1-ChiSard)
-  SardAlpha <- SardBeta+1
-  cat(HakeAlpha, HakeBeta, AnchAlpha, AnchBeta, SardAlpha, SardBeta,"\n")
+  for(Ispec in 1:Nspecies){
+    idSpe <- which(PredationPars$name == names(SpeciesData)[Ispec])
+    parChi[Ispec] <- PredationPars$chi[idSpe]
+    parOme[Ispec] <- PredationPars$om[idSpe]
+    
+    if(PredationPars$type[idSpe] == "Predator"){
+      parBet[Ispec] <- (1 - parChi[Ispec])/(2*parChi[Ispec] - 1)
+    }else{
+      parBet[Ispec] <- (2*parChi[Ispec] - 1.0)/(1 - parChi[Ispec])
+    }
+    parAlp[Ispec] <- parBet[Ispec] + 1
+  }
+  
+  # # This is hake-Chi
+  # HakeChi <- PredationPars$HakeSurv
+  # # This is anchovy and sardine omega
+  # OmegaMAnch <- PredationPars$PropMAnch
+  # OmegaMSard <- PredationPars$PropMSard
+  # # This is anchovy and sardine chi
+  # ChiAnch <- PredationPars$MdropAnch
+  # ChiSard <- PredationPars$MdropSard
+  
+  # # transform the predation parameters
+  # HakeBeta <- (1-HakeChi)/(2*HakeChi-1)
+  # HakeAlpha <- HakeBeta+1
+  # AnchBeta <- (2*ChiAnch-1.0)/(1-ChiAnch)
+  # AnchAlpha <- AnchBeta+1
+  # SardBeta <- (2*ChiSard-1.0)/(1-ChiSard)
+  # SardAlpha <- SardBeta+1
+  # cat(HakeAlpha, HakeBeta, AnchAlpha, AnchBeta, SardAlpha, SardBeta,"\n")
   
   # set up the N matrix
   for(Ispec in 1:Nspecies){  
@@ -928,32 +1039,62 @@ popNspecie <- function(Nspecies, SpeciesData, InitN, RecDev, LogR0, Fvals, Selex
   WithPred <- T
   for(Iyear in 1:(Nyear+Nproj)){
     # Compute pred biomass
-    for(Ispec in 1:Nspecies){  
+    for(Ispec in 1:Nspecies){
       AmaxA <- Amax[Ispec]
-      for (Iage in 1:AmaxA) PredB[Ispec, Iyear]  <- sum(N[Ispec, Iyear, 1:AmaxA]*WeightS[Ispec, 1:AmaxA])
-    }  
+      for (Iage in 1:AmaxA) PredB[Ispec, Iyear] <- sum(N[Ispec, Iyear, 1:AmaxA]*WeightS[Ispec, 1:AmaxA])
+    }
     
     # Somewhat hard-wired
     MTwo <- matrix(0, nrow = Nspecies, ncol = MaxA)
-    if(WithPred==T){  
-      # Too little prey reduces predator survival
-      PreyHake <- (PredB[2, Iyear]+PredB[3, Iyear])/(PredB0[2]+PredB0[3])
-      MTwo[1,] = -1*log(HakeAlpha*PreyHake/(HakeBeta+PreyHake))
+    for(Ispec in 1:Nspecies){
+      idSpe <- which(PredationPars$name == names(SpeciesData)[Ispec])
       
-      # Calculate the depletions      
-      DeplHake <- PredB[1, Iyear]/PredB0[1]
-      DeplAnch <- PredB[2, Iyear]/PredB0[2]
-      DeplSard <- PredB[3, Iyear]/PredB0[3]
+      if(PredationPars$type[idSpe] == "Predator"){
+        indPrey <- which(PredationPars$who[idSpe,] != "None")
+        tmpPredB <- numeric(length(indPrey))
+        tmpPredB0 <- numeric(length(indPrey))
+        for(idPre in 1:length(indPrey)){
+          idAss <- which(names(SpeciesData) == PredationPars$name[idPre])
+          if(PredationPars$who[idSpe,idPre] == "All"){
+            tmpPredB[idAss] <- PredB[idAss, Iyear]
+            tmpPredB0[idAss] <- PredB0[idAss, Iyear]
+          }else{
+            if(PredationPars$who[idSpe,idPre] == "Smaller than"){
+              predAge <- which(1:Amax[idAss] <= PredationPars$qty[idSpe,idPre])
+              propAge <- N[idAss, Iyear, predAge]/sum(N[idAss, Iyear,])
+              tmpPredB[idAss] <- PredB[idAss, Iyear]*propAge
+              tmpPredB0[idAss] <- PredB0[idAss, Iyear]*propAge
+            }else{
+              predAge <- which(1:Amax[idAss] >= PredationPars$qty[idSpe,idPre])
+              propAge <- N[idAss, Iyear, predAge]/sum(N[idAss, Iyear,])
+              tmpPredB[idAss] <- PredB[idAss, Iyear]*propAge
+              tmpPredB0[idAss] <- PredB0[idAss, Iyear]*propAge
+            }
+          }
+          numPred <- length(which(PredationPars$who[,indPrey]) != "None")
+          if(numPred > 0){
+            tmpPredB[idAss] <- tmpPredB[idAss]/numPred
+            tmpPredB0[idAss] <- tmpPredB0[idAss]/numPred
+          }
+        }
+        totPrey <- sum(tmpPredB)/sum(tmpPredB0)
+        MTwo[Ispec,] <- -1*log(parAlp[Ispec]*totPrey/(parBet[Ispec]+totPrey))
+      }
+      indPreda <- which(PredationPars$who[,idSpe] != "None")
       
-      # too many hake increases prey M (but under type 2)
-      Func1 <- AnchAlpha*DeplHake/(AnchBeta+DeplAnch)
-      for(Iage in 1:Amax[1]){
-        MTwo[2, Iage]  <- OmegaMAnch*M[2, Iage]*(Func1-1)
+      if(length(indPreda) > 0){
+        
+      deplPreda <- numeric(length(indPreda))
+      deplI <- PredB[Ispec, Iyear]/PredB0[Ispec]
+      for(iPreda in 1:length(deplPreda)){
+        idAss <- which(names(SpeciesData) == PredationPars$name[indPreda[iPreda]])
+        deplPreda[iPreda] <- PredB[idAss, Iyear]/PredB0[idAss, Iyear]
       }
-      Func1 <- SardAlpha*DeplHake/(SardBeta+DeplSard)
-      for(Iage in 1:Amax[1]){
-        MTwo[3, Iage]  <- OmegaMSard*M[3, Iage]*(Func1-1)
-      }
+      propM <- parAlp[Ispec]*mean(deplPreda)/(parBet[Ispec]+deplI)
+        for(Iage in 1:Amax[1]){
+          MTwo[Ispec, Iage]  <- parOme[Ispec]*M[Ispec, Iage]*(propM-1)
+        }
+       }
     }
     
     # Compute F, Z, catch-at-age, and SSB; note that I have added the extra mortality
@@ -1078,7 +1219,8 @@ likeNspecie <- function(Nspecies, SpeciesData, Outs, SurvSel, RecDev, InitN){
     if(SpeciesData[[Ispec]]$NSAL > 0){
       for(Jsurv in 1:SpeciesData[[Ispec]]$Nsurvey){
         # Compute ML estimate of survey Q
-        Q1 <- 0;Q2 <- 0
+        Q1 <- 0
+        Q2 <- 0
         for(II in 1:SpeciesData[[Ispec]]$NSAL){
           if(SpeciesData[[Ispec]]$SSAL[II]==Jsurv){
             # Convert from real years to model years  
@@ -1182,8 +1324,8 @@ likeNspecie <- function(Nspecies, SpeciesData, Outs, SurvSel, RecDev, InitN){
 
 
 
-funNopt <- function(Pars, DoEst = T, SpeciesData, Nspecies, ParInit, Phases, PredationPars){
-  ExtVal <- Extract(Pars, ParInit, SpeciesData, Nspecies, Phases)
+funNopt <- function(Pars, DoEst = TRUE, SpeciesData, Nspecies, PredationPars){
+  ExtVal <- setNin(Pars, SpeciesData, Nspecies)
   
   ParOut <- ExtVal$ParOut
   AltPIN <- ExtVal$AltPIN
@@ -1201,7 +1343,7 @@ funNopt <- function(Pars, DoEst = T, SpeciesData, Nspecies, ParInit, Phases, Pre
   OutLikelihood <- likeNspecie(Nspecies, SpeciesData, Outs, SurvSel, RecDev, InitN)
   
   # Trick to get things passes
-  if(DoEst==T)
+  if(DoEst == TRUE)
     return(OutLikelihood$TotalLike+Prior)  
   else{
     Out2 <- NULL
@@ -1303,7 +1445,7 @@ funNopt <- function(Pars, DoEst = T, SpeciesData, Nspecies, ParInit, Phases, Pre
 
 
 
-setNin <- function(Pars, ParInt, SpeciesData, Nspecies, Phases, Nproj = 0){
+setNin <- function(Pars, SpeciesData, Nspecies, Nproj = 0){
   AmaxP <- rep(0, Nspecies)
   
   InitN <- matrix(NA, nrow = Nspecies, ncol = 100)
