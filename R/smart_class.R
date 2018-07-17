@@ -452,7 +452,7 @@ SmartProject <- R6Class("smartProject",
                               stop("Missing Data! Run setAssesData() first.")
                             }
                             cat("\n\nMultiple Species Assessment\n", sep = "")
-                            assMultiResRes <<- list()
+                            assMultiRes <<- list()
                             Nspecies <- length(assessData)
                             Pars <- NULL
                             for(Ispec in 1:Nspecies){
@@ -484,7 +484,7 @@ SmartProject <- R6Class("smartProject",
                               Pars <- c(Pars, InitN, RecDev, LogR0, VecS, VecC, Fvals, InitF)
                             }  
                             Npar <- length(Pars)
-                              Res <- fitNPars(Pars, TheFunk2, FullMin = TRUE, DoVarCo = TRUE,
+                              Res <- fitNPars(Pars, funNopt, FullMin = TRUE, DoVarCo = TRUE,
                                              SpeciesData = assessData, Nspecies = Nspecies,
                                              PredationPars = assessInteract)
                               
