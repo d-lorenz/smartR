@@ -435,10 +435,10 @@ SmartProject <- R6Class("smartProject",
                             Pars <- c(assessData[[specie]]$InitN, RecDev, LogR0, VecS, VecC, Fvals, InitF)
                             Npar <- length(Pars)
                             Res <- fit1Pars(Pars,
-                                              fun1opt,
-                                              FullMin = TRUE,
-                                              DoVarCo = TRUE,
-                                              SpeciesData = assessData[[specie]])
+                                            fun1opt,
+                                            FullMin = TRUE,
+                                            DoVarCo = TRUE,
+                                            SpeciesData = assessData[[specie]])
                             assSingleRes[[specie]] <<- fun1opt(Res$par,
                                                                DoEst = FALSE,
                                                                SpeciesData = assessData[[specie]])
@@ -484,16 +484,16 @@ SmartProject <- R6Class("smartProject",
                               Pars <- c(Pars, InitN, RecDev, LogR0, VecS, VecC, Fvals, InitF)
                             }  
                             Npar <- length(Pars)
-                              Res <- fitNPars(Pars, funNopt, FullMin = TRUE, DoVarCo = TRUE,
-                                             SpeciesData = assessData, Nspecies = Nspecies,
-                                             PredationPars = assessInteract)
-                              
-                              assMultiRes[[specie]] <<- funNopt(Res$par, DoEst = FALSE, SpeciesData = assessData,
-                                                                Nspecies = Nspecies, PredationPars = assessInteract)
-                              assMultiRes[[specie]]$par <<- Res$par
-                              assMultiRes[[specie]]$VarCo <<- Res$VarCo
-                              assMultiRes[[specie]]$SSBSD <<- Res$SSBSD
-                              cat("\n\n", specie," Assessment Complete!\n", sep = "")
+                            Res <- fitNPars(Pars, funNopt, FullMin = TRUE, DoVarCo = TRUE,
+                                            SpeciesData = assessData, Nspecies = Nspecies,
+                                            PredationPars = assessInteract)
+                            
+                            assMultiRes <<- funNopt(Res$par, DoEst = FALSE, SpeciesData = assessData,
+                                                    Nspecies = Nspecies, PredationPars = assessInteract)
+                            assMultiRes$par <<- Res$par
+                            assMultiRes$VarCo <<- Res$VarCo
+                            assMultiRes$SSBSD <<- Res$SSBSD
+                            cat("\n\nAssessment Complete!\n", sep = "")
                           },
                           setPlotSingle = function(specie = ""){
                             if(is.null(assSingleRes[[specie]])){
