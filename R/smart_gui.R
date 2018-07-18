@@ -3205,7 +3205,8 @@ smart_gui <- function(){
         }
       }
       
-      my_project$setAssessInteract(intType = iteTyp,
+      my_project$setAssessInteract(intName = speLst,
+                                   intType = iteTyp,
                                    intWho = iteIte,
                                    intQty = iteItePar,
                                    intChi = as.numeric(iteChi),
