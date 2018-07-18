@@ -884,7 +884,7 @@ fitNPars <- function(Pars, optFun, FullMin = FALSE, DoVarCo = FALSE, ...){
     Outputs$SSBSD <- rep(0, Nyear)
     
     Res <- optim(Res$par, optFun, method = "BFGS", hessian = TRUE, DoEst = TRUE, ...)
-    Outputs <- fun1opt(Res$par, DoEst = FALSE, ...)
+    Outputs <- funNopt(Res$par, DoEst = FALSE, ...)
     Outputs$par <- Res$par
     # print(Res$par)
     Outputs$VarCo <- matrix(0, ncol = Npar, nrow = Npar)
