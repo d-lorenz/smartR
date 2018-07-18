@@ -553,8 +553,8 @@ SmartProject <- R6Class("smartProject",
                               
                               ssbData <- data.frame(Year = 1:assessData[[specie]]$Nyear+assessData[[specie]]$Yr1-1,
                                                     SSB = assMultiRes$SSB[specie,],
-                                                    Lower = assMultiRes$SSB[specie,]-1.96*assMultiRes$SSBSD[(1:assessData[[specie]]$Nyear)+specie],
-                                                    Upper = assMultiRes$SSB[specie,]+1.96*assMultiRes$SSBSD[(1:assessData[[specie]]$Nyear)+specie])
+                                                    Lower = assMultiRes$SSB[specie,]-1.96*assMultiRes$SSBSD[seq(from = 1, to = length(assMulti$SSBSD), by = length(assessData))+specie-1],
+                                                    Upper = assMultiRes$SSB[specie,]+1.96*assMultiRes$SSBSD[seq(from = 1, to = length(assMulti$SSBSD), by = length(assessData))+specie-1])
                               
                               assMultiPlot[[names(assessData)[specie]]]$SSB <<- ggplot_SSBsingle(choSpecie = names(assessData)[specie], assData = ssbData)
                               
