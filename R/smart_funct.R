@@ -1340,7 +1340,8 @@ funNopt <- function(Pars, DoEst = TRUE, SpeciesData, Nspecies, PredationPars){
       Out2$Nlen <- c(Out2$Nlen, SpeciesData[[Ispec]]$Nlen)
     }
     
-    Out2$Nyear <- length(Outs$SSB) 
+    # Out2$Nyear <- length(Outs$SSB) 
+    Out2$Nyear <- ncol(Outs$SSB) 
     Out2$Nspecies <- Nspecies
     
     Out2$CvCatch <- OutLikelihood$CvCatch
