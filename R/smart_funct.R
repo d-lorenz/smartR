@@ -1570,7 +1570,7 @@ forwPop <- function(Pars, SpeciesData, Nspecies, PredationPars, Nproj, Nsim, Fut
   Fvals <- ExtVal$Fvals
   InitF <- ExtVal$InitF
   Prior <- ExtVal$Prior
-  Nyear <- assessData[[1]]$Nyear
+  Nyear <- SpeciesData[[1]]$Nyear
   
   # Projection the population model and compute the negative log-likelihood
   SSBOut <- array(0,dim=c(Nspecies, Nsim, Nyear+Nproj))
@@ -1582,7 +1582,7 @@ forwPop <- function(Pars, SpeciesData, Nspecies, PredationPars, Nproj, Nsim, Fut
       for(Ispec in 1:Nspecies){
         for(Iyear in (Nyear+1):(Nyear+Nproj)){
           if(is.null(FutF)){
-            Fvals[Ispec,Iyear] <- Fvals[,Nyear]
+            Fvals[Ispec,Iyear] <- Fvals[Ispec,Nyear]
           }else{
             Fvals[Ispec,Iyear] <- FutF[Ispec]
           }
