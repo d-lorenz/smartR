@@ -1060,17 +1060,17 @@ popNspecie <- function(Nspecies, SpeciesData, InitN, RecDev, LogR0, Fvals, Selex
       
       if(length(indPreda) > 0){
         
-      deplPreda <- numeric(length(indPreda))
-      deplI <- PredB[Ispec, Iyear]/PredB0[Ispec]
-      for(iPreda in 1:length(deplPreda)){
-        idAss <- which(names(SpeciesData) == PredationPars$name[indPreda[iPreda]])
-        deplPreda[iPreda] <- PredB[idAss, Iyear]/PredB0[idAss]
-      }
-      propM <- parAlp[Ispec]*mean(deplPreda)/(parBet[Ispec]+deplI)
+        deplPreda <- numeric(length(indPreda))
+        deplI <- PredB[Ispec, Iyear]/PredB0[Ispec]
+        for(iPreda in 1:length(deplPreda)){
+          idAss <- which(names(SpeciesData) == PredationPars$name[indPreda[iPreda]])
+          deplPreda[iPreda] <- PredB[idAss, Iyear]/PredB0[idAss]
+        }
+        propM <- parAlp[Ispec]*mean(deplPreda)/(parBet[Ispec]+deplI)
         for(Iage in 1:Amax[1]){
           MTwo[Ispec, Iage]  <- parOme[Ispec]*M[Ispec, Iage]*(propM-1)
         }
-       }
+      }
     }
     
     # Compute F, Z, catch-at-age, and SSB; note that I have added the extra mortality
@@ -1554,4 +1554,57 @@ setNin <- function(Pars, SpeciesData, Nspecies, Nproj = 0){
   Outs$Prior <- Prior
   Outs$Nyear <- Nyear
   return(Outs)
+}
+
+
+forwPop <- function(Pars, SpeciesData, Nspecies, PredationPars, Nproj, Nsim, FutF, SigmaR){
+  
+  ExtVal <- setNin(Pars, SpeciesData, Nspecies, Nproj = Nproj)
+  
+  ParOut <- ExtVal$ParOut
+  InitN <- ExtVal$InitN
+  RecDev <- ExtVal$RecDev
+  LogR0 <- ExtVal$LogR0
+  SurvSel <- ExtVal$SurvSel
+  Selex <- ExtVal$Selex
+  Fvals <- ExtVal$Fvals
+  InitF <- ExtVal$InitF
+  Prior <- ExtVal$Prior
+  
+  # Projection the population model and compute the negative log-likelihood
+  SSBOut <- array(0,dim=c(Nspecies, Nsim, Nyear+Nproj))
+  for(Isim in 1:Nsim){
+    for(Ispec in 1:Nspecies){
+      for(Iyear in (Nyear+1):(Nyear+Nproj)){
+        RecDev[Ispec,Iyear] <- rnorm(1,0,SigmaR)-SigmaR^2.0/2.0
+      }
+      for(Ispec in 1:Nspecies){
+        for(Iyear in (Nyear+1):(Nyear+Nproj)){
+          Fvals[Ispec,Iyear] <- Fvals[,Nyear]
+        }
+      }
+      Outs <- popNspecie(Nspecies,SpeciesData,InitN,RecDev,LogR0,Fvals,Selex,InitF,PredationPars,Nproj=Nproj)
+      for(Ispec in 1:Nspecies){
+        SSBOut[Ispec,Isim,] <- Outs$SSB[Ispec,]
+      }
+    }
+  }
+  
+  Years <- 1:(Nyear+Nproj)+SpeciesData[[1]]$Yr1-1
+  SpecName <- names(SpeciesData)
+  for(Ispec in 1:Nspecies){
+    SumOut <- matrix(0,nrow=Nyear+Nproj,ncol=5) 
+    for(Iyear in 1:(Nyear+Nproj)){
+      SumOut[Iyear,] <- quantile(SSBOut[Ispec,,Iyear],probs=c(0.05,0.25,0.5,0.75,0.95))
+    }
+    ymax <- max(SumOut)*1.1
+    plot(Years,SumOut[,3],type='l',ylim=c(0,ymax),ylab=SpecName[Ispec])
+    xx <- c(Years,rev(Years))
+    yy <- c(SumOut[,5],rev(SumOut[,1]))
+    polygon(xx,yy,col="gray10")
+    xx <- c(Years,rev(Years))
+    yy <- c(SumOut[,4],rev(SumOut[,2]))
+    polygon(xx,yy,col="gray80")
+    lines(Years,SumOut[,3],lty=2,lwd=2)
+  }
 }
