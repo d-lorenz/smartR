@@ -534,6 +534,7 @@ SmartProject <- R6Class("smartProject",
                             
                             assSinglePlot[[specie]]$ObsPredCAA <<- ggplot_OPCsingle(choSpecie = specie, assData = caaData)
                             
+                            
                             catcData <- data.frame(Year = 1:assessData[[specie]]$Nyear+assessData[[specie]]$Yr1-1,
                                                    Catch = assSingleRes[[specie]]$ObsCatch,
                                                    Lower = assSingleRes[[specie]]$ObsCatch*exp(-1.96*assSingleRes[[specie]]$CvCatch),
@@ -541,6 +542,55 @@ SmartProject <- R6Class("smartProject",
                             
                             assSinglePlot[[specie]]$totCatc <<- ggplot_TCsingle(choSpecie = specie, assData = catcData)
                             
+                          },
+                          setPlotMulti = function(){
+                            if(is.null(assMultiRes)){
+                              stop("\n\nMissing Results! Run Assessment First.")
+                            }
+                            
+                            for(specie in 1:length(assessData)){
+                              assMultiPlot[[names(assessData)[specie]]] <<- list()
+                              
+                              ssbData <- data.frame(Year = 1:assessData[[specie]]$Nyear+assessData[[specie]]$Yr1-1,
+                                                    SSB = assMultiRes$SSB[specie,],
+                                                    Lower = assMultiRes$SSB[specie,]-1.96*assMultiRes$SSBSD[(1:6)+(1-specie)*6],
+                                                    Upper = assMultiRes$SSB[specie,]+1.96*assMultiRes$SSBSD[(1:6)+(1-specie)*6])
+                              
+                              assMultiPlot[[names(assessData)[specie]]]$SSB <<- ggplot_SSBsingle(choSpecie = names(assessData)[specie], assData = ssbData)
+                              
+                              
+                              survData <- list()
+                              tmpObs <- as.data.frame(assMultiRes$ObsSAA[specie,1:assessData[[specie]]$Nyear,1:assessData[[specie]]$Amax])
+                              tmpObs$Year <- assMultiRes$YSAA[specie, 1:assessData[[specie]]$Nyear]
+                              survData$obsSAA <- melt(tmpObs, id.vars = "Year",
+                                                      variable.name = "Age", value.name = "Index")
+                              survData$obsSAA$Lower <- survData$obsSAA$Index*exp(-1.96*assMultiRes$CvIndex) 
+                              survData$obsSAA$Upper <- survData$obsSAA$Index*exp(+1.96*assMultiRes$CvIndex)
+                              levels(survData$obsSAA$Age) <- paste("Age", substr(levels(survData$obsSAA$Age), start = 2, stop = 2))
+                              
+                              tmpPred <- as.data.frame(assMultiRes$PredSAA[specie,1:assessData[[specie]]$Nyear,1:assessData[[specie]]$Amax])
+                              # colnames(tmpPred) <- colnames(assSingleRes[[specie]]$ObsSAA)
+                              tmpPred$Year <- assMultiRes$YSAA[specie, 1:assessData[[specie]]$Nyear]
+                              survData$predSAA <- melt(tmpPred, id.vars = "Year",
+                                                       variable.name = "Age", value.name = "Index")
+                              levels(survData$predSAA$Age) <- paste("Age", substr(levels(survData$predSAA$Age), start = 2, stop = 2))
+                              
+                              assMultiPlot[[names(assessData)[specie]]]$ObsPredSurv <<- ggplot_OPSsingle(choSpecie = names(assessData)[specie], assData = survData)
+                              
+                              
+                              caaData <- data.frame(Age = 0:(assMultiRes$Amax[specie]-1),
+                                                    obsCAA = apply(assMultiRes$ObsCAA[specie,1:assessData[[specie]]$Nyear,1:assessData[[specie]]$Amax], 2, sum),
+                                                    predCAA = apply(assMultiRes$PredCAA[specie,1:assessData[[specie]]$Nyear,1:assessData[[specie]]$Amax], 2, sum))
+                              
+                              assMultiPlot[[names(assessData)[specie]]]$ObsPredCAA <<- ggplot_OPCsingle(choSpecie = names(assessData)[specie], assData = caaData)
+                              
+                              catcData <- data.frame(Year = 1:assessData[[specie]]$Nyear+assessData[[specie]]$Yr1-1,
+                                                     Catch = assMultiRes$ObsCatch[specie,],
+                                                     Lower = assMultiRes$ObsCatch[specie,]*exp(-1.96*assMultiRes$CvCatch),
+                                                     Upper = assMultiRes$ObsCatch[specie,]*exp(+1.96*assMultiRes$CvCatch))
+                              
+                              assMultiPlot[[names(assessData)[specie]]]$totCatc <<- ggplot_TCsingle(choSpecie = names(assessData)[specie], assData = catcData)
+                            }
                           },
                           setCostInput = function(){
                             if(is.null(fleet$effortIndex)) stop("Missing Effort Index")
