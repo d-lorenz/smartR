@@ -1594,9 +1594,10 @@ forwPop <- function(Pars, SpeciesData, Nspecies, PredationPars, Nproj, Nsim, Fut
       }
     }
   }
-  
+  par(mfrow = c(2, ceiling(Nspecies/2)))
   Years <- 1:(Nyear+Nproj)+SpeciesData[[1]]$Yr1-1
   SpecName <- names(SpeciesData)
+  outLst <- list()
   for(Ispec in 1:Nspecies){
     SumOut <- matrix(0,nrow=Nyear+Nproj,ncol=5) 
     for(Iyear in 1:(Nyear+Nproj)){
@@ -1611,5 +1612,11 @@ forwPop <- function(Pars, SpeciesData, Nspecies, PredationPars, Nproj, Nsim, Fut
     yy <- c(SumOut[,4],rev(SumOut[,2]))
     polygon(xx,yy,col="gray80")
     lines(Years,SumOut[,3],lty=2,lwd=2)
+    SumOut <- as.data.frame(SumOut)
+    colnames(SumOut) <- paste0("Q_", c(0.05,0.25,0.5,0.75,0.95))
+    rownames(SumOut) <- paste0("Y_", Years)
+    outLst[[SpecName[Ispec]]] <- SumOut
   }
+  
+  return(outLst)
 }
