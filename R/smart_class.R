@@ -850,8 +850,14 @@ SmartProject <- R6Class("smartProject",
                                 all_in_box <- in_box_ping[perOnInd,1:2]
                                 all_sos <- sqldf("select * from tmp_eff join (select * from all_in_box) using (I_NCEE, T_NUM)")
                                 cat("\nSaving Data", sep = "")
-                                tmp_key <- names(which.max(table(years(all_sos$DATE))))
-                                fleet$rawEffort[[tmp_key]] <<- all_sos
+                                numYea <- unique(years(all_sos$DATE))
+                                for(yea in 1:length(numYea)){
+                                  if(is.nullfleet$rawEffort[[numYea[yea]]]){
+                                    fleet$rawEffort[[numYea[yea]]] <<- all_sos[years(all_sos$DATE) == numYea[yea],]
+                                  }else{
+                                    fleet$rawEffort[[numYea[yea]]] <<- rbind(fleet$rawEffort[[numYea[yea]]], all_sos[years(all_sos$DATE) == numYea[yea],])
+                                  }
+                                }
                               }
                             }
                           },
