@@ -852,7 +852,7 @@ SmartProject <- R6Class("smartProject",
                                 cat("\nSaving Data", sep = "")
                                 numYea <- unique(years(all_sos$DATE))
                                 for(yea in 1:length(numYea)){
-                                  if(is.nullfleet$rawEffort[[numYea[yea]]]){
+                                  if(is.null(fleet$rawEffort[[numYea[yea]]])){
                                     fleet$rawEffort[[numYea[yea]]] <<- all_sos[years(all_sos$DATE) == numYea[yea],]
                                   }else{
                                     fleet$rawEffort[[numYea[yea]]] <<- rbind(fleet$rawEffort[[numYea[yea]]], all_sos[years(all_sos$DATE) == numYea[yea],])
