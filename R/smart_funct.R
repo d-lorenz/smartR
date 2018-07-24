@@ -374,7 +374,7 @@ getFleetRevSeason = function(predProd, monthVec, lwStat, priceVec){
 
 lvlSimEffo <- function(simuEffo, maxEff = 100){
   xtr <- apply(simuEffo, 1, sum)
-  over_thr <- which(x > maxEff, arr.ind = TRUE)
+  over_thr <- which(simuEffo > maxEff, arr.ind = TRUE)
   if(nrow(over_thr) > 0){
     over_thr <- over_thr[order(over_thr[,1]),]
     for(i in 1:length(unique(over_thr[,1]))){
