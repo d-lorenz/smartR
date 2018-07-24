@@ -1349,7 +1349,7 @@ SmartProject <- R6Class("smartProject",
                             simCostRevenue <<- merge(simTotalCost[,c("I_NCEE", "Year", "totCost")],
                                                      simTotalRevenue[,c("I_NCEE", "Year", "totRevenue")])
                           },
-                          simulateFishery = function(thr0 = 100, effoMode = "flat", effoDen = 1.05, effoBan = numeric(0), timeStep = "Year"){
+                          simulateFishery = function(thr0 = 100, effoMode = "flat", effoDen = 1.05, effoBan = numeric(0), timeStep = "Year", maxEffo = 0){
                             cat("\nGetting length-weight statistics...", sep = "")
                             getLWstat()
                             cat("Done!", sep = "")
@@ -1381,6 +1381,11 @@ SmartProject <- R6Class("smartProject",
                               genSimEffo(method = effoMode, selRow = toOpt, overDen = effoDen, areaBan = effoBan)
                               cat("Done!", sep = "")
                               
+                              if(maxEffo > 0){
+                                cat("\n\tScaling max effort... ", sep = "")
+                                simEffo[,-c(1:3,ncol(simEffo))] <<- lvlSimEffo(simuEffo = simEffo[,-c(1:3,ncol(simEffo))], maxEff = maxEffo)
+                                cat("Done!", sep = "")
+                              }
                               cat("\n\tComputing production...", sep = "")
                               simProdAll(selRow = toOpt)
                               cat("Done!", sep = "")
