@@ -372,6 +372,22 @@ getFleetRevSeason = function(predProd, monthVec, lwStat, priceVec){
   return(outProp)
 }
 
+lvlSimEffo <- function(simuEffo, maxEff = 100){
+  xtr <- apply(simuEffo, 1, sum)
+  over_thr <- which(x > maxEff, arr.ind = TRUE)
+  if(nrow(over_thr) > 0){
+    over_thr <- over_thr[order(over_thr[,1]),]
+    for(i in 1:length(unique(over_thr[,1]))){
+      ox <- as.numeric(unique(over_thr[,1])[i])
+      oy <- as.numeric(over_thr[which(over_thr[,1] == ox), 2])
+      simuEffo[ox, oy] <- maxEff
+      tdiff <- xtr[ox] - sum(simuEffo[ox,])
+      simuEffo[ox, setdiff(1:ncol(simuEffo), oy)] <- (sum(simuEffo[ox, setdiff(1:ncol(simuEffo), oy)])+tdiff)*simuEffo[ox,setdiff(1:ncol(simuEffo), oy)]/sum(simuEffo[ox, setdiff(1:ncol(simuEffo), oy)])
+    }
+  }
+  return(simuEffo)
+}
+
 
 ### Stock Assessment ####
 
