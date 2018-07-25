@@ -374,15 +374,21 @@ getFleetRevSeason = function(predProd, monthVec, lwStat, priceVec){
 
 lvlSimEffo <- function(simuEffo, maxEff = 100){
   xtr <- apply(simuEffo, 1, sum)
-  over_thr <- which(simuEffo > maxEff, arr.ind = TRUE)
-  if(nrow(over_thr) > 0){
+  over_thr <- which(simuEffo > maxEff, arr.ind=TRUE)
+  if(nrow(over_thr)>0){
     over_thr <- over_thr[order(over_thr[,1]),]
-    for(i in 1:length(unique(over_thr[,1]))){
+    for(i in 1:length(unique((over_thr[,1])))){
       ox <- as.numeric(unique(over_thr[,1])[i])
-      oy <- as.numeric(over_thr[which(over_thr[,1] == ox), 2])
+      oy <- as.numeric(over_thr[which(over_thr[,1] == ox),2]) 
       simuEffo[ox, oy] <- maxEff
       tdiff <- xtr[ox] - sum(simuEffo[ox,])
-      simuEffo[ox, setdiff(1:ncol(simuEffo), oy)] <- (sum(simuEffo[ox, setdiff(1:ncol(simuEffo), oy)])+tdiff)*simuEffo[ox,setdiff(1:ncol(simuEffo), oy)]/sum(simuEffo[ox, setdiff(1:ncol(simuEffo), oy)])
+      seClm <- setdiff(1:ncol(simuEffo), oy)
+      isum <- sum(simuEffo[ox, seClm])
+      if(isum == 0){
+        isum <- 1
+        simuEffo[ox, seClm] <- 1/length(seClm)
+      }
+      simuEffo[ox, seClm] <- (sum(simuEffo[ox, seClm])+tdiff)*simuEffo[ox, seClm]/isum
     }
   }
   return(simuEffo)
