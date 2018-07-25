@@ -1289,11 +1289,12 @@ SmartProject <- R6Class("smartProject",
                               stop("No mcmc output found")
                             
                             for(specie in 1:length(fisheryBySpecie)){
-                              if(is.null(fleet$ecoPrice[[specie]]))
-                                stop(paste0("No size/price data found for specie ", specie))
+                              priIdx <- which(names(fleet$ecoPrice) == fisheryBySpecie[[specie]]$specie)
+                              if(is.null(fleet$ecoPrice[[priIdx]]))
+                                stop(paste0("No size/price data found for specie ", names(fleet$ecoPrice)[priIdx]))
                               
-                              vecSize <- sort(unique(c(fleet$ecoPrice[[specie]]$LowerBound, fleet$ecoPrice[[specie]]$UpperBound)))
-                              curUnit <- unique(fleet$ecoPrice[[specie]]$Units)[1]
+                              vecSize <- sort(unique(c(fleet$ecoPrice[[priIdx]]$LowerBound, fleet$ecoPrice[[priIdx]]$UpperBound)))
+                              curUnit <- unique(fleet$ecoPrice[[priIdx]]$Units)[1]
                               
                               fisheryBySpecie[[specie]]$setLWstat(lwUnit = curUnit)
                               fgNames <- paste0("LW_", 1:(sampMap$cutFG+1))
