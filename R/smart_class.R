@@ -1187,11 +1187,14 @@ SmartProject <- R6Class("smartProject",
                               }
                             }
                           },
-                          genSimEffo = function(method = "flat", selRow = numeric(0), overDen = 1.05, areaBan = numeric(0)){
+                          genSimEffo = function(method = "flat", selRow = numeric(0), areaBan = numeric(0)){
                             if(is.null(simEffo)){
                               simEffo <<- fleet$effoAllLoa[fleet$effoAllLoa$Year == max(as.numeric(as.character(unique(fleet$effoAllLoa$Year)))),]
                             }else{
-                              methods <- c("flat", "flatDen", "ban", "banDen")
+                              methods <- c("flat",
+                                           # "flatDen",
+                                           # "banDen",
+                                           "ban")
                               selMode <- methods[pmatch(method, methods)]
                               
                               if (is.na(selMode)) 
@@ -1200,18 +1203,19 @@ SmartProject <- R6Class("smartProject",
                               if(length(selRow) == 0)
                                 selRow <- 1:nrow(simEffo)
                               
-                              if(selMode %in% c("flatDen", "banDen")){
-                                simDen <- apply(simEffo[,4:(ncol(simEffo)-1)], 2, sum)/as.numeric(table(sampMap$cutResult$FG))
-                                obsDen <- apply(fleet$effoAllLoa[,4:(ncol(fleet$effoAllLoa)-1)],2,sum)/as.numeric(table(sampMap$cutResult$FG))
-                                fDen = simDen/(overDen*obsDen)
-                                if(length(which(is.na(fDen)))>0) fDen[which(is.na(fDen))] <- 1
-                              }
+                              # if(selMode %in% c("flatDen", "banDen")){
+                              #   simDen <- apply(simEffo[,4:(ncol(simEffo)-1)], 2, sum)/as.numeric(table(sampMap$cutResult$FG))
+                              #   obsDen <- apply(fleet$effoAllLoa[,4:(ncol(fleet$effoAllLoa)-1)],2,sum)/as.numeric(table(sampMap$cutResult$FG))
+                              #   fDen = simDen/(overDen*obsDen)
+                              #   if(length(which(is.na(fDen)))>0) fDen[which(is.na(fDen))] <- 1
+                              # }
                               
                               simEffo[selRow, 4:(ncol(simEffo)-1)] <<- switch(selMode,
                                                                               flat = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genFlatEffo(effoPatt = x)))},
-                                                                              flatDen = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genFlatEffoDen(effoPatt = x, targetDensity = fDen)))},
-                                                                              ban = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genBanEffo(effoPatt = x, set0 = areaBan)))},
-                                                                              banDen = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genBanEffoDen(effoPatt = x, set0 = areaBan, targetDensity = fDen)))})
+                                                                              # flatDen = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genFlatEffoDen(effoPatt = x, targetDensity = fDen)))},
+                                                                              # banDen = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genBanEffoDen(effoPatt = x, set0 = areaBan, targetDensity = fDen)))},
+                                                                              ban = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genBanEffo(effoPatt = x, set0 = areaBan)))}
+                                                                              )
                               
                             }
                           },
@@ -1350,7 +1354,7 @@ SmartProject <- R6Class("smartProject",
                             simCostRevenue <<- merge(simTotalCost[,c("I_NCEE", "Year", "totCost")],
                                                      simTotalRevenue[,c("I_NCEE", "Year", "totRevenue")])
                           },
-                          simulateFishery = function(thr0 = 100, effoMode = "flat", effoDen = 1.05, effoBan = numeric(0), timeStep = "Year", maxEffo = 0){
+                          simulateFishery = function(thr0 = 100, effoMode = "flat", effoBan = numeric(0), timeStep = "Year", maxEffo = 0){
                             cat("\nGetting length-weight statistics...", sep = "")
                             getLWstat()
                             cat("Done!", sep = "")
@@ -1379,7 +1383,7 @@ SmartProject <- R6Class("smartProject",
                               cat("\nIteration", nIter)
                               
                               cat("\n\tOptimising effort... ", sep = "")
-                              genSimEffo(method = effoMode, selRow = toOpt, overDen = effoDen, areaBan = effoBan)
+                              genSimEffo(method = effoMode, selRow = toOpt, areaBan = effoBan)
                               cat("Done!", sep = "")
                               
                               if(maxEffo > 0){
