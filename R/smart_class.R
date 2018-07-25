@@ -1215,7 +1215,7 @@ SmartProject <- R6Class("smartProject",
                                                                               # flatDen = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genFlatEffoDen(effoPatt = x, targetDensity = fDen)))},
                                                                               # banDen = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genBanEffoDen(effoPatt = x, set0 = areaBan, targetDensity = fDen)))},
                                                                               ban = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genBanEffo(effoPatt = x, set0 = areaBan)))}
-                                                                              )
+                              )
                               
                             }
                           },
