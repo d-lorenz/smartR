@@ -54,7 +54,7 @@ smart_gui <- function(){
   
   my_project$createFleet()
   
-  logoPNG <- readJPEG(source = system.file("SMART_Logo.2.jpg", package="smartR"))
+  logoPNG <- readJPEG(source = system.file("smartRlogo.jpg", package="smartR"))
   pre_dev <- length(dev.list())
   
   main_win <- gwindow(paste("SMART - Version ", "1.1", sep = ""), width = 1200, height= 600, visible = TRUE)
@@ -3467,6 +3467,6 @@ smart_gui <- function(){
   suppressWarnings(suppressMessages(ggplot() +
                                       geom_blank() +
                                       annotation_custom(rasterGrob(logoPNG),
-                                                        xmin = 0.3, xmax = 0.7,
-                                                        ymin = 0.3, ymax = 0.7)))
+                                                        xmin = 0, xmax = 1,
+                                                        ymin = 0, ymax = 1)))
 }
