@@ -145,7 +145,7 @@ SmartProject <- R6Class("smartProject",
                           assMultiRes = list(),
                           assMultiPlot = list(),
                           assessInteract = list(),
-                          setAssessInteract = function(intName, intType, intWho, intQty, intChi, intOm, intPer){
+                          setAssessInteract = function(intName, intType, intWho, intQty, intChi, intOm){
                             assessInteract <<- list()
                             assessInteract$name <<- intName
                             assessInteract$type <<- intType
@@ -153,7 +153,7 @@ SmartProject <- R6Class("smartProject",
                             assessInteract$qty <<- intQty
                             assessInteract$chi <<- intChi
                             assessInteract$om <<- intOm
-                            assessInteract$per <<- intPer
+                            # assessInteract$per <<- intPer
                           },
                           setAssessData = function(specie, forecast = FALSE){
                             cat("\nSetup Assessment Data for", specie,"...\n")
