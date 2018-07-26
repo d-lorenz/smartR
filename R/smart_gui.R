@@ -3186,9 +3186,9 @@ smart_gui <- function(){
       speWid[[oneSpe]]$gruCeOm <- gedit(text = "0.0", horizontal = TRUE, width = 5,
                                         container = speWid[[oneSpe]]$gruC)
       
-      glabel(text = "Perc:", container = speWid[[oneSpe]]$gruC)
-      speWid[[oneSpe]]$gruCePer <- gedit(text = "0.0", horizontal = TRUE, width = 5,
-                                         container = speWid[[oneSpe]]$gruC)
+      # glabel(text = "Perc:", container = speWid[[oneSpe]]$gruC)
+      # speWid[[oneSpe]]$gruCePer <- gedit(text = "0.0", horizontal = TRUE, width = 5,
+      #                                    container = speWid[[oneSpe]]$gruC)
       addSpring(speWid[[oneSpe]]$gruC)
       addSpace(speWid[[oneSpe]]$fra, 10)
     }
@@ -3201,7 +3201,7 @@ smart_gui <- function(){
         iteTyp[i] <- svalue(speWid[[i]]$rad)
         iteChi[i] <- svalue(speWid[[i]]$gruCeChi)
         iteOm[i] <- svalue(speWid[[i]]$gruCeOm)
-        itePer[i] <- svalue(speWid[[i]]$gruCePer)
+        # itePer[i] <- svalue(speWid[[i]]$gruCePer)
         for(s in 1:length(speLst)){
           iteIte[i, s] <- as.character(svalue(speWid[[i]]$diet[[s]]$fraBrad))
           iteItePar[i, s] <- svalue(speWid[[i]]$diet[[s]]$fraBage)
@@ -3230,7 +3230,7 @@ smart_gui <- function(){
       iteTyp[i] <- svalue(speWid[[i]]$rad)
       iteChi[i] <- svalue(speWid[[i]]$gruCeChi)
       iteOm[i] <- svalue(speWid[[i]]$gruCeOm)
-      itePer[i] <- svalue(speWid[[i]]$gruCePer)
+      # itePer[i] <- svalue(speWid[[i]]$gruCePer)
       for(s in 1:length(speLst)){
         iteIte[i, s] <- as.character(svalue(speWid[[i]]$diet[[s]]$fraBrad))
         iteItePar[i, s] <- svalue(speWid[[i]]$diet[[s]]$fraBage)
@@ -3406,7 +3406,12 @@ smart_gui <- function(){
       dev.set(dev.list()[pre_dev+10])
       suppressWarnings(print(my_project$assSinglePlot[[svalue(assSpe_drop)]]$SSB))
     }else{
-      
+      my_project$assMulti()
+      my_project$setPlotMulti()
+      assRes_drop[] <- names(my_project$assessData)
+      svalue(assRes_drop) <- assRes_drop[][which(assRes_drop[] == svalue(assSpe_drop))]
+      dev.set(dev.list()[pre_dev+10])
+      suppressWarnings(print(my_project$assMultiPlot[[svalue(assSpe_drop)]]$SSB))
     }
   })
   ass_Str_but$set_size(value = c(width = 80))
@@ -3429,7 +3434,11 @@ smart_gui <- function(){
                                      OPCatch = {suppressWarnings(print(my_project$assSinglePlot[[svalue(assRes_drop)]]$ObsPredCAA))},
                                      TotalCatch = {suppressWarnings(print(my_project$assSinglePlot[[svalue(assRes_drop)]]$totCatc))})
                             }else{
-                              
+                              switch(svalue(ass_Res_radio),
+                                     SSB = {suppressWarnings(print(my_project$assMultiPlot[[svalue(assRes_drop)]]$SSB))},
+                                     OPSurvey = {suppressWarnings(print(my_project$assMultiPlot[[svalue(assRes_drop)]]$ObsPredSurv))},
+                                     OPCatch = {suppressWarnings(print(my_project$assMultiPlot[[svalue(assRes_drop)]]$ObsPredCAA))},
+                                     TotalCatch = {suppressWarnings(print(my_project$assMultiPlot[[svalue(assRes_drop)]]$totCatc))})
                             }
                           })
   addSpace(ass_Res, 10)
