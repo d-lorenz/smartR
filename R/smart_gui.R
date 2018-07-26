@@ -3074,7 +3074,7 @@ smart_gui <- function(){
     iteTyp <- rep("None", length(speLst))
     iteChi <- rep("None", length(speLst))
     iteOm <- rep("None", length(speLst))
-    itePer <- rep("None", length(speLst))
+    # itePer <- rep("None", length(speLst))
     iteIte <- matrix(data = "None", nrow = length(speLst), ncol = length(speLst), byrow = TRUE)
     iteItePar <- matrix(data = 0, nrow = length(speLst), ncol = length(speLst), byrow = TRUE)
     
@@ -3103,7 +3103,7 @@ smart_gui <- function(){
                                          iteTyp[i] <- svalue(speWid[[i]]$rad)
                                          iteChi[i] <- svalue(speWid[[i]]$gruCeChi)
                                          iteOm[i] <- svalue(speWid[[i]]$gruCeOm)
-                                         itePer[i] <- svalue(speWid[[i]]$gruCePer)
+                                         # itePer[i] <- svalue(speWid[[i]]$gruCePer)
                                          for(s in 1:length(speLst)){
                                            iteIte[i, s] <- as.character(svalue(speWid[[i]]$diet[[s]]$fraBrad))
                                            iteItePar[i, s] <- svalue(speWid[[i]]$diet[[s]]$fraBage)
@@ -3143,7 +3143,7 @@ smart_gui <- function(){
                                                               iteTyp[i] <- svalue(speWid[[i]]$rad)
                                                               iteChi[i] <- svalue(speWid[[i]]$gruCeChi)
                                                               iteOm[i] <- svalue(speWid[[i]]$gruCeOm)
-                                                              itePer[i] <- svalue(speWid[[i]]$gruCePer)
+                                                              # itePer[i] <- svalue(speWid[[i]]$gruCePer)
                                                               for(s in 1:length(speLst)){
                                                                 iteIte[i, s] <- as.character(svalue(speWid[[i]]$diet[[s]]$fraBrad))
                                                                 iteItePar[i, s] <- svalue(speWid[[i]]$diet[[s]]$fraBage)
@@ -3213,8 +3213,7 @@ smart_gui <- function(){
                                    intWho = iteIte,
                                    intQty = iteItePar,
                                    intChi = as.numeric(iteChi),
-                                   intOm = as.numeric(iteOm),
-                                   intPer = as.numeric(itePer))
+                                   intOm = as.numeric(iteOm))
       dispose(tempAssInte)
     })
     addSpring(but_g)
