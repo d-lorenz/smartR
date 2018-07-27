@@ -543,20 +543,13 @@ smart_gui <- function(){
     
     enabled(eff_g_top) <- FALSE
     
-    #### SKIPPED LOADING rData
-    #     tmp_files <- gfile(text = "Select Effort DBs", type = "open",
-    #                        initial.filename = NULL, initial.dir = getwd(), filter = list(),
-    #                        multi = TRUE)
-    #
-    #     my_project$loadFleeEffoDbs(tmp_files)
-    
-    tmp_file <- "/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/smart_rawEffort_new.rData"
-    # tmp_file <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
-    
+    tmp_files <- gfile(text = "Select Effort DBs", type = "open",
+                       initial.filename = NULL, initial.dir = getwd(), filter = list(),
+                       multi = TRUE)
     cat("\nLoading effort from vmsbase db...", sep = "")
     svalue(stat_bar) <- "Loading effort from vmsbase db..."
     Sys.sleep(1)
-    my_project$fleet$rawEffort <- readRDS(tmp_file)
+    my_project$loadFleeEffoDbs(tmp_files)
     my_project$fleet$setEffortIds()
     cat("   Done!", sep = "")
     svalue(stat_bar) <- ""
