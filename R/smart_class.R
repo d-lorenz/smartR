@@ -1087,14 +1087,18 @@ SmartProject <- R6Class("smartProject",
                             sampMap$rawInpu <<- list()
                             
                             cat("\n\nLoading available data:\n")
-                            if(!is.null(sampMap$bioDF)){
+                            if(is.null(sampMap$bioDF)){
+                              stop("\nMissing Seabed Data!\n")
+                              }else{
                               sampMap$availData <<- c(sampMap$availData, "Seabed")
                               cat("\n   -   Seabed Category")
                               sampMap$rawInpu <<- c(sampMap$rawInpu, Seabed = list(data.frame(sampMap$bioDF)))
                               cat("\t\t-   Loaded!")
                             }
                             
-                            if(!is.null(fleet$rawEffort)){
+                            if(is.null(fleet$rawEffort)){
+                              stop("\nMissing Effort Data!\n")
+                            }else{
                               sampMap$availData <<- c(sampMap$availData, "Effort")
                               cat("\n   -   Effort Distribution")
                               raw_effort <- numeric(length = sampMap$nCells)
@@ -1114,7 +1118,9 @@ SmartProject <- R6Class("smartProject",
                               cat("\t-   Loaded!")
                             }
                             
-                            if(!is.null(sampMap$griCent)){
+                            if(is.null(sampMap$griCent)){
+                              stop("\nMissing Depth Data!\n")
+                            }else{
                               sampMap$availData <<- c(sampMap$availData, "Depth")
                               cat("\n   -   Cell Depth")
                               sampMap$rawInpu <<- c(sampMap$rawInpu, Depth = list(sampMap$centDept[,3]))
@@ -4290,29 +4296,20 @@ SampleMap <- R6Class("sampleMap",
                          map.scale(x = min(abs(x_rang))+(diff(x_rang)/10), y = min(abs(y_rang))+(diff(y_rang)/7), cex = 0.65, ratio = FALSE)
                          
                        },
-                       setClusInpu = function(whiData = rep(TRUE,3), howData = rep(1, 3)){
-                         truIdx <- which(whiData == TRUE)
-                         if(length(truIdx)>0){
-                           tmp_lst <- list()
-                           for(i in truIdx){
-                             if(i == 1){
-                               cat("\n   -   Seabed")
-                               tmp_lst <- c(tmp_lst, list(rawInpu[[i]] * switch(howData[i], "0.5X" = 0.5, "1" = 1, "2X" = 2)))
-                               cat("\t\t-   Set!")
-                             } else if(i == 2){
-                               cat("\n   -   Effort")
-                               tmp_lst <- c(tmp_lst, list(vegan::decostand(log10(1 + rawInpu[[i]]), method = "range", MARGIN = 2) * switch(howData[i], "0.5X" = 0.5, "1" = 1, "2X" = 2)))
-                               cat("\t\t-   Set!")
-                             } else if(i == 3){
-                               cat("\n   -   Depth")
-                               tmp_inpu <- -rawInpu[[i]]
-                               tmp_inpu[tmp_inpu < 0] <- 0
-                               tmp_lst <- c(tmp_lst, Depth = list(vegan::decostand(log10(1 + tmp_inpu), method = "range", MARGIN = 2) * switch(howData[i], "0.5X" = 0.5, "1" = 1, "2X" = 2)))
-                               cat("\t\t-   Set!\n")
-                             }
-                           }
-                           clusInpu <<- do.call(cbind, tmp_lst)
-                         }
+                       setClusInpu = function(howData = rep(1, 3)){
+                         tmp_lst <- list()
+                         cat("\n   -   Seabed")
+                         tmp_lst <- c(tmp_lst, list(rawInpu[[i]] * howData[1]))
+                         cat("\t\t-   Set!")
+                         cat("\n   -   Effort")
+                         tmp_lst <- c(tmp_lst, list(vegan::decostand(log10(1 + rawInpu[[i]]), method = "range", MARGIN = 2) * howData[2]))
+                         cat("\t\t-   Set!")
+                         cat("\n   -   Depth")
+                         tmp_inpu <- -rawInpu[[3]]
+                         tmp_inpu[tmp_inpu < 0] <- 0
+                         tmp_lst <- c(tmp_lst, Depth = list(vegan::decostand(log10(1 + tmp_inpu), method = "range", MARGIN = 2) * howData[3]))
+                         cat("\t\t-   Set!\n")
+                         clusInpu <<- do.call(cbind, tmp_lst)
                        },
                        calcFishGrou = function(numCuts = 50,
                                                minsize = 10,
