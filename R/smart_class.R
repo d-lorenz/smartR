@@ -3474,13 +3474,13 @@ FishFleet <- R6Class("fishFleet",
                        },
                        plotCountIDsEffoProd = function(){
                          tmp_effo <- data.frame("Year" = names(effortIds),
-                                                "Ids" = unlist(lapply(effortIds, length)),
+                                                "Ids" = unlist(lapply(sapply(effortIds, unique), length)),
                                                 "Dataset" = "Effort")
                          tmp_prod <- data.frame("Year" = names(productionIds),
-                                                "Ids" = unlist(lapply(productionIds, length)),
+                                                "Ids" = unlist(lapply(sapply(productionIds, unique), length)),
                                                 "Dataset" = "Production")
                          tmp_comb <- data.frame("Year" = names(idsEffoProd),
-                                                "Ids" = unlist(lapply(idsEffoProd, length)),
+                                                "Ids" = unlist(lapply(sapply(idsEffoProd, unique), length)),
                                                 "Dataset" = "Overlap")
                          tmp_df <- rbind(tmp_effo, tmp_prod, tmp_comb)
                          rownames(tmp_df) <- NULL
@@ -3503,7 +3503,7 @@ FishFleet <- R6Class("fishFleet",
                        },
                        plotCountIDsEffo = function(){
                          tmp_df <- data.frame("Year" = names(effortIds),
-                                              "Ids" = unlist(lapply(unique(effortIds), length)))
+                                              "Ids" = unlist(lapply(sapply(effortIds, unique), length)))
                          tmp_plot <- ggplot(tmp_df, aes(x = Year, y = Ids)) + geom_bar(stat = "identity") +
                            geom_text(aes(y=Ids, label = Ids), position= position_dodge(width=1),
                                      vjust=2.5, color="white") +
