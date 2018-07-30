@@ -4090,7 +4090,7 @@ SampleMap <- R6Class("sampleMap",
                            tmp_bioc <- ggBioDF
                          }
                          
-                         gooEnv <<- suppressMessages(grid.arrange(tmp_grid,
+                         gooEnv <<- suppressWarnings(grid.arrange(tmp_grid,
                                                                  tmp_dept,
                                                                  tmp_bioc,
                                                                  layout_matrix = matrix(1:3,1,3)))
@@ -4228,8 +4228,7 @@ SampleMap <- R6Class("sampleMap",
                                                               axis.text.y = element_text(size = 8),
                                                               axis.title.y = element_text(size = 10),
                                                               legend.text = element_text(size = 8),
-                                                              legend.title = element_text(size = 10),
-                                                              plot.title = element_blank()))
+                                                              legend.title = element_text(size = 10)))
                        },
                        ggplotBioDF = function(){
                          suppressWarnings(print(ggBioDF))
@@ -4289,8 +4288,7 @@ SampleMap <- R6Class("sampleMap",
                                                               axis.text.y = element_text(size = 8),
                                                               axis.title.y = element_text(size = 10),
                                                               legend.text = element_text(size = 8),
-                                                              legend.title = element_text(size = 10),
-                                                              plot.title = element_blank()))
+                                                              legend.title = element_text(size = 10)))
                        },
                        ggplotGridBathy = function(){
                          suppressWarnings(print(ggDepth))
