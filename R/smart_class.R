@@ -3873,6 +3873,7 @@ SampleMap <- R6Class("sampleMap",
                        cutResShpCent = NULL,
                        cutResShpFort = NULL,
                        fgWeigDist = NULL,
+                       gooEnv = NULL,
                        ggBioDF = NULL,
                        ggDepth = NULL,
                        ggDepthFGbox = NULL,
@@ -4062,7 +4063,8 @@ SampleMap <- R6Class("sampleMap",
                                                                                 fill = 'grey', size = 0.1,
                                                                                 color = 'gainsboro', data = gridFortify, alpha = 0.5) +
                                                         lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4])) +
-                                                        xlab("Longitude") + ylab("Latitude")+
+                                                        xlab("Longitude") + ylab("Latitude") +
+                                                        ggtitle("Grid") +
                                                         theme_tufte(base_size = 14, ticks=T) +
                                                         theme(legend.position = "none",
                                                               axis.text.x = element_text(size = 8),
@@ -4070,6 +4072,31 @@ SampleMap <- R6Class("sampleMap",
                                                               panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
                                                               axis.text.y = element_text(size = 8),
                                                               axis.title.y = element_text(size = 10)))
+                       },
+                       setGooEnv = function(){
+                         if(is.null(gooGrid)){
+                           tmp_grid <- ggplot() + geom_blank() + ggtitle("No grid Loaded")
+                         }else{
+                           tmp_grid <- gooGrid
+                         }
+                         if(is.null(ggDepth)){
+                           tmp_dept <- ggplot() + geom_blank() + ggtitle("No depth Loaded")
+                         }else{
+                           tmp_dept <- ggDepth
+                         }
+                         if(is.null(ggBioDF)){
+                           tmp_bioc <- ggplot() + geom_blank() + ggtitle("No seabed Loaded")
+                         }else{
+                           tmp_bioc <- ggBioDF
+                         }
+                         
+                         gooEnv <<- suppressMessages(grid.arrange(tmp_grid,
+                                                                 tmp_dept,
+                                                                 tmp_bioc,
+                                                                 layout_matrix = matrix(1:3,1,3)))
+                       },
+                       plotGooEnv = function(){
+                         suppressWarnings(print(gooEnv))
                        },
                        plotGooGrid = function(){
                          suppressWarnings(print(gooGrid))
@@ -4192,6 +4219,7 @@ SampleMap <- R6Class("sampleMap",
                                                                      data = grid_data, alpha = 0.8) +
                                                         lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4])) +
                                                         xlab("Longitude") + ylab("Latitude") +
+                                                        ggtitle("Seabed") +
                                                         theme_tufte(base_size = 14, ticks=T) +
                                                         theme(legend.position = "right",
                                                               axis.text.x = element_text(size = 8),
@@ -4252,6 +4280,7 @@ SampleMap <- R6Class("sampleMap",
                                                         lims(x = extendrange(plotRange[1:2]),
                                                              y = extendrange(plotRange[3:4])) +
                                                         xlab("Longitude") + ylab("Latitude") +
+                                                        ggtitle("Depth") +
                                                         theme_tufte(base_size = 14, ticks=T) +
                                                         theme(legend.position = "right",
                                                               axis.text.x = element_text(size = 8),
@@ -4299,10 +4328,10 @@ SampleMap <- R6Class("sampleMap",
                        setClusInpu = function(howData = rep(1, 3)){
                          tmp_lst <- list()
                          cat("\n   -   Seabed")
-                         tmp_lst <- c(tmp_lst, list(rawInpu[[i]] * howData[1]))
+                         tmp_lst <- c(tmp_lst, list(rawInpu[[1]] * howData[1]))
                          cat("\t\t-   Set!")
                          cat("\n   -   Effort")
-                         tmp_lst <- c(tmp_lst, list(vegan::decostand(log10(1 + rawInpu[[i]]), method = "range", MARGIN = 2) * howData[2]))
+                         tmp_lst <- c(tmp_lst, list(vegan::decostand(log10(1 + rawInpu[[2]]), method = "range", MARGIN = 2) * howData[2]))
                          cat("\t\t-   Set!")
                          cat("\n   -   Depth")
                          tmp_inpu <- -rawInpu[[3]]
