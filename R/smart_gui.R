@@ -536,7 +536,6 @@ smart_gui <- function(){
     
     enabled(eff_g_top) <- FALSE
     
-    cat("\nLoading effort from vmsbase db...", sep = "")
     svalue(stat_bar) <- "Loading effort from vmsbase db..."
     Sys.sleep(1)
     
