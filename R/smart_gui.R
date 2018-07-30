@@ -311,12 +311,17 @@ smart_gui <- function(){
   gri_g_top1_gri <- ggroup(horizontal = TRUE, container = gri_g_top1)
   # addSpring(gri_g_top1_gri)
   gbutton("Load Grid", container = gri_g_top1_gri, handler = function(h,...){
-    svalue(stat_bar) <- "Loading Grid..."
+    
+    tmpGridfile <- gfile(text = "Select Grid Shapefile", type = "open",
+                         initial.filename = NULL, initial.dir = getwd(), filter = list(),
+                         multi = FALSE)
     enabled(gri_g_top) <- FALSE
+    
+    svalue(stat_bar) <- "Loading Grid..."
     Sys.sleep(1)
     dev.set(dev.list()[pre_dev+2])
     
-    my_project$loadMap(pathGridShp)
+    my_project$loadMap(tmpGridfile)
     
     ### automatic download of google map
     my_project$sampMap$getGooMap()       ### FIX add a check if sampMap is loaded
@@ -395,15 +400,15 @@ smart_gui <- function(){
          })
   addSpring(gri_g_top1_dep)
   gbutton("Load Depth", container = gri_g_top1_dep, handler = function(h,...){
+    
     dev.set(dev.list()[pre_dev+2])
-    ## Get path to bathymetry rData
-    svalue(stat_bar) <- "Loading depth..."
+    tmpBathyfile <- gfile(text = "Select Bathymetry Matrix", type = "open",
+                          initial.filename = NULL, initial.dir = getwd(), filter = list(),
+                          multi = FALSE)
     enabled(gri_g_top) <- FALSE
-    
+    svalue(stat_bar) <- "Loading depth..."
     Sys.sleep(1)
-    
-    my_project$sampMap$loadGridBath(pathBathymetry)
-    # my_project$sampMap$getCentDept()
+    my_project$sampMap$loadGridBath(tmpBathyfile)
     svalue(stat_bar) <- "Plotting Bathymetry..."
     Sys.sleep(1)
     my_project$sampMap$ggplotGridBathy()
@@ -424,13 +429,16 @@ smart_gui <- function(){
   gri_g_top1_bio <- ggroup(horizontal = TRUE, container = gri_g_top1)
   # addSpring(gri_g_top1_bio)
   gbutton("Load Biocenosis", container = gri_g_top1_bio, handler = function(h,...){
-    enabled(gri_g_top) <- FALSE
+    tmpBiocfile <- gfile(text = "Select Biocenonsis Matrix", type = "open",
+                         initial.filename = NULL, initial.dir = getwd(), filter = list(),
+                         multi = FALSE)
     
+    enabled(gri_g_top) <- FALSE
     Sys.sleep(1)
     dev.set(dev.list()[pre_dev+2])
     svalue(stat_bar) <- "Loading biocenosis data.frame..."
     
-    my_project$sampMap$loadBioDF(pathSeabed)
+    my_project$sampMap$loadBioDF(tmpBiocfile)
     
     if(!is.null(my_project$sampMap$gooMap)){
       my_project$sampMap$ggplotBioDF()
@@ -501,22 +509,17 @@ smart_gui <- function(){
   eff_g_top1 <- ggroup(horizontal = FALSE, container = eff_g_top)
   addSpring(eff_g_top1)
   gbutton("Load from rData", container = eff_g_top1, handler = function(h,...){
-    # my_project$fleet$loadMatEffort("/Users/Lomo/Documents/Uni/R/smart/data/EFF_OTB_Hours_9years.rData")
-    #### SKIPPED LOADING rData
-    #     tmp_files <- gfile(text = "Select Effort rData", type = "open",
-    #                        initial.filename = NULL, initial.dir = getwd(), filter = list(),
-    #                        multi = TRUE)
-    #
-    #     my_project$loadFleeEffoDbs(tmp_files)
-    #     my_project$fleet$rawEffort <- readRDS(tmp_files)
     
+    tmpVMSfile <- gfile(text = "Select Effort rData", type = "open",
+                        initial.filename = NULL, initial.dir = getwd(), filter = list(),
+                        multi = TRUE)
     enabled(eff_g_top) <- FALSE
     
     cat("\nLoading effort from rData...", sep = "")
     svalue(stat_bar) <- "Loading effort from rData..."
     Sys.sleep(1)
     
-    my_project$fleet$rawEffort <- readRDS(pathRawVMS)
+    my_project$fleet$rawEffort <- readRDS(tmpVMSfile)
     my_project$fleet$setEffortIds()
     # cat("   Done!", sep = "")
     svalue(stat_bar) <- ""
@@ -541,15 +544,58 @@ smart_gui <- function(){
   addSpring(eff_g_top1)
   gbutton("Extract from VMSBASE", container = eff_g_top1, handler = function(h,...){
     
+    tmpVMSfiles <- gfile(text = "Select Effort DBs", type = "open",
+                         initial.filename = NULL, initial.dir = getwd(), filter = list(),
+                         multi = TRUE)
+    
     enabled(eff_g_top) <- FALSE
     
-    tmp_files <- gfile(text = "Select Effort DBs", type = "open",
-                       initial.filename = NULL, initial.dir = getwd(), filter = list(),
-                       multi = TRUE)
     cat("\nLoading effort from vmsbase db...", sep = "")
     svalue(stat_bar) <- "Loading effort from vmsbase db..."
     Sys.sleep(1)
-    my_project$loadFleeEffoDbs(tmp_files)
+    
+    avaMet <- sqldf("select distinct met_des from nn_clas", dbname = tmpVMSfiles)[,1]
+    
+    temp_dia <- gwindow(title="Load vmsbase DB data", visible = FALSE,
+                        # parent = main_win,
+                        width = 400, height = 200)
+    up_ho <- ggroup(horizontal = TRUE, container = temp_dia)
+    addSpace(obj = up_ho, 5)
+    up_g <- ggroup(horizontal = FALSE, container = up_ho, expand = TRUE)
+    addSpace(obj = up_g, 5)
+    up_fra <- gframe(container = up_g, horizontal = FALSE, expand = TRUE)
+    addSpace(obj = up_fra, 15)
+    dbs_g <- ggroup(horizontal = TRUE, container = up_fra)
+    addSpace(obj = dbs_g, 10)
+    pathLab <- glabel(text = paste0("Loaded DB:\t\t", unlist(strsplit(tmpVMSfiles, "/"))[length(unlist(strsplit(tmpVMSfiles, "/")))]), container = dbs_g)
+    addSpace(obj = up_fra, 30)
+    met_g <- ggroup(horizontal = TRUE, container = up_fra)
+    addSpace(obj = met_g, 10)
+    glabel("Select Metier:\t", container = met_g)
+    addSpace(obj = met_g, 10)
+    metLab <- gcombobox(items = avaMet, container = met_g, expand = TRUE)
+    addSpace(obj = met_g, 10)
+    addSpace(obj = up_fra, 15)
+    onBox_g <- ggroup(horizontal = TRUE, container = up_fra)
+    addSpace(obj = onBox_g, 10)
+    glabel("% on grid:\t", container = onBox_g)
+    perOn_sli <- gslider(from = 0, to = 100, by = 1,
+                         value = 90, container = onBox_g)
+    addSpace(obj = onBox_g, 10)
+    addSpace(obj = up_fra, 10)
+    
+    addSpace(obj = up_g, 5)
+    gbutton(text = "Run Query", container = up_g, handler = function(...){
+      enabled(temp_dia) <- FALSE
+      Sys.sleep(1)
+      my_project$loadFleeEffoDbs(effort_path = tmpVMSfiles, met_nam = svalue(metLab), onBox = TRUE, perOnBox = svalue(perOn_sli))
+      cat("\n\n---\tExtraction completed!\t---\n")
+      dispose(temp_dia)
+    })
+    addSpace(obj = up_g, 5)
+    addSpace(obj = up_ho, 5)
+    visible(temp_dia) <- TRUE
+
     my_project$fleet$setEffortIds()
     cat("   Done!", sep = "")
     svalue(stat_bar) <- ""
@@ -738,21 +784,19 @@ smart_gui <- function(){
   gbutton("Load AA data", container = eff_g_top_IO, handler = function(h,...){
     svalue(stat_bar) <- "Loading AA data..."
     
+    tmpEffofiles <- gfile(text = "Select AA effort data", type = "open",
+                          initial.filename = NULL, initial.dir = getwd(), filter = list(),
+                          multi = TRUE)
+    
     enabled(eff_g_top) <- FALSE
     
     Sys.sleep(1)
-    
-    #### SKIPPED LOADING rData
-    #     tmp_files <- gfile(text = "Select AA effort data", type = "open",
-    #                        initial.filename = NULL, initial.dir = getwd(), filter = list(),
-    #                        multi = TRUE)
-    #
     
     cat("\nLoading effort from AA data...", sep = "")
     svalue(stat_bar) <- "Loading effort from AA data..."
     Sys.sleep(1)
     
-    my_project$fleet$rawEffort <- readRDS(pathEffortAA)
+    my_project$fleet$rawEffort <- readRDS(tmpEffofiles)
     my_project$fleet$setEffortIds()
     
     effvie_drop[] <- names(my_project$fleet$rawEffort)
@@ -772,21 +816,16 @@ smart_gui <- function(){
     Sys.sleep(1)
     
     enabled(eff_g_top) <- FALSE
-    
-    #### SKIPPED SAVING rData
-    #     tmp_files <- gfile(text = "Select AA effort data", type = "save",
-    #                        initial.filename = NULL, initial.dir = getwd(), filter = list(),
-    #                        multi = TRUE)
-    #
-    
-    # tmp_file <- "/Users/Lomo/Documents/Uni/PhD/TESI/SoS_vms/smart_rawEffort_new.rData"
-    tmp_file <- "/Users/Lomo/Documents/Uni/R/smart/data/RawEffort/rawEffort_seabedGrid_afterAll.rData"
+
+    tmpOutAAfiles <- gfile(text = "Select AA effort data", type = "save",
+                       initial.filename = NULL, initial.dir = getwd(), filter = list(),
+                       multi = TRUE)
     
     cat("\nSaving AA effort to rData...", sep = "")
     svalue(stat_bar) <- "Saving AA effort to rData..."
     Sys.sleep(1)
     
-    saveRDS(my_project$fleet$rawEffort, tmp_file)
+    saveRDS(my_project$fleet$rawEffort, tmpOutAAfiles)
     
     svalue(stat_bar) <- ""
     
