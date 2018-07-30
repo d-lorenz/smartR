@@ -4096,7 +4096,7 @@ SampleMap <- R6Class("sampleMap",
                                                                  layout_matrix = matrix(1:3,1,3)))
                        },
                        plotGooEnv = function(){
-                         suppressWarnings(print(gooEnv))
+                         suppressWarnings(grid.draw(gooEnv))
                        },
                        plotGooGrid = function(){
                          suppressWarnings(print(gooGrid))
