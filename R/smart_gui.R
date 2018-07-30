@@ -590,31 +590,31 @@ smart_gui <- function(){
       Sys.sleep(1)
       my_project$loadFleeEffoDbs(effort_path = tmpVMSfiles, met_nam = svalue(metLab), onBox = TRUE, perOnBox = svalue(perOn_sli))
       cat("\n\n---\tExtraction completed!\t---\n")
+      my_project$fleet$setEffortIds()
+      
+      svalue(stat_bar) <- ""
+      
+      effvie_drop[] <- names(my_project$fleet$rawEffort)
+      svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
+      dev.set(dev.list()[pre_dev+3])
+      
+      svalue(stat_bar) <- "Plotting Count of disinct vessels..."
+      Sys.sleep(1)
+      my_project$fleet$plotCountIDsEffo()
+      svalue(stat_bar) <- ""
+      
+      enabled(eff_g_top) <- TRUE
+      
+      ### Update Effort Status
+      effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
+      delete(effo_g, effo_g$children[[length(effo_g$children)]])
+      add(effo_g, effo_sta_n)
+      
       dispose(temp_dia)
     })
     addSpace(obj = up_g, 5)
     addSpace(obj = up_ho, 5)
     visible(temp_dia) <- TRUE
-
-    my_project$fleet$setEffortIds()
-    cat("   Done!", sep = "")
-    svalue(stat_bar) <- ""
-    
-    effvie_drop[] <- names(my_project$fleet$rawEffort)
-    svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
-    dev.set(dev.list()[pre_dev+3])
-    
-    svalue(stat_bar) <- "Plotting Count of disinct vessels..."
-    Sys.sleep(1)
-    my_project$fleet$plotCountIDsEffo()
-    svalue(stat_bar) <- ""
-    
-    enabled(eff_g_top) <- TRUE
-    
-    ### Update Effort Status
-    effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
-    delete(effo_g, effo_g$children[[length(effo_g$children)]])
-    add(effo_g, effo_sta_n)
   })
   addSpring(eff_g_top1)
   gbutton("View Stats", container = eff_g_top1, handler = function(h,...){
@@ -897,67 +897,6 @@ smart_gui <- function(){
   fig_g_top <- gframe(horizontal = TRUE, container = fig_g)
   
   addSpring(fig_g_top)
-  fig_g_top_vars <- gframe(text = "Variables and Weights", horizontal = FALSE, container = fig_g_top, expand = TRUE)
-  addSpring(fig_g_top_vars)
-  gbutton("\nSelect\n", container = fig_g_top_vars, handler = function(h,...){
-    
-    temp_dia <- gwindow(title="Select variables and weights", visible = FALSE,
-                        parent = main_win,
-                        width = 350, height = 200)
-    
-    up_g_top <- ggroup(horizontal = FALSE, container = temp_dia)
-    addSpring(up_g_top)
-    up_g <- ggroup(horizontal = TRUE, container = up_g_top)
-    
-    addSpring(up_g)
-    
-    # speVars_gru <- ggroup(horizontal = TRUE, container = up_g)
-    lyt <- glayout(container = up_g)
-    
-    lyt[1,2] <- "Variables"
-    lyt[1,3] <- "      Weights      "
-    # lyt[2,2] <- gcheckbox(c("Sampling Distribution"), checked = TRUE, container = lyt)
-    # lyt[2,3] <- gcombobox(items = c("0.5X","1","2X"), selected = 2, container = lyt)
-    lyt[2,2] <- gcheckbox(c("Seabed"), checked = FALSE, container = lyt)
-    lyt[2,3] <- gcombobox(items = c("0.5X","1","2X"), selected = 2, container = lyt)
-    lyt[3,2] <- gcheckbox(c("Fishing Effort"), checked = FALSE, container = lyt)
-    lyt[3,3] <- gcombobox(items = c("0.5X","1","2X"), selected = 2, container = lyt)
-    lyt[4,2] <- gcheckbox(c("Bathymetry"), checked = FALSE, container = lyt)
-    lyt[4,3] <- gcombobox(items = c("0.5X","1","2X"), selected = 2, container = lyt)
-    
-    addSpring(up_g)
-    addSpring(up_g_top)
-    bot_g <- ggroup(horizontal = TRUE, container = up_g_top)
-    addSpring(bot_g)
-    
-    gbutton("\nAccept\n", container = bot_g,
-            handler = function(h,...){
-              
-              cat("\nInput for Fishing Grounds Clustering:\n")
-              my_project$sampMap$setClusInpu(whiData = unlist(lapply(lyt[2:4,2], svalue)),
-                                             howData = unlist(lapply(lyt[2:4,3], svalue)))
-              
-              dispose(temp_dia)
-            })
-    addSpring(bot_g)
-    
-    my_project$setAvailData()
-    
-    ifelse("Seabed" %in% my_project$sampMap$availData,
-           lapply(lyt[2,], function(x) enabled(x) <- TRUE),
-           lapply(lyt[2,], function(x) enabled(x) <- FALSE))
-    ifelse("Effort" %in% my_project$sampMap$availData,
-           lapply(lyt[3,], function(x) enabled(x) <- TRUE),
-           lapply(lyt[3,], function(x) enabled(x) <- FALSE))
-    ifelse("Depth" %in% my_project$sampMap$availData,
-           lapply(lyt[4,], function(x) enabled(x) <- TRUE),
-           lapply(lyt[4,], function(x) enabled(x) <- FALSE))
-    
-    visible(temp_dia) <- TRUE
-  })
-  
-  addSpring(fig_g_top_vars)
-  addSpring(fig_g_top)
   
   fig_g_top_dist <- gframe(text = "Distance Metric", horizontal = FALSE, container = fig_g_top, expand = TRUE)
   addSpring(fig_g_top_dist)
@@ -976,6 +915,10 @@ smart_gui <- function(){
   addSpring(fig_g_top)
   
   gbutton("\n   Run   \n", container = fig_g_top, handler = function(h,...){
+    
+    my_project$setAvailData()
+    my_project$sampMap$setClusInpu()
+    
     my_project$sampMap$calcFishGrou(numCuts = svalue(fg_maxCut), #max 50
                                     minsize = 10,
                                     modeska = "S",
