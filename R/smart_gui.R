@@ -332,20 +332,9 @@ smart_gui <- function(){
     svalue(gri_l1) <- paste("Polyset: Loaded")
     svalue(gri_l2) <- paste("N. Cells: ", my_project$sampMap$nCells)
     svalue(gri_l3) <- paste("GCenter: Loaded")
-    svalue(stat_bar) <- "Plotting grid..."
-    if(!is.null(my_project$sampMap$gooMap)){
-      my_project$sampMap$plotGooGrid()
-    }else{
-      my_project$sampMap$plotSamMap(title = my_project$sampMap$gridName)
-    }
-    if(!is.null(my_project$rawDataSurvey)){
-      svalue(stat_bar) <- "Splitting Survey Population..."
-      my_project$setLFDPopSurvey()
-    }
-    # if(!is.null(my_project$rawDataFishery)){
-    #   svalue(stat_bar) <- "Splitting Fishery Population..."
-    #   my_project$setLFDPopFishery()
-    # }
+    svalue(stat_bar) <- "Plotting..."
+    my_project$sampMap$setGooEnv()
+    my_project$sampMap$plotGooEnv()
     enabled(gri_g_top) <- TRUE
     
     svalue(stat_bar) <- ""
@@ -360,33 +349,28 @@ smart_gui <- function(){
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_gri,
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+2])
-           svalue(stat_bar) <- "Plotting grid..."
            enabled(gri_g_top) <- FALSE
-           
-           if(!is.null(my_project$sampMap$gooMap)){
-             my_project$sampMap$plotGooGrid()
-           }else{
-             my_project$sampMap$plotSamMap(title = my_project$sampMap$gridName)
-           }
+           svalue(stat_bar) <- "Plotting..."
+           Sys.sleep(1)
+           my_project$sampMap$setGooEnv()
+           my_project$sampMap$plotGooEnv()
+           svalue(stat_bar) <- ""
            enabled(gri_g_top) <- TRUE
-           
          })
   addSpring(gri_g_top1_gri)
-  
   addSpring(gri_g_top1)
   
   gri_g_top1_dep <- ggroup(horizontal = TRUE, container = gri_g_top1)
-  #   addSpring(gri_g_top1_dep)
   gbutton("Download Depth", container = gri_g_top1_dep, handler = function(h,...){
     dev.set(dev.list()[pre_dev+2])
     svalue(stat_bar) <- "Downloading depth..."
     enabled(gri_g_top) <- FALSE
-    
     Sys.sleep(1)
     my_project$sampMap$getGridBath()
-    svalue(stat_bar) <- "Plotting Bathymetry..."
+    svalue(stat_bar) <- "Plotting..."
     Sys.sleep(1)
-    my_project$sampMap$ggplotGridBathy()
+    my_project$sampMap$setGooEnv()
+    my_project$sampMap$plotGooEnv()
     svalue(stat_bar) <- ""
     enabled(gri_g_top) <- TRUE
   })
@@ -400,7 +384,6 @@ smart_gui <- function(){
          })
   addSpring(gri_g_top1_dep)
   gbutton("Load Depth", container = gri_g_top1_dep, handler = function(h,...){
-    
     dev.set(dev.list()[pre_dev+2])
     tmpBathyfile <- gfile(text = "Select Bathymetry Matrix", type = "open",
                           initial.filename = NULL, initial.dir = getwd(), filter = list(),
@@ -409,83 +392,86 @@ smart_gui <- function(){
     svalue(stat_bar) <- "Loading depth..."
     Sys.sleep(1)
     my_project$sampMap$loadGridBath(tmpBathyfile)
-    svalue(stat_bar) <- "Plotting Bathymetry..."
+    svalue(stat_bar) <- "Plotting..."
     Sys.sleep(1)
-    my_project$sampMap$ggplotGridBathy()
+    my_project$sampMap$setGooEnv()
+    my_project$sampMap$plotGooEnv()
     svalue(stat_bar) <- ""
     enabled(gri_g_top) <- TRUE
-    
   })
-  # addSpring(gri_g_top1_dep)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_dep,
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+2])
-           my_project$sampMap$ggplotGridBathy()
-         })
+           svalue(stat_bar) <- "Plotting..."
+           Sys.sleep(1)
+           my_project$sampMap$setGooEnv()
+           my_project$sampMap$plotGooEnv()
+           svalue(stat_bar) <- ""
+           enabled(gri_g_top) <- TRUE
+           })
   addSpring(gri_g_top1_dep)
-  
   addSpring(gri_g_top1)
   
   gri_g_top1_bio <- ggroup(horizontal = TRUE, container = gri_g_top1)
-  # addSpring(gri_g_top1_bio)
   gbutton("Load Biocenosis", container = gri_g_top1_bio, handler = function(h,...){
     tmpBiocfile <- gfile(text = "Select Biocenonsis Matrix", type = "open",
                          initial.filename = NULL, initial.dir = getwd(), filter = list(),
                          multi = FALSE)
-    
     enabled(gri_g_top) <- FALSE
     Sys.sleep(1)
     dev.set(dev.list()[pre_dev+2])
     svalue(stat_bar) <- "Loading biocenosis data.frame..."
-    
     my_project$sampMap$loadBioDF(tmpBiocfile)
-    
-    if(!is.null(my_project$sampMap$gooMap)){
-      my_project$sampMap$ggplotBioDF()
-    }else{
-      my_project$sampMap$plotBioDF()
-    }
+    svalue(stat_bar) <- "Plotting..."
+    Sys.sleep(1)
+    my_project$sampMap$setGooEnv()
+    my_project$sampMap$plotGooEnv()
     svalue(stat_bar) <- ""
     enabled(gri_g_top) <- TRUE
-    
   })
-  # addSpring(gri_g_top1_bio)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_bio,
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+2])
-           if(!is.null(my_project$sampMap$gooMap)){
-             my_project$sampMap$ggplotBioDF()
-           }else{
-             my_project$sampMap$plotBioDF()
-           }         })
+           enabled(gri_g_top) <- FALSE
+           svalue(stat_bar) <- "Plotting..."
+           Sys.sleep(1)
+           my_project$sampMap$setGooEnv()
+           my_project$sampMap$plotGooEnv()
+           svalue(stat_bar) <- ""
+           enabled(gri_g_top) <- TRUE
+           })
   addSpring(gri_g_top1_bio)
   
   gri_g_top1_goo <- ggroup(horizontal = TRUE, container = gri_g_top1)
   # addSpring(gri_g_top1_goo)
   gbutton("Load Google map", container = gri_g_top1_goo, handler = function(h,...){
-    enabled(gri_g_top) <- FALSE
-    
-    Sys.sleep(1)
     dev.set(dev.list()[pre_dev+2])
+    enabled(gri_g_top) <- FALSE
+    Sys.sleep(1)
     svalue(stat_bar) <- "Loading Google map..."
     my_project$sampMap$getGooMap()
     my_project$sampMap$setGooGrid()
     my_project$sampMap$setGooBbox()
+    svalue(stat_bar) <- "Plotting..."
+    Sys.sleep(1)
+    my_project$sampMap$setGooEnv()
+    my_project$sampMap$plotGooEnv()
     svalue(stat_bar) <- ""
-    my_project$sampMap$plotGooGrid()
     enabled(gri_g_top) <- TRUE
-    
   })
   # addSpring(gri_g_top1_goo)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_goo,
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+2])
-           my_project$sampMap$plotGooGrid()
-         })
+           svalue(stat_bar) <- "Plotting..."
+           Sys.sleep(1)
+           my_project$sampMap$setGooEnv()
+           my_project$sampMap$plotGooEnv()
+           svalue(stat_bar) <- ""
+           enabled(gri_g_top) <- TRUE
+           })
   addSpring(gri_g_top1_goo)
-  
   addSpring(gri_g_top1)
-  
   addSpring(gri_g_top)
   
   gri_g_top2 <- ggroup(horizontal = FALSE, container = gri_g_top)
