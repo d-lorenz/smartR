@@ -3486,13 +3486,13 @@ FishFleet <- R6Class("fishFleet",
                        },
                        plotCountIDsEffoProd = function(){
                          tmp_effo <- data.frame("Year" = names(effortIds),
-                                                "Ids" = unlist(lapply(sapply(effortIds, unique), length)),
+                                                "Ids" = unlist(lapply(sapply(effortIds, unique, simplify = FALSE), length)),
                                                 "Dataset" = "Effort")
                          tmp_prod <- data.frame("Year" = names(productionIds),
-                                                "Ids" = unlist(lapply(sapply(productionIds, unique), length)),
+                                                "Ids" = unlist(lapply(sapply(productionIds, unique, simplify = FALSE), length)),
                                                 "Dataset" = "Production")
                          tmp_comb <- data.frame("Year" = names(idsEffoProd),
-                                                "Ids" = unlist(lapply(sapply(idsEffoProd, unique), length)),
+                                                "Ids" = unlist(lapply(sapply(idsEffoProd, unique, simplify = FALSE), length)),
                                                 "Dataset" = "Overlap")
                          tmp_df <- rbind(tmp_effo, tmp_prod, tmp_comb)
                          rownames(tmp_df) <- NULL
