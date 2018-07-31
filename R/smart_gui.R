@@ -194,10 +194,10 @@ smart_gui <- function(){
   
   ####   Environment   ####
   
-  gri_g <- gvbox(container = uti_gn, label = "Grid", expand = TRUE)
+  gri_g <- gvbox(container = uti_gn, label = "Environment", expand = TRUE)
   gri_g_top <- gframe(horizontal = TRUE, container = gri_g)
   addSpring(gri_g_top)
-  gri_g_top1_gri <- gframe("Environment", horizontal = TRUE, container = gri_g_top)
+  gri_g_top1_gri <- gframe("Grid", horizontal = TRUE, container = gri_g_top)
   addSpace(gri_g_top1_gri, 10)
   gbutton("Load", container = gri_g_top1_gri, handler = function(h,...){
     
