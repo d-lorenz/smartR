@@ -302,9 +302,9 @@ smart_gui <- function(){
   
   gri_g <- gvbox(container = uti_gn, label = "Grid", expand = TRUE)
   gri_g_top <- gframe(horizontal = TRUE, container = gri_g)
-  addSpace(gri_g_top, 20)
-
+  addSpring(gri_g_top)
   gri_g_top1_gri <- gframe("Grid", horizontal = TRUE, container = gri_g_top)
+  addSpace(gri_g_top1_gri, 10)
   gbutton("Load", container = gri_g_top1_gri, handler = function(h,...){
     
     tmpGridfile <- gfile(text = "Select Grid Shapefile", type = "open",
@@ -339,6 +339,7 @@ smart_gui <- function(){
     delete(grid_g, grid_g$children[[length(grid_g$children)]])
     add(grid_g, grid_sta_n)
   })
+  addSpace(gri_g_top1_gri, 10)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_gri,
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+2])
@@ -350,10 +351,10 @@ smart_gui <- function(){
            svalue(stat_bar) <- ""
            enabled(gri_g_top) <- TRUE
          })
-  addSpring(gri_g_top1_gri)
+  addSpace(gri_g_top1_gri, 10)
   addSpace(gri_g_top, 20)
-  
   gri_g_top1_dep <- gframe("Depth", horizontal = TRUE, container = gri_g_top)
+  addSpace(gri_g_top1_dep, 10)
   gbutton("Download", container = gri_g_top1_dep, handler = function(h,...){
     dev.set(dev.list()[pre_dev+2])
     svalue(stat_bar) <- "Downloading depth..."
@@ -367,15 +368,14 @@ smart_gui <- function(){
     svalue(stat_bar) <- ""
     enabled(gri_g_top) <- TRUE
   })
-  addSpring(gri_g_top1_dep)
-  gimage(system.file("ico/document-save-2.ico", package="smartR"), container = gri_g_top1_dep,
-         handler = function(h,...){
+  addSpace(gri_g_top1_dep, 10)
+  gbutton(" Save ", container = gri_g_top1_dep, handler = function(h,...){
            if(!is.null(my_project$sampMap$gridBathy)){
              save2path <- "/Users/Lomo/Documents/Uni/Lab/Proj/smart\ gui/SMART_GUI/bathy_test.rData"
              my_project$sampMap$saveGridBath(save2path)
            }
          })
-  addSpring(gri_g_top1_dep)
+  addSpace(gri_g_top1_dep, 10)
   gbutton("Load", container = gri_g_top1_dep, handler = function(h,...){
     dev.set(dev.list()[pre_dev+2])
     tmpBathyfile <- gfile(text = "Select Bathymetry Matrix", type = "open",
@@ -392,6 +392,7 @@ smart_gui <- function(){
     svalue(stat_bar) <- ""
     enabled(gri_g_top) <- TRUE
   })
+  addSpace(gri_g_top1_dep, 10)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_dep,
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+2])
@@ -402,10 +403,10 @@ smart_gui <- function(){
            svalue(stat_bar) <- ""
            enabled(gri_g_top) <- TRUE
            })
-  addSpring(gri_g_top1_dep)
+  addSpace(gri_g_top1_dep, 10)
   addSpace(gri_g_top, 20)
-  
   gri_g_top1_bio <- gframe("Seabed", horizontal = TRUE, container = gri_g_top)
+  addSpace(gri_g_top1_bio, 10)
   gbutton("Load", container = gri_g_top1_bio, handler = function(h,...){
     tmpBiocfile <- gfile(text = "Select Biocenonsis Matrix", type = "open",
                          initial.filename = NULL, initial.dir = getwd(), filter = list(),
@@ -422,6 +423,7 @@ smart_gui <- function(){
     svalue(stat_bar) <- ""
     enabled(gri_g_top) <- TRUE
   })
+  addSpace(gri_g_top1_bio, 10)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_bio,
          handler = function(h,...){
            dev.set(dev.list()[pre_dev+2])
@@ -433,7 +435,7 @@ smart_gui <- function(){
            svalue(stat_bar) <- ""
            enabled(gri_g_top) <- TRUE
            })
-  addSpring(gri_g_top1_bio)
+  addSpace(gri_g_top1_bio, 10)
   addSpring(gri_g_top)
   gri_g_top2 <- ggroup(horizontal = FALSE, container = gri_g_top)
   addSpring(gri_g_top2)
@@ -441,9 +443,7 @@ smart_gui <- function(){
   gri_l2 <- glabel("N. Cells: ", container = gri_g_top2)
   gri_l3 <- glabel("GCenter: ", container = gri_g_top2)
   addSpring(gri_g_top2)
-  
   addSpring(gri_g_top)
-  
   gri_p <- ggraphics(container = gri_g, width = 550, height = 250, expand = TRUE)
   
   
