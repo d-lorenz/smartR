@@ -3149,9 +3149,15 @@ FishFleet <- R6Class("fishFleet",
                          sort_files <- sort(production_path)
                          rawProduction <<- list()
                          for(i in 1:length(sort_files)){
-                           tmp_mat <- read.csv2(sort_files[i])
-                           tmp_key <- names(which.max(table(years(tmp_mat$UTC_S))))
-                           rawProduction[[tmp_key]] <<- tmp_mat
+                           tmp_mat <- read.csv(sort_files[i], stringsAsFactors = FALSE)
+                           numYea <- as.character(sort(unique(years(tmp_mat$UTC_S))))
+                           for(yea in 1:length(numYea)){
+                             if(is.null(rawProduction[[numYea[yea]]])){
+                               rawProduction[[numYea[yea]]] <<- tmp_mat[years(tmp_mat$UTC_S) == numYea[yea],]
+                             }else{
+                               rawProduction[[numYea[yea]]] <<- rbind(rawProduction[[numYea[yea]]], tmp_mat[years(tmp_mat$UTC_S) == numYea[yea],])
+                             }
+                           }
                          }
                          cat("Done!", sep = "")
                        },
