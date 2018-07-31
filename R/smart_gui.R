@@ -865,10 +865,11 @@ smart_gui <- function(){
     my_project$setAvailData()
     my_project$sampMap$setClusInpu()
     
-    my_project$sampMap$calcFishGrou(numCuts = svalue(fg_maxCut), #max 50
+    my_project$sampMap$calcFishGrou(numCuts = svalue(fg_maxCut),
                                     minsize = 10,
                                     modeska = "S",
-                                    skater_method = svalue(fg_metr))
+                                    skater_method = svalue(fg_metr),
+                                    nei_queen = FALSE)
     dev.set(dev.list()[pre_dev+4])
     
     fg_plotCut[] <- 1:svalue(fg_maxCut)
@@ -931,12 +932,16 @@ smart_gui <- function(){
   reg_g_top_raw <- ggroup(horizontal = FALSE, container = reg_g_top)
   addSpring(reg_g_top_raw)
   gbutton("Load EU register", container = reg_g_top_raw, handler = function(h,...){
-    my_project$fleet$loadFleetRegis(register_path = pathRegister)
+    tmpRegfiles <- gfile(text = "Select Fleet Register", type = "open",
+                         initial.filename = NULL, initial.dir = getwd(), filter = list(),
+                         multi = TRUE)
+    enabled(reg_g_top) <- FALSE
+    svalue(stat_bar) <- "Loading Fleet Register..."
+    Sys.sleep(1)
+    my_project$fleet$loadFleetRegis(register_path = tmpRegfiles)
     my_project$fleet$cleanRegister()
     my_project$fleet$setVmsRegister()
-    # my_project$fleet$splitFleet()
     dev.set(dev.list()[pre_dev+5])
-    # my_project$fleet$plotRegSum()
     ggplot_registerDispatch(curRegister = my_project$fleet$rawRegister, selPlot = "Summary")
     
     ### Update Register Status
@@ -944,6 +949,9 @@ smart_gui <- function(){
       delete(regi_g, regi_g$children[[length(regi_g$children)]])
       add(regi_g, regi_sta_n)
     }
+    
+    svalue(stat_bar) <- ""
+    enabled(reg_g_top) <- TRUE
   })
   addSpring(reg_g_top_raw)
   gbutton("View Raw Data", container = reg_g_top_raw, handler = function(h,...){
@@ -1041,82 +1049,59 @@ smart_gui <- function(){
   pro_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Production")
   pro_g_top <- gframe(horizontal = TRUE, container = pro_g)
   addSpace(pro_g_top, 2)
-  # addSpring(pro_g_top)
   addSpace(pro_g_top, 40)
   pro_g_top1 <- ggroup(horizontal = FALSE, container = pro_g_top, expand = TRUE)
   addSpring(pro_g_top1)
-  #   gbutton("Edit Raw Production", container = pro_g_top1, handler = function(h,...){
-  #
-  #   })
   gbutton("Load Landings", container = pro_g_top1, handler = function(h,...){
-    # tmp_files <- gfile(text = "Select Landings Data", type = "open",
-    #                    filter = list("csv files" = list(patterns = c("*.csv")),
-    #                                  "All files" = list(patterns = c("*"))),
-    #                    multi = TRUE)
-    # my_project$fleet$loadProduction(tmp_files)
+    tmpLandfiles <- gfile(text = "Select Landings Data", type = "open",
+                       filter = list("csv files" = list(patterns = c("*.csv")),
+                                     "All files" = list(patterns = c("*"))),
+                       multi = TRUE)
+    my_project$fleet$loadProduction(tmpLandfiles)
     enabled(pro_g_top) <- FALSE
     svalue(stat_bar) <- "Loading landings..."
     Sys.sleep(1)
-    
     dev.set(dev.list()[pre_dev+6])
-    my_project$fleet$rawProduction <- readRDS(pathLanding)
-    
     svalue(stat_bar) <- "Setting Ids..."
     Sys.sleep(1)
     my_project$fleet$setProdIds()
-    
-    # my_project$fleet$plotCountIDsProd()
-    
     my_project$fleet$setIdsEffoProd()
-    
     svalue(stat_bar) <- "Plotting Ids..."
     Sys.sleep(1)
     my_project$fleet$plotCountIDsEffoProd()
-    
     svalue(stat_bar) <- "Setting Production Matrix..."
     Sys.sleep(1)
     my_project$fleet$setProdMatr()
     my_project$fleet$setDayEffoMatrGround()
     my_project$fleet$setEffoProdMatr()
     my_project$fleet$setEffoProdMont()
-    
     svalue(stat_bar) <- "Setting Species..."
     Sys.sleep(1)
     my_project$fleet$setProdSpec()
     my_project$fleet$setEffoProdAll()
-    
     svalue(stat_bar) <- "Getting Loa..."
     Sys.sleep(1)
     my_project$fleet$setEffoProdAllLoa()
-    
     svalue(stat_bar) <- ""
     Sys.sleep(1)
-    # my_project$fleet$setSpecSett()
     spe_drop[] <- sort(names(my_project$fleet$specSett))
     provie_drop[] <- names(my_project$fleet$effoProdMont)
     svalue(spe_drop, index = TRUE) <- 1
     svalue(provie_drop, index = TRUE) <- 1
     enabled(spe_drop) <- TRUE
-    
     enabled(pro_g_top) <- TRUE
-    
   })
   addSpring(pro_g_top1)
   
   spe_fra <- gframe(text = "Specie", container = pro_g_top1, horizontal = TRUE, expand = TRUE)
-  # addSpace(spe_fra, 20)
   spe_drop <- gcombobox("Specie list", selected = 1,
                         editable = FALSE, container = spe_fra, expand = TRUE)
   addSpring(pro_g_top1)
-  
-  # addSpace(spe_fra, 20)
   addSpace(pro_g_top, 40)
-  # addSpring(pro_g_top)
   enabled(spe_drop) <- FALSE
-  
   pro_g_top2 <- ggroup(horizontal = FALSE, container = pro_g_top)
   addSpring(pro_g_top2)
-  
+
   gbutton("Set Threshold", container = pro_g_top2, handler = function(h,...){
     
     temp_dia <- gwindow(title="Set Landings Threshold", visible = FALSE,
@@ -1125,22 +1110,14 @@ smart_gui <- function(){
     
     up_g <- ggroup(horizontal = FALSE, container = temp_dia)
     up_fra <- gframe(container = up_g, horizontal = TRUE, expand = TRUE)
-    # addSpring(up_fra)
     addSpace(up_fra, 20)
     spe_fra <- gframe(text = "Specie", container = up_fra, horizontal = TRUE, expand = TRUE)
-    # addSpace(spe_fra, 20)
     addSpring(spe_fra)
     glabel(text = svalue(spe_drop), container = spe_fra)
-    # spe_drop <- gcombobox(sort(my_project$fleet$prodSpec[["Cross"]]), selected = 1,
-    #                       editable = FALSE, container = spe_fra, expand = TRUE,
-    #                       handler = function(...){
     tmp_spe <- my_project$fleet$effoProdAll[,which(colnames(my_project$fleet$effoProdAll) == svalue(spe_drop))]
     tmp_spe <- tmp_spe[tmp_spe != 0]
-    #                       })
-    # addSpace(spe_fra, 20)
     addSpring(spe_fra)
     addSpace(up_fra, 20)
-    # addSpring(up_fra)
     thr_fra <- gframe(text = "Threshold", container = up_fra, horizontal = TRUE)
     addSpace(thr_fra, 20)
     thr_spin <- gspinbutton(from = 0, to = 100,
@@ -1187,7 +1164,6 @@ smart_gui <- function(){
                                        main = bquote(italic(.(svalue(spe_drop)))), xlab = "")
                                   abline(v = svalue(thr_spin), col = 2, lwd = 3, lty = 2)
                                 })
-    
     addSpace(bou_fra, 20)
     addSpring(up_fra)
     
@@ -1200,16 +1176,13 @@ smart_gui <- function(){
     addSpace(up_fra, 20)
     
     gbutton(text = "\n   Set!   \n", container = up_fra, handler = function(...){
-      
       my_project$fleet$setSpecSettItm(specie = svalue(spe_drop),
                                       thresh = svalue(thr_spin),
                                       brea = svalue(num_bre_spin),
                                       max_xlim = svalue(max_x_spin))
-      
       svalue(set_lab) <- "Set"
       delete(set_gru, set_gru$children[[length(set_gru$children)]])
       add(set_gru, land_sta_n)
-      
     })
     addSpring(up_fra)
     
