@@ -1501,23 +1501,18 @@ smart_gui <- function(){
   gbutton("Load Sample", container = raw_g_top1, handler = function(h,...){
     svalue(stat_bar) <- "Loading Data..."
     Sys.sleep(1)
-    my_project$loadSurveyLFD(csv_path = pathSurvey)
+    tmpSurvfiles <- gfile(text = "Select Survey Data", type = "open",
+                          filter = list("csv files" = list(patterns = c("*.csv")),
+                                        "All files" = list(patterns = c("*"))),
+                          multi = TRUE)
+    my_project$loadSurveyLFD(csv_path = tmpSurvfiles)
     
-    if(!is.null(my_project$rawDataSurvey)){ #update_pop_gui()
-      
+    if(!is.null(my_project$rawDataSurvey)){
       raw_t[] <- my_project$rawDataSurvey[sample(1:nrow(my_project$rawDataSurvey), 100, replace = FALSE),]
       svalue(raw_l1) <- paste("Specie: ", paste(my_project$specieInSurvey, collapse = " - "))
-      #   svalue(raw_l2) <- paste("Length Classes: from ",  min(my_project$LClass), " to ", max(my_project$LClass))
       svalue(raw_l3) <- paste("Years: from", min(as.numeric(as.character(my_project$yearInSurvey))), " to ", max(as.numeric(as.character(my_project$yearInSurvey))))
-      # spec_drop[] <- my_project$specieInSurvey
       spec_drop_mix[] <- my_project$specieInSurvey
-      # spevie_drop[] <- c("All", my_project$specieInSurvey)
-      # cohSpe_drop[] <- my_project$specieInSurvey
-      # svalue(spec_drop) <- my_project$specieInSurvey[1]
-      # svalue(cohSpe_drop) <- my_project$specieInSurvey[1]
-      # svalue(spevie_drop) <- "All"
       svalue(spec_drop_mix) <- my_project$specieInSurvey[1]
-      
       if(is.null(my_project$specieInFishery)){
         assSpe_drop[] <- my_project$specieInSurvey
         svalue(assSpe_drop) <- my_project$specieInSurvey[1]
@@ -1525,20 +1520,11 @@ smart_gui <- function(){
         assSpe_drop[] <- intersect(my_project$specieInSurvey, my_project$specieInFishery)
         svalue(assSpe_drop) <- my_project$specieInSurvey[1]
       }
-      # year_drop[] <- c("All", as.character(my_project$yearInSurvey))
-      # cohYea_drop[] <- c("All", as.character(my_project$yearInSurvey))
-      # svalue(year_drop) <- my_project$yearInSurvey[1]
-      # svalue(cohYea_drop) <- "All"
-      
-      # Update LWrel specie selection
-      # assSpe_drop[] <- my_project$specieInSurvey
-      # svalue(assSpe_drop) <- my_project$specieInSurvey[1]
-      
+
       if(!is.null(my_project$sampMap$cutResShp)){
         my_project$addFg2Survey()
         my_project$setSpreaSurvey()
         my_project$setSpatSurvey()
-        
         my_project$sampMap$set_ggMapFgSurvey(my_project$rawDataSurvey)
       }
       
