@@ -1549,7 +1549,6 @@ smart_gui <- function(){
     
     pop_g <- ggroup(horizontal = FALSE, container = temp_dia, label = "Population")
     pop_g_top <- gframe(horizontal = TRUE, container = pop_g, spacing = 10)
-    # addSpring(pop_g_top)
     lfdfra_g <- gframe("LFD data", horizontal = TRUE, container = pop_g_top, expand = TRUE)
     addSpring(lfdfra_g)
     
@@ -1559,9 +1558,9 @@ smart_gui <- function(){
     spec_drop <- gcombobox(items = my_project$specieInSurvey,
                            selected = 1, container = spec_b, expand = TRUE,
                            editable = FALSE, handler = function(h,...){
-                             
                              spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
-                             svalue(sex_drop) <- "Female"
+                             sex_drop[] <- names(which(lapply(my_project$surveyBySpecie[[spe_ind]]$spreDist, nrow) > 0))
+                             svalue(sex_drop) <- sex_drop[1]
                              suppressWarnings(grid.arrange(my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histLfdTot"]],
                                                            my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histUtcLfd"]],
                                                            my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histUtcTot"]],
@@ -1570,6 +1569,7 @@ smart_gui <- function(){
                                                                                  c(2,2,2,4),
                                                                                  c(2,2,2,4))))
                            })
+    spec_drop$set_size(value = c(width = 150))
     addSpring(spec_b)
     sex_b <- gframe("Sex", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
     addSpring(lfdfra_g)
@@ -1578,7 +1578,6 @@ smart_gui <- function(){
                           selected = 1, container = sex_b, expand = TRUE,
                           editable = FALSE, handler = function(h,...){
                             spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
-                            
                             suppressWarnings(grid.arrange(my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histLfdTot"]],
                                                           my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histUtcLfd"]],
                                                           my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histUtcTot"]],
