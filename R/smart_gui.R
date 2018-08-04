@@ -1628,9 +1628,7 @@ smart_gui <- function(){
     addSpring(spec_b)
     spec_drop <- gcombobox(items = as.character(my_project$specieInSurvey), selected = 1,
                            container = spec_b, editable = FALSE, handler = function(h,...){
-                             # my_project$plotGooSpe(whiSpe = svalue(spec_drop), whiSou = "Fishery")
                              spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
-                             
                              suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSurvey,
                                                            my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
                                                            my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatRelFreq"]],
@@ -1648,7 +1646,6 @@ smart_gui <- function(){
                           selected = 1, container = sex_b, expand = TRUE,
                           editable = FALSE, handler = function(h,...){
                             spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
-                            
                             suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSurvey,
                                                           my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
                                                           my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatRelFreq"]],
@@ -1670,12 +1667,9 @@ smart_gui <- function(){
     addSpace(pop_g_top, 10)
     
     pop_p <- ggraphics(container = pop_g, width = 650, height = 450, expand = TRUE)
-    
     visible(temp_dia) <- TRUE
     
     spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
-    
-    # my_project$plotGooSpe(whiSpe = "All", whiSou = "Fishery")
     suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSurvey,
                                   my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
                                   my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatRelFreq"]],
@@ -1845,15 +1839,10 @@ smart_gui <- function(){
       my_project$sampMap$set_ggMapFgFishery(my_project$rawDataFishery)
     }
     
-    if(!is.null(my_project$rawDataFishery)){ #update_pop_gui()
-      
+    if(!is.null(my_project$rawDataFishery)){
       fis_t[] <- my_project$rawDataFishery[sample(1:nrow(my_project$rawDataFishery), 100, replace = FALSE),]
       svalue(fis_l1) <- paste("Specie: ", paste(my_project$specieInFishery, collapse = " - "))
       svalue(fis_l3) <- paste("Years: from", min(as.numeric(as.character(my_project$yearInFishery))), " to ", max(as.numeric(as.character(my_project$yearInFishery))))
-      
-      # Update LWrel specie selection
-      # assSpe_drop[] <- my_project$specieInFishery
-      # svalue(assSpe_drop) <- my_project$specieInFishery[1]
       if(is.null(my_project$specieInSurvey)){
         assSpe_drop[] <- my_project$specieInFishery
         svalue(assSpe_drop) <- my_project$specieInFishery[1]
@@ -1861,18 +1850,7 @@ smart_gui <- function(){
         assSpe_drop[] <- intersect(my_project$specieInSurvey, my_project$specieInFishery)
         svalue(assSpe_drop) <- my_project$specieInSurvey[1]
       }
-      
       svalue(stat_bar) <- ""
-      
-      # ### Update Sampling Status
-      # svalue(n_year_s) <- paste(length(my_project$yearInFishery), " years", sep = "")
-      # svalue(mi_date_s) <- paste("From: ", min(as.numeric(as.character(my_project$yearInFishery))), sep = "")
-      # svalue(ma_date_s) <- paste("To: ", max(as.numeric(as.character(my_project$yearInFishery))), sep = "")
-      # svalue(n_spec_s) <- paste(length(my_project$specieInFishery),
-      #                           ifelse(length(my_project$specieInFishery) == 1, " specie", " species"), sep = "")
-      #
-      # delete(samp_g, samp_g$children[[length(samp_g$children)]])
-      # add(samp_g, samp_sta_n)
     }
   })
   addSpring(fis_g_top1)
@@ -1888,13 +1866,11 @@ smart_gui <- function(){
   addSpace(fis_g_top, 2)
   
   gbutton("Open\nLFD\nViewer", container = fis_g_top, handler = function(h,...){
-    
     temp_dia <- gwindow(title="Fishery Length Frequency Distribution Viewer", visible = FALSE,
                         parent = main_win, width = 800, height = 500)
     
     pop_g <- ggroup(horizontal = FALSE, container = temp_dia, label = "Population")
     pop_g_top <- gframe(horizontal = TRUE, container = pop_g, spacing = 10)
-    # addSpring(pop_g_top)
     lfdfra_g <- gframe("LFD data", horizontal = TRUE, container = pop_g_top, expand = TRUE)
     addSpring(lfdfra_g)
     
@@ -1904,7 +1880,6 @@ smart_gui <- function(){
     spec_drop <- gcombobox(items = my_project$specieInFishery,
                            selected = 1, container = spec_b, expand = TRUE,
                            editable = FALSE, handler = function(h,...){
-                             
                              spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
                              svalue(sex_drop) <- "Female"
                              suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histLfdTot"]],
@@ -1923,7 +1898,6 @@ smart_gui <- function(){
                           selected = 1, container = sex_b, expand = TRUE,
                           editable = FALSE, handler = function(h,...){
                             spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
-                            
                             suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histLfdTot"]],
                                                           my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histUtcLfd"]],
                                                           my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histUtcTot"]],
@@ -1942,9 +1916,7 @@ smart_gui <- function(){
     gbutton("Close", container = pop_g_top, handler = function(h,...){
       dispose(temp_dia)
     })
-    
     addSpring(pop_g_top)
-    
     visible(temp_dia) <- TRUE
     spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
     
@@ -1960,23 +1932,16 @@ smart_gui <- function(){
   addSpring(fis_g_top)
   
   gbutton("View\nSpatial\nDistribution", container = fis_g_top, handler = function(h,...){
-    
     temp_dia <- gwindow(title="Spatial Distribution of Fishery sampling", visible = FALSE,
                         parent = main_win, width = 700, height = 500)
-    
     pop_g <- ggroup(horizontal = FALSE, container = temp_dia)
-    
     pop_g_top <- gframe(horizontal = TRUE, container = pop_g, spacing = 10)
-    
     addSpring(pop_g_top)
     spec_b <- gframe("Specie", horizontal = FALSE, container = pop_g_top, expand = TRUE)
-    
     addSpring(spec_b)
     spec_drop <- gcombobox(items = as.character(my_project$specieInFishery), selected = 1,
                            container = spec_b, editable = FALSE, handler = function(h,...){
-                             # my_project$plotGooSpe(whiSpe = svalue(spec_drop), whiSou = "Fishery")
                              spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
-                             
                              suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgFishery,
                                                            my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
                                                            my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatRelFreq"]],
@@ -1994,7 +1959,6 @@ smart_gui <- function(){
                           selected = 1, container = sex_b, expand = TRUE,
                           editable = FALSE, handler = function(h,...){
                             spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
-                            
                             suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgFishery,
                                                           my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
                                                           my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatRelFreq"]],
@@ -2003,7 +1967,6 @@ smart_gui <- function(){
                                                                                 c(4,1,1),
                                                                                 c(NA,2,3))
                             ))
-                            
                           })
     addSpring(sex_b)
     addSpring(pop_g_top)
@@ -2012,16 +1975,11 @@ smart_gui <- function(){
       dispose(temp_dia)
     })
     addSpring(pop_g_top)
-    
     addSpace(pop_g_top, 10)
-    
     pop_p <- ggraphics(container = pop_g, width = 650, height = 450, expand = TRUE)
-    
     visible(temp_dia) <- TRUE
     
     spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
-    
-    # my_project$plotGooSpe(whiSpe = "All", whiSou = "Fishery")
     suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgFishery,
                                   my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
                                   my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatRelFreq"]],
@@ -2121,48 +2079,26 @@ smart_gui <- function(){
                        pre_mfrow <- par(c("mfrow", "mar"))
                        par(mfrow = c(2, 1))
                        par(mar = c(2,2,1.5,0.5))
-                       
                        ind_spe <- which(my_project$specieInSurvey == svalue(spec_drop_mix))
-                       # Set number of cohorts
                        my_project$surveyBySpecie[[ind_spe]]$setNCoho(as.numeric(svalue(ncih_sb)))
-                       # Compute mixture
-                       # my_project$surveyBySpecie[[ind_spe]]$calcMix(nAdap = as.numeric(svalue(mc_niter)), nSamp = as.numeric(svalue(mc_nsamp)))
                        my_project$surveyBySpecie[[ind_spe]]$calcMixDate(nAdap = as.numeric(svalue(mc_niter)),
                                                                         nSamp = as.numeric(svalue(mc_nsamp)),
                                                                         sexDrop = svalue(sex_drop_mix),
                                                                         curveSel = svalue(gcurv_r))
-                       
                        my_project$surveyBySpecie[[ind_spe]]$ggplotMcmcOut(selSex = svalue(sex_drop_mix))
-                       # Transform length to cohorts
-                       # my_project$calcCoh_A_Survey(ind_spe)
-                       # Interpolate cohorts
-                       # my_project$intrpCoh_A_Survey(ind_spe)
                        cohCoh_drop[] <- c("All", seq(1, my_project$surveyBySpecie[[ind_spe]]$nCoho, by = 1))
-                       
                      }else{
                        pre_mfrow <- par(c("mfrow", "mar"))
                        par(mfrow = c(2, 4))
                        par(mar = c(2,2,1.5,0.5))
-                       
                        ind_spe <- which(my_project$specieInFishery == svalue(spec_drop_mix))
-                       # Set number of cohorts
                        my_project$fisheryBySpecie[[ind_spe]]$setNCoho(as.numeric(svalue(ncih_sb)))
-                       # Compute mixture
                        my_project$fisheryBySpecie[[ind_spe]]$calcMixDate(nAdap = as.numeric(svalue(mc_niter)),
                                                                          nSamp = as.numeric(svalue(mc_nsamp)),
                                                                          sexDrop = svalue(sex_drop_mix),
                                                                          curveSel = svalue(gcurv_r))
-                       
                        my_project$fisheryBySpecie[[ind_spe]]$ggplotMcmcOut(selSex = svalue(sex_drop_mix))
-                       
-                       # Transform length to cohorts
-                       # my_project$calcCoh_A_Fishery(ind_spe)
-                       # Interpolate cohorts
-                       # my_project$intrpCoh_A_Fishery(ind_spe)
-                       # cohCoh_drop[] <- c("All", seq(1, my_project$fisheryBySpecie[[ind_spe]]$nCoho, by = 1))
-                       
                      }
-                     # svalue(cohCoh_drop) <- "All"
                      par(pre_mfrow)
                    })
   addSpring(go_g)
@@ -2173,7 +2109,6 @@ smart_gui <- function(){
                        horizontal = FALSE, container = view_g,
                        handler = function(h,...){
                          dev.set(dev.list()[pre_dev+7])
-                         
                          if(svalue(sourceMix_r) == "Survey"){
                            my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_mix))]]$ggplotMcmcOut(selCompo = svalue(view_radio),
                                                                                                                                 selSex = svalue(sex_drop_mix))
@@ -2182,10 +2117,8 @@ smart_gui <- function(){
                                                                                                                                   selSex = svalue(sex_drop_mix))
                          }
                        })
-  
   addSpring(cont_g)
   addSpace(mix_g_top, 20)
-  
   mix_p <- ggraphics(container = mix_g, width = 550, height = 250, expand = TRUE)
   
   
@@ -2194,11 +2127,7 @@ smart_gui <- function(){
   cohoP_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Cohorts")
   cohoP_g_top <- gframe(horizontal = TRUE, container = cohoP_g, spacing = 10)
   addSpace(cohoP_g_top, 2)
-  # addSpring(cohoP_g_top)
-  
   cohofra_g <- gframe("Cohort data", horizontal = TRUE, container = cohoP_g_top, expand = TRUE)
-  # addSpring(cohofra_g)
-  
   sourceCoh_r <- gradio(items = c("Survey", "Fishery"), horizontal = FALSE, container = cohofra_g, expand = TRUE, handler = function(...){
     if(svalue(sourceCoh_r) == "Survey"){
       if(is.null(my_project$specieInSurvey)){
@@ -2271,13 +2200,7 @@ smart_gui <- function(){
   addSpring(cohofra_g)
   addSpring(cohCoh_b)
   cohCoh_drop <- gcombobox(items = "Cohort", selected = 1, container = cohCoh_b, editable = FALSE, handler = function(h,...){
-    # svalue(sourceCoh_r)   # source = "Survey"
-    # svalue(spec_drop_coh) # specie = 1
-    # svalue(sexRadio_coh)     # sex = "Female"
-    # svalue(gruRadio_coh)   # group = "Age"
-    # svalue(cohTyp_drop)    #  type = "LFD"
     dev.set(dev.list()[pre_dev+8])
-    
     if(svalue(sourceCoh_r) == "Survey"){
       cohSpe_ind <- which(my_project$specieInSurvey == svalue(spec_drop_coh))
       if(svalue(cohTyp_drop) == "LFD"){
@@ -2334,8 +2257,6 @@ smart_gui <- function(){
            #                        ifelse(svalue(cohYea_drop) == "All", "All", which(my_project$yearInSurvey == svalue(cohYea_drop))),
            #                        ifelse(svalue(cohInt_r) == "Yes", TRUE, FALSE))
          })
-  # addSpring(cohofra_g)
-  # addSpring(cohoP_g_top)
   addSpace(cohoP_g_top, 2)
   cohPop_p <- ggraphics(container = cohoP_g, width = 550, height = 250, expand = TRUE)
   
