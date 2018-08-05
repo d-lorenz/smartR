@@ -713,6 +713,29 @@ SmartProject <- R6Class("smartProject",
                           setYearFishery = function(){yearInFishery <<- sort(unique(years(rawDataFishery[,"Date"])), decreasing = FALSE)},
                           loadMap = function(map_path){sampMap <<- SampleMap$new(map_path)},
                           createFleet = function(){fleet <<- FishFleet$new()},
+                          importEnv = function(envLst){
+                            sampMap <<- SampleMap$new()
+                            sampMap$gridPath <<- envLst$gridPath
+                            sampMap$gridName <<- envLst$gridName
+                            sampMap$gridShp <<- envLst$gridShp
+                            sampMap$nCells <<- envLst$nCells
+                            sampMap$gridPolySet <<- envLst$gridPolySet
+                            sampMap$gridFortify <<- envLst$gridFortify
+                            sampMap$griCent <<- envLst$griCent
+                            sampMap$gridBbox <<- envLst$gridBbox
+                            sampMap$gridBboxExt <<- envLst$gridBboxExt
+                            sampMap$gridBboxSP <<- envLst$gridBboxSP
+                            sampMap$gooMap <<- envLst$gooMap
+                            sampMap$gooMapPlot <<- envLst$gooMapPlot
+                            sampMap$plotRange <<- envLst$plotRange
+                            sampMap$gooGrid <<- envLst$gooGrid
+                            sampMap$gooBbox <<- envLst$gooBbox
+                            sampMap$gridBathy <<- envLst$gridBathy
+                            sampMap$centDept <<- envLst$centDept
+                            sampMap$ggDepth <<- envLst$ggDepth
+                            sampMap$bioDF <<- envLst$bioDF
+                            sampMap$ggBioDF <<- envLst$ggBioDF
+                          },
                           setSpecieSurvey = function(){specieInSurvey <<- unique(rawDataSurvey[,"Specie"])},
                           setSpecieFishery = function(){specieInFishery <<- unique(rawDataFishery[,"Specie"])},
                           splitSpecieSurvey = function(){
@@ -3912,6 +3935,30 @@ SampleMap <- R6Class("sampleMap",
                            setGridCenter()
                            createGridBbox()
                          }
+                       },
+                       exportEnv = function(){
+                         envOut <- list()
+                         envOut$gridPath <- gridPath
+                         envOut$gridName <- gridName
+                         envOut$gridShp <- gridShp
+                         envOut$nCells <- nCells
+                         envOut$gridPolySet <- gridPolySet
+                         envOut$gridFortify <- gridFortify
+                         envOut$griCent <- griCent
+                         envOut$gridBbox <- gridBbox
+                         envOut$gridBboxExt <- gridBboxExt
+                         envOut$gridBboxSP <- gridBboxSP
+                         envOut$gooMap <- gooMap
+                         envOut$gooMapPlot <- gooMapPlot
+                         envOut$plotRange <- plotRange
+                         envOut$gooGrid <- gooGrid
+                         envOut$gooBbox <- gooBbox
+                         envOut$gridBathy <- gridBathy
+                         envOut$centDept <- centDept
+                         envOut$ggDepth <- ggDepth
+                         envOut$bioDF <- bioDF
+                         envOut$ggBioDF <- ggBioDF
+                         return(envOut)
                        },
                        setAreaGrid = function(){
                          cat("\n\nComputing Total Area... ", sep = "")
