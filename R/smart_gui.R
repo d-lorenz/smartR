@@ -72,9 +72,6 @@ smart_gui <- function(){
     ### Update grid Status
     
     if(!is.null(my_project$sampMap)){
-      svalue(gri_l1) <- paste("Polyset: Loaded")
-      svalue(gri_l2) <- paste("N. Cells: ", my_project$sampMap$nCells)
-      svalue(gri_l3) <- paste("GCenter: Loaded")
       svalue(n_cell_g) <- paste("N. Cells: ", my_project$sampMap$nCells)
       delete(grid_g, grid_g$children[[length(grid_g$children)]])
       add(grid_g, grid_sta_n)
@@ -133,7 +130,7 @@ smart_gui <- function(){
   grid_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   grid_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
   add(grid_g, grid_sta)
-
+  
   addSpring(pro_g_mid)
   samp_g <- gframe(text = "Survey", horizontal = FALSE, container = pro_g_mid)
   n_year_s <- glabel("   ---", container = samp_g)
@@ -147,7 +144,7 @@ smart_gui <- function(){
   samp_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   samp_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
   add(samp_g, samp_sta)
-
+  
   addSpring(pro_g_mid)
   effo_g <- gframe(text = "Effort", horizontal = FALSE, container = pro_g_mid)
   addSpring(effo_g)
@@ -157,7 +154,7 @@ smart_gui <- function(){
   effo_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
   add(effo_g, effo_sta)
-
+  
   addSpring(pro_g_mid)
   figr_g <- gframe(text = "Fishing Ground", horizontal = FALSE, container = pro_g_mid)
   addSpring(figr_g)
@@ -167,7 +164,7 @@ smart_gui <- function(){
   figr_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   figr_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
   add(figr_g, figr_sta)
-
+  
   addSpring(pro_g_mid)
   regi_g <- gframe(text = "Register", horizontal = FALSE, container = pro_g_mid)
   addSpring(regi_g)
@@ -177,7 +174,7 @@ smart_gui <- function(){
   regi_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   regi_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
   add(regi_g, regi_sta)
-
+  
   addSpring(pro_g_mid)
   prod_g <- gframe(text = "Production", horizontal = FALSE, container = pro_g_mid)
   addSpring(prod_g)
@@ -186,13 +183,19 @@ smart_gui <- function(){
   })
   prod_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   add(prod_g, prod_sta)
-
+  
   addSpring(pro_g_mid)
   addSpace(pro_g_mid, 2)
   
   pro_p <- ggraphics(container = pro_g, width = 550, height = 250, expand = TRUE)
   
   ####   Environment   ####
+  env1_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
+  env1_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
+  env2_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
+  env2_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
+  env3_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
+  env3_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
   
   gri_g <- gvbox(container = uti_gn, label = "Environment", expand = TRUE)
   gri_g_top <- gframe(horizontal = TRUE, container = gri_g)
@@ -218,9 +221,6 @@ smart_gui <- function(){
     my_project$sampMap$setGooGrid()
     my_project$sampMap$setGooBbox()
     
-    svalue(gri_l1) <- paste("Polyset: Loaded")
-    svalue(gri_l2) <- paste("N. Cells: ", my_project$sampMap$nCells)
-    svalue(gri_l3) <- paste("GCenter: Loaded")
     svalue(stat_bar) <- "Plotting..."
     my_project$sampMap$setGooEnv()
     my_project$sampMap$plotGooEnv()
@@ -232,6 +232,8 @@ smart_gui <- function(){
     svalue(n_cell_g) <- paste("N. Cells: ", my_project$sampMap$nCells)
     delete(grid_g, grid_g$children[[length(grid_g$children)]])
     add(grid_g, grid_sta_n)
+    delete(gri_g_top1_gri, gri_g_top1_gri$children[[length(gri_g_top1_gri$children)]])
+    add(gri_g_top1_gri, env1_sta_n)
   })
   addSpace(gri_g_top1_gri, 10)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_gri,
@@ -246,6 +248,8 @@ smart_gui <- function(){
            enabled(gri_g_top) <- TRUE
          })
   addSpace(gri_g_top1_gri, 10)
+  add(gri_g_top1_gri, env1_sta)
+  
   addSpace(gri_g_top, 20)
   gri_g_top1_dep <- gframe("Depth", horizontal = TRUE, container = gri_g_top)
   addSpace(gri_g_top1_dep, 10)
@@ -261,14 +265,17 @@ smart_gui <- function(){
     my_project$sampMap$plotGooEnv()
     svalue(stat_bar) <- ""
     enabled(gri_g_top) <- TRUE
+    
+    delete(gri_g_top1_dep, gri_g_top1_dep$children[[length(gri_g_top1_dep$children)]])
+    add(gri_g_top1_dep, env2_sta_n)
   })
   addSpace(gri_g_top1_dep, 10)
   gbutton(" Save ", container = gri_g_top1_dep, handler = function(h,...){
-           if(!is.null(my_project$sampMap$gridBathy)){
-             save2path <- "/Users/Lomo/Documents/Uni/Lab/Proj/smart\ gui/SMART_GUI/bathy_test.rData"
-             my_project$sampMap$saveGridBath(save2path)
-           }
-         })
+    if(!is.null(my_project$sampMap$gridBathy)){
+      save2path <- "/Users/Lomo/Documents/Uni/Lab/Proj/smart\ gui/SMART_GUI/bathy_test.rData"
+      my_project$sampMap$saveGridBath(save2path)
+    }
+  })
   addSpace(gri_g_top1_dep, 10)
   gbutton("Load", container = gri_g_top1_dep, handler = function(h,...){
     dev.set(dev.list()[pre_dev+2])
@@ -285,6 +292,9 @@ smart_gui <- function(){
     my_project$sampMap$plotGooEnv()
     svalue(stat_bar) <- ""
     enabled(gri_g_top) <- TRUE
+    
+    delete(gri_g_top1_dep, gri_g_top1_dep$children[[length(gri_g_top1_dep$children)]])
+    add(gri_g_top1_dep, env2_sta_n)
   })
   addSpace(gri_g_top1_dep, 10)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_dep,
@@ -296,8 +306,10 @@ smart_gui <- function(){
            my_project$sampMap$plotGooEnv()
            svalue(stat_bar) <- ""
            enabled(gri_g_top) <- TRUE
-           })
+         })
   addSpace(gri_g_top1_dep, 10)
+  add(gri_g_top1_dep, env2_sta)
+  
   addSpace(gri_g_top, 20)
   gri_g_top1_bio <- gframe("Seabed", horizontal = TRUE, container = gri_g_top)
   addSpace(gri_g_top1_bio, 10)
@@ -316,6 +328,9 @@ smart_gui <- function(){
     my_project$sampMap$plotGooEnv()
     svalue(stat_bar) <- ""
     enabled(gri_g_top) <- TRUE
+    
+    delete(gri_g_top1_bio, gri_g_top1_bio$children[[length(gri_g_top1_bio$children)]])
+    add(gri_g_top1_bio, env3_sta_n)
   })
   addSpace(gri_g_top1_bio, 10)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_bio,
@@ -328,14 +343,49 @@ smart_gui <- function(){
            my_project$sampMap$plotGooEnv()
            svalue(stat_bar) <- ""
            enabled(gri_g_top) <- TRUE
-           })
+         })
   addSpace(gri_g_top1_bio, 10)
+  add(gri_g_top1_bio, env3_sta)
+  
   addSpring(gri_g_top)
-  gri_g_top2 <- ggroup(horizontal = FALSE, container = gri_g_top)
+  gri_g_top2 <- gframe(text = "Environmental Asset", horizontal = TRUE, container = gri_g_top)
   addSpring(gri_g_top2)
-  gri_l1 <- glabel("Polyset: ", container = gri_g_top2)
-  gri_l2 <- glabel("N. Cells: ", container = gri_g_top2)
-  gri_l3 <- glabel("GCenter: ", container = gri_g_top2)
+  gbutton("Export", container = gri_g_top2, handler = function(h,...){
+    enabled(gri_g_top) <- FALSE
+    Sys.sleep(1)
+    tmpOutEnvfiles <- gfile(text = "Select output data name", type = "save",
+                            initial.filename = "Smart_EnvAsset_List.RDS",
+                            initial.dir = my_project$sampMap$gridPath)
+    svalue(stat_bar) <- "Saving..."
+    if(rev(unlist(strsplit(tmpOutEnvfiles, "[.]")))[1] != "RDS"){
+      tmpOutEnvfiles <- paste(tmpOutEnvfiles, ".RDS", sep = "")
+    }
+    Sys.sleep(1)
+    saveRDS(my_project$sampMap$exportEnv(), tmpOutEnvfiles)
+    svalue(stat_bar) <- ""
+    enabled(gri_g_top) <- TRUE
+  })
+  addSpring(gri_g_top2)
+  gbutton("Import", container = gri_g_top2, handler = function(h,...){
+    dev.set(dev.list()[pre_dev+2])
+    enabled(gri_g_top) <- FALSE
+    Sys.sleep(1)
+    tmpInEnvfiles <- gfile(text = "Select Environment Asset file", type = "open",
+                           initial.filename = NULL, initial.dir = getwd())
+    svalue(stat_bar) <- "Loading..."
+    Sys.sleep(1)
+    my_project$importEnv(readRDS(tmpInEnvfiles))
+    my_project$sampMap$setGooEnv()
+    my_project$sampMap$plotGooEnv()
+    delete(gri_g_top1_gri, gri_g_top1_gri$children[[length(gri_g_top1_gri$children)]])
+    add(gri_g_top1_gri, env1_sta_n)
+    delete(gri_g_top1_dep, gri_g_top1_dep$children[[length(gri_g_top1_dep$children)]])
+    add(gri_g_top1_dep, env2_sta_n)
+    delete(gri_g_top1_bio, gri_g_top1_bio$children[[length(gri_g_top1_bio$children)]])
+    add(gri_g_top1_bio, env3_sta_n)
+    svalue(stat_bar) <- ""
+    enabled(gri_g_top) <- TRUE
+  })
   addSpring(gri_g_top2)
   addSpring(gri_g_top)
   gri_p <- ggraphics(container = gri_g, width = 550, height = 250, expand = TRUE)
@@ -656,10 +706,10 @@ smart_gui <- function(){
     Sys.sleep(1)
     
     enabled(eff_g_top) <- FALSE
-
+    
     tmpOutAAfiles <- gfile(text = "Select AA effort data", type = "save",
-                       initial.filename = NULL, initial.dir = getwd(), filter = list(),
-                       multi = TRUE)
+                           initial.filename = NULL, initial.dir = getwd(), filter = list(),
+                           multi = TRUE)
     
     cat("\nSaving AA effort to rData...", sep = "")
     svalue(stat_bar) <- "Saving AA effort to rData..."
@@ -948,9 +998,9 @@ smart_gui <- function(){
   addSpring(pro_g_top1)
   gbutton("Load Landings", container = pro_g_top1, handler = function(h,...){
     tmpLandfiles <- gfile(text = "Select Landings Data", type = "open",
-                       filter = list("csv files" = list(patterns = c("*.csv")),
-                                     "All files" = list(patterns = c("*"))),
-                       multi = TRUE)
+                          filter = list("csv files" = list(patterns = c("*.csv")),
+                                        "All files" = list(patterns = c("*"))),
+                          multi = TRUE)
     my_project$fleet$loadProduction(tmpLandfiles)
     enabled(pro_g_top) <- FALSE
     svalue(stat_bar) <- "Loading landings..."
@@ -995,7 +1045,7 @@ smart_gui <- function(){
   enabled(spe_drop) <- FALSE
   pro_g_top2 <- ggroup(horizontal = FALSE, container = pro_g_top)
   addSpring(pro_g_top2)
-
+  
   gbutton("Set Threshold", container = pro_g_top2, handler = function(h,...){
     
     temp_dia <- gwindow(title="Set Landings Threshold", visible = FALSE,
@@ -1520,7 +1570,7 @@ smart_gui <- function(){
         assSpe_drop[] <- intersect(my_project$specieInSurvey, my_project$specieInFishery)
         svalue(assSpe_drop) <- my_project$specieInSurvey[1]
       }
-
+      
       if(!is.null(my_project$sampMap$cutResShp)){
         my_project$addFg2Survey()
         my_project$setSpreaSurvey()
