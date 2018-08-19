@@ -82,7 +82,6 @@ smart_gui <- function(){
     if(!is.null(my_project$fleet$rawEffort)){
       effvie_drop[] <- c("All", colnames(my_project$fleet$rawEffort))
       svalue(effvie_drop) <- "All"
-      #       effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
       delete(effo_g, effo_g$children[[length(effo_g$children)]])
       add(effo_g, effo_sta_n)
     }
@@ -850,8 +849,6 @@ smart_gui <- function(){
       add(eff_g_top1, eff1_sta_n)
       delete(eff_g_top1b, eff_g_top1b$children[[length(eff_g_top1b$children)]])
       add(eff_g_top1b, eff2_sta_n)
-      delete(effo_g, effo_g$children[[length(effo_g$children)]])
-      add(effo_g, effo_sta_n)
     },
     error = function(error_message){
       message("An error has occurred!")
