@@ -203,49 +203,59 @@ smart_gui <- function(){
   gri_g_top1_gri <- gframe("Grid", horizontal = TRUE, container = gri_g_top)
   addSpace(gri_g_top1_gri, 10)
   gbutton("Load", container = gri_g_top1_gri, handler = function(h,...){
-    
-    tmpGridfile <- gfile(text = "Select Grid Shapefile", type = "open",
-                         initial.filename = NULL, initial.dir = getwd(), filter = list(),
-                         multi = FALSE)
     enabled(gri_g_top) <- FALSE
-    
-    svalue(stat_bar) <- "Loading Grid..."
-    Sys.sleep(1)
-    dev.set(dev.list()[pre_dev+2])
-    
-    my_project$loadMap(tmpGridfile)
-    
-    ### automatic download of google map
-    my_project$sampMap$getGooMap()       ### FIX add a check if sampMap is loaded
-    svalue(stat_bar) <- "Downloading Google map..."
-    my_project$sampMap$setGooGrid()
-    my_project$sampMap$setGooBbox()
-    
-    svalue(stat_bar) <- "Plotting..."
-    my_project$sampMap$setGooEnv()
-    my_project$sampMap$plotGooEnv()
-    enabled(gri_g_top) <- TRUE
-    
-    svalue(stat_bar) <- ""
-    
-    ### Update Grid Status
-    svalue(n_cell_g) <- paste("N. Cells: ", my_project$sampMap$nCells)
-    delete(grid_g, grid_g$children[[length(grid_g$children)]])
-    add(grid_g, grid_sta_n)
-    delete(gri_g_top1_gri, gri_g_top1_gri$children[[length(gri_g_top1_gri$children)]])
-    add(gri_g_top1_gri, env1_sta_n)
+    tryCatch(expr = {
+      tmpGridfile <- gfile(text = "Select Grid Shapefile", type = "open",
+                           initial.filename = NULL, initial.dir = getwd(), filter = list(),
+                           multi = FALSE)
+      
+      svalue(stat_bar) <- "Loading Grid..."
+      Sys.sleep(1)
+      dev.set(dev.list()[pre_dev+2])
+      my_project$loadMap(tmpGridfile)
+      my_project$sampMap$getGooMap()
+      svalue(stat_bar) <- "Downloading Google map..."
+      my_project$sampMap$setGooGrid()
+      my_project$sampMap$setGooBbox()
+      svalue(stat_bar) <- "Plotting..."
+      my_project$sampMap$setGooEnv()
+      my_project$sampMap$plotGooEnv()
+      
+      ### Update Grid Status
+      svalue(n_cell_g) <- paste("N. Cells: ", my_project$sampMap$nCells)
+      delete(grid_g, grid_g$children[[length(grid_g$children)]])
+      add(grid_g, grid_sta_n)
+      delete(gri_g_top1_gri, gri_g_top1_gri$children[[length(gri_g_top1_gri$children)]])
+      add(gri_g_top1_gri, env1_sta_n)
+    },
+    error = function(error_message){
+      message("An error has occurred!")
+      message(error_message)
+    },
+    finally = {
+      enabled(gri_g_top) <- TRUE
+      svalue(stat_bar) <- ""
+    })
   })
   addSpace(gri_g_top1_gri, 10)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_gri,
          handler = function(h,...){
-           dev.set(dev.list()[pre_dev+2])
            enabled(gri_g_top) <- FALSE
-           svalue(stat_bar) <- "Plotting..."
-           Sys.sleep(1)
-           my_project$sampMap$setGooEnv()
-           my_project$sampMap$plotGooEnv()
-           svalue(stat_bar) <- ""
-           enabled(gri_g_top) <- TRUE
+           tryCatch(expr = {
+             dev.set(dev.list()[pre_dev+2])
+             svalue(stat_bar) <- "Plotting..."
+             Sys.sleep(1)
+             my_project$sampMap$setGooEnv()
+             my_project$sampMap$plotGooEnv()
+           },
+           error = function(error_message){
+             message("An error has occurred!")
+             message(error_message)
+           },
+           finally = {
+             enabled(gri_g_top) <- TRUE
+             svalue(stat_bar) <- ""
+           })
          })
   addSpace(gri_g_top1_gri, 10)
   add(gri_g_top1_gri, env1_sta)
@@ -254,58 +264,92 @@ smart_gui <- function(){
   gri_g_top1_dep <- gframe("Depth", horizontal = TRUE, container = gri_g_top)
   addSpace(gri_g_top1_dep, 10)
   gbutton("Download", container = gri_g_top1_dep, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+2])
-    svalue(stat_bar) <- "Downloading depth..."
     enabled(gri_g_top) <- FALSE
-    Sys.sleep(1)
-    my_project$sampMap$getGridBath()
-    svalue(stat_bar) <- "Plotting..."
-    Sys.sleep(1)
-    my_project$sampMap$setGooEnv()
-    my_project$sampMap$plotGooEnv()
-    svalue(stat_bar) <- ""
-    enabled(gri_g_top) <- TRUE
-    
-    delete(gri_g_top1_dep, gri_g_top1_dep$children[[length(gri_g_top1_dep$children)]])
-    add(gri_g_top1_dep, env2_sta_n)
+    tryCatch(expr = {
+      dev.set(dev.list()[pre_dev+2])
+      svalue(stat_bar) <- "Downloading depth..."
+      Sys.sleep(1)
+      my_project$sampMap$getGridBath()
+      svalue(stat_bar) <- "Plotting..."
+      Sys.sleep(1)
+      my_project$sampMap$setGooEnv()
+      my_project$sampMap$plotGooEnv()
+      delete(gri_g_top1_dep, gri_g_top1_dep$children[[length(gri_g_top1_dep$children)]])
+      add(gri_g_top1_dep, env2_sta_n)
+    },
+    error = function(error_message){
+      message("An error has occurred!")
+      message(error_message)
+    },
+    finally = {
+      enabled(gri_g_top) <- TRUE
+      svalue(stat_bar) <- ""
+    })
   })
   addSpace(gri_g_top1_dep, 10)
   gbutton(" Save ", container = gri_g_top1_dep, handler = function(h,...){
-    if(!is.null(my_project$sampMap$gridBathy)){
-      save2path <- "/Users/Lomo/Documents/Uni/Lab/Proj/smart\ gui/SMART_GUI/bathy_test.rData"
-      my_project$sampMap$saveGridBath(save2path)
-    }
+    enabled(gri_g_top) <- FALSE
+    tryCatch(expr = {
+      if(!is.null(my_project$sampMap$gridBathy)){
+        save2path <- "/Users/Lomo/Documents/Uni/Lab/Proj/smart\ gui/SMART_GUI/bathy_test.rData"
+        my_project$sampMap$saveGridBath(save2path)
+      }
+    },
+    error = function(error_message){
+      message("An error has occurred!")
+      message(error_message)
+    },
+    finally = {
+      enabled(gri_g_top) <- TRUE
+      svalue(stat_bar) <- ""
+    })
   })
   addSpace(gri_g_top1_dep, 10)
   gbutton("Load", container = gri_g_top1_dep, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+2])
-    tmpBathyfile <- gfile(text = "Select Bathymetry Matrix", type = "open",
-                          initial.filename = NULL, initial.dir = getwd(), filter = list(),
-                          multi = FALSE)
     enabled(gri_g_top) <- FALSE
-    svalue(stat_bar) <- "Loading depth..."
-    Sys.sleep(1)
-    my_project$sampMap$loadGridBath(tmpBathyfile)
-    svalue(stat_bar) <- "Plotting..."
-    Sys.sleep(1)
-    my_project$sampMap$setGooEnv()
-    my_project$sampMap$plotGooEnv()
-    svalue(stat_bar) <- ""
-    enabled(gri_g_top) <- TRUE
-    
-    delete(gri_g_top1_dep, gri_g_top1_dep$children[[length(gri_g_top1_dep$children)]])
-    add(gri_g_top1_dep, env2_sta_n)
+    tryCatch(expr = {
+      dev.set(dev.list()[pre_dev+2])
+      tmpBathyfile <- gfile(text = "Select Bathymetry Matrix", type = "open",
+                            initial.filename = NULL, initial.dir = getwd(), filter = list(),
+                            multi = FALSE)
+      svalue(stat_bar) <- "Loading depth..."
+      Sys.sleep(1)
+      my_project$sampMap$loadGridBath(tmpBathyfile)
+      svalue(stat_bar) <- "Plotting..."
+      Sys.sleep(1)
+      my_project$sampMap$setGooEnv()
+      my_project$sampMap$plotGooEnv()
+      delete(gri_g_top1_dep, gri_g_top1_dep$children[[length(gri_g_top1_dep$children)]])
+      add(gri_g_top1_dep, env2_sta_n)
+    },
+    error = function(error_message){
+      message("An error has occurred!")
+      message(error_message)
+    },
+    finally = {
+      enabled(gri_g_top) <- TRUE
+      svalue(stat_bar) <- ""
+    })
   })
   addSpace(gri_g_top1_dep, 10)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_dep,
          handler = function(h,...){
-           dev.set(dev.list()[pre_dev+2])
-           svalue(stat_bar) <- "Plotting..."
-           Sys.sleep(1)
-           my_project$sampMap$setGooEnv()
-           my_project$sampMap$plotGooEnv()
-           svalue(stat_bar) <- ""
-           enabled(gri_g_top) <- TRUE
+           enabled(gri_g_top) <- FALSE
+           tryCatch(expr = {
+             dev.set(dev.list()[pre_dev+2])
+             svalue(stat_bar) <- "Plotting..."
+             Sys.sleep(1)
+             my_project$sampMap$setGooEnv()
+             my_project$sampMap$plotGooEnv()
+           },
+           error = function(error_message){
+             message("An error has occurred!")
+             message(error_message)
+           },
+           finally = {
+             enabled(gri_g_top) <- TRUE
+             svalue(stat_bar) <- ""
+           })
          })
   addSpace(gri_g_top1_dep, 10)
   add(gri_g_top1_dep, env2_sta)
@@ -314,35 +358,50 @@ smart_gui <- function(){
   gri_g_top1_bio <- gframe("Seabed", horizontal = TRUE, container = gri_g_top)
   addSpace(gri_g_top1_bio, 10)
   gbutton("Load", container = gri_g_top1_bio, handler = function(h,...){
-    tmpBiocfile <- gfile(text = "Select Biocenonsis Matrix", type = "open",
-                         initial.filename = NULL, initial.dir = getwd(), filter = list(),
-                         multi = FALSE)
     enabled(gri_g_top) <- FALSE
-    Sys.sleep(1)
-    dev.set(dev.list()[pre_dev+2])
-    svalue(stat_bar) <- "Loading biocenosis data.frame..."
-    my_project$sampMap$loadBioDF(tmpBiocfile)
-    svalue(stat_bar) <- "Plotting..."
-    Sys.sleep(1)
-    my_project$sampMap$setGooEnv()
-    my_project$sampMap$plotGooEnv()
-    svalue(stat_bar) <- ""
-    enabled(gri_g_top) <- TRUE
-    
-    delete(gri_g_top1_bio, gri_g_top1_bio$children[[length(gri_g_top1_bio$children)]])
-    add(gri_g_top1_bio, env3_sta_n)
+    tryCatch(expr = {
+      tmpBiocfile <- gfile(text = "Select Biocenonsis Matrix", type = "open",
+                           initial.filename = NULL, initial.dir = getwd(), filter = list(),
+                           multi = FALSE)
+      Sys.sleep(1)
+      dev.set(dev.list()[pre_dev+2])
+      svalue(stat_bar) <- "Loading biocenosis data.frame..."
+      my_project$sampMap$loadBioDF(tmpBiocfile)
+      svalue(stat_bar) <- "Plotting..."
+      Sys.sleep(1)
+      my_project$sampMap$setGooEnv()
+      my_project$sampMap$plotGooEnv()
+      delete(gri_g_top1_bio, gri_g_top1_bio$children[[length(gri_g_top1_bio$children)]])
+      add(gri_g_top1_bio, env3_sta_n)
+    },
+    error = function(error_message){
+      message("An error has occurred!")
+      message(error_message)
+    },
+    finally = {
+      enabled(gri_g_top) <- TRUE
+      svalue(stat_bar) <- ""
+    })
   })
   addSpace(gri_g_top1_bio, 10)
   gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = gri_g_top1_bio,
          handler = function(h,...){
-           dev.set(dev.list()[pre_dev+2])
            enabled(gri_g_top) <- FALSE
-           svalue(stat_bar) <- "Plotting..."
-           Sys.sleep(1)
-           my_project$sampMap$setGooEnv()
-           my_project$sampMap$plotGooEnv()
-           svalue(stat_bar) <- ""
-           enabled(gri_g_top) <- TRUE
+           tryCatch(expr = {
+             dev.set(dev.list()[pre_dev+2])
+             svalue(stat_bar) <- "Plotting..."
+             Sys.sleep(1)
+             my_project$sampMap$setGooEnv()
+             my_project$sampMap$plotGooEnv()
+           },
+           error = function(error_message){
+             message("An error has occurred!")
+             message(error_message)
+           },
+           finally = {
+             enabled(gri_g_top) <- TRUE
+             svalue(stat_bar) <- ""
+           })
          })
   addSpace(gri_g_top1_bio, 10)
   add(gri_g_top1_bio, env3_sta)
@@ -352,39 +411,55 @@ smart_gui <- function(){
   addSpring(gri_g_top2)
   gbutton("Export", container = gri_g_top2, handler = function(h,...){
     enabled(gri_g_top) <- FALSE
-    Sys.sleep(1)
-    tmpOutEnvfiles <- gfile(text = "Select output data name", type = "save",
-                            initial.filename = "Smart_EnvAsset_List.RDS",
-                            initial.dir = my_project$sampMap$gridPath)
-    svalue(stat_bar) <- "Saving..."
-    if(rev(unlist(strsplit(tmpOutEnvfiles, "[.]")))[1] != "RDS"){
-      tmpOutEnvfiles <- paste(tmpOutEnvfiles, ".RDS", sep = "")
-    }
-    Sys.sleep(1)
-    saveRDS(my_project$sampMap$exportEnv(), tmpOutEnvfiles)
-    svalue(stat_bar) <- ""
-    enabled(gri_g_top) <- TRUE
+    tryCatch(expr = {
+      Sys.sleep(1)
+      tmpOutEnvfiles <- gfile(text = "Select output data name", type = "save",
+                              initial.filename = "Smart_EnvAsset_List.RDS",
+                              initial.dir = my_project$sampMap$gridPath)
+      svalue(stat_bar) <- "Saving..."
+      if(rev(unlist(strsplit(tmpOutEnvfiles, "[.]")))[1] != "RDS"){
+        tmpOutEnvfiles <- paste(tmpOutEnvfiles, ".RDS", sep = "")
+      }
+      Sys.sleep(1)
+      saveRDS(my_project$sampMap$exportEnv(), tmpOutEnvfiles)
+    },
+    error = function(error_message){
+      message("An error has occurred!")
+      message(error_message)
+    },
+    finally = {
+      enabled(gri_g_top) <- TRUE
+      svalue(stat_bar) <- ""
+    })
   })
   addSpring(gri_g_top2)
   gbutton("Import", container = gri_g_top2, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+2])
     enabled(gri_g_top) <- FALSE
-    Sys.sleep(1)
-    tmpInEnvfiles <- gfile(text = "Select Environment Asset file", type = "open",
-                           initial.filename = NULL, initial.dir = getwd())
-    svalue(stat_bar) <- "Loading..."
-    Sys.sleep(1)
-    my_project$importEnv(readRDS(tmpInEnvfiles))
-    my_project$sampMap$setGooEnv()
-    my_project$sampMap$plotGooEnv()
-    delete(gri_g_top1_gri, gri_g_top1_gri$children[[length(gri_g_top1_gri$children)]])
-    add(gri_g_top1_gri, env1_sta_n)
-    delete(gri_g_top1_dep, gri_g_top1_dep$children[[length(gri_g_top1_dep$children)]])
-    add(gri_g_top1_dep, env2_sta_n)
-    delete(gri_g_top1_bio, gri_g_top1_bio$children[[length(gri_g_top1_bio$children)]])
-    add(gri_g_top1_bio, env3_sta_n)
-    svalue(stat_bar) <- ""
-    enabled(gri_g_top) <- TRUE
+    tryCatch(expr = {
+      dev.set(dev.list()[pre_dev+2])
+      Sys.sleep(1)
+      tmpInEnvfiles <- gfile(text = "Select Environment Asset file", type = "open",
+                             initial.filename = NULL, initial.dir = getwd())
+      svalue(stat_bar) <- "Loading..."
+      Sys.sleep(1)
+      my_project$importEnv(readRDS(tmpInEnvfiles))
+      my_project$sampMap$setGooEnv()
+      my_project$sampMap$plotGooEnv()
+      delete(gri_g_top1_gri, gri_g_top1_gri$children[[length(gri_g_top1_gri$children)]])
+      add(gri_g_top1_gri, env1_sta_n)
+      delete(gri_g_top1_dep, gri_g_top1_dep$children[[length(gri_g_top1_dep$children)]])
+      add(gri_g_top1_dep, env2_sta_n)
+      delete(gri_g_top1_bio, gri_g_top1_bio$children[[length(gri_g_top1_bio$children)]])
+      add(gri_g_top1_bio, env3_sta_n)
+    },
+    error = function(error_message){
+      message("An error has occurred!")
+      message(error_message)
+    },
+    finally = {
+      enabled(gri_g_top) <- TRUE
+      svalue(stat_bar) <- ""
+    })
   })
   addSpring(gri_g_top2)
   addSpring(gri_g_top)
@@ -392,392 +467,399 @@ smart_gui <- function(){
   
   
   ####   Effort   ####
+  eff1_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
+  eff1_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
+  eff2_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
+  eff2_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
   
   eff_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Effort")
   eff_g_top <- gframe(horizontal = TRUE, container = eff_g)
   addSpace(eff_g_top, 2)
   addSpring(eff_g_top)
-  eff_g_top1 <- ggroup(horizontal = FALSE, container = eff_g_top)
-  addSpring(eff_g_top1)
-  gbutton("Load from rData", container = eff_g_top1, handler = function(h,...){
-    
-    tmpVMSfile <- gfile(text = "Select Effort rData", type = "open",
-                        initial.filename = NULL, initial.dir = getwd(), filter = list(),
-                        multi = TRUE)
+  eff_g_top1 <- gframe(text = "Load", horizontal = TRUE, container = eff_g_top)
+  addSpace(eff_g_top1, 10)
+  gbutton("from vmsbase DB", container = eff_g_top1, handler = function(h,...){
     enabled(eff_g_top) <- FALSE
-    
-    cat("\nLoading effort from rData...", sep = "")
-    svalue(stat_bar) <- "Loading effort from rData..."
-    Sys.sleep(1)
-    
-    my_project$fleet$rawEffort <- readRDS(tmpVMSfile)
-    my_project$fleet$setEffortIds()
-    # cat("   Done!", sep = "")
-    svalue(stat_bar) <- ""
-    
-    effvie_drop[] <- names(my_project$fleet$rawEffort)
-    svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
-    dev.set(dev.list()[pre_dev+3])
-    
-    svalue(stat_bar) <- "Plotting raw points..."
-    my_project$ggplotRawPoints(svalue(effvie_drop))
-    svalue(stat_bar) <- ""
-    
-    # my_project$effPlot("All")
-    
-    enabled(eff_g_top) <- TRUE
-    
-    ### Update Effort Status
-    effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
-    delete(effo_g, effo_g$children[[length(effo_g$children)]])
-    add(effo_g, effo_sta_n)
-  })
-  addSpring(eff_g_top1)
-  gbutton("Extract from VMSBASE", container = eff_g_top1, handler = function(h,...){
-    
-    tmpVMSfiles <- gfile(text = "Select Effort DBs", type = "open",
-                         initial.filename = NULL, initial.dir = getwd(), filter = list(),
-                         multi = TRUE)
-    
-    enabled(eff_g_top) <- FALSE
-    
-    svalue(stat_bar) <- "Loading effort from vmsbase db..."
-    Sys.sleep(1)
-    
-    avaMet <- sqldf("select distinct met_des from nn_clas", dbname = tmpVMSfiles)[,1]
-    
-    temp_dia <- gwindow(title="Load vmsbase DB data", visible = FALSE,
-                        # parent = main_win,
-                        width = 400, height = 200)
-    up_ho <- ggroup(horizontal = TRUE, container = temp_dia)
-    addSpace(obj = up_ho, 5)
-    up_g <- ggroup(horizontal = FALSE, container = up_ho, expand = TRUE)
-    addSpace(obj = up_g, 5)
-    up_fra <- gframe(container = up_g, horizontal = FALSE, expand = TRUE)
-    addSpace(obj = up_fra, 15)
-    dbs_g <- ggroup(horizontal = TRUE, container = up_fra)
-    addSpace(obj = dbs_g, 10)
-    pathLab <- glabel(text = paste0("Loaded DB:\t\t", unlist(strsplit(tmpVMSfiles, "/"))[length(unlist(strsplit(tmpVMSfiles, "/")))]), container = dbs_g)
-    addSpace(obj = up_fra, 30)
-    met_g <- ggroup(horizontal = TRUE, container = up_fra)
-    addSpace(obj = met_g, 10)
-    glabel("Select Metier:\t", container = met_g)
-    addSpace(obj = met_g, 10)
-    metLab <- gcombobox(items = avaMet, container = met_g, expand = TRUE)
-    addSpace(obj = met_g, 10)
-    addSpace(obj = up_fra, 15)
-    onBox_g <- ggroup(horizontal = TRUE, container = up_fra)
-    addSpace(obj = onBox_g, 10)
-    glabel("% on grid:\t", container = onBox_g)
-    perOn_sli <- gslider(from = 0, to = 100, by = 1,
-                         value = 90, container = onBox_g)
-    addSpace(obj = onBox_g, 10)
-    addSpace(obj = up_fra, 10)
-    
-    addSpace(obj = up_g, 5)
-    gbutton(text = "Run Query", container = up_g, handler = function(...){
-      enabled(temp_dia) <- FALSE
+    tryCatch(expr = {
+      tmpVMSfiles <- gfile(text = "Select Effort DBs", type = "open",
+                           initial.filename = NULL, initial.dir = getwd(), filter = list(),
+                           multi = TRUE)
+      svalue(stat_bar) <- "Loading effort from vmsbase db..."
       Sys.sleep(1)
-      my_project$loadFleeEffoDbs(effort_path = tmpVMSfiles, met_nam = svalue(metLab), onBox = TRUE, perOnBox = svalue(perOn_sli))
-      cat("\n\n---\tExtraction completed!\t---\n")
-      my_project$fleet$setEffortIds()
+      avaMet <- sqldf("select distinct met_des from nn_clas", dbname = tmpVMSfiles)[,1]
       
+      temp_dia <- gwindow(title="Load vmsbase DB data", visible = FALSE,
+                          # parent = main_win,
+                          width = 400, height = 200)
+      up_ho <- ggroup(horizontal = TRUE, container = temp_dia)
+      addSpace(obj = up_ho, 5)
+      up_g <- ggroup(horizontal = FALSE, container = up_ho, expand = TRUE)
+      addSpace(obj = up_g, 5)
+      up_fra <- gframe(container = up_g, horizontal = FALSE, expand = TRUE)
+      addSpace(obj = up_fra, 15)
+      dbs_g <- ggroup(horizontal = TRUE, container = up_fra)
+      addSpace(obj = dbs_g, 10)
+      pathLab <- glabel(text = paste0("Loaded DB:\t\t", unlist(strsplit(tmpVMSfiles, "/"))[length(unlist(strsplit(tmpVMSfiles, "/")))]), container = dbs_g)
+      addSpace(obj = up_fra, 30)
+      met_g <- ggroup(horizontal = TRUE, container = up_fra)
+      addSpace(obj = met_g, 10)
+      glabel("Select Metier:\t", container = met_g)
+      addSpace(obj = met_g, 10)
+      metLab <- gcombobox(items = avaMet, container = met_g, expand = TRUE)
+      addSpace(obj = met_g, 10)
+      addSpace(obj = up_fra, 15)
+      onBox_g <- ggroup(horizontal = TRUE, container = up_fra)
+      addSpace(obj = onBox_g, 10)
+      glabel("% on grid:\t", container = onBox_g)
+      perOn_sli <- gslider(from = 0, to = 100, by = 1,
+                           value = 90, container = onBox_g)
+      addSpace(obj = onBox_g, 10)
+      addSpace(obj = up_fra, 10)
+      addSpace(obj = up_g, 5)
+      gbutton(text = "Run Query", container = up_g, handler = function(...){
+        enabled(temp_dia) <- FALSE
+        Sys.sleep(1)
+        my_project$loadFleeEffoDbs(effort_path = tmpVMSfiles, met_nam = svalue(metLab), onBox = TRUE, perOnBox = svalue(perOn_sli))
+        cat("\n\n---\tExtraction completed!\t---\n")
+        my_project$fleet$setEffortIds()
+        svalue(stat_bar) <- ""
+        effvie_drop[] <- names(my_project$fleet$rawEffort)
+        svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
+        dev.set(dev.list()[pre_dev+3])
+        svalue(stat_bar) <- "Plotting Count of disinct vessels..."
+        Sys.sleep(1)
+        my_project$fleet$plotCountIDsEffo()
+        delete(effo_g, effo_g$children[[length(effo_g$children)]])
+        add(effo_g, effo_sta_n)
+        delete(eff_g_top1, eff_g_top1$children[[length(eff_g_top1$children)]])
+        add(eff_g_top1, eff1_sta_n)
+        dispose(temp_dia)
+      })
+      addSpace(obj = up_g, 5)
+      addSpace(obj = up_ho, 5)
+      visible(temp_dia) <- TRUE
+    },
+    error = function(error_message){
+      message("An error has occurred!")
+      message(error_message)
+    },
+    finally = {
+      enabled(eff_g_top) <- TRUE
       svalue(stat_bar) <- ""
-      
+    })
+  })
+  addSpace(eff_g_top1, 10)
+  gbutton("from rData", container = eff_g_top1, handler = function(h,...){
+    enabled(eff_g_top) <- FALSE
+    tryCatch(expr = {
+      tmpVMSfile <- gfile(text = "Select Effort rData", type = "open",
+                          initial.filename = NULL, initial.dir = getwd(), filter = list(),
+                          multi = TRUE)
+      cat("\nLoading effort from rData...", sep = "")
+      svalue(stat_bar) <- "Loading effort from rData..."
+      Sys.sleep(1)
+      my_project$fleet$rawEffort <- readRDS(tmpVMSfile)
+      my_project$fleet$setEffortIds()
+      svalue(stat_bar) <- ""
       effvie_drop[] <- names(my_project$fleet$rawEffort)
       svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
       dev.set(dev.list()[pre_dev+3])
-      
-      svalue(stat_bar) <- "Plotting Count of disinct vessels..."
-      Sys.sleep(1)
-      my_project$fleet$plotCountIDsEffo()
-      svalue(stat_bar) <- ""
-      
-      enabled(eff_g_top) <- TRUE
+      svalue(stat_bar) <- "Plotting raw points..."
+      my_project$ggplotRawPoints(svalue(effvie_drop))
       
       ### Update Effort Status
       effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
       delete(effo_g, effo_g$children[[length(effo_g$children)]])
       add(effo_g, effo_sta_n)
-      
-      dispose(temp_dia)
-    })
-    addSpace(obj = up_g, 5)
-    addSpace(obj = up_ho, 5)
-    visible(temp_dia) <- TRUE
-  })
-  addSpring(eff_g_top1)
-  gbutton("View Stats", container = eff_g_top1, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+3])
-    
-    enabled(eff_g_top) <- FALSE
-    
-    svalue(stat_bar) <- "Plotting Count of disinct vessels..."
-    Sys.sleep(1)
-    my_project$fleet$plotCountIDsEffo()
-    svalue(stat_bar) <- ""
-    
-    enabled(eff_g_top) <- TRUE
-    
-  })
-  addSpring(eff_g_top1)
-  
-  addSpring(eff_g_top)
-  
-  eff_g_top1b <- ggroup(horizontal = FALSE, container = eff_g_top)
-  addSpring(eff_g_top1b)
-  gbutton("Set Fishing Points", container = eff_g_top1b, handler = function(h,...){
-    svalue(stat_bar) <- "Setting parameters..."
-    
-    enabled(eff_g_top) <- FALSE
-    
-    temp_dia <- gwindow(title="Set Fishing Points", visible = FALSE,
-                        width = 650, height = 450, parent = main_win)
-    
-    up_g <- ggroup(horizontal = FALSE, container = temp_dia)
-    up_fra <- gframe(container = up_g, horizontal = TRUE)
-    addSpring(up_fra)
-    spe_fra <- gframe(text = "Speed Range", container = up_fra, horizontal = TRUE)
-    spe_lay <- glayout(homogeneous = FALSE, spacing = 10, container = spe_fra)
-    spe_lay[1,1, anchor = 0] <- "Min"
-    spe_lay[2,1, anchor = 0] <- "Max"
-    spe_lay[1,2, anchor = 0] <- gspinbutton(from = 0, to = 30, by = 1, value = 0, container = spe_lay,
-                                            handler = function(...){
-                                              my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
-                                                                              speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
-                                                                              depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
-                                            })
-    spe_lay[2,2, anchor = 0] <- gspinbutton(from = 0, to = 30, by = 1, value = 10, container = spe_lay,
-                                            handler = function(...){
-                                              my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
-                                                                              speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
-                                                                              depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
-                                            })
-    addSpring(up_fra)
-    dep_fra <- gframe(text = "Depth Range", container = up_fra, horizontal = TRUE)
-    dep_lay <- glayout(homogeneous = FALSE, spacing = 10, container = dep_fra)
-    dep_lay[1,1, anchor = 0] <- "Min"
-    dep_lay[2,1, anchor = 0] <- "Max"
-    dep_lay[1,2, anchor = 0] <- gspinbutton(from = -5000, to = 0, by = 10, value = -500, container = dep_lay,
-                                            handler = function(...){
-                                              my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
-                                                                              speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
-                                                                              depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
-                                            })
-    dep_lay[2,2, anchor = 0] <- gspinbutton(from = -5000, to = 0, by = 10, value = 0, container = dep_lay,
-                                            handler = function(...){
-                                              my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
-                                                                              speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
-                                                                              depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
-                                            })
-    addSpring(up_fra)
-    yea_fra <- gframe(text = "Year View", container = up_fra, horizontal = TRUE)
-    yea_drop <- gcombobox(names(my_project$fleet$rawEffort), selected = 1,
-                          editable = FALSE, container = yea_fra, expand = TRUE,
-                          handler = function(...){
-                            my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
-                                                            speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
-                                                            depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
-                          })
-    addSpring(up_fra)
-    gbutton(text = "\n   Set!   \n", container = up_fra, handler = function(...){
-      enabled(up_fra) <- FALSE
-      
-      plot(NULL, xlim = c(0,5), ylim = c(0,1), axes = FALSE, xlab = "", ylab = "")
-      
-      my_project$fleet$setFishPoinPara(speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
-                                       depth_range = sort(unlist(lapply(dep_lay[1:2,2], svalue)), decreasing = TRUE))
-      
-      svalue(stat_bar) <- "Setting fishing points..."
-      points(1,0, pch = 19, col = "grey20")
-      text(1,0, labels = "Parameters", pos = 3, col = "grey20", srt = 45, offset = 1.5)
-      svalue(int_progBar) <- 10
-      Sys.sleep(1)
-      
-      my_project$fleet$setFishPoin()
-      
-      points(2,0, pch = 19, col = "grey20")
-      text(2,0, labels = "Fishing Points", pos = 3, col = "grey20", srt = 45, offset = 1.5)
+      delete(eff_g_top1, eff_g_top1$children[[length(eff_g_top1$children)]])
+      add(eff_g_top1, eff1_sta_n)
+    },
+    error = function(error_message){
+      message("An error has occurred!")
+      message(error_message)
+    },
+    finally = {
+      enabled(eff_g_top) <- TRUE
       svalue(stat_bar) <- ""
-      svalue(int_progBar) <- 30
-      Sys.sleep(1)
-      svalue(stat_bar) <- "Setting fishing point cells..."
-      Sys.sleep(1)
-      
-      my_project$setCellPoin()
-      
-      points(3,0, pch = 19, col = "grey20")
-      text(3,0, labels = "Cell Assign", pos = 3, col = "grey20", srt = 45, offset = 1.5)
-      svalue(stat_bar) <- "Adding week and month number to dataset..."
-      svalue(int_progBar) <- 60
-      Sys.sleep(1)
-      
-      my_project$fleet$setWeekMonthNum()
-      
-      points(4,0, pch = 19, col = "grey20")
-      text(4,0, labels = "Week/Month\nAppend", pos = 3, col = "grey20", srt = 45, offset = 1.5)
-      svalue(stat_bar) <- ""
-      svalue(int_progBar) <- 90
-      Sys.sleep(1)
-      svalue(stat_bar) <- "Completed!"
-      svalue(int_progBar) <- 100
-      Sys.sleep(1)
-      if(gconfirm("Fishing point selection completed!\nClose window?", title = "Confirm", icon = "question", parent = temp_dia)){
-        
-        enabled(eff_g_top) <- TRUE
-        
-        dispose(temp_dia)
-      }else{
-        enabled(up_fra) <- TRUE
-        
-        enabled(eff_g_top) <- TRUE
-      }
     })
-    addSpring(up_fra)
-    fipo_gra <- ggraphics(width = 600, height = 400, container = up_g, expand = TRUE)
-    
-    bot_progStat <- ggroup(container = up_g, horizontal = TRUE)
-    
-    addSpring(bot_progStat)
-    int_progBar <- gprogressbar(value = 0, container = bot_progStat)
-    addSpring(bot_progStat)
-    
-    visible(temp_dia) <- TRUE
-    
-    my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
-                                    speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
-                                    depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
   })
-  
-  addSpring(eff_g_top1b)
-  
-  gbutton("View Stats", container = eff_g_top1b, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+3])
-    svalue(stat_bar) <- "Plotting fishing points data summary..."
-    
+  addSpace(eff_g_top1, 10)
+  gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = eff_g_top1, handler = function(h,...){
     enabled(eff_g_top) <- FALSE
-    
-    Sys.sleep(1)
-    my_project$fleet$plotFishPoinStat()
-    svalue(stat_bar) <- ""
-    
-    enabled(eff_g_top) <- TRUE
-    
+    tryCatch(expr = {
+      dev.set(dev.list()[pre_dev+3])
+      svalue(stat_bar) <- "Plotting Count of disinct vessels..."
+      Sys.sleep(1)
+      my_project$fleet$plotCountIDsEffo()
+    },
+    error = function(error_message){
+      message("An error has occurred!")
+      message(error_message)
+    },
+    finally = {
+      enabled(eff_g_top) <- TRUE
+      svalue(stat_bar) <- ""
+    })
   })
-  # addSpring(eff_g_top1b)
-  addSpring(eff_g_top1b)
+  addSpace(eff_g_top1, 10)
+  add(eff_g_top1, eff1_sta)
+  addSpring(eff_g_top)
+  
+  eff_g_top1b <- gframe(text = "Fishing Point", horizontal = TRUE, container = eff_g_top)
+  addSpace(eff_g_top1b, 10)
+  gbutton("Set", container = eff_g_top1b, handler = function(h,...){
+    enabled(eff_g_top) <- FALSE
+    tryCatch(expr = {
+      svalue(stat_bar) <- "Setting parameters..."
+      temp_dia <- gwindow(title="Set Fishing Points", visible = FALSE,
+                          width = 650, height = 450, parent = main_win)
+      up_g <- ggroup(horizontal = FALSE, container = temp_dia)
+      up_fra <- gframe(container = up_g, horizontal = TRUE)
+      addSpring(up_fra)
+      spe_fra <- gframe(text = "Speed Range", container = up_fra, horizontal = TRUE)
+      spe_lay <- glayout(homogeneous = FALSE, spacing = 10, container = spe_fra)
+      spe_lay[1,1, anchor = 0] <- "Min"
+      spe_lay[2,1, anchor = 0] <- "Max"
+      spe_lay[1,2, anchor = 0] <- gspinbutton(from = 0, to = 30, by = 1, value = 0, container = spe_lay,
+                                              handler = function(...){
+                                                my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
+                                                                                speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
+                                                                                depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
+                                              })
+      spe_lay[2,2, anchor = 0] <- gspinbutton(from = 0, to = 30, by = 1, value = 10, container = spe_lay,
+                                              handler = function(...){
+                                                my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
+                                                                                speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
+                                                                                depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
+                                              })
+      addSpring(up_fra)
+      dep_fra <- gframe(text = "Depth Range", container = up_fra, horizontal = TRUE)
+      dep_lay <- glayout(homogeneous = FALSE, spacing = 10, container = dep_fra)
+      dep_lay[1,1, anchor = 0] <- "Min"
+      dep_lay[2,1, anchor = 0] <- "Max"
+      dep_lay[1,2, anchor = 0] <- gspinbutton(from = -5000, to = 0, by = 10, value = -500, container = dep_lay,
+                                              handler = function(...){
+                                                my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
+                                                                                speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
+                                                                                depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
+                                              })
+      dep_lay[2,2, anchor = 0] <- gspinbutton(from = -5000, to = 0, by = 10, value = 0, container = dep_lay,
+                                              handler = function(...){
+                                                my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
+                                                                                speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
+                                                                                depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
+                                              })
+      addSpring(up_fra)
+      yea_fra <- gframe(text = "Year View", container = up_fra, horizontal = TRUE)
+      yea_drop <- gcombobox(names(my_project$fleet$rawEffort), selected = 1,
+                            editable = FALSE, container = yea_fra, expand = TRUE,
+                            handler = function(...){
+                              my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
+                                                              speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
+                                                              depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
+                            })
+      addSpring(up_fra)
+      gbutton(text = "\n   Set!   \n", container = up_fra, handler = function(...){
+        enabled(up_fra) <- FALSE
+        plot(NULL, xlim = c(0,5), ylim = c(0,1), axes = FALSE, xlab = "", ylab = "")
+        my_project$fleet$setFishPoinPara(speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
+                                         depth_range = sort(unlist(lapply(dep_lay[1:2,2], svalue)), decreasing = TRUE))
+        
+        svalue(stat_bar) <- "Setting fishing points..."
+        points(1,0, pch = 19, col = "grey20")
+        text(1,0, labels = "Parameters", pos = 3, col = "grey20", srt = 45, offset = 1.5)
+        svalue(int_progBar) <- 10
+        Sys.sleep(1)
+        my_project$fleet$setFishPoin()
+        points(2,0, pch = 19, col = "grey20")
+        text(2,0, labels = "Fishing Points", pos = 3, col = "grey20", srt = 45, offset = 1.5)
+        svalue(stat_bar) <- ""
+        svalue(int_progBar) <- 30
+        Sys.sleep(1)
+        svalue(stat_bar) <- "Setting fishing point cells..."
+        Sys.sleep(1)
+        my_project$setCellPoin()
+        points(3,0, pch = 19, col = "grey20")
+        text(3,0, labels = "Cell Assign", pos = 3, col = "grey20", srt = 45, offset = 1.5)
+        svalue(stat_bar) <- "Adding week and month number to dataset..."
+        svalue(int_progBar) <- 60
+        Sys.sleep(1)
+        my_project$fleet$setWeekMonthNum()
+        points(4,0, pch = 19, col = "grey20")
+        text(4,0, labels = "Week/Month\nAppend", pos = 3, col = "grey20", srt = 45, offset = 1.5)
+        svalue(stat_bar) <- ""
+        svalue(int_progBar) <- 90
+        Sys.sleep(1)
+        svalue(stat_bar) <- "Completed!"
+        svalue(int_progBar) <- 100
+        Sys.sleep(1)
+        delete(eff_g_top1b, eff_g_top1b$children[[length(eff_g_top1b$children)]])
+        add(eff_g_top1b, eff2_sta_n)
+        if(gconfirm("Fishing point selection completed!\nClose window?", title = "Confirm", icon = "question", parent = temp_dia)){
+          dispose(temp_dia)
+        }else{
+          enabled(up_fra) <- TRUE
+        }
+      })
+      addSpring(up_fra)
+      fipo_gra <- ggraphics(width = 600, height = 400, container = up_g, expand = TRUE)
+      bot_progStat <- ggroup(container = up_g, horizontal = TRUE)
+      addSpring(bot_progStat)
+      int_progBar <- gprogressbar(value = 0, container = bot_progStat)
+      addSpring(bot_progStat)
+      visible(temp_dia) <- TRUE
+      my_project$fleet$plotSpeedDepth(which_year = svalue(yea_drop),
+                                      speed_range = unlist(lapply(spe_lay[1:2,2], svalue)),
+                                      depth_range = unlist(lapply(dep_lay[1:2,2], svalue)))
+    },
+    error = function(error_message){
+      message("An error has occurred!")
+      message(error_message)
+    },
+    finally = {
+      enabled(eff_g_top) <- TRUE
+      svalue(stat_bar) <- ""
+    })
+  })
+  addSpace(eff_g_top1b, 10)
+  gimage(system.file("ico/view-refresh-5.ico", package="smartR"), container = eff_g_top1b, handler = function(h,...){
+    enabled(eff_g_top) <- FALSE
+    tryCatch(expr = {
+      dev.set(dev.list()[pre_dev+3])
+      svalue(stat_bar) <- "Plotting fishing points data summary..."
+      Sys.sleep(1)
+      my_project$fleet$plotFishPoinStat()
+    },
+    error = function(error_message){
+      message("An error has occurred!")
+      message(error_message)
+    },
+    finally = {
+      enabled(eff_g_top) <- TRUE
+      svalue(stat_bar) <- ""
+    })
+  })
+  addSpace(eff_g_top1b, 10)
+  add(eff_g_top1b, eff2_sta)
   
   addSpring(eff_g_top)
   
-  eff_g_top_IO <- ggroup(horizontal = FALSE, container = eff_g_top)
-  addSpring(eff_g_top_IO)
-  gbutton("Load AA data", container = eff_g_top_IO, handler = function(h,...){
-    svalue(stat_bar) <- "Loading AA data..."
-    
-    tmpEffofiles <- gfile(text = "Select AA effort data", type = "open",
-                          initial.filename = NULL, initial.dir = getwd(), filter = list(),
-                          multi = TRUE)
-    
-    enabled(eff_g_top) <- FALSE
-    
-    Sys.sleep(1)
-    
-    cat("\nLoading effort from AA data...", sep = "")
-    svalue(stat_bar) <- "Loading effort from AA data..."
-    Sys.sleep(1)
-    
-    my_project$fleet$rawEffort <- readRDS(tmpEffofiles)
-    my_project$fleet$setEffortIds()
-    
-    effvie_drop[] <- names(my_project$fleet$rawEffort)
-    svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
-    dev.set(dev.list()[pre_dev+3])
-    
-    my_project$ggplotGridEffort(names(my_project$fleet$rawEffort)[1])
-    
-    svalue(stat_bar) <- ""
-    
-    enabled(eff_g_top) <- TRUE
-    
-  })
-  addSpring(eff_g_top_IO)
-  gbutton("Save AA data", container = eff_g_top_IO, handler = function(h,...){
-    svalue(stat_bar) <- "Saving AA data..."
-    Sys.sleep(1)
-    
-    enabled(eff_g_top) <- FALSE
-    
-    tmpOutAAfiles <- gfile(text = "Select AA effort data", type = "save",
-                           initial.filename = NULL, initial.dir = getwd(), filter = list(),
-                           multi = TRUE)
-    
-    cat("\nSaving AA effort to rData...", sep = "")
-    svalue(stat_bar) <- "Saving AA effort to rData..."
-    Sys.sleep(1)
-    
-    saveRDS(my_project$fleet$rawEffort, tmpOutAAfiles)
-    
-    svalue(stat_bar) <- ""
-    
-    enabled(eff_g_top) <- TRUE
-    
-  })
-  addSpring(eff_g_top_IO)
-  
-  addSpring(eff_g_top)
-  
-  eff_g_top2 <- gframe(text = "View", horizontal = TRUE, container = eff_g_top, expand = TRUE)
-  addSpring(eff_g_top2)
+  eff_g_top2 <- gframe(text = "View Points", horizontal = TRUE, container = eff_g_top, expand = TRUE)
+  addSpace(eff_g_top2, 10)
   effvie_drop <- gcombobox(items = "Year", selected = 1, container = eff_g_top2, expand = TRUE, editable = FALSE)
-  addSpring(eff_g_top2)
-  
-  eff_g_top2_ver <- ggroup(horizontal = FALSE, container = eff_g_top2)
-  addSpring(eff_g_top2_ver)
-  gbutton("Raw Points", container = eff_g_top2_ver, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+3])
-    svalue(stat_bar) <- "Plotting raw points..."
-    
+  addSpace(eff_g_top2, 20)
+  gbutton("Raw", container = eff_g_top2, handler = function(h,...){
     enabled(eff_g_top) <- FALSE
-    
-    Sys.sleep(1)
-    my_project$ggplotRawPoints(svalue(effvie_drop))
-    svalue(stat_bar) <- ""
-    
-    enabled(eff_g_top) <- TRUE
-    
+    tryCatch(expr = {
+      dev.set(dev.list()[pre_dev+3])
+      svalue(stat_bar) <- "Plotting raw points..."
+      Sys.sleep(1)
+      my_project$ggplotRawPoints(svalue(effvie_drop))
+    },
+    error = function(error_message){
+      message("An error has occurred!")
+      message(error_message)
+    },
+    finally = {
+      enabled(eff_g_top) <- TRUE
+      svalue(stat_bar) <- ""
+    })
   })
-  addSpring(eff_g_top2_ver)
-  gbutton("Fishing Points", container = eff_g_top2_ver, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+3])
-    svalue(stat_bar) <- "Plotting fishing points..."
-    
+  addSpace(eff_g_top2, 5)
+  gbutton("Fishing", container = eff_g_top2, handler = function(h,...){
     enabled(eff_g_top) <- FALSE
-    
-    Sys.sleep(1)
-    my_project$ggplotFishingPoints(svalue(effvie_drop))
-    svalue(stat_bar) <- ""
-    
-    enabled(eff_g_top) <- TRUE
-    
+    tryCatch(expr = {
+      dev.set(dev.list()[pre_dev+3])
+      svalue(stat_bar) <- "Plotting fishing points..."
+      Sys.sleep(1)
+      my_project$ggplotFishingPoints(svalue(effvie_drop))
+    },
+    error = function(error_message){
+      message("An error has occurred!")
+      message(error_message)
+    },
+    finally = {
+      enabled(eff_g_top) <- TRUE
+      svalue(stat_bar) <- ""
+    })
   })
-  addSpring(eff_g_top2_ver)
-  gbutton("Gridded Points", container = eff_g_top2_ver, handler = function(h,...){
-    dev.set(dev.list()[pre_dev+3])
-    svalue(stat_bar) <- "Plotting gridded points..."
-    
+  addSpace(eff_g_top2, 5)
+  gbutton("Gridded", container = eff_g_top2, handler = function(h,...){
     enabled(eff_g_top) <- FALSE
-    
-    Sys.sleep(1)
-    my_project$ggplotGridEffort(svalue(effvie_drop))
-    svalue(stat_bar) <- ""
-    
-    enabled(eff_g_top) <- TRUE
-    
+    tryCatch(expr = {
+      dev.set(dev.list()[pre_dev+3])
+      svalue(stat_bar) <- "Plotting gridded points..."
+      Sys.sleep(1)
+      my_project$ggplotGridEffort(svalue(effvie_drop))
+    },
+    error = function(error_message){
+      message("An error has occurred!")
+      message(error_message)
+    },
+    finally = {
+      enabled(eff_g_top) <- TRUE
+      svalue(stat_bar) <- ""
+    })
   })
-  addSpring(eff_g_top2_ver)
-  addSpring(eff_g_top2)
-  # addSpring(eff_g_top1c)
+  addSpace(eff_g_top2, 10)
   addSpring(eff_g_top)
+  
+  eff_g_top3 <- gframe(text = "Effort Asset", horizontal = TRUE, container = eff_g_top)
+  addSpace(eff_g_top3, 10)
+  gbutton("Export", container = eff_g_top3, handler = function(h,...){
+    enabled(eff_g_top) <- FALSE
+    tryCatch(expr = {
+      Sys.sleep(1)
+      cat("\nSaving Effort Asset to rData...", sep = "")
+      tmpOutEffFiles <- gfile(text = "Select output data name", type = "save",
+                              initial.filename = "Smart_EffAsset_List.RDS",
+                              initial.dir = my_project$sampMap$gridPath)
+      svalue(stat_bar) <- "Saving..."
+      if(rev(unlist(strsplit(tmpOutEffFiles, "[.]")))[1] != "RDS"){
+        tmpOutEffFiles <- paste(tmpOutEffFiles, ".RDS", sep = "")
+      }
+      Sys.sleep(1)
+      saveRDS(my_project$sampMap$rawEffort, tmpOutEffFiles)
+    },
+    error = function(error_message){
+      message("An error has occurred!")
+      message(error_message)
+    },
+    finally = {
+      enabled(eff_g_top) <- TRUE
+      svalue(stat_bar) <- ""
+    })
+  })
+  addSpace(eff_g_top3, 5)
+  gbutton("Import", container = eff_g_top3, handler = function(h,...){
+    enabled(eff_g_top) <- FALSE
+    tryCatch(expr = {
+      Sys.sleep(1)
+      tmpInEffFiles <- gfile(text = "Select Effort Asset file", type = "open",
+                             initial.filename = NULL, initial.dir = getwd())
+      svalue(stat_bar) <- "Loading..."
+      Sys.sleep(1)
+      my_project$fleet$rawEffort <- readRDS(tmpEffofiles)
+      my_project$fleet$setEffortIds()
+      effvie_drop[] <- names(my_project$fleet$rawEffort)
+      svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
+      dev.set(dev.list()[pre_dev+3])
+      my_project$ggplotGridEffort(names(my_project$fleet$rawEffort)[1])
+      delete(effo_g, effo_g$children[[length(effo_g$children)]])
+      add(effo_g, effo_sta_n)
+    },
+    error = function(error_message){
+      message("An error has occurred!")
+      message(error_message)
+    },
+    finally = {
+      enabled(eff_g_top) <- TRUE
+      svalue(stat_bar) <- ""
+    })
+  })
+  addSpace(eff_g_top3, 10)
+  addSpace(eff_g_top, 10)
+  
   eff_p <- ggraphics(container = eff_g, width = 550, height = 250, expand = TRUE)
   
   
