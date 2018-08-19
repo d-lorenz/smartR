@@ -817,7 +817,7 @@ smart_gui <- function(){
         tmpOutEffFiles <- paste(tmpOutEffFiles, ".RDS", sep = "")
       }
       Sys.sleep(1)
-      saveRDS(my_project$sampMap$rawEffort, tmpOutEffFiles)
+      saveRDS(my_project$fleet$rawEffort, tmpOutEffFiles)
     },
     error = function(error_message){
       message("An error has occurred!")
