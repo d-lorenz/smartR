@@ -568,7 +568,6 @@ smart_gui <- function(){
       my_project$ggplotRawPoints(svalue(effvie_drop))
       
       ### Update Effort Status
-      effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
       delete(effo_g, effo_g$children[[length(effo_g$children)]])
       add(effo_g, effo_sta_n)
       delete(eff_g_top1, eff_g_top1$children[[length(eff_g_top1$children)]])
@@ -839,12 +838,18 @@ smart_gui <- function(){
                              initial.filename = NULL, initial.dir = getwd())
       svalue(stat_bar) <- "Loading..."
       Sys.sleep(1)
-      my_project$fleet$rawEffort <- readRDS(tmpEffofiles)
+      my_project$fleet$rawEffort <- readRDS(tmpInEffFiles)
       my_project$fleet$setEffortIds()
       effvie_drop[] <- names(my_project$fleet$rawEffort)
       svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
       dev.set(dev.list()[pre_dev+3])
       my_project$ggplotGridEffort(names(my_project$fleet$rawEffort)[1])
+      delete(effo_g, effo_g$children[[length(effo_g$children)]])
+      add(effo_g, effo_sta_n)
+      delete(eff_g_top1, eff_g_top1$children[[length(eff_g_top1$children)]])
+      add(eff_g_top1, eff1_sta_n)
+      delete(eff_g_top1b, eff_g_top1b$children[[length(eff_g_top1b$children)]])
+      add(eff_g_top1b, eff2_sta_n)
       delete(effo_g, effo_g$children[[length(effo_g$children)]])
       add(effo_g, effo_sta_n)
     },
