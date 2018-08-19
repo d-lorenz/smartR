@@ -1730,9 +1730,11 @@ smart_gui <- function(){
     })
     
     addSpring(pop_g_top)
+    spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
+    sex_drop[] <- names(which(lapply(my_project$surveyBySpecie[[spe_ind]]$spreDist, nrow) > 0))
+    svalue(sex_drop) <- sex_drop[1]
     
     visible(temp_dia) <- TRUE
-    spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
     
     suppressWarnings(grid.arrange(my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histLfdTot"]],
                                   my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histUtcLfd"]],
