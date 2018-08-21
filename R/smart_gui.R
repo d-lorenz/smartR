@@ -979,7 +979,7 @@ smart_gui <- function(){
       svalue(stat_bar) <- ""
     })
   })
-  addSpace(eff_g_top3, 5)
+  addSpace(fig_g_top3, 5)
   gbutton("Import", container = fig_g_top3, handler = function(h,...){
     tryCatch(expr = {
       Sys.sleep(1)
@@ -1369,7 +1369,7 @@ smart_gui <- function(){
     
     addSpring(up_fra)
     
-    gbutton(text = "Get\nLogit", container = up_fra, handler = function(...){
+    gbutton(text = " Get\nLogit", container = up_fra, handler = function(...){
       tryCatch(expr = {
         my_project$fleet$setSpecLogit(selSpecie = svalue(spe_drop),
                                       selModel = svalue(mod_radSel),
