@@ -1357,7 +1357,6 @@ smart_gui <- function(){
     addSpring(set_gru_up)
     addSpace(up_fra, 20)
     
-    # addSpring(up_fra)
     gbutton(text = " Close\nWindow", container = up_fra, handler = function(...){
       dispose(temp_dia)
     })
@@ -1390,23 +1389,16 @@ smart_gui <- function(){
   gbutton("Get NNLS", container = pro_g_top2, handler = function(h,...){
     
     
-    
     temp_dia <- gwindow(title="Get NNLS", visible = FALSE,
                         parent = main_win,
                         width = 950, height = 500)
     
     up_g <- ggroup(horizontal = FALSE, container = temp_dia, expand = TRUE)
     up_fra <- gframe(container = up_g, horizontal = TRUE, expand = TRUE)
-    # addSpring(up_fra)
     addSpace(up_fra, 20)
     spe_fra <- gframe(text = "Specie", container = up_fra, horizontal = TRUE, expand = TRUE)
     addSpring(spe_fra)
     glabel(text = svalue(spe_drop), container = spe_fra)
-    # spe_drop <- gcombobox(sort(names(my_project$fleet$specSett)[which(!unlist(lapply(my_project$fleet$specSett, is.null)))]), selected = 1,
-    #                       editable = FALSE, container = spe_fra, expand = TRUE,
-    #                       handler = function(...){
-    #
-    #                       })
     addSpring(spe_fra)
     addSpace(up_fra, 20)
     
@@ -1426,28 +1418,20 @@ smart_gui <- function(){
                                round(100*my_project$fleet$resNNLS[[svalue(spe_drop)]]$nfitted/my_project$fleet$resNNLS[[svalue(spe_drop)]]$nSce),
                                "%)\n\n",
                                sep = "")
-      # provie_drop[] <- names(my_project$fleet$effoProdMont)
-      # prospe_drop[] <- sort(names(my_project$fleet$specSett)[which(!unlist(lapply(my_project$fleet$specSett, is.null)))])
       my_project$fleet$plotNNLS(specie = svalue(spe_drop), thresR2 = svalue(thr_spin))
     })
     addSpace(up_fra, 20)
     obs_fra <- gframe(text = "Min Observations", container = up_fra, expand = TRUE, horizontal = TRUE)
     addSpace(obs_fra, 20)
     obs_spin <- gspinbutton(from = 1, to = 100,
-                            by = 1, value = 10, container = obs_fra, expand = TRUE,
-                            handler = function(...){
-                              
-                            })
+                            by = 1, value = 10, container = obs_fra, expand = TRUE)
     addSpace(up_fra, 20)
     addSpace(obs_fra, 20)
     
     thr_fra <- gframe(text = "R2 Threshold", container = up_fra, expand = TRUE, horizontal = TRUE)
     addSpace(thr_fra, 20)
     thr_spin <- gslider(from = 0, to = 1,
-                        by = 0.01, value = 0, container = thr_fra, expand = TRUE,
-                        handler = function(...){
-                          
-                        })
+                        by = 0.01, value = 0, container = thr_fra, expand = TRUE)
     addSpace(up_fra, 20)
     addSpace(thr_fra, 20)
     
@@ -1465,12 +1449,10 @@ smart_gui <- function(){
     addSpring(set_gru_up)
     addSpace(up_fra, 20)
     
-    # addSpring(up_fra)
     gbutton(text = " Close\nWindow", container = up_fra, handler = function(...){
       dispose(temp_dia)
     })
     addSpace(up_fra, 20)
-    # addSpace(up_g, 20)
     bot_g <- ggroup(horizontal = TRUE, container = up_g)
     addSpace(bot_g, 10)
     bot_lef_g <- ggroup(horizontal = FALSE, container = bot_g)
@@ -1485,7 +1467,6 @@ smart_gui <- function(){
     logi_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
     logi_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
     add(set_gru, logi_sta)
-    
   })
   addSpring(pro_g_top2)
   addSpring(pro_g_top)
@@ -1494,30 +1475,20 @@ smart_gui <- function(){
   addSpring(pro_g_topBeta)
   gbutton("Tune\nBetas", container = pro_g_topBeta, handler = function(h,...){
     
-    
-    
     temp_dia <- gwindow(title="Set Max Beta", visible = FALSE,
                         parent = main_win,
                         width = 950, height = 500)
     
     up_g <- ggroup(horizontal = FALSE, container = temp_dia, expand = TRUE)
     up_fra <- gframe(container = up_g, horizontal = TRUE, expand = TRUE)
-    # addSpring(up_fra)
     addSpace(up_fra, 20)
     spe_fra <- gframe(text = "Specie", container = up_fra, horizontal = TRUE, expand = TRUE)
     addSpring(spe_fra)
     glabel(text = svalue(spe_drop), container = spe_fra)
-    # spe_drop <- gcombobox(sort(names(my_project$fleet$specSett)[which(!unlist(lapply(my_project$fleet$specSett, is.null)))]), selected = 1,
-    #                       editable = FALSE, container = spe_fra, expand = TRUE,
-    #                       handler = function(...){
-    #
-    #                       })
     
     addSpring(spe_fra)
     addSpace(up_fra, 20)
-    
     maxb_fra <- gframe(text = "Max Beta", container = up_fra, expand = TRUE, horizontal = TRUE)
-    
     addSpace(maxb_fra, 20)
     maxb_spin <- gslider(from = 1, to = ceiling(max(my_project$fleet$betaMeltYear[[svalue(spe_drop)]]$Productivity)),
                          by = 1, value = 0, container = maxb_fra, expand = TRUE,
@@ -1531,13 +1502,10 @@ smart_gui <- function(){
     gbutton(text = "\n   Save   \n", container = up_fra, handler = function(...){
       
       my_project$fleet$betaMeltYear[[svalue(spe_drop)]]$Productivity[my_project$fleet$betaMeltYear[[svalue(spe_drop)]]$Productivity > svalue(maxb_spin)] <- svalue(maxb_spin)
-      
       svalue(set_lab) <- "Saved"
       delete(set_gru, set_gru$children[[length(set_gru$children)]])
       add(set_gru, logi_sta_n)
-      
       print(ggplot_betasBoxplot(df_YearFGprod = my_project$fleet$betaMeltYear[[svalue(spe_drop)]], int_hline = svalue(maxb_spin)))
-      
     })
     
     addSpace(up_fra, 20)
@@ -1547,25 +1515,18 @@ smart_gui <- function(){
     set_gru <- ggroup(container = set_gru_up, horizontal = TRUE)
     addSpring(set_gru_up)
     addSpace(up_fra, 20)
-    
-    # addSpring(up_fra)
     gbutton(text = " Close\nWindow", container = up_fra, handler = function(...){
       dispose(temp_dia)
     })
     addSpace(up_fra, 20)
-    # addSpace(up_g, 20)
     bot_g <- ggroup(horizontal = TRUE, container = up_g)
-    
     nnls_gra <- ggraphics(width = 300, height = 400, container = bot_g, expand = TRUE)
     visible(temp_dia) <- TRUE
     addSpace(bot_g, 10)
-    
     logi_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
     logi_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
     add(set_gru, logi_sta)
-    
     print(ggplot_betasBoxplot(df_YearFGprod = my_project$fleet$betaMeltYear[[svalue(spe_drop)]], int_hline = max(my_project$fleet$betaMeltYear[[svalue(spe_drop)]]$Productivity)))
-    
   })
   addSpring(pro_g_topBeta)
   addSpring(pro_g_top)
@@ -1591,7 +1552,6 @@ smart_gui <- function(){
   provie_drop <- gcombobox(items = "Year   ", selected = 1, container = pro_g_top2_view,
                            expand = TRUE, editable = FALSE)
   provie_drop$set_size(value = c(width = 80))
-  
   addSpring(pro_g_top2_view)
   pro_g_top2_ver <- ggroup(horizontal = FALSE, container = pro_g_top2_view)
   addSpring(pro_g_top2_ver)
@@ -1614,7 +1574,6 @@ smart_gui <- function(){
     suppressWarnings(grid.arrange(my_project$sampMap$ggProdFGmap,
                                   my_project$sampMap$ggProdFGbox,
                                   layout_matrix = rbind(c(1,1,1,2),c(1,1,1,2))))
-    
     svalue(stat_bar) <- ""
   })
   addSpring(pro_g_top2_ver)
