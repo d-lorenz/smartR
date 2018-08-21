@@ -715,6 +715,16 @@ smart_gui <- function(){
       message(error_message)
     },
     finally = {
+      tryCatch(expr = {
+        dev.set(dev.list()[pre_dev+3])
+        svalue(stat_bar) <- "Plotting fishing points data summary..."
+        Sys.sleep(1)
+        my_project$fleet$plotFishPoinStat()
+      },
+      error = function(error_message){
+        message("An error has occurred!")
+        message(error_message)
+      })
       enabled(eff_g_top) <- TRUE
       svalue(stat_bar) <- ""
     })
