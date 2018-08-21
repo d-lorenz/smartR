@@ -3393,8 +3393,14 @@ FishFleet <- R6Class("fishFleet",
                          specLogit[[selSpecie]]$logit$Roc <<- ROCR::performance(specLogit[[selSpecie]]$logit$Prediction, "tpr", "fpr")
                        },
                        setLogitConf = function(selSpecie, test){
-                         specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(as.factor(specLogit[[selSpecie]]$logit$Predict > specLogit[[selSpecie]]$logit$Cut),
+                         tryCatch(expr = {
+                         specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(factor(specLogit[[selSpecie]]$logit$Predict > specLogit[[selSpecie]]$logit$Cut, levels = c(FALSE, TRUE)),
                                                                                            test$Target)
+                         },
+                         error = function(error_message){
+                           message("An error has occurred, different categories to compute the confusion matrix")
+                           message(error_message)
+                         })
                        },
                        setSpecLogit = function(selSpecie, selModel = c("GLM", "CART", "RF", "NN")[1],
                                                cp = 0.01, cv = 2){
@@ -3405,7 +3411,7 @@ FishFleet <- R6Class("fishFleet",
                          
                          colnames(tmp_mat)[ncol(tmp_mat)] <- "Target"
                          specLogit[[selSpecie]]$Landings <<- tmp_mat$Target
-                         tmp_mat$Target <- as.factor(tmp_mat$Target > specSett[[selSpecie]]$threshold)
+                         tmp_mat$Target <- factor(tmp_mat$Target > specSett[[selSpecie]]$threshold, levels = c(FALSE, TRUE))
                          
                          split = caret::createDataPartition(y = tmp_mat$Target, p = 0.7, list = FALSE)[,1]
                          train <- tmp_mat[split,]
