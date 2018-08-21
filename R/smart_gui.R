@@ -1284,7 +1284,7 @@ smart_gui <- function(){
     addSpace(up_fra, 20)
     mod_fra <- gframe(text = "Model", container = up_fra, horizontal = TRUE, expand = TRUE)
     addSpace(mod_fra, 20)
-    mod_radSel <- gradio(items = c("GLM", "CART", "RF", "NN"),
+    mod_radSel <- gradio(items = c("GLM", "CART", "RF"),
                          selected = 1, horizontal = FALSE, container = mod_fra, handler = function(...){
                            switch(svalue(mod_radSel),
                                   GLM = {
@@ -1295,10 +1295,7 @@ smart_gui <- function(){
                                     lapply(par_modSel[c(1,3:4),2], function(x) enabled(x) <- FALSE)},
                                   RF = {
                                     lapply(list(par_modSel[3,2]), function(x) enabled(x) <- TRUE)
-                                    lapply(par_modSel[c(1:2,4),2], function(x) enabled(x) <- FALSE)},
-                                  NN = {
-                                    lapply(list(par_modSel[4,2]), function(x) enabled(x) <- TRUE)
-                                    lapply(par_modSel[1:3,2], function(x) enabled(x) <- FALSE)}
+                                    lapply(par_modSel[c(1:2,4),2], function(x) enabled(x) <- FALSE)}
                            )
                          })
     addSpace(mod_fra, 20)
@@ -1310,15 +1307,13 @@ smart_gui <- function(){
     par_modSel <- glayout(container = par_fra)
     par_modSel[1,1:2] <- "None"
     par_modSel[2,1] <- "cp"
-    par_modSel[2,2] <- gspinbutton(from = 0, to = 1, by = 0.001, value = 0.01, container = par_modSel)
+    par_modSel[2,2] <- gspinbutton(from = 0, to = 1, by = 0.001, value = 0.02, container = par_modSel)
     par_modSel[3,1] <- "CV"
-    par_modSel[3,2] <- gspinbutton(from = 2, to = 10, by = 1, value = 5, container = par_modSel)
-    par_modSel[4,1] <- "Iter"
-    par_modSel[4,2] <- gspinbutton(from = 100, to = 1000, by = 100, value = 100, container = par_modSel)
+    par_modSel[3,2] <- gspinbutton(from = 2, to = 10, by = 1, value = 2, container = par_modSel)
     
     addSpace(par_fra, 20)
     
-    lapply(par_modSel[2:4,2], function(x) enabled(x) <- FALSE)
+    lapply(par_modSel[2:3,2], function(x) enabled(x) <- FALSE)
     
     addSpring(up_fra)
     
