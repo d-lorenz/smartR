@@ -942,10 +942,8 @@ smart_gui <- function(){
   
   addSpring(fig_g_top)
   
-  gbutton("    Select\n      this\nPartitioning", container = fig_g_top, handler = function(h,...){
+  gbutton("    Select\nPartitioning", container = fig_g_top, handler = function(h,...){
     my_project$setFishGround(numCut = svalue(fg_plotCut))
-    my_project$sampMap$setCutResult(ind_clu = svalue(fg_plotCut))
-    
     suppressWarnings(grid.arrange(my_project$sampMap$ggIchFGlin,
                                   my_project$sampMap$ggSilFGlin,
                                   my_project$sampMap$ggCutFGmap,
@@ -957,7 +955,61 @@ smart_gui <- function(){
   })
   addSpring(fig_g_top)
   
-  addSpace(fig_g_top, 2)
+  fig_g_top3 <- gframe(text = "Fishing Ground Asset", horizontal = TRUE, container = fig_g_top)
+  addSpace(fig_g_top3, 10)
+  gbutton("Export", container = fig_g_top3, handler = function(h,...){
+    tryCatch(expr = {
+      Sys.sleep(1)
+      cat("\nSaving Fishing Ground Asset to rData...", sep = "")
+      tmpOutFGFiles <- gfile(text = "Select output data name", type = "save",
+                             initial.filename = "Smart_FGAsset_List.RDS",
+                             initial.dir = my_project$sampMap$gridPath)
+      svalue(stat_bar) <- "Saving..."
+      if(rev(unlist(strsplit(tmpOutFGFiles, "[.]")))[1] != "RDS"){
+        tmpOutFGFiles <- paste(tmpOutFGFiles, ".RDS", sep = "")
+      }
+      Sys.sleep(1)
+      saveRDS(my_project$sampMap$exportFG(), tmpOutFGFiles)
+    },
+    error = function(error_message){
+      message("An error has occurred!")
+      message(error_message)
+    },
+    finally = {
+      svalue(stat_bar) <- ""
+    })
+  })
+  addSpace(eff_g_top3, 5)
+  gbutton("Import", container = fig_g_top3, handler = function(h,...){
+    tryCatch(expr = {
+      Sys.sleep(1)
+      tmpInEffFiles <- gfile(text = "Select Fishing Ground Asset file", type = "open",
+                             initial.filename = NULL, initial.dir = getwd())
+      svalue(stat_bar) <- "Loading..."
+      Sys.sleep(1)
+      my_project$sampMap$importFG(readRDS(tmpInEffFiles))
+      svalue(fg_plotCut) <- my_project$sampMap$cutFG
+      my_project$setFishGround(numCut = svalue(fg_plotCut))
+      suppressWarnings(grid.arrange(my_project$sampMap$ggIchFGlin,
+                                    my_project$sampMap$ggSilFGlin,
+                                    my_project$sampMap$ggCutFGmap,
+                                    my_project$sampMap$ggEffoFGmap,
+                                    my_project$sampMap$ggDepthFGbox,
+                                    my_project$sampMap$ggEffoFGbox,
+                                    my_project$sampMap$ggBioFGmat,
+                                    layout_matrix = rbind(c(1,3,3,5,6,7),c(2,4,4,5,6,7))))
+    },
+    error = function(error_message){
+      message("An error has occurred!")
+      message(error_message)
+    },
+    finally = {
+      svalue(stat_bar) <- ""
+    })
+  })
+  addSpace(fig_g_top3, 10)
+  addSpace(fig_g_top, 10)
+  
   fisGro_p <- ggraphics(container = fig_g, width = 550, height = 250, expand = TRUE)
   
   
