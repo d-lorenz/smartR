@@ -3960,6 +3960,18 @@ SampleMap <- R6Class("sampleMap",
                          envOut$ggBioDF <- ggBioDF
                          return(envOut)
                        },
+                       exportFG = function(){
+                         fgOut <- list()
+                         fgOut$cutFG <- cutFG
+                         fgOut$rawInpu <- rawInpu
+                         fgOut$clusMat <- clusMat
+                         return(fgOut)
+                       },
+                       importFG = function(fgList){
+                         cutFG <<- fgList$cutFG
+                         rawInpu <<- fgList$rawInpu
+                         clusMat <<- fgList$clusMat
+                       },
                        setAreaGrid = function(){
                          cat("\n\nComputing Total Area... ", sep = "")
                          clipDept <- as.SpatialGridDataFrame(gridBathy)
