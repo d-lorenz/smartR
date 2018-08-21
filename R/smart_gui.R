@@ -1371,14 +1371,14 @@ smart_gui <- function(){
     
     gbutton(text = "Get\nLogit", container = up_fra, handler = function(...){
       tryCatch(expr = {
-      my_project$fleet$setSpecLogit(selSpecie = svalue(spe_drop),
-                                    selModel = svalue(mod_radSel),
-                                    cp = svalue(par_modSel[2,2]),
-                                    cv = svalue(par_modSel[3,2]))
-      my_project$fleet$plotLogitROC(selSpecie = svalue(spe_drop))
-      svalue(thr_spin) <- round(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Cut, 2)
-      svalue(tmp_txt) <- capture.output({cat("\n")
-        print(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Confusion)})
+        my_project$fleet$setSpecLogit(selSpecie = svalue(spe_drop),
+                                      selModel = svalue(mod_radSel),
+                                      cp = svalue(par_modSel[2,2]),
+                                      cv = svalue(par_modSel[3,2]))
+        my_project$fleet$plotLogitROC(selSpecie = svalue(spe_drop))
+        svalue(thr_spin) <- round(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Cut, 2)
+        svalue(tmp_txt) <- capture.output({cat("\n")
+          print(my_project$fleet$specLogit[[svalue(spe_drop)]]$logit$Confusion)})
       },
       error = function(error_message){
         message("An error has occurred, try changing model parameters")
@@ -1464,19 +1464,19 @@ smart_gui <- function(){
     gbutton(text = " Get\nNNLS", container = up_fra, handler = function(...){
       
       tryCatch(expr = {
-      if(is.null(my_project$fleet$effoProdAllLoa)) my_project$fleet$setEffoProdAllLoa()
-      my_project$getNnlsModel(specie = svalue(spe_drop), minobs = svalue(obs_spin), thr_r2 = svalue(thr_spin))
-      svalue(tmp_txt) <- paste("\n\nRaw Scenarios:\n\n\t",
-                               nrow(my_project$fleet$resNNLS[[svalue(spe_drop)]]$bmat),
-                               "\n\nWith at least ", svalue(obs_spin), " observations:\n\n\t",
-                               my_project$fleet$resNNLS[[svalue(spe_drop)]]$nSce,
-                               "\n\nFitted:\n\n\t",
-                               my_project$fleet$resNNLS[[svalue(spe_drop)]]$nfitted,
-                               "   (",
-                               round(100*my_project$fleet$resNNLS[[svalue(spe_drop)]]$nfitted/my_project$fleet$resNNLS[[svalue(spe_drop)]]$nSce),
-                               "%)\n\n",
-                               sep = "")
-      my_project$fleet$plotNNLS(specie = svalue(spe_drop), thresR2 = svalue(thr_spin))
+        if(is.null(my_project$fleet$effoProdAllLoa)) my_project$fleet$setEffoProdAllLoa()
+        my_project$getNnlsModel(specie = svalue(spe_drop), minobs = svalue(obs_spin), thr_r2 = svalue(thr_spin))
+        svalue(tmp_txt) <- paste("\n\nRaw Scenarios:\n\n\t",
+                                 nrow(my_project$fleet$resNNLS[[svalue(spe_drop)]]$bmat),
+                                 "\n\nWith at least ", svalue(obs_spin), " observations:\n\n\t",
+                                 my_project$fleet$resNNLS[[svalue(spe_drop)]]$nSce,
+                                 "\n\nFitted:\n\n\t",
+                                 my_project$fleet$resNNLS[[svalue(spe_drop)]]$nfitted,
+                                 "   (",
+                                 round(100*my_project$fleet$resNNLS[[svalue(spe_drop)]]$nfitted/my_project$fleet$resNNLS[[svalue(spe_drop)]]$nSce),
+                                 "%)\n\n",
+                                 sep = "")
+        my_project$fleet$plotNNLS(specie = svalue(spe_drop), thresR2 = svalue(thr_spin))
       },
       error = function(error_message){
         message("An error has occurred, try changing number of minimum observation")
