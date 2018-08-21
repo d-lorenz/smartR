@@ -1424,7 +1424,7 @@ smart_gui <- function(){
     obs_fra <- gframe(text = "Min Observations", container = up_fra, expand = TRUE, horizontal = TRUE)
     addSpace(obs_fra, 20)
     obs_spin <- gspinbutton(from = 1, to = 100,
-                            by = 1, value = 10, container = obs_fra, expand = TRUE)
+                            by = 1, value = 3, container = obs_fra, expand = TRUE)
     addSpace(up_fra, 20)
     addSpace(obs_fra, 20)
     
