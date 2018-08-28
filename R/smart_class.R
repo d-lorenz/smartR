@@ -3971,12 +3971,16 @@ SampleMap <- R6Class("sampleMap",
                          fgOut$cutFG <- cutFG
                          fgOut$rawInpu <- rawInpu
                          fgOut$clusMat <- clusMat
+                         fgOut$indSil <- indSil
+                         fgOut$indCH <- indCH
                          return(fgOut)
                        },
                        importFG = function(fgList){
                          cutFG <<- fgList$cutFG
                          rawInpu <<- fgList$rawInpu
                          clusMat <<- fgList$clusMat
+                         indSil <<- fgList$indSil
+                         indCH <<- fgList$indCH
                        },
                        setAreaGrid = function(){
                          cat("\n\nComputing Total Area... ", sep = "")
