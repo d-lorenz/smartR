@@ -989,7 +989,7 @@ smart_gui <- function(){
       Sys.sleep(1)
       my_project$sampMap$importFG(readRDS(tmpInEffFiles))
       svalue(fg_plotCut) <- my_project$sampMap$cutFG
-      my_project$setFishGround(numCut = svalue(fg_plotCut))
+      my_project$setFishGround(numCut = my_project$sampMap$cutFG)
       suppressWarnings(grid.arrange(my_project$sampMap$ggIchFGlin,
                                     my_project$sampMap$ggSilFGlin,
                                     my_project$sampMap$ggCutFGmap,
