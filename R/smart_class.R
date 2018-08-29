@@ -775,6 +775,7 @@ SmartProject <- R6Class("smartProject",
                           setSpreaSurvey = function(){
                             for(i in 1:length(surveyBySpecie)){
                               surveyBySpecie[[i]]$setSpreDistSing()
+                              surveyBySpecie[[i]]$setAvailSex()
                             }
                           },
                           setSpatSurvey = function(){
