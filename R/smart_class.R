@@ -2172,6 +2172,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                             LFDPop = NULL,
                             mixPar = NULL,
                             nCoho = NULL,
+                            speSex = NULL,
                             spreDist = list(),
                             sprePlot = list(),
                             spreSpat = list(),
@@ -2247,6 +2248,9 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
                                 
                                 setSprePlot(sampSex = sex)
                               }
+                            },
+                            setAvailSex = function(){
+                              speSex <<- sort(names(which(lapply(spreDist, nrow) > 0)))
                             },
                             setSprePlot = function(sampSex){
                               sprePlot[[sampSex]] <<- list(histLfdTot = set_ggHistLfdTot(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", ifelse(sampSex == "Male", "#63B8FF", "#63FFAE"))),
