@@ -1685,12 +1685,12 @@ smart_gui <- function(){
         svalue(assSpe_drop) <- my_project$specieInSurvey[1]
       }
       
-      if(!is.null(my_project$sampMap$cutResShp)){
-        my_project$addFg2Survey()
-        my_project$setSpreaSurvey()
-        my_project$setSpatSurvey()
-        my_project$sampMap$set_ggMapFgSurvey(my_project$rawDataSurvey)
-      }
+      # if(!is.null(my_project$sampMap$cutResShp)){
+      #   my_project$addFg2Survey()
+      #   my_project$setSpreaSurvey()
+      #   my_project$setSpatSurvey()
+      #   my_project$sampMap$set_ggMapFgSurvey(my_project$rawDataSurvey)
+      # }
       
       ### Update Sampling Status
       svalue(n_year_s) <- paste(length(my_project$yearInSurvey), " years", sep = "")
