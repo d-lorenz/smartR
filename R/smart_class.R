@@ -694,6 +694,14 @@ SmartProject <- R6Class("smartProject",
                             setSpecieSurvey()
                             cat(" found: ", paste(specieInSurvey, collapse = " - "), "\nSplitting Species...", sep = "")
                             splitSpecieSurvey()
+                            
+                            if(!is.null(sampMap$cutResShp)){
+                              addFg2Survey()
+                              setSpreaSurvey()
+                              setSpatSurvey()
+                              sampMap$set_ggMapFgSurvey(rawDataSurvey)
+                            }
+                            
                             cat(" completed!", sep = "")
                           },
                           loadFisheryLFD = function(csv_path) {
