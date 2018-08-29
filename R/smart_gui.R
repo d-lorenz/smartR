@@ -1948,20 +1948,22 @@ smart_gui <- function(){
     sex_drop <- gcombobox(items = c("Female", "Male", "Unsex", "All"), selected = 1, editable = FALSE, container = plofra_g, expand = TRUE, handler = function(...){
       specie_ind <- which(my_project$specieInSurvey == svalue(specie_drop))
       sex_sel <- svalue(sex_drop)
-      tmp_abus <- data.frame(Class = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Class,
-                             Stratum = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Stratum,
-                             Year = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Year)
-      if(sex_sel == "Female"){
-        tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiFem
-      }else if(sex_sel == "Male"){
-        tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiMal
-      }else if(sex_sel == "Unsex"){
-        tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiUns
-      }else if(sex_sel == "All"){
-        tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiFem + my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiMal + my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiUns
+      if(!is.null(my_project$surveyBySpecie[[specie_ind]]$abuAvg)){
+        tmp_abus <- data.frame(Class = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Class,
+                               Stratum = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Stratum,
+                               Year = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Year)
+        if(sex_sel == "Female"){
+          tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiFem
+        }else if(sex_sel == "Male"){
+          tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiMal
+        }else if(sex_sel == "Unsex"){
+          tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiUns
+        }else if(sex_sel == "All"){
+          tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiFem + my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiMal + my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiUns
+        }
+        tmp_abus$Zeros <- as.factor(tmp_abus$Index == 0)
+        print(ggplot_meditsIndex(inMedits = tmp_abus))
       }
-      tmp_abus$Zeros <- as.factor(tmp_abus$Index == 0)
-      print(ggplot_meditsIndex(inMedits = tmp_abus))
     })
     addSpace(plofra_g, 10)
     addSpring(med_g_top)
@@ -1972,7 +1974,6 @@ smart_gui <- function(){
     addSpace(med_g_top, 10)
     sex_drop[] <- my_project$surveyBySpecie[[1]]$speSex
     svalue(sex_drop) <- sex_drop[1]
-    
     visible(temp_dia) <- TRUE
   })
   
