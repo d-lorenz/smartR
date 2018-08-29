@@ -1997,13 +1997,16 @@ smart_gui <- function(){
   gbutton("Load Sample", container = fis_g_top1, handler = function(h,...){
     svalue(stat_bar) <- "Loading Data..."
     Sys.sleep(1)
-    my_project$loadFisheryLFD(csv_path = pathFishery)
+    tmpFishfiles <- gfile(text = "Select Fishery Data", type = "open",
+                          filter = list("csv files" = list(patterns = c("*.csv")),
+                                        "All files" = list(patterns = c("*"))),
+                          multi = TRUE)
+    my_project$loadFisheryLFD(csv_path = tmpFishfiles)
     
     if(!is.null(my_project$sampMap$cutResShp)){
       my_project$addFg2Fishery()
       my_project$setSpreaFishery()
       my_project$setSpatFishery()
-      
       my_project$sampMap$set_ggMapFgFishery(my_project$rawDataFishery)
     }
     
