@@ -1901,9 +1901,8 @@ smart_gui <- function(){
       my_project$setMeditsIndex()
       delete(medInd_f, medInd_f$children[[length(medInd_f$children)]])
       add(medInd_f, icoMedit_on)
-      
       specie_ind <- 1
-      sex_sel <- "Female"
+      sex_sel <- sex_drop[1]
       tmp_abus <- data.frame(Class = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Class,
                              Stratum = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Stratum,
                              Year = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Year)
