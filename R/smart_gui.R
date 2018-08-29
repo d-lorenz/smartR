@@ -1756,8 +1756,7 @@ smart_gui <- function(){
     
     addSpring(pop_g_top)
     spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
-    # sex_drop[] <- names(which(lapply(my_project$surveyBySpecie[[spe_ind]]$spreDist, nrow) > 0))
-    sex_drop[] <- my_project$surveyBySpecie[[spe_ind]]$speSex
+    sex_drop[] <- my_project$surveyBySpecie[[1]]$speSex
     svalue(sex_drop) <- sex_drop[1]
     
     visible(temp_dia) <- TRUE
@@ -1779,9 +1778,7 @@ smart_gui <- function(){
                         parent = main_win, width = 700, height = 500)
     
     pop_g <- ggroup(horizontal = FALSE, container = temp_dia)
-    
     pop_g_top <- gframe(horizontal = TRUE, container = pop_g, spacing = 10)
-    
     addSpring(pop_g_top)
     spec_b <- gframe("Specie", horizontal = FALSE, container = pop_g_top, expand = TRUE)
     
@@ -1789,6 +1786,8 @@ smart_gui <- function(){
     spec_drop <- gcombobox(items = as.character(my_project$specieInSurvey), selected = 1,
                            container = spec_b, editable = FALSE, handler = function(h,...){
                              spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
+                             sex_drop[] <- my_project$surveyBySpecie[[spe_ind]]$speSex
+                             svalue(sex_drop) <- sex_drop[1]
                              suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSurvey,
                                                            my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
                                                            my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatRelFreq"]],
@@ -1814,7 +1813,6 @@ smart_gui <- function(){
                                                                                 c(4,1,1),
                                                                                 c(NA,2,3))
                             ))
-                            
                           })
     addSpring(sex_b)
     addSpring(pop_g_top)
@@ -1825,6 +1823,8 @@ smart_gui <- function(){
     addSpring(pop_g_top)
     
     addSpace(pop_g_top, 10)
+    sex_drop[] <- my_project$surveyBySpecie[[1]]$speSex
+    svalue(sex_drop) <- sex_drop[1]
     
     pop_p <- ggraphics(container = pop_g, width = 650, height = 450, expand = TRUE)
     visible(temp_dia) <- TRUE
@@ -1920,6 +1920,8 @@ smart_gui <- function(){
     addSpace(plofra_g, 10)
     specie_drop <- gcombobox(items = my_project$specieInSurvey, selected = 1, editable = FALSE, container = plofra_g, expand = TRUE, handler = function(...){
       specie_ind <- which(my_project$specieInSurvey == svalue(specie_drop))
+      sex_drop[] <- my_project$surveyBySpecie[[specie_ind]]$speSex
+      svalue(sex_drop) <- sex_drop[1]
       sex_sel <- svalue(sex_drop)
       tmp_abus <- data.frame(Class = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Class,
                              Stratum = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Stratum,
@@ -1962,6 +1964,9 @@ smart_gui <- function(){
       dispose(temp_dia)
     })
     addSpace(med_g_top, 10)
+    sex_drop[] <- my_project$surveyBySpecie[[1]]$speSex
+    svalue(sex_drop) <- sex_drop[1]
+    
     visible(temp_dia) <- TRUE
   })
   
