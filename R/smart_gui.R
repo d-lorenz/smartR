@@ -1723,7 +1723,8 @@ smart_gui <- function(){
                            selected = 1, container = spec_b, expand = TRUE,
                            editable = FALSE, handler = function(h,...){
                              spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
-                             sex_drop[] <- names(which(lapply(my_project$surveyBySpecie[[spe_ind]]$spreDist, nrow) > 0))
+                             # sex_drop[] <- names(which(lapply(my_project$surveyBySpecie[[spe_ind]]$spreDist, nrow) > 0))
+                             sex_drop[] <- my_project$surveyBySpecie[[spe_ind]]$speSex
                              svalue(sex_drop) <- sex_drop[1]
                              suppressWarnings(grid.arrange(my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histLfdTot"]],
                                                            my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histUtcLfd"]],
@@ -1763,7 +1764,8 @@ smart_gui <- function(){
     
     addSpring(pop_g_top)
     spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
-    sex_drop[] <- names(which(lapply(my_project$surveyBySpecie[[spe_ind]]$spreDist, nrow) > 0))
+    # sex_drop[] <- names(which(lapply(my_project$surveyBySpecie[[spe_ind]]$spreDist, nrow) > 0))
+    sex_drop[] <- my_project$surveyBySpecie[[spe_ind]]$speSex
     svalue(sex_drop) <- sex_drop[1]
     
     visible(temp_dia) <- TRUE
