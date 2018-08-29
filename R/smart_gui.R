@@ -1130,7 +1130,6 @@ smart_gui <- function(){
   
   pro_g <- ggroup(horizontal = FALSE, container = uti_gn, label = "Production")
   pro_g_top <- gframe(horizontal = TRUE, container = pro_g)
-  addSpace(pro_g_top, 2)
   addSpace(pro_g_top, 40)
   pro_g_top1 <- ggroup(horizontal = FALSE, container = pro_g_top, expand = TRUE)
   addSpring(pro_g_top1)
