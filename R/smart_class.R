@@ -3415,7 +3415,7 @@ FishFleet <- R6Class("fishFleet",
                            message(error_message)
                          })
                        },
-                       setSpecLogit = function(selSpecie, selModel = c("GLM", "CART", "RF", "NN")[1],
+                       setSpecLogit = function(selSpecie, selModel = c("GLM", "CART", "RF")[1],
                                                cp = 0.01, cv = 2){
                          if(is.null(specLogit)) specLogit <<- list()
                          if(is.null(specLogit[[selSpecie]])) specLogit[[selSpecie]] <<- list()
