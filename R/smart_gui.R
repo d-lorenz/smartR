@@ -131,24 +131,10 @@ smart_gui <- function(){
   add(grid_g, grid_sta)
   
   addSpring(pro_g_mid)
-  samp_g <- gframe(text = "Survey", horizontal = FALSE, container = pro_g_mid)
-  n_year_s <- glabel("   ---", container = samp_g)
-  mi_date_s <- glabel("", container = samp_g)
-  ma_date_s <- glabel("", container = samp_g)
-  n_spec_s <- glabel("   ---", container = samp_g)
-  addSpring(samp_g)
-  samp_b <- gbutton(text = "Show data", container = samp_g, handler = function(h,..){
-    svalue(uti_gn) <- 3
-  })
-  samp_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
-  samp_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
-  add(samp_g, samp_sta)
-  
-  addSpring(pro_g_mid)
   effo_g <- gframe(text = "Effort", horizontal = FALSE, container = pro_g_mid)
   addSpring(effo_g)
   effo_b <- gbutton(text = "Show data", container = effo_g, handler = function(h,..){
-    svalue(uti_gn) <- 7
+    svalue(uti_gn) <- 3
   })
   effo_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   effo_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
@@ -158,7 +144,7 @@ smart_gui <- function(){
   figr_g <- gframe(text = "Fishing Ground", horizontal = FALSE, container = pro_g_mid)
   addSpring(figr_g)
   figr_b <- gbutton(text = "Show data", container = figr_g, handler = function(h,..){
-    svalue(uti_gn) <- 8
+    svalue(uti_gn) <- 4
   })
   figr_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   figr_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
@@ -168,7 +154,7 @@ smart_gui <- function(){
   regi_g <- gframe(text = "Register", horizontal = FALSE, container = pro_g_mid)
   addSpring(regi_g)
   regi_b <- gbutton(text = "Show data", container = regi_g, handler = function(h,..){
-    svalue(uti_gn) <- 9
+    svalue(uti_gn) <- 5
   })
   regi_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   regi_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
@@ -178,10 +164,69 @@ smart_gui <- function(){
   prod_g <- gframe(text = "Production", horizontal = FALSE, container = pro_g_mid)
   addSpring(prod_g)
   prod_b <- gbutton(text = "Show data", container = prod_g, handler = function(h,..){
-    svalue(uti_gn) <- 10
+    svalue(uti_gn) <- 6
   })
   prod_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   add(prod_g, prod_sta)
+  
+  addSpring(pro_g_mid)
+  samp_g <- gframe(text = "Survey", horizontal = FALSE, container = pro_g_mid)
+  n_year_s <- glabel("   ---", container = samp_g)
+  mi_date_s <- glabel("", container = samp_g)
+  ma_date_s <- glabel("", container = samp_g)
+  n_spec_s <- glabel("   ---", container = samp_g)
+  addSpring(samp_g)
+  samp_b <- gbutton(text = "Show data", container = samp_g, handler = function(h,..){
+    svalue(uti_gn) <- 7
+  })
+  samp_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
+  samp_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
+  add(samp_g, samp_sta)
+  
+  addSpring(pro_g_mid)
+  fish_g <- gframe(text = "Fishery", horizontal = FALSE, container = pro_g_mid)
+  n_yearF_s <- glabel("   ---", container = fish_g)
+  mi_dateF_s <- glabel("", container = fish_g)
+  ma_dateF_s <- glabel("", container = fish_g)
+  n_specF_s <- glabel("   ---", container = fish_g)
+  addSpring(fish_g)
+  fish_b <- gbutton(text = "Show data", container = fish_g, handler = function(h,..){
+    svalue(uti_gn) <- 8
+  })
+  fish_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
+  fish_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
+  add(fish_g, fish_sta)
+  
+  addSpring(pro_g_mid)
+  mixt_g <- gframe(text = "Mixture", horizontal = FALSE, container = pro_g_mid)
+  addSpring(mixt_g)
+  mixt_b <- gbutton(text = "Show data", container = mixt_g, handler = function(h,..){
+    svalue(uti_gn) <- 9
+  })
+  mixt_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
+  mixt_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
+  add(mixt_g, mixt_sta)
+  
+  addSpring(pro_g_mid)
+  simu_g <- gframe(text = "Simulation", horizontal = FALSE, container = pro_g_mid)
+  addSpring(simu_g)
+  simu_b <- gbutton(text = "Show data", container = simu_g, handler = function(h,..){
+    svalue(uti_gn) <- 10
+  })
+  simu_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
+  simu_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
+  add(simu_g, simu_sta)
+  
+  addSpring(pro_g_mid)
+  asse_g <- gframe(text = "Assessment", horizontal = FALSE, container = pro_g_mid)
+  addSpring(asse_g)
+  asse_b <- gbutton(text = "Show data", container = asse_g, handler = function(h,..){
+    svalue(uti_gn) <- 11
+  })
+  asse_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
+  asse_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
+  add(asse_g, asse_sta)
+  
   
   addSpring(pro_g_mid)
   addSpace(pro_g_mid, 2)
@@ -1770,9 +1815,7 @@ smart_gui <- function(){
                                                         c(2,2,2,4),
                                                         c(2,2,2,4))))
   })
-  
   addSpring(raw_g_top)
-  
   gbutton("Spatial Distribution", container = raw_g_top, handler = function(h,...){
     
     temp_dia <- gwindow(title="Spatial Distribution of Survey sampling", visible = FALSE,
@@ -1841,9 +1884,7 @@ smart_gui <- function(){
                                                         c(NA,2,3))
     ))
   })
-  
   addSpring(raw_g_top)
-  
   gbutton("MEDITS index", container = raw_g_top, handler = function(h,...){
     
     strataVect <- c(0, 10, 50, 100, 200, 500, 800, Inf)
@@ -1973,9 +2014,7 @@ smart_gui <- function(){
     svalue(sex_drop) <- sex_drop[1]
     visible(temp_dia) <- TRUE
   })
-  
   addSpring(raw_g_top)
-  
   raw_g_top2 <- ggroup(horizontal = FALSE, container = raw_g_top)
   raw_l1 <- glabel("Specie: ", container = raw_g_top2)
   raw_l3 <- glabel("Years: ", container = raw_g_top2)
@@ -2015,22 +2054,23 @@ smart_gui <- function(){
         assSpe_drop[] <- intersect(my_project$specieInSurvey, my_project$specieInFishery)
         svalue(assSpe_drop) <- my_project$specieInSurvey[1]
       }
+      
+      ### Update Fishery Status
+      svalue(n_yearF_s) <- paste(length(my_project$yearInFishery), " years", sep = "")
+      svalue(mi_dateF_s) <- paste("From: ", min(as.numeric(as.character(my_project$yearInFishery))), sep = "")
+      svalue(ma_dateF_s) <- paste("To: ", max(as.numeric(as.character(my_project$yearInFishery))), sep = "")
+      svalue(n_specF_s) <- paste(length(my_project$specieInFishery),
+                                ifelse(length(my_project$specieInFishery) == 1, " specie", " species"), sep = "")
+      
+      delete(fish_g, fish_g$children[[length(fish_g$children)]])
+      add(fish_g, fish_sta_n)
+      
       svalue(stat_bar) <- ""
     }
   })
   addSpring(fis_g_top1)
-  
   addSpring(fis_g_top)
-  fis_g_top2 <- ggroup(horizontal = FALSE, container = fis_g_top)
-  addSpring(fis_g_top2)
-  fis_l1 <- glabel("Specie: ", container = fis_g_top2)
-  addSpace(fis_g_top2, 2)
-  fis_l3 <- glabel("Years: ", container = fis_g_top2)
-  addSpring(fis_g_top2)
-  addSpring(fis_g_top)
-  addSpace(fis_g_top, 2)
-  
-  gbutton("Open\nLFD\nViewer", container = fis_g_top, handler = function(h,...){
+  gbutton("LFD Viewer", container = fis_g_top, handler = function(h,...){
     temp_dia <- gwindow(title="Fishery Length Frequency Distribution Viewer", visible = FALSE,
                         parent = main_win, width = 800, height = 500)
     
@@ -2093,10 +2133,8 @@ smart_gui <- function(){
                                                         c(2,2,2,4),
                                                         c(2,2,2,4))))
   })
-  
   addSpring(fis_g_top)
-  
-  gbutton("View\nSpatial\nDistribution", container = fis_g_top, handler = function(h,...){
+  gbutton("Spatial Distribution", container = fis_g_top, handler = function(h,...){
     temp_dia <- gwindow(title="Spatial Distribution of Fishery sampling", visible = FALSE,
                         parent = main_win, width = 700, height = 500)
     pop_g <- ggroup(horizontal = FALSE, container = temp_dia)
@@ -2154,25 +2192,17 @@ smart_gui <- function(){
                                                         c(NA,2,3))
     ))
   })
-  
   addSpring(fis_g_top)
   
-  gbutton("Assign FG", container = fis_g_top, handler = function(h,...){
-    if(!is.null(my_project$sampMap$cutResShp)){
-      my_project$addFg2Fishery()
-    }
-    fis_t[] <- my_project$rawDataFishery[sample(1:nrow(my_project$rawDataFishery), 100, replace = FALSE),]
-  })
+  fis_g_top2 <- ggroup(horizontal = FALSE, container = fis_g_top)
+  addSpring(fis_g_top2)
+  fis_l1 <- glabel("Specie: ", container = fis_g_top2)
+  fis_l3 <- glabel("Years: ", container = fis_g_top2)
   addSpring(fis_g_top)
+  addSpace(fis_g_top, 2)
+  addSpace(fis_g_top2, 2)
   
-  blankDF = data.frame(Specie = character(0),
-                       Lat = numeric(0),
-                       Lon = numeric(0),
-                       Date = character(0),
-                       Length = numeric(0),
-                       Female = character(0),
-                       Male = character(0),
-                       Unsex = character(0), stringsAsFactors=FALSE)
+  blankDF = data.frame(Specie = character(0), Lat = numeric(0), Lon = numeric(0), Date = character(0), Length = numeric(0), Female = character(0), Male = character(0), Unsex = character(0), stringsAsFactors=FALSE)
   fis_t <- gtable(blankDF, container = fis_g, expand = TRUE)
   
   
