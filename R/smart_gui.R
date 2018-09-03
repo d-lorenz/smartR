@@ -1761,16 +1761,8 @@ smart_gui <- function(){
                            selected = 1, container = spec_b, expand = TRUE,
                            editable = FALSE, handler = function(h,...){
                              spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
-                             # sex_drop[] <- names(which(lapply(my_project$surveyBySpecie[[spe_ind]]$spreDist, nrow) > 0))
                              sex_drop[] <- my_project$surveyBySpecie[[spe_ind]]$speSex
                              svalue(sex_drop) <- sex_drop[1]
-                             # suppressWarnings(grid.arrange(my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histLfdTot"]],
-                             #                               my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histUtcLfd"]],
-                             #                               my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histUtcTot"]],
-                             #                               my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["dotUtcSplit"]],
-                             #                               layout_matrix = rbind(c(1,1,1,3),
-                             #                                                     c(2,2,2,4),
-                             #                                                     c(2,2,2,4))))
                            })
     spec_drop$set_size(value = c(width = 150))
     addSpring(spec_b)
@@ -2086,14 +2078,8 @@ smart_gui <- function(){
                            selected = 1, container = spec_b, expand = TRUE,
                            editable = FALSE, handler = function(h,...){
                              spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
-                             svalue(sex_drop) <- "Female"
-                             suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histLfdTot"]],
-                                                           my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histUtcLfd"]],
-                                                           my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histUtcTot"]],
-                                                           my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["dotUtcSplit"]],
-                                                           layout_matrix = rbind(c(1,1,1,3),
-                                                                                 c(2,2,2,4),
-                                                                                 c(2,2,2,4))))
+                             sex_drop[] <- my_project$fisheryBySpecie[[spe_ind]]$speSex
+                             svalue(sex_drop) <- sex_drop[1]
                            })
     addSpring(spec_b)
     sex_b <- gframe("Sex", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
@@ -2124,6 +2110,8 @@ smart_gui <- function(){
     addSpring(pop_g_top)
     visible(temp_dia) <- TRUE
     spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
+    sex_drop[] <- my_project$fisheryBySpecie[[1]]$speSex
+    svalue(sex_drop) <- sex_drop[1]
     
     suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histLfdTot"]],
                                   my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histUtcLfd"]],
