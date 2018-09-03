@@ -1824,14 +1824,6 @@ smart_gui <- function(){
                              spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
                              sex_drop[] <- my_project$surveyBySpecie[[spe_ind]]$speSex
                              svalue(sex_drop) <- sex_drop[1]
-                             # suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSurvey,
-                             #                               my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
-                             #                               my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatRelFreq"]],
-                             #                               my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbbTbl"]],
-                             #                               layout_matrix = rbind(c(NA,1,1),
-                             #                                                     c(4,1,1),
-                             #                                                     c(NA,2,3))
-                             # ))
                            })
     spec_drop$set_size(value = c(width = 150))
     addSpring(spec_b)
@@ -2081,6 +2073,7 @@ smart_gui <- function(){
                              sex_drop[] <- my_project$fisheryBySpecie[[spe_ind]]$speSex
                              svalue(sex_drop) <- sex_drop[1]
                            })
+    spec_drop$set_size(value = c(width = 150))
     addSpring(spec_b)
     sex_b <- gframe("Sex", horizontal = FALSE, container = lfdfra_g, expand = TRUE)
     addSpring(lfdfra_g)
@@ -2133,15 +2126,10 @@ smart_gui <- function(){
     spec_drop <- gcombobox(items = as.character(my_project$specieInFishery), selected = 1,
                            container = spec_b, editable = FALSE, handler = function(h,...){
                              spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
-                             suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgFishery,
-                                                           my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
-                                                           my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatRelFreq"]],
-                                                           my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbbTbl"]],
-                                                           layout_matrix = rbind(c(NA,1,1),
-                                                                                 c(4,1,1),
-                                                                                 c(NA,2,3))
-                             ))
+                             sex_drop[] <- my_project$fisheryBySpecie[[spe_ind]]$speSex
+                             svalue(sex_drop) <- sex_drop[1]
                            })
+    spec_drop$set_size(value = c(width = 150))
     addSpring(spec_b)
     sex_b <- gframe("Sex", horizontal = FALSE, container = pop_g_top, expand = TRUE)
     addSpring(pop_g_top)
@@ -2167,6 +2155,9 @@ smart_gui <- function(){
     })
     addSpring(pop_g_top)
     addSpace(pop_g_top, 10)
+    sex_drop[] <- my_project$fisheryBySpecie[[1]]$speSex
+    svalue(sex_drop) <- sex_drop[1]
+    
     pop_p <- ggraphics(container = pop_g, width = 650, height = 450, expand = TRUE)
     visible(temp_dia) <- TRUE
     
