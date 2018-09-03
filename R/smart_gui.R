@@ -1705,7 +1705,7 @@ smart_gui <- function(){
   addSpring(raw_g_top1)
   addSpring(raw_g_top)
   
-  gbutton("Open\nLFD\nViewer", container = raw_g_top, handler = function(h,...){
+  gbutton("LFD Viewer", container = raw_g_top, handler = function(h,...){
     
     temp_dia <- gwindow(title="Survey Length Frequency Distribution Viewer", visible = FALSE,
                         parent = main_win, width = 800, height = 500)
@@ -1779,7 +1779,7 @@ smart_gui <- function(){
   
   addSpring(raw_g_top)
   
-  gbutton("View\nSpatial\nDistribution", container = raw_g_top, handler = function(h,...){
+  gbutton("Spatial Distribution", container = raw_g_top, handler = function(h,...){
     
     temp_dia <- gwindow(title="Spatial Distribution of Survey sampling", visible = FALSE,
                         parent = main_win, width = 700, height = 500)
@@ -1849,7 +1849,7 @@ smart_gui <- function(){
   
   addSpring(raw_g_top)
   
-  gbutton("      Get\nMEDITS index", container = raw_g_top, handler = function(h,...){
+  gbutton("MEDITS index", container = raw_g_top, handler = function(h,...){
     
     strataVect <- c(0, 10, 50, 100, 200, 500, 800, Inf)
     icoStrata_off <- gimage(system.file("ico/user-invisible.png", package="smartR"))
