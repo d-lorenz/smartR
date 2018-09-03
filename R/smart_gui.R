@@ -1725,13 +1725,13 @@ smart_gui <- function(){
                              # sex_drop[] <- names(which(lapply(my_project$surveyBySpecie[[spe_ind]]$spreDist, nrow) > 0))
                              sex_drop[] <- my_project$surveyBySpecie[[spe_ind]]$speSex
                              svalue(sex_drop) <- sex_drop[1]
-                             suppressWarnings(grid.arrange(my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histLfdTot"]],
-                                                           my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histUtcLfd"]],
-                                                           my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histUtcTot"]],
-                                                           my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["dotUtcSplit"]],
-                                                           layout_matrix = rbind(c(1,1,1,3),
-                                                                                 c(2,2,2,4),
-                                                                                 c(2,2,2,4))))
+                             # suppressWarnings(grid.arrange(my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histLfdTot"]],
+                             #                               my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histUtcLfd"]],
+                             #                               my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histUtcTot"]],
+                             #                               my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["dotUtcSplit"]],
+                             #                               layout_matrix = rbind(c(1,1,1,3),
+                             #                                                     c(2,2,2,4),
+                             #                                                     c(2,2,2,4))))
                            })
     spec_drop$set_size(value = c(width = 150))
     addSpring(spec_b)
@@ -1795,15 +1795,16 @@ smart_gui <- function(){
                              spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop))
                              sex_drop[] <- my_project$surveyBySpecie[[spe_ind]]$speSex
                              svalue(sex_drop) <- sex_drop[1]
-                             suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSurvey,
-                                                           my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
-                                                           my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatRelFreq"]],
-                                                           my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbbTbl"]],
-                                                           layout_matrix = rbind(c(NA,1,1),
-                                                                                 c(4,1,1),
-                                                                                 c(NA,2,3))
-                             ))
+                             # suppressWarnings(grid.arrange(my_project$sampMap$ggMapFgSurvey,
+                             #                               my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbsFreq"]],
+                             #                               my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatRelFreq"]],
+                             #                               my_project$surveyBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["spatAbbTbl"]],
+                             #                               layout_matrix = rbind(c(NA,1,1),
+                             #                                                     c(4,1,1),
+                             #                                                     c(NA,2,3))
+                             # ))
                            })
+    spec_drop$set_size(value = c(width = 150))
     addSpring(spec_b)
     sex_b <- gframe("Sex", horizontal = FALSE, container = pop_g_top, expand = TRUE)
     addSpring(pop_g_top)
@@ -1927,8 +1928,7 @@ smart_gui <- function(){
     specie_drop <- gcombobox(items = my_project$specieInSurvey, selected = 1, editable = FALSE, container = plofra_g, expand = TRUE, handler = function(...){
       specie_ind <- which(my_project$specieInSurvey == svalue(specie_drop))
       sex_drop[] <- my_project$surveyBySpecie[[specie_ind]]$speSex
-      svalue(sex_drop) <- sex_drop[1]
-      sex_sel <- svalue(sex_drop)
+      sex_sel <- sex_drop[1]
       tmp_abus <- data.frame(Class = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Class,
                              Stratum = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Stratum,
                              Year = my_project$surveyBySpecie[[specie_ind]]$abuAvg$Year)
@@ -1942,8 +1942,11 @@ smart_gui <- function(){
         tmp_abus$Index <- my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiFem + my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiMal + my_project$surveyBySpecie[[specie_ind]]$abuAvg$weiUns
       }
       tmp_abus$Zeros <- as.factor(tmp_abus$Index == 0)
-      print(ggplot_meditsIndex(inMedits = tmp_abus))
+      svalue(sex_drop) <- sex_drop[1]
+      
+      # print(ggplot_meditsIndex(inMedits = tmp_abus))
     })
+    specie_drop$set_size(value = c(width = 150))
     addSpace(plofra_g, 10)
     sex_drop <- gcombobox(items = c("Female", "Male", "Unsex", "All"), selected = 1, editable = FALSE, container = plofra_g, expand = TRUE, handler = function(...){
       specie_ind <- which(my_project$specieInSurvey == svalue(specie_drop))
