@@ -773,6 +773,7 @@ SmartProject <- R6Class("smartProject",
                           setSpreaFishery = function(){
                             for(i in 1:length(fisheryBySpecie)){
                               fisheryBySpecie[[i]]$setSpreDistSing()
+                              fisheryBySpecie[[i]]$setAvailSex()
                             }
                           },
                           setSpatFishery = function(){
@@ -2587,6 +2588,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                              LFDPop = NULL,
                              mixPar = NULL,
                              nCoho = NULL,
+                             speSex = NULL,
                              spreDist = list(),
                              spreSpat = list(),
                              sprePlot = list(),
@@ -2615,6 +2617,9 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
                              setNCoho = function(num_coh){nCoho <<- num_coh},
                              setLWpar = function(alphaVal, betaVal, sex){
                                LWpar[[sex]] <<- list(alpha = as.numeric(alphaVal), beta = as.numeric(betaVal))
+                             },
+                             setAvailSex = function(){
+                               speSex <<- sort(names(which(lapply(spreDist, nrow) > 0)))
                              },
                              setSprePlot = function(sampSex){
                                sprePlot[[sampSex]] <<- list(histLfdTot = set_ggHistLfdTot(spreDist[[sampSex]]) + scale_fill_manual(values = ifelse(sampSex == "Female", "#FF6A6A", ifelse(sampSex == "Male", "#63B8FF", "#63FFAE"))),
