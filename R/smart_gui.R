@@ -1684,13 +1684,6 @@ smart_gui <- function(){
         svalue(assSpe_drop) <- my_project$specieInSurvey[1]
       }
       
-      # if(!is.null(my_project$sampMap$cutResShp)){
-      #   my_project$addFg2Survey()
-      #   my_project$setSpreaSurvey()
-      #   my_project$setSpatSurvey()
-      #   my_project$sampMap$set_ggMapFgSurvey(my_project$rawDataSurvey)
-      # }
-      
       ### Update Sampling Status
       svalue(n_year_s) <- paste(length(my_project$yearInSurvey), " years", sep = "")
       svalue(mi_date_s) <- paste("From: ", min(as.numeric(as.character(my_project$yearInSurvey))), sep = "")
@@ -1700,11 +1693,12 @@ smart_gui <- function(){
       
       delete(samp_g, samp_g$children[[length(samp_g$children)]])
       add(samp_g, samp_sta_n)
+      
+      svalue(stat_bar) <- ""
     }
   })
   addSpring(raw_g_top1)
   addSpring(raw_g_top)
-  
   gbutton("LFD Viewer", container = raw_g_top, handler = function(h,...){
     
     temp_dia <- gwindow(title="Survey Length Frequency Distribution Viewer", visible = FALSE,
@@ -2009,13 +2003,6 @@ smart_gui <- function(){
                                         "All files" = list(patterns = c("*"))),
                           multi = TRUE)
     my_project$loadFisheryLFD(csv_path = tmpFishfiles)
-    
-    if(!is.null(my_project$sampMap$cutResShp)){
-      my_project$addFg2Fishery()
-      my_project$setSpreaFishery()
-      my_project$setSpatFishery()
-      my_project$sampMap$set_ggMapFgFishery(my_project$rawDataFishery)
-    }
     
     if(!is.null(my_project$rawDataFishery)){
       fis_t[] <- my_project$rawDataFishery[sample(1:nrow(my_project$rawDataFishery), 100, replace = FALSE),]

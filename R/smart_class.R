@@ -715,6 +715,14 @@ SmartProject <- R6Class("smartProject",
                             setSpecieFishery()
                             cat(" found: ", paste(specieInFishery, collapse = " - "), "\nSplitting Species...", sep = "")
                             splitSpecieFishery()
+                            
+                            if(!is.null(sampMap$cutResShp)){
+                              addFg2Fishery()
+                              setSpreaFishery()
+                              setSpatFishery()
+                              sampMap$set_ggMapFgFishery(rawDataFishery)
+                            }
+                            
                             cat(" completed!", sep = "")
                           },
                           setYearSurvey = function(){yearInSurvey <<- sort(unique(years(rawDataSurvey[,"Date"])), decreasing = FALSE)},
