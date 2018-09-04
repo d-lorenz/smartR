@@ -211,7 +211,7 @@ smart_gui <- function(){
   simu_g <- gframe(text = "Simulation", horizontal = FALSE, container = pro_g_mid)
   addSpring(simu_g)
   simu_b <- gbutton(text = "Show data", container = simu_g, handler = function(h,..){
-    svalue(uti_gn) <- 10
+    svalue(uti_gn) <- 11
   })
   simu_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   simu_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
@@ -221,7 +221,7 @@ smart_gui <- function(){
   asse_g <- gframe(text = "Assessment", horizontal = FALSE, container = pro_g_mid)
   addSpring(asse_g)
   asse_b <- gbutton(text = "Show data", container = asse_g, handler = function(h,..){
-    svalue(uti_gn) <- 11
+    svalue(uti_gn) <- 12
   })
   asse_sta <- gimage(system.file("ico/user-invisible.png", package="smartR"))
   asse_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
@@ -1206,7 +1206,7 @@ smart_gui <- function(){
     svalue(stat_bar) <- "Setting Production Matrix..."
     Sys.sleep(1)
     my_project$fleet$setProdMatr()
-    my_project$fleet$setDayEffoMatrGround()
+    my_project$fleet$setDayEffoMatrGround(maxFG = my_project$sampMap$cutFG+1)
     my_project$fleet$setEffoProdMatr()
     my_project$fleet$setEffoProdMont()
     svalue(stat_bar) <- "Setting Species..."
@@ -2002,8 +2002,7 @@ smart_gui <- function(){
   raw_g_top2 <- ggroup(horizontal = FALSE, container = raw_g_top)
   raw_l1 <- glabel("Specie: ", container = raw_g_top2)
   raw_l3 <- glabel("Years: ", container = raw_g_top2)
-  addSpring(raw_g_top)
-  addSpace(raw_g_top, 2)
+  addSpace(raw_g_top, 10)
   addSpace(raw_g_top2, 2)
   
   blankDF = data.frame(Specie = character(0), Lat = numeric(0), Lon = numeric(0), Year = character(0), Class = numeric(0), Female = character(0), Male = character(0), Unsex = character(0), stringsAsFactors=FALSE)
@@ -2101,10 +2100,11 @@ smart_gui <- function(){
       dispose(temp_dia)
     })
     addSpring(pop_g_top)
-    visible(temp_dia) <- TRUE
     spe_ind <- which(my_project$specieInFishery == svalue(spec_drop))
     sex_drop[] <- my_project$fisheryBySpecie[[1]]$speSex
     svalue(sex_drop) <- sex_drop[1]
+    
+    visible(temp_dia) <- TRUE
     
     suppressWarnings(grid.arrange(my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histLfdTot"]],
                                   my_project$fisheryBySpecie[[spe_ind]]$sprePlot[[svalue(sex_drop)]][["histUtcLfd"]],
@@ -2174,11 +2174,9 @@ smart_gui <- function(){
   addSpring(fis_g_top)
   
   fis_g_top2 <- ggroup(horizontal = FALSE, container = fis_g_top)
-  addSpring(fis_g_top2)
   fis_l1 <- glabel("Specie: ", container = fis_g_top2)
   fis_l3 <- glabel("Years: ", container = fis_g_top2)
-  addSpring(fis_g_top)
-  addSpace(fis_g_top, 2)
+  addSpace(fis_g_top, 10)
   addSpace(fis_g_top2, 2)
   
   blankDF = data.frame(Specie = character(0), Lat = numeric(0), Lon = numeric(0), Date = character(0), Length = numeric(0), Female = character(0), Male = character(0), Unsex = character(0), stringsAsFactors=FALSE)
