@@ -3299,12 +3299,13 @@ FishFleet <- R6Class("fishFleet",
                          for(i in names(effoProdMont)){
                            cat(i, "... ", sep = "")
                            prodSpec[[i]] <<- colnames(effoProdMont[[i]])[ncol(dayEffoMatr[[i]]):ncol(effoProdMont[[i]])]
-                           if(i == names(prodSpec)[1]){
-                             prodSpec[["Cross"]] <<- prodSpec[[i]]
-                           }else{
-                             prodSpec[["Cross"]] <<- intersect(prodSpec[["Cross"]], prodSpec[[i]])
-                           }
+                           # if(i == names(prodSpec)[1]){
+                           #   prodSpec[["Cross"]] <<- prodSpec[[i]]
+                           # }else{
+                           #   prodSpec[["Cross"]] <<- intersect(prodSpec[["Cross"]], prodSpec[[i]])
+                           # }
                          }
+                         prodSpec[["Cross"]] <<- sort(unique(unlist(prodSpec)))
                          setSpecSett()
                          setNNLS()
                          cat("Done!\n", sep = "")
