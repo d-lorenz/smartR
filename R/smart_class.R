@@ -4119,16 +4119,18 @@ SampleMap <- R6Class("sampleMap",
                          gridBboxSP <<- SpatialPolygons(list(polypolyext))
                        },
                        getGooMap = function(){
-                         gooMap <<- get_googlemap(center = c(lon = mean(gridPolySet$X), lat = mean(gridPolySet$Y)),
-                                                  zoom = MaxZoom(latrange = c(gridBboxExt[2], gridBboxExt[4]),
-                                                                 lonrange = c(gridBboxExt[1], gridBboxExt[3])),
-                                                  size = c(640, 640), scale = 2, format = "png8", maptype = "hybrid",
-                                                  color = "color")
+                         gooMap <<- ggplot() +
+                           borders(fill="black",colour="black",
+                                   xlim = gridBboxExt[c(1,3)],
+                                   ylim = gridBboxExt[c(2,4)]) +
+                           coord_map("bonne", xlim = gridBboxExt[c(1,3)],
+                                     ylim = gridBboxExt[c(2,4)],
+                                     lat0 = mean(gridBboxExt[c(2,4)]))
                          setGooPlot()
                          setPlotRange()
                        },
                        setGooPlot = function(){
-                         gooMapPlot <<- ggmap(gooMap) + xlab("Longitude") + ylab("Latitude")
+                         gooMapPlot <<- gooMap + xlab("Longitude") + ylab("Latitude")
                        },
                        setPlotRange = function(){
                          plotRange <<- data.frame(xmin=gridBboxExt[1],
