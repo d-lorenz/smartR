@@ -1004,8 +1004,6 @@ SmartProject <- R6Class("smartProject",
                                                             ggtitle(paste0("Spatial Distribution of ", specie," - Cohort ", coh_i - 2)) +
                                                             geom_text(aes(label = FG, x = Lon, y = Lat),
                                                                       data = tmp_coo, size = 2) +
-                                                            lims(x = extendrange(sampMap$plotRange[1:2]),
-                                                                 y = extendrange(sampMap$plotRange[3:4])) +
                                                             theme(legend.position = c(0.1, 0.22),
                                                                   legend.text = element_text(size = 10, colour="grey19"),
                                                                   # legend.title = element_blank(),
@@ -1062,8 +1060,6 @@ SmartProject <- R6Class("smartProject",
                                                                       aes(x = LON, y = LAT, shape = Status, color = Status),
                                                                       size = 0.6, alpha = 0.3) +
                                                            scale_colour_manual(values = c("coral", "darkseagreen1")) +
-                                                           lims(x = extendrange(sampMap$plotRange[1:2]),
-                                                                y = extendrange(sampMap$plotRange[3:4])) +
                                                            guides(colour = guide_legend(override.aes = list(size=3, alpha = 1))) +
                                                            ggtitle(paste("Sample raw points - ", year, sep = ""))+
                                                            theme_tufte(base_size = 14, ticks=T) +
@@ -1109,8 +1105,6 @@ SmartProject <- R6Class("smartProject",
                                               data = tmp_coo, size = 2) +
                                     ggtitle("Average Distance x Fishing Ground") +
                                     xlab("Longitude") + ylab("Latitude") +
-                                    lims(x = extendrange(sampMap$plotRange[1:2]),
-                                         y = extendrange(sampMap$plotRange[3:4])) +
                                     geom_point(data = fleet$regHarbsBox,
                                                mapping = aes(x = Lon, y = Lat, size = absFreq),
                                                fill = NA, color = "tomato3", shape = 21) +
@@ -1526,9 +1520,7 @@ SmartProject <- R6Class("smartProject",
                                                                                        data = tmp_coo, size = 2) +
                                                                              ggtitle("Map of observed effort pattern") + 
                                                                              xlab("Longitude") + ylab("Latitude") + 
-                                                                             theme(legend.position = "left") +
-                                                                             lims(x = extendrange(sampMap$plotRange[1:2]),
-                                                                                  y = extendrange(sampMap$plotRange[3:4])))
+                                                                             theme(legend.position = "left"))
                             
                             simResPlot[["optEffort"]] <<- suppressMessages(sampMap$gooMapPlot + 
                                                                              geom_polygon(aes(x = long, y = lat, group = group, fill = opt), 
@@ -1538,9 +1530,7 @@ SmartProject <- R6Class("smartProject",
                                                                              geom_text(aes(label = FG, x = Lon, y = Lat),
                                                                                        data = tmp_coo, size = 2) +
                                                                              ggtitle("Map of optimized effort pattern") + 
-                                                                             xlab("Longitude") + ylab("Latitude") + 
-                                                                             lims(x = extendrange(sampMap$plotRange[1:2]),
-                                                                                  y = extendrange(sampMap$plotRange[3:4])))
+                                                                             xlab("Longitude") + ylab("Latitude"))
                             
                             simResPlot[["absChange"]] <<- suppressMessages(sampMap$gooMapPlot + 
                                                                              geom_polygon(aes(x = long, y = lat, group = group, fill = delta), 
@@ -1551,9 +1541,7 @@ SmartProject <- R6Class("smartProject",
                                                                                        data = tmp_coo, size = 2) +
                                                                              ggtitle("Map of Absolute Change") + 
                                                                              xlab("Longitude") + ylab("Latitude") + 
-                                                                             theme(legend.position = "left") +
-                                                                             lims(x = extendrange(sampMap$plotRange[1:2]),
-                                                                                  y = extendrange(sampMap$plotRange[3:4])))
+                                                                             theme(legend.position = "left"))
                             
                             simResPlot[["relChange"]] <<- suppressMessages(sampMap$gooMapPlot + 
                                                                              geom_polygon(aes(x = long, y = lat, group = group, fill = deltaPerc), 
@@ -1563,9 +1551,7 @@ SmartProject <- R6Class("smartProject",
                                                                              geom_text(aes(label = FG, x = Lon, y = Lat),
                                                                                        data = tmp_coo, size = 2) +
                                                                              ggtitle("Map of Relative Change") + 
-                                                                             xlab("Longitude") + ylab("Latitude") + 
-                                                                             lims(x = extendrange(sampMap$plotRange[1:2]),
-                                                                                  y = extendrange(sampMap$plotRange[3:4])))
+                                                                             xlab("Longitude") + ylab("Latitude"))
                             
                           },
                           ggplotFishingPoints = function(year){
@@ -1575,7 +1561,6 @@ SmartProject <- R6Class("smartProject",
                                                            geom_point(data = tmp_dat,
                                                                       aes(x = LON, y = LAT, color = Status), size = 0.25, alpha = 0.2)+
                                                            scale_colour_manual(values = c("coral", "darkseagreen1")) +
-                                                           lims(x = extendrange(sampMap$plotRange[1:2]), y = extendrange(sampMap$plotRange[3:4])) +
                                                            guides(colour = guide_legend(override.aes = list(size=3, alpha = 1))) +
                                                            ggtitle(paste("Sample fishing points - ", year, sep = ""))+
                                                            theme_tufte(base_size = 14, ticks=T) +
@@ -1617,9 +1602,7 @@ SmartProject <- R6Class("smartProject",
                                                                                  data = tmp_coo, size = 2) +
                                                                        # theme(legend.position='none') +
                                                                        ggtitle(paste("Betas x Fishing Ground - ", year, sep = "")) +
-                                                                       xlab("Longitude") + ylab("Latitude") +
-                                                                       lims(x = extendrange(sampMap$plotRange[1:2]),
-                                                                            y = extendrange(sampMap$plotRange[3:4]))
+                                                                       xlab("Longitude") + ylab("Latitude")
                             )
                             sampMap$ggBetaFGbox <<- suppressMessages(ggplot(fleet$betaMeltYear[[specie]],
                                                                             aes(x = FishGround, y = Productivity,
@@ -1667,9 +1650,7 @@ SmartProject <- R6Class("smartProject",
                                                                                 data = tmp_coo, size = 2) +
                                                                       # theme(legend.position='none') +
                                                                       ggtitle(paste("Production x Fishing Ground - ", year, sep = "")) +
-                                                                      xlab("Longitude") + ylab("Latitude") +
-                                                                      lims(x = extendrange(sampMap$plotRange[1:2]),
-                                                                           y = extendrange(sampMap$plotRange[3:4]))
+                                                                      xlab("Longitude") + ylab("Latitude")
                             )
                             sampMap$ggProdFGbox <<- suppressMessages(ggplot(fleet$prodMeltYear[[specie]], aes(x = FishGround, y = Production, group = FishGround)) +
                                                                        geom_boxplot() +
@@ -1822,7 +1803,6 @@ SmartProject <- R6Class("smartProject",
                                                                                trans = 'log10',
                                                                                breaks = trans_breaks('log10', function(x) 10^x),
                                                                                labels = trans_format('log10', math_format(10^.x))) +
-                                                           lims(x = extendrange(sampMap$plotRange[1:2]), y = extendrange(sampMap$plotRange[3:4])) +
                                                            ggtitle(paste("Fishing Effort - ", year, sep = "")))
                             suppressWarnings(print(tmp_plot))
                           },
@@ -4069,8 +4049,6 @@ SampleMap <- R6Class("sampleMap",
                              geom_polygon(data = cutResShpFort,
                                           aes(x = long, y = lat, group = group),
                                           colour = "grey10", size = 0.1, alpha = 0.8) +
-                             lims(x = extendrange(plotRange[1:2]),
-                                  y = extendrange(plotRange[3:4])) +
                              theme(legend.position = "right",
                                    axis.text.x = element_text(size = 5),
                                    axis.title.x = element_text(size = 7),
@@ -4108,8 +4086,6 @@ SampleMap <- R6Class("sampleMap",
                              geom_polygon(data = cutResShpFort,
                                           aes(x = long, y = lat, group = group),
                                           colour = "grey10", size = 0.1, alpha = 0.8) +
-                             lims(x = extendrange(plotRange[1:2]),
-                                  y = extendrange(plotRange[3:4])) +
                              theme(legend.position = "right",
                                    axis.text.x = element_text(size = 5),
                                    axis.title.x = element_text(size = 7),
@@ -4164,7 +4140,6 @@ SampleMap <- R6Class("sampleMap",
                          gooGrid <<- suppressMessages(gooMapPlot + geom_polygon(aes(x = long, y = lat, group = group),
                                                                                 fill = 'grey', size = 0.1,
                                                                                 color = 'gainsboro', data = gridFortify, alpha = 0.5) +
-                                                        lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4])) +
                                                         xlab("Longitude") + ylab("Latitude") +
                                                         ggtitle("Grid") +
                                                         theme_tufte(base_size = 14, ticks=T) +
@@ -4204,12 +4179,9 @@ SampleMap <- R6Class("sampleMap",
                          suppressWarnings(print(gooGrid))
                        },
                        plotGooGridData = function(grid_data){
-                         
                          gooMapPlot + geom_polygon(aes(x = X, y = Y, group = PID),
                                                    fill = 'grey', size = 0.2,
-                                                   color = 'gainsboro', data = grid_data, alpha = 0.5) +
-                           coord_fixed(xlim = extendrange(plotRange[1:2]),
-                                       ylim = extendrange(plotRange[3:4]), expand = TRUE)
+                                                   color = 'gainsboro', data = grid_data, alpha = 0.5)
                        },
                        setSampColScale = function(fac_col){
                          myColors <- brewer.pal(length(fac_col), "Set1")
@@ -4319,7 +4291,6 @@ SampleMap <- R6Class("sampleMap",
                          ggBioDF <<- suppressMessages(gooMapPlot +
                                                         geom_polygon(aes(x = X, y = Y, group = PID, fill = Seabed), size = 0.2,
                                                                      data = grid_data, alpha = 0.8) +
-                                                        lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4])) +
                                                         xlab("Longitude") + ylab("Latitude") +
                                                         ggtitle("Seabed") +
                                                         theme_tufte(base_size = 14, ticks=T) +
@@ -4373,13 +4344,11 @@ SampleMap <- R6Class("sampleMap",
                          f_bathy$z[f_bathy$z > 0] <- 0
                          colnames(f_bathy) <- c("lon", "lat", "Depth")
                          ggDepth <<- suppressMessages(gooMapPlot +
-                                                        geom_contour(aes(z = Depth, colour = factor(..level..)), data = f_bathy,
+                                                        geom_contour(aes(x = lon, y = lat, z = Depth, colour = factor(..level..)), data = f_bathy,
                                                                      linetype = "solid", size = 0.35,
                                                                      breaks = isoLine, alpha = 1) +
                                                         scale_colour_brewer(palette = "Accent", name="Isobath") +
                                                         guides(colour = guide_legend(override.aes = list(size = 2, alpha = 1))) +
-                                                        lims(x = extendrange(plotRange[1:2]),
-                                                             y = extendrange(plotRange[3:4])) +
                                                         xlab("Longitude") + ylab("Latitude") +
                                                         ggtitle("Depth") +
                                                         theme_tufte(base_size = 14, ticks=T) +
@@ -4598,7 +4567,6 @@ SampleMap <- R6Class("sampleMap",
                                                             scale_fill_gradient(low = "Yellow", high = "coral", trans = "sqrt") +
                                                             geom_text(aes(label = FG, x = Lon, y = Lat),
                                                                       data = tmp_coo, size = 2) +
-                                                            lims(x = extendrange(plotRange[1:2]), y = extendrange(plotRange[3:4])) +
                                                             theme(legend.position='none'))
                        },
                        setBioFGmat = function(){
@@ -4645,8 +4613,6 @@ SampleMap <- R6Class("sampleMap",
                                                                         data = cutResShpFort, alpha = 0.8) +
                                                            geom_text(aes(label = FG, x = Lon, y = Lat),
                                                                      data = tmp_coo, size = 2) +
-                                                           lims(x = extendrange(plotRange[1:2]),
-                                                                y = extendrange(plotRange[3:4])) +
                                                            theme(legend.position='none'))
                        },
                        setIchFGlin = function(numCut){
