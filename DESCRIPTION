@@ -38,8 +38,6 @@ Imports:
     shape,
     jpeg,
     grid,
-    ggmap,
-    RgoogleMaps,
     ggplot2,
     sqldf,
     gsubfn,
