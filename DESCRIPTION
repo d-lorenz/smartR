@@ -57,5 +57,6 @@ Imports:
     rpart,
     ggrepel,
     rgdal,
-    RColorBrewer
+    RColorBrewer,
+    jsonlite
 RoxygenNote: 6.0.1

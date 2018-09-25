@@ -41,6 +41,7 @@ importFrom("ggrepel", "geom_label_repel")
 importFrom("vegan", "decostand")
 importFrom("rgdal", "readOGR")
 importFrom("RColorBrewer", "brewer.pal")
+importFrom("jsonlite","fromJSON")
 
 export(smart_gui)
 export(SmartProject)
