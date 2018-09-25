@@ -395,6 +395,28 @@ lvlSimEffo <- function(simuEffo, maxEff = 100){
 }
 
 
+## geocoding function using OSM Nominatim API
+## from: https://datascienceplus.com/osm-nominatim-with-r-getting-locations-geo-coordinates-by-its-address/
+## adpted from code by: D.Kisler 
+nominatim_osm <- function(address = NULL){
+  numAddr <- length(address)
+  outAddr <- data.frame(Name = address, Lon = numeric(numAddr), Lat = numeric(numAddr))
+  for(i in 1:numAddr){
+    Sys.sleep(1.2)
+    cat("\n", address[i], " - ")
+    outCoo <- fromJSON(gsub('\\@addr\\@', gsub('\\s+', '\\%20', address[i]),
+                            'http://nominatim.openstreetmap.org/search/@addr@?format=json&addressdetails=0&limit=1'))
+    outAddr$Lon[i] <- as.numeric(outCoo$lon)
+    outAddr$Lat[i] <- as.numeric(outCoo$lat)
+    cat("Lon ", outAddr$Lon[i], " - Lat ", outAddr$Lat[i])
+  }
+  return(outAddr)
+}
+
+
+
+
+
 ### Stock Assessment ####
 
 GetALKMW <- function(Linf, Kappa, T0, CV0, CVLinf, aa, bb, Amax, LenClassMax, Offset){

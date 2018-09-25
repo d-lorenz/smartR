@@ -3100,9 +3100,7 @@ FishFleet <- R6Class("fishFleet",
                        },
                        setRegHarbs = function(){
                          cat("\n\tGetting Harbours coordinates...\n", cat = "")
-                         harb_cur_uni <- data.frame(Name = sort(unique(vmsRegister$Port.Name)), Lon = NA, Lat = NA)
-                         harb_cur_uni[,2:3] <- geocode(as.character(harb_cur_uni[,1]), output = "latlon" , source = "google")
-                         regHarbsUni <<- harb_cur_uni
+                         regHarbsUni <<- nominatim_osm(address = sort(unique(vmsRegister$Port.Name)))
                          cat("\n\t\tHarbours geocoding completed!", cat = "")
                        },
                        setEcoPrice = function(sel_specie, price_df){
