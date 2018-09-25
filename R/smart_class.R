@@ -1124,7 +1124,7 @@ SmartProject <- R6Class("smartProject",
                             cat("\n\nLoading available data:\n")
                             if(is.null(sampMap$bioDF)){
                               stop("\nMissing Seabed Data!\n")
-                              }else{
+                            }else{
                               sampMap$availData <<- c(sampMap$availData, "Seabed")
                               cat("\n   -   Seabed Category")
                               sampMap$rawInpu <<- c(sampMap$rawInpu, Seabed = list(data.frame(sampMap$bioDF)))
@@ -3399,8 +3399,8 @@ FishFleet <- R6Class("fishFleet",
                        },
                        setLogitConf = function(selSpecie, test){
                          tryCatch(expr = {
-                         specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(factor(specLogit[[selSpecie]]$logit$Predict > specLogit[[selSpecie]]$logit$Cut, levels = c(FALSE, TRUE)),
-                                                                                           test$Target)
+                           specLogit[[selSpecie]]$logit$Confusion <<- caret::confusionMatrix(factor(specLogit[[selSpecie]]$logit$Predict > specLogit[[selSpecie]]$logit$Cut, levels = c(FALSE, TRUE)),
+                                                                                             test$Target)
                          },
                          error = function(error_message){
                            message("An error has occurred, different categories to compute the confusion matrix")
@@ -4168,9 +4168,9 @@ SampleMap <- R6Class("sampleMap",
                          }
                          
                          gooEnv <<- suppressWarnings(grid.arrange(tmp_grid,
-                                                                 tmp_dept,
-                                                                 tmp_bioc,
-                                                                 layout_matrix = matrix(1:3,1,3)))
+                                                                  tmp_dept,
+                                                                  tmp_bioc,
+                                                                  layout_matrix = matrix(1:3,1,3)))
                        },
                        plotGooEnv = function(){
                          suppressWarnings(grid.draw(gooEnv))

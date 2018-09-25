@@ -2043,7 +2043,7 @@ smart_gui <- function(){
       svalue(mi_dateF_s) <- paste("From: ", min(as.numeric(as.character(my_project$yearInFishery))), sep = "")
       svalue(ma_dateF_s) <- paste("To: ", max(as.numeric(as.character(my_project$yearInFishery))), sep = "")
       svalue(n_specF_s) <- paste(length(my_project$specieInFishery),
-                                ifelse(length(my_project$specieInFishery) == 1, " specie", " species"), sep = "")
+                                 ifelse(length(my_project$specieInFishery) == 1, " specie", " species"), sep = "")
       
       delete(fish_g, fish_g$children[[length(fish_g$children)]])
       add(fish_g, fish_sta_n)
