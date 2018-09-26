@@ -4139,10 +4139,12 @@ SampleMap <- R6Class("sampleMap",
                        },
                        createGridBbox = function(){
                          gridBbox <<- bbox(gridShp)
-                         gridBboxExt <<- make_bbox(lon = gridBbox[1,],
-                                                   lat = gridBbox[2,],
-                                                   f = 0.1)
-                         
+                         lon_range <- extendrange(range(lon, na.rm = TRUE), f = 0.1)
+                         lat_range <- extendrange(range(lat, na.rm = TRUE), f = 0.1)
+                         gridBboxExt <<- c(left = lon_range[1],
+                                           bottom = lat_range[1],
+                                           right = lon_range[2], 
+                                           top = lat_range[2])
                          polyext <- Polygon(cbind(c(gridBboxExt[["left"]],gridBboxExt[["left"]],gridBboxExt[["right"]],gridBboxExt[["right"]],gridBboxExt[["left"]]),
                                                   c(gridBboxExt[["bottom"]],gridBboxExt[["top"]],gridBboxExt[["top"]],gridBboxExt[["bottom"]],gridBboxExt[["bottom"]])))
                          
