@@ -813,7 +813,6 @@ smart_gui <- function(){
       Sys.sleep(0.3)
       my_project$ggplotGridEffort(svalue(effvie_drop))
       svalue(stat_bar) <- "Plotting..."
-      Sys.sleep(0.3)
       my_project$setGgEff()
       my_project$plotGgEff()
     },
@@ -866,22 +865,9 @@ smart_gui <- function(){
       Sys.sleep(1)
       my_project$fleet$rawEffort <- readRDS(tmpInEffFiles)
       my_project$fleet$setEffortIds()
+      dev.set(dev.list()[pre_dev+3])
       effvie_drop[] <- names(my_project$fleet$rawEffort)
       svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
-      dev.set(dev.list()[pre_dev+3])
-      svalue(stat_bar) <- "Loading raw effort..."
-      Sys.sleep(0.3)
-      my_project$ggplotRawPoints(svalue(effvie_drop))
-      svalue(stat_bar) <- "Loading fishing points..."
-      Sys.sleep(0.3)
-      my_project$ggplotFishingPoints(svalue(effvie_drop))
-      svalue(stat_bar) <- "Loading gridded points..."
-      Sys.sleep(0.3)
-      my_project$ggplotGridEffort(svalue(effvie_drop))
-      svalue(stat_bar) <- "Plotting..."
-      Sys.sleep(0.3)
-      my_project$setGgEff()
-      my_project$plotGgEff()
       delete(effo_g, effo_g$children[[length(effo_g$children)]])
       add(effo_g, effo_sta_n)
       delete(eff_g_top1, eff_g_top1$children[[length(eff_g_top1$children)]])
@@ -1017,16 +1003,16 @@ smart_gui <- function(){
       svalue(stat_bar) <- "Loading..."
       Sys.sleep(1)
       my_project$sampMap$importFG(readRDS(tmpInEffFiles))
-      svalue(fg_plotCut) <- my_project$sampMap$cutFG
       my_project$setFishGround(numCut = my_project$sampMap$cutFG)
-      suppressWarnings(grid.arrange(my_project$sampMap$ggIchFGlin,
-                                    my_project$sampMap$ggSilFGlin,
-                                    my_project$sampMap$ggCutFGmap,
-                                    my_project$sampMap$ggEffoFGmap,
-                                    my_project$sampMap$ggDepthFGbox,
-                                    my_project$sampMap$ggEffoFGbox,
-                                    my_project$sampMap$ggBioFGmat,
-                                    layout_matrix = rbind(c(1,3,3,5,6,7),c(2,4,4,5,6,7))))
+      svalue(fg_plotCut) <- my_project$sampMap$cutFG
+      # suppressWarnings(grid.arrange(my_project$sampMap$ggIchFGlin,
+      #                               my_project$sampMap$ggSilFGlin,
+      #                               my_project$sampMap$ggCutFGmap,
+      #                               my_project$sampMap$ggEffoFGmap,
+      #                               my_project$sampMap$ggDepthFGbox,
+      #                               my_project$sampMap$ggEffoFGbox,
+      #                               my_project$sampMap$ggBioFGmat,
+      #                               layout_matrix = rbind(c(1,3,3,5,6,7),c(2,4,4,5,6,7))))
     },
     error = function(error_message){
       message("An error has occurred!")
