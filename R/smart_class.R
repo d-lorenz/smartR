@@ -1067,7 +1067,7 @@ SmartProject <- R6Class("smartProject",
                                                            guides(colour = guide_legend(override.aes = list(size=3, alpha = 1))) +
                                                            ggtitle(paste("Sample raw points - ", year, sep = ""))+
                                                            theme_tufte(base_size = 14, ticks=T) +
-                                                           theme(legend.position = "right",
+                                                           theme(legend.position = "bottom",
                                                                  axis.text.x = element_text(size = 8),
                                                                  axis.title.x = element_text(size = 10),
                                                                  panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
@@ -1591,7 +1591,7 @@ SmartProject <- R6Class("smartProject",
                                                            guides(colour = guide_legend(override.aes = list(size=3, alpha = 1))) +
                                                            ggtitle(paste("Sample fishing points - ", year, sep = ""))+
                                                            theme_tufte(base_size = 14, ticks=T) +
-                                                           theme(legend.position = "right",
+                                                           theme(legend.position = "bottom",
                                                                  axis.text.x = element_text(size = 8),
                                                                  axis.title.x = element_text(size = 10),
                                                                  panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
@@ -1831,7 +1831,7 @@ SmartProject <- R6Class("smartProject",
                                                                                labels = trans_format('log10', math_format(10^.x))) +
                                                            ggtitle(paste("Fishing Effort - ", year, sep = "")) +
                                                            theme_tufte(base_size = 14, ticks=T) +
-                                                           theme(legend.position = "right",
+                                                           theme(legend.position = "bottom",
                                                                  axis.text.x = element_text(size = 8),
                                                                  axis.title.x = element_text(size = 10),
                                                                  panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
@@ -4328,7 +4328,7 @@ SampleMap <- R6Class("sampleMap",
                                                         xlab("Longitude") + ylab("Latitude") +
                                                         ggtitle("Seabed") +
                                                         theme_tufte(base_size = 14, ticks=T) +
-                                                        theme(legend.position = "right",
+                                                        theme(legend.position = "bottom",
                                                               axis.text.x = element_text(size = 8),
                                                               axis.title.x = element_text(size = 10),
                                                               panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
@@ -4386,7 +4386,7 @@ SampleMap <- R6Class("sampleMap",
                                                         xlab("Longitude") + ylab("Latitude") +
                                                         ggtitle("Depth") +
                                                         theme_tufte(base_size = 14, ticks=T) +
-                                                        theme(legend.position = "right",
+                                                        theme(legend.position = "bottom",
                                                               axis.text.x = element_text(size = 8),
                                                               axis.title.x = element_text(size = 10),
                                                               panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
