@@ -4555,7 +4555,7 @@ SampleMap <- R6Class("sampleMap",
                          ggDepthFGbox <<- suppressMessages(ggplot(cutResult, aes(x = FG, y = Depth, group = FG)) +
                                                              geom_boxplot(color = "grey23") +
                                                              coord_flip() +
-                                                             ylab("Fishing Ground") +
+                                                             xlab("Fishing Ground") +
                                                              theme_tufte(base_size = 14, ticks=T) +
                                                              ylim(NA, 0) +
                                                              theme(legend.position = "none",
@@ -4571,7 +4571,7 @@ SampleMap <- R6Class("sampleMap",
                          ggEffoFGbox <<- suppressMessages(ggplot(cutResEffo, aes(x = Cluster, y = Effort, group = Cluster)) +
                                                             geom_boxplot(color = "grey23") +
                                                             coord_flip() +
-                                                            ylab("Fishing Ground") +
+                                                            xlab("Fishing Ground") +
                                                             theme_tufte(base_size = 14, ticks=T) +
                                                             theme(legend.position = "none",
                                                                   axis.text.x = element_text(size = 8),
@@ -4630,7 +4630,7 @@ SampleMap <- R6Class("sampleMap",
                                                                     label = levels(bio2plot$Substrate),
                                                                     angle = rep(90, length(levels(bio2plot$Substrate)))) +
                                                            theme_tufte(base_size = 14, ticks=T) +
-                                                           ylab("Fishing Ground") +
+                                                           xlab("Fishing Ground") +
                                                            theme(legend.position = "none",
                                                                  axis.text.x = element_text(size = 8),
                                                                  axis.title.x = element_text(size = 10, colour = "white"),
