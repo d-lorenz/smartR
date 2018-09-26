@@ -4555,12 +4555,13 @@ SampleMap <- R6Class("sampleMap",
                          ggDepthFGbox <<- suppressMessages(ggplot(cutResult, aes(x = FG, y = Depth, group = FG)) +
                                                              geom_boxplot(color = "grey23") +
                                                              coord_flip() +
+                                                             ylab("Fishing Ground") +
                                                              theme_tufte(base_size = 14, ticks=T) +
                                                              ylim(NA, 0) +
                                                              theme(legend.position = "none",
                                                                    axis.text.x = element_text(size = 8),
                                                                    axis.title.x = element_text(size = 10),
-                                                                   panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+                                                                   panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
                                                                    axis.text.y = element_text(size = 8),
                                                                    axis.title.y = element_text(size = 10),
                                                                    legend.text = element_text(size = 8),
@@ -4570,11 +4571,12 @@ SampleMap <- R6Class("sampleMap",
                          ggEffoFGbox <<- suppressMessages(ggplot(cutResEffo, aes(x = Cluster, y = Effort, group = Cluster)) +
                                                             geom_boxplot(color = "grey23") +
                                                             coord_flip() +
+                                                            ylab("Fishing Ground") +
                                                             theme_tufte(base_size = 14, ticks=T) +
                                                             theme(legend.position = "none",
                                                                   axis.text.x = element_text(size = 8),
                                                                   axis.title.x = element_text(size = 10),
-                                                                  panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+                                                                  panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
                                                                   axis.text.y = element_text(size = 8),
                                                                   axis.title.y = element_text(size = 10),
                                                                   legend.text = element_text(size = 8),
@@ -4604,7 +4606,14 @@ SampleMap <- R6Class("sampleMap",
                                                             scale_fill_gradient(low = "Yellow", high = "coral", trans = "sqrt") +
                                                             geom_text(aes(label = FG, x = Lon, y = Lat),
                                                                       data = tmp_coo, size = 2) +
-                                                            theme(legend.position='none'))
+                                                            ggtitle("Average Effort Intensity") +
+                                                            theme_tufte(base_size = 14, ticks=T) +
+                                                            theme(legend.position = "bottom",
+                                                                  axis.text.x = element_text(size = 8),
+                                                                  axis.title.x = element_text(size = 10),
+                                                                  panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
+                                                                  axis.text.y = element_text(size = 8),
+                                                                  axis.title.y = element_text(size = 10)))
                        },
                        setBioFGmat = function(){
                          # ind_col <- which(make.names(colnames(bioDF)) %in% colnames(cutResult))
@@ -4621,10 +4630,11 @@ SampleMap <- R6Class("sampleMap",
                                                                     label = levels(bio2plot$Substrate),
                                                                     angle = rep(90, length(levels(bio2plot$Substrate)))) +
                                                            theme_tufte(base_size = 14, ticks=T) +
+                                                           ylab("Fishing Ground") +
                                                            theme(legend.position = "none",
                                                                  axis.text.x = element_text(size = 8),
                                                                  axis.title.x = element_text(size = 10, colour = "white"),
-                                                                 panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+                                                                 panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
                                                                  axis.text.y = element_text(size = 8),
                                                                  axis.title.y = element_text(size = 10),
                                                                  legend.text = element_text(size = 8),
@@ -4650,21 +4660,48 @@ SampleMap <- R6Class("sampleMap",
                                                                         data = cutResShpFort, alpha = 0.8) +
                                                            geom_text(aes(label = FG, x = Lon, y = Lat),
                                                                      data = tmp_coo, size = 2) +
-                                                           theme(legend.position='none'))
+                                                           ggtitle("Regions") +
+                                                           theme_tufte(base_size = 14, ticks=T) +
+                                                           theme(legend.position = "bottom",
+                                                                 axis.text.x = element_text(size = 8),
+                                                                 axis.title.x = element_text(size = 10),
+                                                                 panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
+                                                                 axis.text.y = element_text(size = 8),
+                                                                 axis.title.y = element_text(size = 10)))
                        },
                        setIchFGlin = function(numCut){
                          ch_df <- data.frame(cut = 1:length(indCH),
                                              CH_index = indCH)
                          ggIchFGlin <<- suppressMessages(ggplot(ch_df, aes(x = cut, y = CH_index)) +
                                                            geom_line() +
-                                                           geom_vline(aes(xintercept = numCut), linetype="dashed", size = 0.5, colour = "red"))
+                                                           geom_vline(aes(xintercept = numCut),
+                                                                      linetype = "dashed", size = 0.5, colour = "red") +
+                                                           ggtitle("Calinski-Harabasz") +
+                                                           ylab("Index") +
+                                                           theme_tufte(base_size = 14, ticks=T) +
+                                                           theme(legend.position = "bottom",
+                                                                 axis.text.x = element_text(size = 8),
+                                                                 axis.title.x = element_blank(),
+                                                                 panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
+                                                                 axis.text.y = element_text(size = 8),
+                                                                 axis.title.y = element_text(size = 10)))
                        },
                        setSilFGlin = function(numCut){
                          sil_df <- data.frame(cut = 1:length(indSil),
                                               Sil_index = indSil)
                          ggSilFGlin <<- suppressMessages(ggplot(sil_df, aes(x = cut, y = Sil_index)) +
                                                            geom_line() +
-                                                           geom_vline(aes(xintercept = numCut), linetype="dashed", size = 0.5, colour = "red"))
+                                                           geom_vline(aes(xintercept = numCut),
+                                                                      linetype = "dashed", size = 0.5, colour = "red") +
+                                                           ggtitle("Silhouette") +
+                                                           ylab("Index") +
+                                                           theme_tufte(base_size = 14, ticks=T) +
+                                                           theme(legend.position = "bottom",
+                                                                 axis.text.x = element_text(size = 8),
+                                                                 axis.title.x = element_blank(),
+                                                                 panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
+                                                                 axis.text.y = element_text(size = 8),
+                                                                 axis.title.y = element_text(size = 10)))
                        }
                      ))
 
