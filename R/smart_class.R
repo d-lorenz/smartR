@@ -4176,7 +4176,7 @@ SampleMap <- R6Class("sampleMap",
                          gooGrid <<- suppressMessages(gooMapPlot + geom_polygon(aes(x = long, y = lat, group = group, fill = ""),
                                                                                 size = 0.1,
                                                                                 color = 'gainsboro', data = gridFortify, alpha = 0.5) +
-                                                        scale_fill_manual("Case Study Cells", values = "grey30") +
+                                                        scale_fill_manual("Case Study Cells", values = "grey50") +
                                                         xlab("Longitude") + ylab("Latitude") +
                                                         ggtitle("Grid") +
                                                         theme_tufte(base_size = 14, ticks=T) +
