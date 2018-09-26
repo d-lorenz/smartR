@@ -1803,7 +1803,16 @@ SmartProject <- R6Class("smartProject",
                                                                                trans = 'log10',
                                                                                breaks = trans_breaks('log10', function(x) 10^x),
                                                                                labels = trans_format('log10', math_format(10^.x))) +
-                                                           ggtitle(paste("Fishing Effort - ", year, sep = "")))
+                                                           ggtitle(paste("Fishing Effort - ", year, sep = "")) +
+                                                           theme_tufte(base_size = 14, ticks=T) +
+                                                           theme(legend.position = "right",
+                                                                 axis.text.x = element_text(size = 8),
+                                                                 axis.title.x = element_text(size = 10),
+                                                                 panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+                                                                 axis.text.y = element_text(size = 8),
+                                                                 axis.title.y = element_text(size = 10),
+                                                                 legend.text = element_text(size = 8),
+                                                                 legend.title = element_text(size = 10)))
                             suppressWarnings(print(tmp_plot))
                           },
                           getNnlsModel = function(specie, minobs, thr_r2){
