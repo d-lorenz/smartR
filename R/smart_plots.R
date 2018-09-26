@@ -217,7 +217,7 @@ ggplot_registerMainGear <- function(df_Register){
               plot.title = element_text(size = 14),
               axis.text.x = element_text(size = 8, angle = 90),
               axis.title = element_blank(),
-              panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+              panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
               axis.text.y = element_text(size = 10),
               axis.ticks.y = element_blank())
     )
@@ -237,7 +237,7 @@ ggplot_registerSecGear <- function(df_Register){
               plot.title = element_text(size = 14),
               axis.text.x = element_text(size = 8, angle = 90),
               axis.title = element_blank(),
-              panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+              panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
               axis.text.y = element_text(size = 10),
               axis.ticks.y = element_blank())
     )
@@ -259,7 +259,7 @@ ggplot_registerHullMaterial <- function(df_Register){
               plot.title = element_text(size = 14),
               axis.text.x = element_text(size = 10, angle = 90),
               axis.title = element_blank(),
-              panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+              panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
               axis.text.y = element_text(size = 10),
               axis.ticks.y = element_blank())
     )
@@ -282,7 +282,7 @@ ggplot_registerConstYear <- function(df_Register){
               plot.title = element_text(size = 14),
               axis.text.x = element_text(size = 8),
               axis.title = element_blank(),
-              panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+              panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
               axis.text.y = element_text(size = 10),
               axis.ticks.y = element_blank())
     )
@@ -305,7 +305,7 @@ ggplot_registerLoa <- function(df_Register){
               plot.title = element_text(size = 14),
               axis.text.x = element_text(size = 8),
               axis.title = element_blank(),
-              panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+              panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
               axis.text.y = element_text(size = 10),
               axis.ticks.y = element_blank())
     )
@@ -328,7 +328,7 @@ ggplot_registerMainPower <- function(df_Register){
               plot.title = element_text(size = 14),
               axis.text.x = element_text(size = 8),
               axis.title = element_blank(),
-              panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+              panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
               axis.text.y = element_text(size = 10),
               axis.ticks.y = element_blank())
     )
