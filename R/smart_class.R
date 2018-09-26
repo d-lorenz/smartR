@@ -1099,7 +1099,7 @@ SmartProject <- R6Class("smartProject",
                           },
                           plotGgEff = function(){
                             suppressWarnings(grid.draw(ggEff))
-                          }
+                          },
                           ggplotFgWeigDists = function(){
                             all_cell <- merge(x = sampMap$cutResShpFort$id,
                                               data.frame(x = as.numeric(substr(names(sampMap$fgWeigDist),3,
