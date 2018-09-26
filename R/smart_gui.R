@@ -799,51 +799,23 @@ smart_gui <- function(){
   
   eff_g_top2 <- gframe(text = "View Points", horizontal = TRUE, container = eff_g_top, expand = TRUE)
   addSpace(eff_g_top2, 10)
-  effvie_drop <- gcombobox(items = "Year", selected = 1, container = eff_g_top2, expand = TRUE, editable = FALSE)
-  addSpace(eff_g_top2, 20)
-  gbutton("Raw", container = eff_g_top2, handler = function(h,...){
+  effvie_drop <- gcombobox(items = "Year", selected = 1, container = eff_g_top2, expand = TRUE, editable = FALSE, handler = function(...){
     enabled(eff_g_top) <- FALSE
     tryCatch(expr = {
       dev.set(dev.list()[pre_dev+3])
-      svalue(stat_bar) <- "Plotting raw points..."
-      Sys.sleep(1)
+      svalue(stat_bar) <- "Loading raw effort..."
+      Sys.sleep(0.3)
       my_project$ggplotRawPoints(svalue(effvie_drop))
-    },
-    error = function(error_message){
-      message("An error has occurred!")
-      message(error_message)
-    },
-    finally = {
-      enabled(eff_g_top) <- TRUE
-      svalue(stat_bar) <- ""
-    })
-  })
-  addSpace(eff_g_top2, 5)
-  gbutton("Fishing", container = eff_g_top2, handler = function(h,...){
-    enabled(eff_g_top) <- FALSE
-    tryCatch(expr = {
-      dev.set(dev.list()[pre_dev+3])
-      svalue(stat_bar) <- "Plotting fishing points..."
-      Sys.sleep(1)
+      svalue(stat_bar) <- "Loading fishing points..."
+      Sys.sleep(0.3)
       my_project$ggplotFishingPoints(svalue(effvie_drop))
-    },
-    error = function(error_message){
-      message("An error has occurred!")
-      message(error_message)
-    },
-    finally = {
-      enabled(eff_g_top) <- TRUE
-      svalue(stat_bar) <- ""
-    })
-  })
-  addSpace(eff_g_top2, 5)
-  gbutton("Gridded", container = eff_g_top2, handler = function(h,...){
-    enabled(eff_g_top) <- FALSE
-    tryCatch(expr = {
-      dev.set(dev.list()[pre_dev+3])
-      svalue(stat_bar) <- "Plotting gridded points..."
-      Sys.sleep(1)
+      svalue(stat_bar) <- "Loading gridded points..."
+      Sys.sleep(0.3)
       my_project$ggplotGridEffort(svalue(effvie_drop))
+      svalue(stat_bar) <- "Plotting..."
+      Sys.sleep(0.3)
+      my_project$setGgEff()
+      my_project$plotGgEff()
     },
     error = function(error_message){
       message("An error has occurred!")
@@ -897,7 +869,19 @@ smart_gui <- function(){
       effvie_drop[] <- names(my_project$fleet$rawEffort)
       svalue(effvie_drop) <- names(my_project$fleet$rawEffort)[1]
       dev.set(dev.list()[pre_dev+3])
-      my_project$ggplotGridEffort(names(my_project$fleet$rawEffort)[1])
+      svalue(stat_bar) <- "Loading raw effort..."
+      Sys.sleep(0.3)
+      my_project$ggplotRawPoints(svalue(effvie_drop))
+      svalue(stat_bar) <- "Loading fishing points..."
+      Sys.sleep(0.3)
+      my_project$ggplotFishingPoints(svalue(effvie_drop))
+      svalue(stat_bar) <- "Loading gridded points..."
+      Sys.sleep(0.3)
+      my_project$ggplotGridEffort(svalue(effvie_drop))
+      svalue(stat_bar) <- "Plotting..."
+      Sys.sleep(0.3)
+      my_project$setGgEff()
+      my_project$plotGgEff()
       delete(effo_g, effo_g$children[[length(effo_g$children)]])
       add(effo_g, effo_sta_n)
       delete(eff_g_top1, eff_g_top1$children[[length(eff_g_top1$children)]])
