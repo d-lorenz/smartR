@@ -121,6 +121,10 @@ SmartProject <- R6Class("smartProject",
                           yearInFishery = NULL,
                           specieInFishery = NULL,
                           fisheryBySpecie = NULL,
+                          ggEffRaw = NULL,
+                          ggEffFish = NULL,
+                          ggEffGrid = NULL,
+                          ggEff = NULL,
                           gooLstCoho = list(),
                           sampMap = NULL,
                           fleet = NULL,
@@ -1052,7 +1056,7 @@ SmartProject <- R6Class("smartProject",
                                                                c("LON","LAT","W_HARB")]
                             tmp_dat$Status <- factor(tmp_dat$W_HARB, levels = c("0", "1"),
                                                      labels = c("At sea", "In harbour"))
-                            tmp_plot <- suppressMessages(sampMap$gooMapPlot +
+                            ggEffRaw <<- suppressMessages(sampMap$gooMapPlot +
                                                            geom_point(data = tmp_dat,
                                                                       aes(x = LON, y = LAT, shape = Status, color = Status),
                                                                       size = 0.6, alpha = 0.3)+
@@ -1071,8 +1075,31 @@ SmartProject <- R6Class("smartProject",
                                                                  axis.title.y = element_text(size = 10),
                                                                  legend.text = element_text(size = 8),
                                                                  legend.title = element_text(size = 10)))
-                            suppressWarnings(print(tmp_plot))
                           },
+                          setGgEff = function(){
+                            if(is.null(ggEffRaw)){
+                              tmp_raw <- ggplot() + geom_blank() + ggtitle("Raw Effort Not Loaded Yet")
+                            }else{
+                              tmp_raw <- ggEffRaw
+                            }
+                            if(is.null(ggEffFish)){
+                              tmp_fish <- ggplot() + geom_blank() + ggtitle("Fishing Point Not Loaded Yet")
+                            }else{
+                              tmp_fish <- ggEffFish
+                            }
+                            if(is.null(ggEffGrid)){
+                              tmp_grid <- ggplot() + geom_blank() + ggtitle("Gridded Effort Not Loaded Yet")
+                            }else{
+                              tmp_grid <- ggEffGrid
+                            }
+                            ggEff <<- suppressWarnings(grid.arrange(tmp_raw,
+                                                                    tmp_fish,
+                                                                    tmp_grid,
+                                                                     layout_matrix = matrix(1:3,1,3)))
+                          },
+                          plotGgEff = function(){
+                            suppressWarnings(grid.draw(ggEff))
+                          }
                           ggplotFgWeigDists = function(){
                             all_cell <- merge(x = sampMap$cutResShpFort$id,
                                               data.frame(x = as.numeric(substr(names(sampMap$fgWeigDist),3,
@@ -1557,7 +1584,7 @@ SmartProject <- R6Class("smartProject",
                           ggplotFishingPoints = function(year){
                             tmp_dat <- fleet$rawEffort[[year]][sample(1:nrow(fleet$rawEffort[[year]]), min(c(50000, nrow(fleet$rawEffort[[year]])))),c("LON","LAT","FishPoint")]
                             tmp_dat$Status <- factor(tmp_dat$FishPoint, levels = c("FALSE", "TRUE"), labels = c("Not fishing", "Fishing"))
-                            tmp_plot <- suppressMessages(sampMap$gooMapPlot +
+                            ggEffFish <<- suppressMessages(sampMap$gooMapPlot +
                                                            geom_point(data = tmp_dat,
                                                                       aes(x = LON, y = LAT, color = Status), size = 0.25, alpha = 0.2)+
                                                            scale_colour_manual(values = c("coral", "darkseagreen1")) +
@@ -1572,7 +1599,6 @@ SmartProject <- R6Class("smartProject",
                                                                  axis.title.y = element_text(size = 10),
                                                                  legend.text = element_text(size = 8),
                                                                  legend.title = element_text(size = 10)))
-                            suppressWarnings(print(tmp_plot))
                           },
                           setPlotBetaMeltYear = function(specie, year){
                             tmp_melt_sub <- subset(fleet$betaMeltYear[[specie]], Year == year)
@@ -1797,7 +1823,7 @@ SmartProject <- R6Class("smartProject",
                             all_cell[is.na(all_cell)] <- 0
                             # grid_data <- cbind(sampMap$gridPolySet, LogCount = log10(all_cell[,2] + 1))
                             grid_data <- cbind(sampMap$gridPolySet, Count = all_cell[,2])
-                            tmp_plot <- suppressMessages(sampMap$gooMapPlot + geom_polygon(aes(x = X, y = Y, group = PID, fill = Count), size = 0.2,
+                            ggEffGrid <<- suppressMessages(sampMap$gooMapPlot + geom_polygon(aes(x = X, y = Y, group = PID, fill = Count), size = 0.2,
                                                                                            data = grid_data, alpha = 0.8) +
                                                            scale_fill_gradient(low = "Yellow", high = "coral",
                                                                                trans = 'log10',
@@ -1813,7 +1839,6 @@ SmartProject <- R6Class("smartProject",
                                                                  axis.title.y = element_text(size = 10),
                                                                  legend.text = element_text(size = 8),
                                                                  legend.title = element_text(size = 10)))
-                            suppressWarnings(print(tmp_plot))
                           },
                           getNnlsModel = function(specie, minobs, thr_r2){
                             data <- fleet$effoProdAllLoa
