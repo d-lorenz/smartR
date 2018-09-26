@@ -752,8 +752,8 @@ SmartProject <- R6Class("smartProject",
                             sampMap$bioDF <<- envLst$bioDF
                             sampMap$ggBioDF <<- envLst$ggBioDF
                           },
-                          setSpecieSurvey = function(){specieInSurvey <<- unique(rawDataSurvey[,"Specie"])},
-                          setSpecieFishery = function(){specieInFishery <<- unique(rawDataFishery[,"Specie"])},
+                          setSpecieSurvey = function(){specieInSurvey <<- sort(unique(rawDataSurvey[,"Specie"]))},
+                          setSpecieFishery = function(){specieInFishery <<- sort(unique(rawDataFishery[,"Specie"]))},
                           splitSpecieSurvey = function(){
                             if(length(specieInSurvey) == 1){
                               addSpecieSurvey(rawDataSurvey)
