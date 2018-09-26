@@ -1139,7 +1139,14 @@ SmartProject <- R6Class("smartProject",
                                                           breaks = pretty(fleet$regHarbsBox$absFreq, 5),
                                                           range = c(1, 15)) +
                                     geom_label_repel(data = fleet$regHarbsBox, mapping = aes(x = Lon, y = Lat, label = Name),
-                                                     size = 3, nudge_x = 0.1, nudge_y = 0.1, color = "grey3", fill ="grey89")
+                                                     size = 3, nudge_x = 0.1, nudge_y = 0.1, color = "grey3", fill ="grey89") +
+                                    theme_tufte(base_size = 14, ticks=T) +
+                                    theme(legend.position = "bottom",
+                                          axis.text.x = element_text(size = 8),
+                                          axis.title.x = element_text(size = 10),
+                                          panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+                                          axis.text.y = element_text(size = 8),
+                                          axis.title.y = element_text(size = 10))
                                 )
                               )
                             )
