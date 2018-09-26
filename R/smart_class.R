@@ -4608,7 +4608,7 @@ SampleMap <- R6Class("sampleMap",
                                                                       data = tmp_coo, size = 2) +
                                                             ggtitle("Average Effort Intensity") +
                                                             theme_tufte(base_size = 14, ticks=T) +
-                                                            theme(legend.position = "bottom",
+                                                            theme(legend.position = "none",
                                                                   axis.text.x = element_text(size = 8),
                                                                   axis.title.x = element_text(size = 10),
                                                                   panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
@@ -4662,7 +4662,7 @@ SampleMap <- R6Class("sampleMap",
                                                                      data = tmp_coo, size = 2) +
                                                            ggtitle("Regions") +
                                                            theme_tufte(base_size = 14, ticks=T) +
-                                                           theme(legend.position = "bottom",
+                                                           theme(legend.position = "none",
                                                                  axis.text.x = element_text(size = 8),
                                                                  axis.title.x = element_text(size = 10),
                                                                  panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
