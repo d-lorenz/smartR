@@ -797,7 +797,7 @@ smart_gui <- function(){
   
   addSpring(eff_g_top)
   
-  eff_g_top2 <- gframe(text = "View Points", horizontal = TRUE, container = eff_g_top, expand = TRUE)
+  eff_g_top2 <- gframe(text = "Maps", horizontal = TRUE, container = eff_g_top, expand = TRUE)
   addSpace(eff_g_top2, 10)
   effvie_drop <- gcombobox(items = "Year", selected = 1, container = eff_g_top2, expand = TRUE, editable = FALSE, handler = function(...){
     enabled(eff_g_top) <- FALSE
