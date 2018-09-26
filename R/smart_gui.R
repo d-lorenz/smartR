@@ -2198,6 +2198,8 @@ smart_gui <- function(){
       }else{
         spec_drop_mix[] <- my_project$specieInSurvey
         svalue(spec_drop_mix) <- my_project$specieInSurvey[1]
+        sex_drop_mix[] <- my_project$surveyBySpecie[[1]]$speSex
+        svalue(sex_drop_mix) <- sex_drop_mix[1]
       }
     }else{
       if(is.null(my_project$specieInFishery)){
@@ -2206,12 +2208,24 @@ smart_gui <- function(){
       }else{
         spec_drop_mix[] <- my_project$specieInFishery
         svalue(spec_drop_mix) <- my_project$specieInFishery[1]
+        sex_drop_mix[] <- my_project$fisheryBySpecie[[1]]$speSex
+        svalue(sex_drop_mix) <- sex_drop_mix[1]
       }
     }
   })
   spec_mix_f <- gframe("Specie and Sex", horizontal = FALSE, container = cont_g, expand = TRUE)
   addSpring(spec_mix_f)
-  spec_drop_mix <- gcombobox(items = "Specie", selected = 1, container = spec_mix_f, editable = FALSE, expand = TRUE)
+  spec_drop_mix <- gcombobox(items = "Specie", selected = 1, container = spec_mix_f, editable = FALSE, expand = TRUE, handler = function(...){
+    if(svalue(sourceMix_r) == "Survey"){
+      spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop_mix))
+        sex_drop_mix[] <- my_project$surveyBySpecie[[spe_ind]]$speSex
+        svalue(sex_drop_mix) <- sex_drop_mix[1]
+    }else{
+      spe_ind <- which(my_project$specieInFishery == svalue(spec_drop_mix))
+        sex_drop_mix[] <- my_project$fisheryBySpecie[[spe_ind]]$speSex
+        svalue(sex_drop_mix) <- sex_drop_mix[1]
+    }
+  })
   spec_drop_mix$set_size(value = c(width = 150))
   addSpring(spec_mix_f)
   sex_drop_mix <- gcombobox(items = c("Female", "Male", "Unsex"), selected = 1, container = spec_mix_f, editable = FALSE, expand = TRUE)
