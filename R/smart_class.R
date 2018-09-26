@@ -4139,8 +4139,8 @@ SampleMap <- R6Class("sampleMap",
                        },
                        createGridBbox = function(){
                          gridBbox <<- bbox(gridShp)
-                         lon_range <- extendrange(range(lon, na.rm = TRUE), f = 0.1)
-                         lat_range <- extendrange(range(lat, na.rm = TRUE), f = 0.1)
+                         lon_range <- extendrange(range(gridBbox[1,], na.rm = TRUE), f = 0.1)
+                         lat_range <- extendrange(range(gridBbox[2,], na.rm = TRUE), f = 0.1)
                          gridBboxExt <<- c(left = lon_range[1],
                                            bottom = lat_range[1],
                                            right = lon_range[2], 
