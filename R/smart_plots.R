@@ -36,11 +36,18 @@ ggplot_prodIndBoxplot = function(df_ProdInde){
                     aes_(x = ~Year, y = ~Production,
                          group = ~Year,
                          color = ~Year),
-                    size = 1, shape = 19, alpha = 0.05,
+                    size = 1, shape = 19, alpha = 0.25,
                     height = 0, width = 0.25) +
         ggtitle("Production Index") +
-        theme_tufte(base_size = 14, ticks=F) +
-        theme(legend.position = 'none')
+        ylab("Index Value") +
+        theme_tufte(base_size = 14, ticks = F) +
+        theme(legend.position = "none",
+              plot.title = element_text(size = 18),
+              axis.text.x = element_text(size = 10),
+              axis.title.x = element_text(size = 12),
+              panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
+              axis.text.y = element_text(size = 12),
+              axis.ticks.y = element_blank())
     )
   )
 }
@@ -57,11 +64,18 @@ ggplot_effoIndBoxplot = function(df_EffoInde){
                     aes_(x = ~Year, y = ~EffInd,
                          group = ~Year,
                          color = ~Year),
-                    size = 1, shape = 19, alpha = 0.05,
+                    size = 1, shape = 19, alpha = 0.25,
                     height = 0, width = 0.25) +
         ggtitle("Effort Index") +
-        theme_tufte(base_size = 14, ticks=F) +
-        theme(legend.position = 'none')
+        ylab("Index Value") +
+        theme_tufte(base_size = 14, ticks = F) +
+        theme(legend.position = "none",
+              plot.title = element_text(size = 18),
+              axis.text.x = element_text(size = 10),
+              axis.title.x = element_text(size = 12),
+              panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
+              axis.text.y = element_text(size = 12),
+              axis.ticks.y = element_blank())
     )
   )
 }
@@ -78,11 +92,18 @@ ggplot_seaDaysBoxplot = function(df_seaDays){
                     aes_(x = ~Year, y = ~Freq,
                          group = ~Year,
                          color = ~Year),
-                    size = 1, shape = 19, alpha = 0.05,
+                    size = 1, shape = 19, alpha = 0.25,
                     height = 0, width = 0.25) +
         ggtitle("Days at Sea") +
-        theme_tufte(base_size = 14, ticks=F) +
-        theme(legend.position = 'none')
+        ylab("Index Value") +
+        theme_tufte(base_size = 14, ticks = F) +
+        theme(legend.position = "none",
+              plot.title = element_text(size = 18),
+              axis.text.x = element_text(size = 10),
+              axis.title.x = element_text(size = 12),
+              panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
+              axis.text.y = element_text(size = 12),
+              axis.ticks.y = element_blank())
     )
   )
 }
