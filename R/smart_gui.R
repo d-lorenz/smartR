@@ -2487,6 +2487,9 @@ smart_gui <- function(){
     
     addSpring(cost_g_top)
     gbutton("   Load\nCost Data", container = cost_g_top, handler = function(h,...){
+      pathCosts <- gfile(text = "Select Costs File", type = "open",
+                           initial.filename = NULL, initial.dir = getwd(), filter = list(),
+                           multi = FALSE)
       my_project$fleet$loadRawEconomy(economic_path = pathCosts)
       my_project$fleet$setYearEconomy()
     })
