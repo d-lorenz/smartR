@@ -342,10 +342,10 @@ ggplot_TotalProduction <- function(df_Prod){
       ggplot() +
         geom_line(data = df_Prod, mapping = aes_(x = ~Year, y = ~Production)) +
         ylab("Kilogram") +
-        theme_tufte(base_size = 14, ticks=F) +
+        theme_tufte(base_size = 14, ticks = F) +
         theme(legend.position = "none",
               axis.text.x = element_text(size = 10),
-              panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+              panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
               axis.text.y = element_text(size = 10),
               axis.ticks.y = element_blank())
     )
@@ -361,10 +361,10 @@ ggplot_FGProduction <- function(df_FGProd){
                   mapping = aes_(x = ~Year, y = ~Production,
                                  color = ~FishGround, group = ~FishGround)) +
         ylab("Kilogram") +
-        theme_tufte(base_size = 14, ticks=F) +
-        theme(legend.position = "right",
+        theme_tufte(base_size = 14, ticks = F) +
+        theme(legend.position = "bottom",
               axis.text.x = element_text(size = 10),
-              panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+              panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
               axis.text.y = element_text(size = 10),
               axis.ticks.y = element_blank()) +
         labs(color = "Fishing Ground")
@@ -382,7 +382,7 @@ set_ggSurvLine <- function(df_surv){
       annotate("text", x = Inf, y = Inf, hjust = 1, vjust = 1,  family="serif", label = "Survivors") +
       theme(legend.position = "none",
             axis.text.x = element_text(size = 5, angle = 90),
-            panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+            panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
             axis.title.x = element_blank(),
             axis.text.y = element_text(size = 5),
             axis.title.y = element_blank(),
@@ -408,7 +408,7 @@ set_ggCatchLine <- function(df_birth){
       theme(legend.position = "none",
             legend.title = element_blank(),
             legend.text = element_text(size = 10),
-            panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+            panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
             axis.text.x = element_text(size = 5, angle = 45),
             axis.title.x = element_blank(),
             axis.text.y = element_text(size = 5),
@@ -441,7 +441,7 @@ set_ggHistBirth <- function(df_mix, df_grow){
                                                        fill = NA))) +
       theme_tufte(base_size = 14, ticks = FALSE) +
       theme(legend.position = "bottom",
-            panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+            panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
             axis.text.x = element_text(size = 8, angle = 90),
             axis.title.x = element_blank(),
             axis.text.y = element_text(size = 8),
@@ -488,7 +488,7 @@ set_ggAgeLength <- function(df_mix, mixPalette){
         scale_fill_manual(values = mixPalette) +
         theme_tufte(base_size = 14, ticks = FALSE) +
         theme(legend.position = "none",
-              panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+              panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
               axis.text.x = element_text(size = 8),
               axis.title.x = element_text(size = 8),
               axis.text.y = element_text(size = 8),
@@ -512,7 +512,7 @@ set_ggSigmaBox <- function(df_sigma, sigPalette, numCoho){
       theme_tufte(base_size = 14, ticks = FALSE) +
       theme(legend.position = "none",
             title = element_text(size = 9),
-            panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+            panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
             axis.text.x = element_text(size = 8),
             axis.title.x = element_text(size = 8),
             axis.text.y = element_text(size = 8),
@@ -538,7 +538,7 @@ set_ggTausBox <- function(df_taus, tauPalette, numCoho){
       theme_tufte(base_size = 14, ticks = FALSE) +
       theme(legend.position = "none",
             title = element_text(size = 9),
-            panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+            panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
             axis.text.x = element_text(size = 8),
             axis.title.x = element_text(size = 8),
             axis.text.y = element_text(size = 8),
@@ -562,7 +562,7 @@ set_ggChainTrace <- function(df_LK){
         theme(title = element_text(size = 10),
               legend.position = "right",
               legend.title = element_text(size = 7),
-              panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+              panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
               axis.text.x = element_text(size = 6),
               axis.title.x = element_blank(),
               axis.text.y = element_text(size = 6),
@@ -583,11 +583,8 @@ set_ggChainScatter <- function(gg_DFscat, meanL, meanK){
         geom_point(data = gg_DFscat,
                    mapping = aes_(x = ~Linf, y = ~Kappa, color = ~factor(Chain)),
                    size = 0.25, alpha = 0.25) +
-        # annotate("point", x = mut_popgrowth$Loo, y = mut_popgrowth$K, color = "grey25", size = 0.7) +
         annotate("point", x = meanL, y = meanK, color = "goldenrod1",
                  shape = 42, size = 12, alpha = 0.9) +
-        # annotate("point", x = mean(mut_popgrowth$Loo), y = mean(mut_popgrowth$K), color = "firebrick",
-        #          shape = 20, size = 5, alpha = 0.9) +
         annotate("text", x = Inf, y = Inf,
                  label = paste("LHat = ", round(meanL, 2),
                                "\nKHat = ", round(meanK, 3), sep = ""),
@@ -596,7 +593,7 @@ set_ggChainScatter <- function(gg_DFscat, meanL, meanK){
         theme_tufte(base_size = 14, ticks = F) +
         theme(legend.position = "none",
               legend.title = element_text(size = 9),
-              panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+              panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
               axis.text.x = element_text(size = 6),
               axis.title.x = element_text(size = 8),
               axis.text.y = element_text(size = 6),
@@ -619,7 +616,7 @@ set_ggHistLfdTot <- function(inLfd){
                      scale_x_continuous(breaks = pretty(inLfd$Length, 10)) +
                      theme_tufte(base_size=14, ticks=F) +
                      theme(legend.position = "none",
-                           panel.grid = element_line(size = 0.25, linetype = 2, colour = "grey20"),
+                           panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
                            axis.text.x = element_text(size = 8),
                            axis.title.x = element_text(size = 10),
                            axis.text.y = element_text(size = 8),
@@ -636,7 +633,7 @@ set_ggHistUtcTot <- function(inLfd){
                family="serif", label = "Time coverage") +
       theme_tufte(base_size = 14, ticks = F) +
       theme(legend.position = "none",
-            panel.grid = element_line(size = 0.25, linetype = 2, colour = "grey20"),
+            panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
             axis.text.x = element_text(size = 8, angle = 45),
             axis.title.x = element_blank(),
             axis.text.y = element_text(size = 8),
@@ -657,7 +654,7 @@ set_ggDotUtcSplit <- function(inLfd){
       scale_y_discrete(breaks = unique(sampPunch$Year), expand = c(0.1, 0.1)) +
       theme_tufte(base_size = 14, ticks = F) +
       theme(legend.position = "none",
-            panel.grid = element_line(size = 0.25, linetype = 2, colour = "grey20"),
+            panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
             axis.text.x = element_text(size = 8),
             axis.title.x = element_blank(),
             axis.text.y = element_text(size = 8),
@@ -675,7 +672,7 @@ set_ggHistUtcLfd <- function(inLfd){
       theme_few() +
       scale_x_continuous(breaks = pretty(inLfd$Length, 5)) +
       theme(legend.position = "none",
-            panel.grid = element_line(size = 0.25, linetype = 2, colour = "grey20"),
+            panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
             axis.text.x = element_text(size = 6),
             strip.text.x = element_text(size = 8),
             axis.title.x = element_text(size = 10),
@@ -695,7 +692,15 @@ ggplot_meditsIndex <- function(inMedits){
       scale_x_continuous(breaks = pretty(inMedits$Class, 10)) +
       scale_color_wsj(guide = FALSE) +
       scale_shape_cleveland(guide = FALSE) +
-      facet_grid(Year~.)
+      facet_grid(Year~.) +
+      theme(panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
+            axis.text.x = element_text(size = 6),
+            strip.text.x = element_text(size = 8),
+            axis.title.x = element_text(size = 10),
+            axis.text.y = element_blank(),
+            strip.text.y = element_text(size = 10),
+            axis.title.y = element_blank(),
+            axis.ticks.y = element_blank())
   )
 }
 
@@ -747,7 +752,7 @@ set_spatAbsFreq <- function(inSpat){
                label = ifelse(inSpat$Freq == 0, "", inSpat$Freq)) +
       theme(legend.position = "none",
             plot.title = element_text(size = 6),
-            panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+            panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
             axis.title = element_blank(),
             axis.text.x = element_text(size = 5),
             axis.title.x = element_blank(),
@@ -768,7 +773,7 @@ set_spatRelFreq <- function(inSpat){
                hjust = 0.5, family="serif", size = 3,
                label = ifelse(inSpat$relFreq == 0, "", inSpat$relFreq)) +
       theme(legend.position = "none",
-            panel.grid = element_line(size = 1, linetype = 2, colour = "grey20"),
+            panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
             plot.title = element_text(size = 6),
             axis.title = element_blank(),
             axis.text.x = element_text(size = 5),
