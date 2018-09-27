@@ -383,7 +383,7 @@ ggplot_FGProduction <- function(df_FGProd){
                                  color = ~FishGround, group = ~FishGround)) +
         ylab("Kilogram") +
         theme_tufte(base_size = 14, ticks = F) +
-        scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(length(unique(df_FGProd$FishGround)))) +
+        scale_color_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(length(unique(df_FGProd$FishGround)))) +
         theme(legend.position = "bottom",
               axis.text.x = element_text(size = 10),
               panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
