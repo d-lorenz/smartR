@@ -125,7 +125,7 @@ ggplot_spatialRegression = function(df_spatialIn, reg_spatialOut){
               plot.title = element_text(size = 18),
               axis.text.x = element_text(size = 10),
               axis.title.x = element_text(size = 12),
-              panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+              panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
               axis.text.y = element_text(size = 12),
               axis.ticks.y = element_blank())
     )
@@ -149,7 +149,7 @@ ggplot_effortRegression = function(df_effortIn, reg_effortOut){
               plot.title = element_text(size = 18),
               axis.text.x = element_text(size = 10),
               axis.title.x = element_text(size = 12),
-              panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+              panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
               axis.text.y = element_text(size = 12),
               axis.ticks.y = element_blank())
     )
@@ -173,7 +173,7 @@ ggplot_productionRegression = function(df_productionIn, reg_productionOut){
               plot.title = element_text(size = 18),
               axis.text.x = element_text(size = 10),
               axis.title.x = element_text(size = 12),
-              panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+              panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
               axis.text.y = element_text(size = 12),
               axis.ticks.y = element_blank())
     )
