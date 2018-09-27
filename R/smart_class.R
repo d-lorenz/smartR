@@ -1633,9 +1633,16 @@ SmartProject <- R6Class("smartProject",
                                                                        scale_fill_gradient("Beta\nValues", low = "lightyellow", high = "mediumseagreen") +
                                                                        geom_text(aes(label = FG, x = Lon, y = Lat),
                                                                                  data = tmp_coo, size = 2) +
-                                                                       # theme(legend.position='none') +
                                                                        ggtitle(paste("Betas x Fishing Ground - ", year, sep = "")) +
-                                                                       xlab("Longitude") + ylab("Latitude")
+                                                                       xlab("Longitude") + ylab("Latitude") +
+                                                                       theme_tufte(base_size = 14, ticks=F) +
+                                                                       theme(legend.position = "bottom",
+                                                                             plot.title = element_text(size = 14),
+                                                                             axis.text.x = element_text(size = 8),
+                                                                             axis.title = element_blank(),
+                                                                             panel.grid = element_line(size = 0.1, linetype = 2, colour = "grey20"),
+                                                                             axis.text.y = element_text(size = 10),
+                                                                             axis.ticks.y = element_blank())
                             )
                             sampMap$ggBetaFGbox <<- suppressMessages(ggplot(fleet$betaMeltYear[[specie]],
                                                                             aes(x = FishGround, y = Productivity,
@@ -1651,7 +1658,14 @@ SmartProject <- R6Class("smartProject",
                                                                                  color = "grey40") +
                                                                        scale_fill_gradient(low = "lightyellow", high = "mediumseagreen") +
                                                                        xlab("Fishing Ground") +
-                                                                       theme(legend.position='none')
+                                                                       theme_tufte(base_size = 14, ticks=F) +
+                                                                       theme(legend.position = "none",
+                                                                             plot.title = element_text(size = 14),
+                                                                             axis.text.x = element_text(size = 8),
+                                                                             axis.title = element_blank(),
+                                                                             panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
+                                                                             axis.text.y = element_text(size = 10),
+                                                                             axis.ticks.y = element_blank())
                             )
                           },
                           setPlotProdMeltYear = function(specie, year){
@@ -1681,9 +1695,16 @@ SmartProject <- R6Class("smartProject",
                                                                                           low = "lightyellow", high = "slateblue1") +
                                                                       geom_text(aes(label = FG, x = Lon, y = Lat),
                                                                                 data = tmp_coo, size = 2) +
-                                                                      # theme(legend.position='none') +
                                                                       ggtitle(paste("Production x Fishing Ground - ", year, sep = "")) +
-                                                                      xlab("Longitude") + ylab("Latitude")
+                                                                      xlab("Longitude") + ylab("Latitude") +
+                                                                      theme_tufte(base_size = 14, ticks=F) +
+                                                                      theme(legend.position = "bottom",
+                                                                            plot.title = element_text(size = 14),
+                                                                            axis.text.x = element_text(size = 8),
+                                                                            axis.title = element_blank(),
+                                                                            panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
+                                                                            axis.text.y = element_text(size = 10),
+                                                                            axis.ticks.y = element_blank())
                             )
                             sampMap$ggProdFGbox <<- suppressMessages(ggplot(fleet$prodMeltYear[[specie]], aes(x = FishGround, y = Production, group = FishGround)) +
                                                                        geom_boxplot() +
@@ -1695,7 +1716,14 @@ SmartProject <- R6Class("smartProject",
                                                                                  color = "grey40") +
                                                                        scale_fill_gradient(low = "lightyellow", high = "slateblue1") +
                                                                        xlab("Fishing Ground") +
-                                                                       theme(legend.position='none')
+                                                                       theme_tufte(base_size = 14, ticks=F) +
+                                                                       theme(legend.position = "none",
+                                                                             plot.title = element_text(size = 14),
+                                                                             axis.text.x = element_text(size = 8),
+                                                                             axis.title = element_blank(),
+                                                                             panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
+                                                                             axis.text.y = element_text(size = 10),
+                                                                             axis.ticks.y = element_blank())
                             )
                           },
                           setCellPoin = function(){
@@ -3374,19 +3402,36 @@ FishFleet <- R6Class("fishFleet",
                              stat_boxplot(geom ='errorbar', width = 0.25) +
                              theme(axis.text.x = element_blank()) +
                              ylim(0, 1) +
-                             labs(title = "R2 values") +
-                             geom_hline(aes(yintercept = thresR2), linetype="dashed", size = 0.5, colour = "red")
+                             labs(title = "R^2 values") +
+                             geom_hline(aes(yintercept = thresR2),
+                                        linetype="dashed", size = 0.5, colour = "red") +
+                             theme_tufte(base_size = 14, ticks = F) +
+                             theme(legend.position = "none",
+                                   plot.title = element_text(size = 14),
+                                   axis.text.x = element_text(size = 8),
+                                   axis.title = element_blank(),
+                                   panel.grid = element_line(size = 0.1, linetype = 2, colour = "grey20"),
+                                   axis.text.y = element_text(size = 10),
+                                   axis.ticks.y = element_blank())
                          )
                          tmp_reg <- data.frame(Observed = resNNLS[[specie]]$obsY,
                                                Fitted = resNNLS[[specie]]$fittedY)
                          
                          reg_p <- suppressMessages(
                            ggplot(tmp_reg, aes(y = Fitted, x = Observed)) +
-                             geom_point(alpha = 0.25, size = 0.2) + stat_smooth(method = "lm") +
+                             geom_point(alpha = 0.25, size = 0.3) + stat_smooth(method = "lm") +
                              labs(title = "Observed VS Fitted") +
                              scale_x_log10() +
                              scale_y_log10() +
-                             annotation_logticks()
+                             annotation_logticks() +
+                             theme_tufte(base_size = 14) +
+                             theme(legend.position = "none",
+                                   plot.title = element_text(size = 14),
+                                   axis.text.x = element_text(size = 8),
+                                   axis.title = element_blank(),
+                                   panel.grid = element_line(size = 0.1, linetype = 2, colour = "grey20"),
+                                   axis.text.y = element_text(size = 10),
+                                   axis.ticks.y = element_blank())
                          )
                          suppressWarnings(
                            grid.arrange(reg_p, bp, layout_matrix = rbind(c(1,1,2),c(1,1,2)))
@@ -3581,7 +3626,7 @@ FishFleet <- R6Class("fishFleet",
                            theme(legend.position = "right",
                                  axis.text.x = element_text(size = 8),
                                  axis.title.x = element_text(size = 10),
-                                 panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
+                                 panel.grid = element_line(size = 0.1, linetype = 2, colour = "grey20"),
                                  axis.text.y = element_text(size = 8),
                                  axis.title.y = element_text(size = 10),
                                  legend.text = element_text(size = 8),
@@ -4088,7 +4133,9 @@ SampleMap <- R6Class("sampleMap",
                              geom_polygon(data = cutResShpFort,
                                           aes(x = long, y = lat, group = group),
                                           colour = "grey10", size = 0.1, alpha = 0.8) +
+                             theme_tufte(base_size = 14, ticks = F) +
                              theme(legend.position = "right",
+                                   panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
                                    axis.text.x = element_text(size = 5),
                                    axis.title.x = element_text(size = 7),
                                    axis.text.y = element_text(size = 5),
