@@ -719,9 +719,9 @@ ggplot_meditsIndex <- function(inMedits){
             axis.text.x = element_text(size = 6),
             strip.text.x = element_text(size = 8),
             axis.title.x = element_text(size = 10),
-            axis.text.y = element_blank(),
+            axis.text.y = element_text(size = 8),
             strip.text.y = element_text(size = 10),
-            axis.title.y = element_blank(),
+            axis.title.y = element_text(size = 10),
             axis.ticks.y = element_blank())
   )
 }
