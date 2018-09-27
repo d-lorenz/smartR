@@ -3617,9 +3617,10 @@ FishFleet <- R6Class("fishFleet",
                          tmp_df <- rbind(tmp_effo, tmp_prod, tmp_comb)
                          rownames(tmp_df) <- NULL
                          tmp_plot <- ggplot(tmp_df, aes(x = Year, y = Ids, fill = Dataset)) +
-                           geom_bar(position=position_dodge(), stat = "identity") +
-                           geom_text(aes(y=Ids, label = Ids), position= position_dodge(width=1),
-                                     vjust=2.5, color="grey20") +
+                           geom_bar(position = position_dodge(), stat = "identity", alpha = 0.75) +
+                           geom_text(aes(y = Ids, label = Ids), position = position_dodge(width=1),
+                                     vjust = 2.5, color = "grey20") +
+                           scale_fill_brewer(palette = "Set2") +
                            ggtitle("Count of Distinct Vessels") +
                            ylab("N. of IDs") +
                            theme_tufte(base_size = 14, ticks=T) +
@@ -4714,6 +4715,7 @@ SampleMap <- R6Class("sampleMap",
                                                                         data = cutResShpFort, alpha = 0.8) +
                                                            geom_text(aes(label = FG, x = Lon, y = Lat),
                                                                      data = tmp_coo, size = 2) +
+                                                           scale_fill_manual(values = colorRampPalette(brewer.pal(8, "Accent"))(length(unique(cutResShpFort$FG)))) +
                                                            ggtitle("Regions") +
                                                            theme_tufte(base_size = 14, ticks=T) +
                                                            theme(legend.position = "none",
