@@ -1636,7 +1636,7 @@ SmartProject <- R6Class("smartProject",
                                                                        ggtitle(paste("Betas x Fishing Ground - ", year, sep = "")) +
                                                                        xlab("Longitude") + ylab("Latitude") +
                                                                        theme_tufte(base_size = 14, ticks=F) +
-                                                                       theme(legend.position = "bottom",
+                                                                       theme(legend.position = "right",
                                                                              plot.title = element_text(size = 14),
                                                                              axis.text.x = element_text(size = 8),
                                                                              axis.title = element_blank(),
@@ -1698,7 +1698,7 @@ SmartProject <- R6Class("smartProject",
                                                                       ggtitle(paste("Production x Fishing Ground - ", year, sep = "")) +
                                                                       xlab("Longitude") + ylab("Latitude") +
                                                                       theme_tufte(base_size = 14, ticks=F) +
-                                                                      theme(legend.position = "bottom",
+                                                                      theme(legend.position = "right",
                                                                             plot.title = element_text(size = 14),
                                                                             axis.text.x = element_text(size = 8),
                                                                             axis.title = element_blank(),
