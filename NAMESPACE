@@ -21,7 +21,8 @@ import("caret")
 importFrom("clues", "get_CH")
 importFrom("cluster", "silhouette")
 importFrom("spdep", "poly2nb", "nbcosts", "nb2listw", "mstree", "skater")
-importFrom("marmap", "getNOAA.bathy", "get.depth", "get.area", "fortify.bathy", "as.SpatialGridDataFrame", "as.bathy")
+importFrom("marmap", "getNOAA.bathy", "get.depth", "get.area", "fortify.bathy",
+           "as.SpatialGridDataFrame", "as.bathy")
 importFrom("shape", "intpalette", "colorlegend")
 importFrom("jpeg", "readJPEG")
 importFrom("grid", "rasterGrob", "grid.draw")
@@ -32,16 +33,22 @@ importFrom("nnls", "nnls")
 importFrom("mtsdi", "mnimput")
 importFrom("gridExtra", "grid.arrange", "tableGrob")
 importFrom("scales", "trans_format", "trans_breaks", "math_format")
-importFrom("grDevices", "dev.list", "dev.set", "boxplot.stats", "rainbow")
-importFrom("graphics", "abline", "barplot", "hist", "par", "points", "text")
-importFrom("stats", "as.formula", "dist", "dnorm", "glm", "predict", "quantile", "runif", "nls", "optim", "pnorm")
+importFrom("grDevices", "dev.list", "dev.set", "boxplot.stats", "rainbow",
+           "colorRampPalette")
+importFrom("graphics", "abline", "barplot", "hist", "par", "points", "text",
+           "lines", "polygon")
+importFrom("stats", "as.formula", "dist", "dnorm", "glm", "predict",
+           "quantile", "runif", "nls", "optim", "pnorm", "rnorm")
 importFrom("utils", "capture.output", "read.table", "read.csv")
-importFrom("ggthemes", "theme_tufte", "theme_few", "scale_color_wsj", "scale_shape_cleveland")
+importFrom("ggthemes", "theme_tufte", "theme_few", "scale_color_wsj",
+           "scale_shape_cleveland")
 importFrom("ggrepel", "geom_label_repel")
 importFrom("vegan", "decostand")
 importFrom("rgdal", "readOGR")
 importFrom("RColorBrewer", "brewer.pal")
 importFrom("jsonlite","fromJSON")
+importFrom("igraph", "%>%", "make_empty_graph", "set_vertex_attr", "add_edges",
+           "add_vertices", "add_edges", "plot.igraph", "layout_with_fr")
 
 export(smart_gui)
 export(SmartProject)

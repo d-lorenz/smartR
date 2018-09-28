@@ -58,5 +58,6 @@ Imports:
     ggrepel,
     rgdal,
     RColorBrewer,
-    jsonlite
+    jsonlite,
+    igraph
 RoxygenNote: 6.0.1
