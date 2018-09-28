@@ -1,7 +1,8 @@
 
 #' SMART GUI
 #'
-#' The \code{smart_gui} function implements the main graphical user interface of SMART.
+#' The \code{smart_gui} function implements the main graphical user interface 
+#' of SMART.
 #'
 #' @return This function does not return a value.
 #'
@@ -20,7 +21,8 @@ smart_gui <- function(){
   logoPNG <- readJPEG(source = system.file("smartRlogo.jpg", package="smartR"))
   pre_dev <- length(dev.list())
   
-  main_win <- gwindow(paste("SMART - Version ", "1.1", sep = ""), width = 1200, height= 600, visible = TRUE)
+  main_win <- gwindow(paste("SMART - Version ", "1.1", sep = ""), width = 1200,
+                      height= 600, visible = TRUE)
   big_g <- ggroup(horizontal = TRUE, container = main_win)
   addSpace(big_g, 10)
   
@@ -35,18 +37,17 @@ smart_gui <- function(){
   gbutton("New", container = pro_g_top)
   addSpring(pro_g_top)
   gbutton("Load", container = pro_g_top, handler = function(h,...){
-    load_path <- gfile(text = "Select Smart_Project file", type = "open", filter = list("R files" = list(patterns = c("*.rData"))))
+    load_path <- gfile(text = "Select Smart_Project file", type = "open",
+                       filter = list("R files" = list(patterns = c("*.rData"))))
     my_project <- readRDS(load_path)
     
     ### Update Sampling Status
     
-    if(!is.null(my_project$rawDataSurvey)){ #update_pop_gui()
-      
+    if(!is.null(my_project$rawDataSurvey)){
       raw_t[] <- my_project$rawDataSurvey[sample(1:nrow(my_project$rawDataSurvey), 100, replace = FALSE),]
-      svalue(raw_l1) <- paste("Specie: ", paste(my_project$specieInSurvey, collapse = " - "))
-      #   svalue(raw_l2) <- paste("Length Classes: from ",  min(my_project$LClass), " to ", max(my_project$LClass))
+      svalue(raw_l1) <- paste("Specie: ", paste(my_project$specieInSurvey,
+                                                collapse = " - "))
       svalue(raw_l3) <- paste("Years: from", min(as.numeric(as.character(my_project$yearInSurvey))), " to ", max(as.numeric(as.character(my_project$yearInSurvey))))
-      # spec_drop[] <- my_project$specieInSurvey            ##  droplist from population tab
       spec_drop_mix[] <- my_project$specieInSurvey
       # spevie_drop[] <- c("All", my_project$specieInSurvey)
       # cohSpe_drop[] <- my_project$specieInSurvey
