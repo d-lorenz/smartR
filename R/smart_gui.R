@@ -2550,7 +2550,7 @@ smart_gui <- function(){
     
     tempWind_Gain <- gwindow(title = "Size Class", visible = FALSE,
                              parent = main_win,
-                             width = 600, height = 400)
+                             width = 700, height = 400)
     
     gain_g <- ggroup(horizontal = FALSE, container = tempWind_Gain, spacing = 15)
     gain_g_top <- gframe(horizontal = TRUE, container = gain_g, spacing = 20)
@@ -2564,6 +2564,7 @@ smart_gui <- function(){
                                 cost_df[] <-tmp_df
                               }
                             })
+    sel_specie$set_size(value = c(width = 150))
     addSpace(gain_g_top, 15)
     add_class <- gbutton(text = "Add Size Class", container = gain_g_top, handler = function(...){
       new_row <- data.frame(Class = "New Class",
