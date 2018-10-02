@@ -2784,58 +2784,11 @@ smart_gui <- function(){
   sim_Ban <- gbutton("Set Closed Area", container = sim_g_SimPar3, handler = function(h,...){
     
     tempWind_Area <- gwindow(title = "Set Closed Area",
-                             # visible = FALSE,
                              parent = main_win,
-                             width = 600, height = 600)
+                             width = 800, height = 600)
     
-    bigGroup <- ggroup(horizontal = FALSE, container = tempWind_Area)
-    
-    smaGroup <- ggroup(horizontal = TRUE, container = bigGroup)
-    addSpring(smaGroup)
-    setArea <- gradio(items = c("Add", "Stop"),  selected = 2, container = smaGroup, handler = function(h,...){
-      if(svalue(setArea) == "Stop"){
-        opt <- options(show.error.messages = FALSE)
-        on.exit(options(opt))
-        stop()
-      }else{
-        try({
-          while(svalue(setArea) == "Add"){
-            banned <- gglocator(n = 1)
-            ban_lst <- unlist(over(SpatialPointsDataFrame(banned, banned),
-                                   my_project$sampMap$cutResShp, returnList = TRUE))
-            if(length(ban_lst) > 0){
-              my_project$simBanFG$Banned[ban_lst] <- ifelse(my_project$simBanFG$Banned[ban_lst] == "Banned", "0", "Banned")
-              
-              grid_data <- merge(x = my_project$sampMap$cutResShpFort,
-                                 y = my_project$simBanFG, all.x = TRUE)
-              
-              print(my_project$sampMap$gooMapPlot +
-                      geom_polygon(aes_(x = ~long, y = ~lat, group = ~group, fill = ~Banned),
-                                   colour = "black", size = 0.1,
-                                   data = grid_data, alpha = 0.8) +
-                      scale_fill_manual("Banned Areas",
-                                        values = c("Banned" = "red", "0" = "blue")) +
-                      geom_text(aes_(label = ~FG, x = ~Lon, y = ~Lat),
-                                data = tmp_coo, size = 2) +
-                      theme(legend.position='none') +
-                      xlab("Longitude") + ylab("Latitude") +
-                      scale_x_continuous(expand=c(0,0)) + 
-                      scale_y_continuous(expand=c(0,0)))
-            }
-          }
-        },silent = TRUE)
-        
-      }
-    })
-    
-    addSpring(smaGroup)
-    endArea <- gbutton(text = "\nClose\n", container = smaGroup, handler = function(h,...){
-      # blockHandlers(obj = setArea)
-      dispose(tempWind_Area)
-    })
-    addSpring(smaGroup)
-    
-    lwRel_p <- ggraphics(container = bigGroup, width = 550, height = 350, expand = TRUE)
+    bigGroup <- ggroup(horizontal = TRUE, container = tempWind_Area)
+    cloAre_p <- ggraphics(container = bigGroup, width = 600, height = 550)
     
     grid_data <- merge(x = my_project$sampMap$cutResShpFort,
                        y = my_project$simBanFG, all.x = TRUE)
@@ -2852,6 +2805,50 @@ smart_gui <- function(){
             xlab("Longitude") + ylab("Latitude") +
             scale_x_continuous(expand=c(0,0)) + 
             scale_y_continuous(expand=c(0,0)))
+    
+    smaGroup <- ggroup(horizontal = FALSE, container = bigGroup, expand = TRUE)
+    addSpace(smaGroup, 15)
+    
+    tmp_Ban <- my_project$simBanFG
+    tmp_Ban$Banned <- factor(tmp_Ban$Banned, levels = c("0", "Banned"))
+    
+    cloDF_g <- ggroup(horizontal = TRUE, container = smaGroup, expand = TRUE)
+    addSpace(cloDF_g, 20)
+    close_df <- gdf(items = tmp_Ban, container = cloDF_g, expand = TRUE)
+    addSpace(cloDF_g, 20)
+    
+    addHandlerChanged(obj = close_df, , handler = function(...){
+      if(sum(which(!my_project$simBanFG$Banned == close_df[]$Banned)) > 0){
+        idChan <- which(!my_project$simBanFG$Banned == close_df[]$Banned)
+        cat("\nChanged FG ", idChan, ": ",
+            as.character(my_project$simBanFG$Banned[idChan]), " -> ",
+            as.character(close_df[]$Banned[idChan]), sep = "")
+        my_project$simBanFG$Banned <- as.character(close_df[]$Banned)
+        grid_data <- merge(x = my_project$sampMap$cutResShpFort,
+                           y = my_project$simBanFG, all.x = TRUE)
+        tmp_coo <- my_project$sampMap$cutResShpCent
+        print(my_project$sampMap$gooMapPlot +
+                geom_polygon(aes_(x = ~long, y = ~lat, group = ~group, fill = ~Banned),
+                             colour = "black", size = 0.1,
+                             data = grid_data, alpha = 0.8) +
+                scale_fill_manual("Banned Areas",
+                                  values = c("Banned" = "red", "0" = "blue")) +
+                geom_text(aes_(label = ~FG, x = ~Lon, y = ~Lat),
+                          data = tmp_coo, size = 2) +
+                theme(legend.position='none') +
+                xlab("Longitude") + ylab("Latitude") +
+                scale_x_continuous(expand=c(0,0)) + 
+                scale_y_continuous(expand=c(0,0)))
+      }
+    })
+    
+    addSpace(smaGroup, 15)
+    endArea <- gbutton(text = "\nClose\n", container = smaGroup, handler = function(h,...){
+      delete(cloDF_g, close_df)
+      dispose(tempWind_Area)
+    })
+    addSpace(smaGroup, 15)
+    
   })
   addSpring(sim_g_SimPar3)
   addSpring(sim_g_SimPar)
