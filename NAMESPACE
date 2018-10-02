@@ -47,7 +47,7 @@ importFrom("vegan", "decostand")
 importFrom("rgdal", "readOGR")
 importFrom("RColorBrewer", "brewer.pal")
 importFrom("jsonlite","fromJSON")
-importFrom("igraph", "%>%", "make_empty_graph", "set_vertex_attr", "add_edges",
+importFrom("igraph", "%>%", "make_empty_graph", "set_vertex_attr", 
            "add_vertices", "add_edges", "plot.igraph", "layout_with_fr")
 
 export(smart_gui)
