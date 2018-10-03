@@ -2189,12 +2189,12 @@ smart_gui <- function(){
   spec_drop_mix <- gcombobox(items = "Specie", selected = 1, container = spec_mix_f, editable = FALSE, expand = TRUE, handler = function(...){
     if(svalue(sourceMix_r) == "Survey"){
       spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop_mix))
-        sex_drop_mix[] <- my_project$surveyBySpecie[[spe_ind]]$speSex
-        svalue(sex_drop_mix) <- sex_drop_mix[1]
+      sex_drop_mix[] <- my_project$surveyBySpecie[[spe_ind]]$speSex
+      svalue(sex_drop_mix) <- sex_drop_mix[1]
     }else{
       spe_ind <- which(my_project$specieInFishery == svalue(spec_drop_mix))
-        sex_drop_mix[] <- my_project$fisheryBySpecie[[spe_ind]]$speSex
-        svalue(sex_drop_mix) <- sex_drop_mix[1]
+      sex_drop_mix[] <- my_project$fisheryBySpecie[[spe_ind]]$speSex
+      svalue(sex_drop_mix) <- sex_drop_mix[1]
     }
   })
   spec_drop_mix$set_size(value = c(width = 150))
@@ -2286,6 +2286,7 @@ smart_gui <- function(){
   cohoP_g_top <- gframe(horizontal = TRUE, container = cohoP_g, spacing = 10)
   addSpace(cohoP_g_top, 2)
   cohofra_g <- gframe("Cohort data", horizontal = TRUE, container = cohoP_g_top, expand = TRUE)
+  addSpace(cohofra_g, 20)
   sourceCoh_r <- gradio(items = c("Survey", "Fishery"), horizontal = FALSE, container = cohofra_g, expand = TRUE, handler = function(...){
     if(svalue(sourceCoh_r) == "Survey"){
       if(is.null(my_project$specieInSurvey)){
@@ -2294,6 +2295,9 @@ smart_gui <- function(){
       }else{
         spec_drop_coh[] <- my_project$specieInSurvey
         svalue(spec_drop_coh) <- my_project$specieInSurvey[1]
+        spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop_coh))
+        sexRadio_coh[] <- my_project$surveyBySpecie[[spe_ind]]$speSex
+        svalue(sexRadio_coh) <- sexRadio_coh[1]
       }
     }else{
       if(is.null(my_project$specieInFishery)){
@@ -2302,6 +2306,9 @@ smart_gui <- function(){
       }else{
         spec_drop_coh[] <- my_project$specieInFishery
         svalue(spec_drop_coh) <- my_project$specieInFishery[1]
+        spe_ind <- which(my_project$specieInFishery == svalue(spec_drop_coh))
+        sexRadio_coh[] <- my_project$fisheryBySpecie[[spe_ind]]$speSex
+        svalue(sexRadio_coh) <- sexRadio_coh[1]
       }
     }
   })
@@ -2310,111 +2317,72 @@ smart_gui <- function(){
   addSpring(cohofra_g)
   addSpring(cohSpe_b)
   spec_drop_coh <- gcombobox(items = "Specie", selected = 1, container = cohSpe_b, editable = FALSE, handler = function(h,...){
-    svalue(sexRadio_coh) <- "Female"
-    svalue(gruRadio_coh) <- "Age"
     svalue(cohTyp_drop) <- "LFD"
     if(svalue(sourceCoh_r) == "Survey"){
-      cohCoh_drop[] <- sort(unique(my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age))
+      spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop_coh))
+      sexRadio_coh[] <- my_project$surveyBySpecie[[spe_ind]]$speSex
+      svalue(sexRadio_coh) <- sexRadio_coh[1]
     }else{
-      cohCoh_drop[] <- sort(unique(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age))
+      spe_ind <- which(my_project$specieInFishery == svalue(spec_drop_coh))
+      sexRadio_coh[] <- my_project$fisheryBySpecie[[spe_ind]]$speSex
+      svalue(sexRadio_coh) <- sexRadio_coh[1]
     }
     svalue(cohCoh_drop, index = TRUE) <- 1
   })
   addSpring(cohSpe_b)
+  spec_drop_coh$set_size(value = c(width = 150))
   
   cohSex_b <- gframe("Sex", horizontal = FALSE, container = cohofra_g, expand = TRUE)
   addSpring(cohofra_g)
   addSpring(cohSex_b)
-  sexRadio_coh <- gradio(items = c("Female", "Male", "Unsex"), selected = 1, container = cohSex_b, expand = TRUE, handler = function(h,...){
-    if(svalue(sourceCoh_r) == "Survey"){
-      cohCoh_drop[] <- sort(unique(my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age))
-    }else{
-      cohCoh_drop[] <- sort(unique(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age))
-    }
-  })
+  sexRadio_coh <- gcombobox(items = c("Female", "Male", "Unsex"),
+                            selected = 1,
+                            container = cohSex_b,
+                            expand = TRUE, editable = FALSE,
+                            handler = function(h,...){
+                              if(svalue(sourceCoh_r) == "Survey"){
+                                spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop_coh))
+                                cohCoh_drop[] <- sort(unique(my_project$surveyBySpecie[[spe_ind]]$groMixout[[svalue(sexRadio_coh)]]$Age))
+                              }else{
+                                spe_ind <- which(my_project$specieInFishery == svalue(spec_drop_coh))
+                                cohCoh_drop[] <- sort(unique(my_project$fisheryBySpecie[[spe_ind]]$groMixout[[svalue(sexRadio_coh)]]$Age))
+                              }
+                            })
   addSpring(cohSex_b)
-  
-  cohGru_b <- gframe("Group", horizontal = FALSE, container = cohofra_g, expand = TRUE)
-  addSpring(cohofra_g)
-  addSpring(cohGru_b)
-  gruRadio_coh <- gradio(items = c("Age", "Birth"), selected = 1, container = cohGru_b, expand = TRUE, handler = function(h,...){
-    if(svalue(gruRadio_coh) == "Age"){
-      if(svalue(sourceCoh_r) == "Survey"){
-        cohCoh_drop[] <- sort(unique(my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age))
-      }else{
-        cohCoh_drop[] <- sort(unique(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Age))
-      }
-    }else{
-      if(svalue(sourceCoh_r) == "Survey"){
-        cohCoh_drop[] <- sort(unique(my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Birth))
-      }else{
-        cohCoh_drop[] <- sort(unique(my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(spec_drop_coh))]]$groMixout[[svalue(sexRadio_coh)]]$Birth))
-      }
-    }
-  })
-  addSpring(cohGru_b)
   
   cohCoh_b <- gframe("Cohort", horizontal = FALSE, container = cohofra_g, expand = TRUE)
   addSpring(cohofra_g)
   addSpring(cohCoh_b)
-  cohCoh_drop <- gcombobox(items = "Cohort", selected = 1, container = cohCoh_b, editable = FALSE, handler = function(h,...){
+  cohCoh_drop <- gcombobox(items = "Age", selected = 1, container = cohCoh_b, editable = FALSE, handler = function(h,...){
     dev.set(dev.list()[pre_dev+8])
     if(svalue(sourceCoh_r) == "Survey"){
       cohSpe_ind <- which(my_project$specieInSurvey == svalue(spec_drop_coh))
-      if(svalue(cohTyp_drop) == "LFD"){
-        
-      }else{
-        
-      }
+      tmpLFD <- my_project$surveyBySpecie[[cohSpe_ind]]$groMixout[[svalue(sexRadio_coh)]][my_project$surveyBySpecie[[cohSpe_ind]]$groMixout[[svalue(sexRadio_coh)]]$Age == svalue(cohCoh_drop),]
+      tmpLFD$UTC <- tmpLFD$Date
+      tmp_palette <- rainbow(max(cohCoh_drop[])+1)
+      suppressWarnings(grid.arrange(set_ggHistLfdTot(inLfd = tmpLFD) + scale_fill_manual(values = tmp_palette[svalue(cohCoh_drop)+1]),
+                                    set_ggHistUtcLfd(inLfd = tmpLFD) + scale_fill_manual(values = tmp_palette[svalue(cohCoh_drop)+1]),
+                                    set_ggHistUtcTot(inLfd = tmpLFD) + scale_fill_manual(values = tmp_palette[svalue(cohCoh_drop)+1]),
+                                    set_ggDotUtcSplit(inLfd = tmpLFD) + scale_color_manual(values = tmp_palette[svalue(cohCoh_drop)+1]),
+                                    layout_matrix = rbind(c(1,1,1,3),
+                                                          c(2,2,2,4),
+                                                          c(2,2,2,4))))
     }else{
       cohSpe_ind <- which(my_project$specieInFishery == svalue(spec_drop_coh))
-      if(svalue(cohTyp_drop) == "LFD"){
-        if(svalue(gruRadio_coh) == "Age"){
-          tmpLFD <- my_project$fisheryBySpecie[[cohSpe_ind]]$groMixout[[svalue(sexRadio_coh)]][my_project$fisheryBySpecie[[cohSpe_ind]]$groMixout[[svalue(sexRadio_coh)]]$Age == svalue(cohCoh_drop),]
-          tmpLFD$UTC <- tmpLFD$Date
-          tmp_palette <- rainbow(max(cohCoh_drop[])+1)
-          suppressWarnings(grid.arrange(set_ggHistLfdTot(inLfd = tmpLFD) + scale_fill_manual(values = tmp_palette[svalue(cohCoh_drop)+1]),
-                                        set_ggHistUtcLfd(inLfd = tmpLFD) + scale_fill_manual(values = tmp_palette[svalue(cohCoh_drop)+1]),
-                                        set_ggHistUtcTot(inLfd = tmpLFD) + scale_fill_manual(values = tmp_palette[svalue(cohCoh_drop)+1]),
-                                        set_ggDotUtcSplit(inLfd = tmpLFD) + scale_color_manual(values = tmp_palette[svalue(cohCoh_drop)+1]),
-                                        layout_matrix = rbind(c(1,1,1,3),
-                                                              c(2,2,2,4),
-                                                              c(2,2,2,4))))
-        }else{
-          tmpLFD <- my_project$fisheryBySpecie[[cohSpe_ind]]$groMixout[[svalue(sexRadio_coh)]][my_project$fisheryBySpecie[[cohSpe_ind]]$groMixout[[svalue(sexRadio_coh)]]$Birth == svalue(cohCoh_drop),]
-          tmpLFD$UTC <- tmpLFD$Date
-          tmpLFD$Month <- factor(tmpLFD$MonthChar, levels = month.abb)
-          
-          tmp_palette <- brewer.pal(12, "Paired")
-          suppressWarnings(grid.arrange(set_ggHistLfdTot(inLfd = tmpLFD) + scale_fill_manual(values = tmp_palette[svalue(cohCoh_drop)-min(cohCoh_drop[])]),
-                                        set_ggHistUtcLfd(inLfd = tmpLFD) + scale_fill_manual(values = tmp_palette[svalue(cohCoh_drop)-min(cohCoh_drop[])]),
-                                        set_ggHistUtcTot(inLfd = tmpLFD) + scale_fill_manual(values = tmp_palette[svalue(cohCoh_drop)-min(cohCoh_drop[])]),
-                                        set_ggDotUtcSplit(inLfd = tmpLFD) + scale_color_manual(values = tmp_palette[svalue(cohCoh_drop)-min(cohCoh_drop[])]),
-                                        layout_matrix = rbind(c(1,1,1,3),
-                                                              c(2,2,2,4),
-                                                              c(2,2,2,4))))
-        }
-      }else{
-        
-      }
+      tmpLFD <- my_project$fisheryBySpecie[[cohSpe_ind]]$groMixout[[svalue(sexRadio_coh)]][my_project$fisheryBySpecie[[cohSpe_ind]]$groMixout[[svalue(sexRadio_coh)]]$Age == svalue(cohCoh_drop),]
+      tmpLFD$UTC <- tmpLFD$Date
+      tmp_palette <- rainbow(max(cohCoh_drop[])+1)
+      suppressWarnings(grid.arrange(set_ggHistLfdTot(inLfd = tmpLFD) + scale_fill_manual(values = tmp_palette[svalue(cohCoh_drop)+1]),
+                                    set_ggHistUtcLfd(inLfd = tmpLFD) + scale_fill_manual(values = tmp_palette[svalue(cohCoh_drop)+1]),
+                                    set_ggHistUtcTot(inLfd = tmpLFD) + scale_fill_manual(values = tmp_palette[svalue(cohCoh_drop)+1]),
+                                    set_ggDotUtcSplit(inLfd = tmpLFD) + scale_color_manual(values = tmp_palette[svalue(cohCoh_drop)+1]),
+                                    layout_matrix = rbind(c(1,1,1,3),
+                                                          c(2,2,2,4),
+                                                          c(2,2,2,4))))
     }
   })
   addSpring(cohCoh_b)
-  
-  cohTyp_b <- gframe("Type", horizontal = FALSE, container = cohofra_g, expand = TRUE)
-  addSpring(cohofra_g)
-  addSpring(cohTyp_b)
-  cohTyp_drop <- gcombobox(items = c("LFD", "Spatial"), selected = 1, container = cohTyp_b, editable = FALSE)
-  addSpring(cohTyp_b)
-  
-  gimage(system.file("ico/view-refresh-5_big.ico", package="smartR"), container = cohofra_g,
-         handler = function(h,...){
-           dev.set(dev.list()[pre_dev+8])
-           # my_project$cohoDisPlot(which(my_project$specieInSurvey == svalue(cohSpe_drop)),
-           #                        ifelse(svalue(cohCoh_drop) == "All", "All", as.numeric(svalue(cohCoh_drop))),
-           #                        ifelse(svalue(cohYea_drop) == "All", "All", which(my_project$yearInSurvey == svalue(cohYea_drop))),
-           #                        ifelse(svalue(cohInt_r) == "Yes", TRUE, FALSE))
-         })
+  addSpace(cohofra_g, 20)
   addSpace(cohoP_g_top, 2)
   cohPop_p <- ggraphics(container = cohoP_g, width = 550, height = 250, expand = TRUE)
   
