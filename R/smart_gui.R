@@ -1494,6 +1494,9 @@ smart_gui <- function() {
           container = reg_g_top_harbs,
           handler = function(h, ...) {
             my_project$fleet$setRegHarbs()
+            dev.set(dev.list()[pre_dev + 5])
+            my_project$getHarbFgDist()
+            my_project$ggplotFgWeigDists()
           }
   )
   addSpace(reg_g_top_harbs, 10)
@@ -1507,12 +1510,12 @@ smart_gui <- function() {
              text = "Select Harbour List file", type = "open",
              filter = list("R files" = list(patterns = c("*.rData")))
            )
-           
            if (length(load_path) == 0) stop("Missing File to Load!")
-           
            cat("\nLoading Harbour List from ", load_path, sep = "")
-           
            my_project$fleet$loadFleetHarb(harb_path = load_path)
+           dev.set(dev.list()[pre_dev + 5])
+           my_project$getHarbFgDist()
+           my_project$ggplotFgWeigDists()
          }
   )
   addSpring(reg_g_harb_ico)
@@ -1531,23 +1534,20 @@ smart_gui <- function() {
            if (rev(unlist(strsplit(save_dest, "[.]")))[1] != "rData") {
              save_dest <- paste(save_dest, ".rData", sep = "")
            }
-           
            my_project$fleet$saveFleetHarb(harb_path = save_dest)
-           
            cat("\nHarbour List saved in: ", save_dest, sep = "")
          }
   )
   addSpring(reg_g_harb_ico)
-  
-  addSpring(reg_g_top_harbs)
-  gbutton("Set Weighted\nDistance",
-          container = reg_g_top_harbs,
-          handler = function(h, ...) {
-            dev.set(dev.list()[pre_dev + 5])
-            my_project$getHarbFgDist()
-            my_project$ggplotFgWeigDists()
-          }
-  )
+  # addSpace(reg_g_top_harbs, 10)
+  # gbutton("Set Weighted\nDistance",
+  #         container = reg_g_top_harbs,
+  #         handler = function(h, ...) {
+  #           dev.set(dev.list()[pre_dev + 5])
+  #           my_project$getHarbFgDist()
+  #           my_project$ggplotFgWeigDists()
+  #         }
+  # )
   addSpace(reg_g_top_harbs, 10)
   gimage(system.file("ico/view-refresh-5_big.ico", package = "smartR"),
          container = reg_g_top_harbs,
