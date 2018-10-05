@@ -3682,57 +3682,94 @@ smart_gui <- function() {
             lwRel_g_top <- ggroup(horizontal = FALSE, container = lwRel_g)
             addSpace(lwRel_g_top, 10)
             
-            assfra_g <- gframe("Input setup",
+            assfra_g <- gframe("Target",
                                horizontal = FALSE,
+                               spacing = 10,
                                container = lwRel_g_top
             )
-            assfra_g$set_size(value = c(width = 200, height = 231))
+            # assfra_g$set_size(value = c(width = 200))
             addSpace(assfra_g, 5)
             
-            assSou_g <- gframe("Source", horizontal = FALSE, container = assfra_g)
-            assSou_r <- gradio(c("Survey", "Fishery"),
-                               selected = 1,
-                               horizontal = FALSE, container = assSou_g,
-                               handler = function(...) {
-                                 if (svalue(assSou_r) == "Survey") {
-                                   if (is.null(my_project$specieInSurvey)) {
-                                     assSpe_drop[] <- "No data"
-                                     svalue(assSpe_drop) <- "No data"
-                                   } else {
-                                     assSpe_drop[] <- my_project$specieInSurvey
-                                     svalue(assSpe_drop) <- my_project$specieInSurvey[1]
-                                   }
-                                 } else {
-                                   if (is.null(my_project$specieInFishery)) {
-                                     assSpe_drop[] <- "No data"
-                                     svalue(assSpe_drop) <- "No data"
-                                   } else {
-                                     assSpe_drop[] <- my_project$specieInFishery
-                                     svalue(assSpe_drop) <- my_project$specieInFishery[1]
-                                   }
-                                 }
-                               }
+            assSou_g <- gframe("Source", horizontal = TRUE, container = assfra_g)
+            addSpace(assSou_g, 5)
+            assSou_r <- gcombobox(c("Survey", "Fishery"),
+                                  selected = 1, expand = TRUE,
+                                  horizontal = FALSE, container = assSou_g,
+                                  handler = function(...) {
+                                    if (svalue(assSou_r) == "Survey") {
+                                      if (is.null(my_project$specieInSurvey)) {
+                                        assSpe_drop[] <- "No data"
+                                        svalue(assSpe_drop) <- "No data"
+                                      } else {
+                                        assSpe_drop[] <- my_project$specieInSurvey
+                                        svalue(assSpe_drop) <- my_project$specieInSurvey[1]
+                                      }
+                                    } else {
+                                      if (is.null(my_project$specieInFishery)) {
+                                        assSpe_drop[] <- "No data"
+                                        svalue(assSpe_drop) <- "No data"
+                                      } else {
+                                        assSpe_drop[] <- my_project$specieInFishery
+                                        svalue(assSpe_drop) <- my_project$specieInFishery[1]
+                                      }
+                                    }
+                                  }
             )
+            addSpace(assSou_g, 5)
             addSpace(assfra_g, 10)
             
-            assSpe_g <- gframe("Specie", horizontal = FALSE, container = assfra_g)
+            assSpe_g <- gframe("Specie", horizontal = TRUE, container = assfra_g)
+            addSpace(assSpe_g, 5)
             assSpe_drop <- gcombobox(
               items = "Specie", selected = 1,
               container = assSpe_g, editable = FALSE
             )
+            assSpe_drop$set_size(value = c(width = 200))
+            addSpace(assSpe_g, 5)
             addSpace(assfra_g, 10)
             
-            lwRel_f_sex <- gframe("Sex", horizontal = FALSE, container = assfra_g)
+            lwRel_f_sex <- gframe("Sex", horizontal = TRUE, container = assfra_g)
+            addSpace(lwRel_f_sex, 5)
             lwRel_sex_drop <- gcombobox(
               items = c("Female", "Male", "Unsex"),
               selected = 1, container = lwRel_f_sex,
-              expand = TRUE,
-              editable = FALSE
+              editable = FALSE, expand = TRUE
             )
+            addSpace(lwRel_f_sex, 5)
             addSpace(assfra_g, 10)
             
+            lwRel_f_meth <- gframe(
+              text = "Method",
+              horizontal = FALSE,
+              container = lwRel_g_top,
+              spacing = 10
+            )
+            addSpace(lwRel_f_meth, 5)
+            
+            lwRel_f_valu <- gframe(
+              text = "Assumption",
+              horizontal = TRUE,
+              container = lwRel_f_meth,
+              spacing = 10
+            )
+            addSpring(lwRel_f_valu)
+            valu_lyt <- glayout(container = lwRel_f_valu, spacing = 10)
+            valu_lyt[1, 1] <- "alpha"
+            valu_lyt[1, 2] <- gedit(text = "0.01", width = 10, container = valu_lyt)
+            valu_lyt[2, 1] <- "beta"
+            valu_lyt[2, 2] <- gedit(text = "3.00", width = 10, container = valu_lyt)
+            addSpring(lwRel_f_valu)
+            
+            addSpace(lwRel_f_meth, 5)
+            lwRel_f_esti <- gframe(
+              text = "Estimation",
+              horizontal = TRUE,
+              container = lwRel_f_meth,
+              spacing = 10
+            )
+            addSpring(lwRel_f_esti)
             gbutton("\t  Load\nWeighted Sample",
-                    container = assfra_g,
+                    container = lwRel_f_esti,
                     handler = function(h, ...) {
                       lw_data <- read.csv(pathLWrel)
                       lw_fit <- nls(Weight ~ I(alpha * Length^beta),
@@ -3804,20 +3841,8 @@ smart_gui <- function() {
                       )
                     }
             )
+            addSpring(lwRel_f_esti)
             
-            addSpace(lwRel_g_top, 10)
-            
-            lwRel_f_valu <- gframe(
-              text = "Values", horizontal = TRUE,
-              container = lwRel_g_top, spacing = 10
-            )
-            addSpace(lwRel_f_valu, 10)
-            valu_lyt <- glayout(container = lwRel_f_valu)
-            valu_lyt[1, 1] <- "alpha"
-            valu_lyt[1, 2] <- gedit(text = "0.01", width = 10, container = valu_lyt)
-            valu_lyt[2, 1] <- "beta"
-            valu_lyt[2, 2] <- gedit(text = "3.00", width = 10, container = valu_lyt)
-            addSpace(lwRel_f_valu, 10)
             
             addSpace(lwRel_g_top, 10)
             
