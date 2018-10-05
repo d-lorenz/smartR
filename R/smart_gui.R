@@ -3238,17 +3238,17 @@ smart_gui <- function() {
           blockHandlers(obj = sexRadio_coh)
           blockHandlers(obj = cohCoh_drop)
           spec_drop_coh[] <- "No data"
+          svalue(spec_drop_coh) <- spec_drop_coh[1]
           sexRadio_coh[] <- "No data"
+          svalue(sexRadio_coh) <- sexRadio_coh[1]
           cohCoh_drop[] <- "No data"
+          svalue(cohCoh_drop) <- cohCoh_drop[1]
           unblockHandlers(obj = spec_drop_coh)
           unblockHandlers(obj = sexRadio_coh)
           unblockHandlers(obj = cohCoh_drop)
         } else {
           spec_drop_coh[] <- my_project$specieInSurvey
           svalue(spec_drop_coh) <- my_project$specieInSurvey[1]
-          spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop_coh))
-          sexRadio_coh[] <- my_project$surveyBySpecie[[spe_ind]]$speSex
-          svalue(sexRadio_coh) <- sexRadio_coh[1]
         }
       } else {
         if (is.null(my_project$specieInFishery)) {
@@ -3256,17 +3256,17 @@ smart_gui <- function() {
           blockHandlers(obj = sexRadio_coh)
           blockHandlers(obj = cohCoh_drop)
           spec_drop_coh[] <- "No data"
+          svalue(spec_drop_coh) <- spec_drop_coh[1]
           sexRadio_coh[] <- "No data"
+          svalue(sexRadio_coh) <- sexRadio_coh[1]
           cohCoh_drop[] <- "No data"
+          svalue(cohCoh_drop) <- cohCoh_drop[1]
           unblockHandlers(obj = spec_drop_coh)
           unblockHandlers(obj = sexRadio_coh)
           unblockHandlers(obj = cohCoh_drop)
         } else {
           spec_drop_coh[] <- my_project$specieInFishery
           svalue(spec_drop_coh) <- my_project$specieInFishery[1]
-          spe_ind <- which(my_project$specieInFishery == svalue(spec_drop_coh))
-          sexRadio_coh[] <- my_project$fisheryBySpecie[[spe_ind]]$speSex
-          svalue(sexRadio_coh) <- sexRadio_coh[1]
         }
       }
     }
@@ -3282,7 +3282,6 @@ smart_gui <- function() {
     items = "Specie", selected = 1,
     container = cohSpe_b, editable = FALSE,
     handler = function(h, ...) {
-      # svalue(cohTyp_drop) <- "LFD"
       if (svalue(sourceCoh_r) == "Survey") {
         spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop_coh))
         sexRadio_coh[] <- my_project$surveyBySpecie[[spe_ind]]$speSex
