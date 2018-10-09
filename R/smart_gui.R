@@ -3722,7 +3722,18 @@ smart_gui <- function() {
             addSpace(assSpe_g, 5)
             assSpe_drop <- gcombobox(
               items = "Specie", selected = 1,
-              container = assSpe_g, editable = FALSE
+              container = assSpe_g, editable = FALSE,
+              handler = function(h, ...) {
+                if (svalue(sourceMix_r) == "Survey") {
+                  spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop_mix))
+                  lwRel_sex_drop[] <- my_project$surveyBySpecie[[spe_ind]]$speSex
+                  svalue(lwRel_sex_drop) <- lwRel_sex_drop[1]
+                } else {
+                  spe_ind <- which(my_project$specieInFishery == svalue(spec_drop_mix))
+                  lwRel_sex_drop[] <- my_project$fisheryBySpecie[[spe_ind]]$speSex
+                  svalue(lwRel_sex_drop) <- lwRel_sex_drop[1]
+                }
+              }
             )
             assSpe_drop$set_size(value = c(width = 200))
             addSpace(assSpe_g, 5)
@@ -3869,6 +3880,8 @@ smart_gui <- function() {
             addSpace(lwRel_g_top, 10)
             
             visible(tempWind_LWrel) <- TRUE
+            
+            svalue(assSou_r, index = TRUE) <- 1
             
             addSpace(lwRel_g, 10)
             lwRel_p <- ggraphics(
