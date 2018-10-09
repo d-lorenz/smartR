@@ -3794,13 +3794,15 @@ smart_gui <- function() {
                                     data = lw_data[, c("Length", "Weight")],
                                     start = list(alpha = 1, beta = 1)
                       )
-                      svalue(valu_lyt[1, 2]) <- round(summary(lw_fit)$coefficients[1, 1], 5)
-                      svalue(valu_lyt[2, 2]) <- round(summary(lw_fit)$coefficients[2, 1], 5)
+                      tmpAlpha <- valu_lyt[1, 2]
+                      tmpBeta <- valu_lyt[2, 2]
+                      svalue(tmpAlpha) <- round(summary(lw_fit)$coefficients[1, 1], 5)
+                      svalue(tmpBeta) <- round(summary(lw_fit)$coefficients[2, 1], 5)
                       
                       if (svalue(assSou_r) == "Survey") {
-                        my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(assSpe_drop))]]$setLWpar(alphaVal = svalue(valu_lyt[1, 2]), betaVal = svalue(valu_lyt[2, 2]), sex = svalue(lwRel_sex_drop))
+                        my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(assSpe_drop))]]$setLWpar(alphaVal = tmpAlpha, betaVal = tmpBeta, sex = svalue(lwRel_sex_drop))
                       } else {
-                        my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(assSpe_drop))]]$setLWpar(alphaVal = svalue(valu_lyt[1, 2]), betaVal = svalue(valu_lyt[2, 2]), sex = svalue(lwRel_sex_drop))
+                        my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(assSpe_drop))]]$setLWpar(alphaVal = tmpAlpha, betaVal = tmpBeta, sex = svalue(lwRel_sex_drop))
                       }
                       
                       print(
