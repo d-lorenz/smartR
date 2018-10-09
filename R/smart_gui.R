@@ -3782,6 +3782,13 @@ smart_gui <- function() {
             gbutton("\t  Load\nWeighted Sample",
                     container = lwRel_f_esti,
                     handler = function(h, ...) {
+                      pathLWrel <- gfile(
+                        text = "Select Length-Weight file", type = "open",
+                        initial.filename = NULL, initial.dir = getwd(),
+                        filter = list(),
+                        multi = FALSE
+                      )
+                      
                       lw_data <- read.csv(pathLWrel)
                       lw_fit <- nls(Weight ~ I(alpha * Length^beta),
                                     data = lw_data[, c("Length", "Weight")],
