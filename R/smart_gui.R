@@ -3724,7 +3724,7 @@ smart_gui <- function() {
               items = "Specie", selected = 1,
               container = assSpe_g, editable = FALSE,
               handler = function(h, ...) {
-                if (svalue(sourceMix_r) == "Survey") {
+                if (svalue(assSou_r) == "Survey") {
                   spe_ind <- which(my_project$specieInSurvey == svalue(spec_drop_mix))
                   lwRel_sex_drop[] <- my_project$surveyBySpecie[[spe_ind]]$speSex
                   svalue(lwRel_sex_drop) <- lwRel_sex_drop[1]
@@ -3800,9 +3800,9 @@ smart_gui <- function() {
                       svalue(tmpBeta) <- round(summary(lw_fit)$coefficients[2, 1], 5)
                       
                       if (svalue(assSou_r) == "Survey") {
-                        my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(assSpe_drop))]]$setLWpar(alphaVal = tmpAlpha, betaVal = tmpBeta, sex = svalue(lwRel_sex_drop))
+                        my_project$surveyBySpecie[[which(my_project$specieInSurvey == svalue(assSpe_drop))]]$setLWpar(alphaVal = svalue(tmpAlpha), betaVal = svalue(tmpBeta), sex = svalue(lwRel_sex_drop))
                       } else {
-                        my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(assSpe_drop))]]$setLWpar(alphaVal = tmpAlpha, betaVal = tmpBeta, sex = svalue(lwRel_sex_drop))
+                        my_project$fisheryBySpecie[[which(my_project$specieInFishery == svalue(assSpe_drop))]]$setLWpar(alphaVal = svalue(tmpAlpha), betaVal = svalue(tmpBeta), sex = svalue(lwRel_sex_drop))
                       }
                       
                       print(
@@ -3863,7 +3863,6 @@ smart_gui <- function() {
             )
             addSpring(lwRel_f_esti)
             
-            
             addSpace(lwRel_g_top, 10)
             
             gbutton("\nSet Weight\n",
@@ -3891,6 +3890,8 @@ smart_gui <- function() {
             visible(tempWind_LWrel) <- TRUE
             
             svalue(assSou_r, index = TRUE) <- 1
+            assSpe_drop[] <- my_project$specieInSurvey
+            svalue(assSpe_drop) <- my_project$specieInSurvey[1]
             
             addSpace(lwRel_g, 10)
             lwRel_p <- ggraphics(
