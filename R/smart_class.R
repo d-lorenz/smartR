@@ -1511,9 +1511,12 @@ SmartProject <- R6Class("smartProject",
       if (is.null(fisheryBySpecie)) {
         stop("No mcmc output found")
       }
-
-      for (specie in 1:length(fisheryBySpecie)) {
-        priIdx <- which(names(fleet$ecoPrice) == fisheryBySpecie[[specie]]$specie)
+      specList <- intersect(my_project$specieInFishery,
+                            names(my_project$fleet$ecoPrice))
+      
+      for (specie in specList) {
+        priIdx <- which(names(fleet$ecoPrice) == specie)
+        fisIdx <- which(specieInFishery == specie)
         if (is.null(fleet$ecoPrice[[priIdx]])) {
           stop(paste0("No size/price data found for specie ", names(fleet$ecoPrice)[priIdx]))
         }
@@ -1521,14 +1524,14 @@ SmartProject <- R6Class("smartProject",
         vecSize <- sort(unique(c(fleet$ecoPrice[[priIdx]]$LowerBound, fleet$ecoPrice[[priIdx]]$UpperBound)))
         curUnit <- unique(fleet$ecoPrice[[priIdx]]$Units)[1]
 
-        fisheryBySpecie[[specie]]$setLWstat(lwUnit = curUnit)
+        fisheryBySpecie[[fisIdx]]$setLWstat(lwUnit = curUnit)
         fgNames <- paste0("LW_", 1:(sampMap$cutFG + 1))
 
         ## yearly
         preRevenue <- data.frame(FG = 1:length(fgNames))
         preRevenue <- cbind(preRevenue, setNames(lapply(1:(length(vecSize) - 1), function(x) x <- NA), 1:(length(vecSize) - 1)))
         for (i in 1:nrow(preRevenue)) {
-          tempRev <- fisheryBySpecie[[specie]]$LWstat[fisheryBySpecie[[specie]]$LWstat$FG == i, ]
+          tempRev <- fisheryBySpecie[[fisIdx]]$LWstat[fisheryBySpecie[[fisIdx]]$LWstat$FG == i, ]
           if (nrow(tempRev) > 0) {
             if (curUnit == "Length") {
               tempRev$propWei <- tempRev$relAbb / sum(tempRev$relAbb)
@@ -1543,16 +1546,16 @@ SmartProject <- R6Class("smartProject",
             }
           }
         }
-        outWeiProp[[fisheryBySpecie[[specie]]$specie]] <<- preRevenue
+        outWeiProp[[fisheryBySpecie[[fisIdx]]$specie]] <<- preRevenue
 
 
         ## seasonal
-        outWeiPropQ[[fisheryBySpecie[[specie]]$specie]] <<- list()
+        outWeiPropQ[[fisheryBySpecie[[fisIdx]]$specie]] <<- list()
         for (season in c("winter", "spring", "summer", "fall")) {
           preReveSea <- data.frame(FG = 1:length(fgNames))
           preReveSea <- cbind(preReveSea, setNames(lapply(1:(length(vecSize) - 1), function(x) x <- NA), 1:(length(vecSize) - 1)))
           for (i in 1:nrow(preReveSea)) {
-            tempRev <- fisheryBySpecie[[specie]]$LWstatQ[fisheryBySpecie[[specie]]$LWstatQ$FG == i & fisheryBySpecie[[specie]]$LWstatQ$Season == season, ]
+            tempRev <- fisheryBySpecie[[fisIdx]]$LWstatQ[fisheryBySpecie[[fisIdx]]$LWstatQ$FG == i & fisheryBySpecie[[fisIdx]]$LWstatQ$Season == season, ]
             if (nrow(tempRev) > 0) {
               if (curUnit == "Length") {
                 tempRev$propWei <- tempRev$relAbb / sum(tempRev$relAbb)
@@ -1567,7 +1570,7 @@ SmartProject <- R6Class("smartProject",
               }
             }
           }
-          outWeiPropQ[[fisheryBySpecie[[specie]]$specie]][[season]] <<- preReveSea
+          outWeiPropQ[[fisheryBySpecie[[fisIdx]]$specie]][[season]] <<- preReveSea
         }
       }
     },
