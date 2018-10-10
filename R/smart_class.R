@@ -337,14 +337,26 @@ SmartProject <- R6Class("smartProject",
       if (length(weightNaN) > 0) {
         for (i in 1:length(weightNaN)) {
           if (weightNaN[i] == 1) {
-            assessData[[specie]]$WeightS[1] <<- mean(c(0, assessData[[specie]]$WeightS[2]))
+            if (!is.na(assessData[[specie]]$WeightS[2])) {
+              assessData[[specie]]$WeightS[1] <<- mean(c(0, assessData[[specie]]$WeightS[2]))
+            } else {
+              assessData[[specie]]$WeightS[1] <<- mean(assessData[[specie]]$WeightS[-1], na.rm = TRUE)
+            }
             next
           }
           if (weightNaN[i] == length(assessData[[specie]]$WeightS)) {
-            assessData[[specie]]$WeightS[weightNaN[i]] <<- assessData[[specie]]$WeightS[weightNaN[i] - 1]
+            if (!is.na(assessData[[specie]]$WeightS[weightNaN[i] - 1])) {
+              assessData[[specie]]$WeightS[weightNaN[i]] <<- assessData[[specie]]$WeightS[weightNaN[i] - 1]
+            } else {
+              assessData[[specie]]$WeightS[weightNaN[i]] <<- mean(assessData[[specie]]$WeightS[-(weightNaN[i])], na.rm = TRUE)
+            }
             next
           }
-          assessData[[specie]]$WeightS[i] <<- mean(c(assessData[[specie]]$WeightS[i - 1], assessData[[specie]]$WeightS[i + 1]))
+          if (!is.na(assessData[[specie]]$WeightS[i - 1] & assessData[[specie]]$WeightS[i + 1])) {
+            assessData[[specie]]$WeightS[i] <<- mean(c(assessData[[specie]]$WeightS[i - 1], assessData[[specie]]$WeightS[i + 1]))
+          } else {
+            assessData[[specie]]$WeightS[i] <<- mean(assessData[[specie]]$WeightS[-(weightNaN[i])], na.rm = TRUE)
+          }
         }
       }
 
