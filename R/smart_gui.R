@@ -4106,22 +4106,22 @@ smart_gui <- function() {
                             switch(svalue(sim_Res_radio),
                                    Summary = {},
                                    Pattern = {
-                                     suppressWarnings(print(grid.arrange(my_project$simResPlot[["obsEffort"]],
+                                     suppressWarnings(grid.arrange(my_project$simResPlot[["obsEffort"]],
                                                                          my_project$simResPlot[["optEffort"]],
                                                                          layout_matrix = rbind(
                                                                            c(1, 1, 2, 2),
                                                                            c(1, 1, 2, 2)
                                                                          )
-                                     )))
+                                     ))
                                    },
                                    Change = {
-                                     suppressWarnings(print(grid.arrange(my_project$simResPlot[["absChange"]],
+                                     suppressWarnings(grid.arrange(my_project$simResPlot[["absChange"]],
                                                                          my_project$simResPlot[["relChange"]],
                                                                          layout_matrix = rbind(
                                                                            c(1, 1, 2, 2),
                                                                            c(1, 1, 2, 2)
                                                                          )
-                                     )))
+                                     ))
                                    }
                             )
                           }
