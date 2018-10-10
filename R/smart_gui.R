@@ -4567,82 +4567,98 @@ smart_gui <- function() {
         addSpace(toptopAss_g, 10)
         visible(tempAssData) <- TRUE
       } else {
+        
+        parZbef_df <- list()
+        parIn_df <- list()
         for (oneSpe in intersect(
           my_project$specieInFishery,
           my_project$specieInSurvey
         )) {
           my_project$setAssessData(
             specie = oneSpe,
-            forecast = ifelse(svalue(ass_Fore_radio) == "No",
-                              FALSE, TRUE
-            )
+            forecast = FALSE
           )
-          
-          parIn_df <- data.frame(matrix(0,
-                                        ncol = my_project$assessData[[oneSpe]]$Amax,
-                                        nrow = 4
+          parIn_df[[oneSpe]] <- data.frame(matrix(0,
+                                                  ncol = my_project$assessData[[oneSpe]]$Amax,
+                                                  nrow = 4
           ))
-          colnames(parIn_df) <- paste0("Age ", (1:ncol(parIn_df)) - 1)
-          rownames(parIn_df) <- c("M", "Mat", "F-Sel", "S-Sel")
-          
-          parIn_df[1, ] <- my_project$assessData[[oneSpe]]$M
-          parIn_df[2, ] <- my_project$assessData[[oneSpe]]$Mat
-          parIn_df[3, ] <- my_project$assessData[[oneSpe]]$Selex
-          parIn_df[4, ] <- my_project$assessData[[oneSpe]]$SelexSurv[1, ]
-          
-          parZbef_df <- as.character(my_project$assessData[[oneSpe]]$PropZBeforeMat)
-          
-          tempAssData <- gwindow(
-            title = "Custom Parameters",
-            visible = FALSE,
-            parent = main_win,
-            width = 500, height = 280
-          )
-          
-          toptopAss_g <- ggroup(horizontal = TRUE, container = tempAssData)
-          addSpace(toptopAss_g, 10)
-          topAss_g <- ggroup(
-            horizontal = FALSE, container = toptopAss_g,
-            expand = TRUE
-          )
-          addSpace(topAss_g, 10)
-          
-          parIn_f <- gframe(text = "", horizontal = TRUE, container = topAss_g)
-          addSpace(parIn_f, 25)
-          parIn_gdf <- gdf(items = parIn_df, container = parIn_f)
-          parIn_gdf$set_size(value = c(height = 125))
-          addSpace(parIn_f, 25)
-          addSpace(topAss_g, 10)
-          
-          parZbef_f <- gframe(
-            text = "Z before Maturity", horizontal = TRUE,
-            container = topAss_g
-          )
-          addSpace(parZbef_f, 25)
-          parZbef_ge <- gedit(
-            text = parZbef_df, width = 15,
-            container = parZbef_f
-          )
-          addSpace(parZbef_f, 25)
-          addSpace(topAss_g, 10)
-          
-          but_g <- ggroup(horizontal = TRUE, container = topAss_g)
-          addSpring(but_g)
-          gbutton("Accept", container = but_g, handler = function(h, ...) {
-            my_project$assessData[[oneSpe]]$M <- as.numeric(unlist(parIn_gdf[1, ]))
-            my_project$assessData[[oneSpe]]$Mat <- as.numeric(unlist(parIn_gdf[2, ]))
-            my_project$assessData[[oneSpe]]$Selex <- as.numeric(unlist(parIn_gdf[3, ]))
-            my_project$assessData[[oneSpe]]$SelexSurv[1, ] <- as.numeric(unlist(parIn_gdf[4, ]))
-            my_project$assessData[[oneSpe]]$PropZBeforeMat <- as.numeric(svalue(parZbef_ge))
-            delete(parIn_f, parIn_gdf)
-            dispose(tempAssData)
-          })
-          addSpring(but_g)
-          
-          addSpace(topAss_g, 10)
-          addSpace(toptopAss_g, 10)
-          visible(tempAssData) <- TRUE
+          colnames(parIn_df[[oneSpe]]) <- paste0("Age ", (1:ncol(parIn_df[[oneSpe]])) - 1)
+          rownames(parIn_df[[oneSpe]]) <- c("M", "Mat", "F-Sel", "S-Sel")
+          parIn_df[[oneSpe]][1, ] <- my_project$assessData[[oneSpe]]$M
+          parIn_df[[oneSpe]][2, ] <- my_project$assessData[[oneSpe]]$Mat
+          parIn_df[[oneSpe]][3, ] <- my_project$assessData[[oneSpe]]$Selex
+          parIn_df[[oneSpe]][4, ] <- my_project$assessData[[oneSpe]]$SelexSurv[1, ]
+          parZbef_df[[oneSpe]] <- as.character(my_project$assessData[[oneSpe]]$PropZBeforeMat)
         }
+        tempAssData <- gwindow(
+          title = "Review Assessment Data",
+          parent = main_win,
+          width = 800, height = 600
+        )
+        bigGroup <- ggroup(horizontal = FALSE, container = tempAssData)
+        ass_gn <- gnotebook(tab.pos = 3, container = bigGroup, expand = TRUE)
+        for (speName in 1:length(names(my_project$assessData))) {
+          assign(paste0("Tab", speName), ggroup(
+            horizontal = FALSE, container = ass_gn,
+            label = names(my_project$assessData)[speName]
+          ))
+          assign(
+            paste0("toptopAss", speName),
+            ggroup(horizontal = TRUE, container = get(paste0("Tab", speName))
+            ))
+          addSpace(get(paste0("toptopAss", speName)), 10)
+          assign(
+            paste0("topAss", speName),
+            ggroup(horizontal = FALSE, expand = TRUE,
+                   container = get(paste0("toptopAss", speName))
+            ))
+          addSpace(get(paste0("topAss", speName)), 10)
+          assign(
+            paste0("parIn", speName),
+            gframe(text = "", horizontal = TRUE, 
+                   container = get(paste0("topAss", speName))
+            ))
+          addSpace(get(paste0("parIn", speName)), 25)
+          assign(
+            paste0("parGdf", speName),
+            gdf(items = parIn_df[[speName]],
+                container = get(paste0("parIn", speName))
+            ))
+          get(paste0("parGdf", speName))$set_size(value = c(height = 125))
+          addSpace(get(paste0("parIn", speName)), 25)
+          addSpace(get(paste0("topAss", speName)), 10)
+          assign(
+            paste0("parZbef", speName),
+            gframe(text = "Z before Maturity", horizontal = TRUE,
+                   container = get(paste0("topAss", speName))
+            ))
+          addSpace(get(paste0("parZbef", speName)), 25)
+          assign(
+            paste0("parZbefGe", speName),
+            gedit(text = parZbef_df[[oneSpe]], width = 15,
+                  container = get(paste0("parZbef", speName))
+            ))
+          addSpace(get(paste0("parZbef", speName)), 25)
+          addSpace(get(paste0("topAss", speName)), 10)
+        }
+        smaGroup <- ggroup(horizontal = TRUE, container = bigGroup)
+        addSpring(smaGroup)
+        endArea <- gbutton(
+          text = "\nClose\n", container = smaGroup,
+          handler = function(h, ...) {
+            for (speName in 1:length(names(my_project$assessData))) {
+              my_project$assessData[[speName]]$M <- as.numeric(unlist(get(paste0("parGdf", speName))[1, ]))
+              my_project$assessData[[speName]]$Mat <- as.numeric(unlist(get(paste0("parGdf", speName))[2, ]))
+              my_project$assessData[[speName]]$Selex <- as.numeric(unlist(get(paste0("parGdf", speName))[3, ]))
+              my_project$assessData[[speName]]$SelexSurv[1, ] <- as.numeric(unlist(get(paste0("parGdf", speName))[4, ]))
+              my_project$assessData[[speName]]$PropZBeforeMat <- as.numeric(svalue(get(paste0("parZbefGe", speName))))
+              delete(get(paste0("parIn", speName)), get(paste0("parGdf", speName)))
+            }
+            dispose(tempAssData)
+          }
+        )
+        addSpring(smaGroup)
+        
       }
     }
   )
