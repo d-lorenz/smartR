@@ -432,7 +432,7 @@ SmartProject <- R6Class("smartProject",
       }
       assessData[[specie]]$SelexSurv[1, ] <<- round(seq(from = 0.5, to = 0.9, length.out = assessData[[specie]]$Amax), 2)
       # assessData[[specie]]$SelexSurv[1,] <<- c(0.2, 0.5, 1, 1)
-      if (is.null(assessData[[specie]]$PropZBeforeMat)) {
+      if (length(assessData[[specie]]$PropZBeforeMat) == 0) {
         assessData[[specie]]$PropZBeforeMat <<- 0.3
       }
       cat("Done!\n\nSetup Assessment Data for", specie, "Completed!\n")
