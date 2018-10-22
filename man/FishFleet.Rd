@@ -15,170 +15,211 @@ to manage fleet data.
 \section{Fields}{
 
 \describe{
-\item{\code{rawRegister}}{Missing description.}
+\item{\code{rawRegister}}{data.frame, raw fleet register data.}
 
-\item{\code{vmsRegister}}{Missing description.}
+\item{\code{vmsRegister}}{data.frame, raw fleet register data for vms vessels only.}
 
-\item{\code{rawEffort}}{Missing description.}
+\item{\code{rawEffort}}{list of DF, raw effort data.}
 
-\item{\code{weekEffoMatr}}{Missing description.}
+\item{\code{dayEffoMatr}}{list of DF, daily aggregated effort data.}
 
-\item{\code{dayEffoMatr}}{Missing description.}
+\item{\code{prodMatr}}{list of DF, production data.}
 
-\item{\code{prodMatr}}{Missing description.}
+\item{\code{effoProd}}{list of DF, merged effort and production data.}
 
-\item{\code{effoProd}}{Missing description.}
+\item{\code{effoProdMont}}{list of DF, monthly aggregated effort and production data.}
 
-\item{\code{effoProdMont}}{Missing description.}
+\item{\code{effoMont}}{list of DF, monthly aggregated effort data.}
 
-\item{\code{effoMont}}{Missing description.}
+\item{\code{effoProdAll}}{data.frame, monthly aggregated effort and production data.}
 
-\item{\code{effoProdAll}}{Missing description.}
+\item{\code{effoAll}}{data.frame, monthly aggregated effort data.}
 
-\item{\code{effoAll}}{Missing description.}
+\item{\code{regHarbsUni}}{data.frame, Harbours name, longitude, latitude and 
+distance from the environment grid.}
 
-\item{\code{trackHarbs}}{Missing description.}
+\item{\code{regHarbsBox}}{data.frame, Harbours name, longitude, latitude, number of 
+registered vessels and distance from the environment grid within the grid 
+box.}
 
-\item{\code{regHarbsUni}}{Missing description.}
+\item{\code{rawProduction}}{list of DF, raw production data.}
 
-\item{\code{regHarbsBox}}{Missing description.}
+\item{\code{rawEconomy}}{data.frame, raw economic data.}
 
-\item{\code{rawSelectivity}}{Missing description.}
+\item{\code{registerIds}}{character, vessel identification from fleet register.}
 
-\item{\code{rawProduction}}{Missing description.}
+\item{\code{predProd}}{list of matrix, simulated production.}
 
-\item{\code{rawEconomy}}{Missing description.}
+\item{\code{productionIds}}{list of int, vessel ids with production data available.}
 
-\item{\code{registerIds}}{Missing description.}
+\item{\code{prodSpec}}{list of character, specie with production data.}
 
-\item{\code{predProd}}{Missing description.}
+\item{\code{specSett}}{list of DF, logit parameter settings by specie.}
 
-\item{\code{productionIds}}{Missing description.}
+\item{\code{specLogit}}{list, logit results by specie.}
 
-\item{\code{prodIdsLoa}}{Missing description.}
+\item{\code{effortIds}}{list of int, vessel ids with effort data available.}
 
-\item{\code{prodSpec}}{Missing description.}
+\item{\code{idsEffoProd}}{list of int, merged vessel ids with both effort and 
+production data available.}
 
-\item{\code{specSett}}{Missing description.}
+\item{\code{effoProdAllLoa}}{data.frame, monthly aggregated effort, production and 
+loa data.}
 
-\item{\code{specLogit}}{Missing description.}
+\item{\code{effoAllLoa}}{data.frame, monthly aggregated effort and loa data.}
 
-\item{\code{effortIds}}{Missing description.}
+\item{\code{effortIndex}}{data.frame, effort index by vessel, year and month with 
+loa data.}
 
-\item{\code{idsEffoProd}}{Missing description.}
+\item{\code{daysAtSea}}{data.frame, days at sea index by vessel, year, month with
+loa and Kw data.}
 
-\item{\code{effoProdAllLoa}}{Missing description.}
+\item{\code{prodIndex}}{data.frame, production index by vessel, year and month.}
 
-\item{\code{effoAllLoa}}{Missing description.}
+\item{\code{resNNLS}}{list, lander results by specie.}
 
-\item{\code{effortIndex}}{Missing description.}
+\item{\code{betaMeltYear}}{list of DF, melted yearly productivity by specie.}
 
-\item{\code{daysAtSea}}{Missing description.}
+\item{\code{prodMeltYear}}{list of DF, melted yearly production by specie.}
 
-\item{\code{prodIndex}}{Missing description.}
+\item{\code{fishPoinPara}}{data.frame, fishing point parameters.}
 
-\item{\code{resNNLS}}{Missing description.}
+\item{\code{ecoPrice}}{list of DF, price/size by specie.}
 
-\item{\code{betaAvg}}{Missing description.}
+\item{\code{inSpatialReg}}{data.frame, input for spatial index regression.}
 
-\item{\code{effortAvg}}{Missing description.}
+\item{\code{inEffortReg}}{data.frame, input for effort index regression.}
 
-\item{\code{betaMeltYear}}{Missing description.}
+\item{\code{inProductionReg}}{data.frame, input for production index regression.}
 
-\item{\code{prodMeltYear}}{Missing description.}
+\item{\code{outSpatialReg}}{list, output for spatial index regression.}
 
-\item{\code{fishPoinPara}}{Missing description.}
+\item{\code{outEffortReg}}{list, output for effort index regression.}
 
-\item{\code{ecoPrice}}{Missing description.}
+\item{\code{outProductionReg}}{list, output for production index regression.}
 
-\item{\code{inSpatialReg}}{Missing description.}
+\item{\code{plotSpatialReg}}{ggplot, spatial index regression results.}
 
-\item{\code{inEffortReg}}{Missing description.}
+\item{\code{plotEffortReg}}{ggplot, effort index regression results.}
 
-\item{\code{inProductionReg}}{Missing description.}
-
-\item{\code{outSpatialReg}}{Missing description.}
-
-\item{\code{outEffortReg}}{Missing description.}
-
-\item{\code{outProductionReg}}{Missing description.}
-
-\item{\code{plotSpatialReg}}{Missing description.}
-
-\item{\code{plotEffortReg}}{Missing description.}
-
-\item{\code{plotProductionReg}}{Missing description.}
+\item{\code{plotProductionReg}}{ggplot, production index regression results.}
 }}
 
 \section{Methods}{
 
 \describe{
-  \item{Documentation}{For full documentation of each method go to https://github.com/smartR_blablabla/}
-  \item{\code{setVmsRegister()}}{This method is used }
-  \item{\code{setRegHarbs()}}{This method is used }
-  \item{\code{setEcoPrice(sel_specie, price_df)}}{This method is used }
-  \item{\code{saveFleetHarb(harb_path)}}{This method is used }
-  \item{\code{loadFleetHarb(harb_path)}}{This method is used }
-  \item{\code{setBetaAvg(sel_specie)}}{This method is used }
-  \item{\code{setEffortAvg()}}{This method is used }
-  \item{\code{loadFleetRegis(register_path)}}{This method is used }
-  \item{\code{loadMatEffort(effort_path)}}{This method is used }
-  \item{\code{loadRawEconomy(economic_path)}}{This method is used }
-  \item{\code{setYearEconomy()}}{This method is used }
-  \item{\code{setInSpatial()}}{This method is used }
-  \item{\code{setInEffort()}}{This method is used }
-  \item{\code{getRegSpatial()}}{This method is used }
-  \item{\code{getRegEffort()}}{This method is used }
-  \item{\code{getRegProduction()}}{This method is used }
-  \item{\code{getCostOutput()}}{This method is used }
-  \item{\code{setCostPlot()}}{This method is used }
-  \item{\code{loadProduction(production_path)}}{This method is used }
-  \item{\code{setFishPoinPara(speed_range, depth_range)}}{This method is used }
-  \item{\code{setWeekMonthNum()}}{This method is used }
-  \item{\code{setFishPoin()}}{This method is used }
-  \item{\code{plotFishPoinStat()}}{This method is used }
-  \item{\code{plotSpeedDepth(which_year, speed_range, depth_range)}}{This method is used }
-  \item{\code{setEffortIds()}}{This method is used }
-  \item{\code{setProdSpec()}}{This method is used }
-  \item{\code{setSpecSett()}}{This method is used }
-  \item{\code{setNNLS()}}{This method is used }
-  \item{\code{setBetaMeltYear(specie)}}{This method is used }
-  \item{\code{setProdMeltYear(specie)}}{This method is used }
-  \item{\code{plotTotProd(specie)}}{This method is used }
-  \item{\code{plotNNLS(specie, thresR2)}}{This method is used }
-  \item{\code{setSpecSettItm(specie, thresh, brea, max_xlim)}}{This method is used }
-  \item{\code{plotLogitROC(selSpecie)}}{This method is used }
-  \item{\code{setSpecLogitConf(selSpecie, cutoff)}}{This method is used }
-  \item{\code{setLogitTrain(selSpecie, train, cp_val, cv_val)}}{This method is used }
-  \item{\code{setLogitTest(selSpecie, test)}}{This method is used }
-  \item{\code{setLogitPred(selSpecie, test)}}{This method is used }
-  \item{\code{setLogitCut(selSpecie)}}{This method is used }
-  \item{\code{setLogitRoc(selSpecie)}}{This method is used }
-  \item{\code{setLogitConf(selSpecie, test)}}{This method is used }
-  \item{\code{setSpecLogit(selSpecie, selModel, cp, cv)}}{This method is used }
-  \item{\code{getMatSpeLand(specie)}}{This method is used }
-  \item{\code{setEffoProdAll()}}{This method is used }
-  \item{\code{setEffoAll()}}{This method is used }
-  \item{\code{setEffoProdAllLoa()}}{This method is used }
-  \item{\code{setEffoAllLoa()}}{This method is used }
-  \item{\code{setProdIds()}}{This method is used }
-  \item{\code{setIdsEffoProd()}}{This method is used }
-  \item{\code{plotCountIDsEffoProd()}}{This method is used }
-  \item{\code{plotCountIDsEffo()}}{This method is used }
-  \item{\code{plotCountIDsProd()}}{This method is used }
-  \item{\code{setEffoProdMatr()}}{This method is used }
-  \item{\code{setEffoProdMont()}}{This method is used }
-  \item{\code{setEffoMont()}}{This method is used }
-  \item{\code{setProdMatr()}}{This method is used }
-  \item{\code{setDayEffoMatrGround(maxFG)}}{This method is used }
-  \item{\code{getLoa4Prod()}}{This method is used }
-  \item{\code{plotLoaProd()}}{This method is used }
-  \item{\code{readRegisterEU(reg_path)}}{This method is used }
-  \item{\code{cleanRegister()}}{This method is used }
-  \item{\code{plotRegSum()}}{This method is used }
-  \item{\code{plotBarReg(regVar, p_las, title)}}{This method is used }
-  \item{\code{plotBoxReg(regVar, title)}}{This method is used }
-  \item{\code{setRegIds()}}{This method is used }
+  \item{\code{setVmsRegister()}}{This method is used to exclude the fleet 
+  register records of vessels without vms}
+  \item{\code{setRegHarbs()}}{This method is used to fetch the harbours
+  coordinates}
+  \item{\code{setEcoPrice(sel_specie, price_df)}}{This method is used to set
+  the price/size attribute by species}
+  \item{\code{saveFleetHarb(harb_path)}}{This method is used to export the
+  rds with the harbours' coordinates}
+  \item{\code{loadFleetHarb(harb_path)}}{This method is used to import the
+  rds with the harbours' coordinates}
+  \item{\code{loadFleetRegis(register_path)}}{This method is used to load the
+  raw fleet register}
+  \item{\code{loadMatEffort(effort_path)}}{This method is used to import the
+  raw effort matrix}
+  \item{\code{loadRawEconomy(economic_path)}}{This method is used to load the
+  raw csv file with economic data}
+  \item{\code{setInSpatial()}}{This method is used to setup the input for the
+  spatial regression}
+  \item{\code{setInEffort()}}{This method is used to setup the input for the
+  effprt regression}
+  \item{\code{getRegSpatial()}}{This method is used to compute the spatial
+  regression}
+  \item{\code{getRegEffort()}}{This method is used to compute the effort
+  regression}
+  \item{\code{getRegProduction()}}{This method is used to compute the 
+  production regression}
+  \item{\code{getCostOutput()}}{This method is a wrapper function to get the
+  economic regressions}
+  \item{\code{setCostPlot()}}{This method is used to setup the plot of the
+  economic regression}
+  \item{\code{loadProduction(production_path)}}{This method is used to load
+  the raw csv of the production data}
+  \item{\code{setFishPoinPara(speed_range, depth_range)}}{This method is 
+  used to setup the fishign points parameters}
+  \item{\code{setWeekMonthNum()}}{This method is used to assign the week and
+  month num to the raw effort data}
+  \item{\code{setFishPoin()}}{This method is used to filter the 
+  fishing points}
+  \item{\code{plotFishPoinStat()}}{This method is used to show the basic 
+  statistics for the fishing points}
+  \item{\code{plotSpeedDepth(which_year, speed_range, depth_range)}}{
+  This method is used to show the speed/depth profile}
+  \item{\code{setEffortIds()}}{This method is used to set the distinct 
+  vessel' ids in the effort dataset}
+  \item{\code{setProdSpec()}}{This method is used to set the distinct specie
+  in the production dataset}
+  \item{\code{setBetaMeltYear(specie)}}{This method is used to set the melted
+  yearly productivity by specie}
+  \item{\code{setProdMeltYear(specie)}}{This method is used to set the melted
+  yearly production by specie}
+  \item{\code{plotTotProd(specie)}}{This method is used to plot the total
+  production by specie}
+  \item{\code{plotNNLS(specie, thresR2)}}{This method is used to show the
+  NNLS results}
+  \item{\code{setSpecSettItm(specie, thresh, brea, max_xlim)}}{
+  This method is used to set the logit parameters by specie}
+  \item{\code{plotLogitROC(selSpecie)}}{This method is used to show the
+  ROC of the logit results}
+  \item{\code{setSpecLogitConf(selSpecie, cutoff)}}{This method is used to
+  set the confusion matrix of the logit results by specie}
+  \item{\code{setLogitTrain(selSpecie, train, cp_val, cv_val)}}{
+  This method is used to setup the train dataset for the logit model}
+  \item{\code{setLogitTest(selSpecie, test)}}{This method is used to setup 
+  the test dataset for the logit model}
+  \item{\code{setLogitPred(selSpecie, test)}}{This method is used to compute 
+  the prediction for the logit model}
+  \item{\code{setLogitCut(selSpecie)}}{This method is used to tune the 
+  cutoff of the logit model}
+  \item{\code{setLogitRoc(selSpecie)}}{This method is used to set the ROC of
+  the logit model}
+  \item{\code{setLogitConf(selSpecie, test)}}{This method is used to
+  set the confusion matrix of the logit results}
+  \item{\code{setSpecLogit(selSpecie, selModel, cp, cv)}}{This method is
+   a wrapper function to get the logit model}
+  \item{\code{getMatSpeLand(specie)}}{This method is used to get the input 
+  data for the logit model}
+  \item{\code{setEffoProdAll()}}{This method is used to combine the 
+  effort/production data from the yearly list into a single data.frame}
+  \item{\code{setEffoAll()}}{This method is used to combine the 
+  effort data from the yearly list into a single data.frame}
+  \item{\code{setEffoProdAllLoa()}}{This method is used to add the LOA data
+  to the effort/production data}
+  \item{\code{setEffoAllLoa()}}{This method is used to add the LOA data
+  to the effort data}
+  \item{\code{setProdIds()}}{This method is used to get the vessel ids with
+  production data available}
+  \item{\code{setIdsEffoProd()}}{This method is used to get the vessel ids
+   with both effort and production data available}
+  \item{\code{plotCountIDsEffoProd()}}{This method is used to set the plot of
+  the basic statistics of the effort/production data}
+  \item{\code{plotCountIDsEffo()}}{This method is used to set the plot of
+  the basic statistics of the effort data}
+  \item{\code{plotCountIDsProd()}}{This method is used to set the plot of
+  the basic statistics of the production data}
+  \item{\code{setEffoProdMatr()}}{This method is used to merge the effort
+  and production data}
+  \item{\code{setEffoProdMont()}}{This method is used to aggregate the
+  effort/production data by month}
+  \item{\code{setEffoMont()}}{This method is used to aggregate the
+  effort data by month}
+  \item{\code{setProdMatr()}}{This method is used to create the production
+  matrix from the raw production data}
+  \item{\code{setDayEffoMatrGround(maxFG)}}{This method is used to assign
+  the fishing grounds to the raw effort data}
+  \item{\code{readRegisterEU(reg_path)}}{This method is used to load the
+  raw european fleet register}
+  \item{\code{cleanRegister()}}{This method is used to clean the raw data in
+  the fleet register}
+  \item{\code{plotRegSum()}}{This method is used to plot the basic statistics
+  for the fleet register data}
+  \item{\code{setRegIds()}}{This method is used to get the distinct vessels
+  ids in the fleet register}
   }
 }
 
