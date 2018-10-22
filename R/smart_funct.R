@@ -382,8 +382,8 @@ getFleetRevSeason <- function(predProd, monthVec, lwStat, priceVec) {
             tmpOutProp <- apply(t(lwStat[[season]][, -1] * t(tmpProd[noZero, ])) * priceVec, 2, sum, na.rm = TRUE)
             outProp[curMon[noZero], ] <- t(tmpOutProp)
           } else {
-          tmpOutProp <- apply(tmpProd[noZero, ], 1, function(x) apply(t(lwStat[[season]][, -1] * t(x)) * priceVec, 2, sum, na.rm = TRUE))
-          outProp[curMon[noZero], ] <- t(tmpOutProp)
+            tmpOutProp <- apply(tmpProd[noZero, ], 1, function(x) apply(t(lwStat[[season]][, -1] * t(x)) * priceVec, 2, sum, na.rm = TRUE))
+            outProp[curMon[noZero], ] <- t(tmpOutProp)
           }
         }
       } else {
@@ -450,7 +450,7 @@ GetALKMW <- function(Linf, Kappa, T0, CV0, CVLinf, aa, bb, Amax, LenClassMax, Of
   Nlen <- length(LenClassMax)
   Width <- LenClassMax[2] - LenClassMax[1]
   ALK <- matrix(0, nrow = Amax, ncol = Nlen)
-  
+
   # Create an ALK
   LenPred0 <- Linf * (1.0 - exp(-Kappa * (0 - T0)))
   for (Iage in 0:(Amax - 1)) {
@@ -467,13 +467,13 @@ GetALKMW <- function(Linf, Kappa, T0, CV0, CVLinf, aa, bb, Amax, LenClassMax, Of
     }
     ALK[Iage + 1, Nlen] <- 1 - Total
   }
-  
+
   # Create mean length-at-age
   Lengths <- (LenClassMax - Width / 2)
   MeanWL <- aa * Lengths^bb
   MeanW <- rep(0, Amax)
   for (Iage in 0:(Amax - 1)) MeanW[Iage + 1] <- sum(ALK[Iage + 1, ] * MeanWL) / 1000
-  
+
   Outs <- NULL
   Outs$ALK <- ALK
   Outs$MeanW <- MeanW
@@ -494,13 +494,13 @@ fit1Pars <- function(Pars, optFun, FullMin = FALSE, DoVarCo = FALSE, ...) {
   Nyear <- length(SSBEst)
   Res$VarCo <- matrix(0, ncol = Npar, nrow = Npar)
   Res$SSBSD <- rep(0, Nyear)
-  
+
   # Hints: Set FullMin = TRUE to apply the full estimates; DoVarCo = TRUE to estimate the variances of the parameters and SSB
   Outputs <- fun1opt(Res$par, DoEst = FALSE, ...)
   Outputs$par <- Res$par
   Outputs$VarCo <- Res$VarCo
   Outputs$SSBSD <- rep(0, Nyear)
-  
+
   # Now do a full minimization
   if (FullMin == TRUE) {
     cat("\nFull minimization:")
@@ -515,13 +515,13 @@ fit1Pars <- function(Pars, optFun, FullMin = FALSE, DoVarCo = FALSE, ...) {
       Res <- optim(Res$par, optFun, hessian = FALSE, method = "CG", DoEst = TRUE, ...)
       cat("\n", Res$value, "CG")
     }
-    
+
     Outputs <- fun1opt(Res$par, DoEst = FALSE, ...)
     Outputs$par <- Res$par
     # print(Res$par)
     Outputs$VarCo <- matrix(0, ncol = Npar, nrow = Npar)
     Outputs$SSBSD <- rep(0, Nyear)
-    
+
     Res <- optim(Res$par, optFun, method = "BFGS", hessian = TRUE, DoEst = TRUE, ...)
     Outputs <- fun1opt(Res$par, DoEst = FALSE, ...)
     Outputs$par <- Res$par
@@ -529,17 +529,17 @@ fit1Pars <- function(Pars, optFun, FullMin = FALSE, DoVarCo = FALSE, ...) {
     Outputs$VarCo <- matrix(0, ncol = Npar, nrow = Npar)
     Outputs$SSBSD <- rep(0, Nyear)
     cat("\nFinal:", Res$value)
-    
+
     # This section computes the variance covariance matrix and hence the standard errors for SSB
     if (DoVarCo == TRUE) {
       cat("\nSolving variance-covariance matrix... ")
       VarCo <- solve(Res$hessian)
       Res$VarCo <- VarCo
-      
+
       SSBEst <- fun1opt(Res$par, DoEst = FALSE, ...)$SSB
       Nyear <- length(SSBEst)
       # print(SSBEst)
-      
+
       # Set up the derivative matrix
       ParStore <- Res$par
       Deriv <- matrix(0, ncol = Nyear, nrow = Npar)
@@ -553,7 +553,7 @@ fit1Pars <- function(Pars, optFun, FullMin = FALSE, DoVarCo = FALSE, ...) {
         SSB2 <- fun1opt(Res$par, DoEst = FALSE, ...)$SSB
         Deriv[II, ] <- (SSB1 - SSB2) / 0.002
       }
-      
+
       # Use the delta method to get the variances for SSB
       SSBSD <- rep(0, Nyear)
       for (Iyear in 1:Nyear) {
@@ -581,17 +581,17 @@ pop1specie <- function(SpeciesData, InitN, RecDev, LogR0, Fvals, Selex, InitF, N
   #   Fvals is F(y)
   #   Selex if FISHERY selectivity
   #   InitF is the initial F
-  
+
   Nyear <- SpeciesData$Nyear
   Amax <- SpeciesData$Amax
-  
+
   # Extract the key biological variables
   M <- SpeciesData$M
   WeightS <- SpeciesData$WeightS
   WeightH <- SpeciesData$WeightH
   Mat <- SpeciesData$Mat
   PropZBeforeMat <- SpeciesData$PropZBeforeMat
-  
+
   # Numbers at age (matrix; goes one year beyond the maximum year)
   N <- matrix(0, nrow = Nyear + Nproj + 1, ncol = Amax)
   # F-at-age (computed from the selectivity at fully-selected F)
@@ -604,7 +604,7 @@ pop1specie <- function(SpeciesData, InitN, RecDev, LogR0, Fvals, Selex, InitF, N
   CAA <- matrix(0, nrow = Nyear + Nproj, ncol = Amax)
   # Predicted catch in weight (needed to compare with the data)
   PredCW <- rep(0, Nyear + Nproj)
-  
+
   # set up the N matrix
   R0 <- exp(LogR0)
   N[1, 1] <- R0
@@ -614,7 +614,7 @@ pop1specie <- function(SpeciesData, InitN, RecDev, LogR0, Fvals, Selex, InitF, N
   for (Iage in 1:Amax) {
     N[1, Iage] <- N[1, Iage] * exp(InitN[Iage])
   }
-  
+
   # Project forward
   for (Iyear in 1:Nyear + Nproj) {
     # Compute F, Z and catch-at-age
@@ -626,11 +626,11 @@ pop1specie <- function(SpeciesData, InitN, RecDev, LogR0, Fvals, Selex, InitF, N
       CAA[Iyear, Iage] <- FAA[Iyear, Iage] / Z[Iage] * N[Iyear, Iage] * (1.0 - exp(-Z[Iage]))
     }
     PredCW[Iyear] <- sum(WeightH * CAA[Iyear, ])
-    
+
     # Predict SSB during the year and remove Z
     SSB[Iyear] <- sum(WeightS * Mat * exp(-PropZBeforeMat * Z) * N[Iyear, ])
     Ntemp <- N[Iyear, ] * exp(-Z)
-    
+
     # Update dynamics and add recruitment
     N[Iyear + 1, Amax] <- Ntemp[Amax] + Ntemp[Amax - 1]
     for (Iage in 2:(Amax - 1)) {
@@ -641,7 +641,7 @@ pop1specie <- function(SpeciesData, InitN, RecDev, LogR0, Fvals, Selex, InitF, N
   # print(N)
   # print(PredCW)
   # print(CAA)
-  
+
   # Return key information
   Outs <- NULL
   Outs$N <- N
@@ -657,7 +657,7 @@ like1specie <- function(SpeciesData, Outs, SurvSel, RecDev, InitN) {
   N <- Outs$N
   PCAA <- Outs$CAA
   PredCW <- Outs$PredCW
-  
+
   # Declare model predictions (not all will be used)
   # Predicted survey catch-at-age
   PredSurvA <- matrix(0, nrow = SpeciesData$NSAA, ncol = SpeciesData$Amax)
@@ -669,21 +669,21 @@ like1specie <- function(SpeciesData, Outs, SurvSel, RecDev, InitN) {
   PredCAL <- matrix(0, nrow = SpeciesData$NCAL, ncol = SpeciesData$Nlen)
   # Predicted survey biomass
   PredSurvBio <- rep(0, max(SpeciesData$NSAA, SpeciesData$NSAL))
-  
+
   # Pre-specified values
   CVCatch <- 0.1
   CVIndex <- 0.3
   SigmaR <- 0.6
-  
+
   Like1 <- 0
   Like2 <- 0
   Like3 <- 0
   Prob1 <- 0
-  
+
   Amax <- SpeciesData$Amax
   Nlen <- SpeciesData$Nlen
   SurveyQ <- rep(0, SpeciesData$Nsurvey)
-  
+
   # Survey (assumed to be absolute, but subject to selectivity)
   if (SpeciesData$NSAA > 0) {
     # This code compute the maximum likelihood estimate of survey Q
@@ -706,7 +706,7 @@ like1specie <- function(SpeciesData, Outs, SurvSel, RecDev, InitN) {
       }
       SurveyQ[Jsurv] <- exp(Q1 / Q2)
       # cat(Jsurv, SurveyQ[Jsurv], Q2, "\n")
-      
+
       # NOW compute the likelihood
       for (II in 1:SpeciesData$NSAA) {
         if (SpeciesData$SSAA[II] == Jsurv) {
@@ -725,7 +725,7 @@ like1specie <- function(SpeciesData, Outs, SurvSel, RecDev, InitN) {
       }
     }
   }
-  
+
   CVIndex <- 0.1
   # Catch-at-age and -at-length
   if (SpeciesData$NCAA > 1) {
@@ -741,21 +741,21 @@ like1specie <- function(SpeciesData, Outs, SurvSel, RecDev, InitN) {
       }
     }
   }
-  
+
   # Total catch (applies to all years)
   for (II in 1:SpeciesData$Nyear) {
     Residual <- log(PredCW[II]) - log(SpeciesData$Catch[II])
     Like3 <- Like3 + Residual^2 / (2 * CVCatch^2)
   }
-  
+
   # Penalty on rec_devs
   for (Iyear in 1:SpeciesData$Nyear) Prob1 <- Prob1 + RecDev[Iyear]^2.0 / (2.0 * SigmaR^2)
   for (Iyear in 1:SpeciesData$Amax) Prob1 <- Prob1 + InitN[Iyear]^2.0 / (2.0 * SigmaR^2)
-  
+
   TotalLike <- Like1 + Like2 + Like3 + Prob1
   # cat(Like1, Like2, Like3, Prob1, TotalLike, "\n")
   # AAAA
-  
+
   Outs <- NULL
   Outs$PredSurvA <- PredSurvA
   Outs$PredSurvL <- PredSurvL
@@ -776,7 +776,7 @@ fun1opt <- function(Pars, DoEst = TRUE, SpeciesData, yProj = 0) {
   Nyear <- SpeciesData$Nyear
   Nsurvey <- SpeciesData$Nsurvey
   # print(Pars)
-  
+
   # Extract the parameters from "Pars"
   InitN <- c(Pars[1:Amax])
   Ipar <- Amax
@@ -786,7 +786,7 @@ fun1opt <- function(Pars, DoEst = TRUE, SpeciesData, yProj = 0) {
   Ipar <- Ipar + 1
   SurvSel <- matrix(0, nrow = Nsurvey, ncol = Amax)
   Selex <- rep(0, Amax)
-  
+
   Prior <- 0
   if (SpeciesData$SelsurvType == 1) {
     SVec <- Pars[(Ipar + 1):(Ipar + Nsurvey * (Amax - 2))]
@@ -861,55 +861,55 @@ fun1opt <- function(Pars, DoEst = TRUE, SpeciesData, yProj = 0) {
   Ipar <- Ipar + Nyear
   InitF <- exp(Pars[Ipar + 1])
   Ipar <- Ipar + 1
-  
+
   # Projection the population model and compute the negative log-likelihood
   Outs <- pop1specie(SpeciesData, InitN, RecDev, LogR0, Fvals, Selex, InitF, Nproj = yProj)
   OutLikelihood <- like1specie(SpeciesData, Outs, SurvSel, RecDev, InitN)
-  
+
   # Trick to get things passes
   if (DoEst == TRUE) {
     return(OutLikelihood$TotalLike + 0.01 * Prior)
   } else {
     Out2 <- NULL
-    
+
     Out2$Amax <- SpeciesData$Amax
     Out2$Nlen <- SpeciesData$Nlen
     Out2$Nyear <- length(Outs$SSB)
-    
+
     Out2$CvCatch <- OutLikelihood$CvCatch
     Out2$CvIndex <- OutLikelihood$CvIndex
     Out2$SigmaR <- OutLikelihood$SigmaR
-    
+
     Out2$N <- Outs$N / 1000
     Out2$FAA <- Outs$FAA
     Out2$SSB <- Outs$SSB / 1000
-    
+
     if (SpeciesData$NSAA > 0) {
       Out2$PredSAA <- OutLikelihood$PredSurvA / 1000
       Out2$YSAA <- SpeciesData$YSAA
       Out2$SSAA <- SpeciesData$SSAA
       Out2$ObsSAA <- SpeciesData$SAA / 1000
     }
-    
+
     if (SpeciesData$NCAA > 0) {
       Out2$PredCAA <- OutLikelihood$PredCAA
       Out2$YCAA <- SpeciesData$YCAA
       Out2$ObsCAA <- SpeciesData$CAA
     }
-    
+
     Out2$Selex <- Selex
     names(Out2$Selex) <- c(0:(Amax - 1))
     Out2$SurvSel <- SurvSel
     names(Out2$SurvSel) <- c(0:(Amax - 1))
-    
+
     if (SpeciesData$NSAA > 0) {
       Out2$ObsSurvBio <- SpeciesData$SurvBio / 1000
       Out2$PredSurvBio <- OutLikelihood$PredSurvBio / 1000
     }
-    
+
     Out2$ObsCatch <- SpeciesData$Catch
     Out2$PredCatch <- Outs$PredCW
-    
+
     return(Out2)
   }
 }
@@ -927,13 +927,13 @@ fitNPars <- function(Pars, optFun, FullMin = FALSE, DoVarCo = FALSE, ...) {
   Nyear <- length(SSBEst)
   Res$VarCo <- matrix(0, ncol = Npar, nrow = Npar)
   Res$SSBSD <- rep(0, Nyear)
-  
+
   # Hints: Set FullMin = TRUE to apply the full estimates; DoVarCo = TRUE to estimate the variances of the parameters and SSB
   Outputs <- funNopt(Res$par, DoEst = FALSE, ...)
   Outputs$par <- Res$par
   Outputs$VarCo <- Res$VarCo
   Outputs$SSBSD <- rep(0, Nyear)
-  
+
   # Now do a full minimization
   if (FullMin == TRUE) {
     cat("\nFull minimization:")
@@ -948,13 +948,13 @@ fitNPars <- function(Pars, optFun, FullMin = FALSE, DoVarCo = FALSE, ...) {
       Res <- optim(Res$par, optFun, hessian = FALSE, method = "CG", DoEst = TRUE, ...)
       cat("\n", Res$value, "CG")
     }
-    
+
     Outputs <- funNopt(Res$par, DoEst = FALSE, ...)
     Outputs$par <- Res$par
     # print(Res$par)
     Outputs$VarCo <- matrix(0, ncol = Npar, nrow = Npar)
     Outputs$SSBSD <- rep(0, Nyear)
-    
+
     Res <- optim(Res$par, optFun, method = "BFGS", hessian = TRUE, DoEst = TRUE, ...)
     Outputs <- funNopt(Res$par, DoEst = FALSE, ...)
     Outputs$par <- Res$par
@@ -962,17 +962,17 @@ fitNPars <- function(Pars, optFun, FullMin = FALSE, DoVarCo = FALSE, ...) {
     Outputs$VarCo <- matrix(0, ncol = Npar, nrow = Npar)
     Outputs$SSBSD <- rep(0, Nyear)
     cat("\nFinal:", Res$value)
-    
+
     # This section computes the variance covariance matrix and hence the standard errors for SSB
     if (DoVarCo == TRUE) {
       cat("\nSolving variance-covariance matrix... ")
       VarCo <- solve(Res$hessian)
       Res$VarCo <- VarCo
-      
+
       SSBEst <- funNopt(Res$par, DoEst = FALSE, ...)$SSB
       Nyear <- length(SSBEst)
       # print(SSBEst)
-      
+
       # Set up the derivative matrix
       ParStore <- Res$par
       Deriv <- matrix(0, ncol = Nyear, nrow = Npar)
@@ -986,7 +986,7 @@ fitNPars <- function(Pars, optFun, FullMin = FALSE, DoVarCo = FALSE, ...) {
         SSB2 <- funNopt(Res$par, DoEst = FALSE, ...)$SSB
         Deriv[II, ] <- (SSB1 - SSB2) / 0.002
       }
-      
+
       # Use the delta method to get the variances for SSB
       SSBSD <- rep(0, Nyear)
       for (Iyear in 1:Nyear) {
@@ -1020,7 +1020,7 @@ popNspecie <- function(Nspecies, SpeciesData, InitN, RecDev, LogR0, Fvals, Selex
     Nlen[Ispec] <- SpeciesData[[Ispec]]$Nlen
   }
   NlenA <- max(Nlen)
-  
+
   M <- matrix(0, nrow = Nspecies, ncol = MaxA)
   WeightS <- matrix(0, nrow = Nspecies, ncol = MaxA)
   WeightH <- matrix(0, nrow = Nspecies, ncol = MaxA)
@@ -1034,7 +1034,7 @@ popNspecie <- function(Nspecies, SpeciesData, InitN, RecDev, LogR0, Fvals, Selex
     Mat[Ispec, 1:AmaxA] <- SpeciesData[[Ispec]]$Mat[1:AmaxA]
     PropZBeforeMat[Ispec] <- SpeciesData[[Ispec]]$PropZBeforeMat
   }
-  
+
   # Declare
   N <- array(0, dim = c(Nspecies, Nyear + Nproj + 1, MaxA))
   CAA <- array(0, dim = c(Nspecies, Nyear + Nproj, MaxA))
@@ -1048,7 +1048,7 @@ popNspecie <- function(Nspecies, SpeciesData, InitN, RecDev, LogR0, Fvals, Selex
   PredB0 <- rep(0, Nspecies)
   # Predicted biomass by stock
   PredB <- matrix(0, nrow = Nspecies, ncol = Nyear + Nproj)
-  
+
   # Compute B0 by stock
   Neqn <- matrix(0, nrow = Nspecies, ncol = MaxA)
   for (Ispec in 1:Nspecies) {
@@ -1058,18 +1058,18 @@ popNspecie <- function(Nspecies, SpeciesData, InitN, RecDev, LogR0, Fvals, Selex
     Neqn[Ispec, AmaxA] <- Neqn[Ispec, AmaxA] / (1.0 - exp(-M[Ispec, AmaxA]))
     for (Iage in 1:AmaxA) PredB0[Ispec] <- sum(Neqn[Ispec, 1:AmaxA] * WeightS[Ispec, 1:AmaxA])
   }
-  
+
   # Predation parameters
   parChi <- numeric(Nspecies)
   parOme <- numeric(Nspecies)
   parAlp <- numeric(Nspecies)
   parBet <- numeric(Nspecies)
-  
+
   for (Ispec in 1:Nspecies) {
     idSpe <- which(PredationPars$name == names(SpeciesData)[Ispec])
     parChi[Ispec] <- PredationPars$chi[idSpe]
     parOme[Ispec] <- PredationPars$om[idSpe]
-    
+
     if (PredationPars$type[idSpe] == "Predator") {
       parBet[Ispec] <- (1 - parChi[Ispec]) / (2 * parChi[Ispec] - 1)
     } else {
@@ -1077,7 +1077,7 @@ popNspecie <- function(Nspecies, SpeciesData, InitN, RecDev, LogR0, Fvals, Selex
     }
     parAlp[Ispec] <- parBet[Ispec] + 1
   }
-  
+
   for (Ispec in 1:Nspecies) {
     N[Ispec, 1, 1] <- R0[Ispec]
     for (Iage in 2:Amax[Ispec]) {
@@ -1087,19 +1087,19 @@ popNspecie <- function(Nspecies, SpeciesData, InitN, RecDev, LogR0, Fvals, Selex
       N[Ispec, 1, Iage] <- N[Ispec, 1, Iage] * exp(InitN[Ispec, Iage])
     }
   }
-  
+
   for (Iyear in 1:(Nyear + Nproj)) {
     # Compute pred biomass
     for (Ispec in 1:Nspecies) {
       AmaxA <- Amax[Ispec]
       for (Iage in 1:AmaxA) PredB[Ispec, Iyear] <- sum(N[Ispec, Iyear, 1:AmaxA] * WeightS[Ispec, 1:AmaxA])
     }
-    
+
     # Somewhat hard-wired
     MTwo <- matrix(0, nrow = Nspecies, ncol = MaxA)
     for (Ispec in 1:Nspecies) {
       idSpe <- which(PredationPars$name == names(SpeciesData)[Ispec])
-      
+
       if (PredationPars$type[idSpe] == "Predator") {
         indPrey <- which(PredationPars$who[idSpe, ] != "None")
         tmpPredB <- numeric(length(indPrey))
@@ -1129,7 +1129,7 @@ popNspecie <- function(Nspecies, SpeciesData, InitN, RecDev, LogR0, Fvals, Selex
         MTwo[Ispec, ] <- -1 * log(parAlp[Ispec] * totPrey / (parBet[Ispec] + totPrey))
       }
       indPreda <- which(PredationPars$who[, idSpe] != "None")
-      
+
       if (length(indPreda) > 0) {
         deplPreda <- numeric(length(indPreda))
         deplI <- PredB[Ispec, Iyear] / PredB0[Ispec]
@@ -1143,7 +1143,7 @@ popNspecie <- function(Nspecies, SpeciesData, InitN, RecDev, LogR0, Fvals, Selex
         }
       }
     }
-    
+
     # Compute F, Z, catch-at-age, and SSB; note that I have added the extra mortality
     for (Ispec in 1:Nspecies) {
       for (Iage in 1:Amax[Ispec]) {
@@ -1157,13 +1157,13 @@ popNspecie <- function(Nspecies, SpeciesData, InitN, RecDev, LogR0, Fvals, Selex
       # Predict SSB during the year and remove Z
       SSB[Ispec, Iyear] <- sum(WeightS[Ispec, ] * Mat[Ispec, ] * exp(-PropZBeforeMat[Ispec] * Z[Ispec, ]) * N[Ispec, Iyear, ])
     }
-    
+
     # update N
     for (Ispec in 1:Nspecies) {
       AmaxA <- Amax[Ispec]
       Ntemp[Ispec, 1:AmaxA] <- N[Ispec, Iyear, 1:AmaxA] * exp(-Z[Ispec, 1:AmaxA])
     }
-    
+
     # Update dynamics and add recruitment
     for (Ispec in 1:Nspecies) {
       AmaxA <- Amax[Ispec]
@@ -1172,7 +1172,7 @@ popNspecie <- function(Nspecies, SpeciesData, InitN, RecDev, LogR0, Fvals, Selex
       N[Ispec, Iyear + 1, 1] <- R0[Ispec] * exp(RecDev[Ispec, Iyear])
     }
   }
-  
+
   Outs <- NULL
   Outs$AmaxA <- AmaxA
   Outs$Amax <- Amax
@@ -1199,7 +1199,7 @@ likeNspecie <- function(Nspecies, SpeciesData, Outs, SurvSel, RecDev, InitN) {
   N <- Outs$N
   PCAA <- Outs$CAA
   PredCW <- Outs$PredCW
-  
+
   # Declare model predictions
   PredSurvA <- array(0, dim = c(Nspecies, 100, AmaxA))
   PredSurvL <- array(0, dim = c(Nspecies, 100, NlenA))
@@ -1207,23 +1207,23 @@ likeNspecie <- function(Nspecies, SpeciesData, Outs, SurvSel, RecDev, InitN) {
   PredCAL <- array(0, dim = c(Nspecies, 100, NlenA))
   PredSurvBio <- array(0, dim = c(Nspecies, 10, 100))
   SurveyQ <- matrix(0, nrow = Nspecies, ncol = 10)
-  
+
   # Pre-specified values
   CVIndex <- 0.3
   CVCatch <- 0.1
   SigmaR <- 0.6
   EffFish <- 100
-  
+
   Like1 <- rep(0, Nspecies)
   Like2 <- rep(0, Nspecies)
   Like3 <- rep(0, Nspecies)
   Prob1 <- rep(0, Nspecies)
-  
+
   for (Ispec in 1:Nspecies) {
     Amax <- SpeciesData[[Ispec]]$Amax
     Nlen <- SpeciesData[[Ispec]]$Nlen
     YrA <- SpeciesData[[Ispec]]$Yr1
-    
+
     # Survey (assumed to be absolute, but subject to selectivity)
     if (SpeciesData[[Ispec]]$NSAA > 0) {
       for (Jsurv in 1:SpeciesData[[Ispec]]$Nsurvey) {
@@ -1262,7 +1262,7 @@ likeNspecie <- function(Nspecies, SpeciesData, Outs, SurvSel, RecDev, InitN) {
         }
       }
     }
-    
+
     # Survey catch-at-length
     if (SpeciesData[[Ispec]]$NSAL > 0) {
       for (Jsurv in 1:SpeciesData[[Ispec]]$Nsurvey) {
@@ -1303,7 +1303,7 @@ likeNspecie <- function(Nspecies, SpeciesData, Outs, SurvSel, RecDev, InitN) {
         }
       }
     }
-    
+
     # Catch-at-age and -at-length
     if (SpeciesData[[Ispec]]$NCAA > 1) {
       for (II in 1:SpeciesData[[Ispec]]$NCAA) {
@@ -1339,7 +1339,7 @@ likeNspecie <- function(Nspecies, SpeciesData, Outs, SurvSel, RecDev, InitN) {
       Residual <- log(PredCW[Ispec, II]) - log(SpeciesData[[Ispec]]$Catch[II])
       Like3[Ispec] <- Like3[Ispec] + Residual^2 / (2 * CVCatch^2)
     }
-    
+
     # Penalty on rec_devs
     for (Iyear in 1:SpeciesData[[Ispec]]$Nyear) {
       Prob1[Ispec] <- Prob1[Ispec] + RecDev[Ispec, Iyear]^2.0 / (2.0 * SigmaR^2)
@@ -1348,12 +1348,12 @@ likeNspecie <- function(Nspecies, SpeciesData, Outs, SurvSel, RecDev, InitN) {
       Prob1[Ispec] <- Prob1[Ispec] + InitN[Ispec, Iyear]^2.0 / (2.0 * SigmaR^2)
     }
   }
-  
+
   TotalLike <- sum(Like1) + sum(Like2) + sum(Like3) + sum(Prob1)
   # cat(Like1, Like2, Like3, Prob1, TotalLike,"\n")
   # if (TotalLike < 9800) AAA
   # AAAA
-  
+
   Outs <- NULL
   Outs$AmaxA <- AmaxA
   Outs$NlenA <- NlenA
@@ -1374,7 +1374,7 @@ likeNspecie <- function(Nspecies, SpeciesData, Outs, SurvSel, RecDev, InitN) {
 
 funNopt <- function(Pars, DoEst = TRUE, SpeciesData, Nspecies, PredationPars) {
   ExtVal <- setNin(Pars, SpeciesData, Nspecies)
-  
+
   ParOut <- ExtVal$ParOut
   AltPIN <- ExtVal$AltPIN
   InitN <- ExtVal$InitN
@@ -1385,22 +1385,22 @@ funNopt <- function(Pars, DoEst = TRUE, SpeciesData, Nspecies, PredationPars) {
   Fvals <- ExtVal$Fvals
   InitF <- ExtVal$InitF
   Prior <- ExtVal$Prior
-  
+
   # Projection the population model and compute the negative log-likelihood
   Outs <- popNspecie(Nspecies, SpeciesData, InitN, RecDev, LogR0, Fvals, Selex, InitF, PredationPars, Nproj = 0)
   OutLikelihood <- likeNspecie(Nspecies, SpeciesData, Outs, SurvSel, RecDev, InitN)
-  
+
   # Trick to get things passes
   if (DoEst == TRUE) {
     return(OutLikelihood$TotalLike + Prior)
   } else {
     Out2 <- NULL
-    
+
     Out2$ParOut <- ParOut
     Out2$AltPIN <- AltPIN
     Out2$TotalLike <- OutLikelihood$TotalLike
     Out2$Prior <- Prior
-    
+
     AmaxA <- OutLikelihood$AmaxA
     Out2$Amax <- NULL
     for (Ispec in 1:Nspecies) {
@@ -1411,20 +1411,20 @@ funNopt <- function(Pars, DoEst = TRUE, SpeciesData, Nspecies, PredationPars) {
     for (Ispec in 1:Nspecies) {
       Out2$Nlen <- c(Out2$Nlen, SpeciesData[[Ispec]]$Nlen)
     }
-    
+
     # Out2$Nyear <- length(Outs$SSB)
     Out2$Nyear <- ncol(Outs$SSB)
     Out2$Nspecies <- Nspecies
-    
+
     Out2$CvCatch <- OutLikelihood$CvCatch
     Out2$CvIndex <- OutLikelihood$CvIndex
     Out2$SigmaR <- OutLikelihood$SigmaR
     Out2$EffFish <- OutLikelihood$EffFish
-    
+
     Out2$N <- Outs$N / 1000
     Out2$FAA <- Outs$FAA
     Out2$SSB <- Outs$SSB / 1000
-    
+
     Out2$ObsSAA <- array(0, dim = c(Nspecies, 100, AmaxA))
     Out2$YSAA <- matrix(0, nrow = Nspecies, ncol = 100)
     Out2$SSAA <- matrix(0, nrow = Nspecies, ncol = 100)
@@ -1438,7 +1438,7 @@ funNopt <- function(Pars, DoEst = TRUE, SpeciesData, Nspecies, PredationPars) {
       }
     }
     Out2$PredSAA <- OutLikelihood$PredSurvA
-    
+
     Out2$ObsSAL <- array(0, dim = c(Nspecies, 100, NlenA))
     Out2$YSAL <- matrix(0, nrow = Nspecies, ncol = 100)
     Out2$SSAL <- matrix(0, nrow = Nspecies, ncol = 100)
@@ -1452,7 +1452,7 @@ funNopt <- function(Pars, DoEst = TRUE, SpeciesData, Nspecies, PredationPars) {
       }
     }
     Out2$PredSAL <- OutLikelihood$PredSurvL
-    
+
     Out2$ObsCAA <- array(0, dim = c(Nspecies, 100, AmaxA))
     for (Ispec in 1:Nspecies) {
       if (length(SpeciesData[[Ispec]]$CAA) > 0) {
@@ -1462,7 +1462,7 @@ funNopt <- function(Pars, DoEst = TRUE, SpeciesData, Nspecies, PredationPars) {
       }
     }
     Out2$PredCAA <- OutLikelihood$PredCAA
-    
+
     Out2$ObsCAL <- array(0, dim = c(Nspecies, 100, NlenA))
     for (Ispec in 1:Nspecies) {
       if (length(SpeciesData[[Ispec]]$CAL) > 0) {
@@ -1472,22 +1472,22 @@ funNopt <- function(Pars, DoEst = TRUE, SpeciesData, Nspecies, PredationPars) {
       }
     }
     Out2$PredCAL <- OutLikelihood$PredCAL
-    
+
     Out2$Selex <- Selex
     Out2$SurvSel <- SurvSel
-    
+
     Out2$ObsSurvBio <- array(0, dim = c(Nspecies, 10, Out2$Nyear))
     for (Ispec in 1:Nspecies) {
       Out2$ObsSurvBio[Ispec, , ] <- SpeciesData[[Ispec]]$SurvBio / 1000
     }
     Out2$PredSurvBio <- OutLikelihood$PredSurvBio / 1000
-    
+
     Out2$ObsCatch <- matrix(0, nrow = Nspecies, ncol = Out2$Nyear)
     for (Ispec in 1:Nspecies) {
       Out2$ObsCatch[Ispec, ] <- SpeciesData[[Ispec]]$Catch
     }
     Out2$PredCatch <- Outs$PredCW
-    
+
     return(Out2)
   }
 }
@@ -1506,7 +1506,7 @@ setNin <- function(Pars, SpeciesData, Nspecies, Nproj = 0) {
   Fvals <- matrix(0, nrow = Nspecies, ncol = Nyear + Nproj)
   Ipar <- 0
   Jpar <- 0
-  
+
   Prior <- 0
   ParOut <- NULL
   ParInitN <- NULL
@@ -1516,7 +1516,7 @@ setNin <- function(Pars, SpeciesData, Nspecies, Nproj = 0) {
   ParVecC <- NULL
   ParFvals <- NULL
   ParInitF <- NULL
-  
+
   for (Ispec in 1:Nspecies) {
     Amax <- SpeciesData[[Ispec]]$Amax
     Nlen <- SpeciesData[[Ispec]]$Nlen
@@ -1524,20 +1524,20 @@ setNin <- function(Pars, SpeciesData, Nspecies, Nproj = 0) {
     Nsurvey <- SpeciesData[[Ispec]]$Nsurvey
     VecS <- NULL
     VecC <- NULL
-    
+
     InitN[Ispec, 1:Amax] <- Pars[(Ipar + 1):(Ipar + Amax)]
     Ipar <- Ipar + Amax
-    
+
     RecDev[Ispec, 1:Nyear] <- Pars[(Ipar + 1):(Nyear + Ipar)]
     Ipar <- Ipar + Nyear
-    
+
     LogR0[Ispec] <- Pars[Ipar + 1]
     Ipar <- Ipar + 1
-    
+
     if (SpeciesData[[Ispec]]$SelsurvType == 1) {
       SVec <- Pars[(Ipar + 1):(Ipar + Nsurvey * (Amax - 2))]
       Ipar <- Ipar + Nsurvey * (Amax - 2)
-      
+
       VecS <- c(VecS, SVec)
       for (Isurv in 1:Nsurvey) {
         Offset1 <- (Isurv - 1) * (Amax - 2) + 1
@@ -1548,7 +1548,7 @@ setNin <- function(Pars, SpeciesData, Nspecies, Nproj = 0) {
     if (SpeciesData[[Ispec]]$SelsurvType == 2) {
       SVec <- Pars[(Ipar + 1):(Ipar + Nsurvey * 3)]
       Ipar <- Ipar + Nsurvey * 3
-      
+
       VecS <- c(VecS, SVec)
       for (Isurv in 1:Nsurvey) {
         Offset <- (Isurv - 1) * 3
@@ -1595,13 +1595,13 @@ setNin <- function(Pars, SpeciesData, Nspecies, Nproj = 0) {
       }
       Selex[Ispec, 1:Amax] <- Selex[Ispec, 1:Amax] / max(Selex[Ispec, 1:Amax])
     }
-    
+
     Fvals[Ispec, 1:Nyear] <- exp(Pars[(Ipar + 1):(Ipar + Nyear)])
     Ipar <- Ipar + Nyear
-    
+
     InitF[Ispec] <- exp(Pars[Ipar + 1])
     Ipar <- Ipar + 1
-    
+
     ParOut <- c(ParOut, InitN[Ispec, 1:Amax], RecDev[Ispec, 1:Nyear], LogR0[Ispec], VecS, VecC, log(Fvals[Ispec, 1:Nyear]), log(InitF[Ispec]))
     ParInitN <- c(ParInitN, InitN[Ispec, 1:Amax])
     ParRecDev <- c(ParRecDev, RecDev[Ispec, 1:Nyear])
@@ -1611,7 +1611,7 @@ setNin <- function(Pars, SpeciesData, Nspecies, Nproj = 0) {
     ParFvals <- c(ParFvals, log(Fvals[Ispec, 1:Nyear]))
     ParInitF <- c(ParInitF, log(InitF[Ispec]))
   }
-  
+
   Outs <- NULL
   Outs$ParOut <- ParOut
   Outs$AltPIN <- list(Dummy = 0, ParlogR0 = ParLogR0, ParVecC = ParVecC, ParVecS = ParVecS, ParInitN = ParInitN, ParRecDev = ParRecDev, ParFvals = ParFvals, ParInitF = ParInitF)
@@ -1630,7 +1630,7 @@ setNin <- function(Pars, SpeciesData, Nspecies, Nproj = 0) {
 
 forwPop <- function(Pars, SpeciesData, Nspecies, PredationPars, Nproj, Nsim, FutF = NULL, SigmaR) {
   ExtVal <- setNin(Pars, SpeciesData, Nspecies, Nproj = Nproj)
-  
+
   ParOut <- ExtVal$ParOut
   InitN <- ExtVal$InitN
   RecDev <- ExtVal$RecDev
@@ -1641,7 +1641,7 @@ forwPop <- function(Pars, SpeciesData, Nspecies, PredationPars, Nproj, Nsim, Fut
   InitF <- ExtVal$InitF
   Prior <- ExtVal$Prior
   Nyear <- SpeciesData[[1]]$Nyear
-  
+
   # Projection the population model and compute the negative log-likelihood
   SSBOut <- array(0, dim = c(Nspecies, Nsim, Nyear + Nproj))
   for (Isim in 1:Nsim) {
@@ -1687,6 +1687,6 @@ forwPop <- function(Pars, SpeciesData, Nspecies, PredationPars, Nproj, Nsim, Fut
     rownames(SumOut) <- paste0("Y_", Years)
     outLst[[SpecName[Ispec]]] <- SumOut
   }
-  
+
   return(outLst)
 }

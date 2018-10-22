@@ -1522,9 +1522,11 @@ SmartProject <- R6Class("smartProject",
       if (is.null(fisheryBySpecie)) {
         stop("No mcmc output found")
       }
-      specList <- intersect(specieInFishery,
-                            names(fleet$ecoPrice))
-      
+      specList <- intersect(
+        specieInFishery,
+        names(fleet$ecoPrice)
+      )
+
       for (specie in specList) {
         priIdx <- which(names(fleet$ecoPrice) == specie)
         fisIdx <- which(specieInFishery == specie)
@@ -2477,7 +2479,7 @@ SmartProject <- R6Class("smartProject",
 #'   length values of the sampled specie}
 #'   \item{\code{setDepth(bathyMatrix)}}{This method is used to assign the
 #'   depth value corresponding to each sampling location}
-#'   \item{\code{setStratum(vecStrata)}}{This method is used to set the 
+#'   \item{\code{setStratum(vecStrata)}}{This method is used to set the
 #'   depth strata of each sampling location}
 #'   \item{\code{setIndSpe()}}{This method is used to aggregate the abundance
 #'   data into the medits index}
@@ -2489,7 +2491,7 @@ SmartProject <- R6Class("smartProject",
 #'   store the alpha and beta values for the length/weight relationship}
 #'   \item{\code{setWeight(sexVal = "Female")}}{This method is used to
 #'   compute the fish weight given their length and the LWrelationship}
-#'   \item{\code{setSpreDistSing()}}{This method is used to spread the 
+#'   \item{\code{setSpreDistSing()}}{This method is used to spread the
 #'   aggregated LFD abundances into single individuals}
 #'   \item{\code{setSprePlot(sampSex)}}{This method is used to setup the
 #'   plots of the LFD statistics}
@@ -2502,7 +2504,7 @@ SmartProject <- R6Class("smartProject",
 #'   module}
 #'   \item{\code{getGrowPar(sexDrop)}}{This method is used to extract the
 #'   growth parameters from the mcmc results}
-#'   \item{\code{getMCage(sexDrop)}}{This method is used to assign an age to 
+#'   \item{\code{getMCage(sexDrop)}}{This method is used to assign an age to
 #'   each fish}
 #'   \item{\code{setMCplot(sexDrop, selCurve)}}{This method is used to setup
 #'   the plot of the mcmc results}
@@ -2954,7 +2956,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
 #'   length values of the sampled specie}
 #'   \item{\code{setDepth(bathyMatrix)}}{This method is used to assign the
 #'   depth value corresponding to each sampling location}
-#'   \item{\code{setStratum(vecStrata)}}{This method is used to set the 
+#'   \item{\code{setStratum(vecStrata)}}{This method is used to set the
 #'   depth strata of each sampling location}
 #'   \item{\code{setIndSpe()}}{This method is used to aggregate the abundance
 #'   data into the medits index}
@@ -2966,7 +2968,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
 #'   store the alpha and beta values for the length/weight relationship}
 #'   \item{\code{setWeight(sexVal = "Female")}}{This method is used to
 #'   compute the fish weight given their length and the LWrelationship}
-#'   \item{\code{setSpreDistSing()}}{This method is used to spread the 
+#'   \item{\code{setSpreDistSing()}}{This method is used to spread the
 #'   aggregated LFD abundances into single individuals}
 #'   \item{\code{setSprePlot(sampSex)}}{This method is used to setup the
 #'   plots of the LFD statistics}
@@ -2979,7 +2981,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
 #'   module}
 #'   \item{\code{getGrowPar(sexDrop)}}{This method is used to extract the
 #'   growth parameters from the mcmc results}
-#'   \item{\code{getMCage(sexDrop)}}{This method is used to assign an age to 
+#'   \item{\code{getMCage(sexDrop)}}{This method is used to assign an age to
 #'   each fish}
 #'   \item{\code{setMCplot(sexDrop, selCurve)}}{This method is used to setup
 #'   the plot of the mcmc results}
@@ -3417,10 +3419,10 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 #' @field effoMont list of DF, monthly aggregated effort data.
 #' @field effoProdAll data.frame, monthly aggregated effort and production data.
 #' @field effoAll data.frame, monthly aggregated effort data.
-#' @field regHarbsUni data.frame, Harbours name, longitude, latitude and 
+#' @field regHarbsUni data.frame, Harbours name, longitude, latitude and
 #' distance from the environment grid.
-#' @field regHarbsBox data.frame, Harbours name, longitude, latitude, number of 
-#' registered vessels and distance from the environment grid within the grid 
+#' @field regHarbsBox data.frame, Harbours name, longitude, latitude, number of
+#' registered vessels and distance from the environment grid within the grid
 #' box.
 #' @field rawProduction list of DF, raw production data.
 #' @field rawEconomy data.frame, raw economic data.
@@ -3431,12 +3433,12 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 #' @field specSett list of DF, logit parameter settings by specie.
 #' @field specLogit list, logit results by specie.
 #' @field effortIds list of int, vessel ids with effort data available.
-#' @field idsEffoProd list of int, merged vessel ids with both effort and 
+#' @field idsEffoProd list of int, merged vessel ids with both effort and
 #' production data available.
-#' @field effoProdAllLoa data.frame, monthly aggregated effort, production and 
+#' @field effoProdAllLoa data.frame, monthly aggregated effort, production and
 #' loa data.
 #' @field effoAllLoa  data.frame, monthly aggregated effort and loa data.
-#' @field effortIndex data.frame, effort index by vessel, year and month with 
+#' @field effortIndex data.frame, effort index by vessel, year and month with
 #' loa data.
 #' @field daysAtSea data.frame, days at sea index by vessel, year, month with
 #' loa and Kw data.
@@ -3458,7 +3460,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 #'
 #' @section Methods:
 #' \describe{
-#'   \item{\code{setVmsRegister()}}{This method is used to exclude the fleet 
+#'   \item{\code{setVmsRegister()}}{This method is used to exclude the fleet
 #'   register records of vessels without vms}
 #'   \item{\code{setRegHarbs()}}{This method is used to fetch the harbours
 #'   coordinates}
@@ -3482,7 +3484,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 #'   regression}
 #'   \item{\code{getRegEffort()}}{This method is used to compute the effort
 #'   regression}
-#'   \item{\code{getRegProduction()}}{This method is used to compute the 
+#'   \item{\code{getRegProduction()}}{This method is used to compute the
 #'   production regression}
 #'   \item{\code{getCostOutput()}}{This method is a wrapper function to get the
 #'   economic regressions}
@@ -3490,17 +3492,17 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 #'   economic regression}
 #'   \item{\code{loadProduction(production_path)}}{This method is used to load
 #'   the raw csv of the production data}
-#'   \item{\code{setFishPoinPara(speed_range, depth_range)}}{This method is 
+#'   \item{\code{setFishPoinPara(speed_range, depth_range)}}{This method is
 #'   used to setup the fishign points parameters}
 #'   \item{\code{setWeekMonthNum()}}{This method is used to assign the week and
 #'   month num to the raw effort data}
-#'   \item{\code{setFishPoin()}}{This method is used to filter the 
+#'   \item{\code{setFishPoin()}}{This method is used to filter the
 #'   fishing points}
-#'   \item{\code{plotFishPoinStat()}}{This method is used to show the basic 
+#'   \item{\code{plotFishPoinStat()}}{This method is used to show the basic
 #'   statistics for the fishing points}
 #'   \item{\code{plotSpeedDepth(which_year, speed_range, depth_range)}}{
 #'   This method is used to show the speed/depth profile}
-#'   \item{\code{setEffortIds()}}{This method is used to set the distinct 
+#'   \item{\code{setEffortIds()}}{This method is used to set the distinct
 #'   vessel' ids in the effort dataset}
 #'   \item{\code{setProdSpec()}}{This method is used to set the distinct specie
 #'   in the production dataset}
@@ -3520,11 +3522,11 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 #'   set the confusion matrix of the logit results by specie}
 #'   \item{\code{setLogitTrain(selSpecie, train, cp_val, cv_val)}}{
 #'   This method is used to setup the train dataset for the logit model}
-#'   \item{\code{setLogitTest(selSpecie, test)}}{This method is used to setup 
+#'   \item{\code{setLogitTest(selSpecie, test)}}{This method is used to setup
 #'   the test dataset for the logit model}
-#'   \item{\code{setLogitPred(selSpecie, test)}}{This method is used to compute 
+#'   \item{\code{setLogitPred(selSpecie, test)}}{This method is used to compute
 #'   the prediction for the logit model}
-#'   \item{\code{setLogitCut(selSpecie)}}{This method is used to tune the 
+#'   \item{\code{setLogitCut(selSpecie)}}{This method is used to tune the
 #'   cutoff of the logit model}
 #'   \item{\code{setLogitRoc(selSpecie)}}{This method is used to set the ROC of
 #'   the logit model}
@@ -3532,11 +3534,11 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 #'   set the confusion matrix of the logit results}
 #'   \item{\code{setSpecLogit(selSpecie, selModel, cp, cv)}}{This method is
 #'    a wrapper function to get the logit model}
-#'   \item{\code{getMatSpeLand(specie)}}{This method is used to get the input 
+#'   \item{\code{getMatSpeLand(specie)}}{This method is used to get the input
 #'   data for the logit model}
-#'   \item{\code{setEffoProdAll()}}{This method is used to combine the 
+#'   \item{\code{setEffoProdAll()}}{This method is used to combine the
 #'   effort/production data from the yearly list into a single data.frame}
-#'   \item{\code{setEffoAll()}}{This method is used to combine the 
+#'   \item{\code{setEffoAll()}}{This method is used to combine the
 #'   effort data from the yearly list into a single data.frame}
 #'   \item{\code{setEffoProdAllLoa()}}{This method is used to add the LOA data
 #'   to the effort/production data}
