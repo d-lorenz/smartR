@@ -1,21 +1,22 @@
 Package: smartR
 Type: Package
-Title: Spatially Explicit Bio-Economic Model for Assessing and Managing Demersal
-    Fisheries
+Title: Spatial Management and Assessment of demersal Resources for Trawl
+       fisheries in R
 Version: 0.39
 Date: 2017-10-12
 Author: Lorenzo D'Andrea, Tommaso Russo, Antonio Parisi, Stefano Cataudella
 Maintainer: Lorenzo D'Andrea <support@vmsbase.org>
-Description: SMART (Spatial MAnagement of demersal Resources for Trawl
-    fisheries), a tool for assessing bio-economic feedback in different management
-    scenarios. SMART combines information from different tasks gathered within
-    the European Data Collection Framework on fisheries and is composed of: 1)
-    spatial models of fishing effort, environmental characteristics and distribution
-    of demersal resources; 2) an Artificial Neural Network which captures the
-    relationships among these aspects in a spatially explicit way and uses them
-    to predict resources abundances; 3) a deterministic module which analyzes the
-    size structure of catches and the associated revenues, according to different
-    spatially-based management scenarios.
+Description: SMART (Spatial Management and Assessment of demersal Resources for
+    Trawl fisheries in R), a tool for assessing bio-economic feedback in 
+    different management scenarios. SMART combines information from different 
+    tasks gathered within the European Data Collection Framework on fisheries 
+    and is composed of: 1) spatial models of fishing effort, environmental 
+    characteristics and distribution of demersal resources; 2) an Artificial 
+    Neural Network which captures the relationships among these aspects in a 
+    spatially explicit way and uses them to predict resources abundances; 3) a 
+    deterministic module which analyzes the size structure of catches and the 
+    associated revenues, according to different spatially-based management 
+    scenarios.
 License: GPL (>= 2)
 Depends:
     R6,
@@ -60,4 +61,5 @@ Imports:
     RColorBrewer,
     jsonlite,
     igraph
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
+Encoding: UTF-8
