@@ -1522,8 +1522,8 @@ SmartProject <- R6Class("smartProject",
       if (is.null(fisheryBySpecie)) {
         stop("No mcmc output found")
       }
-      specList <- intersect(my_project$specieInFishery,
-                            names(my_project$fleet$ecoPrice))
+      specList <- intersect(specieInFishery,
+                            names(fleet$ecoPrice))
       
       for (specie in specList) {
         priIdx <- which(names(fleet$ecoPrice) == specie)
