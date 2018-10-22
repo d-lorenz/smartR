@@ -14,20 +14,20 @@
 #'
 #' @format \code{\link{R6Class}} object.
 #'
-#' @field rawDataSurvey Stores the raw survey data as is in the provided csv file. The attribute is populated by \code{loadSurveyLFD()} method.
+#' @field rawDataSurvey Stores the raw survey data after being populated by \code{loadSurveyLFD()} method.
 #' @field yearInSurvey Stores the distinct years in the \code{rawDataSurvey} time-serie.
 #' @field specieInSurvey Stores the distinct species in the \code{rawDataSurvey} time-serie.
-#' @field surveyBySpecie Stores a list of \code{SurveyBySpecie} objects, one for each species in the time-series.
+#' @field surveyBySpecie Stores a list of \code{\link{SurveyBySpecie}} objects, one for each species in the time-series.
 
 #' @field rawDataFishery Stores the raw fishery data as is in the provided csv file. The attribute is populated by \code{loadFisheryLFD()} method.
 #' @field yearInFishery Stores the distinct years in the \code{rawDataFishery} time-serie.
 #' @field specieInFishery Stores the distinct species in the \code{rawDataFishery} time-serie.
-#' @field fisheryBySpecie Stores a list of \code{FisheryBySpecie} objects, one for each species in the time-series.
+#' @field fisheryBySpecie Stores a list of \code{\link{FisheryBySpecie}} objects, one for each species in the time-series.
 #'
 #' @field gooLstCoho Stores a list of plots of species cohorts spatial distribution .
 #'
-#' @field sampMap Stores the \code{environment} object.
-#' @field fleet Stores the \code{fleet} object.
+#' @field sampMap Stores the \code{\link[=SampleMap]{environment}} object.
+#' @field fleet Stores the \code{\link{FishFleet}} object.
 #'
 #' @field simProd Stores the simulated pattern of production.
 #' @field simEffo Stores the simulated pattern of effort.
@@ -49,7 +49,6 @@
 #'
 #' @section Methods:
 #' \describe{
-#'   \item{Documentation}{For full documentation of each method go to https://github.com/smartR_blablabla/}
 #'   \item{\code{setCostInput()}}{This method is used to setup the required data for costs computation}
 #'   \item{\code{setInProduction()}}{This method is used to setup the required data for production costs computation}
 #'   \item{\code{setDaysAtSea()}}{This method is used to compute the number of Days at Sea of each vessel}
@@ -2449,51 +2448,68 @@ SmartProject <- R6Class("smartProject",
 #'
 #' @format \code{\link{R6Class}} object.
 #'
-#' @field specie Missing description.
-#' @field year Missing description.
-#' @field rawLFD Missing description.
-#' @field abuAvg Missing description.
-#' @field meditsIndex Missing description.
-#' @field lengClas Missing description.
-#' @field LFDPop Missing description.
-#' @field mixPar Missing description.
-#' @field nCoho Missing description.
-#' @field spreDist Missing description.
-#' @field sprePlot Missing description.
-#' @field spreSpat Missing description.
-#' @field sampMcmc Missing description.
-#' @field groMixout Missing description.
-#' @field groPars Missing description.
-#' @field Coh_A Missing description.
-#' @field Coh_A_Int Missing description.
-#' @field LWpar Missing description.
+#' @field specie Name of the specie.
+#' @field year Years in the time-serie.
+#' @field rawLFD data.frame, raw length frequency distribution.
+#' @field abuAvg data.frame, average abundances by depth' stratum.
+#' @field meditsIndex data.frame, medits index by depth' stratum.
+#' @field lengClas numeric, length classes.
+#' @field nCoho numeric, number of cohorts.
+#' @field spreDist list of DF, lfd by sex.
+#' @field sprePlot plots of LFD statistics.
+#' @field spreSpat list of DF, spatial distribution by sex.
+#' @field sampMcmc list, mcmc output chains.
+#' @field groMixout list of DF, aged individuals by sex.
+#' @field groPars list of DF, growth parameters by sex.
+#' @field LWpar list of DF, length/weight parameters by sex.
 #'
 #' @section Methods:
 #' \describe{
-#'   \item{Documentation}{For full documentation of each method go to https://github.com/smartR_blablabla/}
-#'   \item{\code{initialize(sing_spe)}}{This method is used }
-#'   \item{\code{setRawData(raw_data)}}{This method is used }
-#'   \item{\code{plotLFD()}}{This method is used }
-#'   \item{\code{setYears()}}{This method is used }
-#'   \item{\code{setSpecie()}}{This method is used }
-#'   \item{\code{setLClass()}}{This method is used }
-#'   \item{\code{setDepth(bathyMatrix)}}{This method is used }
-#'   \item{\code{setStratum(vecStrata)}}{This method is used }
-#'   \item{\code{setIndSpe()}}{This method is used }
-#'   \item{\code{setAbuAvg()}}{This method is used }
-#'   \item{\code{setNCoho(num_coh)}}{This method is used }
-#'   \item{\code{setLWpar(alphaVal, betaVal, sex)}}{This method is used }
-#'   \item{\code{setWeight(sexVal = "Female")}}{This method is used }
-#'   \item{\code{setSpreDistSing()}}{This method is used }
-#'   \item{\code{setSprePlot(sampSex)}}{This method is used }
-#'   \item{\code{setSpatDistSing()}}{This method is used }
-#'   \item{\code{setSpatPlot(sampSex)}}{This method is used }
-#'   \item{\code{getMCsamps(numSamp, numAdap, numIter, sexDrop, curveSel)}}{This method is used }
-#'   \item{\code{getGrowPar(sexDrop)}}{This method is used }
-#'   \item{\code{getMCage(sexDrop)}}{This method is used }
-#'   \item{\code{setMCplot(sexDrop, selCurve)}}{This method is used }
-#'   \item{\code{calcMixDate(nAdap, nSamp, nIter, sexDrop, curveSel)}}{This method is used }
-#'   \item{\code{ggplotMcmcOut(selCompo, selSex)}}{This method is used }
+#'   \item{\code{initialize(sing_spe)}}{Automatic initialization made by the
+#'   SmartProject class}
+#'   \item{\code{setRawData(raw_data)}}{This method is used load the initial
+#'   raw dataset}
+#'   \item{\code{setYears()}}{This method is used to store the years in the
+#'   provided time-serie}
+#'   \item{\code{setSpecie()}}{This method is used to store the name of
+#'   the specie of the initial raw data}
+#'   \item{\code{setLClass()}}{This method is used to store the unique
+#'   length values of the sampled specie}
+#'   \item{\code{setDepth(bathyMatrix)}}{This method is used to assign the
+#'   depth value corresponding to each sampling location}
+#'   \item{\code{setStratum(vecStrata)}}{This method is used to set the 
+#'   depth strata of each sampling location}
+#'   \item{\code{setIndSpe()}}{This method is used to aggregate the abundance
+#'   data into the medits index}
+#'   \item{\code{setAbuAvg()}}{This method is used to standardize the
+#'   spatial abundances by depth strata}
+#'   \item{\code{setNCoho(num_coh)}}{This method is used to setup the number
+#'   of cohorts for the ageing module}
+#'   \item{\code{setLWpar(alphaVal, betaVal, sex)}}{This method is used to
+#'   store the alpha and beta values for the length/weight relationship}
+#'   \item{\code{setWeight(sexVal = "Female")}}{This method is used to
+#'   compute the fish weight given their length and the LWrelationship}
+#'   \item{\code{setSpreDistSing()}}{This method is used to spread the 
+#'   aggregated LFD abundances into single individuals}
+#'   \item{\code{setSprePlot(sampSex)}}{This method is used to setup the
+#'   plots of the LFD statistics}
+#'   \item{\code{setSpatDistSing()}}{This method is used to setup the spatial
+#'   distribution of the single specimens}
+#'   \item{\code{setSpatPlot(sampSex)}}{This method is used to store the
+#'   spatial plots of the population}
+#'   \item{\code{getMCsamps(numSamp, numAdap, numIter, sexDrop, curveSel)}}{
+#'   This method is used to get a sample of the population to feed the mcmc
+#'   module}
+#'   \item{\code{getGrowPar(sexDrop)}}{This method is used to extract the
+#'   growth parameters from the mcmc results}
+#'   \item{\code{getMCage(sexDrop)}}{This method is used to assign an age to 
+#'   each fish}
+#'   \item{\code{setMCplot(sexDrop, selCurve)}}{This method is used to setup
+#'   the plot of the mcmc results}
+#'   \item{\code{calcMixDate(nAdap, nSamp, nIter, sexDrop, curveSel)}}{
+#'   This method is used to estimate the growth parameters of a population}
+#'   \item{\code{ggplotMcmcOut(selCompo, selSex)}}{This method is used to
+#'   output the stored plots of mcmc results}
 #'   }
 
 
@@ -2909,48 +2925,68 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
 #'
 #' @format \code{\link{R6Class}} object.
 #'
-#' @field specie Missing description.
-#' @field year Missing description.
-#' @field rawLFD Missing description.
-#' @field lengClas Missing description.
-#' @field LFDPop Missing description.
-#' @field mixPar Missing description.
-#' @field nCoho Missing description.
-#' @field spreDist Missing description.
-#' @field sprePlot Missing description.
-#' @field spreSpat Missing description.
-#' @field sampMcmc Missing description.
-#' @field groMixout Missing description.
-#' @field groPars Missing description.
-#' @field Coh_A Missing description.
-#' @field Coh_A_Int Missing description.
-#' @field LWpar Missing description.
-#' @field LWparQ Missing description.
-#' @field selPar Missing description.
+#' @field specie Name of the specie.
+#' @field year Years of the time serie.
+#' @field rawLFD data.frame, raw length frequency distribution.
+#' @field abuAvg data.frame, average abundances by depth' stratum.
+#' @field meditsIndex data.frame, medits index by depth' stratum.
+#' @field lengClas numeric, length classes.
+#' @field nCoho numeric, number of cohorts.
+#' @field spreDist list of DF, lfd by sex.
+#' @field sprePlot plots of LFD statistics.
+#' @field spreSpat list of DF, spatial distribution by sex.
+#' @field sampMcmc list, mcmc output chains.
+#' @field groMixout list of DF, aged individuals by sex.
+#' @field groPars list of DF, growth parameters by sex.
+#' @field LWpar list of DF, length/weight parameters by sex.
 #'
-#' @section Methods:
+#'   #' @section Methods:
 #' \describe{
-#'   \item{Documentation}{For full documentation of each method go to https://github.com/smartR_blablabla/}
-#'   \item{\code{initialize(sing_spe)}}{This method is used }
-#'   \item{\code{setRawData(raw_data)}}{This method is used }
-#'   \item{\code{plotLFD()}}{This method is used }
-#'   \item{\code{setYears()}}{This method is used }
-#'   \item{\code{setSpecie()}}{This method is used }
-#'   \item{\code{setLClass()}}{This method is used }
-#'   \item{\code{setNCoho(num_coh)}}{This method is used }
-#'   \item{\code{setLWpar(alphaVal, betaVal, sex)}}{This method is used }
-#'   \item{\code{setWeight(sexVal = "Female")}}{This method is used }
-#'   \item{\code{setSpreDistSing()}}{This method is used }
-#'   \item{\code{setSprePlot(sampSex)}}{This method is used }
-#'   \item{\code{setSpatDistSing()}}{This method is used }
-#'   \item{\code{setSpatPlot(sampSex)}}{This method is used }
-#'   \item{\code{setLWstat(lwUnit)}}{This method is used }
-#'   \item{\code{getMCsamps(numSamp, numAdap, numIter, sexDrop, curveSel)}}{This method is used }
-#'   \item{\code{getGrowPar(sexDrop)}}{This method is used }
-#'   \item{\code{getMCage(sexDrop)}}{This method is used }
-#'   \item{\code{setMCplot(sexDrop, selCurve)}}{This method is used }
-#'   \item{\code{calcMixDate(nAdap, nSamp, nIter, sexDrop, curveSel)}}{This method is used }
-#'   \item{\code{ggplotMcmcOut(selCompo, selSex)}}{This method is used }
+#'   \item{\code{initialize(sing_spe)}}{Automatic initialization made by the
+#'   SmartProject class}
+#'   \item{\code{setRawData(raw_data)}}{This method is used load the initial
+#'   raw dataset}
+#'   \item{\code{setYears()}}{This method is used to store the years in the
+#'   provided time-serie}
+#'   \item{\code{setSpecie()}}{This method is used to store the name of
+#'   the specie of the initial raw data}
+#'   \item{\code{setLClass()}}{This method is used to store the unique
+#'   length values of the sampled specie}
+#'   \item{\code{setDepth(bathyMatrix)}}{This method is used to assign the
+#'   depth value corresponding to each sampling location}
+#'   \item{\code{setStratum(vecStrata)}}{This method is used to set the 
+#'   depth strata of each sampling location}
+#'   \item{\code{setIndSpe()}}{This method is used to aggregate the abundance
+#'   data into the medits index}
+#'   \item{\code{setAbuAvg()}}{This method is used to standardize the
+#'   spatial abundances by depth strata}
+#'   \item{\code{setNCoho(num_coh)}}{This method is used to setup the number
+#'   of cohorts for the ageing module}
+#'   \item{\code{setLWpar(alphaVal, betaVal, sex)}}{This method is used to
+#'   store the alpha and beta values for the length/weight relationship}
+#'   \item{\code{setWeight(sexVal = "Female")}}{This method is used to
+#'   compute the fish weight given their length and the LWrelationship}
+#'   \item{\code{setSpreDistSing()}}{This method is used to spread the 
+#'   aggregated LFD abundances into single individuals}
+#'   \item{\code{setSprePlot(sampSex)}}{This method is used to setup the
+#'   plots of the LFD statistics}
+#'   \item{\code{setSpatDistSing()}}{This method is used to setup the spatial
+#'   distribution of the single specimens}
+#'   \item{\code{setSpatPlot(sampSex)}}{This method is used to store the
+#'   spatial plots of the population}
+#'   \item{\code{getMCsamps(numSamp, numAdap, numIter, sexDrop, curveSel)}}{
+#'   This method is used to get a sample of the population to feed the mcmc
+#'   module}
+#'   \item{\code{getGrowPar(sexDrop)}}{This method is used to extract the
+#'   growth parameters from the mcmc results}
+#'   \item{\code{getMCage(sexDrop)}}{This method is used to assign an age to 
+#'   each fish}
+#'   \item{\code{setMCplot(sexDrop, selCurve)}}{This method is used to setup
+#'   the plot of the mcmc results}
+#'   \item{\code{calcMixDate(nAdap, nSamp, nIter, sexDrop, curveSel)}}{
+#'   This method is used to estimate the growth parameters of a population}
+#'   \item{\code{ggplotMcmcOut(selCompo, selSex)}}{This method is used to
+#'   output the stored plots of mcmc results}
 #'   }
 
 FisheryBySpecie <- R6Class("FisheryBySpecie",
@@ -4320,11 +4356,11 @@ FishFleet <- R6Class("fishFleet",
 #'
 #' @format \code{\link{R6Class}} object.
 #'
-#' @field gridPath Stores the file path f the Environment grid.
-#' @field gridName Stores the file name of the Environment grid.
-#' @field gridShp Stores the SpatialPoligon object of the Environment grid.
-#' @field gridBbox Stores the bounding box coordinates of the Environment grid.
-#' @field gridBboxExt Stores the extended bounding box coordinates of the Environment grid.
+#' @field gridPath Stores the file path to the selected Environment grid shapefile.
+#' @field gridName Stores the file name of the Environment grid shapefile.
+#' @field gridShp Stores the SpatialPoligon object of the Environment grid shapefile.
+#' @field gridBbox Stores the bounding box coordinates of the Environment grid shapefile.
+#' @field gridBboxExt Stores the extended bounding box coordinates of the Environment grid shapefile.
 #' @field gridBboxSP Stores the bounding box of the Environment grid as a SpatialPoligon.
 #' @field areaGrid Stores the total area covered by the Environment grid.
 #' @field areaStrata Stores the area covered by depth strata.
@@ -4377,8 +4413,6 @@ FishFleet <- R6Class("fishFleet",
 #'
 #' @section Methods:
 #' \describe{
-#'   \item{Documentation}{For full documentation of each method go to https://github.com/smartR_blablabla/}
-#'   \item{\code{initialize(grid_path)}}{This method is used to initialize the spatial information of the area of study.}
 #'   \item{\code{setAreaGrid()}}{This method is used to compute the total area covered by the environmental grid.}
 #'   \item{\code{setAreaStrata(vectorStrata)}}{This method is used to compute the area covered by each depth strata.}
 #'   \item{\code{setWeightStrata()}}{This method is used to compute the area covered by each depth strata relative to the total area of the grid.}

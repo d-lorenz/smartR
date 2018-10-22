@@ -10,5 +10,6 @@ smart_gui()
 This function does not return a value.
 }
 \description{
-The \code{smart_gui} function implements the main graphical user interface of SMART.
+The \code{smart_gui} function implements the main graphical user interface
+of SMART.
 }

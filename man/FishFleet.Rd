@@ -5,9 +5,6 @@
 \alias{FishFleet}
 \title{FishFleet}
 \format{\code{\link{R6Class}} object.}
-\usage{
-FishFleet
-}
 \value{
 Object of \code{\link{R6Class}} with attributes and methods for the fishery data.
 }

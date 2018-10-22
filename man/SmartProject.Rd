@@ -16,13 +16,13 @@ The \code{SmartProject} class implements the main class of
 \section{Fields}{
 
 \describe{
-\item{\code{rawDataSurvey}}{Stores the raw survey data as is in the provided csv file. The attribute is populated by \code{loadSurveyLFD()} method.}
+\item{\code{rawDataSurvey}}{Stores the raw survey data after being populated by \code{loadSurveyLFD()} method.}
 
 \item{\code{yearInSurvey}}{Stores the distinct years in the \code{rawDataSurvey} time-serie.}
 
 \item{\code{specieInSurvey}}{Stores the distinct species in the \code{rawDataSurvey} time-serie.}
 
-\item{\code{surveyBySpecie}}{Stores a list of \code{SurveyBySpecie} objects, one for each species in the time-series.}
+\item{\code{surveyBySpecie}}{Stores a list of \code{\link{SurveyBySpecie}} objects, one for each species in the time-series.}
 
 \item{\code{rawDataFishery}}{Stores the raw fishery data as is in the provided csv file. The attribute is populated by \code{loadFisheryLFD()} method.}
 
@@ -30,13 +30,13 @@ The \code{SmartProject} class implements the main class of
 
 \item{\code{specieInFishery}}{Stores the distinct species in the \code{rawDataFishery} time-serie.}
 
-\item{\code{fisheryBySpecie}}{Stores a list of \code{FisheryBySpecie} objects, one for each species in the time-series.}
+\item{\code{fisheryBySpecie}}{Stores a list of \code{\link{FisheryBySpecie}} objects, one for each species in the time-series.}
 
 \item{\code{gooLstCoho}}{Stores a list of plots of species cohorts spatial distribution .}
 
-\item{\code{sampMap}}{Stores the \code{environment} object.}
+\item{\code{sampMap}}{Stores the \code{\link[=SampleMap]{environment}} object.}
 
-\item{\code{fleet}}{Stores the \code{fleet} object.}
+\item{\code{fleet}}{Stores the \code{\link{FishFleet}} object.}
 
 \item{\code{simProd}}{Stores the simulated pattern of production.}
 
@@ -72,7 +72,6 @@ The \code{SmartProject} class implements the main class of
 \section{Methods}{
 
 \describe{
-  \item{Documentation}{For full documentation of each method go to https://github.com/smartR_blablabla/}
   \item{\code{setCostInput()}}{This method is used to setup the required data for costs computation}
   \item{\code{setInProduction()}}{This method is used to setup the required data for production costs computation}
   \item{\code{setDaysAtSea()}}{This method is used to compute the number of Days at Sea of each vessel}
@@ -108,14 +107,14 @@ The \code{SmartProject} class implements the main class of
   \item{\code{setAvailData()}}{This method is used to gather the required data for the spatial clustering}
   \item{\code{predictProduction(specie)}}{This method is used to compute the estimated production}
   \item{\code{simProdAll(selRow = numeric(0))}}{This method is used to compute the simulated production}
-  \item{\code{genSimEffo(method = "flat", selRow = numeric(0), overDen = 1.05, areaBan = numeric(0))}}{This method is used to create a simulated pattern of effort}
+  \item{\code{genSimEffo(method = "flat", selRow = numeric(0), areaBan = numeric(0))}}{This method is used to create a simulated pattern of effort}
   \item{\code{getSimSpatialCost()}}{This method is used to compute the simulated spatial costs}
   \item{\code{getSimEffortCost()}}{This method is used to compute the simulated effort costs}
   \item{\code{getSimProdCost()}}{This method is used to compute the simulated production costs}
   \item{\code{getSimTotalCost()}}{This method is used to collect all the simulated costs}
   \item{\code{getSimRevenue(selRow = numeric(0), timeScale = "Year")}}{This method is used to compute the simulated revenues}
   \item{\code{getLWstat()}}{This method is used to compute the length/weight statistics for each fishing ground}
-  \item{\code{simulateFishery(thr0 = 100, effoMode = "flat", effoDen = 1.05, effoBan = numeric(0), timeStep = "Year")}}{This method is used to simulate one year of fishing}
+  \item{\code{simulateFishery(thr0 = 100, effoMode = "flat", effoBan = numeric(0), timeStep = "Year")}}{This method is used to simulate one year of fishing}
   \item{\code{setSimResults()}}{This method is used to store the results of a simulation run}
   \item{\code{ggplotFishingPoints(year)}}{This method is used to plot the fishing points}
   \item{\code{setCellPoin()}}{This method is used assign a cell to each vms point}
