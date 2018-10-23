@@ -18,7 +18,7 @@ smartRgui <- function(smartRstudy = NULL) {
   if (is.null(smartRstudy)) {
     stop("Initialize smartRstudy first!\n
          yourSmartRstudy <- SmartProject$new()\n
-         smart_gui(smartRstudy = yourSmartRstudy)", call. = FALSE)
+         smartRgui(smartRstudy = yourSmartRstudy)", call. = FALSE)
   } else {
     smartRstudy$createFleet()
 
