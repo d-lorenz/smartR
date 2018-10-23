@@ -14,8 +14,7 @@ This function does not return a value.
 }
 \description{
 The \code{smartRgui} function implements the main graphical user interface
-of smartR. Please, refer to the package vignette for more detailed
-instructions.
+of smartR. Please, contact the package maintainer for detailed instructions.
 }
 \examples{
 \dontrun{

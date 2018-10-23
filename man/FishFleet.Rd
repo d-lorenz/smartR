@@ -35,11 +35,11 @@ to manage fleet data.
 
 \item{\code{effoAll}}{data.frame, monthly aggregated effort data.}
 
-\item{\code{regHarbsUni}}{data.frame, Harbours name, longitude, latitude and 
+\item{\code{regHarbsUni}}{data.frame, Harbours name, longitude, latitude and
 distance from the environment grid.}
 
-\item{\code{regHarbsBox}}{data.frame, Harbours name, longitude, latitude, number of 
-registered vessels and distance from the environment grid within the grid 
+\item{\code{regHarbsBox}}{data.frame, Harbours name, longitude, latitude, number of
+registered vessels and distance from the environment grid within the grid
 box.}
 
 \item{\code{rawProduction}}{list of DF, raw production data.}
@@ -60,15 +60,15 @@ box.}
 
 \item{\code{effortIds}}{list of int, vessel ids with effort data available.}
 
-\item{\code{idsEffoProd}}{list of int, merged vessel ids with both effort and 
+\item{\code{idsEffoProd}}{list of int, merged vessel ids with both effort and
 production data available.}
 
-\item{\code{effoProdAllLoa}}{data.frame, monthly aggregated effort, production and 
+\item{\code{effoProdAllLoa}}{data.frame, monthly aggregated effort, production and
 loa data.}
 
 \item{\code{effoAllLoa}}{data.frame, monthly aggregated effort and loa data.}
 
-\item{\code{effortIndex}}{data.frame, effort index by vessel, year and month with 
+\item{\code{effortIndex}}{data.frame, effort index by vessel, year and month with
 loa data.}
 
 \item{\code{daysAtSea}}{data.frame, days at sea index by vessel, year, month with
@@ -108,7 +108,7 @@ loa and Kw data.}
 \section{Methods}{
 
 \describe{
-  \item{\code{setVmsRegister()}}{This method is used to exclude the fleet 
+  \item{\code{setVmsRegister()}}{This method is used to exclude the fleet
   register records of vessels without vms}
   \item{\code{setRegHarbs()}}{This method is used to fetch the harbours
   coordinates}
@@ -132,7 +132,7 @@ loa and Kw data.}
   regression}
   \item{\code{getRegEffort()}}{This method is used to compute the effort
   regression}
-  \item{\code{getRegProduction()}}{This method is used to compute the 
+  \item{\code{getRegProduction()}}{This method is used to compute the
   production regression}
   \item{\code{getCostOutput()}}{This method is a wrapper function to get the
   economic regressions}
@@ -140,17 +140,17 @@ loa and Kw data.}
   economic regression}
   \item{\code{loadProduction(production_path)}}{This method is used to load
   the raw csv of the production data}
-  \item{\code{setFishPoinPara(speed_range, depth_range)}}{This method is 
+  \item{\code{setFishPoinPara(speed_range, depth_range)}}{This method is
   used to setup the fishign points parameters}
   \item{\code{setWeekMonthNum()}}{This method is used to assign the week and
   month num to the raw effort data}
-  \item{\code{setFishPoin()}}{This method is used to filter the 
+  \item{\code{setFishPoin()}}{This method is used to filter the
   fishing points}
-  \item{\code{plotFishPoinStat()}}{This method is used to show the basic 
+  \item{\code{plotFishPoinStat()}}{This method is used to show the basic
   statistics for the fishing points}
   \item{\code{plotSpeedDepth(which_year, speed_range, depth_range)}}{
   This method is used to show the speed/depth profile}
-  \item{\code{setEffortIds()}}{This method is used to set the distinct 
+  \item{\code{setEffortIds()}}{This method is used to set the distinct
   vessel' ids in the effort dataset}
   \item{\code{setProdSpec()}}{This method is used to set the distinct specie
   in the production dataset}
@@ -170,11 +170,11 @@ loa and Kw data.}
   set the confusion matrix of the logit results by specie}
   \item{\code{setLogitTrain(selSpecie, train, cp_val, cv_val)}}{
   This method is used to setup the train dataset for the logit model}
-  \item{\code{setLogitTest(selSpecie, test)}}{This method is used to setup 
+  \item{\code{setLogitTest(selSpecie, test)}}{This method is used to setup
   the test dataset for the logit model}
-  \item{\code{setLogitPred(selSpecie, test)}}{This method is used to compute 
+  \item{\code{setLogitPred(selSpecie, test)}}{This method is used to compute
   the prediction for the logit model}
-  \item{\code{setLogitCut(selSpecie)}}{This method is used to tune the 
+  \item{\code{setLogitCut(selSpecie)}}{This method is used to tune the
   cutoff of the logit model}
   \item{\code{setLogitRoc(selSpecie)}}{This method is used to set the ROC of
   the logit model}
@@ -182,11 +182,11 @@ loa and Kw data.}
   set the confusion matrix of the logit results}
   \item{\code{setSpecLogit(selSpecie, selModel, cp, cv)}}{This method is
    a wrapper function to get the logit model}
-  \item{\code{getMatSpeLand(specie)}}{This method is used to get the input 
+  \item{\code{getMatSpeLand(specie)}}{This method is used to get the input
   data for the logit model}
-  \item{\code{setEffoProdAll()}}{This method is used to combine the 
+  \item{\code{setEffoProdAll()}}{This method is used to combine the
   effort/production data from the yearly list into a single data.frame}
-  \item{\code{setEffoAll()}}{This method is used to combine the 
+  \item{\code{setEffoAll()}}{This method is used to combine the
   effort data from the yearly list into a single data.frame}
   \item{\code{setEffoProdAllLoa()}}{This method is used to add the LOA data
   to the effort/production data}

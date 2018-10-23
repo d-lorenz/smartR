@@ -59,7 +59,7 @@ The \code{SurveyBySpecie} class implements the class of SMART to
   length values of the sampled specie}
   \item{\code{setDepth(bathyMatrix)}}{This method is used to assign the
   depth value corresponding to each sampling location}
-  \item{\code{setStratum(vecStrata)}}{This method is used to set the 
+  \item{\code{setStratum(vecStrata)}}{This method is used to set the
   depth strata of each sampling location}
   \item{\code{setIndSpe()}}{This method is used to aggregate the abundance
   data into the medits index}
@@ -71,7 +71,7 @@ The \code{SurveyBySpecie} class implements the class of SMART to
   store the alpha and beta values for the length/weight relationship}
   \item{\code{setWeight(sexVal = "Female")}}{This method is used to
   compute the fish weight given their length and the LWrelationship}
-  \item{\code{setSpreDistSing()}}{This method is used to spread the 
+  \item{\code{setSpreDistSing()}}{This method is used to spread the
   aggregated LFD abundances into single individuals}
   \item{\code{setSprePlot(sampSex)}}{This method is used to setup the
   plots of the LFD statistics}
@@ -84,7 +84,7 @@ The \code{SurveyBySpecie} class implements the class of SMART to
   module}
   \item{\code{getGrowPar(sexDrop)}}{This method is used to extract the
   growth parameters from the mcmc results}
-  \item{\code{getMCage(sexDrop)}}{This method is used to assign an age to 
+  \item{\code{getMCage(sexDrop)}}{This method is used to assign an age to
   each fish}
   \item{\code{setMCplot(sexDrop, selCurve)}}{This method is used to setup
   the plot of the mcmc results}
