@@ -445,6 +445,15 @@ nominatim_osm <- function(address = NULL) {
 
 
 ### Stock Assessment ####
+## This module of SMART represents a kind of whiteboard: the user can use a 
+## series of custom functions, inspired to the ones provided by Punt for the 
+## AMARE-MED: Advanced school on Multispecies modelling approaches for 
+## ecosystem based marine resource management in the Mediterranea Sea.
+## See also: Punt, A.E., MacCall, A.D., Essington, T.E., Francis, T.B., 
+## Hurtado-Ferro, F., Johnson, K.F., Kaplan, I.C., Koehn, L.E., Levin, P.S., 
+## and Sydeman, W.J. (2016). Exploring the implications of the harvest control 
+## rule for Pacific sardine, accounting for predator dynamics: A MICE model. 
+## Ecol. Model. 337, 79–95
 
 GetALKMW <- function(Linf, Kappa, T0, CV0, CVLinf, aa, bb, Amax, LenClassMax, Offset) {
   Nlen <- length(LenClassMax)
