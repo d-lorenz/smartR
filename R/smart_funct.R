@@ -1203,7 +1203,7 @@ popNspecie <- function(Nspecies, SpeciesData, InitN, RecDev, LogR0, Fvals, Selex
 
 likeNspecie <- function(Nspecies, SpeciesData, Outs, SurvSel, RecDev, InitN) {
   # Extract data needed for likelihood calculation
-  AmaxA <- Outs$AmaxA
+  AmaxA <- max(Outs$Amax)
   NlenA <- Outs$NlenA
   N <- Outs$N
   PCAA <- Outs$CAA
