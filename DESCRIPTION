@@ -1,24 +1,25 @@
 Package: smartR
 Type: Package
 Title: Spatial Management and Assessment of Demersal Resources for Trawl
-       Fisheries in R
-Version: 0.59
-Date: 2018-10-23
+       Fisheries
+Version: 0.6.0
+Date: 2018-10-30
 Author: Lorenzo D'Andrea, Tommaso Russo, Antonio Parisi, Stefano Cataudella
 Maintainer: Lorenzo D'Andrea <dandrea.lorenz@gmail.com>
 Description: A tool for assessing bio-economic feedback in 
-  different management scenarios. smartR (Spatial Management and Assessment of demersal Resources for 
-  Trawl fisheries in R) combines information from different 
-  tasks gathered within the European Data Collection Framework for the fishery
-  sector. The smartR package implements the SMART model in R, through the 
-  object-oriented programming paradigm, and within this package it is possible
-  to achieve the complete set of analyses required by the SMART approach: 
-  from the editing and formatting of the raw data; the construction and 
-  maintenance of coherent datasets; the numerical and visual inspection of 
-  the generated metadata; to the final simulation of management scenarios and
-  the forecast of their effects. The interaction between the user and the 
-  application could take place through invocation of methods via the command
-  line or could be entirely committed to the graphical user interfaces (GUI).
+  different management scenarios. 'smartR' (Spatial Management and Assessment 
+  of demersal Resources for Trawl fisheries) combines information from different
+   tasks gathered within the European Data Collection Framework for the fishery
+  sector. The 'smartR' package implements the SMART model (Russo et al., 2014 
+  <doi:10.1371/journal.pone.0086222>) in R, through the object-oriented 
+  programming paradigm, and within this package it is possible to achieve the 
+  complete set of analyses required by the SMART approach: from the editing and
+   formatting of the raw data; the construction and maintenance of coherent 
+  datasets; the numerical and visual inspection of the generated metadata; to 
+  the final simulation of management scenarios and the forecast of their 
+  effects. The interaction between the user and the application could take 
+  place through invocation of methods via the command line or could be entirely
+   committed to the graphical user interfaces (GUI).
 License: GPL (>= 2)
 Depends:
     R6,
