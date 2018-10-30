@@ -91,7 +91,7 @@
 #'   \item{\code{getSimTotalCost()}}{This method is used to collect all the simulated costs}
 #'   \item{\code{getSimRevenue(selRow = numeric(0), timeScale = "Year")}}{This method is used to compute the simulated revenues}
 #'   \item{\code{getLWstat()}}{This method is used to compute the length/weight statistics for each fishing ground}
-#'   \item{\code{simulateFishery(thr0 = 100, effoMode = "flat", effoBan = numeric(0), timeStep = "Year")}}{This method is used to simulate one year of fishing}
+#'   \item{\code{simulateFishery(thr0 = 100, effoBan = numeric(0), timeStep = "Year")}}{This method is used to simulate one year of fishing}
 #'   \item{\code{setSimResults()}}{This method is used to store the results of a simulation run}
 #'   \item{\code{ggplotFishingPoints(year)}}{This method is used to plot the fishing points}
 #'   \item{\code{setCellPoin()}}{This method is used assign a cell to each vms point}
@@ -1403,39 +1403,42 @@ SmartProject <- R6Class("smartProject",
         }
       }
     },
-    genSimEffo = function(method = "flat", selRow = numeric(0), areaBan = numeric(0)) {
+    genSimEffo = function(selRow = numeric(0), areaBan = numeric(0)) {
       if (is.null(simEffo)) {
         simEffo <<- fleet$effoAllLoa[fleet$effoAllLoa$Year == max(as.numeric(as.character(unique(fleet$effoAllLoa$Year)))), ]
       } else {
-        methods <- c(
-          "flat",
-          # "flatDen",
-          # "banDen",
-          "ban"
-        )
-        selMode <- methods[pmatch(method, methods)]
-
-        if (is.na(selMode)) {
-          stop("invalid effort generation metod")
-        }
 
         if (length(selRow) == 0) {
           selRow <- 1:nrow(simEffo)
         }
 
-        # if(selMode %in% c("flatDen", "banDen")){
-        #   simDen <- apply(simEffo[,4:(ncol(simEffo)-1)], 2, sum)/as.numeric(table(sampMap$cutResult$FG))
-        #   obsDen <- apply(fleet$effoAllLoa[,4:(ncol(fleet$effoAllLoa)-1)],2,sum)/as.numeric(table(sampMap$cutResult$FG))
-        #   fDen = simDen/(overDen*obsDen)
-        #   if(length(which(is.na(fDen)))>0) fDen[which(is.na(fDen))] <- 1
-        # }
-
+        obsZero <- apply(simEffo[selRow, 4:(ncol(simEffo) - 1)], 2, sum)
+        posZero <- which(obsZero == 0)
+        lenPosZero <- length(posZero)
+        lenAreaBan <- length(areaBan)
+        
+        if (lenPosZero == 0 & lenAreaBan == 0) {
+          selMode <- "flat"
+        } else if (lenPosZero == 0 & lenAreaBan > 0) {
+          selMode <- "ban"
+        } else if (lenPosZero > 0 & lenAreaBan == 0) {
+          selMode <- "zero"
+          areaBan <- posZero
+        } else if (lenPosZero > 0 & lenAreaBan > 0) {
+          selMode <- "zeroBan"
+          areaBan <- intersect(areaBan, posZero)
+        }
+        
         simEffo[selRow, 4:(ncol(simEffo) - 1)] <<- switch(selMode,
           flat = {
             t(apply(simEffo[selRow, 4:(ncol(simEffo) - 1)], 1, function(x) genFlatEffo(effoPatt = x)))
           },
-          # flatDen = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genFlatEffoDen(effoPatt = x, targetDensity = fDen)))},
-          # banDen = {t(apply(simEffo[selRow, 4:(ncol(simEffo)-1)], 1, function(x) genBanEffoDen(effoPatt = x, set0 = areaBan, targetDensity = fDen)))},
+          zero = {
+            t(apply(simEffo[selRow, 4:(ncol(simEffo) - 1)], 1, function(x) genBanEffo(effoPatt = x, set0 = areaBan)))
+          },
+          zeroBan = {
+            t(apply(simEffo[selRow, 4:(ncol(simEffo) - 1)], 1, function(x) genBanEffo(effoPatt = x, set0 = areaBan)))
+          },
           ban = {
             t(apply(simEffo[selRow, 4:(ncol(simEffo) - 1)], 1, function(x) genBanEffo(effoPatt = x, set0 = areaBan)))
           }
@@ -1593,7 +1596,7 @@ SmartProject <- R6Class("smartProject",
         simTotalRevenue[, c("I_NCEE", "Year", "totRevenue")]
       )
     },
-    simulateFishery = function(thr0 = 100, effoMode = "flat", effoBan = numeric(0), timeStep = "Year", maxEffo = 0) {
+    simulateFishery = function(thr0 = 100, effoBan = numeric(0), timeStep = "Year", maxEffo = 0) {
       cat("\nGetting length-weight statistics...", sep = "")
       getLWstat()
       cat("Done!", sep = "")
@@ -1622,7 +1625,7 @@ SmartProject <- R6Class("smartProject",
         cat("\nIteration", nIter)
 
         cat("\n\tOptimising effort... ", sep = "")
-        genSimEffo(method = effoMode, selRow = toOpt, areaBan = effoBan)
+        genSimEffo(selRow = toOpt, areaBan = effoBan)
         cat("Done!", sep = "")
 
         if (maxEffo > 0) {

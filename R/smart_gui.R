@@ -3928,32 +3928,6 @@ smartRgui <- function(smartRstudy = NULL) {
       container = sim_f_Thr
     )
     addSpring(sim_g_SimPar2)
-    sim_f_Mode <- gframe(
-      text = "Effort Pattern Mode", horizontal = TRUE,
-      container = sim_g_SimPar2, expand = TRUE
-    )
-    sim_Mode <- gcombobox(
-      items = c(
-        "flat",
-        # "flatDen",
-        # "banDen",
-        "ban"
-      ), expand = TRUE,
-      selected = 1, container = sim_f_Mode,
-      handler = function(h, ...) {
-        # if(svalue(sim_Mode) %in% c("flatDen", "banDen")){
-        #   enabled(sim_f_Den) <- TRUE
-        # }else{
-        #   enabled(sim_f_Den) <- FALSE
-        # }
-        if (svalue(sim_Mode) == "ban") {
-          enabled(sim_Ban) <- TRUE
-        } else {
-          enabled(sim_Ban) <- FALSE
-        }
-      }
-    )
-    addSpring(sim_g_SimPar2)
     addSpring(sim_g_SimPar)
     sim_g_SimPar3 <- ggroup(horizontal = FALSE, container = sim_g_SimPar)
     addSpring(sim_g_SimPar3)
@@ -3968,10 +3942,6 @@ smartRgui <- function(smartRstudy = NULL) {
     )
     addSpring(sim_f_Sca)
     addSpring(sim_g_SimPar3)
-    # sim_f_Den <- gframe(text = "Density", horizontal = TRUE, container = sim_g_SimPar3)
-    # addSpring(sim_f_Den)
-    # sim_Den <- gspinbutton(from = 0.5, to = 5, by = 0.1, value = 1.1, container = sim_f_Den)
-    # addSpring(sim_f_Den)
     addSpring(sim_g_SimPar3)
     sim_Ban <- gbutton("Set Closed Area",
       container = sim_g_SimPar3,
@@ -4079,12 +4049,10 @@ smartRgui <- function(smartRstudy = NULL) {
         gc()
         smartRstudy$genSimEffo()
         smartRstudy$genSimEffo(
-          method = svalue(sim_Mode),
           areaBan = as.numeric(smartRstudy$simBanFG$FG[smartRstudy$simBanFG$Banned == "Banned"])
         )
         smartRstudy$simulateFishery(
           thr0 = svalue(sim_Thr),
-          effoMode = svalue(sim_Mode),
           effoBan = as.numeric(smartRstudy$simBanFG$FG[smartRstudy$simBanFG$Banned == "Banned"]),
           timeStep = svalue(sim_Sca)
         )
