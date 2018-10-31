@@ -114,7 +114,7 @@ The \code{SmartProject} class implements the main class of
   \item{\code{getSimTotalCost()}}{This method is used to collect all the simulated costs}
   \item{\code{getSimRevenue(selRow = numeric(0), timeScale = "Year")}}{This method is used to compute the simulated revenues}
   \item{\code{getLWstat()}}{This method is used to compute the length/weight statistics for each fishing ground}
-  \item{\code{simulateFishery(thr0 = 100, effoMode = "flat", effoBan = numeric(0), timeStep = "Year")}}{This method is used to simulate one year of fishing}
+  \item{\code{simulateFishery(thr0 = 100, effoBan = numeric(0), timeStep = "Year")}}{This method is used to simulate one year of fishing}
   \item{\code{setSimResults()}}{This method is used to store the results of a simulation run}
   \item{\code{ggplotFishingPoints(year)}}{This method is used to plot the fishing points}
   \item{\code{setCellPoin()}}{This method is used assign a cell to each vms point}
