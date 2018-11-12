@@ -27,7 +27,7 @@ smartRgui <- function(smartRstudy = NULL) {
     ))
     pre_dev <- length(dev.list())
 
-    main_win <- gwindow(paste("SMART - Version ", "1.1", sep = ""),
+    main_win <- gwindow(paste("SMART - Version ", packageVersion("smartR"), sep = ""),
       width = 1200,
       height = 600, visible = TRUE
     )
