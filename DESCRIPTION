@@ -3,7 +3,7 @@ Type: Package
 Title: Spatial Management and Assessment of Demersal Resources for Trawl
        Fisheries
 Version: 0.60.0
-Date: 2018-10-31
+Date: 2018-11-12
 Author: Lorenzo D'Andrea, Tommaso Russo, Antonio Parisi, Stefano Cataudella
 Maintainer: Lorenzo D'Andrea <dandrea.lorenz@gmail.com>
 Description: A tool for assessing bio-economic feedback in 
