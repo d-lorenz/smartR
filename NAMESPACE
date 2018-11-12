@@ -39,7 +39,8 @@ importFrom("graphics", "abline", "barplot", "hist", "par", "points", "text",
            "lines", "polygon")
 importFrom("stats", "as.formula", "dist", "dnorm", "glm", "predict",
            "quantile", "runif", "nls", "optim", "pnorm", "rnorm")
-importFrom("utils", "capture.output", "read.table", "read.csv")
+importFrom("utils", "capture.output", "read.table", "read.csv",
+           "packageVersion")
 importFrom("ggthemes", "theme_tufte", "theme_few", "scale_color_wsj",
            "scale_shape_cleveland")
 importFrom("ggrepel", "geom_label_repel")
