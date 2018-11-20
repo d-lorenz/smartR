@@ -105,7 +105,123 @@
 #'   \item{\code{getNnlsModel(specie, minobs, thr_r2)}}{This method is used to compute the coefficients of the NNLS model}
 #'   \item{\code{cohoDisPlot(whoSpe, whoCoh, whiYea, interp)}}{This method is used to store the spatial distribution of the species by cohort}
 #'   }
-#'
+#' @examples
+#' # Initialize SmartProject
+#' yourSmartRstudy <- SmartProject$new()
+#' 
+#' # Initialize fleet object
+#' yourSmartRstudy$createFleet()
+#' 
+#' 
+#' ######################
+#' ## Environment Data ##
+#' ######################
+#' 
+#' # Locate the example environment asset' file
+#' envAssetPath <- system.file("extdata/mapAsset.RDS", package = "smartR")
+#' 
+#' # Load environment asset' data
+#' yourSmartRstudy$importEnv(readRDS(envAssetPath))
+#' 
+#' # View case study' grid
+#' print(yourSmartRstudy$sampMap$gooGrid)
+#' # View case study' depth
+#' print(yourSmartRstudy$sampMap$ggDepth)
+#' # View case study' seabed
+#' print(yourSmartRstudy$sampMap$ggBioDF)
+#' 
+#' # Setup and view combined plot
+#' yourSmartRstudy$sampMap$setGooEnv()
+#' 
+#' 
+#' ################
+#' ## Fleet Data ##
+#' ################
+#' 
+#' # Locate the example fleet asset' file
+#' effAssetPath <- system.file("extdata/effAsset.RDS", package = "smartR")
+#' 
+#' # Load fleet asset' data
+#' yourSmartRstudy$fleet$rawEffort <- readRDS(effAssetPath)
+#' 
+#' # Setup fishing vessel ids
+#' yourSmartRstudy$fleet$setEffortIds()
+#' 
+#' # View barplot of the number of IDs within each year and among all year
+#' yourSmartRstudy$fleet$plotCountIDsEffo()
+#' 
+#' # Setup plot of a sample of the raw data points
+#' yourSmartRstudy$ggplotRawPoints(year = "2012")
+#' 
+#' # View sample raw data points
+#' print(yourSmartRstudy$ggEffRaw)
+#' 
+#' # View speed distribution to setup fishing point filter
+#' yourSmartRstudy$fleet$plotSpeedDepth(
+#' which_year = "2012",
+#' speed_range = c(2, 8),
+#' depth_range = c(-20, -600)
+#' )
+#' 
+#' # Setup fishing points' filter
+#' yourSmartRstudy$fleet$setFishPoinPara(
+#' speed_range = c(2, 8),
+#' depth_range = c(-20, -600)
+#' )
+#' 
+#' # Compute fishing points
+#' yourSmartRstudy$fleet$setFishPoin()
+#' 
+#' # Assign cell id to each fishing point
+#' yourSmartRstudy$setCellPoin()
+#' 
+#' # Add week and month number to each point
+#' yourSmartRstudy$fleet$setWeekMonthNum()
+#' 
+#' # Show fishing points' basic statistics
+#' yourSmartRstudy$fleet$plotFishPoinStat()
+#' 
+#' # Setup plot of a sample of the fishing points
+#' yourSmartRstudy$ggplotFishingPoints(year = "2012")
+#' 
+#' # Setup plot of the gridded fishing time
+#' yourSmartRstudy$ggplotGridEffort(year = "2012")
+#' 
+#' # View combined plot of raw data, fishing point and gridded fishing time
+#' yourSmartRstudy$setGgEff()
+#' 
+#' 
+#' #####################
+#' ## Fishing Grounds ##
+#' #####################
+#' 
+#' # Setup available data to identify fishing areas
+#' yourSmartRstudy$setAvailData()
+#' 
+#' # Setup cluster analysis input
+#' yourSmartRstudy$sampMap$setClusInpu()
+#' 
+#' # Run cluster analysis with the SKATER method
+#' yourSmartRstudy$sampMap$calcFishGrou(numCuts = 10, minsize = 10, modeska = "S", skater_method = "manhattan", nei_queen = FALSE)
+#' 
+#' # Setup cluster plot with 5 clusters
+#' yourSmartRstudy$sampMap$setCutResult(ind_clu = 5)
+#' 
+#' # Inspect output
+#' # Scatterplot of the Calinski-Harabasz Index
+#' print(yourSmartRstudy$sampMap$ggIchFGlin)
+#' # Scatterplot of the Silhouette Index
+#' print(yourSmartRstudy$sampMap$ggSilFGlin)
+#' # Map of the clusters' configuration
+#' print(yourSmartRstudy$sampMap$ggCutFGmap)
+#' # Map of the average effort in each cluster
+#' yourSmartRstudy$sampMap$ggEffoFGmap
+#' # Boxplot of the average effort in each cluster
+#' yourSmartRstudy$sampMap$ggEffoFGbox
+#' # Tileplot of the substrate in each cluster
+#' yourSmartRstudy$sampMap$ggBioFGmat
+#' 
+
 
 
 SmartProject <- R6Class("smartProject",
