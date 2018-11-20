@@ -2,8 +2,8 @@ Package: smartR
 Type: Package
 Title: Spatial Management and Assessment of Demersal Resources for Trawl
        Fisheries
-Version: 0.60.0
-Date: 2018-11-12
+Version: 0.61.0
+Date: 2018-11-20
 Author: Lorenzo D'Andrea, Tommaso Russo, Antonio Parisi, Stefano Cataudella
 Maintainer: Lorenzo D'Andrea <dandrea.lorenz@gmail.com>
 Description: A tool for assessing bio-economic feedback in 
@@ -64,5 +64,6 @@ Imports:
     RColorBrewer,
     jsonlite,
     igraph
+LazyData: true
 RoxygenNote: 6.1.0
 Encoding: UTF-8
