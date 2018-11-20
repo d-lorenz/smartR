@@ -16,9 +16,11 @@
 #' line or could be entirely committed to the graphical user interfaces (GUI).
 #'
 #' @section Start Here:
-#' Here are listed the most important elements of a Smart analysis. The first
-#' is the GUI developed to guide and assist the user, while the other five are
-#' the classes that make up the smartR package.
+#' Here are listed the most important elements of a Smart analysis. The first, 
+#' \link{smartRgui}, is the GUI developed to guide and assist the user,
+#'  while the other five are the classes that make up the smartR package.
+#'  See \link{SmartProject} for an example workflow.
+#'  
 #' \describe{
 #'   \item{\link{smartRgui}}{GUI to assist the analysis}
 #'   \item{\link{SmartProject}}{main project class}
