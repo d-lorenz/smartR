@@ -150,13 +150,6 @@ yourSmartRstudy$importEnv(readRDS(envAssetPath))
 
 # View case study' grid
 print(yourSmartRstudy$sampMap$gooGrid)
-# View case study' depth
-print(yourSmartRstudy$sampMap$ggDepth)
-# View case study' seabed
-print(yourSmartRstudy$sampMap$ggBioDF)
-
-# Setup and view combined plot
-yourSmartRstudy$sampMap$setGooEnv()
 
 
 ################
@@ -171,15 +164,6 @@ yourSmartRstudy$fleet$rawEffort <- readRDS(effAssetPath)
 
 # Setup fishing vessel ids
 yourSmartRstudy$fleet$setEffortIds()
-
-# View barplot of the number of IDs within each year and among all year
-yourSmartRstudy$fleet$plotCountIDsEffo()
-
-# Setup plot of a sample of the raw data points
-yourSmartRstudy$ggplotRawPoints(year = "2012")
-
-# View sample raw data points
-print(yourSmartRstudy$ggEffRaw)
 
 # View speed distribution to setup fishing point filter
 yourSmartRstudy$fleet$plotSpeedDepth(
@@ -203,18 +187,6 @@ yourSmartRstudy$setCellPoin()
 # Add week and month number to each point
 yourSmartRstudy$fleet$setWeekMonthNum()
 
-# Show fishing points' basic statistics
-yourSmartRstudy$fleet$plotFishPoinStat()
-
-# Setup plot of a sample of the fishing points
-yourSmartRstudy$ggplotFishingPoints(year = "2012")
-
-# Setup plot of the gridded fishing time
-yourSmartRstudy$ggplotGridEffort(year = "2012")
-
-# View combined plot of raw data, fishing point and gridded fishing time
-yourSmartRstudy$setGgEff()
-
 
 #####################
 ## Fishing Grounds ##
@@ -227,25 +199,14 @@ yourSmartRstudy$setAvailData()
 yourSmartRstudy$sampMap$setClusInpu()
 
 # Run cluster analysis with the SKATER method
-yourSmartRstudy$sampMap$calcFishGrou(numCuts = 10, minsize = 10,
+yourSmartRstudy$sampMap$calcFishGrou(numCuts = 3, minsize = 10,
  modeska = "S", skater_method = "manhattan", nei_queen = FALSE)
 
-# Setup cluster plot with 5 clusters
-yourSmartRstudy$sampMap$setCutResult(ind_clu = 5)
+# Setup cluster plot with 3 clusters
+yourSmartRstudy$sampMap$setCutResult(ind_clu = 3)
 
-# Inspect output
-# Scatterplot of the Calinski-Harabasz Index
-print(yourSmartRstudy$sampMap$ggIchFGlin)
-# Scatterplot of the Silhouette Index
-print(yourSmartRstudy$sampMap$ggSilFGlin)
 # Map of the clusters' configuration
 print(yourSmartRstudy$sampMap$ggCutFGmap)
-# Map of the average effort in each cluster
-print(yourSmartRstudy$sampMap$ggEffoFGmap)
-# Boxplot of the average effort in each cluster
-print(yourSmartRstudy$sampMap$ggEffoFGbox)
-# Tileplot of the substrate in each cluster
-print(yourSmartRstudy$sampMap$ggBioFGmat)
 
 }
 \keyword{data}
