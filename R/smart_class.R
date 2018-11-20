@@ -123,9 +123,12 @@
 #' # Load environment asset' data
 #' yourSmartRstudy$importEnv(readRDS(envAssetPath))
 #' 
-#' # View case study' grid
-#' print(yourSmartRstudy$sampMap$gooGrid)
-#' 
+#' # Setup case study' map
+#' yourSmartRstudy$sampMap$getGooMap()
+#' yourSmartRstudy$sampMap$setGooGrid()
+#' yourSmartRstudy$sampMap$setGooBbox()
+#' yourSmartRstudy$sampMap$setGgDepth()
+#' yourSmartRstudy$sampMap$setGgBioDF()
 #' 
 #' ################
 #' ## Fleet Data ##
