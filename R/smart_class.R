@@ -202,7 +202,8 @@
 #' yourSmartRstudy$sampMap$setClusInpu()
 #' 
 #' # Run cluster analysis with the SKATER method
-#' yourSmartRstudy$sampMap$calcFishGrou(numCuts = 10, minsize = 10, modeska = "S", skater_method = "manhattan", nei_queen = FALSE)
+#' yourSmartRstudy$sampMap$calcFishGrou(numCuts = 10, minsize = 10,
+#'  modeska = "S", skater_method = "manhattan", nei_queen = FALSE)
 #' 
 #' # Setup cluster plot with 5 clusters
 #' yourSmartRstudy$sampMap$setCutResult(ind_clu = 5)
@@ -215,11 +216,11 @@
 #' # Map of the clusters' configuration
 #' print(yourSmartRstudy$sampMap$ggCutFGmap)
 #' # Map of the average effort in each cluster
-#' yourSmartRstudy$sampMap$ggEffoFGmap
+#' print(yourSmartRstudy$sampMap$ggEffoFGmap)
 #' # Boxplot of the average effort in each cluster
-#' yourSmartRstudy$sampMap$ggEffoFGbox
+#' print(yourSmartRstudy$sampMap$ggEffoFGbox)
 #' # Tileplot of the substrate in each cluster
-#' yourSmartRstudy$sampMap$ggBioFGmat
+#' print(yourSmartRstudy$sampMap$ggBioFGmat)
 #' 
 
 
