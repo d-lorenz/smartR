@@ -898,7 +898,6 @@ SmartProject <- R6Class("smartProject",
     },
     importEnv = function(envLst) {
       sampMap <<- SampleMap$new()
-      sampMap$gridPath <<- envLst$gridPath
       sampMap$gridName <<- envLst$gridName
       sampMap$gridShp <<- envLst$gridShp
       sampMap$nCells <<- envLst$nCells
@@ -2039,8 +2038,7 @@ SmartProject <- R6Class("smartProject",
         ))
     },
     setCellPoin = function() {
-      num_cell <- getinfo.shape(sampMap$gridPath)$entities
-      sampMap$gridShp@plotOrder <- 1:num_cell
+      sampMap$gridShp@plotOrder <- 1:length(sampMap$gridShp@plotOrder)
       tmp_polygons <- SpatialPolygons(sampMap$gridShp@polygons)
       cat("\nGridding year ", sep = "")
       for (j in names(fleet$rawEffort)) {
@@ -4673,7 +4671,6 @@ SampleMap <- R6Class("sampleMap",
     },
     exportEnv = function() {
       envOut <- list()
-      envOut$gridPath <- gridPath
       envOut$gridName <- gridName
       envOut$gridShp <- gridShp
       envOut$nCells <- nCells
@@ -5298,7 +5295,6 @@ SampleMap <- R6Class("sampleMap",
       )
       cutResShp <<- unionSpatialPolygons(gridShp, IDs = clusMat[, ind_clu])
 
-      # num_cell <- getinfo.shape(cutResShp)$entities
       cutResShp@plotOrder <<- 1:ind_clu
 
       # cutResShpCent <<- as.data.frame(coordinates(cutResShp))
