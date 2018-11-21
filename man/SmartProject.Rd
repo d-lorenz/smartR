@@ -154,6 +154,9 @@ yourSmartRstudy$sampMap$setGooGrid()
 yourSmartRstudy$sampMap$setGooBbox()
 yourSmartRstudy$sampMap$setGgDepth()
 yourSmartRstudy$sampMap$setGgBioDF()
+# View case study' grid
+print(yourSmartRstudy$sampMap$gooGrid)
+
 
 ################
 ## Fleet Data ##
