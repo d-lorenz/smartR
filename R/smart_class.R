@@ -1507,7 +1507,7 @@ SmartProject <- R6Class("smartProject",
           areaBan <- posZero
         } else if (lenPosZero > 0 & lenAreaBan > 0) {
           selMode <- "zeroBan"
-          areaBan <- intersect(areaBan, posZero)
+          areaBan <- union(areaBan, posZero)
         }
         
         simEffo[selRow, 4:(ncol(simEffo) - 1)] <<- switch(selMode,
