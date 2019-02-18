@@ -354,6 +354,17 @@ genBanEffo <- function(effoPatt, set0) {
 #   return(Estar)
 # }
 
+getSingleProd <- function(oneEff, betas, scenarios, thres, fgs){
+  oneEff <- as.numeric(oneEff)
+  curScen <- which((scenarios$YEAR == oneEff[1]) & (scenarios$MONTH == oneEff[3]))
+  ib <- betas[curScen, ]
+  if (sum(ib * oneEff[fgs]) > 0) {
+    return((ib * oneEff[fgs] * oneEff[length(oneEff)]) + ((ib * oneEff[fgs]) / sum(ib * oneEff[fgs])) * thres)
+  } else {
+    return(NA)
+  }
+}
+
 getFleetRevenue <- function(predProd, lwStat, priceVec) {
   outProp <- apply(predProd, 1, function(x) apply(t(lwStat * t(x)) * priceVec, 2, sum, na.rm = TRUE))
   outProp <- t(outProp)
