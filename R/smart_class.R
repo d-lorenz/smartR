@@ -1467,16 +1467,14 @@ SmartProject <- R6Class("smartProject",
         } else {
           infish <- which(predict(fleet$specLogit[[specie]]$logit$Model, datalog, type = "prob")[, 2] > fleet$specLogit[[specie]]$logit$Cut)
         }
-        for (i in 1:length(infish)) {
-          idata <- as.numeric(simEffo[selRow, ][infish[i], fgClms])
-          iloa <- as.numeric(simEffo[selRow, ][infish[i], "Loa"])
-          iy <- which(lyears == simEffo[selRow, ][infish[i], "Year"])
-          im <- as.numeric(as.character(simEffo[selRow, ][infish[i], "MonthNum"]))
-          ib <- fleet$resNNLS[[specie]]$bmat[which((fleet$resNNLS[[specie]]$SceMat$YEAR == iy) & (fleet$resNNLS[[specie]]$SceMat$MONTH == im)), ]
-          if (sum(ib * idata) > 0) {
-            Prod[infish[i], ] <- (ib * idata * iloa) + ((ib * idata) / sum(ib * idata)) * thrZero
-          }
-        }
+        
+        Prod[infish, ] <- do.call(rbind, lapply(split(simEffo[selRow[infish],], seq(nrow(simEffo[selRow[infish],]))),
+                                                FUN = function(x) getSingleProd(oneEff = as.numeric(x),
+                                                                                betas = fleet$resNNLS[[specie]]$bmat,
+                                                                                scenarios = fleet$resNNLS[[specie]]$SceMat,
+                                                                                thres = thrZero,
+                                                                                fgs = fgClms)))
+        
         Prod[is.na(Prod)] <- 0
         colnames(Prod) <- paste("PR_", as.character(seq(1, ncol(Prod))), sep = "")
         if (length(selRow) == nrow(simEffo)) {
