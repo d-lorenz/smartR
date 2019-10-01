@@ -1028,8 +1028,8 @@ ggplot_OPCsingle <- function(choSpecie, assData) {
 
 ggplot_TCsingle <- function(choSpecie, assData) {
   suppressMessages(
-    ggplot(data = assData, aes_(x = ~Year, y = ~Catch)) +
-      geom_errorbar(aes_(ymin = ~Lower, ymax = ~Upper), colour = "black", width = 0.1) +
+    ggplot(data = assData, aes_(x = ~Year, y = ~Catch/1000)) +
+      geom_errorbar(aes_(ymin = ~Lower/1000, ymax = ~Upper/1000), colour = "black", width = 0.1) +
       geom_point() +
       geom_line() +
       ggtitle(paste(choSpecie, "- Total Catch")) +

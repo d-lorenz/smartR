@@ -415,7 +415,7 @@ SmartProject <- R6Class("smartProject",
       }
       tmpWei$Age <- factor(tmpWei$Age, levels = 0:(assessData[[specie]]$Amax - 1))
 
-      assessData[[specie]]$WeightS <<- (ddply(tmpWei, .(Age), summarise, coh.mean = mean(Weight) / 1000, .drop = FALSE))[, 2]
+      assessData[[specie]]$WeightS <<- (ddply(tmpWei, .(Age), summarise, coh.mean = min(Weight) / 1000, .drop = FALSE))[, 2]
       weightNaN <- which(is.nan(assessData[[specie]]$WeightS))
       if (length(weightNaN) > 0) {
         for (i in 1:length(weightNaN)) {
@@ -435,20 +435,48 @@ SmartProject <- R6Class("smartProject",
             }
             next
           }
-          if (!is.na(assessData[[specie]]$WeightS[i - 1] & assessData[[specie]]$WeightS[i + 1])) {
-            assessData[[specie]]$WeightS[i] <<- mean(c(assessData[[specie]]$WeightS[i - 1], assessData[[specie]]$WeightS[i + 1]))
+          if (!is.na(assessData[[specie]]$WeightS[weightNaN[i] - 1] & assessData[[specie]]$WeightS[weightNaN[i] + 1])) {
+            assessData[[specie]]$WeightS[weightNaN[i]] <<- mean(c(assessData[[specie]]$WeightS[weightNaN[i] - 1], assessData[[specie]]$WeightS[weightNaN[i] + 1]))
           } else {
-            assessData[[specie]]$WeightS[i] <<- mean(assessData[[specie]]$WeightS[-(weightNaN[i])], na.rm = TRUE)
+            assessData[[specie]]$WeightS[weightNaN[i]] <<- mean(assessData[[specie]]$WeightS[-(weightNaN[i])], na.rm = TRUE)
           }
         }
       }
 
-      assessData[[specie]]$WeightH <<- assessData[[specie]]$WeightS
-
+      assessData[[specie]]$WeightH <<- (ddply(tmpWei, .(Age), summarise, coh.mean = mean(Weight) / 1000, .drop = FALSE))[, 2]
+      weightNaN <- which(is.nan(assessData[[specie]]$WeightH))
+      if (length(weightNaN) > 0) {
+        for (i in 1:length(weightNaN)) {
+          if (weightNaN[i] == 1) {
+            if (!is.na(assessData[[specie]]$WeightH[2])) {
+              assessData[[specie]]$WeightH[1] <<- mean(c(0, assessData[[specie]]$WeightH[2]))
+            } else {
+              assessData[[specie]]$WeightH[1] <<- mean(assessData[[specie]]$WeightH[-1], na.rm = TRUE)
+            }
+            next
+          }
+          if (weightNaN[i] == length(assessData[[specie]]$WeightH)) {
+            if (!is.na(assessData[[specie]]$WeightH[weightNaN[i] - 1])) {
+              assessData[[specie]]$WeightH[weightNaN[i]] <<- assessData[[specie]]$WeightH[weightNaN[i] - 1]
+            } else {
+              assessData[[specie]]$WeightH[weightNaN[i]] <<- mean(assessData[[specie]]$WeightH[-(weightNaN[i])], na.rm = TRUE)
+            }
+            next
+          }
+          if (!is.na(assessData[[specie]]$WeightH[weightNaN[i] - 1] & assessData[[specie]]$WeightH[weightNaN[i] + 1])) {
+            assessData[[specie]]$WeightH[weightNaN[i]] <<- mean(c(assessData[[specie]]$WeightH[weightNaN[i] - 1], assessData[[specie]]$WeightH[weightNaN[i] + 1]))
+          } else {
+            assessData[[specie]]$WeightH[weightNaN[i]] <<- mean(assessData[[specie]]$WeightH[-(weightNaN[i])], na.rm = TRUE)
+          }
+        }
+      }
+      
+      
       assessData[[specie]]$Qinit <<- 0
       assessData[[specie]]$InitN <<- rep(0, fisheryBySpecie[[indSpeFis]]$nCoho)
       assessData[[specie]]$InitR0 <<- 20
-
+      assessData[[specie]]$recDev <<- rep(0, assessData[[specie]]$Nyear)
+      
       ### Growth
       for (sex in 1:length(names(fisheryBySpecie[[indSpeFis]]$groPars))) {
         if (sex == 1) {
@@ -568,7 +596,7 @@ SmartProject <- R6Class("smartProject",
       assSingleRes[[specie]]$SSBSD <<- Res$SSBSD
       cat("\n\n", specie, " Assessment Complete!\n", sep = "")
     },
-    assMulti = function() {
+    assMulti = function(varCov = TRUE) {
       if (is.null(assessData)) {
         stop("Missing Data! Run setAssesData() first.")
       }
@@ -576,15 +604,16 @@ SmartProject <- R6Class("smartProject",
       assMultiRes <<- list()
       Nspecies <- length(assessData)
       Pars <- NULL
+      ParsInit <- NULL
       for (Ispec in 1:Nspecies) {
         Qinit <- rep(assessData[[Ispec]]$Qinit, assessData[[Ispec]]$Nsurvey)
         Amax <- assessData[[Ispec]]$Amax
         Nsurvey <- assessData[[Ispec]]$Nsurvey
         Nyear <- assessData[[Ispec]]$Nyear
         InitN <- assessData[[Ispec]]$InitN
-        RecDev <- rep(0, assessData[[Ispec]]$Nyear)
+        RecDev <- assessData[[Ispec]]$recDev
         LogR0 <- assessData[[Ispec]]$InitR0
-
+        
         VecS <- NULL
         VecC <- NULL
         if (assessData[[Ispec]]$SelsurvType == 1) {
@@ -594,26 +623,47 @@ SmartProject <- R6Class("smartProject",
             for (Iage in 1:(Amax - 2)) VecS[Offset + Iage] <- log((1 - assessData[[Ispec]]$SelexSurv[Isurv, Iage]) / assessData[[Ispec]]$SelexSurv[Isurv, Iage])
           }
         }
+        if (assessData[[Ispec]]$SelsurvType == 2) {
+          for (Isurv in 1:Nsurvey) {
+            Offset <- 3*(Isurv-1)
+            VecS[(Offset + 1):(Offset + 3)] <- log(assessData[[Ispec]]$SelexSurv[Isurv, 1:3])
+          }
+        }
+        
+        
         if (assessData[[Ispec]]$SelexType == 1) {
           VecC <- rep(0, Amax - 2)
           for (Iage in 1:(Amax - 2)) {
             VecC[Iage] <- log((1 - assessData[[Ispec]]$Selex[Iage]) / assessData[[Ispec]]$Selex[Iage])
           }
         }
+        if (assessData[[Ispec]]$SelexType == 2) {
+          VecC[1:3] <- log(assessData[[Ispec]]$Selex[1:3])
+        }
+        
         Fvals <- rep(0, Nyear)
         InitF <- log(1)
         Pars <- c(Pars, InitN, RecDev, LogR0, VecS, VecC, Fvals, InitF)
+        
+        # if(toOpt[1] == TRUE) Pars <- c(Pars, InitN) else ParsInit <- c(ParsInit, InitN)
+        # if(toOpt[2] == TRUE) Pars <- c(Pars, RecDev) else ParsInit <- c(ParsInit, RecDev)
+        # if(toOpt[3] == TRUE) Pars <- c(Pars, LogR0) else ParsInit <- c(ParsInit, LogR0)
+        # if(toOpt[4] == TRUE) Pars <- c(Pars, VecS) else ParsInit <- c(ParsInit, VecS)
+        # if(toOpt[5] == TRUE) Pars <- c(Pars, VecC) else ParsInit <- c(ParsInit, VecC)
+        # if(toOpt[6] == TRUE) Pars <- c(Pars, Fvals) else ParsInit <- c(ParsInit, Fvals)
+        # if(toOpt[7] == TRUE) Pars <- c(Pars, InitF) else ParsInit <- c(ParsInit, InitF)
+        
       }
       Npar <- length(Pars)
       Res <- fitNPars(Pars, funNopt,
-        FullMin = TRUE, DoVarCo = TRUE,
+        FullMin = TRUE, DoVarCo = varCov,
         SpeciesData = assessData, Nspecies = Nspecies,
         PredationPars = assessInteract
       )
-
+      
       assMultiRes <<- funNopt(Res$par,
-        DoEst = FALSE, SpeciesData = assessData,
-        Nspecies = Nspecies, PredationPars = assessInteract
+                              DoEst = FALSE, SpeciesData = assessData,
+                              Nspecies = Nspecies, PredationPars = assessInteract
       )
       assMultiRes$par <<- Res$par
       assMultiRes$VarCo <<- Res$VarCo
@@ -834,7 +884,7 @@ SmartProject <- R6Class("smartProject",
     setRegHarbBox = function() {
       cat("\n\tComputing Harbours-FishingGround distances...", cat = "")
       tmp_dist <- gDistance(sampMap$gridShp,
-        SpatialPoints(fleet$regHarbsUni[, 2:3]),
+        SpatialPoints(fleet$regHarbsUni[, 2:3], proj4string = CRS(proj4string(sampMap$gridShp))),
         byid = TRUE
       )
       fleet$regHarbsUni$shpDist <<- apply(tmp_dist, 1, min)
@@ -1050,7 +1100,7 @@ SmartProject <- R6Class("smartProject",
           in_box <- over(SpatialPoints(tmp_eff[, c("LON", "LAT")]), sampMap$gridBboxSP)
         } else {
           in_box <- over(
-            SpatialPoints(tmp_eff[, c("LON", "LAT")]),
+            SpatialPoints(tmp_eff[, c("LON", "LAT")], proj4string = CRS(proj4string(sampMap$gridShp))),
             unionSpatialPolygons(sampMap$gridShp,
               IDs = rep(
                 1,
@@ -1469,11 +1519,11 @@ SmartProject <- R6Class("smartProject",
         }
         
         Prod[infish, ] <- do.call(rbind, lapply(split(simEffo[selRow[infish],], seq(nrow(simEffo[selRow[infish],]))),
-                                                FUN = function(x) getSingleProd(oneEff = as.numeric(x),
-                                                                                betas = fleet$resNNLS[[specie]]$bmat,
-                                                                                scenarios = fleet$resNNLS[[specie]]$SceMat,
-                                                                                thres = thrZero,
-                                                                                fgs = fgClms)))
+                              FUN = function(x) getSingleProd(oneEff = as.numeric(x),
+                                                              betas = fleet$resNNLS[[specie]]$bmat,
+                                                              scenarios = fleet$resNNLS[[specie]]$SceMat,
+                                                              thres = thrZero,
+                                                              fgs = fgClms)))
         
         Prod[is.na(Prod)] <- 0
         colnames(Prod) <- paste("PR_", as.character(seq(1, ncol(Prod))), sep = "")
@@ -1602,7 +1652,7 @@ SmartProject <- R6Class("smartProject",
       }
       simTotalRevenue <<- aggregate(totRevenue ~ I_NCEE + Year, tmp_Revenue, sum)
     },
-    getLWstat = function() {
+    getLWstat = function(fill = FALSE) {
       if (is.null(fisheryBySpecie)) {
         stop("No mcmc output found")
       }
@@ -1667,6 +1717,13 @@ SmartProject <- R6Class("smartProject",
               }
             }
           }
+          if ( fill == TRUE) {
+            avgLW <- apply(preReveSea[,2:ncol(preReveSea)], 2, mean, na.rm = TRUE)/sum(apply(preReveSea[,2:ncol(preReveSea)], 2, mean, na.rm = TRUE))
+            idxNArows <- which(apply(is.na(preReveSea[,2:ncol(preReveSea)]), 1, all))
+            if (length(idxNArows) > 0) {
+              preReveSea[idxNArows, 2:ncol(preReveSea)] <- rep(avgLW, each = length(idxNArows))
+            } 
+          }
           outWeiPropQ[[fisheryBySpecie[[fisIdx]]$specie]][[season]] <<- preReveSea
         }
       }
@@ -1677,12 +1734,13 @@ SmartProject <- R6Class("smartProject",
         simTotalRevenue[, c("I_NCEE", "Year", "totRevenue")]
       )
     },
-    simulateFishery = function(thr0 = 100, effoBan = numeric(0), timeStep = "Year", maxEffo = 0) {
+    simulateFishery = function(thr0 = 100, effoBan = numeric(0), timeStep = "Year", maxEffo = 0, fillLW = FALSE) {
       cat("\nGetting length-weight statistics...", sep = "")
-      getLWstat()
+      getLWstat(fill = fillLW)
       cat("Done!", sep = "")
 
       cat("\nSetup initial parameters...", sep = "")
+      
       genSimEffo()
       simProdAll()
       getSimTotalCost()
@@ -2095,7 +2153,7 @@ SmartProject <- R6Class("smartProject",
         SpatialPoints(data.frame(
           Lon = rawDataFishery$Lon,
           Lat = rawDataFishery$Lat
-        )),
+        ), proj4string = CRS(proj4string(sampMap$gridShp))),
         sampMap$cutResShp
       )]
 
@@ -2104,7 +2162,7 @@ SmartProject <- R6Class("smartProject",
           SpatialPoints(data.frame(
             Lon = fisheryBySpecie[[i]]$rawLFD$Lon,
             Lat = fisheryBySpecie[[i]]$rawLFD$Lat
-          )),
+          ), proj4string = CRS(proj4string(sampMap$gridShp))),
           sampMap$cutResShp
         )]
       }
@@ -2117,7 +2175,7 @@ SmartProject <- R6Class("smartProject",
         SpatialPoints(data.frame(
           Lon = rawDataSurvey$Lon,
           Lat = rawDataSurvey$Lat
-        )),
+        ), proj4string = CRS(proj4string(sampMap$gridShp))),
         sampMap$cutResShp
       )]
 
@@ -2126,7 +2184,7 @@ SmartProject <- R6Class("smartProject",
           SpatialPoints(data.frame(
             Lon = surveyBySpecie[[i]]$rawLFD$Lon,
             Lat = surveyBySpecie[[i]]$rawLFD$Lat
-          )),
+          ), proj4string = CRS(proj4string(sampMap$gridShp))),
           sampMap$cutResShp
         )]
       }
