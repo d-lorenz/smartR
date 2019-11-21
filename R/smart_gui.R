@@ -58,7 +58,7 @@ smartRgui <- function(smartRstudy = NULL) {
           100,
           replace = FALSE
         ), ]
-        svalue(raw_l1) <- paste("Specie: ", paste(smartRstudy$specieInSurvey,
+        svalue(raw_l1) <- paste("Species: ", paste(smartRstudy$specieInSurvey,
           collapse = " - "
         ))
         svalue(raw_l3) <- paste(
@@ -92,9 +92,7 @@ smartRgui <- function(smartRstudy = NULL) {
           sep = ""
         )
         svalue(n_spec_s) <- paste(length(smartRstudy$specieInSurvey),
-          ifelse(length(smartRstudy$specieInSurvey) == 1,
-            " specie", " species"
-          ),
+          " species",
           sep = ""
         )
         #       samp_sta_n <- gimage(system.file("ico/user-available.png", package="smartR"))
@@ -1625,10 +1623,10 @@ smartRgui <- function(smartRstudy = NULL) {
     addSpring(pro_g_top1)
 
     spe_fra <- gframe(
-      text = "Specie", container = pro_g_top1, horizontal = TRUE,
+      text = "Species", container = pro_g_top1, horizontal = TRUE,
       expand = TRUE
     )
-    spe_drop <- gcombobox("Specie list",
+    spe_drop <- gcombobox("Species list",
       selected = 1,
       editable = FALSE, container = spe_fra, expand = TRUE
     )
@@ -1649,7 +1647,7 @@ smartRgui <- function(smartRstudy = NULL) {
       up_fra <- gframe(container = up_g, horizontal = TRUE, expand = TRUE)
       addSpace(up_fra, 20)
       spe_fra <- gframe(
-        text = "Specie", container = up_fra, horizontal = TRUE,
+        text = "Species", container = up_fra, horizontal = TRUE,
         expand = TRUE
       )
       addSpring(spe_fra)
@@ -1746,7 +1744,7 @@ smartRgui <- function(smartRstudy = NULL) {
         text = "\n   Set!   \n", container = up_fra,
         handler = function(...) {
           smartRstudy$fleet$setSpecSettItm(
-            specie = svalue(spe_drop),
+            species = svalue(spe_drop),
             thresh = svalue(thr_spin),
             brea = svalue(num_bre_spin),
             max_xlim = svalue(max_x_spin)
@@ -1824,7 +1822,7 @@ smartRgui <- function(smartRstudy = NULL) {
       addSpace(up_fra, 20)
 
       spe_fra <- gframe(
-        text = "Specie", container = up_fra, horizontal = TRUE,
+        text = "Species", container = up_fra, horizontal = TRUE,
         expand = TRUE
       )
       addSpace(spe_fra, 10)
@@ -2024,7 +2022,7 @@ smartRgui <- function(smartRstudy = NULL) {
       up_fra <- gframe(container = up_g, horizontal = TRUE, expand = TRUE)
       addSpace(up_fra, 20)
       spe_fra <- gframe(
-        text = "Specie", container = up_fra, horizontal = TRUE,
+        text = "Species", container = up_fra, horizontal = TRUE,
         expand = TRUE
       )
       addSpring(spe_fra)
@@ -2039,7 +2037,7 @@ smartRgui <- function(smartRstudy = NULL) {
               smartRstudy$fleet$setEffoProdAllLoa()
             }
             smartRstudy$getNnlsModel(
-              specie = svalue(spe_drop),
+              species = svalue(spe_drop),
               minobs = svalue(obs_spin),
               thr_r2 = svalue(thr_spin)
             )
@@ -2056,7 +2054,7 @@ smartRgui <- function(smartRstudy = NULL) {
               sep = ""
             )
             smartRstudy$fleet$plotNNLS(
-              specie = svalue(spe_drop),
+              species = svalue(spe_drop),
               thresR2 = svalue(thr_spin)
             )
           },
@@ -2161,7 +2159,7 @@ smartRgui <- function(smartRstudy = NULL) {
       up_fra <- gframe(container = up_g, horizontal = TRUE, expand = TRUE)
       addSpace(up_fra, 20)
       spe_fra <- gframe(
-        text = "Specie", container = up_fra, horizontal = TRUE,
+        text = "Species", container = up_fra, horizontal = TRUE,
         expand = TRUE
       )
       addSpring(spe_fra)
@@ -2278,7 +2276,7 @@ smartRgui <- function(smartRstudy = NULL) {
       svalue(stat_bar) <- "Plotting Betas..."
       Sys.sleep(1)
       smartRstudy$setPlotBetaMeltYear(
-        specie = svalue(spe_drop),
+        species = svalue(spe_drop),
         year = svalue(provie_drop)
       )
       suppressWarnings(grid.arrange(smartRstudy$sampMap$ggBetaFGmap,
@@ -2296,7 +2294,7 @@ smartRgui <- function(smartRstudy = NULL) {
       svalue(stat_bar) <- "Plotting production..."
       Sys.sleep(1)
       smartRstudy$setPlotProdMeltYear(
-        specie = svalue(spe_drop),
+        species = svalue(spe_drop),
         year = svalue(provie_drop)
       )
       suppressWarnings(grid.arrange(smartRstudy$sampMap$ggProdFGmap,
@@ -2313,7 +2311,7 @@ smartRgui <- function(smartRstudy = NULL) {
     gbutton("    Total\nProduction",
       container = pro_g_top2_view,
       handler = function(h, ...) {
-        smartRstudy$fleet$plotTotProd(specie = svalue(spe_drop))
+        smartRstudy$fleet$plotTotProd(species = svalue(spe_drop))
       }
     )
     addSpring(pro_g_top2_ver)
@@ -2349,7 +2347,7 @@ smartRgui <- function(smartRstudy = NULL) {
 
       if (!is.null(smartRstudy$rawDataSurvey)) {
         raw_t[] <- smartRstudy$rawDataSurvey[sample(1:nrow(smartRstudy$rawDataSurvey), 100, replace = FALSE), ]
-        svalue(raw_l1) <- paste("Specie: ", paste(smartRstudy$specieInSurvey, collapse = " - "))
+        svalue(raw_l1) <- paste("Species: ", paste(smartRstudy$specieInSurvey, collapse = " - "))
         svalue(raw_l3) <- paste("Years: from", min(as.numeric(as.character(smartRstudy$yearInSurvey))), " to ", max(as.numeric(as.character(smartRstudy$yearInSurvey))))
         spec_drop_mix[] <- smartRstudy$specieInSurvey
         svalue(spec_drop_mix) <- smartRstudy$specieInSurvey[1]
@@ -2378,9 +2376,7 @@ smartRgui <- function(smartRstudy = NULL) {
           sep = ""
         )
         svalue(n_spec_s) <- paste(length(smartRstudy$specieInSurvey),
-          ifelse(length(smartRstudy$specieInSurvey) == 1,
-            " specie", " species"
-          ),
+          " species",
           sep = ""
         )
 
@@ -2410,7 +2406,7 @@ smartRgui <- function(smartRstudy = NULL) {
       )
       addSpring(lfdfra_g)
 
-      spec_b <- gframe("Specie",
+      spec_b <- gframe("Species",
         horizontal = FALSE, container = lfdfra_g,
         expand = TRUE
       )
@@ -2495,7 +2491,7 @@ smartRgui <- function(smartRstudy = NULL) {
         pop_g <- ggroup(horizontal = FALSE, container = temp_dia)
         pop_g_top <- gframe(horizontal = TRUE, container = pop_g, spacing = 10)
         addSpring(pop_g_top)
-        spec_b <- gframe("Specie",
+        spec_b <- gframe("Species",
           horizontal = FALSE, container = pop_g_top,
           expand = TRUE
         )
@@ -2753,13 +2749,13 @@ smartRgui <- function(smartRstudy = NULL) {
     })
     addSpring(raw_g_top)
     raw_g_top2 <- ggroup(horizontal = FALSE, container = raw_g_top)
-    raw_l1 <- glabel("Specie: ", container = raw_g_top2)
+    raw_l1 <- glabel("Species: ", container = raw_g_top2)
     raw_l3 <- glabel("Years: ", container = raw_g_top2)
     addSpace(raw_g_top, 10)
     addSpace(raw_g_top2, 2)
 
     blankDF <- data.frame(
-      Specie = character(0),
+      Species = character(0),
       Lat = numeric(0),
       Lon = numeric(0),
       Year = character(0),
@@ -2798,7 +2794,7 @@ smartRgui <- function(smartRstudy = NULL) {
           100,
           replace = FALSE
         ), ]
-        svalue(fis_l1) <- paste("Specie: ", paste(smartRstudy$specieInFishery,
+        svalue(fis_l1) <- paste("Species: ", paste(smartRstudy$specieInFishery,
           collapse = " - "
         ))
         svalue(fis_l3) <- paste(
@@ -2831,9 +2827,7 @@ smartRgui <- function(smartRstudy = NULL) {
           sep = ""
         )
         svalue(n_specF_s) <- paste(length(smartRstudy$specieInFishery),
-          ifelse(length(smartRstudy$specieInFishery) == 1,
-            " specie", " species"
-          ),
+          " species",
           sep = ""
         )
 
@@ -2863,7 +2857,7 @@ smartRgui <- function(smartRstudy = NULL) {
       )
       addSpring(lfdfra_g)
 
-      spec_b <- gframe("Specie",
+      spec_b <- gframe("Species",
         horizontal = FALSE, container = lfdfra_g,
         expand = TRUE
       )
@@ -2946,7 +2940,7 @@ smartRgui <- function(smartRstudy = NULL) {
         pop_g <- ggroup(horizontal = FALSE, container = temp_dia)
         pop_g_top <- gframe(horizontal = TRUE, container = pop_g, spacing = 10)
         addSpring(pop_g_top)
-        spec_b <- gframe("Specie",
+        spec_b <- gframe("Species",
           horizontal = FALSE, container = pop_g_top,
           expand = TRUE
         )
@@ -3019,13 +3013,13 @@ smartRgui <- function(smartRstudy = NULL) {
     addSpring(fis_g_top)
 
     fis_g_top2 <- ggroup(horizontal = FALSE, container = fis_g_top)
-    fis_l1 <- glabel("Specie: ", container = fis_g_top2)
+    fis_l1 <- glabel("Species: ", container = fis_g_top2)
     fis_l3 <- glabel("Years: ", container = fis_g_top2)
     addSpace(fis_g_top, 10)
     addSpace(fis_g_top2, 2)
 
     blankDF <- data.frame(
-      Specie = character(0),
+      Species = character(0),
       Lat = numeric(0),
       Lon = numeric(0),
       Date = character(0),
@@ -3075,13 +3069,13 @@ smartRgui <- function(smartRstudy = NULL) {
         }
       }
     )
-    spec_mix_f <- gframe("Specie and Sex",
+    spec_mix_f <- gframe("Species and Sex",
       horizontal = FALSE,
       container = cont_g, expand = TRUE
     )
     addSpring(spec_mix_f)
     spec_drop_mix <- gcombobox(
-      items = "Specie", selected = 1,
+      items = "Species", selected = 1,
       container = spec_mix_f, editable = FALSE,
       expand = TRUE, handler = function(...) {
         if (svalue(sourceMix_r) == "Survey") {
@@ -3276,14 +3270,14 @@ smartRgui <- function(smartRstudy = NULL) {
       }
     )
     addSpring(cohofra_g)
-    cohSpe_b <- gframe("Specie",
+    cohSpe_b <- gframe("Species",
       horizontal = FALSE, container = cohofra_g,
       expand = TRUE
     )
     addSpring(cohofra_g)
     addSpring(cohSpe_b)
     spec_drop_coh <- gcombobox(
-      items = "Specie", selected = 1,
+      items = "Species", selected = 1,
       container = cohSpe_b, editable = FALSE,
       handler = function(h, ...) {
         if (svalue(sourceCoh_r) == "Survey") {
@@ -3722,10 +3716,10 @@ smartRgui <- function(smartRstudy = NULL) {
         addSpace(assSou_g, 5)
         addSpace(assfra_g, 10)
 
-        assSpe_g <- gframe("Specie", horizontal = TRUE, container = assfra_g)
+        assSpe_g <- gframe("Species", horizontal = TRUE, container = assfra_g)
         addSpace(assSpe_g, 5)
         assSpe_drop <- gcombobox(
-          items = "Specie", selected = 1,
+          items = "Species", selected = 1,
           container = assSpe_g, editable = FALSE,
           handler = function(h, ...) {
             if (svalue(assSou_r) == "Survey") {
@@ -4130,7 +4124,7 @@ smartRgui <- function(smartRstudy = NULL) {
     ass_g_spePred <- ggroup(horizontal = FALSE, container = ass_g_top)
     addSpring(ass_g_spePred)
     assSpe_drop <- gcombobox(
-      items = "Specie", selected = 1, editable = FALSE,
+      items = "Species", selected = 1, editable = FALSE,
       container = ass_g_spePred,
       handler = NULL
     )
@@ -4471,7 +4465,7 @@ smartRgui <- function(smartRstudy = NULL) {
         if (svalue(assSM_rad) == "Single") {
           tmpSpe <- svalue(assSpe_drop)
           smartRstudy$setAssessData(
-            specie = tmpSpe,
+            species = tmpSpe,
             forecast = ifelse(svalue(ass_Fore_radio) == "No",
               FALSE, TRUE
             )
@@ -4546,7 +4540,7 @@ smartRgui <- function(smartRstudy = NULL) {
             smartRstudy$specieInSurvey
           )) {
             smartRstudy$setAssessData(
-              specie = oneSpe,
+              species = oneSpe,
               forecast = FALSE
             )
             parIn_df[[oneSpe]] <- data.frame(matrix(0,
@@ -4684,8 +4678,8 @@ smartRgui <- function(smartRstudy = NULL) {
       text = "Start", container = ass_g_top,
       handler = function(h, ...) {
         if (svalue(assSM_rad) == "Single") {
-          smartRstudy$assSingle(specie = svalue(assSpe_drop))
-          smartRstudy$setPlotSingle(specie = svalue(assSpe_drop))
+          smartRstudy$assSingle(species = svalue(assSpe_drop))
+          smartRstudy$setPlotSingle(species = svalue(assSpe_drop))
           assRes_drop[] <- names(smartRstudy$assessData)
           svalue(assRes_drop) <- assRes_drop[][which(assRes_drop[] == svalue(assSpe_drop))]
           dev.set(dev.list()[pre_dev + 10])
@@ -4709,7 +4703,7 @@ smartRgui <- function(smartRstudy = NULL) {
     )
     addSpace(ass_Res, 10)
     assRes_drop <- gcombobox(
-      items = "    Specie", selected = 1,
+      items = "    Species", selected = 1,
       editable = FALSE, container = ass_Res,
       handler = NULL
     )

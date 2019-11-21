@@ -82,7 +82,7 @@
 #'   \item{\code{ggplotRawPoints(year)}}{This method is used to plot the raw vms points}
 #'   \item{\code{ggplotFgWeigDists()}}{This method is used to plot the weighted average distance between harbours and fishing grounds}
 #'   \item{\code{setAvailData()}}{This method is used to gather the required data for the spatial clustering}
-#'   \item{\code{predictProduction(specie)}}{This method is used to compute the estimated production}
+#'   \item{\code{predictProduction(species)}}{This method is used to compute the estimated production}
 #'   \item{\code{simProdAll(selRow = numeric(0))}}{This method is used to compute the simulated production}
 #'   \item{\code{genSimEffo(method = "flat", selRow = numeric(0), areaBan = numeric(0))}}{This method is used to create a simulated pattern of effort}
 #'   \item{\code{getSimSpatialCost()}}{This method is used to compute the simulated spatial costs}
@@ -102,7 +102,7 @@
 #'   \item{\code{setWeekEffoMatrCell()}}{This method is used to combine the raw effort points in weekly aggregated effort by cell}
 #'   \item{\code{setWeekEffoMatrGround()}}{This method is used to combine the raw effort points in weekly aggregated effort by fishing ground}
 #'   \item{\code{ggplotGridEffort(year)}}{This method is used to plot the gridded fishing effort}
-#'   \item{\code{getNnlsModel(specie, minobs, thr_r2)}}{This method is used to compute the coefficients of the NNLS model}
+#'   \item{\code{getNnlsModel(species, minobs, thr_r2)}}{This method is used to compute the coefficients of the NNLS model}
 #'   \item{\code{cohoDisPlot(whoSpe, whoCoh, whiYea, interp)}}{This method is used to store the spatial distribution of the species by cohort}
 #'   }
 #' @examples
@@ -242,28 +242,28 @@ SmartProject <- R6Class("smartProject",
       assessInteract$om <<- intOm
       # assessInteract$per <<- intPer
     },
-    setAssessData = function(specie, forecast = FALSE) {
-      cat("\nSetup Assessment Data for", specie, "...\n")
-      if (is.null(assessData[[specie]])) {
-        assessData[[specie]] <<- list()
+    setAssessData = function(species, forecast = FALSE) {
+      cat("\nSetup Assessment Data for", species, "...\n")
+      if (is.null(assessData[[species]])) {
+        assessData[[species]] <<- list()
       }
-      indSpeFis <- which(specieInFishery == specie)
-      indSpeSur <- which(specieInSurvey == specie)
+      indSpeFis <- which(specieInFishery == species)
+      indSpeSur <- which(specieInSurvey == species)
 
       cat("\n\tLoading time-scales... ")
-      assessData[[specie]]$Amax <<- fisheryBySpecie[[indSpeFis]]$nCoho
-      assessData[[specie]]$Yr1 <<- as.numeric(as.character(min(years(fisheryBySpecie[[indSpeFis]]$rawLFD$Date))))
+      assessData[[species]]$Amax <<- fisheryBySpecie[[indSpeFis]]$nCoho
+      assessData[[species]]$Yr1 <<- as.numeric(as.character(min(years(fisheryBySpecie[[indSpeFis]]$rawLFD$Date))))
 
-      assessData[[specie]]$Yr2 <<- as.numeric(as.character(max(years(fisheryBySpecie[[indSpeFis]]$rawLFD$Date))))
-      if (forecast) assessData[[specie]]$Yr2 <<- assessData[[specie]]$Yr2 + 1
+      assessData[[species]]$Yr2 <<- as.numeric(as.character(max(years(fisheryBySpecie[[indSpeFis]]$rawLFD$Date))))
+      if (forecast) assessData[[species]]$Yr2 <<- assessData[[species]]$Yr2 + 1
 
-      assessData[[specie]]$Nyear <<- assessData[[specie]]$Yr2 - assessData[[specie]]$Yr1 + 1
+      assessData[[species]]$Nyear <<- assessData[[species]]$Yr2 - assessData[[species]]$Yr1 + 1
 
-      assessData[[specie]]$Nlen <<- 2
-      assessData[[specie]]$NCAL <<- 0
-      assessData[[specie]]$Nsurvey <<- 1
-      assessData[[specie]]$NSAA <<- assessData[[specie]]$Nyear
-      assessData[[specie]]$NSAL <<- 0
+      assessData[[species]]$Nlen <<- 2
+      assessData[[species]]$NCAL <<- 0
+      assessData[[species]]$Nsurvey <<- 1
+      assessData[[species]]$NSAA <<- assessData[[species]]$Nyear
+      assessData[[species]]$NSAL <<- 0
       cat("Done!")
 
       ## Catch
@@ -271,15 +271,15 @@ SmartProject <- R6Class("smartProject",
       tmpDF <- aggregate(
         Production ~ Year, data.frame(
           Year = as.character(fleet$effoAllLoa$Year),
-          Production = apply(fleet$predProd[[specie]], 1, sum),
+          Production = apply(fleet$predProd[[species]], 1, sum),
           stringsAsFactors = FALSE
         ),
         sum
       )
-      assessData[[specie]]$Catch <<- tmpDF$Production
+      assessData[[species]]$Catch <<- tmpDF$Production
       if (forecast) {
-        if (is.null(simProd[[specie]])) stop("\nMissing Simulated Production!\n")
-        assessData[[specie]]$Catch <<- c(assessData[[specie]]$Catch, sum(simProd[[specie]]))
+        if (is.null(simProd[[species]])) stop("\nMissing Simulated Production!\n")
+        assessData[[species]]$Catch <<- c(assessData[[species]]$Catch, sum(simProd[[species]]))
       }
 
       ## Catch at Age
@@ -309,7 +309,7 @@ SmartProject <- R6Class("smartProject",
       }
       outProp <- matrix(
         data = 0,
-        nrow = nrow(fleet$predProd[[specie]]),
+        nrow = nrow(fleet$predProd[[species]]),
         ncol = fisheryBySpecie[[indSpeFis]]$nCoho
       )
       tmpSeason <- data.frame(
@@ -322,34 +322,34 @@ SmartProject <- R6Class("smartProject",
         )
       )
       for (season in c("winter", "spring", "summer", "fall")) {
-        tmpOutProp <- apply(fleet$predProd[[specie]][fleet$effoAllLoa$MonthNum %in% tmpSeason$Month[tmpSeason$Season == season], ], 1, function(x) apply(outWeiQ[[season]][, -1] * t(x), 2, sum, na.rm = TRUE))
+        tmpOutProp <- apply(fleet$predProd[[species]][fleet$effoAllLoa$MonthNum %in% tmpSeason$Month[tmpSeason$Season == season], ], 1, function(x) apply(outWeiQ[[season]][, -1] * t(x), 2, sum, na.rm = TRUE))
         outProp[fleet$effoAllLoa$MonthNum %in% tmpSeason$Month[tmpSeason$Season == season], ] <- t(tmpOutProp)
       }
       outCAA <- aggregate(. ~ Year, data.frame(Year = fleet$effoAllLoa$Year, outProp), sum)
 
-      assessData[[specie]]$YCAA <<- as.numeric(as.character(outCAA[, 1]))
-      if (forecast) assessData[[specie]]$YCAA <<- c(assessData[[specie]]$YCAA, assessData[[specie]]$Yr2)
+      assessData[[species]]$YCAA <<- as.numeric(as.character(outCAA[, 1]))
+      if (forecast) assessData[[species]]$YCAA <<- c(assessData[[species]]$YCAA, assessData[[species]]$Yr2)
 
-      assessData[[specie]]$CAA <<- outCAA[, -1] / apply(outCAA[, -1], 1, sum)
+      assessData[[species]]$CAA <<- outCAA[, -1] / apply(outCAA[, -1], 1, sum)
       if (forecast) {
-        if (is.null(simProd[[specie]])) stop("\nMissing Simulated Production!\n")
+        if (is.null(simProd[[species]])) stop("\nMissing Simulated Production!\n")
         if (is.null(simEffo)) stop("\nMissing Simulated Effort!\n")
         simProp <- matrix(
           data = 0,
-          nrow = nrow(simProd[[specie]]),
+          nrow = nrow(simProd[[species]]),
           ncol = fisheryBySpecie[[indSpeFis]]$nCoho
         )
         for (season in c("winter", "spring", "summer", "fall")) {
-          tmpOutProp <- apply(simProd[[specie]][simEffo$MonthNum %in% tmpSeason$Month[tmpSeason$Season == season], ], 1, function(x) apply(outWeiQ[[season]][, -1] * t(x), 2, sum, na.rm = TRUE))
+          tmpOutProp <- apply(simProd[[species]][simEffo$MonthNum %in% tmpSeason$Month[tmpSeason$Season == season], ], 1, function(x) apply(outWeiQ[[season]][, -1] * t(x), 2, sum, na.rm = TRUE))
           simProp[simEffo$MonthNum %in% tmpSeason$Month[tmpSeason$Season == season], ] <- t(tmpOutProp)
         }
         simCAA <- aggregate(. ~ Year, data.frame(Year = simEffo$Year, simProp), sum)
-        assessData[[specie]]$CAA <<- rbind(assessData[[specie]]$CAA, simCAA[, -1] / apply(simCAA[, -1], 1, sum))
+        assessData[[species]]$CAA <<- rbind(assessData[[species]]$CAA, simCAA[, -1] / apply(simCAA[, -1], 1, sum))
       }
 
-      assessData[[specie]]$NCAA <<- nrow(assessData[[specie]]$CAA)
-      assessData[[specie]]$YCAL <<- 0
-      assessData[[specie]]$CAL <<- matrix(0, ncol = assessData[[specie]]$Nlen, nrow = assessData[[specie]]$NCAL)
+      assessData[[species]]$NCAA <<- nrow(assessData[[species]]$CAA)
+      assessData[[species]]$YCAL <<- 0
+      assessData[[species]]$CAL <<- matrix(0, ncol = assessData[[species]]$Nlen, nrow = assessData[[species]]$NCAL)
       cat("Done!")
 
       ## Survey at Age
@@ -390,18 +390,18 @@ SmartProject <- R6Class("smartProject",
       }
       outSAA <- aggregate(. ~ Year, outMem[, c(2, 4:(4 + (surveyBySpecie[[indSpeSur]]$nCoho - 1)))], sum)
 
-      assessData[[specie]]$SAA <<- outSAA[, -1]
-      if (forecast) assessData[[specie]]$SAA <<- rbind(assessData[[specie]]$SAA, assessData[[specie]]$SAA[nrow(assessData[[specie]]$SAA), ])
+      assessData[[species]]$SAA <<- outSAA[, -1]
+      if (forecast) assessData[[species]]$SAA <<- rbind(assessData[[species]]$SAA, assessData[[species]]$SAA[nrow(assessData[[species]]$SAA), ])
 
-      assessData[[specie]]$YSAA <<- as.numeric(as.character(outSAA[, 1]))
-      if (forecast) assessData[[specie]]$YSAA <<- c(assessData[[specie]]$YSAA, assessData[[specie]]$Yr2)
+      assessData[[species]]$YSAA <<- as.numeric(as.character(outSAA[, 1]))
+      if (forecast) assessData[[species]]$YSAA <<- c(assessData[[species]]$YSAA, assessData[[species]]$Yr2)
 
-      assessData[[specie]]$SSAA <<- rep(1, nrow(assessData[[specie]]$SAA))
-      assessData[[specie]]$SAL <<- matrix(0, ncol = assessData[[specie]]$Nlen, nrow = assessData[[specie]]$NSAL)
-      assessData[[specie]]$YSAL <<- 0
-      assessData[[specie]]$SSAL <<- 0
-      assessData[[specie]]$SelsurvType <<- 1
-      assessData[[specie]]$SelexType <<- 1
+      assessData[[species]]$SSAA <<- rep(1, nrow(assessData[[species]]$SAA))
+      assessData[[species]]$SAL <<- matrix(0, ncol = assessData[[species]]$Nlen, nrow = assessData[[species]]$NSAL)
+      assessData[[species]]$YSAL <<- 0
+      assessData[[species]]$SSAL <<- 0
+      assessData[[species]]$SelsurvType <<- 1
+      assessData[[species]]$SelexType <<- 1
       cat("Done!")
 
       ### Mean Weight
@@ -413,69 +413,69 @@ SmartProject <- R6Class("smartProject",
           tmpWei <- rbind(tmpWei, fisheryBySpecie[[indSpeFis]]$groMixout[[sex]][, c("Age", "Weight")])
         }
       }
-      tmpWei$Age <- factor(tmpWei$Age, levels = 0:(assessData[[specie]]$Amax - 1))
+      tmpWei$Age <- factor(tmpWei$Age, levels = 0:(assessData[[species]]$Amax - 1))
 
-      assessData[[specie]]$WeightS <<- (ddply(tmpWei, .(Age), summarise, coh.mean = min(Weight) / 1000, .drop = FALSE))[, 2]
-      weightNaN <- which(is.nan(assessData[[specie]]$WeightS))
+      assessData[[species]]$WeightS <<- (ddply(tmpWei, .(Age), summarise, coh.mean = min(Weight) / 1000, .drop = FALSE))[, 2]
+      weightNaN <- which(is.nan(assessData[[species]]$WeightS))
       if (length(weightNaN) > 0) {
         for (i in 1:length(weightNaN)) {
           if (weightNaN[i] == 1) {
-            if (!is.na(assessData[[specie]]$WeightS[2])) {
-              assessData[[specie]]$WeightS[1] <<- mean(c(0, assessData[[specie]]$WeightS[2]))
+            if (!is.na(assessData[[species]]$WeightS[2])) {
+              assessData[[species]]$WeightS[1] <<- mean(c(0, assessData[[species]]$WeightS[2]))
             } else {
-              assessData[[specie]]$WeightS[1] <<- mean(assessData[[specie]]$WeightS[-1], na.rm = TRUE)
+              assessData[[species]]$WeightS[1] <<- mean(assessData[[species]]$WeightS[-1], na.rm = TRUE)
             }
             next
           }
-          if (weightNaN[i] == length(assessData[[specie]]$WeightS)) {
-            if (!is.na(assessData[[specie]]$WeightS[weightNaN[i] - 1])) {
-              assessData[[specie]]$WeightS[weightNaN[i]] <<- assessData[[specie]]$WeightS[weightNaN[i] - 1]
+          if (weightNaN[i] == length(assessData[[species]]$WeightS)) {
+            if (!is.na(assessData[[species]]$WeightS[weightNaN[i] - 1])) {
+              assessData[[species]]$WeightS[weightNaN[i]] <<- assessData[[species]]$WeightS[weightNaN[i] - 1]
             } else {
-              assessData[[specie]]$WeightS[weightNaN[i]] <<- mean(assessData[[specie]]$WeightS[-(weightNaN[i])], na.rm = TRUE)
+              assessData[[species]]$WeightS[weightNaN[i]] <<- mean(assessData[[species]]$WeightS[-(weightNaN[i])], na.rm = TRUE)
             }
             next
           }
-          if (!is.na(assessData[[specie]]$WeightS[weightNaN[i] - 1] & assessData[[specie]]$WeightS[weightNaN[i] + 1])) {
-            assessData[[specie]]$WeightS[weightNaN[i]] <<- mean(c(assessData[[specie]]$WeightS[weightNaN[i] - 1], assessData[[specie]]$WeightS[weightNaN[i] + 1]))
+          if (!is.na(assessData[[species]]$WeightS[weightNaN[i] - 1] & assessData[[species]]$WeightS[weightNaN[i] + 1])) {
+            assessData[[species]]$WeightS[weightNaN[i]] <<- mean(c(assessData[[species]]$WeightS[weightNaN[i] - 1], assessData[[species]]$WeightS[weightNaN[i] + 1]))
           } else {
-            assessData[[specie]]$WeightS[weightNaN[i]] <<- mean(assessData[[specie]]$WeightS[-(weightNaN[i])], na.rm = TRUE)
+            assessData[[species]]$WeightS[weightNaN[i]] <<- mean(assessData[[species]]$WeightS[-(weightNaN[i])], na.rm = TRUE)
           }
         }
       }
 
-      assessData[[specie]]$WeightH <<- (ddply(tmpWei, .(Age), summarise, coh.mean = mean(Weight) / 1000, .drop = FALSE))[, 2]
-      weightNaN <- which(is.nan(assessData[[specie]]$WeightH))
+      assessData[[species]]$WeightH <<- (ddply(tmpWei, .(Age), summarise, coh.mean = mean(Weight) / 1000, .drop = FALSE))[, 2]
+      weightNaN <- which(is.nan(assessData[[species]]$WeightH))
       if (length(weightNaN) > 0) {
         for (i in 1:length(weightNaN)) {
           if (weightNaN[i] == 1) {
-            if (!is.na(assessData[[specie]]$WeightH[2])) {
-              assessData[[specie]]$WeightH[1] <<- mean(c(0, assessData[[specie]]$WeightH[2]))
+            if (!is.na(assessData[[species]]$WeightH[2])) {
+              assessData[[species]]$WeightH[1] <<- mean(c(0, assessData[[species]]$WeightH[2]))
             } else {
-              assessData[[specie]]$WeightH[1] <<- mean(assessData[[specie]]$WeightH[-1], na.rm = TRUE)
+              assessData[[species]]$WeightH[1] <<- mean(assessData[[species]]$WeightH[-1], na.rm = TRUE)
             }
             next
           }
-          if (weightNaN[i] == length(assessData[[specie]]$WeightH)) {
-            if (!is.na(assessData[[specie]]$WeightH[weightNaN[i] - 1])) {
-              assessData[[specie]]$WeightH[weightNaN[i]] <<- assessData[[specie]]$WeightH[weightNaN[i] - 1]
+          if (weightNaN[i] == length(assessData[[species]]$WeightH)) {
+            if (!is.na(assessData[[species]]$WeightH[weightNaN[i] - 1])) {
+              assessData[[species]]$WeightH[weightNaN[i]] <<- assessData[[species]]$WeightH[weightNaN[i] - 1]
             } else {
-              assessData[[specie]]$WeightH[weightNaN[i]] <<- mean(assessData[[specie]]$WeightH[-(weightNaN[i])], na.rm = TRUE)
+              assessData[[species]]$WeightH[weightNaN[i]] <<- mean(assessData[[species]]$WeightH[-(weightNaN[i])], na.rm = TRUE)
             }
             next
           }
-          if (!is.na(assessData[[specie]]$WeightH[weightNaN[i] - 1] & assessData[[specie]]$WeightH[weightNaN[i] + 1])) {
-            assessData[[specie]]$WeightH[weightNaN[i]] <<- mean(c(assessData[[specie]]$WeightH[weightNaN[i] - 1], assessData[[specie]]$WeightH[weightNaN[i] + 1]))
+          if (!is.na(assessData[[species]]$WeightH[weightNaN[i] - 1] & assessData[[species]]$WeightH[weightNaN[i] + 1])) {
+            assessData[[species]]$WeightH[weightNaN[i]] <<- mean(c(assessData[[species]]$WeightH[weightNaN[i] - 1], assessData[[species]]$WeightH[weightNaN[i] + 1]))
           } else {
-            assessData[[specie]]$WeightH[weightNaN[i]] <<- mean(assessData[[specie]]$WeightH[-(weightNaN[i])], na.rm = TRUE)
+            assessData[[species]]$WeightH[weightNaN[i]] <<- mean(assessData[[species]]$WeightH[-(weightNaN[i])], na.rm = TRUE)
           }
         }
       }
       
       
-      assessData[[specie]]$Qinit <<- 0
-      assessData[[specie]]$InitN <<- rep(0, fisheryBySpecie[[indSpeFis]]$nCoho)
-      assessData[[specie]]$InitR0 <<- 20
-      assessData[[specie]]$recDev <<- rep(0, assessData[[specie]]$Nyear)
+      assessData[[species]]$Qinit <<- 0
+      assessData[[species]]$InitN <<- rep(0, fisheryBySpecie[[indSpeFis]]$nCoho)
+      assessData[[species]]$InitR0 <<- 20
+      assessData[[species]]$recDev <<- rep(0, assessData[[species]]$Nyear)
       
       ### Growth
       for (sex in 1:length(names(fisheryBySpecie[[indSpeFis]]$groPars))) {
@@ -510,91 +510,91 @@ SmartProject <- R6Class("smartProject",
         mean(tmpAlpha),
         mean(tmpBeta)
       )
-      LenClassMax <- seq(from = assessData[[specie]]$Nlen, by = assessData[[specie]]$Nlen, length = assessData[[specie]]$Nlen)
-      GetALK <- GetALKMW(GrowthAL[1], GrowthAL[2], GrowthAL[3], GrowthAL[4], GrowthAL[5], GrowthLW[1], GrowthLW[2], assessData[[specie]]$Amax, LenClassMax, 0.0)
+      LenClassMax <- seq(from = assessData[[species]]$Nlen, by = assessData[[species]]$Nlen, length = assessData[[species]]$Nlen)
+      GetALK <- GetALKMW(GrowthAL[1], GrowthAL[2], GrowthAL[3], GrowthAL[4], GrowthAL[5], GrowthLW[1], GrowthLW[2], assessData[[species]]$Amax, LenClassMax, 0.0)
       ALK1 <- GetALK$ALK
-      GetALK <- GetALKMW(GrowthAL[1], GrowthAL[2], GrowthAL[3], GrowthAL[4], GrowthAL[5], GrowthLW[1], GrowthLW[2], assessData[[specie]]$Amax, LenClassMax, 0.5)
+      GetALK <- GetALKMW(GrowthAL[1], GrowthAL[2], GrowthAL[3], GrowthAL[4], GrowthAL[5], GrowthLW[1], GrowthLW[2], assessData[[species]]$Amax, LenClassMax, 0.5)
       ALK2 <- GetALK$ALK
       WeightLen <- GrowthLW[1] * GetALK$Lengths^GrowthLW[2] / 1000
-      assessData[[specie]]$ALK1 <<- ALK1
-      assessData[[specie]]$ALK2 <<- ALK2
-      assessData[[specie]]$WeightLen <<- WeightLen
-      SurvBio <- matrix(0, nrow = 10, ncol = assessData[[specie]]$Nyear)
-      SurvBio[1, ] <- apply(t(assessData[[specie]]$SAA) * assessData[[specie]]$WeightH, 2, sum)
-      assessData[[specie]]$SurvBio <<- SurvBio
+      assessData[[species]]$ALK1 <<- ALK1
+      assessData[[species]]$ALK2 <<- ALK2
+      assessData[[species]]$WeightLen <<- WeightLen
+      SurvBio <- matrix(0, nrow = 10, ncol = assessData[[species]]$Nyear)
+      SurvBio[1, ] <- apply(t(assessData[[species]]$SAA) * assessData[[species]]$WeightH, 2, sum)
+      assessData[[species]]$SurvBio <<- SurvBio
       cat("Done!")
 
       # from GUI
       cat("\n\tLoading User Parameters... ")
-      # assessData[[specie]]$M <<- c(2.3, 1.1, 0.8, 0.7)
-      if (is.null(assessData[[specie]]$M)) {
-        assessData[[specie]]$M <<- round(seq(from = 0.7, to = 0.3, length.out = assessData[[specie]]$Amax), 2)
+      # assessData[[species]]$M <<- c(2.3, 1.1, 0.8, 0.7)
+      if (is.null(assessData[[species]]$M)) {
+        assessData[[species]]$M <<- round(seq(from = 0.7, to = 0.3, length.out = assessData[[species]]$Amax), 2)
       }
-      # assessData[[specie]]$Mat <<- c(0.5, 1, 1, 1)
-      if (is.null(assessData[[specie]]$Mat)) {
-        assessData[[specie]]$Mat <<- round(seq(from = 0.2, to = 0.9, length.out = assessData[[specie]]$Amax), 2)
+      # assessData[[species]]$Mat <<- c(0.5, 1, 1, 1)
+      if (is.null(assessData[[species]]$Mat)) {
+        assessData[[species]]$Mat <<- round(seq(from = 0.2, to = 0.9, length.out = assessData[[species]]$Amax), 2)
       }
-      # assessData[[specie]]$Selex <<- c(0.1, 0.2, 0.6, 1)
-      if (is.null(assessData[[specie]][["Selex"]])) {
-        assessData[[specie]]$Selex <<- round(seq(from = 0.2, to = 0.9, length.out = assessData[[specie]]$Amax), 2)
+      # assessData[[species]]$Selex <<- c(0.1, 0.2, 0.6, 1)
+      if (is.null(assessData[[species]][["Selex"]])) {
+        assessData[[species]]$Selex <<- round(seq(from = 0.2, to = 0.9, length.out = assessData[[species]]$Amax), 2)
       }
-      if (is.null(assessData[[specie]]$SelexSurv)) {
-        assessData[[specie]]$SelexSurv <<- matrix(0, nrow = 10, ncol = assessData[[specie]]$Amax)
+      if (is.null(assessData[[species]]$SelexSurv)) {
+        assessData[[species]]$SelexSurv <<- matrix(0, nrow = 10, ncol = assessData[[species]]$Amax)
       }
-      assessData[[specie]]$SelexSurv[1, ] <<- round(seq(from = 0.5, to = 0.9, length.out = assessData[[specie]]$Amax), 2)
-      # assessData[[specie]]$SelexSurv[1,] <<- c(0.2, 0.5, 1, 1)
-      if (length(assessData[[specie]]$PropZBeforeMat) == 0) {
-        assessData[[specie]]$PropZBeforeMat <<- 0.3
+      assessData[[species]]$SelexSurv[1, ] <<- round(seq(from = 0.5, to = 0.9, length.out = assessData[[species]]$Amax), 2)
+      # assessData[[species]]$SelexSurv[1,] <<- c(0.2, 0.5, 1, 1)
+      if (length(assessData[[species]]$PropZBeforeMat) == 0) {
+        assessData[[species]]$PropZBeforeMat <<- 0.3
       }
-      cat("Done!\n\nSetup Assessment Data for", specie, "Completed!\n")
+      cat("Done!\n\nSetup Assessment Data for", species, "Completed!\n")
     },
-    assSingle = function(specie = "") {
-      if (is.null(assessData[[specie]])) {
+    assSingle = function(species = "") {
+      if (is.null(assessData[[species]])) {
         stop("Missing Data! Run setAssesData() first.")
       }
-      cat("\n\nAssessing ", specie, "\n", sep = "")
-      assSingleRes[[specie]] <<- list()
-      Nyear <- assessData[[specie]]$Nyear
-      Amax <- assessData[[specie]]$Amax
-      Nsurvey <- assessData[[specie]]$Nsurvey
-      LogR0 <- assessData[[specie]]$InitR0
-      RecDev <- rep(0, assessData[[specie]]$Nyear)
-      Qinit <- rep(assessData[[specie]]$Qinit, Nsurvey)
+      cat("\n\nAssessing ", species, "\n", sep = "")
+      assSingleRes[[species]] <<- list()
+      Nyear <- assessData[[species]]$Nyear
+      Amax <- assessData[[species]]$Amax
+      Nsurvey <- assessData[[species]]$Nsurvey
+      LogR0 <- assessData[[species]]$InitR0
+      RecDev <- rep(0, assessData[[species]]$Nyear)
+      Qinit <- rep(assessData[[species]]$Qinit, Nsurvey)
       VecS <- NULL
       VecC <- NULL
-      if (assessData[[specie]]$SelsurvType == 1) {
+      if (assessData[[species]]$SelsurvType == 1) {
         VecS <- rep(0, Nsurvey * (Amax - 2))
         for (Isurv in 1:Nsurvey) {
           Offset <- (Amax - 2) * (Isurv - 1)
           for (Iage in 1:(Amax - 2)) {
-            VecS[Offset + Iage] <- log((1 - assessData[[specie]]$SelexSurv[Isurv, Iage]) / assessData[[specie]]$SelexSurv[Isurv, Iage])
+            VecS[Offset + Iage] <- log((1 - assessData[[species]]$SelexSurv[Isurv, Iage]) / assessData[[species]]$SelexSurv[Isurv, Iage])
           }
         }
       }
-      if (assessData[[specie]]$SelexType == 1) {
+      if (assessData[[species]]$SelexType == 1) {
         VecC <- rep(0, Amax - 2)
         for (Iage in 1:(Amax - 2)) {
-          VecC[Iage] <- log((1 - assessData[[specie]]$Selex[Iage]) / assessData[[specie]]$Selex[Iage])
+          VecC[Iage] <- log((1 - assessData[[species]]$Selex[Iage]) / assessData[[species]]$Selex[Iage])
         }
       }
       Fvals <- rep(0, Nyear)
       InitF <- log(1)
-      Pars <- c(assessData[[specie]]$InitN, RecDev, LogR0, VecS, VecC, Fvals, InitF)
+      Pars <- c(assessData[[species]]$InitN, RecDev, LogR0, VecS, VecC, Fvals, InitF)
       Npar <- length(Pars)
       Res <- fit1Pars(Pars,
         fun1opt,
         FullMin = TRUE,
         DoVarCo = TRUE,
-        SpeciesData = assessData[[specie]]
+        SpeciesData = assessData[[species]]
       )
-      assSingleRes[[specie]] <<- fun1opt(Res$par,
+      assSingleRes[[species]] <<- fun1opt(Res$par,
         DoEst = FALSE,
-        SpeciesData = assessData[[specie]]
+        SpeciesData = assessData[[species]]
       )
-      assSingleRes[[specie]]$par <<- Res$par
-      assSingleRes[[specie]]$VarCo <<- Res$VarCo
-      assSingleRes[[specie]]$SSBSD <<- Res$SSBSD
-      cat("\n\n", specie, " Assessment Complete!\n", sep = "")
+      assSingleRes[[species]]$par <<- Res$par
+      assSingleRes[[species]]$VarCo <<- Res$VarCo
+      assSingleRes[[species]]$SSBSD <<- Res$SSBSD
+      cat("\n\n", species, " Assessment Complete!\n", sep = "")
     },
     assMulti = function(varCov = TRUE) {
       if (is.null(assessData)) {
@@ -670,84 +670,84 @@ SmartProject <- R6Class("smartProject",
       assMultiRes$SSBSD <<- Res$SSBSD
       cat("\n\nAssessment Complete!\n", sep = "")
     },
-    setPlotSingle = function(specie = "") {
-      if (is.null(assSingleRes[[specie]])) {
+    setPlotSingle = function(species = "") {
+      if (is.null(assSingleRes[[species]])) {
         stop("\n\nMissing Results! Run Assessment First.")
       }
-      assSinglePlot[[specie]] <<- list()
+      assSinglePlot[[species]] <<- list()
 
       ssbData <- data.frame(
-        Year = 1:assessData[[specie]]$Nyear + assessData[[specie]]$Yr1 - 1,
-        SSB = assSingleRes[[specie]]$SSB,
-        Lower = assSingleRes[[specie]]$SSB - 1.96 * assSingleRes[[specie]]$SSBSD,
-        Upper = assSingleRes[[specie]]$SSB + 1.96 * assSingleRes[[specie]]$SSBSD
+        Year = 1:assessData[[species]]$Nyear + assessData[[species]]$Yr1 - 1,
+        SSB = assSingleRes[[species]]$SSB,
+        Lower = assSingleRes[[species]]$SSB - 1.96 * assSingleRes[[species]]$SSBSD,
+        Upper = assSingleRes[[species]]$SSB + 1.96 * assSingleRes[[species]]$SSBSD
       )
 
-      assSinglePlot[[specie]]$SSB <<- ggplot_SSBsingle(choSpecie = specie, assData = ssbData)
+      assSinglePlot[[species]]$SSB <<- ggplot_SSBsingle(choSpecie = species, assData = ssbData)
 
 
       survData <- list()
-      tmpObs <- assSingleRes[[specie]]$ObsSAA
-      tmpObs$Year <- assSingleRes[[specie]]$YSAA
+      tmpObs <- assSingleRes[[species]]$ObsSAA
+      tmpObs$Year <- assSingleRes[[species]]$YSAA
       survData$obsSAA <- melt(tmpObs,
         id.vars = "Year",
         variable.name = "Age", value.name = "Index"
       )
-      survData$obsSAA$Lower <- survData$obsSAA$Index * exp(-1.96 * assSingleRes[[specie]]$CvIndex)
-      survData$obsSAA$Upper <- survData$obsSAA$Index * exp(+1.96 * assSingleRes[[specie]]$CvIndex)
+      survData$obsSAA$Lower <- survData$obsSAA$Index * exp(-1.96 * assSingleRes[[species]]$CvIndex)
+      survData$obsSAA$Upper <- survData$obsSAA$Index * exp(+1.96 * assSingleRes[[species]]$CvIndex)
       levels(survData$obsSAA$Age) <- paste("Age", levels(survData$obsSAA$Age))
 
-      tmpPred <- as.data.frame(assSingleRes[[specie]]$PredSAA)
-      colnames(tmpPred) <- colnames(assSingleRes[[specie]]$ObsSAA)
-      tmpPred$Year <- assSingleRes[[specie]]$YSAA
+      tmpPred <- as.data.frame(assSingleRes[[species]]$PredSAA)
+      colnames(tmpPred) <- colnames(assSingleRes[[species]]$ObsSAA)
+      tmpPred$Year <- assSingleRes[[species]]$YSAA
       survData$predSAA <- melt(tmpPred,
         id.vars = "Year",
         variable.name = "Age", value.name = "Index"
       )
       levels(survData$predSAA$Age) <- paste("Age", levels(survData$predSAA$Age))
 
-      assSinglePlot[[specie]]$ObsPredSurv <<- ggplot_OPSsingle(choSpecie = specie, assData = survData)
+      assSinglePlot[[species]]$ObsPredSurv <<- ggplot_OPSsingle(choSpecie = species, assData = survData)
 
 
       caaData <- data.frame(
-        Age = 0:(assSingleRes[[specie]]$Amax - 1),
-        obsCAA = apply(assSingleRes[[specie]]$ObsCAA, 2, sum),
-        predCAA = apply(assSingleRes[[specie]]$PredCAA, 2, sum)
+        Age = 0:(assSingleRes[[species]]$Amax - 1),
+        obsCAA = apply(assSingleRes[[species]]$ObsCAA, 2, sum),
+        predCAA = apply(assSingleRes[[species]]$PredCAA, 2, sum)
       )
 
-      assSinglePlot[[specie]]$ObsPredCAA <<- ggplot_OPCsingle(choSpecie = specie, assData = caaData)
+      assSinglePlot[[species]]$ObsPredCAA <<- ggplot_OPCsingle(choSpecie = species, assData = caaData)
 
 
       catcData <- data.frame(
-        Year = 1:assessData[[specie]]$Nyear + assessData[[specie]]$Yr1 - 1,
-        Catch = assSingleRes[[specie]]$ObsCatch,
-        Lower = assSingleRes[[specie]]$ObsCatch * exp(-1.96 * assSingleRes[[specie]]$CvCatch),
-        Upper = assSingleRes[[specie]]$ObsCatch * exp(+1.96 * assSingleRes[[specie]]$CvCatch)
+        Year = 1:assessData[[species]]$Nyear + assessData[[species]]$Yr1 - 1,
+        Catch = assSingleRes[[species]]$ObsCatch,
+        Lower = assSingleRes[[species]]$ObsCatch * exp(-1.96 * assSingleRes[[species]]$CvCatch),
+        Upper = assSingleRes[[species]]$ObsCatch * exp(+1.96 * assSingleRes[[species]]$CvCatch)
       )
 
-      assSinglePlot[[specie]]$totCatc <<- ggplot_TCsingle(choSpecie = specie, assData = catcData)
+      assSinglePlot[[species]]$totCatc <<- ggplot_TCsingle(choSpecie = species, assData = catcData)
     },
     setPlotMulti = function() {
       if (is.null(assMultiRes)) {
         stop("\n\nMissing Results! Run Assessment First.")
       }
 
-      for (specie in 1:length(assessData)) {
-        assMultiPlot[[names(assessData)[specie]]] <<- list()
+      for (species in 1:length(assessData)) {
+        assMultiPlot[[names(assessData)[species]]] <<- list()
 
         ssbData <- data.frame(
-          Year = 1:assessData[[specie]]$Nyear + assessData[[specie]]$Yr1 - 1,
-          SSB = assMultiRes$SSB[specie, ],
-          Lower = assMultiRes$SSB[specie, ] - 1.96 * assMultiRes$SSBSD[seq(from = 1, to = length(assMultiRes$SSBSD), by = length(assessData)) + specie - 1],
-          Upper = assMultiRes$SSB[specie, ] + 1.96 * assMultiRes$SSBSD[seq(from = 1, to = length(assMultiRes$SSBSD), by = length(assessData)) + specie - 1]
+          Year = 1:assessData[[species]]$Nyear + assessData[[species]]$Yr1 - 1,
+          SSB = assMultiRes$SSB[species, ],
+          Lower = assMultiRes$SSB[species, ] - 1.96 * assMultiRes$SSBSD[seq(from = 1, to = length(assMultiRes$SSBSD), by = length(assessData)) + species - 1],
+          Upper = assMultiRes$SSB[species, ] + 1.96 * assMultiRes$SSBSD[seq(from = 1, to = length(assMultiRes$SSBSD), by = length(assessData)) + species - 1]
         )
 
-        assMultiPlot[[names(assessData)[specie]]]$SSB <<- ggplot_SSBsingle(choSpecie = names(assessData)[specie], assData = ssbData)
+        assMultiPlot[[names(assessData)[species]]]$SSB <<- ggplot_SSBsingle(choSpecie = names(assessData)[species], assData = ssbData)
 
 
         survData <- list()
-        tmpObs <- as.data.frame(assMultiRes$ObsSAA[specie, 1:assessData[[specie]]$Nyear, 1:assessData[[specie]]$Amax])
-        tmpObs$Year <- assMultiRes$YSAA[specie, 1:assessData[[specie]]$Nyear]
+        tmpObs <- as.data.frame(assMultiRes$ObsSAA[species, 1:assessData[[species]]$Nyear, 1:assessData[[species]]$Amax])
+        tmpObs$Year <- assMultiRes$YSAA[species, 1:assessData[[species]]$Nyear]
         survData$obsSAA <- melt(tmpObs,
           id.vars = "Year",
           variable.name = "Age", value.name = "Index"
@@ -756,34 +756,34 @@ SmartProject <- R6Class("smartProject",
         survData$obsSAA$Upper <- survData$obsSAA$Index * exp(+1.96 * assMultiRes$CvIndex)
         levels(survData$obsSAA$Age) <- paste("Age", substr(levels(survData$obsSAA$Age), start = 2, stop = 2))
 
-        tmpPred <- as.data.frame(assMultiRes$PredSAA[specie, 1:assessData[[specie]]$Nyear, 1:assessData[[specie]]$Amax])
-        # colnames(tmpPred) <- colnames(assSingleRes[[specie]]$ObsSAA)
-        tmpPred$Year <- assMultiRes$YSAA[specie, 1:assessData[[specie]]$Nyear]
+        tmpPred <- as.data.frame(assMultiRes$PredSAA[species, 1:assessData[[species]]$Nyear, 1:assessData[[species]]$Amax])
+        # colnames(tmpPred) <- colnames(assSingleRes[[species]]$ObsSAA)
+        tmpPred$Year <- assMultiRes$YSAA[species, 1:assessData[[species]]$Nyear]
         survData$predSAA <- melt(tmpPred,
           id.vars = "Year",
           variable.name = "Age", value.name = "Index"
         )
         levels(survData$predSAA$Age) <- paste("Age", substr(levels(survData$predSAA$Age), start = 2, stop = 2))
 
-        assMultiPlot[[names(assessData)[specie]]]$ObsPredSurv <<- ggplot_OPSsingle(choSpecie = names(assessData)[specie], assData = survData)
+        assMultiPlot[[names(assessData)[species]]]$ObsPredSurv <<- ggplot_OPSsingle(choSpecie = names(assessData)[species], assData = survData)
 
 
         caaData <- data.frame(
-          Age = 0:(assMultiRes$Amax[specie] - 1),
-          obsCAA = apply(assMultiRes$ObsCAA[specie, 1:assessData[[specie]]$Nyear, 1:assessData[[specie]]$Amax], 2, sum),
-          predCAA = apply(assMultiRes$PredCAA[specie, 1:assessData[[specie]]$Nyear, 1:assessData[[specie]]$Amax], 2, sum)
+          Age = 0:(assMultiRes$Amax[species] - 1),
+          obsCAA = apply(assMultiRes$ObsCAA[species, 1:assessData[[species]]$Nyear, 1:assessData[[species]]$Amax], 2, sum),
+          predCAA = apply(assMultiRes$PredCAA[species, 1:assessData[[species]]$Nyear, 1:assessData[[species]]$Amax], 2, sum)
         )
 
-        assMultiPlot[[names(assessData)[specie]]]$ObsPredCAA <<- ggplot_OPCsingle(choSpecie = names(assessData)[specie], assData = caaData)
+        assMultiPlot[[names(assessData)[species]]]$ObsPredCAA <<- ggplot_OPCsingle(choSpecie = names(assessData)[species], assData = caaData)
 
         catcData <- data.frame(
-          Year = 1:assessData[[specie]]$Nyear + assessData[[specie]]$Yr1 - 1,
-          Catch = assMultiRes$ObsCatch[specie, ],
-          Lower = assMultiRes$ObsCatch[specie, ] * exp(-1.96 * assMultiRes$CvCatch),
-          Upper = assMultiRes$ObsCatch[specie, ] * exp(+1.96 * assMultiRes$CvCatch)
+          Year = 1:assessData[[species]]$Nyear + assessData[[species]]$Yr1 - 1,
+          Catch = assMultiRes$ObsCatch[species, ],
+          Lower = assMultiRes$ObsCatch[species, ] * exp(-1.96 * assMultiRes$CvCatch),
+          Upper = assMultiRes$ObsCatch[species, ] * exp(+1.96 * assMultiRes$CvCatch)
         )
 
-        assMultiPlot[[names(assessData)[specie]]]$totCatc <<- ggplot_TCsingle(choSpecie = names(assessData)[specie], assData = catcData)
+        assMultiPlot[[names(assessData)[species]]]$totCatc <<- ggplot_TCsingle(choSpecie = names(assessData)[species], assData = catcData)
       }
     },
     setCostInput = function() {
@@ -972,17 +972,17 @@ SmartProject <- R6Class("smartProject",
       sampMap$ggBioDF <<- envLst$ggBioDF
     },
     setSpecieSurvey = function() {
-      specieInSurvey <<- sort(unique(rawDataSurvey[, "Specie"]))
+      specieInSurvey <<- sort(unique(rawDataSurvey[, "Species"]))
     },
     setSpecieFishery = function() {
-      specieInFishery <<- sort(unique(rawDataFishery[, "Specie"]))
+      specieInFishery <<- sort(unique(rawDataFishery[, "Species"]))
     },
     splitSpecieSurvey = function() {
       if (length(specieInSurvey) == 1) {
         addSpecieSurvey(rawDataSurvey)
       } else {
         for (i in 1:length(specieInSurvey)) {
-          addSpecieSurvey(rawDataSurvey[rawDataSurvey[, "Specie"] == specieInSurvey[i], ])
+          addSpecieSurvey(rawDataSurvey[rawDataSurvey[, "Species"] == specieInSurvey[i], ])
         }
       }
     },
@@ -991,7 +991,7 @@ SmartProject <- R6Class("smartProject",
         addSpecieFishery(rawDataFishery)
       } else {
         for (i in 1:length(specieInFishery)) {
-          addSpecieFishery(rawDataFishery[rawDataFishery[, "Specie"] == specieInFishery[i], ])
+          addSpecieFishery(rawDataFishery[rawDataFishery[, "Species"] == specieInFishery[i], ])
         }
       }
     },
@@ -1026,7 +1026,7 @@ SmartProject <- R6Class("smartProject",
     setDepthSurvey = function() {
       cat("\n\nSetting depth of survey data:", sep = "")
       for (i in 1:length(surveyBySpecie)) {
-        cat("\n\t", surveyBySpecie[[i]]$specie, "... ", sep = "")
+        cat("\n\t", surveyBySpecie[[i]]$species, "... ", sep = "")
         surveyBySpecie[[i]]$setDepth(bathyMatrix = sampMap$gridBathy)
         cat("Done!", sep = "")
       }
@@ -1035,7 +1035,7 @@ SmartProject <- R6Class("smartProject",
     setStratumSurvey = function(vectorStrata = c(0, 10, 100, 1000, Inf)) {
       cat("\nSetting stratum of survey data:", sep = "")
       for (i in 1:length(surveyBySpecie)) {
-        cat("\n\t", surveyBySpecie[[i]]$specie, "... ", sep = "")
+        cat("\n\t", surveyBySpecie[[i]]$species, "... ", sep = "")
         surveyBySpecie[[i]]$setStratum(vecStrata = vectorStrata)
         cat("Done!", sep = "")
       }
@@ -1044,7 +1044,7 @@ SmartProject <- R6Class("smartProject",
     setAbuAvgAll = function() {
       cat("\nComputing average Number of individuals x Size x Stratum: ", sep = "")
       for (i in 1:length(surveyBySpecie)) {
-        cat("\n\t", surveyBySpecie[[i]]$specie, "... ", sep = "")
+        cat("\n\t", surveyBySpecie[[i]]$species, "... ", sep = "")
         surveyBySpecie[[i]]$setAbuAvg()
         cat("Done!", sep = "")
       }
@@ -1053,7 +1053,7 @@ SmartProject <- R6Class("smartProject",
     setMeditsIndex = function() {
       cat("\nComputing MEDITS index: ", sep = "")
       for (i in 1:length(surveyBySpecie)) {
-        cat("\n\t", surveyBySpecie[[i]]$specie, "... ", sep = "")
+        cat("\n\t", surveyBySpecie[[i]]$species, "... ", sep = "")
         surveyBySpecie[[i]]$setIndSpe()
         cat("Done!", sep = "")
       }
@@ -1062,7 +1062,7 @@ SmartProject <- R6Class("smartProject",
     setStrataAbu = function() {
       cat("\nComputing weighted Number of individuals x Size x Stratum: ", sep = "")
       for (i in 1:length(surveyBySpecie)) {
-        cat("\n\t", surveyBySpecie[[i]]$specie, "... ", sep = "")
+        cat("\n\t", surveyBySpecie[[i]]$species, "... ", sep = "")
         surveyBySpecie[[i]]$abuAvg$weiFem <<- surveyBySpecie[[i]]$abuAvg$Female * sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
         surveyBySpecie[[i]]$abuAvg$weiMal <<- surveyBySpecie[[i]]$abuAvg$Male * sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
         surveyBySpecie[[i]]$abuAvg$weiUns <<- surveyBySpecie[[i]]$abuAvg$Unsex * sampMap$weightStrata[surveyBySpecie[[i]]$abuAvg$Stratum]
@@ -1175,30 +1175,30 @@ SmartProject <- R6Class("smartProject",
     plotGooSpe = function(whiSpe, whiSou) {
       if (whiSou == "Survey") {
         if (whiSpe == "All") {
-          tmp_data <- unique(rawDataSurvey[, c("Specie", "Lat", "Lon")])
+          tmp_data <- unique(rawDataSurvey[, c("Species", "Lat", "Lon")])
         } else {
-          tmp_data <- unique(rawDataSurvey[which(rawDataSurvey$Specie == whiSpe), c("Specie", "Lat", "Lon")])
+          tmp_data <- unique(rawDataSurvey[which(rawDataSurvey$Species == whiSpe), c("Species", "Lat", "Lon")])
         }
-        # levels(tmp_data[,1]) <- unique(rawDataSurvey[,"Specie"])
+        # levels(tmp_data[,1]) <- unique(rawDataSurvey[,"Species"])
 
         sampMap$plotGooSpeSur(tmp_data)
       } else {
         if (whiSpe == "All") {
-          tmp_data <- unique(rawDataFishery[, c("Specie", "Lat", "Lon")])
+          tmp_data <- unique(rawDataFishery[, c("Species", "Lat", "Lon")])
         } else {
-          tmp_data <- unique(rawDataFishery[which(rawDataFishery$Specie == whiSpe), c("Specie", "Lat", "Lon")])
+          tmp_data <- unique(rawDataFishery[which(rawDataFishery$Species == whiSpe), c("Species", "Lat", "Lon")])
         }
-        # levels(tmp_data[,1]) <- unique(rawDataFishery[,"Specie"])
+        # levels(tmp_data[,1]) <- unique(rawDataFishery[,"Species"])
 
         sampMap$plotGooSpeFis(tmp_data)
       }
     },
-    setGooPlotCohoFish = function(specie = "", sex = "Female", speCol = "", smooPoi = 500, smooBin = 0.5) {
-      cat("\n\nProcessing ", specie, " - ", sex, "... Cohort ", sep = "")
-      gooLstCoho[[specie]] <<- list()
-      gooLstCoho[[specie]][[sex]] <<- list()
+    setGooPlotCohoFish = function(species = "", sex = "Female", speCol = "", smooPoi = 500, smooBin = 0.5) {
+      cat("\n\nProcessing ", species, " - ", sex, "... Cohort ", sep = "")
+      gooLstCoho[[species]] <<- list()
+      gooLstCoho[[species]][[sex]] <<- list()
 
-      tmpMix <- fisheryBySpecie[[which(specieInFishery == specie)]]$groMixout[[sex]]
+      tmpMix <- fisheryBySpecie[[which(specieInFishery == species)]]$groMixout[[sex]]
       ageFGtbl <- table(tmpMix$FG, tmpMix$Age)
       cohAbuFG <- as.data.frame(cbind(FG = as.numeric(rownames(ageFGtbl)), ageFGtbl))
       outPalette <- rainbow(ncol(cohAbuFG) - 1)
@@ -1240,7 +1240,7 @@ SmartProject <- R6Class("smartProject",
             # trans = "log10",
             breaks = pretty(1:100, 5), limits = c(1, 100)
           ) +
-          ggtitle(paste0("Spatial Distribution of ", specie, " - Cohort ", coh_i - 2)) +
+          ggtitle(paste0("Spatial Distribution of ", species, " - Cohort ", coh_i - 2)) +
           geom_text(aes(label = FG, x = Lon, y = Lat),
             data = tmp_coo, size = 2
           ) +
@@ -1273,7 +1273,7 @@ SmartProject <- R6Class("smartProject",
             data = tmp_coo, size = 2
           ))
 
-        gooLstCoho[[specie]][[sex]][[colnames(ageFGtbl)[coh_i - 1]]] <<- mapCoho
+        gooLstCoho[[species]][[sex]][[colnames(ageFGtbl)[coh_i - 1]]] <<- mapCoho
       }
       cat(" Completed!", sep = "")
     },
@@ -1469,34 +1469,34 @@ SmartProject <- R6Class("smartProject",
         cat("\t\t-   Loaded!\n")
       }
     },
-    predictProduction = function(specie) {
+    predictProduction = function(species) {
       Prod <- matrix(data = NA, nrow(fleet$effoAllLoa), ncol = sampMap$cutFG + 1)
       lyears <- sort(as.numeric(as.character(unique(fleet$effoAllLoa$Year))))
-      thrZero <- mean(fleet$effoProdAllLoa[, specie][fleet$effoProdAllLoa[, specie] < fleet$specSett[[specie]]$threshold & fleet$effoProdAllLoa[, specie] > 0])
+      thrZero <- mean(fleet$effoProdAllLoa[, species][fleet$effoProdAllLoa[, species] < fleet$specSett[[species]]$threshold & fleet$effoProdAllLoa[, species] > 0])
       fgClms <- which(colnames(fleet$effoAllLoa) %in% as.character(seq(1, sampMap$cutFG + 1)))
       datalog <- fleet$effoAllLoa
       datalog$MonthNum <- as.factor(datalog$MonthNum)
       datalog$Year <- as.factor(datalog$Year)
-      if (fleet$specLogit[[specie]]$logit$Name == "GLM") {
-        infish <- which(predict(fleet$specLogit[[specie]]$logit$Model, datalog, type = "response") > fleet$specLogit[[specie]]$logit$Cut)
+      if (fleet$specLogit[[species]]$logit$Name == "GLM") {
+        infish <- which(predict(fleet$specLogit[[species]]$logit$Model, datalog, type = "response") > fleet$specLogit[[species]]$logit$Cut)
       } else {
-        infish <- which(predict(fleet$specLogit[[specie]]$logit$Model, datalog, type = "prob")[, 2] > fleet$specLogit[[specie]]$logit$Cut)
+        infish <- which(predict(fleet$specLogit[[species]]$logit$Model, datalog, type = "prob")[, 2] > fleet$specLogit[[species]]$logit$Cut)
       }
-      # infish <- which(predict(fleet$specLogit[[specie]]$logit$logit_f, datalog, type="response") > fleet$specLogit[[specie]]$optCut)
+      # infish <- which(predict(fleet$specLogit[[species]]$logit$logit_f, datalog, type="response") > fleet$specLogit[[species]]$optCut)
       for (i in 1:length(infish)) {
         idata <- as.numeric(fleet$effoAllLoa[infish[i], fgClms])
         iloa <- as.numeric(fleet$effoAllLoa[infish[i], "Loa"])
         iy <- which(lyears == fleet$effoAllLoa[infish[i], "Year"])
         im <- as.numeric(as.character(fleet$effoAllLoa[infish[i], "MonthNum"]))
-        ib <- fleet$resNNLS[[specie]]$bmat[which((fleet$resNNLS[[specie]]$SceMat$YEAR == iy) & (fleet$resNNLS[[specie]]$SceMat$MONTH == im)), ]
-        # Prod[infish[i]] <- sum(ib * idata * iloa) + mean(fleet$effoProdAllLoa[,specie][fleet$effoProdAllLoa[,specie] < fleet$specSett[[specie]]$threshold & fleet$effoProdAllLoa[,specie] > 0])
+        ib <- fleet$resNNLS[[species]]$bmat[which((fleet$resNNLS[[species]]$SceMat$YEAR == iy) & (fleet$resNNLS[[species]]$SceMat$MONTH == im)), ]
+        # Prod[infish[i]] <- sum(ib * idata * iloa) + mean(fleet$effoProdAllLoa[,species][fleet$effoProdAllLoa[,species] < fleet$specSett[[species]]$threshold & fleet$effoProdAllLoa[,species] > 0])
         if (sum(ib * idata) > 0) {
           Prod[infish[i], ] <- (ib * idata * iloa) + ((ib * idata) / sum(ib * idata)) * thrZero
         }
       }
       Prod[is.na(Prod)] <- 0
       colnames(Prod) <- paste("PR_", as.character(seq(1, ncol(Prod))), sep = "")
-      fleet$predProd[[specie]] <<- Prod
+      fleet$predProd[[species]] <<- Prod
     },
     simProdAll = function(selRow = numeric(0)) {
       if (length(selRow) == 0) {
@@ -1509,28 +1509,28 @@ SmartProject <- R6Class("smartProject",
       datalog$Year <- as.factor(datalog$Year)
       fgClms <- which(colnames(simEffo) %in% as.character(seq(1, sampMap$cutFG + 1)))
 
-      for (specie in names(fleet$specLogit)) {
+      for (species in names(fleet$specLogit)) {
         Prod <- matrix(data = NA, length(selRow), ncol = sampMap$cutFG + 1)
-        thrZero <- mean(fleet$effoProdAllLoa[, specie][fleet$effoProdAllLoa[, specie] < fleet$specSett[[specie]]$threshold & fleet$effoProdAllLoa[, specie] > 0])
-        if (fleet$specLogit[[specie]]$logit$Name == "GLM") {
-          infish <- which(predict(fleet$specLogit[[specie]]$logit$Model, datalog, type = "response") > fleet$specLogit[[specie]]$logit$Cut)
+        thrZero <- mean(fleet$effoProdAllLoa[, species][fleet$effoProdAllLoa[, species] < fleet$specSett[[species]]$threshold & fleet$effoProdAllLoa[, species] > 0])
+        if (fleet$specLogit[[species]]$logit$Name == "GLM") {
+          infish <- which(predict(fleet$specLogit[[species]]$logit$Model, datalog, type = "response") > fleet$specLogit[[species]]$logit$Cut)
         } else {
-          infish <- which(predict(fleet$specLogit[[specie]]$logit$Model, datalog, type = "prob")[, 2] > fleet$specLogit[[specie]]$logit$Cut)
+          infish <- which(predict(fleet$specLogit[[species]]$logit$Model, datalog, type = "prob")[, 2] > fleet$specLogit[[species]]$logit$Cut)
         }
         
         Prod[infish, ] <- do.call(rbind, lapply(split(simEffo[selRow[infish],], seq(nrow(simEffo[selRow[infish],]))),
                               FUN = function(x) getSingleProd(oneEff = as.numeric(x),
-                                                              betas = fleet$resNNLS[[specie]]$bmat,
-                                                              scenarios = fleet$resNNLS[[specie]]$SceMat,
+                                                              betas = fleet$resNNLS[[species]]$bmat,
+                                                              scenarios = fleet$resNNLS[[species]]$SceMat,
                                                               thres = thrZero,
                                                               fgs = fgClms)))
         
         Prod[is.na(Prod)] <- 0
         colnames(Prod) <- paste("PR_", as.character(seq(1, ncol(Prod))), sep = "")
         if (length(selRow) == nrow(simEffo)) {
-          simProd[[specie]] <<- Prod
+          simProd[[species]] <<- Prod
         } else {
-          simProd[[specie]][selRow, ] <<- Prod
+          simProd[[species]][selRow, ] <<- Prod
         }
       }
     },
@@ -1590,8 +1590,8 @@ SmartProject <- R6Class("smartProject",
     },
     getSimProdCost = function() {
       outProd <- numeric(nrow(simProd[[1]]))
-      for (specie in names(simProd)) {
-        outProd <- outProd + apply(simProd[[specie]], 1, sum)
+      for (species in names(simProd)) {
+        outProd <- outProd + apply(simProd[[species]], 1, sum)
       }
       tmp_Prod <- data.frame(
         Year = simEffo$Year,
@@ -1623,27 +1623,27 @@ SmartProject <- R6Class("smartProject",
       speNam <- names(simProd)
       tmp_Revenue <- cbind(simEffo[, 1:3], (matrix(NA, nrow = nrow(simEffo[, ]), ncol = length(speNam))))
       names(tmp_Revenue)[4:(4 + length(speNam) - 1)] <- speNam
-      for (specie in speNam) {
+      for (species in speNam) {
         if (timeScale == "Year") {
           tmpRev <- getFleetRevenue(
-            predProd = simProd[[specie]][selRow, ],
-            lwStat = outWeiProp[[specie]][, -1],
-            priceVec = fleet$ecoPrice[[specie]]$Price
+            predProd = simProd[[species]][selRow, ],
+            lwStat = outWeiProp[[species]][, -1],
+            priceVec = fleet$ecoPrice[[species]]$Price
           )
         } else {
           tmpRev <- getFleetRevSeason(
-            predProd = simProd[[specie]][selRow, ],
+            predProd = simProd[[species]][selRow, ],
             monthVec = tmp_Revenue$MonthNum[selRow],
-            lwStat = outWeiPropQ[[specie]],
-            priceVec = fleet$ecoPrice[[specie]]$Price
+            lwStat = outWeiPropQ[[species]],
+            priceVec = fleet$ecoPrice[[species]]$Price
           )
         }
         if (length(selRow) == nrow(simEffo)) {
-          simRevenue[[specie]] <<- tmpRev
+          simRevenue[[species]] <<- tmpRev
         } else {
-          simRevenue[[specie]][selRow, ] <<- tmpRev
+          simRevenue[[species]][selRow, ] <<- tmpRev
         }
-        tmp_Revenue[, specie] <- apply(simRevenue[[specie]], 1, sum, na.rm = TRUE)
+        tmp_Revenue[, species] <- apply(simRevenue[[species]], 1, sum, na.rm = TRUE)
       }
       if (ncol(tmp_Revenue) == 4) {
         tmp_Revenue$totRevenue <- tmp_Revenue[, 4]
@@ -1661,11 +1661,11 @@ SmartProject <- R6Class("smartProject",
         names(fleet$ecoPrice)
       )
 
-      for (specie in specList) {
-        priIdx <- which(names(fleet$ecoPrice) == specie)
-        fisIdx <- which(specieInFishery == specie)
+      for (species in specList) {
+        priIdx <- which(names(fleet$ecoPrice) == species)
+        fisIdx <- which(specieInFishery == species)
         if (is.null(fleet$ecoPrice[[priIdx]])) {
-          stop(paste0("No size/price data found for specie ", names(fleet$ecoPrice)[priIdx]))
+          stop(paste0("No size/price data found for species ", names(fleet$ecoPrice)[priIdx]))
         }
 
         vecSize <- sort(unique(c(fleet$ecoPrice[[priIdx]]$LowerBound, fleet$ecoPrice[[priIdx]]$UpperBound)))
@@ -1693,11 +1693,11 @@ SmartProject <- R6Class("smartProject",
             }
           }
         }
-        outWeiProp[[fisheryBySpecie[[fisIdx]]$specie]] <<- preRevenue
+        outWeiProp[[fisheryBySpecie[[fisIdx]]$species]] <<- preRevenue
 
 
         ## seasonal
-        outWeiPropQ[[fisheryBySpecie[[fisIdx]]$specie]] <<- list()
+        outWeiPropQ[[fisheryBySpecie[[fisIdx]]$species]] <<- list()
         for (season in c("winter", "spring", "summer", "fall")) {
           preReveSea <- data.frame(FG = 1:length(fgNames))
           preReveSea <- cbind(preReveSea, setNames(lapply(1:(length(vecSize) - 1), function(x) x <- NA), 1:(length(vecSize) - 1)))
@@ -1724,7 +1724,7 @@ SmartProject <- R6Class("smartProject",
               preReveSea[idxNArows, 2:ncol(preReveSea)] <- rep(avgLW, each = length(idxNArows))
             } 
           }
-          outWeiPropQ[[fisheryBySpecie[[fisIdx]]$specie]][[season]] <<- preReveSea
+          outWeiPropQ[[fisheryBySpecie[[fisIdx]]$species]][[season]] <<- preReveSea
         }
       }
     },
@@ -1942,8 +1942,8 @@ SmartProject <- R6Class("smartProject",
           legend.title = element_text(size = 10)
         ))
     },
-    setPlotBetaMeltYear = function(specie, year) {
-      tmp_melt_sub <- subset(fleet$betaMeltYear[[specie]], Year == year)
+    setPlotBetaMeltYear = function(species, year) {
+      tmp_melt_sub <- subset(fleet$betaMeltYear[[species]], Year == year)
       all_cell <- merge(
         x = sampMap$cutResShpFort$id,
         data.frame(
@@ -1989,7 +1989,7 @@ SmartProject <- R6Class("smartProject",
           axis.ticks.y = element_blank()
         ))
       sampMap$ggBetaFGbox <<- suppressMessages(ggplot(
-        fleet$betaMeltYear[[specie]],
+        fleet$betaMeltYear[[species]],
         aes(
           x = FishGround, y = Productivity,
           group = FishGround
@@ -2023,8 +2023,8 @@ SmartProject <- R6Class("smartProject",
           axis.ticks.y = element_blank()
         ))
     },
-    setPlotProdMeltYear = function(specie, year) {
-      tmp_melt_sub <- subset(fleet$prodMeltYear[[specie]], Year == year)
+    setPlotProdMeltYear = function(species, year) {
+      tmp_melt_sub <- subset(fleet$prodMeltYear[[species]], Year == year)
       all_cell <- merge(
         x = sampMap$cutResShpFort$id,
         data.frame(
@@ -2069,7 +2069,7 @@ SmartProject <- R6Class("smartProject",
           axis.text.y = element_text(size = 10),
           axis.ticks.y = element_blank()
         ))
-      sampMap$ggProdFGbox <<- suppressMessages(ggplot(fleet$prodMeltYear[[specie]], aes(x = FishGround, y = Production, group = FishGround)) +
+      sampMap$ggProdFGbox <<- suppressMessages(ggplot(fleet$prodMeltYear[[species]], aes(x = FishGround, y = Production, group = FishGround)) +
         geom_boxplot() +
         coord_flip() +
         geom_point(
@@ -2276,16 +2276,16 @@ SmartProject <- R6Class("smartProject",
           legend.title = element_text(size = 10)
         ))
     },
-    getNnlsModel = function(specie, minobs, thr_r2) {
+    getNnlsModel = function(species, minobs, thr_r2) {
       data <- fleet$effoProdAllLoa
       nFG <- sampMap$cutFG + 1
-      thrB <- fleet$specSett[[specie]]$threshold
-      thr0 <- mean(data[, specie][data[, specie] < thrB & data[, specie] > 0])
+      thrB <- fleet$specSett[[species]]$threshold
+      thr0 <- mean(data[, species][data[, species] < thrB & data[, species] > 0])
       naFind <- which(is.na(data) == TRUE, arr.ind = TRUE)
       if (length(naFind) > 0) data <- data[-naFind[, 1], ]
-      norow <- which(data[, which(colnames(data) == specie)] <= thrB)
+      norow <- which(data[, which(colnames(data) == species)] <= thrB)
       X0 <- data[-norow, which(colnames(data) %in% c("Year", "MonthNum", "Loa", as.character(seq(1:nFG))))]
-      Y0 <- data[-norow, which(colnames(data) == specie)]
+      Y0 <- data[-norow, which(colnames(data) == species)]
 
       # Gen Matrix of scenaria and fill by membership
       nY <- length(unique(X0$Year))
@@ -2366,8 +2366,8 @@ SmartProject <- R6Class("smartProject",
       blist[[6]] <- nfitted
       blist[[7]] <- nSce
       names(blist) <- c("bmat", "obsY", "fittedY", "nnls_r2", "SceMat", "nfitted", "nSce")
-      fleet$resNNLS[[specie]] <<- blist
-      fleet$setBetaMeltYear(specie)
+      fleet$resNNLS[[species]] <<- blist
+      fleet$setBetaMeltYear(species)
     },
     cohoDisPlot = function(whoSpe, whoCoh, whiYea, interp) {
       if (interp == FALSE) {
@@ -2380,7 +2380,7 @@ SmartProject <- R6Class("smartProject",
             distrPlotCols(
               cols = rev(topo.colors(101)), vals = round_yea,
               maxVal = ceiling(max(yea_abb)),
-              plotTitle = paste("Specie: ", specieInSurvey[whoSpe], " - All cohorts - All years", sep = ""), legendUnits = "N."
+              plotTitle = paste("Species: ", specieInSurvey[whoSpe], " - All cohorts - All years", sep = ""), legendUnits = "N."
             )
           } else {
             # 1+round(apply(surveyBySpecie[[whoSpe]]$Coh_A[,,whiYea,],1,sum)/max(apply(surveyBySpecie[[whoSpe]]$Coh_A[,,whiYea,],1,sum)), 2)*100
@@ -2390,7 +2390,7 @@ SmartProject <- R6Class("smartProject",
             distrPlotCols(
               cols = rev(topo.colors(101)), vals = round_yea,
               maxVal = ceiling(max(yea_abb)),
-              plotTitle = paste("Specie: ", specieInSurvey[whoSpe], " - All cohorts - Year: ", whiYea, sep = ""),
+              plotTitle = paste("Species: ", specieInSurvey[whoSpe], " - All cohorts - Year: ", whiYea, sep = ""),
               legendUnits = "N."
             )
           }
@@ -2402,7 +2402,7 @@ SmartProject <- R6Class("smartProject",
             distrPlotCols(
               cols = rev(topo.colors(101)), vals = round_yea,
               maxVal = ceiling(max(yea_abb)),
-              plotTitle = paste("Specie: ", specieInSurvey[whoSpe], " - Cohort: ", whoCoh, "- All years", sep = ""),
+              plotTitle = paste("Species: ", specieInSurvey[whoSpe], " - Cohort: ", whoCoh, "- All years", sep = ""),
               legendUnits = "N."
             )
           } else {
@@ -2412,7 +2412,7 @@ SmartProject <- R6Class("smartProject",
             distrPlotCols(
               cols = rev(topo.colors(101)), vals = round_yea,
               maxVal = ceiling(max(yea_abb)),
-              plotTitle = paste("Specie: ", specieInSurvey[whoSpe], " - Cohort: ", whoCoh, " - Year: ", whiYea, sep = ""),
+              plotTitle = paste("Species: ", specieInSurvey[whoSpe], " - Cohort: ", whoCoh, " - Year: ", whiYea, sep = ""),
               legendUnits = "N."
             )
           }
@@ -2426,7 +2426,7 @@ SmartProject <- R6Class("smartProject",
             distrPlotCols(
               cols = rev(topo.colors(101)), vals = round_yea,
               maxVal = ceiling(max(yea_abb)),
-              plotTitle = paste("Specie: ", specieInSurvey[whoSpe], " - All cohorts - All years", sep = ""),
+              plotTitle = paste("Species: ", specieInSurvey[whoSpe], " - All cohorts - All years", sep = ""),
               legendUnits = "N."
             )
           } else {
@@ -2436,7 +2436,7 @@ SmartProject <- R6Class("smartProject",
             distrPlotCols(
               cols = rev(topo.colors(101)), vals = round_yea,
               maxVal = ceiling(max(yea_abb)),
-              plotTitle = paste("Specie: ", specieInSurvey[whoSpe], " - All cohorts - Year: ", whiYea, sep = ""),
+              plotTitle = paste("Species: ", specieInSurvey[whoSpe], " - All cohorts - Year: ", whiYea, sep = ""),
               legendUnits = "N."
             )
           }
@@ -2448,7 +2448,7 @@ SmartProject <- R6Class("smartProject",
             distrPlotCols(
               cols = rev(topo.colors(101)), vals = round_yea,
               maxVal = ceiling(max(yea_abb)),
-              plotTitle = paste("Specie: ", specieInSurvey[whoSpe], " - Cohort: ", whoCoh, "- All years", sep = ""),
+              plotTitle = paste("Species: ", specieInSurvey[whoSpe], " - Cohort: ", whoCoh, "- All years", sep = ""),
               legendUnits = "N."
             )
           } else {
@@ -2458,7 +2458,7 @@ SmartProject <- R6Class("smartProject",
             distrPlotCols(
               cols = rev(topo.colors(101)), vals = round_yea,
               maxVal = ceiling(max(yea_abb)),
-              plotTitle = paste("Specie: ", specieInSurvey[whoSpe], " - Cohort: ", whoCoh, " - Year: ", whiYea, sep = ""),
+              plotTitle = paste("Species: ", specieInSurvey[whoSpe], " - Cohort: ", whoCoh, " - Year: ", whiYea, sep = ""),
               legendUnits = "N."
             )
           }
@@ -2484,7 +2484,7 @@ SmartProject <- R6Class("smartProject",
     calcCoh_A_Survey = function(ind_num) {
       Pop <- surveyBySpecie[[ind_num]]$LFDPop
       LC <- surveyBySpecie[[ind_num]]$lengClas[-length(surveyBySpecie[[ind_num]]$lengClas)]
-      sp <- surveyBySpecie[[ind_num]]$specie
+      sp <- surveyBySpecie[[ind_num]]$species
       nc <- surveyBySpecie[[ind_num]]$nCoho
       surveyBySpecie[[ind_num]]$Coh_A <<- array(dim = c(sampMap$nCells, nc, length(surveyBySpecie[[ind_num]]$year), 2))
       for (y in 1:length(surveyBySpecie[[ind_num]]$year)) {
@@ -2508,7 +2508,7 @@ SmartProject <- R6Class("smartProject",
     calcCoh_A_Fishery = function(ind_num) {
       Pop <- fisheryBySpecie[[ind_num]]$LFDPop
       LC <- fisheryBySpecie[[ind_num]]$lengClas[-length(fisheryBySpecie[[ind_num]]$lengClas)]
-      sp <- fisheryBySpecie[[ind_num]]$specie
+      sp <- fisheryBySpecie[[ind_num]]$species
       nc <- fisheryBySpecie[[ind_num]]$nCoho
       fisheryBySpecie[[ind_num]]$Coh_A <<- array(dim = c(sampMap$nCells, nc, length(fisheryBySpecie[[ind_num]]$year), 2))
       for (y in 1:length(fisheryBySpecie[[ind_num]]$year)) {
@@ -2591,7 +2591,7 @@ SmartProject <- R6Class("smartProject",
 #'
 #' @format \code{\link{R6Class}} object.
 #'
-#' @field specie Name of the specie.
+#' @field species Name of the species.
 #' @field year Years in the time-serie.
 #' @field rawLFD data.frame, raw length frequency distribution.
 #' @field abuAvg data.frame, average abundances by depth' stratum.
@@ -2615,9 +2615,9 @@ SmartProject <- R6Class("smartProject",
 #'   \item{\code{setYears()}}{This method is used to store the years in the
 #'   provided time-serie}
 #'   \item{\code{setSpecie()}}{This method is used to store the name of
-#'   the specie of the initial raw data}
+#'   the species of the initial raw data}
 #'   \item{\code{setLClass()}}{This method is used to store the unique
-#'   length values of the sampled specie}
+#'   length values of the sampled species}
 #'   \item{\code{setDepth(bathyMatrix)}}{This method is used to assign the
 #'   depth value corresponding to each sampling location}
 #'   \item{\code{setStratum(vecStrata)}}{This method is used to set the
@@ -2660,7 +2660,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
   portable = FALSE,
   class = TRUE,
   public = list(
-    specie = NULL,
+    species = NULL,
     year = NULL,
     rawLFD = NULL,
     abuAvg = NULL,
@@ -2695,7 +2695,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
       year <<- sort(unique(rawLFD[, "Date"]), decreasing = FALSE)
     },
     setSpecie = function() {
-      specie <<- unique(rawLFD[, "Specie"])
+      species <<- unique(rawLFD[, "Species"])
     },
     setLClass = function() {
       lengClas <<- seq(from = min(rawLFD[, "Class"]), to = max(rawLFD[, "Class"]), by = 1)
@@ -2742,7 +2742,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
         tmp_spre <- rawLFD[!is.na(rawLFD$numFG), c("Date", "Class", "numFG", sex)]
 
         num_sex <- sum(tmp_spre[, 4])
-        cat("Found", num_sex, sex, as.character(specie), "samples\n", sep = " ")
+        cat("Found", num_sex, sex, as.character(species), "samples\n", sep = " ")
 
         spreDist <- data.frame(
           UTC = rep(tmp_spre$Date, tmp_spre[, 4]),
@@ -3068,7 +3068,7 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
 #'
 #' @format \code{\link{R6Class}} object.
 #'
-#' @field specie Name of the specie.
+#' @field species Name of the species.
 #' @field year Years of the time serie.
 #' @field rawLFD data.frame, raw length frequency distribution.
 #' @field abuAvg data.frame, average abundances by depth' stratum.
@@ -3092,9 +3092,9 @@ SurveyBySpecie <- R6Class("SurveyBySpecie",
 #'   \item{\code{setYears()}}{This method is used to store the years in the
 #'   provided time-serie}
 #'   \item{\code{setSpecie()}}{This method is used to store the name of
-#'   the specie of the initial raw data}
+#'   the species of the initial raw data}
 #'   \item{\code{setLClass()}}{This method is used to store the unique
-#'   length values of the sampled specie}
+#'   length values of the sampled species}
 #'   \item{\code{setDepth(bathyMatrix)}}{This method is used to assign the
 #'   depth value corresponding to each sampling location}
 #'   \item{\code{setStratum(vecStrata)}}{This method is used to set the
@@ -3136,7 +3136,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
   portable = FALSE,
   class = TRUE,
   public = list(
-    specie = NULL,
+    species = NULL,
     year = NULL,
     rawLFD = NULL,
     lengClas = NULL,
@@ -3172,7 +3172,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
       year <<- sort(unique(years(rawLFD[, "Date"])), decreasing = FALSE)
     },
     setSpecie = function() {
-      specie <<- unique(rawLFD[, "Specie"])
+      species <<- unique(rawLFD[, "Species"])
     },
     setLClass = function() {
       lengClas <<- seq(from = min(rawLFD[, "Class"]), to = max(rawLFD[, "Class"]), by = 1)
@@ -3199,7 +3199,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
         tmp_spre <- rawLFD[!is.na(rawLFD$numFG), c("Date", "Class", "numFG", sex)]
 
         num_sex <- sum(tmp_spre[, 4])
-        cat("Found", num_sex, sex, as.character(specie), "samples\n", sep = " ")
+        cat("Found", num_sex, sex, as.character(species), "samples\n", sep = " ")
 
         spreDist <- data.frame(
           UTC = rep(tmp_spre$Date, tmp_spre[, 4]),
@@ -3570,9 +3570,9 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 #' @field registerIds character, vessel identification from fleet register.
 #' @field predProd list of matrix, simulated production.
 #' @field productionIds list of int, vessel ids with production data available.
-#' @field prodSpec list of character, specie with production data.
-#' @field specSett list of DF, logit parameter settings by specie.
-#' @field specLogit list, logit results by specie.
+#' @field prodSpec list of character, species with production data.
+#' @field specSett list of DF, logit parameter settings by species.
+#' @field specLogit list, logit results by species.
 #' @field effortIds list of int, vessel ids with effort data available.
 #' @field idsEffoProd list of int, merged vessel ids with both effort and
 #' production data available.
@@ -3584,11 +3584,11 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 #' @field daysAtSea data.frame, days at sea index by vessel, year, month with
 #' loa and Kw data.
 #' @field prodIndex data.frame, production index by vessel, year and month.
-#' @field resNNLS list, lander results by specie.
-#' @field betaMeltYear list of DF, melted yearly productivity by specie.
-#' @field prodMeltYear list of DF, melted yearly production by specie.
+#' @field resNNLS list, lander results by species.
+#' @field betaMeltYear list of DF, melted yearly productivity by species.
+#' @field prodMeltYear list of DF, melted yearly production by species.
 #' @field fishPoinPara data.frame, fishing point parameters.
-#' @field ecoPrice list of DF, price/size by specie.
+#' @field ecoPrice list of DF, price/size by species.
 #' @field inSpatialReg data.frame, input for spatial index regression.
 #' @field inEffortReg data.frame, input for effort index regression.
 #' @field inProductionReg data.frame, input for production index regression.
@@ -3645,22 +3645,22 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 #'   This method is used to show the speed/depth profile}
 #'   \item{\code{setEffortIds()}}{This method is used to set the distinct
 #'   vessel' ids in the effort dataset}
-#'   \item{\code{setProdSpec()}}{This method is used to set the distinct specie
+#'   \item{\code{setProdSpec()}}{This method is used to set the distinct species
 #'   in the production dataset}
-#'   \item{\code{setBetaMeltYear(specie)}}{This method is used to set the melted
-#'   yearly productivity by specie}
-#'   \item{\code{setProdMeltYear(specie)}}{This method is used to set the melted
-#'   yearly production by specie}
-#'   \item{\code{plotTotProd(specie)}}{This method is used to plot the total
-#'   production by specie}
-#'   \item{\code{plotNNLS(specie, thresR2)}}{This method is used to show the
+#'   \item{\code{setBetaMeltYear(species)}}{This method is used to set the melted
+#'   yearly productivity by species}
+#'   \item{\code{setProdMeltYear(species)}}{This method is used to set the melted
+#'   yearly production by species}
+#'   \item{\code{plotTotProd(species)}}{This method is used to plot the total
+#'   production by species}
+#'   \item{\code{plotNNLS(species, thresR2)}}{This method is used to show the
 #'   NNLS results}
-#'   \item{\code{setSpecSettItm(specie, thresh, brea, max_xlim)}}{
-#'   This method is used to set the logit parameters by specie}
+#'   \item{\code{setSpecSettItm(species, thresh, brea, max_xlim)}}{
+#'   This method is used to set the logit parameters by species}
 #'   \item{\code{plotLogitROC(selSpecie)}}{This method is used to show the
 #'   ROC of the logit results}
 #'   \item{\code{setSpecLogitConf(selSpecie, cutoff)}}{This method is used to
-#'   set the confusion matrix of the logit results by specie}
+#'   set the confusion matrix of the logit results by species}
 #'   \item{\code{setLogitTrain(selSpecie, train, cp_val, cv_val)}}{
 #'   This method is used to setup the train dataset for the logit model}
 #'   \item{\code{setLogitTest(selSpecie, test)}}{This method is used to setup
@@ -3675,7 +3675,7 @@ FisheryBySpecie <- R6Class("FisheryBySpecie",
 #'   set the confusion matrix of the logit results}
 #'   \item{\code{setSpecLogit(selSpecie, selModel, cp, cv)}}{This method is
 #'    a wrapper function to get the logit model}
-#'   \item{\code{getMatSpeLand(specie)}}{This method is used to get the input
+#'   \item{\code{getMatSpeLand(species)}}{This method is used to get the input
 #'   data for the logit model}
 #'   \item{\code{setEffoProdAll()}}{This method is used to combine the
 #'   effort/production data from the yearly list into a single data.frame}
@@ -3977,45 +3977,45 @@ FishFleet <- R6Class("fishFleet",
       resNNLS <<- vector(mode = "list", length = length(prodSpec[["Cross"]]))
       names(resNNLS) <<- sort(prodSpec[["Cross"]])
     },
-    setBetaMeltYear = function(specie) {
+    setBetaMeltYear = function(species) {
       tmp_df <- data.frame(
-        Year = names(effoProd)[resNNLS[[specie]]$SceMat$YEAR],
-        resNNLS[[specie]]$bmat
+        Year = names(effoProd)[resNNLS[[species]]$SceMat$YEAR],
+        resNNLS[[species]]$bmat
       )
       tmp_df_agg <- aggregate(. ~ Year, tmp_df, sum)
-      betaMeltYear[[specie]] <<- melt(
+      betaMeltYear[[species]] <<- melt(
         data = tmp_df_agg, id.vars = "Year",
         measure.vars = c(2:ncol(tmp_df_agg)),
         variable.name = "FishGround", value.name = "Productivity"
       )
     },
-    setProdMeltYear = function(specie) {
+    setProdMeltYear = function(species) {
       tmp_df <- data.frame(
         Year = as.character(effoAllLoa[, 1]),
-        predProd[[specie]]
+        predProd[[species]]
       )
       tmp_df_agg <- aggregate(. ~ Year, tmp_df, sum)
-      prodMeltYear[[specie]] <<- melt(
+      prodMeltYear[[species]] <<- melt(
         data = tmp_df_agg, id.vars = "Year",
         measure.vars = c(2:ncol(tmp_df_agg)),
         variable.name = "FishGround", value.name = "Production"
       )
     },
-    plotTotProd = function(specie) {
-      year_Prod <- aggregate(. ~ Year, prodMeltYear[[specie]][, c(1, 3)], sum)
+    plotTotProd = function(species) {
+      year_Prod <- aggregate(. ~ Year, prodMeltYear[[species]][, c(1, 3)], sum)
       year_Prod[, 1] <- as.numeric(as.character(year_Prod[, 1]))
       tot_prod <- ggplot_TotalProduction(year_Prod)
-      fg_prod <- ggplot_FGProduction(prodMeltYear[[specie]])
+      fg_prod <- ggplot_FGProduction(prodMeltYear[[species]])
       grid.arrange(tot_prod,
         fg_prod,
         layout_matrix = rbind(c(1, 1, 2), c(1, 1, 2)),
         top = "Production"
       )
     },
-    plotNNLS = function(specie, thresR2) {
+    plotNNLS = function(species, thresR2) {
       tmp_df <- data.frame(
         R2 = "R2",
-        Values = as.numeric(resNNLS[[specie]][["nnls_r2"]])
+        Values = as.numeric(resNNLS[[species]][["nnls_r2"]])
       )
       bp <- suppressMessages(
         ggplot(tmp_df, aes(x = R2, y = Values)) +
@@ -4040,8 +4040,8 @@ FishFleet <- R6Class("fishFleet",
           )
       )
       tmp_reg <- data.frame(
-        Observed = resNNLS[[specie]]$obsY,
-        Fitted = resNNLS[[specie]]$fittedY
+        Observed = resNNLS[[species]]$obsY,
+        Fitted = resNNLS[[species]]$fittedY
       )
 
       reg_p <- suppressMessages(
@@ -4066,8 +4066,8 @@ FishFleet <- R6Class("fishFleet",
         grid.arrange(reg_p, bp, layout_matrix = rbind(c(1, 1, 2), c(1, 1, 2)))
       )
     },
-    setSpecSettItm = function(specie, thresh, brea, max_xlim) {
-      specSett[[specie]] <<- data.frame(
+    setSpecSettItm = function(species, thresh, brea, max_xlim) {
+      specSett[[species]] <<- data.frame(
         threshold = thresh,
         breaks = brea,
         max_x = max_xlim
@@ -4180,11 +4180,11 @@ FishFleet <- R6Class("fishFleet",
       # Confusion
       setLogitConf(selSpecie, test)
     },
-    getMatSpeLand = function(specie) {
+    getMatSpeLand = function(species) {
       tmp_mat <- effoProdAllLoa[, c(
         3:(ncol(dayEffoMatr[[1]])),
         which(colnames(effoProdAllLoa) == "Loa"),
-        which(colnames(effoProdAllLoa) == specie)
+        which(colnames(effoProdAllLoa) == species)
       )]
       tmp_mat$MonthNum <- as.factor(tmp_mat$MonthNum)
       return(tmp_mat)
@@ -4842,8 +4842,8 @@ SampleMap <- R6Class("sampleMap",
             axis.title.y = element_text(size = 7)
           ) +
           geom_jitter(
-            data = rawSampCoo[, c("Lon", "Lat", "Specie")],
-            aes(x = Lon, y = Lat, shape = Specie, color = Specie),
+            data = rawSampCoo[, c("Lon", "Lat", "Species")],
+            aes(x = Lon, y = Lat, shape = Species, color = Species),
             size = 1, width = 0.1, height = 0.1, alpha = 0.35
           ) +
           geom_point(
@@ -4888,8 +4888,8 @@ SampleMap <- R6Class("sampleMap",
             axis.title.y = element_text(size = 7)
           ) +
           geom_jitter(
-            data = rawSampCoo[, c("Lon", "Lat", "Specie")],
-            aes(x = Lon, y = Lat, shape = Specie, color = Specie),
+            data = rawSampCoo[, c("Lon", "Lat", "Species")],
+            aes(x = Lon, y = Lat, shape = Species, color = Species),
             size = 1, width = 0.1, height = 0.1, alpha = 0.35
           ) +
           geom_point(
@@ -5005,12 +5005,12 @@ SampleMap <- R6Class("sampleMap",
     setSampColScale = function(fac_col) {
       myColors <- brewer.pal(length(fac_col), "Set1")
       names(myColors) <- fac_col
-      sampColScale <<- scale_colour_manual(name = "Specie", values = myColors)
+      sampColScale <<- scale_colour_manual(name = "Species", values = myColors)
     },
     plotGooSpeSur = function(poi_data) {
       temp_pos <- suppressMessages(gooGrid + geom_jitter(
         data = poi_data,
-        aes(x = Lon, y = Lat, shape = Specie, color = Specie),
+        aes(x = Lon, y = Lat, shape = Species, color = Species),
         width = 0.05, height = 0.05, alpha = 0.95
       ) + sampColScale)
       suppressWarnings(print(temp_pos))
@@ -5018,11 +5018,11 @@ SampleMap <- R6Class("sampleMap",
     plotGooSpeFis = function(poi_data) {
       temp_pos <- suppressMessages(gooGrid + geom_jitter(
         data = poi_data,
-        aes(x = Lon, y = Lat, shape = Specie, color = Specie),
+        aes(x = Lon, y = Lat, shape = Species, color = Species),
         width = 0.05, height = 0.05, alpha = 0.95
       ))
       # temp_pos <- gooGrid + geom_jitter(data = poi_data,
-      #                             aes(x = Lon, y = Lat, shape = Specie, color = Specie),
+      #                             aes(x = Lon, y = Lat, shape = Species, color = Species),
       #                             width = 0.05, height = 0.05, alpha = 0.95)
       # print(temp_pos)
       suppressWarnings(print(temp_pos))

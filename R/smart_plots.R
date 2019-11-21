@@ -956,7 +956,7 @@ set_spatRelFreq <- function(inSpat) {
 }
 
 
-### Single Specie Assessment ####
+### Single Species Assessment ####
 
 ggplot_SSBsingle <- function(choSpecie, assData) {
   suppressMessages(
