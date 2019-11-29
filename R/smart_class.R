@@ -4358,10 +4358,14 @@ FishFleet <- R6Class("fishFleet",
       effoProd <<- list()
       cat("\nCreating Effort x Production matrix\n", sep = "")
       for (i in intersect(names(dayEffoMatr), names(prodMatr))) {
-        cat(i, "... ", sep = "")
-        tmp_effo <- dayEffoMatr[[i]]
-        tmp_prod <- prodMatr[[i]]
-        effoProd[[i]] <<- sqldf("select * from tmp_effo, tmp_prod where I_NCEE = NUMUE and DATE >= UTC_S and DATE <= UTC_E")
+          cat(i, "... ", sep = "")
+          tmp_effo <- dayEffoMatr[[i]]
+          tmp_prod <- prodMatr[[i]]
+          tmp_effoProd <- merge(x = cbind(tmp_effo, NUMUE = tmp_effo$I_NCEE), y = tmp_prod, by.x = "I_NCEE", by.y = "NUMUE")
+          tmp_ids <- which(tmp_effoProd$DATE >= tmp_effoProd$UTC_S & tmp_effoProd$DATE <= tmp_effoProd$UTC_E)
+          effoProd[[i]] <- tmp_effoProd[tmp_ids,]
+          rm(tmp_effo, tmp_prod, tmp_effoProd)
+          gc()
       }
       cat("Done!\n")
     },

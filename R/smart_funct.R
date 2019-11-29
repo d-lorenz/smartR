@@ -356,7 +356,7 @@ genBanEffo <- function(effoPatt, set0) {
 
 getSingleProd <- function(oneEff, betas, scenarios, thres, fgs){
   oneEff <- as.numeric(oneEff)
-  curScen <- which((scenarios$YEAR == oneEff[1]) & (scenarios$MONTH == oneEff[3]))
+  curScen <- which((scenarios$YEAR == oneEff[2]) & (scenarios$MONTH == oneEff[3]))
   ib <- betas[curScen, ]
   if (sum(ib * oneEff[fgs]) > 0) {
     return((ib * oneEff[fgs] * oneEff[length(oneEff)]) + ((ib * oneEff[fgs]) / sum(ib * oneEff[fgs])) * thres)
