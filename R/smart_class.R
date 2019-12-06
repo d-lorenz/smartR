@@ -4363,7 +4363,7 @@ FishFleet <- R6Class("fishFleet",
           tmp_prod <- prodMatr[[i]]
           tmp_effoProd <- merge(x = cbind(tmp_effo, NUMUE = tmp_effo$I_NCEE), y = tmp_prod, by.x = "I_NCEE", by.y = "NUMUE")
           tmp_ids <- which(tmp_effoProd$DATE >= tmp_effoProd$UTC_S & tmp_effoProd$DATE <= tmp_effoProd$UTC_E)
-          effoProd[[i]] <- tmp_effoProd[tmp_ids,]
+          effoProd[[i]] <<- tmp_effoProd[tmp_ids,]
           rm(tmp_effo, tmp_prod, tmp_effoProd)
           gc()
       }
