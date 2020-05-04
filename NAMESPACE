@@ -18,7 +18,6 @@ import("sqldf")
 import("chron")
 import("rgeos")
 import("caret")
-importFrom("clues", "get_CH")
 importFrom("cluster", "silhouette")
 importFrom("spdep", "poly2nb", "nbcosts", "nb2listw", "mstree", "skater")
 importFrom("marmap", "getNOAA.bathy", "get.depth", "get.area", "fortify.bathy",
