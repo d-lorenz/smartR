@@ -1,29 +1,6 @@
 
 # SmartR Plots ----
 
-# ## Survey - Hauls x Stratum x Year ----
-# ggplot_surveyStrataYear = function(df_uniHaul, specieName){
-#   return(
-#     suppressMessages(
-#       ggplot() +
-#         geom_bin2d(data = df_uniHaul,
-#                    mapping = aes(x = Year, y = Stratum)) +
-#         scale_fill_gradient(low = "#F0F8FF", high = "#1C86EE") +
-#         geom_text(data = data.frame(table(df_uniHaul$Year, df_uniHaul$Stratum)),
-#                   mapping = aes(y = Var2, x = Var1, label = Freq)) +
-#         theme_tufte(base_size = 14, ticks=F) +
-#         ggtitle(paste("Number of Hauls x Year with ", specieName, sep = "")) +
-#         theme(legend.position = "none",
-#               plot.title = element_text(size = 14),
-#               axis.text.x = element_text(size = 10),
-#               axis.title = element_blank(),
-#               panel.grid = element_line(size = 0.5, linetype = 2, colour = "grey20"),
-#               axis.text.y = element_text(size = 10),
-#               axis.ticks.y = element_blank())
-#     )
-#   )
-# }
-
 ## Pre-Sim - Production Index x Year Boxplot ----
 ggplot_prodIndBoxplot <- function(df_ProdInde) {
   return(
@@ -252,20 +229,20 @@ ggplot_betasBoxplot <- function(df_YearFGprod, int_hline) {
 ggplot_registerDispatch <- function(curRegister, selPlot) {
   suppressWarnings(
     switch(selPlot,
-      "Summary" = grid.arrange(ggplot_registerMainGear(df_Register = curRegister),
-        ggplot_registerSecGear(df_Register = curRegister),
-        ggplot_registerHullMaterial(df_Register = curRegister[!is.na(curRegister$Hull.Material), ]),
-        ggplot_registerConstYear(df_Register = curRegister),
-        ggplot_registerLoa(df_Register = curRegister),
-        ggplot_registerMainPower(df_Register = curRegister),
-        layout_matrix = rbind(c(1, 2, 3), c(4, 5, 6))
-      ),
-      "Main Gear" = print(ggplot_registerMainGear(df_Register = curRegister)),
-      "Secondary Gear" = print(ggplot_registerSecGear(df_Register = curRegister)),
-      "Hull Material" = print(ggplot_registerHullMaterial(df_Register = curRegister[!is.na(curRegister$Hull.Material), ])),
-      "Construction Year" = print(ggplot_registerConstYear(df_Register = curRegister)),
-      "Length Over All" = print(ggplot_registerLoa(df_Register = curRegister)),
-      "Main Power" = print(ggplot_registerMainPower(df_Register = curRegister))
+           "Summary" = grid.arrange(ggplot_registerMainGear(df_Register = curRegister),
+                                    ggplot_registerSecGear(df_Register = curRegister),
+                                    ggplot_registerHullMaterial(df_Register = curRegister[!is.na(curRegister$Hull.Material), ]),
+                                    ggplot_registerConstYear(df_Register = curRegister),
+                                    ggplot_registerLoa(df_Register = curRegister),
+                                    ggplot_registerMainPower(df_Register = curRegister),
+                                    layout_matrix = rbind(c(1, 2, 3), c(4, 5, 6))
+           ),
+           "Main Gear" = print(ggplot_registerMainGear(df_Register = curRegister)),
+           "Secondary Gear" = print(ggplot_registerSecGear(df_Register = curRegister)),
+           "Hull Material" = print(ggplot_registerHullMaterial(df_Register = curRegister[!is.na(curRegister$Hull.Material), ])),
+           "Construction Year" = print(ggplot_registerConstYear(df_Register = curRegister)),
+           "Length Over All" = print(ggplot_registerLoa(df_Register = curRegister)),
+           "Main Power" = print(ggplot_registerMainPower(df_Register = curRegister))
     )
   )
 }
@@ -327,8 +304,8 @@ ggplot_registerHullMaterial <- function(df_Register) {
         geom_bar(
           data = df_Register,
           mapping = aes_(~factor(Hull.Material,
-            levels = c(1, 2, 3, 4, 5),
-            labels = c("Wood", "Metal", "Plastic", "Other", "Unknown")
+                                 levels = c(1, 2, 3, 4, 5),
+                                 labels = c("Wood", "Metal", "Plastic", "Other", "Unknown")
           ))
         ) +
         theme_tufte(base_size = 14, ticks = F) +
@@ -526,7 +503,7 @@ set_ggCatchLine <- function(df_birth) {
         axis.ticks.y = element_blank()
       )
   )
-
+  
   if (length(unique(df_birth$Birth)) <= 12) {
     tmpPlot <- tmpPlot + scale_color_brewer(palette = "Paired")
   } else {
@@ -655,7 +632,7 @@ set_ggTausBox <- function(df_taus, tauPalette, numCoho) {
   names(cohoPreci) <- c("Iter", "Cohort", "Value")
   cohoPreci$Cohort <- factor(as.numeric(cohoPreci$Cohort), levels = 1:(numCoho))
   stsPreci <- boxplot.stats(cohoPreci$Value)$stats ## from: http://stackoverflow.com/questions/21533158/remove-outliers-fully-from-multiple-boxplots-made-with-ggplot2-in-r-and-display
-
+  
   cohoPreciGG <- suppressMessages(
     ggplot(cohoPreci, aes_(x = ~Cohort, y = ~Value, fill = ~Cohort)) +
       geom_boxplot(alpha = 0.6, outlier.color = "grey30", outlier.size = 0.35, notch = TRUE) +
@@ -674,7 +651,7 @@ set_ggTausBox <- function(df_taus, tauPalette, numCoho) {
       ) +
       coord_cartesian(ylim = c(stsPreci[2] / 2, max(stsPreci) * 1.25)) ## from: http://stackoverflow.com/questions/21533158/remove-outliers-fully-from-multiple-boxplots-made-with-ggplot2-in-r-and-display
   )
-
+  
   return(cohoPreciGG)
 }
 
@@ -721,16 +698,16 @@ set_ggChainScatter <- function(gg_DFscat, meanL, meanK) {
           size = 0.25, alpha = 0.25
         ) +
         annotate("point",
-          x = meanL, y = meanK, color = "goldenrod1",
-          shape = 42, size = 12, alpha = 0.9
+                 x = meanL, y = meanK, color = "goldenrod1",
+                 shape = 42, size = 12, alpha = 0.9
         ) +
         annotate("text",
-          x = Inf, y = Inf,
-          label = paste("LHat = ", round(meanL, 2),
-            "\nKHat = ", round(meanK, 3),
-            sep = ""
-          ),
-          hjust = 1, vjust = 1, color = "goldenrod1", fontface = "bold"
+                 x = Inf, y = Inf,
+                 label = paste("LHat = ", round(meanL, 2),
+                               "\nKHat = ", round(meanK, 3),
+                               sep = ""
+                 ),
+                 hjust = 1, vjust = 1, color = "goldenrod1", fontface = "bold"
         ) +
         scale_color_brewer(palette = "Dark2", "Chain") +
         theme_tufte(base_size = 14, ticks = F) +
@@ -756,21 +733,21 @@ set_ggChainScatter <- function(gg_DFscat, meanL, meanK) {
 ## Length Frequency Distribution Histogram ----
 set_ggHistLfdTot <- function(inLfd) {
   suppressMessages(ggplot(inLfd, aes_(x = ~Length, y = ~..count.., fill = ~factor(1))) +
-    geom_histogram(bins = 50, alpha = 0.7, col = "grey10") +
-    # annotate("text", x = 0, y = Inf, hjust = 0, vjust = 1,
-    #          family="serif", label = "Absolute frequency of \nlength values") +
-    geom_vline(xintercept = mean(inLfd$Length), col = "grey90", lwd = 0.6, lty = 2) +
-    scale_x_continuous(breaks = pretty(inLfd$Length, 10)) +
-    theme_tufte(base_size = 14, ticks = F) +
-    theme(
-      legend.position = "none",
-      panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
-      axis.text.x = element_text(size = 8),
-      axis.title.x = element_text(size = 10),
-      axis.text.y = element_text(size = 8),
-      axis.title.y = element_blank(),
-      axis.ticks.y = element_blank()
-    ))
+                     geom_histogram(bins = 50, alpha = 0.7, col = "grey10") +
+                     # annotate("text", x = 0, y = Inf, hjust = 0, vjust = 1,
+                     #          family="serif", label = "Absolute frequency of \nlength values") +
+                     geom_vline(xintercept = mean(inLfd$Length), col = "grey90", lwd = 0.6, lty = 2) +
+                     scale_x_continuous(breaks = pretty(inLfd$Length, 10)) +
+                     theme_tufte(base_size = 14, ticks = F) +
+                     theme(
+                       legend.position = "none",
+                       panel.grid = element_line(size = 0.05, linetype = 2, colour = "grey20"),
+                       axis.text.x = element_text(size = 8),
+                       axis.title.x = element_text(size = 10),
+                       axis.text.y = element_text(size = 8),
+                       axis.title.y = element_blank(),
+                       axis.ticks.y = element_blank()
+                     ))
 }
 
 ## UTC Coverage Histogram ----
@@ -779,8 +756,8 @@ set_ggHistUtcTot <- function(inLfd) {
     ggplot(data.frame(UTC = unique(inLfd$UTC)), aes_(x = ~UTC, y = ~..count.., fill = ~factor(1))) +
       geom_histogram(bins = 100, alpha = 0.7) +
       annotate("text",
-        x = -Inf, y = Inf, hjust = 0, vjust = 1,
-        family = "serif", label = "Time coverage"
+               x = -Inf, y = Inf, hjust = 0, vjust = 1,
+               family = "serif", label = "Time coverage"
       ) +
       theme_tufte(base_size = 14, ticks = F) +
       theme(
@@ -893,13 +870,13 @@ set_spatAbbTbl <- function(inSpat) {
     AbsFreq = inSpat$Freq,
     RelFreq = inSpat$relFreq
   )
-
+  
   fgAbbTheme <- gridExtra::ttheme_default(
     core = list(fg_params = list(cex = 0.4)),
     colhead = list(fg_params = list(cex = 0.6)),
     rowhead = list(fg_params = list(cex = 0.4))
   )
-
+  
   return(tableGrob(out_FgTbl, theme = fgAbbTheme))
 }
 
@@ -912,9 +889,9 @@ set_spatAbsFreq <- function(inSpat) {
       scale_y_continuous(breaks = pretty(inSpat$Freq, n = 5)) +
       ggtitle("Absolute number of obsevartions\nin each fishing ground") +
       annotate("text",
-        x = 1:nrow(inSpat), y = inSpat$Freq + max(inSpat$Freq) / 20,
-        hjust = 0.5, family = "serif", size = 3,
-        label = ifelse(inSpat$Freq == 0, "", inSpat$Freq)
+               x = 1:nrow(inSpat), y = inSpat$Freq + max(inSpat$Freq) / 20,
+               hjust = 0.5, family = "serif", size = 3,
+               label = ifelse(inSpat$Freq == 0, "", inSpat$Freq)
       ) +
       theme(
         legend.position = "none",
@@ -938,9 +915,9 @@ set_spatRelFreq <- function(inSpat) {
       scale_y_continuous(breaks = pretty(inSpat$relFreq, n = 5)) +
       ggtitle("Relative number of obsevartions\nin each fishing ground") +
       annotate("text",
-        x = 1:nrow(inSpat), y = inSpat$relFreq + max(inSpat$relFreq) / 20,
-        hjust = 0.5, family = "serif", size = 3,
-        label = ifelse(inSpat$relFreq == 0, "", inSpat$relFreq)
+               x = 1:nrow(inSpat), y = inSpat$relFreq + max(inSpat$relFreq) / 20,
+               hjust = 0.5, family = "serif", size = 3,
+               label = ifelse(inSpat$relFreq == 0, "", inSpat$relFreq)
       ) +
       theme(
         legend.position = "none",
@@ -964,7 +941,7 @@ ggplot_SSBsingle <- function(choSpecie, assData) {
       geom_point() +
       geom_line() +
       geom_ribbon(aes(ymin = assData$Lower, ymax = assData$Upper),
-        linetype = 2, alpha = 0.1
+                  linetype = 2, alpha = 0.1
       ) +
       ggtitle(paste(choSpecie, "- Stock SSB")) +
       theme_tufte(base_size = 14, ticks = F) +
@@ -985,7 +962,7 @@ ggplot_OPSsingle <- function(choSpecie, assData) {
   suppressMessages(
     ggplot(assData$obsSAA, aes_(x = ~Year, y = ~Index, colour = ~Age, group = ~Age)) +
       geom_errorbar(aes_(ymin = ~Lower, ymax = ~Upper),
-        colour = "black", width = .1
+                    colour = "black", width = .1
       ) +
       geom_point(size = 1) +
       geom_line(data = assData$predSAA, aes_(x = ~Year, y = ~Index, colour = ~Age, group = ~Age)) +
