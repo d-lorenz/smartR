@@ -1,4 +1,4 @@
-# smartR <img src="inst/smartRlogo.jpg" align="right" width="120" />
+# smartR <img src="inst/smartRlogo.jpg" align="right" width="400" />
 
 [![R build status](https://travis-ci.org/d-lorenz/smartR.svg?branch=master)](https://travis-ci.org/d-lorenz/smartR)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/smartR)](https://cran.r-project.org/package=smartR)
