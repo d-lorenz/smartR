@@ -22,4 +22,5 @@ addons:
       - jags
       - libgdal1-dev
       - libproj-dev
+      - libudunits2-dev
 
