@@ -16,4 +16,5 @@ addons:
       - libgs-dev
       - qpdf
       - ghostscript
+      - gtk2-devel
 
