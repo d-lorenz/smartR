@@ -21,6 +21,7 @@ Description: A tool for assessing bio-economic feedback in
   effects. The interaction between the user and the application could take 
   place through invocation of methods via the command line or could be entirely
    committed to the graphical user interfaces (GUI).
+URL: https://github.com/d-lorenz/smartR
 License: GPL (>= 2)
 Depends:
     R6,
