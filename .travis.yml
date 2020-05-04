@@ -19,4 +19,5 @@ addons:
       - build-essential
       - libgtk2.0-dev
       - libnetcdf-dev
+      - jags
 
