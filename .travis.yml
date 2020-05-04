@@ -1,0 +1,19 @@
+
+language: r
+
+r:
+  - release
+  - devel
+
+script:
+  - R CMD build .
+  - R CMD check *tar.gz --as-cran
+
+addons:
+  apt:
+    update: true
+    packages:
+      - libgs-dev
+      - qpdf
+      - ghostscript
+
