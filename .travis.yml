@@ -20,4 +20,6 @@ addons:
       - libgtk2.0-dev
       - libnetcdf-dev
       - jags
+      - libgdal1-dev
+      - libproj-dev
 
